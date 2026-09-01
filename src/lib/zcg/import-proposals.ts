@@ -2,7 +2,9 @@ import { and, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
 import { zcgProposals, zcgSheetImports } from "@/lib/db/schema";
 import { parseCsv } from "./csv";
+import { getZcgIssueCreatedAt } from "./github-issue-date";
 import { normalizeKey, parseUsdCents, parseZcgDate } from "./normalize";
+import { reconcileFutureProposalDates } from "./proposal-date";
 import { fetchSheetCsv, readSheetStatus, sha256, ZCG_GIDS } from "./sheets";
 
 type ProposalInput = typeof zcgProposals.$inferInsert;
@@ -262,6 +264,7 @@ export type ProposalImportResult = {
   gid: string;
   rows: number;
   imported: number;
+  dateCorrections: number;
   status: string;
 };
 
@@ -279,7 +282,12 @@ export async function importProposals(): Promise<ProposalImportResult[]> {
       const hash = sha256(csvText);
       const rows = parseCsv(csvText);
       const status = readSheetStatus(rows);
-      const proposals = spec.parse(rows, spec.gid);
+      const parsedProposals = spec.parse(rows, spec.gid);
+      const reconciliation = await reconcileFutureProposalDates(
+        parsedProposals,
+        getZcgIssueCreatedAt,
+      );
+      const proposals = reconciliation.rows;
 
       await db.transaction(async (tx) => {
         await tx
@@ -312,6 +320,7 @@ export async function importProposals(): Promise<ProposalImportResult[]> {
         gid: spec.gid,
         rows: rows.length,
         imported: proposals.length,
+        dateCorrections: reconciliation.corrected,
         status,
       });
     } catch (err) {
@@ -319,6 +328,7 @@ export async function importProposals(): Promise<ProposalImportResult[]> {
         gid: spec.gid,
         rows: 0,
         imported: 0,
+        dateCorrections: 0,
         status: `error: ${err instanceof Error ? err.message : String(err)}`,
       });
       // Re-lança contexto p/ logging do chamador sem derrubar as outras abas.
