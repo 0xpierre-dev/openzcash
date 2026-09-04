@@ -1,7 +1,7 @@
 export type ArboristCallSource = "notes" | "youtube";
 
 export interface ArboristCall {
-  /** Call number from the notes repository. Pending recordings have no number. */
+  /** Published number, or the next sequence number while notes are pending. */
   number: number | null;
   /** ISO meeting date (YYYY-MM-DD) when parseable. */
   date: string | null;
@@ -99,8 +99,8 @@ export function parseArboristYoutubeFeed(xml: string): ArboristCall[] {
 
 /**
  * Adds recent recordings that have not reached the notes repository yet.
- * Existing note order is preserved because call numbers remain the historical
- * archive's canonical ordering.
+ * Pending calls continue from the highest published call number in meeting
+ * order. GitHub remains authoritative when the matching note arrives.
  */
 export function mergeArboristCalls(
   notes: ArboristCall[],
@@ -152,6 +152,21 @@ export function mergeArboristCalls(
     knownDates.add(recording.date);
   }
 
-  pending.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-  return [...pending, ...enrichedNotes];
+  const latestNoteNumber = enrichedNotes.reduce<number | null>(
+    (latest, call) =>
+      call.number != null && (latest == null || call.number > latest)
+        ? call.number
+        : latest,
+    null,
+  );
+  const chronological = pending.sort((a, b) =>
+    (a.date ?? "").localeCompare(b.date ?? ""),
+  );
+  const numbered = chronological.map((call, index) => ({
+    ...call,
+    number:
+      latestNoteNumber == null ? call.number : latestNoteNumber + index + 1,
+  }));
+
+  return [...numbered.reverse(), ...enrichedNotes];
 }

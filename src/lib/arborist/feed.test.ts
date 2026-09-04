@@ -71,7 +71,7 @@ describe("parseArboristYoutubeFeed", () => {
 });
 
 describe("mergeArboristCalls", () => {
-  it("prepends only unmatched recordings newer than the latest published note", () => {
+  it("numbers newer pending recordings in chronological call sequence", () => {
     const calls = mergeArboristCalls(
       [note(129, "2026-08-06", "existing129")],
       [
@@ -96,8 +96,8 @@ describe("mergeArboristCalls", () => {
 
     expect(calls.map(({ number, date, source }) => ({ number, date, source })))
       .toEqual([
-        { number: null, date: "2026-09-03", source: "youtube" },
-        { number: null, date: "2026-08-20", source: "youtube" },
+        { number: 131, date: "2026-09-03", source: "youtube" },
+        { number: 130, date: "2026-08-20", source: "youtube" },
         { number: 129, date: "2026-08-06", source: "notes" },
       ]);
   });
