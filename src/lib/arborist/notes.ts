@@ -1,14 +1,20 @@
 import "server-only";
 
+import {
+  mergeArboristCalls,
+  parseArboristYoutubeFeed,
+  type ArboristCall,
+} from "./feed";
+
+export type { ArboristCall } from "./feed";
+
 /**
  * The Zcash Arborist Call archive.
  *
  * Notes for every call live as markdown in the community-maintained repo
- * ZcashCommunityGrants/arboretum-notes. We read the directory listing and the
- * raw files from GitHub (public, no auth), parse the header block of each note
- * — call number, date, duration, YouTube recording, moderator, notetaker and
- * agenda — and cache the result in-process. Nothing is hand-copied, so a new
- * call published upstream shows up here on the next refresh.
+ * ZcashCommunityGrants/arboretum-notes. The official Zcash Foundation YouTube
+ * feed fills the gap between a recording being published and its note reaching
+ * GitHub. On every refresh, GitHub notes replace matching provisional videos.
  */
 
 const OWNER = "ZcashCommunityGrants";
@@ -16,8 +22,12 @@ const REPO = "arboretum-notes";
 const DIR = "AllArboristCallNotes";
 const RAW = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${DIR}`;
 const TTL_MS = 60 * 60_000; // notes change at most a couple of times a month
+const YOUTUBE_CHANNEL_ID = "UCi01v05DNTUEC_eB0c9rpgQ";
+const YOUTUBE_FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
 
 export const ARBORIST_REPO_URL = `https://github.com/${OWNER}/${REPO}`;
+export const ARBORIST_YOUTUBE_URL =
+  "https://www.youtube.com/@zcashfoundation/videos";
 export const ARBORIST_FORUM_URL =
   "https://forum.zcashcommunity.com/c/ecosystem-updates/foundation/21";
 
@@ -76,27 +86,6 @@ export async function getArboristAnnouncements(): Promise<
   } catch {
     return annCache?.items ?? [];
   }
-}
-
-export interface ArboristCall {
-  /** Call number, e.g. 129. */
-  number: number;
-  /** ISO date (YYYY-MM-DD) when parseable. */
-  date: string | null;
-  /** Header line as written, kept when the date could not be parsed. */
-  rawDate: string;
-  /** Stated meeting duration, e.g. "15 minutes". */
-  duration: string | null;
-  /** YouTube recording URL — most calls have one. */
-  video: string | null;
-  /** YouTube video id, for the thumbnail. */
-  videoId: string | null;
-  moderator: string | null;
-  notetaker: string | null;
-  /** Agenda items listed in the header. */
-  agenda: string[];
-  /** Link to the note file on GitHub. */
-  url: string;
 }
 
 const MONTHS: Record<string, number> = {
@@ -194,12 +183,15 @@ export function parseNote(
     notetaker: cleanName(md.match(/^Notes\s*:?\s*([^\n]+)/im)?.[1]),
     agenda,
     url: `https://github.com/${OWNER}/${REPO}/blob/main/${DIR}/${encodeURIComponent(fileName)}`,
+    source: "notes",
   };
 }
 
 /** Fills in years the header omitted, using the surrounding calls. */
 function inferMissingDates(calls: ArboristCall[]): ArboristCall[] {
-  const sorted = [...calls].sort((a, b) => a.number - b.number);
+  const sorted = [...calls].sort(
+    (a, b) => (a.number ?? 0) - (b.number ?? 0),
+  );
   return sorted.map((c, i) => {
     if (c.date || !c.rawDate) return c;
     const mon = c.rawDate.match(/([A-Za-z]{3,})/)?.[1];
@@ -224,6 +216,32 @@ function inferMissingDates(calls: ArboristCall[]): ArboristCall[] {
 let cache: { at: number; items: ArboristCall[] } | null = null;
 let inflight: Promise<ArboristCall[]> | null = null;
 
+async function fetchYoutubeRecordings(): Promise<ArboristCall[]> {
+  try {
+    const res = await fetch(YOUTUBE_FEED_URL, {
+      headers: { accept: "application/atom+xml" },
+      signal: AbortSignal.timeout(8_000),
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    return parseArboristYoutubeFeed(await res.text());
+  } catch {
+    return [];
+  }
+}
+
+async function youtubeFallback(
+  now: number,
+  recordingsPromise: Promise<ArboristCall[]>,
+): Promise<ArboristCall[]> {
+  const recordings = await recordingsPromise;
+  const cachedNotes =
+    cache?.items.filter((call) => call.source === "notes") ?? [];
+  const result = mergeArboristCalls(cachedNotes, recordings);
+  if (result.length > 0) cache = { at: now, items: result };
+  return result;
+}
+
 /** Every Arborist call, newest first. Cached ~1h in-process; concurrent
  * refreshes share one sweep, and a stale cache is served while it runs. */
 export async function getArboristCalls(): Promise<ArboristCall[]> {
@@ -241,6 +259,7 @@ export async function getArboristCalls(): Promise<ArboristCall[]> {
 }
 
 async function refresh(now: number): Promise<ArboristCall[]> {
+  const youtube = fetchYoutubeRecordings();
   try {
     const listRes = await fetch(
       `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DIR}`,
@@ -255,7 +274,7 @@ async function refresh(now: number): Promise<ArboristCall[]> {
         cache: "no-store",
       },
     );
-    if (!listRes.ok) return cache?.items ?? [];
+    if (!listRes.ok) return youtubeFallback(now, youtube);
     const listing = (await listRes.json()) as { name: string; type: string }[];
     const files = listing
       .filter((f) => f.type === "file" && /\.md$/i.test(f.name))
@@ -280,20 +299,22 @@ async function refresh(now: number): Promise<ArboristCall[]> {
       );
       items.push(...batch.filter((x): x is ArboristCall => x !== null));
     }
-    if (items.length === 0) return cache?.items ?? [];
+    if (items.length === 0) return youtubeFallback(now, youtube);
 
     // De-duplicate by call number (the repo keeps a stray copy or two).
     const byNumber = new Map<number, ArboristCall>();
     for (const c of items) {
+      if (c.number == null) continue;
       const prev = byNumber.get(c.number);
       if (!prev || (!prev.date && c.date)) byNumber.set(c.number, c);
     }
-    const result = inferMissingDates([...byNumber.values()]).sort(
-      (a, b) => b.number - a.number,
+    const notes = inferMissingDates([...byNumber.values()]).sort(
+      (a, b) => (b.number ?? 0) - (a.number ?? 0),
     );
+    const result = mergeArboristCalls(notes, await youtube);
     cache = { at: now, items: result };
     return result;
   } catch {
-    return cache?.items ?? [];
+    return youtubeFallback(now, youtube);
   }
 }

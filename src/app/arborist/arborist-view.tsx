@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * Client view for /arborist: search and filters over the full call archive.
- * Calls with a recording carry a small play badge on the call number, which
- * is the fastest way to spot "this episode has video".
+ * Calls with a recording carry a small play badge. Recordings discovered in
+ * the official YouTube feed stay visibly provisional until GitHub notes land.
  */
 
 type VideoFilter = "all" | "video" | "novideo";
@@ -47,7 +47,7 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
       if (video === "novideo" && c.video) return false;
       if (!needle) return true;
       return (
-        String(c.number).includes(needle) ||
+        (c.number != null && String(c.number).includes(needle)) ||
         (c.date ?? "").includes(needle) ||
         (c.moderator ?? "").toLowerCase().includes(needle) ||
         (c.notetaker ?? "").toLowerCase().includes(needle) ||
@@ -96,7 +96,7 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
         <ul className="divide-y divide-stone-100">
           {shown.map((c) => (
             <li
-              key={c.number}
+              key={`${c.source}:${c.number ?? c.videoId ?? c.date}`}
               className="flex items-start gap-4 px-4 py-4 transition hover:bg-amber-500/[0.04] sm:px-5"
             >
               {/* Call number, with the play badge when a recording exists */}
@@ -110,10 +110,10 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
                   )}
                 >
                   <span className="text-[9px] font-medium uppercase tracking-wider text-stone-400">
-                    call
+                    {c.number == null ? "video" : "call"}
                   </span>
                   <span className="text-lg font-bold leading-none text-stone-900 tnum">
-                    {c.number}
+                    {c.number ?? "new"}
                   </span>
                 </div>
                 {c.video ? (
@@ -122,7 +122,11 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
                     target="_blank"
                     rel="noreferrer"
                     title="Watch the recording on YouTube"
-                    aria-label={`Watch call ${c.number} on YouTube`}
+                    aria-label={
+                      c.number == null
+                        ? `Watch the Arborist recording from ${fmtDate(c.date, c.rawDate)} on YouTube`
+                        : `Watch call ${c.number} on YouTube`
+                    }
                     className="absolute -bottom-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-rose-600 text-white shadow-sm ring-2 ring-white transition hover:bg-rose-500"
                   >
                     <PlayBadge className="ml-0.5 h-3 w-3" />
@@ -151,6 +155,11 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
                       · notes by {c.notetaker}
                     </span>
                   ) : null}
+                  {c.source === "youtube" ? (
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-900 ring-1 ring-inset ring-amber-300/70">
+                      Recording available · notes pending
+                    </span>
+                  ) : null}
                 </div>
 
                 {c.agenda.length > 0 ? (
@@ -167,14 +176,16 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
                 ) : null}
 
                 <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-medium">
-                  <a
-                    href={c.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-stone-600 hover:text-amber-800"
-                  >
-                    Full notes ↗
-                  </a>
+                  {c.url ? (
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-stone-600 hover:text-amber-800"
+                    >
+                      Full notes ↗
+                    </a>
+                  ) : null}
                   {c.video ? (
                     <a
                       href={c.video}
@@ -190,9 +201,9 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
               </div>
 
               {/* Thumbnail on wide screens */}
-              {c.videoId ? (
+              {c.videoId && c.video ? (
                 <a
-                  href={c.video!}
+                  href={c.video}
                   target="_blank"
                   rel="noreferrer"
                   className="hidden shrink-0 overflow-hidden rounded-lg ring-1 ring-stone-200 transition hover:ring-amber-400/60 lg:block"

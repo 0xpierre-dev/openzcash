@@ -4,6 +4,7 @@ import {
   getArboristCalls,
   getArboristAnnouncements,
   ARBORIST_REPO_URL,
+  ARBORIST_YOUTUBE_URL,
   ARBORIST_FORUM_URL,
 } from "@/lib/arborist/notes";
 import { ArboristView } from "./arborist-view";
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Arborist Calls · OpenZcash",
   description:
-    "Every Zcash Arborist Call: dates, agendas, moderators, notes and recordings, read live from the community notes repository.",
+    "Every Zcash Arborist Call: dates, agendas, moderators, notes and recordings, read live from the notes repository and official video feed.",
 };
 
 async function Archive() {
@@ -46,7 +47,7 @@ async function Archive() {
   return (
     <>
       <section className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Calls archived" value={String(calls.length)} />
+        <Stat label="Calls listed" value={String(calls.length)} />
         <Stat
           label="With recording"
           value={`${withVideo} of ${calls.length}`}
@@ -54,8 +55,14 @@ async function Archive() {
         />
         <Stat label="Running since" value={firstYear} />
         <Stat
-          label="Latest call"
-          value={latest ? `#${latest.number}` : "n/a"}
+          label="Latest meeting"
+          value={
+            latest
+              ? latest.number == null
+                ? "Recording"
+                : `#${latest.number}`
+              : "n/a"
+          }
           sub={latest?.date ?? undefined}
         />
       </section>
@@ -110,7 +117,7 @@ export default function ArboristPage() {
     <>
       <PageHeader
         title="Arborist Calls"
-        subtitle="The Zcash protocol's standing engineering call: agendas, moderators, notes and recordings for every meeting, read live from the community notes repository."
+        subtitle="The Zcash protocol's standing engineering call: agendas, moderators, notes and recordings, reconciled from the community notes and official video feed."
       />
 
       <Suspense
@@ -133,10 +140,18 @@ export default function ArboristPage() {
         >
           ZcashCommunityGrants/arboretum-notes ↗
         </a>
-        , the community-maintained record of every call. Dates, durations,
-        moderators and recording links are parsed from each note&apos;s header;
-        where a header omitted the year, it is inferred from the neighbouring
-        calls.
+        , the community-maintained record of every call, and the{" "}
+        <a
+          href={ARBORIST_YOUTUBE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="text-amber-700 hover:underline"
+        >
+          official Zcash Foundation YouTube feed ↗
+        </a>
+        . New recordings appear with notes pending; once the matching GitHub
+        note is published, it replaces the provisional entry automatically.
+        Dates, durations and participants are parsed from the note header.
       </p>
     </>
   );
