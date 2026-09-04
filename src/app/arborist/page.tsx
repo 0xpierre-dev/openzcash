@@ -151,7 +151,9 @@ export default function ArboristPage() {
         </a>
         . New recordings appear with notes pending; once the matching GitHub
         note is published, it replaces the provisional entry automatically.
-        Dates, durations and participants are parsed from the note header.
+        Calls 1–29 are preserved from the repository&apos;s historical agenda
+        archive; later calls use the full notes. Dates, durations and
+        participants are parsed from those source records.
       </p>
     </>
   );

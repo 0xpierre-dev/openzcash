@@ -183,7 +183,7 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
                       rel="noreferrer"
                       className="text-stone-600 hover:text-amber-800"
                     >
-                      Full notes ↗
+                      {c.source === "agenda" ? "Agenda ↗" : "Full notes ↗"}
                     </a>
                   ) : null}
                   {c.video ? (

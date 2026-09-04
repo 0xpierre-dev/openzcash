@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   mergeArboristCalls,
+  parseArboristAgenda,
   parseArboristYoutubeFeed,
   type ArboristCall,
 } from "./feed";
@@ -26,6 +27,60 @@ function note(
     source: "notes",
   };
 }
+
+describe("parseArboristAgenda", () => {
+  it("parses the historical agenda records that predate full call notes", () => {
+    const markdown = `
+# Arborist Call 1 Agenda
+
+Meeting Date: October 30th, 2020
+
+Duration: 1 hour 15 minutes
+
+[YouTube Recording](https://youtu.be/czK65XWtlAM)
+
+## Agenda
+___
+
+1. Welcome and Meeting Intro
+2. Research & Implementation Status Updates
+
+   Deirdre Connolly - Zebrad
+
+3. Presentations
+
+   + Potential Network Upgrade Pipeline (NUP) Improvements
+
+4. Wrap up / Read Out
+`;
+
+    expect(
+      parseArboristAgenda(
+        markdown,
+        "Arborist Call 1 Agenda.md",
+        "https://github.com/example/AgendaArchive/Arborist-Call-1-Agenda.md",
+      ),
+    ).toEqual({
+      number: 1,
+      date: "2020-10-30",
+      rawDate: "October 30th, 2020",
+      duration: "1 hour 15 minutes",
+      video: "https://youtu.be/czK65XWtlAM",
+      videoId: "czK65XWtlAM",
+      moderator: null,
+      notetaker: null,
+      agenda: [
+        "Welcome and Meeting Intro",
+        "Research & Implementation Status Updates",
+        "Presentations",
+        "Potential Network Upgrade Pipeline (NUP) Improvements",
+        "Wrap up / Read Out",
+      ],
+      url: "https://github.com/example/AgendaArchive/Arborist-Call-1-Agenda.md",
+      source: "agenda",
+    });
+  });
+});
 
 describe("parseArboristYoutubeFeed", () => {
   it("creates pending-note records from Arborist titles using the meeting date", () => {

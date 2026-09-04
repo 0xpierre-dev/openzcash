@@ -2,6 +2,8 @@ import "server-only";
 
 import {
   mergeArboristCalls,
+  parseArboristAgenda,
+  parseArboristDate,
   parseArboristYoutubeFeed,
   type ArboristCall,
 } from "./feed";
@@ -11,16 +13,17 @@ export type { ArboristCall } from "./feed";
 /**
  * The Zcash Arborist Call archive.
  *
- * Notes for every call live as markdown in the community-maintained repo
- * ZcashCommunityGrants/arboretum-notes. The official Zcash Foundation YouTube
- * feed fills the gap between a recording being published and its note reaching
- * GitHub. On every refresh, GitHub notes replace matching provisional videos.
+ * Full notes from call 30 onward and historical agendas for calls 1–29 live as
+ * markdown in the community-maintained ZcashCommunityGrants/arboretum-notes
+ * repo. The official Zcash Foundation YouTube feed fills the gap between a
+ * recording being published and its note reaching GitHub. On every refresh,
+ * GitHub notes replace matching provisional videos.
  */
 
 const OWNER = "ZcashCommunityGrants";
 const REPO = "arboretum-notes";
 const DIR = "AllArboristCallNotes";
-const RAW = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${DIR}`;
+const AGENDA_DIR = "AgendaArchive";
 const TTL_MS = 60 * 60_000; // notes change at most a couple of times a month
 const YOUTUBE_CHANNEL_ID = "UCi01v05DNTUEC_eB0c9rpgQ";
 const YOUTUBE_FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
@@ -30,6 +33,18 @@ export const ARBORIST_YOUTUBE_URL =
   "https://www.youtube.com/@zcashfoundation/videos";
 export const ARBORIST_FORUM_URL =
   "https://forum.zcashcommunity.com/c/ecosystem-updates/foundation/21";
+
+function encodedPath(path: string): string {
+  return path.split("/").map(encodeURIComponent).join("/");
+}
+
+function rawUrl(path: string): string {
+  return `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${encodedPath(path)}`;
+}
+
+function blobUrl(path: string): string {
+  return `https://github.com/${OWNER}/${REPO}/blob/main/${encodedPath(path)}`;
+}
 
 /**
  * Scheduling announcements from the Zcash Foundation forum category.
@@ -119,6 +134,7 @@ export function parseNote(
   md: string,
   fallbackNumber: number | null,
   fileName: string,
+  sourcePath = `${DIR}/${fileName}`,
 ): ArboristCall | null {
   if (md.length < 200) return null;
 
@@ -131,24 +147,7 @@ export function parseNote(
   const rawDate =
     md.match(/Meeting Date\/?\s*Time\s*:?\s*([^\n]+)/i)?.[1]?.trim() ?? "";
 
-  let date: string | null = null;
-  // "6th Aug, 2026" | "22nd Jan.2026" | "February 6th, 2026"
-  const dmy = rawDate.match(
-    /(\d{1,2})\s*(?:st|nd|rd|th)?\s*[.,]?\s*([A-Za-z]{3,})\.?\s*[.,]?\s*(\d{4})?/,
-  );
-  const mdy = rawDate.match(
-    /([A-Za-z]{3,})\.?\s+(\d{1,2})\s*(?:st|nd|rd|th)?\s*[.,]?\s*(\d{4})?/,
-  );
-  const pick = (day: string, mon: string, year?: string) => {
-    const mi = MONTHS[mon.toLowerCase().slice(0, 3)];
-    if (!mi || !year) return null;
-    return `${year}-${String(mi).padStart(2, "0")}-${String(Number(day)).padStart(2, "0")}`;
-  };
-  if (dmy && MONTHS[dmy[2]!.toLowerCase().slice(0, 3)]) {
-    date = pick(dmy[1]!, dmy[2]!, dmy[3]);
-  } else if (mdy) {
-    date = pick(mdy[2]!, mdy[1]!, mdy[3]);
-  }
+  const date = parseArboristDate(rawDate);
 
   const video =
     md.match(
@@ -182,7 +181,7 @@ export function parseNote(
     moderator: cleanName(md.match(/Moderator\s*:?\s*([^\n]+)/i)?.[1]),
     notetaker: cleanName(md.match(/^Notes\s*:?\s*([^\n]+)/im)?.[1]),
     agenda,
-    url: `https://github.com/${OWNER}/${REPO}/blob/main/${DIR}/${encodeURIComponent(fileName)}`,
+    url: blobUrl(sourcePath),
     source: "notes",
   };
 }
@@ -236,7 +235,7 @@ async function youtubeFallback(
 ): Promise<ArboristCall[]> {
   const recordings = await recordingsPromise;
   const cachedNotes =
-    cache?.items.filter((call) => call.source === "notes") ?? [];
+    cache?.items.filter((call) => call.source !== "youtube") ?? [];
   const result = mergeArboristCalls(cachedNotes, recordings);
   if (result.length > 0) cache = { at: now, items: result };
   return result;
@@ -258,27 +257,92 @@ export async function getArboristCalls(): Promise<ArboristCall[]> {
   return cache ? cache.items : inflight;
 }
 
+interface RepoFile {
+  name: string;
+  path: string;
+  type: string;
+}
+
+async function fetchRepoListing(directory?: string): Promise<RepoFile[] | null> {
+  const suffix = directory ? `/contents/${encodedPath(directory)}` : "/contents";
+  const response = await fetch(
+    `https://api.github.com/repos/${OWNER}/${REPO}${suffix}`,
+    {
+      headers: {
+        accept: "application/vnd.github+json",
+        ...(process.env.GITHUB_TOKEN
+          ? { authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+          : {}),
+      },
+      signal: AbortSignal.timeout(10_000),
+      cache: "no-store",
+    },
+  );
+  if (!response.ok) return null;
+  const listing = (await response.json()) as RepoFile[];
+  return Array.isArray(listing) ? listing : null;
+}
+
+function callNumberFromFileName(fileName: string): number | null {
+  const value = Number(fileName.match(/\bCall\s+#?\s*(\d+)/i)?.[1] ?? NaN);
+  return Number.isFinite(value) ? value : null;
+}
+
 async function refresh(now: number): Promise<ArboristCall[]> {
   const youtube = fetchYoutubeRecordings();
   try {
-    const listRes = await fetch(
-      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DIR}`,
-      {
-        headers: {
-          accept: "application/vnd.github+json",
-          ...(process.env.GITHUB_TOKEN
-            ? { authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-            : {}),
-        },
-        signal: AbortSignal.timeout(10_000),
-        cache: "no-store",
-      },
-    );
-    if (!listRes.ok) return youtubeFallback(now, youtube);
-    const listing = (await listRes.json()) as { name: string; type: string }[];
-    const files = listing
+    const [notesListing, agendaListing, rootListing] = await Promise.all([
+      fetchRepoListing(DIR),
+      fetchRepoListing(AGENDA_DIR),
+      fetchRepoListing(),
+    ]);
+    if (!notesListing) return youtubeFallback(now, youtube);
+
+    const notesFiles = notesListing
       .filter((f) => f.type === "file" && /\.md$/i.test(f.name))
       .filter((f) => /call/i.test(f.name));
+    const coveredNumbers = new Set(
+      notesFiles.flatMap((file) => {
+        const number = callNumberFromFileName(file.name);
+        return number == null ? [] : [number];
+      }),
+    );
+
+    // Call 99 was accidentally committed at the repository root. Treat root
+    // note files as a fallback without allowing them to override canonical
+    // files in AllArboristCallNotes.
+    const rootNoteFiles: RepoFile[] = [];
+    const rootCandidates = (rootListing ?? [])
+      .filter((f) => f.type === "file" && /\.md$/i.test(f.name))
+      .filter((f) => /call/i.test(f.name))
+      .sort(
+        (a, b) =>
+          Number(/^Arborist\s+Call/i.test(b.name)) -
+          Number(/^Arborist\s+Call/i.test(a.name)),
+      );
+    for (const file of rootCandidates) {
+      const number = callNumberFromFileName(file.name);
+      if (number == null || coveredNumbers.has(number)) continue;
+      rootNoteFiles.push(file);
+      coveredNumbers.add(number);
+    }
+
+    // Calls 1–29 predate full notes but have official historical agendas with
+    // dates and recordings. Load only numbers still absent after note sources.
+    const agendaFiles: RepoFile[] = [];
+    for (const file of agendaListing ?? []) {
+      if (file.type !== "file" || !/\.md$/i.test(file.name)) continue;
+      const number = callNumberFromFileName(file.name);
+      if (number == null || coveredNumbers.has(number)) continue;
+      agendaFiles.push(file);
+      coveredNumbers.add(number);
+    }
+
+    const files = [
+      ...notesFiles.map((file) => ({ ...file, kind: "notes" as const })),
+      ...rootNoteFiles.map((file) => ({ ...file, kind: "notes" as const })),
+      ...agendaFiles.map((file) => ({ ...file, kind: "agenda" as const })),
+    ];
 
     const items: ArboristCall[] = [];
     const CHUNK = 12;
@@ -286,12 +350,15 @@ async function refresh(now: number): Promise<ArboristCall[]> {
       const batch = await Promise.all(
         files.slice(i, i + CHUNK).map(async (f) => {
           try {
-            const r = await fetch(`${RAW}/${encodeURIComponent(f.name)}`, {
+            const r = await fetch(rawUrl(f.path), {
               signal: AbortSignal.timeout(8_000),
               cache: "no-store",
             });
             if (!r.ok) return null;
-            return parseNote(await r.text(), null, f.name);
+            const markdown = await r.text();
+            return f.kind === "agenda"
+              ? parseArboristAgenda(markdown, f.name, blobUrl(f.path))
+              : parseNote(markdown, null, f.name, f.path);
           } catch {
             return null;
           }
@@ -301,7 +368,8 @@ async function refresh(now: number): Promise<ArboristCall[]> {
     }
     if (items.length === 0) return youtubeFallback(now, youtube);
 
-    // De-duplicate by call number (the repo keeps a stray copy or two).
+    // De-duplicate by call number after combining canonical notes, root note
+    // fallbacks and agenda-only history in that authority order.
     const byNumber = new Map<number, ArboristCall>();
     for (const c of items) {
       if (c.number == null) continue;

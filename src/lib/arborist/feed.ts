@@ -1,4 +1,4 @@
-export type ArboristCallSource = "notes" | "youtube";
+export type ArboristCallSource = "notes" | "agenda" | "youtube";
 
 export interface ArboristCall {
   /** Published number, or the next sequence number while notes are pending. */
@@ -21,6 +21,108 @@ export interface ArboristCall {
   url: string | null;
   /** The source that made this archive item available. */
   source: ArboristCallSource;
+}
+
+const MONTHS: Record<string, number> = {
+  jan: 1,
+  feb: 2,
+  mar: 3,
+  apr: 4,
+  may: 5,
+  jun: 6,
+  jul: 7,
+  aug: 8,
+  sep: 9,
+  oct: 10,
+  nov: 11,
+  dec: 12,
+};
+
+/** Parses the English date variants used by both notes and legacy agendas. */
+export function parseArboristDate(rawDate: string): string | null {
+  const dmy = rawDate.match(
+    /(\d{1,2})\s*(?:st|nd|rd|th)?\s*[.,]?\s*([A-Za-z]{3,})\.?\s*[.,]?\s*(\d{4})?/,
+  );
+  const mdy = rawDate.match(
+    /([A-Za-z]{3,})\.?\s+(\d{1,2})\s*(?:st|nd|rd|th)?\s*[.,]?\s*(\d{4})?/,
+  );
+  const pick = (day: string, month: string, year?: string) => {
+    const monthNumber = MONTHS[month.toLowerCase().slice(0, 3)];
+    if (!monthNumber || !year) return null;
+    const timestamp = Date.UTC(Number(year), monthNumber - 1, Number(day));
+    const parsed = new Date(timestamp);
+    if (
+      parsed.getUTCFullYear() !== Number(year) ||
+      parsed.getUTCMonth() !== monthNumber - 1 ||
+      parsed.getUTCDate() !== Number(day)
+    ) {
+      return null;
+    }
+    return `${year}-${String(monthNumber).padStart(2, "0")}-${String(Number(day)).padStart(2, "0")}`;
+  };
+
+  if (dmy && MONTHS[dmy[2]!.toLowerCase().slice(0, 3)]) {
+    return pick(dmy[1]!, dmy[2]!, dmy[3]);
+  }
+  return mdy ? pick(mdy[2]!, mdy[1]!, mdy[3]) : null;
+}
+
+/**
+ * Parses the agenda-only records that cover Arborist Calls 1–29. These are
+ * intentionally distinct from full notes so the UI never overstates what the
+ * historical source contains.
+ */
+export function parseArboristAgenda(
+  md: string,
+  fileName: string,
+  url: string,
+): ArboristCall | null {
+  const number = Number(
+    md.match(/Arborist\s+Call\s+#?\s*(\d+)/i)?.[1] ??
+      fileName.match(/(?:Call\s+)?(\d+)/i)?.[1] ??
+      NaN,
+  );
+  if (!Number.isFinite(number)) return null;
+
+  const rawDate =
+    md.match(/Meeting Date(?:\/Time)?\s*:\s*([^\r\n]+)/i)?.[1]?.trim() ?? "";
+  const video =
+    md.match(
+      /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+)/i,
+    )?.[1] ?? null;
+  const videoId = video?.match(/(?:v=|youtu\.be\/)([\w-]{6,})/i)?.[1] ?? null;
+  const agendaBlock = md.match(/##\s*Agenda\s*\n([\s\S]*)/i)?.[1] ?? "";
+  const agenda = agendaBlock
+    .split(/\r?\n/)
+    .filter((line) =>
+      /^\s*(?:(?:\d+|[ivxlcdm]+)[.)]|[-+*])\s+/i.test(line),
+    )
+    .map((line) =>
+      line
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+        .replace(/^\s*(?:(?:\d+|[ivxlcdm]+)[.)]|[-+*])\s+/i, "")
+        .replace(/[*_`]/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter((line) => line.length > 2 && line.length < 120)
+    .slice(0, 8);
+
+  return {
+    number,
+    date: parseArboristDate(rawDate),
+    rawDate,
+    duration:
+      md.match(/^(?:Meeting )?Duration\s*:\s*([^\r\n]+)/im)?.[1]?.trim() ||
+      null,
+    video,
+    videoId,
+    moderator: null,
+    notetaker: null,
+    agenda,
+    url,
+    source: "agenda",
+  };
 }
 
 function decodeXml(value: string): string {
