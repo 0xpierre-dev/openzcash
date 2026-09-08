@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Card, PageHeader, Stat } from "@/components/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Catalog, ClassifiedRepository, FundingEvent, Organization, Project, Source } from "@/lib/ecosystem/types";
 import {
@@ -183,6 +184,7 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
   const [page, setPage] = useState(1);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
+  const methodologyRef = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     // URL filters are applied after hydration, so server and client markup
     // begin identically and direct links from project details remain usable.
@@ -226,104 +228,102 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
   }
   const measuredPercent = stats.eligible ? Math.round(stats.measured / stats.eligible * 100) : 0;
   const num = (value: number) => number.format(value);
+  function showSources() {
+    const details = methodologyRef.current;
+    if (!details) return;
+    details.open = true;
+    details.scrollIntoView({ block: "start" });
+    details.querySelector("summary")?.focus({ preventScroll: true });
+  }
 
   return <div className={styles.explorer}>
-    <nav className={styles.tabs} aria-label="Ecosystem apps">
-      <Link href="/ecosystem" aria-current={!isDevelopment ? "page" : undefined}>Ecosystem</Link>
-      <Link href="/development" aria-current={isDevelopment ? "page" : undefined}>Development</Link>
-      <Link href="/wallets">Wallets ↗</Link>
-    </nav>
-    <header className={styles.heading}>
-      <div><div className={styles.eyebrow}>Open-source Zcash</div>
-        <h1>{isDevelopment ? "Follow the code." : "An ecosystem, connected."}</h1>
-        <p>{isDevelopment
-          ? "Public repositories across Zcash teams and grant-funded projects. Explore what each one does, who maintains it and how its code is changing."
-          : "Discover the projects building on Zcash — from protocol research and full nodes to wallets, payments and developer tools."}</p>
+    <PageHeader title={isDevelopment ? "Development" : "Ecosystem"} actions={
+      <div className={styles.headerActions}>
+        <nav className={styles.tabs} aria-label="Ecosystem apps">
+          <Link href="/ecosystem" aria-current={!isDevelopment ? "page" : undefined}>Ecosystem</Link>
+          <Link href="/development" aria-current={isDevelopment ? "page" : undefined}>Development</Link>
+        </nav>
       </div>
-      <div className={styles.snapshot}><strong>Source snapshot</strong>{displayDate(catalog.snapshot.collectedAt)}
-        <div>{num(catalog.snapshot.owners.filter(owner => owner.complete).length)} full account inventories</div></div>
-    </header>
+    } />
 
     <div className={styles.stats} aria-label="Catalog statistics">
       {(isDevelopment ? [
-        [num(matchingRepos.length), "Repositories in this view"],
-        [stats.measured ? num(stats.commits) : "—", "Default-branch commits · " + period + " days"],
-        [stats.measured ? num(stats.active) : "—", "Repositories with commits · no forks"],
-        [stats.measured ? num(stats.releases) : "—", "Published release records · " + period + " days"],
+        [num(matchingRepos.length), "Repositories"],
+        [stats.measured ? num(stats.commits) : "—", "Commits · " + period + "d"],
+        [stats.measured ? num(stats.active) : "—", "Active repos · " + period + "d"],
+        [stats.measured ? num(stats.releases) : "—", "Releases · " + period + "d"],
       ] : [
-        [num(catalog.registry.projects.length), "Mapped projects & components"],
-        [num(repositories.length), "Canonical public repositories"],
-        [num(catalog.registry.organizations.length), "Teams & maintainer accounts"],
-        [num(catalog.registry.projects.filter(isGrantFunded).length), "Projects with recorded grant approvals"],
-      ]).map(([value, label]) => <div className={styles.stat} key={label}><strong>{value}</strong><span>{label}</span></div>)}
+        [num(catalog.registry.projects.length), "Projects & components"],
+        [num(repositories.length), "Repositories"],
+        [num(catalog.registry.organizations.length), "Teams & accounts"],
+        [num(catalog.registry.projects.filter(isGrantFunded).length), "With grant approvals"],
+      ]).map(([value, label]) => <Stat key={label} label={label} value={value} />)}
+    </div>
+    <div className={styles.dataNote}>
+      <span>{isDevelopment ? "Repository-wide totals · excludes forks" : "Grant approval ≠ payment or current funding"}</span>
+      <button onClick={showSources}>Snapshot {displayDate(catalog.snapshot.collectedAt)} · Sources</button>
     </div>
 
-    <div className={styles.filters}>
-      <div className={styles.filterTop}>
-        <label className={styles.search}><span aria-hidden="true">⌕</span>
-          <input type="search" value={query} onChange={event => update(setQuery, event.target.value)}
-            placeholder={isDevelopment ? "Search repositories, projects, languages…" : "Search projects, tools and teams…"}
-            aria-label={isDevelopment ? "Search repositories" : "Search projects"} /></label>
-        {isDevelopment && <div className={styles.periods} role="group" aria-label="Activity period">
-          {[7, 30, 90].map(days => <button key={days} aria-pressed={period === days}
-            onClick={() => { setPeriod(days); setPage(1); }}>{days} days</button>)}</div>}
-      </div>
-      <div className={styles.selects}>
-        <label>Maintainer<select value={organization} onChange={event => update(setOrganization, event.target.value)}
-          aria-label="Filter by maintainer"><option value="">All maintainers</option>
-          {organizations.map(org => <option key={org.id} value={org.id}>{org.name}</option>)}</select></label>
-        <label>Funding evidence<select value={funding} onChange={event => update(setFunding, event.target.value)}
-          aria-label="Filter by funding"><option value="">All funding histories</option>
-          <option value="grants">Recorded grant approval</option>
+    <div className={styles.filters} role="group" aria-label="Catalog filters">
+      <label className={styles.search}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg>
+        <input type="search" value={query} onChange={event => update(setQuery, event.target.value)}
+          placeholder={isDevelopment ? "Search repositories…" : "Search projects…"}
+          aria-label={isDevelopment ? "Search repositories" : "Search projects"} /></label>
+      <select value={category} onChange={event => update(setCategory, event.target.value)} aria-label="Filter by purpose">
+        <option value="">All categories</option>
+        {categories.map(item => <option key={item} value={item}>{item}</option>)}
+      </select>
+      <select value={organization} onChange={event => update(setOrganization, event.target.value)}
+        aria-label="Filter by maintainer"><option value="">All maintainers</option>
+        {organizations.map(org => <option key={org.id} value={org.id}>{org.name}</option>)}</select>
+      <select value={funding} onChange={event => update(setFunding, event.target.value)}
+          aria-label="Filter by funding"><option value="">All funding</option>
+          <option value="grants">Grant approvals</option>
           {isDevelopment && <option value="historical-dev-fund">Former Dev Fund recipient</option>}
-        </select></label>
-        {isDevelopment && <label>Repository type<select value={lifecycle}
+      </select>
+      {isDevelopment && <select value={lifecycle}
           onChange={event => update(setLifecycle, event.target.value)} aria-label="Filter repository type">
-          <option value="">All · including historical</option><option value="original">Original · not archived</option>
+          <option value="">All repositories</option><option value="original">Original · not archived</option>
           <option value="archived">Archived</option><option value="forks">Forks</option>
-        </select></label>}
-      </div>
-      <div className={styles.chips} role="group" aria-label="Purpose tags">
-        <button className={styles.chip} aria-pressed={!category} onClick={() => update(setCategory, "")}>All purposes</button>
-        {categories.map(item => <button key={item} className={styles.chip} aria-pressed={category === item}
-          onClick={() => update(setCategory, item)}>{item}</button>)}
-      </div>
+      </select>}
     </div>
     <div className={styles.caption}><span aria-live="polite">
       <strong>{num(resultCount)} {isDevelopment ? "repositories" : "projects & components"}</strong>
       {selectedProject && " · " + selectedProject.name}
-      {isDevelopment && stats.eligible > 0 && " · Activity available for " + measuredPercent + "% of original repositories"}
-    </span>{(query || category || organization || funding || lifecycle || projectId) &&
-      <button className={styles.textButton} onClick={clearFilters}>Clear filters</button>}</div>
-    {isDevelopment && <p className={styles.small + " mb-4"}>Repository-wide activity. Shared and multichain codebases may include non-Zcash work; totals exclude forks.</p>}
+    </span><div className={styles.resultActions}>
+      {(query || category || organization || funding || lifecycle || projectId) &&
+        <button className={styles.textButton} onClick={clearFilters}>Clear filters</button>}
+      {isDevelopment && <div className={styles.periods} role="group" aria-label="Activity period">
+        {[7, 30, 90].map(days => <button key={days} aria-pressed={period === days} aria-label={days + " days"}
+          onClick={() => { setPeriod(days); setPage(1); }}>{days}d</button>)}</div>}
+    </div></div>
 
     {resultCount === 0 ? <div className={styles.empty}><h2>No matches in this view</h2>
       <p>Try another project name, purpose or maintainer.</p>
       <button className={styles.textButton} onClick={clearFilters}>Clear filters</button></div>
-      : isDevelopment ? <div className={styles.tablePanel}><div className={styles.tableScroll}>
-        <table className={styles.table}><thead><tr>
-          <th scope="col">Repository / maintainer</th><th scope="col">Purpose</th>
-          <th scope="col">Commits · {period}d</th><th scope="col">Last push</th><th scope="col">Latest release marker</th>
+      : isDevelopment ? <div className={styles.tablePanel}><div className={styles.tableScroll} tabIndex={0} role="region" aria-label="Repository results">
+        <table className={styles.table} aria-label="Development repositories"><thead><tr>
+          <th scope="col">Repository</th><th scope="col">Category</th>
+          <th scope="col" className={styles.numberCell}>Commits · {period}d</th><th scope="col">Last push</th><th scope="col">Release</th>
         </tr></thead><tbody>{matchingRepos.slice(start, start + perPage).map(repo => {
           const count = repo.activity?.commits[String(period)];
           const release = repo.activity?.latestRelease;
-          return <tr key={repo.id}><td><div className={styles.repoOwner}>{repo.owner}</div>
+          return <tr key={repo.id}><td>
             <button className={styles.repoTitle} onClick={() => setSelection({ kind: "repository", value: repo })}>
-              {repo.name} <span aria-hidden="true">↗</span></button>
-            <div className={styles.repoDescription}>{repo.description.slice(0, 150)}{repo.description.length > 150 ? "…" : ""}</div>
+              {repo.name} <span aria-hidden="true">→</span></button>
             <div className={styles.repoMeta}>
-              {repo.language && <span className={styles.small}>{repo.language}</span>}
+              <span>{repo.owner}{repo.language && " · " + repo.language}</span>
               {repo.archived && <Badge muted>Archived</Badge>}{repo.fork && <Badge muted>Fork</Badge>}
               {repo.projects.some(isGrantFunded) && <Badge>Grant history</Badge>}
             </div></td><td><Badge>{repo.category}</Badge>
-              <div className={styles.small}>{repo.classification === "reviewed" ? "Source mapped" : "Inferred tag"}</div></td>
-            <td><span className={styles.numeric}>{typeof count === "number" ? num(count) : "—"}</span>
-              {repo.fork && <div className={styles.small}>Excluded from totals</div>}</td>
-            <td><span className={styles.small}>{displayDate(repo.pushedAt)}</span></td>
+              {repo.classification !== "reviewed" && <div className={styles.small}>Inferred</div>}</td>
+            <td className={styles.numberCell}><span className={styles.numeric}
+              title={repo.fork ? "Fork history — excluded from totals" : "Default-branch commits"}>{typeof count === "number" ? num(count) : "—"}</span></td>
+            <td><span className={styles.date}>{displayDate(repo.pushedAt)}</span></td>
             <td>{release ? <><External className={styles.release} url={release.url}>{release.tagName} ↗</External>
               <div className={styles.small}>{displayDate(release.publishedAt)}</div>
               {release.isPrerelease && <Badge muted>Prerelease</Badge>}</>
-              : <span className={styles.small}>No release marker</span>}</td></tr>;
+              : <span className={styles.small} aria-label="No release marker" title="No release marker">—</span>}</td></tr>;
         })}</tbody></table>
       </div></div> : <div className={styles.grid}>
         {matchingProjects.slice(start, start + perPage).map(project => {
@@ -331,15 +331,15 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
           const org = catalog.registry.organizations.find(item => item.id === project.organizationId);
           const allArchived = repos.length > 0 && repos.every(repo => repo.archived);
           return <article className={styles.card} key={project.id}>
+            <Card className={styles.cardSurface + " p-4"}>
             <div className={styles.cardTop}><Mark project={project} /><div><h2>{project.name}</h2>
               <p>{org?.name || "Independent project"}</p></div></div>
-            <p className={styles.description}>{project.description}</p>
             <div className={styles.badges}><Badge>{project.category}</Badge>
               {isGrantFunded(project) && <Badge>Grant history</Badge>}
-              {allArchived && <Badge muted>Archived</Badge>}
-              {project.tags.slice(0, 2).map(tag => <Badge key={tag} muted>{tag}</Badge>)}</div>
-            <div className={styles.cardBottom}><span>{repos.length ? repos.length + " GitHub " + (repos.length === 1 ? "repo" : "repos") : "Public sources"}</span>
-              <button onClick={() => setSelection({ kind: "project", value: project })}>Explore →</button></div>
+              {allArchived && <Badge muted>Archived</Badge>}</div>
+            <div className={styles.cardBottom}><span>{repos.length ? repos.length + " " + (repos.length === 1 ? "repository" : "repositories") : "Public sources"}</span>
+              <button aria-label={"View " + project.name} onClick={() => setSelection({ kind: "project", value: project })}>Details →</button></div>
+            </Card>
           </article>;
         })}
       </div>}
@@ -350,7 +350,7 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
       <button disabled={visiblePage >= pages} onClick={() => setPage(visiblePage + 1)}>Next →</button></nav>}
 
     {!isDevelopment && <details className={styles.methodology}>
-      <summary>Organizations & funding history</summary>
+      <summary>Organizations & funding</summary>
       <p>Funding models change over time. Explore the source-backed record for each team.</p>
       <div className={styles.organizationGrid}>{coreOrganizations.map(org =>
         <article key={org.id} className={styles.organizationCard}><h3>{org.name}</h3>
@@ -358,8 +358,10 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
           <button onClick={() => setSelection({ kind: "organization", value: org })}>History & sources →</button>
         </article>)}</div>
     </details>}
-    <details className={styles.methodology}>
-      <summary>Coverage, sources & methodology</summary>
+    <details ref={methodologyRef} className={styles.methodology}>
+      <summary>Sources & methodology</summary>
+      <p>Snapshot {displayDate(catalog.snapshot.collectedAt)} · {num(catalog.snapshot.owners.filter(owner => owner.complete).length)} full account inventories.
+        {isDevelopment && stats.eligible > 0 && " Activity available for " + measuredPercent + "% of original repositories in this view."}</p>
       <p>Complete public repository inventories are shown below. Other maintainers are represented by selected Zcash-related repositories.
         This is a bounded source inventory, not a claim that every private, deleted or undiscovered repository is included.</p>
       <div className={styles.tableScroll}><table className={styles.coverageTable}>
@@ -372,6 +374,8 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
       <p>Repository identity is deduplicated by GitHub ID after redirects. Archived projects and forks remain searchable.
         Purpose tags distinguish reviewed project mappings from inferences based on repository metadata.</p>
       <p>Activity counts use 7, 30 and 90-day windows ending at collection time.
+        They count commits reachable from the current default branch and published GitHub release records, not code quality or delivered work.
+        Shared and multichain codebases may include non-Zcash work.
         Headline totals exclude forks. Individual commit counts are not deduplicated across separate original repositories or attribution of individual developer effort.
         Missing measurements appear as a dash. Release records include prereleases and do not establish deployment.</p>
       <p>{num(catalog.registry.grantReview.classification.length)} of {num(catalog.registry.grantReview.totalApproved)} approved proposal rows classified.
@@ -387,9 +391,11 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
       <p><Link href="/zcg/proposals">Proposal history →</Link> · <Link href="/zcg/grants">Grant ledger →</Link> ·
         {" "}<a href="/api/ecosystem" target="_blank" rel="noopener noreferrer">Public dataset ↗</a></p>
     </details>
-    <footer className={styles.footer}><span>Source-linked public data. Historical funding stays visible.</span>
-      <span>Checked {displayDate(catalog.snapshot.collectedAt)} · <Link href={isDevelopment ? "/ecosystem" : "/development"}>
-        {isDevelopment ? "Explore projects" : "Follow development"} →</Link></span></footer>
+    <footer className={styles.footer}><span>OpenZcash · Public data</span>
+      <div className={styles.footerLinks}>
+        <Link href="/wallets">Wallets →</Link>
+        <Link href={isDevelopment ? "/ecosystem" : "/development"}>{isDevelopment ? "Ecosystem" : "Development"} →</Link>
+      </div></footer>
     <DetailDialog selection={selection} close={() => setSelection(null)} repositories={repositories}
       organizations={catalog.registry.organizations} projects={catalog.registry.projects} />
   </div>;
