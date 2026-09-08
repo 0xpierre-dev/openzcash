@@ -2,6 +2,7 @@ export type Source = { title: string; url: string };
 export type FundingEvent = {
   title: string;
   status: string;
+  program?: "zcg" | "coinholder";
   date?: string | null;
   sourceUrl: string;
   repositoryEvidenceUrl?: string;
@@ -10,6 +11,24 @@ export type FundingEvent = {
   dateNote?: string;
   associationNote?: string;
   repositoryEvidenceKind?: string;
+};
+export type ProjectNotice = {
+  kind: "support" | "capability";
+  label: string;
+  summary: string;
+  sourceUrl: string;
+  date: string;
+  // Only these stable GitHub identities inherit this project notice.
+  repositoryIds?: string[];
+};
+export type RepositoryClassification = {
+  repositoryId: string;
+  repository: string;
+  category: string;
+  tags: string[];
+  rationale: string;
+  sourceUrl: string;
+  checkedAt: string;
 };
 export type Organization = {
   id: string;
@@ -38,12 +57,14 @@ export type Project = {
   logo?: string | null;
   stage?: string;
   relatedProjectIds?: string[];
+  notices?: ProjectNotice[];
 };
 export type Registry = {
   schemaVersion: number;
   checkedAt: string;
   organizations: Organization[];
   projects: Project[];
+  repositoryClassifications?: RepositoryClassification[];
   owners: { login: string; scope: string; sourceUrl: string }[];
   selectedRepositories: string[];
   coverageNotes: string[];
@@ -111,6 +132,8 @@ export type ClassifiedRepository = Repository & {
   projects: Project[];
   organization: Organization | null;
   category: string;
-  classification: "reviewed" | "inferred";
+  classification: "reviewed" | "project-associated" | "inferred";
+  review: RepositoryClassification | null;
+  notices: ProjectNotice[];
   tags: string[];
 };

@@ -1,6 +1,394 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-09-08T16:53:33.850Z",
+  "checkedAt": "2026-09-08T23:10:23.000Z",
+  "repositoryClassifications": [
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMDU0NjE2NTM=",
+      "repository": "adityapk00/lightwalletd",
+      "category": "Infrastructure",
+      "tags": [
+        "lightwalletd",
+        "backend"
+      ],
+      "rationale": "Light-client backend service fork; the associated Zecwallet family's desktop/mobile features are not repository capabilities.",
+      "sourceUrl": "https://github.com/adityapk00/lightwalletd",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMTM0Mzk4NzU=",
+      "repository": "adityapk00/zecwallet-light-cli",
+      "category": "Wallets",
+      "tags": [
+        "CLI",
+        "light-client",
+        "Rust"
+      ],
+      "rationale": "The README presents an interactive command-line wallet. Wallets is the primary purpose; reusable library code remains a secondary facet.",
+      "sourceUrl": "https://github.com/adityapk00/zecwallet-light-cli",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOJJSXEg",
+      "repository": "KeystoneHQ/keystone-sdk-ios",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Swift",
+        "iOS",
+        "SDK"
+      ],
+      "rationale": "Reusable Swift SDK for Keystone integration, not a standalone wallet.",
+      "sourceUrl": "https://github.com/KeystoneHQ/keystone-sdk-ios",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOKQ7SkQ",
+      "repository": "LedgerHQ/device-sdk-ts",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "TypeScript",
+        "device-communication",
+        "SDK"
+      ],
+      "rationale": "TypeScript device-communication libraries; the Zcash contribution does not make the whole SDK a Zcash wallet.",
+      "sourceUrl": "https://github.com/LedgerHQ/device-sdk-ts",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkzNTk0NTYyMTE=",
+      "repository": "nighthawk-apps/zcashex",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Elixir",
+        "JSON-RPC",
+        "client-library"
+      ],
+      "rationale": "Elixir client library for Zcash JSON-RPC; association with an infrastructure program does not change the artifact type.",
+      "sourceUrl": "https://github.com/nighthawk-apps/zcashex",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOKSLwxA",
+      "repository": "QED-it/zcash_tx_tool",
+      "category": "Developer tools",
+      "tags": [
+        "Rust",
+        "ZSA",
+        "transaction-generation"
+      ],
+      "rationale": "Transaction generation and testing tool in the QEDIT ZSA workflow. The repository itself is not a fork.",
+      "sourceUrl": "https://github.com/QED-it/zcash_tx_tool",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOTUdAlw",
+      "repository": "valargroup/reddsa",
+      "category": "Cryptography",
+      "tags": [
+        "RedDSA",
+        "signatures"
+      ],
+      "rationale": "Fork of a RedDSA signature library, not a node implementation.",
+      "sourceUrl": "https://github.com/valargroup/reddsa",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOS_xeHg",
+      "repository": "valargroup/sinsemilla",
+      "category": "Cryptography",
+      "tags": [
+        "Sinsemilla",
+        "hashing",
+        "commitments"
+      ],
+      "rationale": "Fork of the Sinsemilla cryptographic scheme, not an FFI package.",
+      "sourceUrl": "https://github.com/valargroup/sinsemilla",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyNzg2MjkwNzg=",
+      "repository": "zcash-hackworks/zcash-testnet-in-a-box",
+      "category": "Infrastructure",
+      "tags": [
+        "Kubernetes",
+        "testnet",
+        "deployment"
+      ],
+      "rationale": "Deployment configuration for a monitored testnet cluster; cataloged as infrastructure even when used for historical research.",
+      "sourceUrl": "https://github.com/zcash-hackworks/zcash-testnet-in-a-box",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMjE1NDA1MjE=",
+      "repository": "zcash-hackworks/zcashd_exporter",
+      "category": "Infrastructure",
+      "tags": [
+        "Prometheus",
+        "monitoring"
+      ],
+      "rationale": "Prometheus metrics exporter for zcashd, not a node implementation. Purpose does not imply continuing support.",
+      "sourceUrl": "https://github.com/zcash-hackworks/zcashd_exporter",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDONdC3ew",
+      "repository": "zcash/sinsemilla",
+      "category": "Cryptography",
+      "tags": [
+        "Sinsemilla",
+        "hashing",
+        "commitments"
+      ],
+      "rationale": "Cryptographic hash/commitment scheme. The letters 'ffi' inside 'efficient' do not identify an FFI library.",
+      "sourceUrl": "https://github.com/zcash/sinsemilla",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOTAYsQw",
+      "repository": "zcash/zcash_client_memory",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Rust",
+        "wallet-data"
+      ],
+      "rationale": "In-memory wallet data-access crate consumed by wallets; not a standalone wallet.",
+      "sourceUrl": "https://github.com/zcash/zcash_client_memory",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMzg3MTcyODM=",
+      "repository": "zcash/zcash-android-wallet-plugins",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Android",
+        "wallet-interfaces"
+      ],
+      "rationale": "Reusable Android wallet interfaces and Gradle dependency, rather than a wallet app.",
+      "sourceUrl": "https://github.com/zcash/zcash-android-wallet-plugins",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnk2NzQ3MjgxNg==",
+      "repository": "zcash/zcash-seeder",
+      "category": "Infrastructure",
+      "tags": [
+        "DNS",
+        "peer-discovery"
+      ],
+      "rationale": "DNS seeding and peer discovery for the Zcash network.",
+      "sourceUrl": "https://github.com/zcash/zcash-seeder",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOTPs8Zg",
+      "repository": "zcash/zewif-zcashd",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Rust",
+        "wallet-migration",
+        "ZeWIF"
+      ],
+      "rationale": "Rust crate translating zcashd wallet.dat data into ZeWIF. Classified by its reusable crate API; migration tooling is the use case.",
+      "sourceUrl": "https://github.com/zcash/zewif-zcashd",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMTQwMzY5MjI=",
+      "repository": "ZcashFoundation/dnsseeder",
+      "category": "Infrastructure",
+      "tags": [
+        "DNS",
+        "peer-discovery"
+      ],
+      "rationale": "DNS seed service for network peer discovery.",
+      "sourceUrl": "https://github.com/ZcashFoundation/dnsseeder",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyMzU2NTE0Mzc=",
+      "repository": "ZcashFoundation/ed25519-zebra",
+      "category": "Cryptography",
+      "tags": [
+        "Ed25519",
+        "signature-verification"
+      ],
+      "rationale": "Ed25519 implementation used by Zebra; this repository is a signature library, not a node.",
+      "sourceUrl": "https://github.com/ZcashFoundation/ed25519-zebra",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOMPVNQQ",
+      "repository": "ZcashFoundation/infra-monitoring-kuma",
+      "category": "Infrastructure",
+      "tags": [
+        "uptime-monitoring",
+        "deployment"
+      ],
+      "rationale": "Uptime Kuma monitoring deployment. Litestream is not a testing tag.",
+      "sourceUrl": "https://github.com/ZcashFoundation/infra-monitoring-kuma",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkxMTAyOTcxNTE=",
+      "repository": "ZcashFoundation/powersoftau-attestations",
+      "category": "Cryptography",
+      "tags": [
+        "Powers of Tau",
+        "ceremony-attestations"
+      ],
+      "rationale": "Attestation archive for the Powers of Tau cryptographic ceremony, not a test suite. This category does not imply executable software.",
+      "sourceUrl": "https://github.com/ZcashFoundation/powersoftau-attestations",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOGZVcOQ",
+      "repository": "ZcashFoundation/reddsa",
+      "category": "Cryptography",
+      "tags": [
+        "RedDSA",
+        "signatures"
+      ],
+      "rationale": "RedDSA signature implementation; the cryptographic primitive is the primary artifact.",
+      "sourceUrl": "https://github.com/ZcashFoundation/reddsa",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyNjA0OTM4Mzk=",
+      "repository": "ZcashFoundation/ristretto255-dh",
+      "category": "Cryptography",
+      "tags": [
+        "Ristretto255",
+        "Diffie-Hellman"
+      ],
+      "rationale": "Ristretto255 Diffie-Hellman key-exchange crate; classified by its cryptographic function.",
+      "sourceUrl": "https://github.com/ZcashFoundation/ristretto255-dh",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOT3xwgg",
+      "repository": "ZcashFoundation/zebra-fuzz-corpora",
+      "category": "Developer tools",
+      "tags": [
+        "fuzzing",
+        "test-corpus"
+      ],
+      "rationale": "Binary seed corpora for fuzz testing; node and harness implementations live separately.",
+      "sourceUrl": "https://github.com/ZcashFoundation/zebra-fuzz-corpora",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyNzI4MjY0NjQ=",
+      "repository": "ZcashFoundation/zebra-net-ra-crash-repro",
+      "category": "Developer tools",
+      "tags": [
+        "rust-analyzer",
+        "reproducer"
+      ],
+      "rationale": "The maintainer's repository description identifies a rust-analyzer crash reproducer; no README was available.",
+      "sourceUrl": "https://api.github.com/repos/ZcashFoundation/zebra-net-ra-crash-repro",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOTlYkXw",
+      "repository": "ZcashFoundation/zt",
+      "category": "Developer tools",
+      "tags": [
+        "CI",
+        "testing",
+        "Python"
+      ],
+      "rationale": "Python task runner for Zebra CI checks, not the Zebra node.",
+      "sourceUrl": "https://github.com/ZcashFoundation/zt",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkzODk3OTM4MjI=",
+      "repository": "zecpublish/platform",
+      "category": "Community",
+      "tags": [
+        "microblogging",
+        "self-hosted"
+      ],
+      "rationale": "Self-hosted microblog/social publishing platform; development is not its user-facing purpose.",
+      "sourceUrl": "https://github.com/zecpublish/platform",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOPpf-Xw",
+      "repository": "zecrocks/blockbook",
+      "category": "Infrastructure",
+      "tags": [
+        "indexer",
+        "explorer"
+      ],
+      "rationale": "Blockchain backend/indexer and explorer; the 'book' fragment is not evidence of educational content.",
+      "sourceUrl": "https://github.com/zecrocks/blockbook",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOOz4Zag",
+      "repository": "zingolabs/zaino-e2e",
+      "category": "Developer tools",
+      "tags": [
+        "end-to-end-tests",
+        "Zaino"
+      ],
+      "rationale": "End-to-end test suite for Zaino, rather than the indexing service.",
+      "sourceUrl": "https://github.com/zingolabs/zaino-e2e",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDONVw_cQ",
+      "repository": "zingolabs/zcash-wallet-formats",
+      "category": "Research",
+      "tags": [
+        "wallet-formats",
+        "survey",
+        "interoperability"
+      ],
+      "rationale": "Survey of existing wallet export formats, not an implemented protocol or the migration tool itself.",
+      "sourceUrl": "https://github.com/zingolabs/zcash-wallet-formats",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOQUW6WA",
+      "repository": "zingolabs/zebra-rpc-ts",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "TypeScript",
+        "JSON-RPC",
+        "client-library"
+      ],
+      "rationale": "TypeScript RPC client package, not an RPC server or indexer.",
+      "sourceUrl": "https://github.com/zingolabs/zebra-rpc-ts",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "R_kgDOGPpv8A",
+      "repository": "zodl-inc/ecc_zcashd_exporter",
+      "category": "Infrastructure",
+      "tags": [
+        "Prometheus",
+        "monitoring",
+        "deployment"
+      ],
+      "rationale": "Deployment and monitoring stack for a zcashd metrics exporter.",
+      "sourceUrl": "https://github.com/zodl-inc/ecc_zcashd_exporter",
+      "checkedAt": "2026-09-08"
+    },
+    {
+      "repositoryId": "MDEwOlJlcG9zaXRvcnkyNDM5NTgzNjQ=",
+      "repository": "Zondax/ledger-zcash-rs",
+      "category": "Libraries & SDKs",
+      "tags": [
+        "Rust",
+        "Ledger",
+        "client-library"
+      ],
+      "rationale": "Rust client bindings for the Ledger Zcash application, separate from the device wallet application.",
+      "sourceUrl": "https://github.com/Zondax/ledger-zcash-rs",
+      "checkedAt": "2026-09-08"
+    }
+  ],
   "organizations": [
     {
       "id": "zcash-core",
@@ -2062,7 +2450,6 @@
         "QR",
         "PCZT",
         "multichain-integration",
-        "pczt",
         "shielded"
       ],
       "description": "Zcash hardware-wallet integration in Keystone's firmware. The repository is multi-chain; the recorded grant concerns its Zcash support.",
@@ -2282,7 +2669,7 @@
       "tags": [
         "dex",
         "cross-chain",
-        "shielded",
+        "shielded-interoperability",
         "external-git"
       ],
       "description": "Zcash chain adapter and Maya node changes for cross-chain swaps. ZCG integration work and the later Coinholder retroactive grant remain separate events.",
@@ -2340,9 +2727,26 @@
         {
           "title": "Source repository",
           "url": "https://gitlab.com/mayachain/mayanode"
+        },
+        {
+          "title": "Team disclosure: cross-chain privacy boundary",
+          "url": "https://forum.zcashcommunity.com/t/maya-protocol-advanced-shielded-zec-support-retroactive-grant/54593/6"
+        },
+        {
+          "title": "Team disclosure: transparent inbound addresses",
+          "url": "https://forum.zcashcommunity.com/t/maya-protocol-advanced-shielded-zec-support-retroactive-grant/54593/15"
         }
       ],
-      "logo": null
+      "logo": null,
+      "notices": [
+        {
+          "kind": "capability",
+          "label": "Privacy scope",
+          "summary": "Team disclosures (February–March 2026) describe transparent inbound/vault addresses and public cross-chain metadata. Shielded interoperability is not end-to-end private custody; no current deployment test is claimed.",
+          "sourceUrl": "https://forum.zcashcommunity.com/t/maya-protocol-advanced-shielded-zec-support-retroactive-grant/54593/15",
+          "date": "2026-03-20"
+        }
+      ]
     },
     {
       "id": "mfkdf2",
@@ -2580,7 +2984,6 @@
         "browser",
         "TypeScript",
         "wallet-integration",
-        "typescript",
         "dapps"
       ],
       "description": "Public dApp SDK for the Noir browser wallet built by the Rhea team. This repository is not the complete extension implementation.",
@@ -2896,7 +3299,6 @@
         "implementation-forks",
         "QEDIT",
         "protocol-extension",
-        "zsa",
         "asset-swaps",
         "testnet",
         "forks"
@@ -3575,11 +3977,9 @@
         "Ycash",
         "mobile",
         "desktop",
-        "light-client",
-        "zcash",
-        "ycash"
+        "light-client"
       ],
-      "description": "Zcash and Ycash light shielded wallet developed by Hanh. The approved funding events cover the original wallet and documented maintenance/Orchard scope.",
+      "description": "Light wallet created for Zcash and Ycash. The maintainer has deprecated Zcash support and directs Zcash users to Zkool; Ycash support remains documented.",
       "website": "https://ywallet.app",
       "repositories": [
         "hhanh00/zwallet"
@@ -3600,6 +4000,10 @@
         {
           "title": "Project scope or funding evidence",
           "url": "https://forum.zcashcommunity.com/t/orchard-and-ua-for-ywallet/43061"
+        },
+        {
+          "title": "Maintainer support and migration notice",
+          "url": "https://github.com/hhanh00/zwallet/commit/865dc0e533276d3426c3778f82082cefc1612fec"
         }
       ],
       "funding": {
@@ -3645,7 +4049,22 @@
         ],
         "scopeNote": "Approval applies to the named proposal and its documented scope, not every repository component or the whole organization. Approval is not proof of payment, acceptance, delivery, deployment, or current support."
       },
-      "logo": "/wallet-logos/ywallet.png"
+      "logo": "/wallet-logos/ywallet.png",
+      "notices": [
+        {
+          "kind": "support",
+          "label": "Zcash support deprecated",
+          "summary": "The maintainer directs Zcash users to Zkool and says Ycash remains supported. This support notice is separate from GitHub archival.",
+          "sourceUrl": "https://github.com/hhanh00/zwallet/commit/865dc0e533276d3426c3778f82082cefc1612fec",
+          "date": "2026-08-23",
+          "repositoryIds": [
+            "MDEwOlJlcG9zaXRvcnkzODIzMjk1Nzk="
+          ]
+        }
+      ],
+      "relatedProjectIds": [
+        "zkool"
+      ]
     },
     {
       "id": "z3",
@@ -4934,7 +5353,7 @@
       "id": "zcash-wallet-formats",
       "name": "Zcash Wallet Formats",
       "organizationId": "zingolabs",
-      "category": "Protocol",
+      "category": "Research",
       "tags": [
         "wallet-interoperability",
         "research",
@@ -5369,9 +5788,6 @@
         "Kotlin",
         "Swift",
         "payment-requests",
-        "zip-321",
-        "kotlin",
-        "swift",
         "upstream-contribution"
       ],
       "description": "Kotlin and Swift ZIP-321 payment URI libraries developed in Pacu's community-developer work. Historical personal-repository links now resolve to ZecDev.",
@@ -5916,7 +6332,7 @@
       "id": "zecwallet-light-cli",
       "name": "Zecwallet Lightclient Library",
       "organizationId": "adityapk00",
-      "category": "Libraries & SDKs",
+      "category": "Wallets",
       "tags": [
         "historical",
         "wallet-library",
@@ -6171,7 +6587,8 @@
         }
       ],
       "relatedProjectIds": [
-        "zcash-wallet-formats"
+        "zcash-wallet-formats",
+        "zexcavator"
       ],
       "logo": null
     },
@@ -6198,14 +6615,39 @@
         {
           "title": "Zingo Labs project inventory",
           "url": "https://github.com/zingolabs"
+        },
+        {
+          "title": "Initial ZeWIF proposal: ZExCavator deliverable",
+          "url": "https://forum.zcashcommunity.com/t/grant-proposal-zcash-extensible-wallet-interchange-format-zewif/49730"
+        },
+        {
+          "title": "Committee approval, 23 December 2024",
+          "url": "https://forum.zcashcommunity.com/t/zcash-community-grants-meeting-minutes-12-23-2024/49913"
         }
       ],
       "funding": {
-        "label": "Funding not mapped",
-        "status": "unassessed",
-        "events": []
+        "label": "Included in the initial ZeWIF approval",
+        "status": "historical-approval",
+        "events": [
+          {
+            "title": "Zcash Extensible Wallet Interchange Format (ZeWiF)",
+            "status": "approved",
+            "date": "2024-12-23",
+            "dateType": "official-ledger-recorded-decision-date",
+            "program": "zcg",
+            "sourceUrl": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=1164534734&range=A309",
+            "scopeSourceUrl": "https://forum.zcashcommunity.com/t/grant-proposal-zcash-extensible-wallet-interchange-format-zewif/49730",
+            "repositoryEvidenceUrl": "https://forum.zcashcommunity.com/t/grant-proposal-zcash-extensible-wallet-interchange-format-zewif/49730",
+            "repositoryEvidenceKind": "proposal-scope",
+            "associationNote": "Initial ZeWIF proposal, phase 4 / deliverable 4.1: ZExCavator, implemented by Zingo Labs."
+          }
+        ],
+        "scopeNote": "Component of the initial ZeWIF approval, not a separate award. The later error-handling renewal is not attributed here. Approval does not establish payment, delivery or current support."
       },
-      "logo": null
+      "logo": null,
+      "relatedProjectIds": [
+        "zewif"
+      ]
     },
     {
       "id": "zgo",
@@ -6466,7 +6908,6 @@
         "wallet-sdk",
         "CLI",
         "Zingo Labs",
-        "rust",
         "light-client",
         "community-grant"
       ],

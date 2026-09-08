@@ -1,7 +1,7 @@
 # Ecosystem and development catalog
 
 `/ecosystem` is a source-linked directory of Zcash projects and components.
-`/development` exposes the underlying public repositories with maintainer,
+`/development` exposes the underlying public repositories with GitHub owner,
 purpose, funding-history, archive and fork filters, plus 7/30/90-day activity.
 Both apps are available from the existing app launcher. `/api/ecosystem` serves
 the same public dataset.
@@ -38,9 +38,32 @@ activity or repository counts.
 
 Projects and components are separate from repository identities. A family and
 its component may both have directory entries; renewals are funding events, not
-new applications. Reviewed project mappings provide purpose tags; remaining
-repositories receive explicitly labeled inferred tags from names, descriptions
-and topics. These classifications are not code audits or endorsements.
+new applications. Repository purpose has three evidence levels:
+
+- `reviewed`: an individual `repositoryClassifications` record, matched by
+  stable GitHub node ID, with category, scoped tags, rationale, date and source.
+- `project-associated` (shown as Project-linked): all linked projects agree on
+  a category, but the repository has not been individually reviewed.
+- `inferred`: no individual review or unanimous project category is available;
+  metadata keywords provide a limited organizational aid.
+
+Project array order never chooses a category. Family tags stay on the project;
+repository search uses individual review tags, GitHub metadata and associated
+project names. It does not inherit every platform, feature or fork claim from
+a family. GitHub lifecycle flags remain separate from curated support notices.
+Project notices reach repositories only through explicitly scoped stable IDs.
+Raw `stage` values mix artifact type, maturity and uncertainty and are not shown
+as verified product-support claims. These classifications are not code audits
+or endorsements.
+
+The 8 September 2026 correction adds 31 individual repository-purpose reviews,
+covering 29 confirmed audit cases plus two identified DNS seeders. Reusable
+client/translator crates are SDKs, deployed services are infrastructure, an
+interactive wallet CLI remains a wallet, and a format survey is research.
+These primary-purpose choices do not exclude secondary use cases. The
+remaining project-linked/inferred repositories are not silently certified.
+GitHub owner options cover every namespace present in the snapshot; Ecosystem
+instead filters the separately recorded project/team association.
 
 ## Funding provenance
 
@@ -62,6 +85,14 @@ or continuing support. Events retain their specific proposal and repository
 evidence. When a ledger date precedes the original proposal discussion, the
 decision date remains unknown; the original recorded value and discrepancy are
 preserved rather than silently assigning a false chronology.
+
+Both project and repository details retain the funding program (ZCG or
+Coinholder Grants) and the project's specific scope note. Other funded projects
+sharing a repository are linked separately, not counted as awards to the
+component. Zexcavator references only the initial ZeWIF approval (A309), scoped
+to phase 4 / deliverable 4.1. It is not a new grant; the later error-handling
+renewal (A383) is not inherited. Approval counts measure project associations,
+not distinct awards; deduplicate decisions by source URL when counting awards.
 
 Examples of organization-level distinctions:
 
@@ -117,6 +148,13 @@ The normal sync refreshes every inventory and activity measurement. The optional
 `npm run sync-ecosystem -- --cached` resumes a local research collection using
 its existing cutoff and cached source reads; it is not a freshness check.
 The cache is ignored by Git and must never contain tokens or private metadata.
+
+A classification-only review can retain the existing GitHub snapshot. In that
+case, review the registry changes, reconcile only its SHA-256 in the snapshot,
+and verify that all repository metadata, inventory records, activity and
+collection timestamps are unchanged. The registry review date is not a new
+GitHub collection date. Changes to the collected identity/inventory scope
+require a collector run, not a hash-only reconciliation.
 
 A failed or incomplete full-account scan cannot replace the prior snapshot.
 Selected-repository or activity failures are recorded as scoped warnings.

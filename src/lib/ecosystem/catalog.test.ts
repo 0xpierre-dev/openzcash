@@ -43,7 +43,7 @@ describe("funding provenance and classification", () => {
     expect(result[0].projects.map(item => item.id)).toEqual(["sample"]);
     expect(result[0].category).toBe("Infrastructure");
     expect(result[0].organization).toBeNull();
-    expect(result[0].classification).toBe("reviewed");
+    expect(result[0].classification).toBe("project-associated");
     expect(filterRepositories(result, { ...filters, funding: "grants", query: "INDEXER rust" })).toHaveLength(1);
   });
   it("retains archived and forked repositories but supports precise lifecycle filters", () => {
@@ -96,7 +96,9 @@ describe("public data safety and checked-in consistency", () => {
   });
   it("validates source links, identities, categories and project owners", () => {
     expect(() => validateCatalog(catalog)).not.toThrow();
-    expect(() => validateCatalog({ ...catalog, snapshot: { ...catalog.snapshot, repositories: [repository(-1)] } }))
+    const invalid = structuredClone(catalog);
+    invalid.snapshot.repositories[0].activity!.commits["30"] = -1;
+    expect(() => validateCatalog(invalid))
       .toThrow("Invalid commit count");
   });
   it("publishes a snapshot from the exact reviewed registry", () => {

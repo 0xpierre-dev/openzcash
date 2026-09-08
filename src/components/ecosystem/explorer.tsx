@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Catalog, ClassifiedRepository, FundingEvent, Organization, Project, Source } from "@/lib/ecosystem/types";
+import type { Catalog, ClassifiedRepository, FundingEvent, Organization, Project, ProjectNotice, Source } from "@/lib/ecosystem/types";
 import {
   activitySummary, classifyRepositories, displayDate, filterProjects,
-  filterRepositories, isGrantFunded, relatedRepositories, safeExternalUrl,
+  filterRepositories, fundingProgramLabel, isGrantFunded, normalizeTags, relatedRepositories,
+  repositoryOwners, safeExternalUrl, sharedRepositoryFunding,
 } from "@/lib/ecosystem/catalog";
 import styles from "./explorer.module.css";
 import { brandLabel, organizationBrand, projectBrand, repositoryBrand, type Brand } from "./branding";
@@ -39,12 +40,25 @@ function brandSources(brand: Brand | null): Source[] {
   return brand ? [{ title: brandLabel(brand) + " source", url: brand.sourceUrl }] : [];
 }
 
+function NoticeBadges({ notices = [] }: { notices?: ProjectNotice[] }) {
+  return <>{notices.filter(notice => notice.kind === "support").map(notice =>
+    <span key={notice.sourceUrl} className={styles.noticeBadge}>{notice.label}</span>)}</>;
+}
+
+function Notices({ notices = [] }: { notices?: ProjectNotice[] }) {
+  return <>{notices.map(notice => <div className={styles.notice} role="note" key={notice.sourceUrl}>
+    <strong>{notice.label}</strong><p>{notice.summary}</p>
+    <External url={notice.sourceUrl}>Source · {displayDate(notice.date)} ↗</External>
+  </div>)}</>;
+}
+
 function FundingEvents({ events }: { events: FundingEvent[] }) {
   if (!events.length) return <p>No project-specific funding decision mapped in this catalog.</p>;
   return <>{events.map((event, index) =>
     <div className={styles.event} key={event.sourceUrl + event.title + index}>
       <strong>{event.title}</strong>
-      <div className={styles.small}>{event.status} · {displayDate(event.date)}</div>
+      <div className={styles.small}>{fundingProgramLabel(event.program) && fundingProgramLabel(event.program) + " · "}
+        {event.status} · {displayDate(event.date)}</div>
       {event.dateNote && <div className={styles.small}>{event.dateNote}</div>}
       <External url={event.sourceUrl}>Decision source ↗</External>
       {event.scopeSourceUrl && <> · <External url={event.scopeSourceUrl}>Proposal scope ↗</External></>}
@@ -53,6 +67,11 @@ function FundingEvents({ events }: { events: FundingEvent[] }) {
     </div>)}
     <p>These are recorded funding decisions. An approval does not establish payment, delivery or continuing support.</p>
   </>;
+}
+
+function ProjectFunding({ project }: { project: Project }) {
+  return <><FundingEvents events={project.funding.events} />
+    {project.funding.scopeNote && <p>{project.funding.scopeNote}</p>}</>;
 }
 
 function Sources({ sources }: { sources: Source[] }) {
@@ -77,9 +96,10 @@ function OrganizationFunding({ organization }: { organization: Organization }) {
   </>;
 }
 
-function DetailDialog({ selection, close, repositories, organizations, projects }: {
+export function DetailDialog({ selection, close, repositories, organizations, projects, onProjectNavigate }: {
   selection: Selection | null; close: () => void;
   repositories: ClassifiedRepository[]; organizations: Organization[]; projects: Project[];
+  onProjectNavigate?: (project: Project) => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -104,9 +124,11 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
       const project = selection.value;
       const repos = relatedRepositories(project, repositories);
       const org = organizations.find(item => item.id === project.organizationId);
+      const sharedFunding = !isGrantFunded(project) ? sharedRepositoryFunding(project, repositories) : [];
       return <>
         <div className={styles.badges}><CategoryBadge category={project.category} />
-          {project.tags.map(tag => <Badge key={tag} muted>{tag}</Badge>)}</div>
+          {normalizeTags(project.tags).map(tag => <Badge key={tag} muted>{tag}</Badge>)}</div>
+        <Notices notices={project.notices} />
         <p>{project.description}</p>
         <div className={styles.dialogLinks}><External url={project.website}>Project website ↗</External>
           <Link href={"/development?project=" + encodeURIComponent(project.id)}>View development →</Link></div>
@@ -123,9 +145,15 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
             {projects.filter(item => project.relatedProjectIds!.includes(item.id)).map(item =>
               <Link key={item.id} href={"/development?project=" + encodeURIComponent(item.id)}>{item.name} →</Link>)}
           </div></>}
-        <h3>Project funding history</h3><FundingEvents events={project.funding.events} />
-        {project.funding.scopeNote && <p>{project.funding.scopeNote}</p>}
-        {org && <><h3>Maintainer / namespace · {org.name}</h3><OrganizationFunding organization={org} />
+        <h3>Project funding history</h3><ProjectFunding project={project} />
+        {sharedFunding.length > 0 && <>
+          <h3>Funding on shared repositories</h3>
+          <p>These other projects share a repository with this entry. Their approvals do not establish a separate award to this component.</p>
+          <div className={styles.dialogLinks}>{sharedFunding.map(other =>
+            <Link key={other.id} href={"/ecosystem?project=" + encodeURIComponent(other.id)}
+              onClick={() => onProjectNavigate ? onProjectNavigate(other) : close()}>{other.name} · scope & sources →</Link>)}</div>
+        </>}
+        {org && <><h3>Project association · {org.name}</h3><OrganizationFunding organization={org} />
           <p>Organization funding history is not a grant award to each repository.</p></>}
         <h3>Sources</h3><Sources sources={[...project.sources, ...brandSources(brand)]} />
       </>;
@@ -135,7 +163,9 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
       return <>
         <div className={styles.badges}><CategoryBadge category={repo.category} />
           {repo.archived && <Badge muted>Archived</Badge>}{repo.fork && <Badge muted>Fork</Badge>}
-          {repo.language && <Badge muted>{repo.language}</Badge>}</div>
+          {repo.disabled && <Badge muted>Disabled</Badge>}
+          {normalizeTags([...(repo.review?.tags || []), repo.language || ""]).map(tag => <Badge key={tag} muted>{tag}</Badge>)}</div>
+        <Notices notices={repo.notices} />
         <p>{repo.description || "No description supplied by the maintainer."}</p>
         <div className={styles.dialogLinks}><External url={repo.url}>Repository ↗</External>
           <External url={repo.url + "/commits/" + encodeURIComponent(repo.defaultBranch || "")}>Commit history ↗</External>
@@ -154,15 +184,24 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
         <p>A GitHub release marker can be a beta or a repository notice; it does not establish a stable package or a deployment.</p>
         <h3>Project associations</h3>
         {repo.projects.length ? repo.projects.map(project =>
-          <div className={styles.event} key={project.id}><strong>{project.name}</strong>
-            <FundingEvents events={project.funding.events} /></div>)
+          <div className={styles.event} key={project.id}>
+            <Link href={"/ecosystem?project=" + encodeURIComponent(project.id)}
+              onClick={() => onProjectNavigate ? onProjectNavigate(project) : close()}><strong>{project.name} →</strong></Link>
+            <ProjectFunding project={project} /></div>)
           : <p>This repository is included by its public owner inventory. A product-specific funding association has not been established.</p>}
+        <h3>GitHub owner / namespace</h3>
+        <External url={"https://github.com/" + encodeURIComponent(repo.owner)}>{repo.owner} ↗</External>
         {repo.organization && <><h3>{repo.organization.name} · organization funding</h3>
-          <OrganizationFunding organization={repo.organization} /></>}
+          <OrganizationFunding organization={repo.organization} />
+          <p>Namespace ownership does not establish exclusive maintenance or funding of every repository.</p></>}
         <h3>Classification & provenance</h3>
         <p>{repo.classification === "reviewed"
-          ? "Purpose comes from a reviewed project record linked to this repository."
+          ? repo.review!.rationale
+          : repo.classification === "project-associated"
+          ? "Purpose is shared by the linked project records; this repository has not received an individual purpose review."
           : "Purpose is inferred from the repository name, description and topics. It is an organizational aid, not an independently reviewed product claim."}</p>
+        {repo.review && <p><External url={repo.review.sourceUrl}>Purpose source ↗</External>
+          {" · Reviewed " + displayDate(repo.review.checkedAt)}</p>}
         {repo.aliases.length > 0 && <p>Also found through: {repo.aliases.join(", ")}.</p>}
         <Sources sources={[{ title: "GitHub metadata", url: repo.sourceUrl },
           ...(repo.organization?.sources || []), ...brandSources(brand)]} />
@@ -201,7 +240,8 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
     }
   }, [catalog.registry.projects]);
   const isDevelopment = mode === "development";
-  const filters = { query, category, organization, funding, lifecycle };
+  const filters = { query, category, organization: isDevelopment ? "" : organization,
+    owner: isDevelopment ? organization : undefined, funding, lifecycle };
   const matchingRepos = filterRepositories(repositories, filters)
     .filter(repo => !projectId || repo.projects.some(project => project.id === projectId))
     .sort((a, b) => (b.activity?.commits[String(period)] ?? -1) -
@@ -221,8 +261,8 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
   const categories = [...new Set((isDevelopment ? repositories : catalog.registry.projects)
     .map(item => item.category))].sort();
   const organizations = catalog.registry.organizations.filter(org =>
-    isDevelopment ? repositories.some(repo => repo.organization?.id === org.id) :
-      catalog.registry.projects.some(project => project.organizationId === org.id));
+    catalog.registry.projects.some(project => project.organizationId === org.id));
+  const owners = repositoryOwners(repositories);
   const coreOrganizations = catalog.registry.organizations.filter(org =>
     ["zcash-foundation", "zodl", "zakura", "shielded-labs", "ecc", "zcash-core"].includes(org.id));
   const selectedProject = catalog.registry.projects.find(project => project.id === projectId);
@@ -230,6 +270,12 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
   function clearFilters() {
     setQuery(""); setCategory(""); setOrganization(""); setFunding(""); setLifecycle(""); setProjectId(null); setPage(1);
     if (window.location.search) window.history.replaceState(null, "", window.location.pathname);
+  }
+  function navigateProject(project: Project) {
+    // Next preserves client state on same-page navigation. A component search
+    // or open dialog must not hide the funded project being opened.
+    setQuery(""); setCategory(""); setOrganization(""); setFunding(""); setLifecycle("");
+    setProjectId(project.id); setPage(1); setSelection(null);
   }
   const measuredPercent = stats.eligible ? Math.round(stats.measured / stats.eligible * 100) : 0;
   const num = (value: number) => number.format(value);
@@ -279,8 +325,10 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
         {categories.map(item => <option key={item} value={item}>{item}</option>)}
       </select>
       <select value={organization} onChange={event => update(setOrganization, event.target.value)}
-        aria-label="Filter by maintainer"><option value="">All maintainers</option>
-        {organizations.map(org => <option key={org.id} value={org.id}>{org.name}</option>)}</select>
+        aria-label={isDevelopment ? "Filter by GitHub owner" : "Filter by project association"}>
+        <option value="">{isDevelopment ? "All GitHub owners" : "All project teams"}</option>
+        {isDevelopment ? owners.map(owner => <option key={owner} value={owner}>{owner}</option>) :
+          organizations.map(org => <option key={org.id} value={org.id}>{org.name}</option>)}</select>
       <select value={funding} onChange={event => update(setFunding, event.target.value)}
           aria-label="Filter by funding"><option value="">All funding</option>
           <option value="grants">Grant approvals</option>
@@ -304,7 +352,7 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
     </div></div>
 
     {resultCount === 0 ? <div className={styles.empty}><h2>No matches in this view</h2>
-      <p>Try another project name, purpose or maintainer.</p>
+      <p>Try another name, category or {isDevelopment ? "GitHub owner" : "project team"}.</p>
       <button className={styles.textButton} onClick={clearFilters}>Clear filters</button></div>
       : isDevelopment ? <div className={styles.tablePanel}><div className={styles.tableScroll} tabIndex={0} role="region" aria-label="Repository results">
         <table className={styles.table} aria-label="Development repositories"><thead><tr>
@@ -320,9 +368,12 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
             <div className={styles.repoMeta}>
               <span>{repo.owner}{repo.language && " · " + repo.language}</span>
               {repo.archived && <Badge muted>Archived</Badge>}{repo.fork && <Badge muted>Fork</Badge>}
+              {repo.disabled && <Badge muted>Disabled</Badge>}
+              <NoticeBadges notices={repo.notices} />
               {repo.projects.some(isGrantFunded) && <Badge>Grant history</Badge>}
             </div></div></div></td><td><CategoryBadge category={repo.category} />
-              {repo.classification !== "reviewed" && <div className={styles.small}>Inferred</div>}</td>
+              {repo.classification !== "reviewed" && <div className={styles.small}>
+                {repo.classification === "project-associated" ? "Project-linked" : "Inferred"}</div>}</td>
             <td className={styles.numberCell}><span className={styles.numeric}
               title={repo.fork ? "Fork history — excluded from totals" : "Default-branch commits"}>{typeof count === "number" ? num(count) : "—"}</span></td>
             <td><span className={styles.date}>{displayDate(repo.pushedAt)}</span></td>
@@ -342,6 +393,7 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
               <p>{org?.name || "Independent project"}</p></div></div>
             <div className={styles.badges}><CategoryBadge category={project.category} />
               {isGrantFunded(project) && <Badge>Grant history</Badge>}
+              <NoticeBadges notices={project.notices} />
               {allArchived && <Badge muted>Archived</Badge>}</div>
             <div className={styles.cardBottom}><span>{repos.length ? repos.length + " " + (repos.length === 1 ? "repository" : "repositories") : "Public sources"}</span>
               <button aria-label={"View " + project.name} onClick={() => setSelection({ kind: "project", value: project })}>Details →</button></div>
@@ -379,7 +431,12 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
           <td>{owner.pages}</td><td>{displayDate(owner.collectedAt)}</td>
         </tr>)}</tbody></table></div>
       <p>Repository identity is deduplicated by GitHub ID after redirects. Archived projects and forks remain searchable.
-        Purpose tags distinguish reviewed project mappings from inferences based on repository metadata.</p>
+        Purpose tags distinguish individual source reviews, project-linked categories and metadata inferences.
+        Project-linked and inferred categories are not individually reviewed repository claims.
+        Project-family tags are not inherited as repository capabilities.</p>
+      <p>Development filters GitHub owners, while Ecosystem filters project team associations.
+        A namespace can contain shared upstream work; neither filter establishes exclusive maintainership.
+        Support notices are separate from archive/fork flags. Unqualified stage values are not displayed as verified support.</p>
       <p>Activity counts use 7, 30 and 90-day windows ending at collection time.
         They count commits reachable from the current default branch and published GitHub release records, not code quality or delivered work.
         Shared and multichain codebases may include non-Zcash work.
@@ -406,6 +463,6 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
         <Link href={isDevelopment ? "/ecosystem" : "/development"}>{isDevelopment ? "Ecosystem" : "Development"} →</Link>
       </div></footer>
     <DetailDialog selection={selection} close={() => setSelection(null)} repositories={repositories}
-      organizations={catalog.registry.organizations} projects={catalog.registry.projects} />
+      organizations={catalog.registry.organizations} projects={catalog.registry.projects} onProjectNavigate={navigateProject} />
   </div>;
 }
