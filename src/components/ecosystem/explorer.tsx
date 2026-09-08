@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Catalog, ClassifiedRepository, FundingEvent, Organization, Project, Source } from "@/lib/ecosystem/types";
@@ -10,6 +9,9 @@ import {
   filterRepositories, isGrantFunded, relatedRepositories, safeExternalUrl,
 } from "@/lib/ecosystem/catalog";
 import styles from "./explorer.module.css";
+import { brandLabel, organizationBrand, projectBrand, repositoryBrand, type Brand } from "./branding";
+import { BrandMark, CategoryBadge } from "./identity";
+import { categoryStyle } from "./presentation";
 
 type Mode = "ecosystem" | "development";
 type Selection = { kind: "project"; value: Project } |
@@ -27,15 +29,14 @@ function External({ url, children, className }: {
 }
 
 function Badge({ children, muted = false }: { children: React.ReactNode; muted?: boolean }) {
-  return <span className={styles.badge + (muted ? " " + styles.mutedBadge : "")}>{children}</span>;
+  return <span className={styles.badge + (muted ? " " + styles.mutedBadge : "")}>
+    {!muted && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>}{children}
+  </span>;
 }
 
-function Mark({ project }: { project: Project }) {
-  const initials = project.name.replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/)
-    .map(word => word[0]).slice(0, 2).join("").toUpperCase();
-  return <span className={styles.mark} aria-hidden="true">
-    {project.logo ? <Image src={project.logo} width={29} height={29} alt="" unoptimized /> : initials}
-  </span>;
+function brandSources(brand: Brand | null): Source[] {
+  return brand ? [{ title: brandLabel(brand) + " source", url: brand.sourceUrl }] : [];
 }
 
 function FundingEvents({ events }: { events: FundingEvent[] }) {
@@ -87,20 +88,24 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
     if (!selection && dialog?.open) dialog.close();
   }, [selection]);
   const title = selection?.kind === "repository" ? selection.value.fullName : selection?.value.name;
+  const brand = !selection ? null : selection.kind === "project" ? projectBrand(selection.value)
+    : selection.kind === "repository" ? repositoryBrand(selection.value) : organizationBrand(selection.value.id);
+  const category = selection && selection.kind !== "organization" ? selection.value.category : "Other";
   return <dialog ref={ref} className={styles.dialog} onClose={close} aria-labelledby="catalog-dialog-title"
     onClick={event => {
       if (event.target !== ref.current) return;
       const rect = ref.current.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close();
     }}>
-    <div className={styles.dialogHeader}><h2 id="catalog-dialog-title">{title}</h2>
+    <div className={styles.dialogHeader}><div className={styles.dialogTitle}>
+      {selection && <BrandMark brand={brand} category={category} />}<h2 id="catalog-dialog-title">{title}</h2></div>
       <button type="button" onClick={close} aria-label="Close details">×</button></div>
     {selection?.kind === "project" && (() => {
       const project = selection.value;
       const repos = relatedRepositories(project, repositories);
       const org = organizations.find(item => item.id === project.organizationId);
       return <>
-        <div className={styles.badges}><Badge>{project.category}</Badge>
+        <div className={styles.badges}><CategoryBadge category={project.category} />
           {project.tags.map(tag => <Badge key={tag} muted>{tag}</Badge>)}</div>
         <p>{project.description}</p>
         <div className={styles.dialogLinks}><External url={project.website}>Project website ↗</External>
@@ -122,13 +127,13 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
         {project.funding.scopeNote && <p>{project.funding.scopeNote}</p>}
         {org && <><h3>Maintainer / namespace · {org.name}</h3><OrganizationFunding organization={org} />
           <p>Organization funding history is not a grant award to each repository.</p></>}
-        <h3>Sources</h3><Sources sources={project.sources} />
+        <h3>Sources</h3><Sources sources={[...project.sources, ...brandSources(brand)]} />
       </>;
     })()}
     {selection?.kind === "repository" && (() => {
       const repo = selection.value;
       return <>
-        <div className={styles.badges}><Badge>{repo.category}</Badge>
+        <div className={styles.badges}><CategoryBadge category={repo.category} />
           {repo.archived && <Badge muted>Archived</Badge>}{repo.fork && <Badge muted>Fork</Badge>}
           {repo.language && <Badge muted>{repo.language}</Badge>}</div>
         <p>{repo.description || "No description supplied by the maintainer."}</p>
@@ -160,7 +165,7 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
           : "Purpose is inferred from the repository name, description and topics. It is an organizational aid, not an independently reviewed product claim."}</p>
         {repo.aliases.length > 0 && <p>Also found through: {repo.aliases.join(", ")}.</p>}
         <Sources sources={[{ title: "GitHub metadata", url: repo.sourceUrl },
-          ...(repo.organization?.sources || [])]} />
+          ...(repo.organization?.sources || []), ...brandSources(brand)]} />
       </>;
     })()}
     {selection?.kind === "organization" && <>
@@ -168,7 +173,7 @@ function DetailDialog({ selection, close, repositories, organizations, projects 
       <p>GitHub: {selection.value.githubOwners.join(", ")}</p>
       <h3>Funding history & current disclosures</h3>
       <OrganizationFunding organization={selection.value} />
-      <h3>Primary sources</h3><Sources sources={selection.value.sources} />
+      <h3>Primary sources</h3><Sources sources={[...selection.value.sources, ...brandSources(brand)]} />
     </>}
   </dialog>;
 }
@@ -308,14 +313,15 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
         </tr></thead><tbody>{matchingRepos.slice(start, start + perPage).map(repo => {
           const count = repo.activity?.commits[String(period)];
           const release = repo.activity?.latestRelease;
-          return <tr key={repo.id}><td>
+          return <tr key={repo.id}><td><div className={styles.repoIdentity}>
+            <BrandMark brand={repositoryBrand(repo)} category={repo.category} compact /><div>
             <button className={styles.repoTitle} onClick={() => setSelection({ kind: "repository", value: repo })}>
               {repo.name} <span aria-hidden="true">→</span></button>
             <div className={styles.repoMeta}>
               <span>{repo.owner}{repo.language && " · " + repo.language}</span>
               {repo.archived && <Badge muted>Archived</Badge>}{repo.fork && <Badge muted>Fork</Badge>}
               {repo.projects.some(isGrantFunded) && <Badge>Grant history</Badge>}
-            </div></td><td><Badge>{repo.category}</Badge>
+            </div></div></div></td><td><CategoryBadge category={repo.category} />
               {repo.classification !== "reviewed" && <div className={styles.small}>Inferred</div>}</td>
             <td className={styles.numberCell}><span className={styles.numeric}
               title={repo.fork ? "Fork history — excluded from totals" : "Default-branch commits"}>{typeof count === "number" ? num(count) : "—"}</span></td>
@@ -330,11 +336,11 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
           const repos = relatedRepositories(project, repositories);
           const org = catalog.registry.organizations.find(item => item.id === project.organizationId);
           const allArchived = repos.length > 0 && repos.every(repo => repo.archived);
-          return <article className={styles.card} key={project.id}>
+          return <article className={styles.card} style={categoryStyle(project.category)} key={project.id}>
             <Card className={styles.cardSurface + " p-4"}>
-            <div className={styles.cardTop}><Mark project={project} /><div><h2>{project.name}</h2>
+            <div className={styles.cardTop}><BrandMark brand={projectBrand(project)} category={project.category} /><div><h2>{project.name}</h2>
               <p>{org?.name || "Independent project"}</p></div></div>
-            <div className={styles.badges}><Badge>{project.category}</Badge>
+            <div className={styles.badges}><CategoryBadge category={project.category} />
               {isGrantFunded(project) && <Badge>Grant history</Badge>}
               {allArchived && <Badge muted>Archived</Badge>}</div>
             <div className={styles.cardBottom}><span>{repos.length ? repos.length + " " + (repos.length === 1 ? "repository" : "repositories") : "Public sources"}</span>
@@ -353,7 +359,8 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
       <summary>Organizations & funding</summary>
       <p>Funding models change over time. Explore the source-backed record for each team.</p>
       <div className={styles.organizationGrid}>{coreOrganizations.map(org =>
-        <article key={org.id} className={styles.organizationCard}><h3>{org.name}</h3>
+        <article key={org.id} className={styles.organizationCard}><div className={styles.organizationIdentity}>
+          <BrandMark brand={organizationBrand(org.id)} category="Other" compact /><h3>{org.name}</h3></div>
           <p>{org.funding.label}</p>
           <button onClick={() => setSelection({ kind: "organization", value: org })}>History & sources →</button>
         </article>)}</div>
@@ -383,6 +390,8 @@ export function EcosystemExplorer({ catalog, mode }: { catalog: Catalog; mode: M
         Renewals are funding events rather than additional apps.</p>
       <p>Mapped entries include both project families and their individual components; these counts are not counts of separate businesses or wallets.
         Shared upstream repositories can be associated with a scoped contribution grant without being funded in their entirety.</p>
+      <p>Marks identify a project, its maintainer or its shared namespace; they do not imply endorsement.
+        Attribution is available in the image label and project details. Entries without a confirmed mark use a category icon.</p>
       {catalog.registry.grantReview.unresolved.length > 0 && <details><summary>Unresolved source associations</summary>
         {catalog.registry.grantReview.unresolved.map((item, index) => <p key={item.sourceUrl + index}>
           <External url={item.sourceUrl}>{item.title} ↗</External> — {item.reason}</p>)}</details>}

@@ -59,4 +59,13 @@ describe("compact catalog presentation", () => {
     expect(html).toContain("Missing measurements appear as a dash.");
     expect(html).toContain('href="/api/ecosystem"');
   });
+  it.each(["ecosystem", "development"] as const)("renders semantic category colors and sourced identities in %s", mode => {
+    const html = render(mode);
+    expect(html).toContain("--category-ink:#6d28d9");
+    expect(html).toContain("--category-ink:#1d4ed8");
+    expect(html).toContain('data-brand-kind="maintainer"');
+    expect(html).toContain('data-brand-kind="namespace"');
+    expect(html).toContain("they do not imply endorsement");
+    expect(html).toContain("Grant history");
+  });
 });
