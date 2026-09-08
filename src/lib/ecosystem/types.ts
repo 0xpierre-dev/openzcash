@@ -1,0 +1,116 @@
+export type Source = { title: string; url: string };
+export type FundingEvent = {
+  title: string;
+  status: string;
+  date?: string | null;
+  sourceUrl: string;
+  repositoryEvidenceUrl?: string;
+  scopeSourceUrl?: string;
+  ledgerRecordedDate?: string;
+  dateNote?: string;
+  associationNote?: string;
+  repositoryEvidenceKind?: string;
+};
+export type Organization = {
+  id: string;
+  name: string;
+  githubOwners: string[];
+  description: string;
+  website: string;
+  funding: {
+    label: string;
+    status: string;
+    history: { label: string; program?: string; from?: string | null; until?: string | null; sourceUrl: string }[];
+  };
+  sources: Source[];
+};
+export type Project = {
+  id: string;
+  name: string;
+  organizationId: string | null;
+  category: string;
+  tags: string[];
+  description: string;
+  website: string;
+  repositories: string[];
+  funding: { label: string; status: string; events: FundingEvent[]; scopeNote?: string };
+  sources: Source[];
+  logo?: string | null;
+  stage?: string;
+  relatedProjectIds?: string[];
+};
+export type Registry = {
+  schemaVersion: number;
+  checkedAt: string;
+  organizations: Organization[];
+  projects: Project[];
+  owners: { login: string; scope: string; sourceUrl: string }[];
+  selectedRepositories: string[];
+  coverageNotes: string[];
+  grantReview: {
+    totalApproved: number;
+    classification: { title: string; sourceUrl: string; kind: string; projectId?: string | null; reason?: string }[];
+    unresolved: { title: string; sourceUrl: string; reason: string }[];
+  };
+};
+export type Release = {
+  name: string | null;
+  tagName: string;
+  publishedAt: string;
+  url: string;
+  isPrerelease: boolean;
+};
+export type Repository = {
+  id: string;
+  fullName: string;
+  name: string;
+  owner: string;
+  url: string;
+  description: string;
+  homepage: string | null;
+  archived: boolean;
+  fork: boolean;
+  disabled: boolean;
+  language: string | null;
+  topics: string[];
+  stars: number;
+  createdAt: string;
+  pushedAt: string | null;
+  defaultBranch: string | null;
+  sourceUrl: string;
+  aliases: string[];
+  activity: {
+    checkedAt: string;
+    since: Record<string, string>;
+    commits: Record<string, number | null>;
+    latestRelease: Release | null;
+    releases: Release[];
+    sourceUrl: string;
+  } | null;
+};
+export type Snapshot = {
+  schemaVersion: number;
+  collectedAt: string;
+  registryHash: string;
+  owners: {
+    login: string;
+    type: string;
+    complete: boolean;
+    pages: number;
+    repositoryCount: number;
+    collectedAt: string | null;
+    sourceUrl: string;
+    identitySource: string;
+  }[];
+  repositories: Repository[];
+  problems: { scope: string; message: string }[];
+  selectedRepositoryCount: number;
+};
+export type Catalog = { registry: Registry; snapshot: Snapshot };
+export type ClassifiedRepository = Repository & {
+  projects: Project[];
+  organization: Organization | null;
+  category: string;
+  classification: "reviewed" | "inferred";
+  tags: string[];
+};

@@ -245,6 +245,22 @@ const APPS: AppDef[] = [
     Icon: IconWallet,
     grad: GRAD.emerald,
   },
+  {
+    id: "ecosystem",
+    label: "Ecosystem",
+    sub: "Projects & maintainers",
+    href: "/ecosystem",
+    Icon: IconGlobe,
+    grad: GRAD.amber,
+  },
+  {
+    id: "development",
+    label: "Development",
+    sub: "Code & releases",
+    href: "/development",
+    Icon: IconChart,
+    grad: GRAD.amber,
+  },
 ];
 
 // Bumped (v5): Coinholder joins the default home. The six deeper data views

@@ -42,3 +42,5 @@ yarn-error.log*
 next-env.d.ts
 .zcg-data/
 .redesign-plan.json
+/.cache/ecosystem-github.json
+/src/data/ecosystem/*.tmp
