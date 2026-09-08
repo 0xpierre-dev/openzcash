@@ -4,6 +4,7 @@ import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { grantMilestones } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
+import { SourceRecordLink } from "@/components/source-record-link";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grant detail · OpenZcash" };
@@ -59,12 +60,12 @@ export default async function GrantDetailPage({
         <Stat
           label="Paid"
           value={formatUsdCents(paidUsd, { compact: true })}
-          sub={`${paid.length} milestones`}
+          sub={`${paid.length} ${paid.length === 1 ? "milestone" : "milestones"}`}
         />
         <Stat
-          label="Open"
+          label="Unpaid budget"
           value={formatUsdCents(openUsd, { compact: true })}
-          sub={`${open.length} milestones`}
+          sub={`${open.length} ${open.length === 1 ? "milestone" : "milestones"}`}
         />
         <Stat
           label="Status"
@@ -76,10 +77,17 @@ export default async function GrantDetailPage({
         />
       </section>
 
+      <p className="mb-6 text-xs text-stone-600">
+        USD figures are budgeted milestone values. Unpaid entries may include
+        cancelled milestones and are not necessarily outstanding commitments.
+        Recorded payment does not independently verify delivery. Source links
+        open the live spreadsheet rows, which may have changed since collection.
+      </p>
+
       {open.length > 0 ? (
         <section className="mb-8">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-            Open milestones
+            Unpaid milestones
             <Badge tone="amber">{open.length}</Badge>
           </h2>
           <Card className="overflow-x-auto p-0">
@@ -94,6 +102,7 @@ export default async function GrantDetailPage({
                   <th className="px-4 py-3 text-right font-medium">
                     Estimated date
                   </th>
+                  <th className="px-4 py-3 text-right font-medium">Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -116,6 +125,9 @@ export default async function GrantDetailPage({
                     <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
                       {(m.estimatedPayoutDate ?? m.paidOutRaw) || "TBD"}
                     </td>
+                    <td className="px-4 py-2.5 text-right">
+                      <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -134,17 +146,18 @@ export default async function GrantDetailPage({
             <thead className="text-[11px] uppercase tracking-wider text-stone-600">
               <tr className="border-b border-stone-200">
                 <th className="px-4 py-3 font-medium">Milestone</th>
-                <th className="px-4 py-3 text-right font-medium">USD</th>
+                <th className="px-4 py-3 text-right font-medium">Budgeted USD</th>
                 <th className="px-4 py-3 text-right font-medium">ZEC</th>
                 <th className="px-4 py-3 text-right font-medium">ZEC/USD</th>
                 <th className="px-4 py-3 text-right font-medium">Paid on</th>
+                <th className="px-4 py-3 text-right font-medium">Source</th>
               </tr>
             </thead>
             <tbody>
               {paid.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="px-4 py-8 text-center text-sm text-stone-600"
                   >
                     No milestones paid yet.
@@ -174,6 +187,9 @@ export default async function GrantDetailPage({
                   </td>
                   <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
                     {m.paidOutDate ?? "·"}
+                  </td>
+                  <td className="px-4 py-2.5 text-right">
+                    <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
                   </td>
                 </tr>
               ))}

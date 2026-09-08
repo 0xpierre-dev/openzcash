@@ -23,7 +23,7 @@ function Section({
 const SOURCES: { name: string; what: string }[] = [
   {
     name: "ZCG public spreadsheet",
-    what: "Disbursements ledger (every milestone/payment), the recipient & classification totals pivots, and the proposals funnel. Imported and de-duplicated on a daily cron.",
+    what: "The disbursements ledger, recipient and classification pivots, and ZCG and Coinholder proposal history. Collection is scheduled every six hours. A successful collection does not mean the source was recently edited.",
   },
   {
     name: "GitHub issue tracker",
@@ -35,7 +35,11 @@ const SOURCES: { name: string; what: string }[] = [
   },
   {
     name: "On-chain (lightwalletd)",
-    what: "The live Lockbox / ZIP-1016 balance and the day's ZEC/USD rate. These are the only figures read directly from the chain.",
+    what: "The Lockbox / ZIP-1016 ZEC balance. Market prices, grant approvals and milestone delivery are not facts supplied by this chain balance.",
+  },
+  {
+    name: "CoinGecko",
+    what: "The current ZEC/USD market price, cached for approximately ten minutes. If the feed is unavailable, the last cached price or the spreadsheet's recorded rate may be used. This price is not read from the Zcash chain.",
   },
 ];
 
@@ -130,11 +134,17 @@ export default function MethodologyPage() {
 
       <Section title="USD vs ZEC">
         <p>
-          Grants are budgeted in USD but paid in ZEC at the day&apos;s rate, so
-          a USD total and a ZEC total describe the same wallet from two angles
-          and should never be added together. On-chain balances are marked to
-          the live price; historical rows keep the rate recorded at payment
-          time.
+          Budgeted USD includes paid and unpaid entries, including amounts
+          recorded for cancelled grants. USD paid in the ledger-based views
+          sums the budgeted value of entries marked paid, not their current
+          market value. ZEC paid is the quantity recorded by the spreadsheet.
+          USD and ZEC must not be added together. Treasury USD valuations use
+          the available market price; historical entries retain their recorded rate.
+        </p>
+        <p className="mt-2">
+          An approval is not a payment, and a recorded payment does not independently
+          verify delivery or impact. Unpaid entries are not necessarily outstanding
+          commitments: check their grant status and the original source.
         </p>
       </Section>
 

@@ -1,4 +1,4 @@
-/** Formata centavos de USD (bigint) para exibição. */
+/** Format USD cents consistently across server and browser ICU versions. */
 export function formatUsdCents(
   cents: bigint | number | null | undefined,
   opts: { compact?: boolean } = {},
@@ -10,12 +10,14 @@ export function formatUsdCents(
       style: "currency",
       currency: "USD",
       notation: "compact",
+      minimumFractionDigits: 0,
       maximumFractionDigits: 1,
     }).format(n);
   }
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
+    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
     maximumFractionDigits: Number.isInteger(n) ? 0 : 2,
   }).format(n);
 }

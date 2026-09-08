@@ -26,13 +26,14 @@ export type RowDiligence = {
 /** Serializable shape for the DataTable (no bigint). */
 export type ProposalTableRow = {
   id: string;
+  program: string;
   title: string;
   platformLink: string | null;
   applicant: string;
   submitted: string;
   status: string;
   statusLabel: string;
-  /** "github" = live GitHub issue (ready for review); "sheet" = mirrored row. */
+  /** "github" = enriched with GitHub details or a decision; "sheet" = mirrored row. */
   source?: "sheet" | "github";
   /** Requested grant amount in whole USD (from the GitHub application), or null. */
   amountUsd?: number | null;
@@ -121,7 +122,7 @@ function DiligenceCell({ d }: { d: RowDiligence }) {
           className={`${chip} bg-rose-500/10 text-rose-800 ring-rose-500/20 hover:bg-rose-500/20`}
           title="The ZCG terms require posting the application on the community forum, and a title search found no thread. Opens a forum search to verify (fuzzy match, may miss renamed threads)."
         >
-          no forum thread
+          thread not found
         </a>
       ) : null}
       {d.meetingUrl ? (
@@ -159,6 +160,16 @@ function tone(status: string) {
 }
 
 const columns: Column<ProposalTableRow>[] = [
+  {
+    key: "program",
+    header: "Program",
+    sortable: true,
+    filterable: true,
+    filterType: "select",
+    sortValue: (r) => r.program,
+    filterValue: (r) => r.program === "coinholder" ? "Coinholder" : "ZCG",
+    render: (r) => <Badge tone="zinc">{r.program === "coinholder" ? "Coinholder" : "ZCG"}</Badge>,
+  },
   {
     key: "title",
     header: "Proposal",
@@ -315,6 +326,7 @@ export function ProposalsTable({ rows, isAdmin = false }: ProposalsTableProps) {
     <DataTable
       columns={cols}
       rows={rows}
+      rowKey={(row) => row.id}
       initialSort={{ key: "submitted", dir: "desc" }}
       maxHeight="max-h-[60vh]"
     />

@@ -7,6 +7,7 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { canonicalRecipient } from "@/lib/zcg/recipient-aliases";
 import { recipientEntryPresentation } from "@/lib/zcg/recipient-entry";
 import { formatZec } from "@/lib/zcash/units";
+import { SourceRecordLink } from "@/components/source-record-link";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Recipient ledger · OpenZcash" };
@@ -68,26 +69,33 @@ export default async function RecipientPage({
 
       <PageHeader
         title={name}
-        subtitle={`${open.length} upcoming and ${paid.length} paid entries in the official ZCG public ledger. Committee stipends, grants and reimbursements are consolidated here.`}
+        subtitle={`${open.length} unpaid and ${paid.length} paid entries in the public ledger. This detail view includes committee stipends, grants and reimbursements; the recipient ranking excludes internal costs.`}
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat
-          label="Future entries"
+          label="Unpaid budget"
           value={formatUsdCents(sum(open), { compact: true })}
-          sub={`${open.length} open`}
+          sub={`${open.length} ${open.length === 1 ? "entry" : "entries"}`}
         />
         <Stat
           label="Paid to date"
           value={formatUsdCents(sum(paid), { compact: true })}
-          sub={`${paid.length} entries`}
+          sub={`${paid.length} ${paid.length === 1 ? "entry" : "entries"}`}
         />
       </section>
+
+      <p className="mb-6 text-xs text-stone-600">
+        USD figures are budgeted entry values. Unpaid entries may include cancelled
+        milestones; they are not necessarily outstanding commitments. Recorded
+        payment does not independently verify delivery. Source links open live
+        spreadsheet rows, which may have changed since collection.
+      </p>
 
       {open.length > 0 ? (
         <section className="mb-8">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-            Upcoming entries
+            Unpaid entries
             <Badge tone="amber">{open.length}</Badge>
           </h2>
           <Card className="overflow-x-auto p-0">
@@ -101,6 +109,7 @@ export default async function RecipientPage({
                   <th className="px-4 py-3 text-right font-medium">
                     Estimated date
                   </th>
+                  <th className="px-4 py-3 text-right font-medium">Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,6 +126,9 @@ export default async function RecipientPage({
                     </td>
                     <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
                       {(m.estimatedPayoutDate ?? m.paidOutRaw) || "TBD"}
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
                     </td>
                   </tr>
                 ))}
@@ -136,16 +148,17 @@ export default async function RecipientPage({
             <thead className="text-[11px] uppercase tracking-wider text-stone-600">
               <tr className="border-b border-stone-200">
                 <th className="px-4 py-3 font-medium">Record</th>
-                <th className="px-4 py-3 text-right font-medium">USD</th>
+                <th className="px-4 py-3 text-right font-medium">Budgeted USD</th>
                 <th className="px-4 py-3 text-right font-medium">ZEC</th>
                 <th className="px-4 py-3 text-right font-medium">Paid on</th>
+                <th className="px-4 py-3 text-right font-medium">Source</th>
               </tr>
             </thead>
             <tbody>
               {paid.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="px-4 py-8 text-center text-sm text-stone-600"
                   >
                     No paid entries yet.
@@ -170,6 +183,9 @@ export default async function RecipientPage({
                   </td>
                   <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
                     {m.paidOutDate ?? m.paidOutRaw ?? "·"}
+                  </td>
+                  <td className="px-4 py-2.5 text-right">
+                    <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
                   </td>
                 </tr>
               ))}

@@ -20,9 +20,11 @@ export async function GET(req: Request) {
     recipient: r.recipientName,
     usd: Number(withInternal ? r.usdCents : r.externalUsdCents) / 100,
     zec: Number(withInternal ? r.zecZat : r.externalZecZat) / 1e8,
+    usdPaid: Number(withInternal ? r.paidUsdCents : r.externalPaidUsdCents) / 100,
+    zecPaid: Number(withInternal ? r.paidZecZat : r.externalPaidZecZat) / 1e8,
     grants: r.grantCount,
-    payments: r.paymentCount,
-    lastPaid: r.lastPaid ?? "",
+    payments: withInternal ? r.paymentCount : r.externalPaymentCount,
+    lastPaid: (withInternal ? r.lastPaid : r.externalLastPaid) ?? "",
     isInternal: r.isInternal,
     hasInternalLines: r.hasInternal,
   }));

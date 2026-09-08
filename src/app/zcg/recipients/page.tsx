@@ -14,20 +14,20 @@ export default async function RecebedoresPage() {
   );
   // Keep anyone with ecosystem lines, ranked by that money only. A recipient
   // whose ledger is PURELY internal (the ZCG bucket, discretionary budget)
-  // stays out; someone who both maintains a funded project and draws a
-  // committee stipend belongs here, counted by their grant total.
+  // stays out. Rank only recorded external payments; preserve unpaid budgets
+  // in a separate column so a newly approved grantee is still discoverable.
   const external = all
     .filter((r) => r.externalUsdCents > 0n || r.externalZecZat > 0n)
     .sort((a, b) =>
-      b.externalUsdCents > a.externalUsdCents
+      b.externalPaidUsdCents > a.externalPaidUsdCents
         ? 1
-        : b.externalUsdCents < a.externalUsdCents
+        : b.externalPaidUsdCents < a.externalPaidUsdCents
           ? -1
           : 0,
     );
-  const grandTotal = external.reduce((s, r) => s + r.externalUsdCents, 0n);
+  const grandTotal = external.reduce((s, r) => s + r.externalPaidUsdCents, 0n);
   const maxUsd = external.reduce(
-    (m, r) => (r.externalUsdCents > m ? r.externalUsdCents : m),
+    (m, r) => (r.externalPaidUsdCents > m ? r.externalPaidUsdCents : m),
     0n,
   );
 
@@ -36,17 +36,18 @@ export default async function RecebedoresPage() {
     recipientKey: r.recipientKey,
     recipient: r.recipientName,
     grantCount: r.grantCount,
-    paymentCount: r.paymentCount,
-    lastPaid: r.lastPaid ?? "",
-    _usd: Number(r.externalUsdCents),
-    _zec: Number(r.externalZecZat),
+    paymentCount: r.externalPaymentCount,
+    lastPaid: r.externalLastPaid ?? "",
+    _usd: Number(r.externalPaidUsdCents),
+    _zec: Number(r.externalPaidZecZat),
+    _budgetedUsd: Number(r.externalUsdCents),
   }));
 
   return (
     <>
       <PageHeader
         title="Recipients"
-        subtitle="How much each organization or individual has received from ZCG, summing every grant, milestone and payment. Committee stipends and internal operating buckets are excluded, so a committee member who also maintains a funded project is counted by their grant total only."
+        subtitle="Recorded payments to organizations and individuals across the ZCG and Coinholder ledgers. USD paid is the budgeted value of settled entries, not a current market valuation. Budgets are shown separately; committee stipends and internal operating costs are excluded."
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
@@ -56,9 +57,9 @@ export default async function RecebedoresPage() {
           sub="orgs and individuals"
         />
         <Stat
-          label="Total distributed"
+          label="USD paid to date"
           value={formatUsdCents(grandTotal, { compact: true })}
-          sub="USD to third parties"
+          sub="recorded external payments"
           tone="warn"
         />
         <Stat
@@ -71,6 +72,13 @@ export default async function RecebedoresPage() {
       <Card className="p-4">
         <RecipientsTable rows={rows} />
       </Card>
+
+      <p className="mt-3 text-xs text-stone-600">
+        Budgeted USD includes all recorded entries, including unpaid or cancelled
+        milestones. It is not money received or an outstanding commitment. Paid
+        amounts remain counted if a grant was later cancelled; delivery and impact
+        are not independently verified here.
+      </p>
 
       <Synced className="mt-4" />
     </>

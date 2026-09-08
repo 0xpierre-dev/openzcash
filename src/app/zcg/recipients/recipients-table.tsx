@@ -14,6 +14,7 @@ export type RecipientRow = {
   lastPaid: string;
   _usd: number;
   _zec: number;
+  _budgetedUsd: number;
 };
 
 interface RecipientsTableProps {
@@ -48,7 +49,7 @@ const columns: Column<RecipientRow>[] = [
   },
   {
     key: "usd",
-    header: "USD",
+    header: "USD paid",
     align: "right",
     sortable: true,
     sortValue: (r) => r._usd,
@@ -59,8 +60,16 @@ const columns: Column<RecipientRow>[] = [
     ),
   },
   {
+    key: "budgetedUsd",
+    header: "Budgeted USD",
+    align: "right",
+    sortable: true,
+    sortValue: (r) => r._budgetedUsd,
+    render: (r) => formatUsdCents(r._budgetedUsd),
+  },
+  {
     key: "zec",
-    header: "ZEC",
+    header: "ZEC paid",
     mobileHidden: true,
     align: "right",
     sortable: true,

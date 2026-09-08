@@ -1,6 +1,7 @@
 import { listDisbursements } from "@/lib/zcg/disbursements-repo";
 import { dataResponse } from "@/lib/api/serialize";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
+import { spreadsheetSource } from "@/lib/zcg/source-links";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,9 @@ export async function GET(req: Request) {
     zec: d.zecDisbursedZat != null ? Number(d.zecDisbursedZat) / 1e8 : null,
     sourceSheet: d.sourceSheet,
     isPaid: d.isPaid,
+    sourceSheetGid: d.sourceSheetGid,
+    ...spreadsheetSource(d.sourceSheetGid, d.sourceRowIndex),
+    importedAt: d.importedAt.toISOString(),
   }));
 
   return dataResponse(data, p.get("format"), "zcg-disbursements", req, total);

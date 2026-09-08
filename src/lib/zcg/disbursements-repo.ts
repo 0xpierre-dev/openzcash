@@ -61,6 +61,9 @@ export type RecipientTotal = {
   recipientName: string;
   usdCents: bigint;
   zecZat: bigint;
+  /** Recorded settled payments; USD is the budgeted value of paid entries. */
+  paidUsdCents: bigint;
+  paidZecZat: bigint;
   /** Nº de grants (projetos distintos) — não confundir com pagamentos. */
   grantCount: number;
   /** Nº de pagamentos efetivados (milestones pagos). */
@@ -75,6 +78,10 @@ export type RecipientTotal = {
    * pelo valor de grant, sem que o stipend mensal o esconda por inteiro. */
   externalUsdCents: bigint;
   externalZecZat: bigint;
+  externalPaidUsdCents: bigint;
+  externalPaidZecZat: bigint;
+  externalPaymentCount: number;
+  externalLastPaid: string | null;
   /** Linhas internas existem para este recebedor (stipend, ops). */
   hasInternal: boolean;
 };
@@ -87,6 +94,8 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
       recipientName: sql<string>`max(${zcgDisbursements.recipientNameRaw})`,
       usdCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}),0)`,
       zecZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}),0)`,
+      paidUsdCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where ${zcgDisbursements.isPaid}),0)`,
+      paidZecZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where ${zcgDisbursements.isPaid}),0)`,
       grantCount: sql<number>`count(distinct ${zcgDisbursements.project}) filter (where ${zcgDisbursements.sourceSheet} in ('grants_disbursed','coinholder_grants'))::int`,
       paymentCount: sql<number>`count(*) filter (where ${zcgDisbursements.isPaid})::int`,
       lineCount: sql<number>`count(*)::int`,
@@ -94,7 +103,11 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
       hasInternal: sql<boolean>`bool_or(${zcgDisbursements.isInternal})`,
       externalUsdCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where not ${zcgDisbursements.isInternal}),0)`,
       externalZecZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where not ${zcgDisbursements.isInternal}),0)`,
-      lastPaid: sql<string | null>`max(${zcgDisbursements.paidOutDate})`,
+      externalPaidUsdCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal}),0)`,
+      externalPaidZecZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal}),0)`,
+      externalPaymentCount: sql<number>`count(*) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal})::int`,
+      externalLastPaid: sql<string | null>`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal})`,
+      lastPaid: sql<string | null>`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid})`,
     })
     .from(zcgDisbursements)
     .groupBy(zcgDisbursements.recipientKey)
@@ -105,6 +118,8 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
     recipientName: r.recipientName,
     usdCents: BigInt(r.usdCents),
     zecZat: BigInt(r.zecZat),
+    paidUsdCents: BigInt(r.paidUsdCents),
+    paidZecZat: BigInt(r.paidZecZat),
     grantCount: r.grantCount,
     paymentCount: r.paymentCount,
     lineCount: r.lineCount,
@@ -112,6 +127,10 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
     lastPaid: r.lastPaid,
     externalUsdCents: BigInt(r.externalUsdCents),
     externalZecZat: BigInt(r.externalZecZat),
+    externalPaidUsdCents: BigInt(r.externalPaidUsdCents),
+    externalPaidZecZat: BigInt(r.externalPaidZecZat),
+    externalPaymentCount: r.externalPaymentCount,
+    externalLastPaid: r.externalLastPaid,
     hasInternal: r.hasInternal,
   }));
 
@@ -134,8 +153,17 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
         : r.recipientKey,
       usdCents: prev.usdCents + r.usdCents,
       zecZat: prev.zecZat + r.zecZat,
+      paidUsdCents: prev.paidUsdCents + r.paidUsdCents,
+      paidZecZat: prev.paidZecZat + r.paidZecZat,
       externalUsdCents: prev.externalUsdCents + r.externalUsdCents,
       externalZecZat: prev.externalZecZat + r.externalZecZat,
+      externalPaidUsdCents: prev.externalPaidUsdCents + r.externalPaidUsdCents,
+      externalPaidZecZat: prev.externalPaidZecZat + r.externalPaidZecZat,
+      externalPaymentCount: prev.externalPaymentCount + r.externalPaymentCount,
+      externalLastPaid:
+        (prev.externalLastPaid ?? "") >= (r.externalLastPaid ?? "")
+          ? prev.externalLastPaid
+          : r.externalLastPaid,
       grantCount: prev.grantCount + r.grantCount,
       paymentCount: prev.paymentCount + r.paymentCount,
       lineCount: prev.lineCount + r.lineCount,
@@ -168,6 +196,8 @@ export type ZcgSummary = {
   recipientCount: number;
   usdTotalCents: bigint;
   zecTotalZat: bigint;
+  usdPaidCents: bigint;
+  zecPaidZat: bigint;
   byCategory: CategoryTotal[];
   bySheet: { sheet: string; count: number }[];
 };
@@ -183,6 +213,8 @@ export async function disbursementsSummary(): Promise<ZcgSummary> {
       recipientCount: sql<number>`count(distinct ${zcgDisbursements.recipientKey}) filter (where not ${zcgDisbursements.isInternal})::int`,
       usdTotalCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}),0)`,
       zecTotalZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}),0)`,
+      usdPaidCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where ${zcgDisbursements.isPaid}),0)`,
+      zecPaidZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where ${zcgDisbursements.isPaid}),0)`,
     })
     .from(zcgDisbursements);
 
@@ -214,6 +246,8 @@ export async function disbursementsSummary(): Promise<ZcgSummary> {
     recipientCount: totals?.recipientCount ?? 0,
     usdTotalCents: BigInt(totals?.usdTotalCents ?? "0"),
     zecTotalZat: BigInt(totals?.zecTotalZat ?? "0"),
+    usdPaidCents: BigInt(totals?.usdPaidCents ?? "0"),
+    zecPaidZat: BigInt(totals?.zecPaidZat ?? "0"),
     byCategory: byCategory.map((c) => ({
       category: c.category,
       usdCents: BigInt(c.usdCents),

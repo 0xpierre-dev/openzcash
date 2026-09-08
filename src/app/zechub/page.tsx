@@ -17,6 +17,8 @@ import { listChangelog } from "@/lib/zcg/changelog";
 import { PayoutsTable } from "./payouts-table";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
+import { SourceDateNotice } from "@/components/source-date-notice";
+import { nowMs } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZecHub DAO · OpenZcash" };
@@ -388,6 +390,7 @@ export default async function ZechubDaoPage() {
 
       {snapshot ? (
         <>
+          <SourceDateNotice date={snapshot.capturedOn} now={nowMs()} />
           <section className="relative mb-6 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/[0.08] via-stone-50 to-stone-50 p-6 shadow-lg shadow-stone-300/50 ring-1 ring-inset ring-stone-900/5">
             <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-amber-500/15 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-10 h-44 w-44 rounded-full bg-emerald-500/10 blur-3xl" />
@@ -452,8 +455,8 @@ export default async function ZechubDaoPage() {
           </section>
 
           {allocationSegments.length > 0 ? (
-            <section className="mb-8 grid items-stretch gap-6 lg:grid-cols-2">
-              <div className="flex flex-col">
+            <section className="mb-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
+              <div className="flex min-w-0 flex-col">
                 <h2 className="mb-3 text-sm font-semibold text-stone-700">
                   FPF allocation by category
                 </h2>
@@ -466,7 +469,7 @@ export default async function ZechubDaoPage() {
                       })}
                       centerLabel="ZEC EARMARKED"
                     />
-                    <ul className="w-full space-y-2.5">
+                    <ul className="w-full min-w-0 space-y-2.5">
                       {allocationSegments.map((s, i) => (
                         <li
                           key={s.label}
@@ -514,7 +517,7 @@ export default async function ZechubDaoPage() {
                   ) : null}
                 </Card>
               </div>
-              <div className="flex flex-col">
+              <div className="flex min-w-0 flex-col">
                 <h2 className="mb-3 text-sm font-semibold text-stone-700">
                   Grants: paid vs committed
                 </h2>

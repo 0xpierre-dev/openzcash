@@ -17,9 +17,9 @@ export async function GET() {
           "/api/zcg/data/grants":
             "Per-grant aggregation: milestones, paid, status. ?format=csv supported.",
           "/api/zcg/data/disbursements":
-            "Payment ledger, one row per milestone payment. Filters: sheet, grant, category, type, search, limit. ?format=csv supported.",
+            "Budget and payment ledger, with sourceUrl, one-based sourceRow and importedAt for each record. Filters: sheet, grant, category, type, search, limit. ?format=csv supported.",
           "/api/zcg/data/recipients":
-            "Per-recipient totals in USD and ZEC. ?format=csv supported.",
+            "Per-recipient budgets and recorded payments: usd is budgeted; usdPaid and zecPaid count settled entries. ?internal=1 includes internal costs. ?format=csv supported.",
           "/api/zcg/office": "Proposals currently under review.",
           "/api/zcg/coinholder/round":
             "The open Coinholder-Directed Retroactive Grants round: proposals, requested amounts, key dates, ballot options.",
@@ -40,7 +40,9 @@ export async function GET() {
       },
       notes: [
         "Read-only and unauthenticated. Amounts are in USD (dollars) and ZEC.",
-        "Grant figures mirror the official ZCG spreadsheet: `usd` is budgeted, `zec` is what actually moved.",
+        "Grant figures mirror the public ZCG spreadsheet: `usd` is budgeted and `zec` is the quantity recorded as disbursed by the source, not an independent on-chain verification.",
+        "Recipient `usdPaid` is the budgeted USD value of settled entries, not today's market value. Default payment counts and dates exclude internal costs. Payment is not proof of delivery.",
+        "Disbursement `importedAt` records collection, not source publication. Source links open the current spreadsheet row, not an immutable snapshot.",
         "List endpoints return { count, total, data }: when total exceeds count the response was capped, so raise ?limit.",
       ],
     },

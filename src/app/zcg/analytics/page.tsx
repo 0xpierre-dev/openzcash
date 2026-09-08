@@ -234,7 +234,7 @@ export default async function AnalyticsPage() {
       {/* #12 Grant delivery */}
       <section className="mb-8">
         <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Grant delivery
+          Grant payment progress
         </h2>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
           <Link href="/zcg/grants" className="block">
@@ -246,19 +246,23 @@ export default async function AnalyticsPage() {
           </Link>
           <Link href="/zcg/grants" className="block">
             <Stat
-              label="Fully delivered"
+              label="Fully paid"
               value={`${fullyPaidPct}%`}
               sub={`${fullyPaid} of ${withMs.length} paid out`}
             />
           </Link>
           <Link href="/zcg/grants" className="block">
             <Stat
-              label="In delivery"
+              label="Payments remaining"
               value={String(inDelivery)}
               sub="open, milestones remaining"
             />
           </Link>
         </div>
+        <p className="mt-3 text-xs text-stone-600">
+          Payment progress follows the ledger. A paid milestone is not independent
+          verification of a deliverable or its impact.
+        </p>
       </section>
 
       {/* Where the money flows now (category momentum) */}

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import {
   listProposals,
-  proposalsFunnel,
   type ProposalRow,
 } from "@/lib/zcg/proposals-repo";
 import { cn, nowMs } from "@/lib/utils";
@@ -14,7 +13,7 @@ import {
   getGrantApplications,
   ZCG_APPLICATIONS_REPO_URL,
 } from "@/lib/zcg/github-applications";
-import { titlesMatch } from "@/lib/zcg/match-titles";
+import { matchProposalApplications } from "@/lib/zcg/match-proposals";
 import { getDiligence } from "@/lib/zcg/diligence";
 import {
   getIssueAmounts,
@@ -49,6 +48,7 @@ function barColor(status: string) {
 function toTableRow(p: ProposalRow): ProposalTableRow {
   return {
     id: p.id,
+    program: p.program,
     title: p.title,
     platformLink: p.platformLink ?? null,
     applicant: p.applicantsRaw ?? "",
@@ -65,9 +65,8 @@ export default async function PropostasPage({
   searchParams: Promise<{ status?: string }>;
 }) {
   const { status: filterRaw } = await searchParams;
-  const [isAdmin, funnel, all, links, applications] = await Promise.all([
+  const [isAdmin, all, links, applications] = await Promise.all([
     getIsAdmin(),
-    cached("proposalsFunnel", LEDGER_TTL_MS, () => proposalsFunnel()),
     cached("listProposals:all", LEDGER_TTL_MS, () => listProposals({})),
     cached("links", LEDGER_TTL_MS, () => getLinks()),
     getGrantApplications(40),
@@ -93,11 +92,11 @@ export default async function PropostasPage({
   // DELETED upstream (404) is not a real, verifiable proposal anymore — drop
   // it from the list and the counts (a footnote below keeps this auditable).
   const isRemovedUpstream = (r: ProposalTableRow) => {
-    if (r.status !== "under_review") return false;
+    if (r.program !== "zcg" || r.status !== "under_review") return false;
     const n = issueNumberFromLink(r.platformLink);
     return n != null && missingIssues.has(n);
   };
-  const sheetRows = all.slice(0, 400).map(toTableRow);
+  const sheetRows = all.map(toTableRow);
   const listedSheetRows = sheetRows.filter((r) => !isRemovedUpstream(r));
   const removedCount = sheetRows.length - listedSheetRows.length;
 
@@ -105,19 +104,18 @@ export default async function PropostasPage({
   // under-review bucket. Enrich the matching sheet row with a "GitHub live"
   // badge + direct issue link instead of listing it twice; only applications
   // with no sheet counterpart become their own new rows.
-  const usedGh = new Set<number>();
+  const matches = matchProposalApplications(listedSheetRows, ghApps);
+  const usedGh = new Set(matches.values());
   const enrichedSheet = listedSheetRows.map((r) => {
-    const idx = ghApps.findIndex(
-      (g, i) => !usedGh.has(i) && titlesMatch(r.title, g.title),
-    );
-    if (idx < 0) {
+    const app = ghApps.find((g) => g.number === matches.get(r.id));
+    if (!app) {
       // No open application matched — the sheet link may still point at a
       // closed issue whose body carries the requested amount, and possibly a
       // committee decision the spreadsheet has not recorded yet. Source
       // hierarchy: a DECIDED source beats an undecided one (the sheet still
       // wins whenever it has decided), so a closed+labelled issue overrides a
       // sheet row stuck on "under review" (real case: #333 declined upstream).
-      const n = issueNumberFromLink(r.platformLink);
+      const n = r.program === "zcg" ? issueNumberFromLink(r.platformLink) : null;
       const amt = n != null ? issueAmounts.get(n) : undefined;
       const dec =
         n != null && r.status === "under_review"
@@ -135,20 +133,20 @@ export default async function PropostasPage({
           : {}),
       };
     }
-    usedGh.add(idx);
     return {
       ...r,
       source: "github" as const,
-      platformLink: ghApps[idx].url ?? r.platformLink,
-      amountUsd: ghApps[idx].amountUsd,
-      diligence: diligence.get(ghApps[idx].number) ?? null,
+      platformLink: app.url ?? r.platformLink,
+      amountUsd: app.amountUsd,
+      diligence: r.status === "under_review" ? diligence.get(app.number) ?? null : null,
     };
   });
 
   const netNewGhRows: ProposalTableRow[] = ghApps
-    .filter((_, i) => !usedGh.has(i))
+    .filter((a) => !usedGh.has(a.number))
     .map((a) => ({
       id: `gh-${a.number}`,
+      program: "zcg",
       title: a.title,
       platformLink: a.url,
       applicant: a.applicant ? `@${a.applicant}` : "",
@@ -171,33 +169,22 @@ export default async function PropostasPage({
   );
   const ghRejected = ghDecided.filter((r) => r.status === "rejected").length;
   const ghApproved = ghDecided.filter((r) => r.status === "approved").length;
-  const ghWithdrawn = ghDecided.filter((r) => r.status === "withdrawn").length;
 
-  // Funnel: applications with no sheet counterpart are net-new to the counts;
-  // sheet rows whose application was deleted upstream leave the counts.
-  const netNewCount = netNewGhRows.length;
-  const reviewDelta =
-    netNewCount - removedCount - ghRejected - ghApproved - ghWithdrawn;
-  let byStatus = funnel.byStatus.map((b) => {
-    if (b.status === "under_review")
-      return { ...b, count: Math.max(b.count + reviewDelta, 0) };
-    if (b.status === "rejected") return { ...b, count: b.count + ghRejected };
-    if (b.status === "approved") return { ...b, count: b.count + ghApproved };
-    if (b.status === "withdrawn") return { ...b, count: b.count + ghWithdrawn };
-    return b;
-  });
-  if (reviewDelta > 0 && !byStatus.some((b) => b.status === "under_review")) {
-    byStatus = [...byStatus, { status: "under_review", count: reviewDelta }];
+  // Count the same reconciled records that search and verdict filters receive.
+  const statusCounts = new Map<string, number>();
+  for (const row of allRows) {
+    statusCounts.set(row.status, (statusCounts.get(row.status) ?? 0) + 1);
   }
-  // GitHub-decided rows move buckets but stay in the total.
-  const total = funnel.total + netNewCount - removedCount;
+  const byStatus = [...statusCounts].map(([status, count]) => ({ status, count }))
+    .sort((a, b) => b.count - a.count || a.status.localeCompare(b.status));
+  const total = allRows.length;
   const approved = byStatus.find((b) => b.status === "approved")?.count ?? 0;
   const maxStatus = byStatus.reduce((m, b) => Math.max(m, b.count), 0);
   const apprRate = total ? Math.round((approved / total) * 100) : 0;
 
   // #8 How fast does ZCG decide? Average committee turnaround, from the dates
   // already recorded on each proposal.
-  const decided = all.filter((p) => p.decisionTurnaroundDays != null);
+  const decided = all.filter((p) => p.program === "zcg" && p.decisionTurnaroundDays != null);
   const avgDecisionDays = decided.length
     ? Math.round(
         decided.reduce((s, p) => s + (p.decisionTurnaroundDays ?? 0), 0) /
@@ -221,7 +208,7 @@ export default async function PropostasPage({
     return {
       ...r,
       daysInReview: days,
-      reviewOverdue: avgDecisionDays != null && days > avgDecisionDays,
+      reviewOverdue: r.program === "zcg" && avgDecisionDays != null && days > avgDecisionDays,
     };
   });
 
@@ -236,7 +223,7 @@ export default async function PropostasPage({
     <>
       <PageHeader
         title="Proposals · Pipeline"
-        subtitle="Every proposal submitted to ZCG, with its verdict. Only the approved ones become funded grants."
+        subtitle="The complete mirrored ZCG and Coinholder proposal history, supplemented by current ZCG applications. Approval is not evidence of payment or delivery."
         actions={
           <a
             href={submitUrl}
@@ -259,12 +246,12 @@ export default async function PropostasPage({
         <Stat
           label="Avg decision"
           value={avgDecisionDays != null ? `${avgDecisionDays}d` : "n/a"}
-          sub="committee turnaround"
+          sub="ZCG committee turnaround"
         />
         <Stat
           label="Ready for review"
           value={String(ghApps.length)}
-          sub="live from GitHub"
+          sub="GitHub review labels"
           tone="warn"
         />
         <Stat
@@ -364,7 +351,7 @@ export default async function PropostasPage({
         <span className="rounded bg-indigo-500/10 px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-indigo-700">
           GitHub live
         </span>{" "}
-        are open applications read straight from the{" "}
+        include application details or decisions read from the{" "}
         <a
           href={ZCG_APPLICATIONS_REPO_URL}
           target="_blank"

@@ -208,15 +208,15 @@ export default async function ZcgPage() {
           sub={`${s.paidCount} payments made`}
         />
         <Stat
-          label="Total disbursed"
-          value={formatUsdCents(s.usdTotalCents, { compact: true })}
-          sub="budgeted in USD"
+          label="USD paid to date"
+          value={formatUsdCents(s.usdPaidCents, { compact: true })}
+          sub="budgeted value of paid entries"
           tone="warn"
         />
         <Stat
-          label="ZEC distributed"
-          value={formatZecCompact(s.zecTotalZat, { symbol: false })}
-          sub="on-chain total"
+          label="ZEC paid (ledger)"
+          value={formatZecCompact(s.zecPaidZat, { symbol: false })}
+          sub="recorded by the spreadsheet"
         />
         <Stat
           label="Recipients"
