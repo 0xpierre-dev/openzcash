@@ -3,6 +3,8 @@ import {
   treasuryAllocations,
   treasuryPayouts,
 } from "@/lib/zechub/treasury-repo";
+import { currentZecUsdQuote } from "@/lib/pricing/live-price";
+import { valueTreasurySnapshot } from "@/lib/zechub/treasury-valuation";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +21,8 @@ const usd = (cents: bigint | null) =>
  * eight of ten payment rows, understating the total by the two most recently
  * appended grants. The sheet's own figure stays available as
  * `totals.paidOutUsdSheet` so the two can be compared.
+ * Legacy USD fields remain sheet-priced. `valuation` separately prices the
+ * dated ZEC holdings using a market quote, without asserting a live balance.
  */
 export async function GET() {
   const snapshot = await latestTreasurySnapshot();
@@ -28,16 +32,33 @@ export async function GET() {
       { status: 503 },
     );
   }
-  const [allocations, payouts] = await Promise.all([
+  const [allocations, payouts, quote] = await Promise.all([
     treasuryAllocations(snapshot.id),
     treasuryPayouts(),
+    currentZecUsdQuote(),
   ]);
+  const valuation = valueTreasurySnapshot(snapshot, quote);
 
   return Response.json(
     {
       ok: true,
       capturedOn: snapshot.capturedOn,
       zecPriceUsd: usd(snapshot.zecPriceCents),
+      valuation: {
+        basis: valuation.basis,
+        balanceAsOf: valuation.balanceAsOf,
+        currency: "USD",
+        zecPriceUsd: usd(valuation.priceCents),
+        quoteSource: quote?.source ?? "ZecHub treasury spreadsheet",
+        quoteSourceUrl: quote?.sourceUrl ?? null,
+        quoteAsOf: quote?.quotedAt ?? null,
+        fetchedAt: quote?.fetchedAt ?? null,
+        stale: quote?.stale ?? null,
+        donationsUsd: usd(valuation.donationsUsdCents),
+        fpfUsd: usd(valuation.fpfUsdCents),
+        zechubIncUsd: usd(valuation.incUsdCents),
+        totalUsd: usd(valuation.totalUsdCents),
+      },
       treasuries: {
         donations: {
           zec: zec(snapshot.donationsZat),
@@ -84,6 +105,6 @@ export async function GET() {
       source:
         "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/edit",
     },
-    { headers: { "cache-control": "public, max-age=900" } },
+    { headers: { "cache-control": "public, max-age=60" } },
   );
 }

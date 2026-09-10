@@ -65,10 +65,19 @@ Mirrors the DAO's public treasury dashboard, refreshed every 6h. Shape:
   snapshot** — not live)
 - `treasuries.donations` `{zec, usd}` — the community donations pot (the largest)
 - `treasuries.fpf` `{zec, usd, spendableZec, reservedUsd}` — held by the fiscal
-  sponsor; `spendableZec` is what is actually free to commit
+  sponsor; `spendableZec` is the unreserved amount recorded on `capturedOn`
 - `treasuries.zechubInc` `{zec, usd}` — the legal entity's pot
 - `multichain` `{penumbraUm, namadaNam}` — non-ZEC holdings
-- `totals` `{zec, paidOutUsd, committedUsd}`
+- `totals` `{zec, paidOutUsd, paidOutUsdSheet, committedUsd}` — `paidOutUsd` sums
+  recorded payout rows; `paidOutUsdSheet` preserves the spreadsheet header
+- `valuation` `{basis, balanceAsOf, currency, zecPriceUsd, quoteSource,
+  quoteSourceUrl, quoteAsOf, fetchedAt, stale, donationsUsd, fpfUsd,
+  zechubIncUsd, totalUsd}` — use for indicative USD value. Market quotes refresh
+  on demand after a 10-minute cache; the API may be cached for 60 seconds.
+  `snapshot-balances-at-market-price` applies the quote to dated ZEC holdings;
+  `sheet-recorded-values` identifies fallback when the quote is unavailable.
+  Preserve both dates and any stale warning. A null `quoteAsOf` means the provider
+  timestamp is unknown; `fetchedAt` is collection time, not quote time.
 - `allocations[]` `{category, zec, sharePct}` — the budget split (Hackathon, Community
   Proposals, Small Bounty Fund, Global Ambassador Provisioning)
 - `payouts[]` `{title, paidUsd, pendingUsd, milestones[]}` — the funded work items
@@ -133,18 +142,17 @@ still failed. Cite these when explaining a loss:
    22 rejected, 57 closed.
 6. **"How much has ZecHub paid?" has three defensible answers — say which you used.**
    Traced to the source spreadsheet (Aug 2026):
-   - **$16,550** — `totals.paidOutUsd`. This is a **stale SUM range** in the sheet: the
+   - **$16,550** — `totals.paidOutUsdSheet`. This is a **stale SUM range** in the sheet: the
      header cell adds only the first 8 of 10 payment rows. The two most recently
      appended rows (Korean Q3 $2,000 + India Jun–Aug $3,200) sit outside the range and
      total exactly the $5,200 gap. It is a spreadsheet bug, not a reporting period.
-   - **$21,750** — the sum of `payouts[].paidUsd`. The correct total of what the API
-     exposes.
+   - **$21,750** — `totals.paidOutUsd`, the sum of recorded `payouts[].paidUsd`.
    - **$26,025** — the sheet's per-grant "USD Paid to date" blocks, which also cover the
      two grants the API reports as `paidUsd: null`.
 
-   Prefer $21,750 for "what the API says was paid", and flag the headline figure as
-   understated. Note the asymmetry: **`totals.committedUsd` ($8,470) IS correct** — it
-   sums all ten rows. One total is trustworthy, the other is not.
+   Re-fetch before quoting these August examples. Prefer `totals.paidOutUsd` for
+   recorded payments and compare it with `paidOutUsdSheet` for reconciliation.
+   `totals.committedUsd` is the spreadsheet's recorded commitment total.
 
 7. **Milestones marked `Complete` are not money paid.** The Global Ambassador Elzz row
    shows three `Complete` milestones with `paidUsd: 3000` and `pendingUsd: 5000`.
@@ -154,16 +162,19 @@ still failed. Cite these when explaining a loss:
    do not fold it into a sum silently; say the row is unquantified.
 9. **There are three treasuries, and the big one is not spendable working capital.**
    Donations held ~414.78 ZEC, FPF ~45 ZEC, ZecHub Inc ~54.35 ZEC. The number that
-   answers "what can they commit right now" is `treasuries.fpf.spendableZec` (~28.74
-   ZEC), not `totals.zec` (~514 ZEC). Never present the grand total as a budget.
+   for unreserved funds in that snapshot is `treasuries.fpf.spendableZec` (~28.74
+   ZEC), not `totals.zec` (~514 ZEC). Neither proves current spending capacity.
 10. **The on-chain DAO holds almost nothing.** The Juno DAO contract and its Polytone
     proxy hold a few hundred dollars of Cosmos assets, no CW20 and no NFTs. The ~514
     ZEC are off-chain under FPF/ZecHub Inc custody and are **not** reachable by a DAO
     message. If asked "what does the DAO control on-chain", answer with the Juno/Osmosis
     balances; if asked "what can ZecHub spend", answer with the treasury API.
-11. **USD figures are snapshot-priced.** `zecPriceUsd` is the price used on
-    `capturedOn`. Do not re-price with today's ZEC and present the result as the
-    dashboard's number; if you re-price, label it as your own conversion.
+11. **Separate recorded USD from market valuation.** Top-level `zecPriceUsd` and
+    `treasuries.*.usd` retain the spreadsheet's recorded price and values.
+    `valuation` prices only the recorded ZEC holdings. Label it indicative, with
+    `balanceAsOf` and the quote date; it excludes UM/NAM holdings. Price changes
+    are not inflows, payouts or new available funds. Never reprice historical
+    USD payouts or commitments. Null valuations are unavailable, not zero.
 12. **`capturedOn` can be weeks old, and the "6h refresh" does not fix that.** The 6h
     cycle re-reads the spreadsheet; `capturedOn` only moves when the DAO edits it
     (measured 12 days stale in Aug 2026). Always state the snapshot date; never call a

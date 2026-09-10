@@ -19,6 +19,8 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
 import { SourceDateNotice } from "@/components/source-date-notice";
 import { nowMs } from "@/lib/utils";
+import { currentZecUsdQuote } from "@/lib/pricing/live-price";
+import { valueTreasurySnapshot } from "@/lib/zechub/treasury-valuation";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZecHub DAO · OpenZcash" };
@@ -279,12 +281,13 @@ function ProposalRow({
 }
 
 export default async function ZechubDaoPage() {
-  const [proposals, snapshot, payouts, series, changes] = await Promise.all([
+  const [proposals, snapshot, payouts, series, changes, quote] = await Promise.all([
     getZechubProposals(40),
     latestTreasurySnapshot(),
     treasuryPayouts(),
     treasurySeries(),
     listChangelog(7, 10, "zechub").catch(() => []),
+    currentZecUsdQuote(),
   ]);
   const allocations = snapshot ? await treasuryAllocations(snapshot.id) : [];
   const previous = series.length >= 2 ? series[series.length - 2] : null;
@@ -298,10 +301,13 @@ export default async function ZechubDaoPage() {
     (snapshot?.donationsZat ?? 0n) +
     (snapshot?.fpfZat ?? 0n) +
     (snapshot?.incZat ?? 0n);
-  const totalUsdCents =
-    (snapshot?.donationsUsdCents ?? 0n) +
-    (snapshot?.fpfUsdCents ?? 0n) +
-    (snapshot?.incUsdCents ?? 0n);
+  const valuation = snapshot ? valueTreasurySnapshot(snapshot, quote) : null;
+  const displayUsd = (cents: bigint | null | undefined) =>
+    cents == null ? "Unavailable" : formatUsdCents(cents);
+  const quoteTime = quote?.quotedAt ?? quote?.fetchedAt;
+  const priceNote = quote && quoteTime
+    ? `CoinGecko${quote.stale ? " · stale quote" : ""} · ${quote.quotedAt ? "" : "retrieved "}${quoteTime.slice(0, 16).replace("T", " ")} UTC`
+    : `spreadsheet price · ${fmtDate(snapshot?.capturedOn ?? "")}`;
   const spendableUsdCents = zatToUsdCents(
     snapshot?.fpfUnreservedZat ?? null,
     snapshot?.zecPriceCents ?? null,
@@ -365,7 +371,7 @@ export default async function ZechubDaoPage() {
     <>
       <PageHeader
         title="ZecHub DAO"
-        subtitle="ZecHub governs itself on-chain (DAO DAO on Juno). Proposals are live from daodao.zone; treasury numbers mirror the public dashboard spreadsheet, imported on the same cycle as the ZCG data."
+        subtitle="ZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote."
         actions={
           <div className="flex items-center gap-2">
             <a
@@ -404,9 +410,14 @@ export default async function ZechubDaoPage() {
                     {formatZec(totalZat)}
                   </p>
                 </div>
-                <p className="text-lg font-semibold text-stone-700 tnum sm:text-xl">
-                  ≈ {formatUsdCents(totalUsdCents)}
-                </p>
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-stone-700 tnum sm:text-xl">
+                    {valuation?.totalUsdCents != null ? "≈ " : ""}{displayUsd(valuation?.totalUsdCents)}
+                  </p>
+                  <p className="mt-1 text-xs text-stone-500">
+                    {quote ? "Indicative USD value of recorded ZEC" : "At the spreadsheet's recorded price"}
+                  </p>
+                </div>
               </div>
               <div className="mt-5">
                 <SplitBar segments={compositionSegments} />
@@ -418,28 +429,28 @@ export default async function ZechubDaoPage() {
             <TreasuryCard
               label="Donations treasury"
               zat={snapshot.donationsZat ?? 0n}
-              sub={formatUsdCents(snapshot.donationsUsdCents ?? 0n)}
+              sub={displayUsd(valuation?.donationsUsdCents)}
               accent="amber"
             />
             <TreasuryCard
               label="FPF program fund"
               zat={snapshot.fpfZat ?? 0n}
-              sub={`${formatUsdCents(snapshot.fpfUsdCents ?? 0n)} · ${formatZec(snapshot.fpfUnreservedZat ?? 0n)} spendable`}
+              sub={`${displayUsd(valuation?.fpfUsdCents)} · ${formatZec(snapshot.fpfUnreservedZat ?? 0n)} spendable in source`}
               accent="emerald"
             />
             <TreasuryCard
               label="ZecHub Inc"
               zat={snapshot.incZat ?? 0n}
-              sub={`${formatUsdCents(snapshot.incUsdCents ?? 0n)}${snapshot.penumbraUm ? ` · ${Math.round(snapshot.penumbraUm)} UM` : ""}${snapshot.namadaNam ? ` · ${Math.round(snapshot.namadaNam).toLocaleString("en-US")} NAM` : ""}`}
+              sub={`${displayUsd(valuation?.incUsdCents)}${snapshot.penumbraUm ? ` · ${Math.round(snapshot.penumbraUm)} UM` : ""}${snapshot.namadaNam ? ` · ${Math.round(snapshot.namadaNam).toLocaleString("en-US")} NAM` : ""}`}
               accent="indigo"
             />
           </section>
 
           <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
             <Stat
-              label="Available for new proposals"
+              label="Available in source snapshot"
               value={formatUsdCents(spendableUsdCents, { compact: true })}
-              sub={`after ${formatUsdCents(snapshot.fpfReservedUsdCents ?? 0n, { compact: true })} committed`}
+              sub={`at source price · ${formatUsdCents(snapshot.fpfReservedUsdCents ?? 0n, { compact: true })} committed`}
               tone="warn"
             />
             <Stat
@@ -449,8 +460,8 @@ export default async function ZechubDaoPage() {
             />
             <Stat
               label="ZEC price used"
-              value={formatUsdCents(snapshot.zecPriceCents ?? 0n)}
-              sub={`dashboard · ${fmtDate(snapshot.capturedOn)}`}
+              value={displayUsd(valuation?.priceCents)}
+              sub={priceNote}
             />
           </section>
 
@@ -655,7 +666,7 @@ export default async function ZechubDaoPage() {
       </Link>
 
       <p className="mt-4 text-xs text-stone-500">
-        Treasury figures mirror the{" "}
+        Treasury balances and payout records mirror the{" "}
         <a
           href={SHEET_URL}
           target="_blank"
@@ -668,7 +679,9 @@ export default async function ZechubDaoPage() {
         {snapshot
           ? ` (last dashboard update ${fmtDate(snapshot.capturedOn)})`
           : ""}
-        , re-imported every 6 hours. Proposals are read live from the DAO DAO
+        , re-imported every 6 hours. Indicative USD values apply the separately
+        dated market quote to those recorded balances; they do not establish
+        current holdings or available funds. Proposals are read live from the DAO DAO
         indexer. The{" "}
         <span className="rounded bg-emerald-500/10 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
           funded

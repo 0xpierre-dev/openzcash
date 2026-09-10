@@ -14,19 +14,31 @@ if not d.get("ok"):
     sys.exit(f"treasury endpoint returned: {d}")
 
 t, tot = d["treasuries"], d["totals"]
-print(f"# ZecHub treasury — snapshot of {d['capturedOn']} (ZEC valued at ${d['zecPriceUsd']:,.2f})")
+usd = lambda n: f"${n:,.2f}" if n is not None else "unavailable"
+print(f"# ZecHub treasury — balances dated {d['capturedOn']}")
+v = d.get("valuation") or {}
+market = v.get("basis") == "snapshot-balances-at-market-price"
+if market:
+    stamp = v.get("quoteAsOf") or f"retrieved {v.get('fetchedAt', 'unknown')}"
+    print(f"Indicative USD at {usd(v.get('zecPriceUsd'))}/ZEC · {v.get('quoteSource')} · {stamp}")
+    if v.get("stale"):
+        print("STALE QUOTE: retained after the feed stopped returning a fresh price.")
+else:
+    print(f"USD at the spreadsheet's recorded price: {usd(d.get('zecPriceUsd'))}/ZEC")
 print()
 print("## the three pots (they are NOT one budget)")
 don, fpf, inc = t["donations"], t["fpf"], t["zechubInc"]
-print(f"  donations    {don['zec']:>10,.2f} ZEC   ${don['usd']:>12,.2f}")
-print(f"  FPF          {fpf['zec']:>10,.2f} ZEC   ${fpf['usd']:>12,.2f}"
-      f"   spendable {fpf['spendableZec']:,.2f} ZEC · reserved ${fpf['reservedUsd']:,.2f}")
-print(f"  ZecHub Inc   {inc['zec']:>10,.2f} ZEC   ${inc['usd']:>12,.2f}")
+print(f"  donations    {don['zec']:>10,.3f} ZEC   {usd(v.get('donationsUsd') if market else don['usd']):>14}")
+print(f"  FPF          {fpf['zec']:>10,.3f} ZEC   {usd(v.get('fpfUsd') if market else fpf['usd']):>14}")
+print(f"  ZecHub Inc   {inc['zec']:>10,.3f} ZEC   {usd(v.get('zechubIncUsd') if market else inc['usd']):>14}")
 print(f"  {'':12}{'-'*10}")
-print(f"  total        {tot['zec']:>10,.2f} ZEC")
+print(f"  total        {tot['zec']:>10,.3f} ZEC")
+if v:
+    print(f"  total USD    {usd(v.get('totalUsd'))}")
 print()
-print(f"  => what ZecHub can commit right now is FPF spendable: {fpf['spendableZec']:,.2f} ZEC")
-print(f"     (~${fpf['spendableZec'] * d['zecPriceUsd']:,.2f} at the snapshot price), NOT the total.")
+print(f"  FPF unreserved in source: {fpf['spendableZec']:,.2f} ZEC · reserved {usd(fpf['reservedUsd'])}")
+print(f"  Unreserved USD at source price: {usd(fpf['spendableZec'] * d['zecPriceUsd'])}")
+print("  Dated holdings and price gains do not prove current spending capacity.")
 mc = d.get("multichain") or {}
 if any(mc.values()):
     print(f"  also held: {mc.get('penumbraUm', 0):,.2f} UM (Penumbra) · {mc.get('namadaNam', 0):,.0f} NAM (Namada)")
@@ -52,12 +64,13 @@ print()
 
 print("## reconciliation (read this before quoting a 'total paid')")
 print(f"  sum of payouts[].paidUsd     ${paid:,.2f}   <- what the API actually exposes")
-print(f"  totals.paidOutUsd            ${tot['paidOutUsd']:,.2f}   <- understated: stale SUM range in the sheet")
+print(f"  totals.paidOutUsd            ${tot['paidOutUsd']:,.2f}   <- sum of recorded payouts")
 if abs(paid - tot["paidOutUsd"]) > 0.01:
-    print(f"  they differ by               ${abs(paid - tot['paidOutUsd']):,.2f}")
-    print("  The sheet's header cell sums only the first 8 of 10 payment rows; the two")
-    print("  most recently appended rows fall outside the range. Prefer the payout sum,")
-    print("  and say so. (totals.committedUsd, by contrast, does sum every row.)")
+    print(f"  WARNING: API payout rows and total differ by ${abs(paid - tot['paidOutUsd']):,.2f}")
+sheet_paid = tot.get("paidOutUsdSheet")
+print(f"  totals.paidOutUsdSheet       {usd(sheet_paid)}   <- source header")
+if sheet_paid is not None and abs(paid - sheet_paid) > 0.01:
+    print(f"  Source header differs from recorded rows by ${abs(paid - sheet_paid):,.2f}; prefer the row sum.")
 print()
 print(f"  sum of payouts[].pendingUsd  ${pending:,.2f}")
 print(f"  totals.committedUsd          ${tot['committedUsd']:,.2f}")
@@ -67,5 +80,5 @@ if unquantified:
         print(f"     · {p['title'][:66]}")
 print()
 print("source: https://openzcash.org/api/zechub/treasury")
-print(f"Snapshot dated {d['capturedOn']} — not a live balance. Refreshes on a 6h cycle.")
+print(f"Balances dated {d['capturedOn']}. Source imported every 6h; market quote cached for 10 minutes.")
 PY

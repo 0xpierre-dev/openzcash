@@ -26,7 +26,7 @@ export async function GET() {
         },
         zechub: {
           "/api/zechub/treasury":
-            "ZecHub DAO treasury: the three pots, allocations and payouts, with the ZEC price used at snapshot time.",
+            "ZecHub DAO treasury: dated balances, allocations and payouts. valuation contains indicative USD values at a separately dated market quote; other USD fields retain the spreadsheet's recorded values.",
         },
         chain: {
           "/api/chain-tip": "Current Zcash block height.",
