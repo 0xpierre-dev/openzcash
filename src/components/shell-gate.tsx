@@ -10,6 +10,7 @@ function isBare(pathname: string): boolean {
     pathname === "/" ||
     pathname === "/login" ||
     pathname === "/monthly" ||
+    pathname === "/monthly-preview" ||
     pathname.startsWith("/monthly/") ||
     pathname.startsWith("/onboarding")
   );

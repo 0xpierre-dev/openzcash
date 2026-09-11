@@ -48,7 +48,8 @@ function EditionLibrary({ editions, edition }: { editions: MonthlyEdition[]; edi
   </div>;
 }
 
-export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[]; edition: MonthlyEdition }) {
+export function MonthlyReader({ editions, edition, embedded = false, baseHref }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string }) {
+  const pageHref = baseHref || `/monthly/${edition.id}`;
   const [pageNumber, setPageNumber] = useState(1);
   const [pages, setPages] = useState<ReportPage[]>([]);
   const [pdf, setPdf] = useState<PdfDocument | null>(null);
@@ -71,8 +72,8 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
     const next = Math.min(edition.pageCount, Math.max(1, Math.trunc(requested)));
     setPageNumber(next);
     // Keep the edition in shared URLs even when entered through /monthly.
-    window.history.replaceState(null, "", `/monthly/${edition.id}#${next}`);
-  }, [edition.id, edition.pageCount]);
+    window.history.replaceState(null, "", `${pageHref}#${next}`);
+  }, [pageHref, edition.pageCount]);
 
   useEffect(() => {
     const sync = () => setPageNumber(pageFromHash(window.location.hash, edition.pageCount));
@@ -149,7 +150,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (libraryDialog.current?.open || event.altKey || event.metaKey || event.ctrlKey || (event.target as HTMLElement).closest("input, select, textarea, [contenteditable=true]")) return;
+      if (event.defaultPrevented || libraryDialog.current?.open || event.altKey || event.metaKey || event.ctrlKey || (event.target as HTMLElement).closest("input, select, textarea, [contenteditable=true], [role=tab]")) return;
       if (["ArrowRight", "PageDown"].includes(event.key)) { event.preventDefault(); goTo(pageNumber + 1); }
       if (["ArrowLeft", "PageUp"].includes(event.key)) { event.preventDefault(); goTo(pageNumber - 1); }
       if (event.key === "Home") { event.preventDefault(); goTo(1); }
@@ -178,7 +179,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
     } catch { setFocused(true); notify("Focus mode enabled. Full screen is unavailable in this browser."); }
   }
   async function sharePage() {
-    const url = `${window.location.origin}/monthly/${edition.id}#${pageNumber}`;
+    const url = `${window.location.origin}${pageHref}#${pageNumber}`;
     try { await navigator.clipboard.writeText(url); notify("Link to this page copied."); }
     catch { window.history.replaceState(null, "", url); notify("The address bar now links to this page. Copy it to share."); }
   }
@@ -195,7 +196,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
   const thumbStart = Math.floor((pageNumber - 1) / 5) * 5;
   const visiblePages = pages.slice(thumbStart, thumbStart + 5);
 
-  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""}`} data-edition={edition.id}>
+  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""}`} data-edition={edition.id}>
     <header className={styles.header}>
       <div className={styles.identity}>
         <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/zcash-mark.svg" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
