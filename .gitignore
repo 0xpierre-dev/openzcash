@@ -39,6 +39,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+/reports/monthly/__pycache__/
 next-env.d.ts
 .zcg-data/
 .redesign-plan.json

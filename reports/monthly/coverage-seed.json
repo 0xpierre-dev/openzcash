@@ -1,0 +1,228 @@
+{
+  "referenceCutoff": "2026-09-10",
+  "instruction": "Refresh this starting universe from current OpenZcash and primary sources. These are discovery references, not current monthly facts.",
+  "organizations": [
+    {
+      "name": "Zcash Foundation",
+      "url": "https://zfnd.org/"
+    },
+    {
+      "name": "ZODL",
+      "url": "https://zodl.com/"
+    },
+    {
+      "name": "Shielded Labs",
+      "url": "https://shieldedlabs.net/"
+    },
+    {
+      "name": "Vizor",
+      "url": "https://vizor.cash/"
+    },
+    {
+      "name": "ZCG",
+      "url": "https://zcashcommunitygrants.org/"
+    },
+    {
+      "name": "FPF",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram"
+    },
+    {
+      "name": "Valar Group + Project Tachyon",
+      "url": "https://forum.zcashcommunity.com/t/56912",
+      "tachyonOfficialSite": "https://tachyon.z.cash/",
+      "tachyonOfficialOrganization": "https://github.com/tachyon-zcash",
+      "tachyonBrand": "https://avatars.githubusercontent.com/u/237353586?v=4"
+    },
+    {
+      "name": "Zakura",
+      "url": "https://zakura.com/",
+      "releases": "https://github.com/zakura-core/zakura/releases",
+      "brand": "https://zakura.com/zakura-flower-v1.svg"
+    },
+    {
+      "name": "QEDIT",
+      "url": "https://forum.zcashcommunity.com/t/56884"
+    },
+    {
+      "name": "Zingo Labs",
+      "url": "https://forum.zcashcommunity.com/t/55845"
+    },
+    {
+      "name": "ZecHub",
+      "url": "https://zechub.wiki/"
+    }
+  ],
+  "communities": [
+    {
+      "name": "ZecHub",
+      "source": "https://forum.zcashcommunity.com/t/53686/57"
+    },
+    {
+      "name": "Zcash Brazil",
+      "source": "https://forum.zcashcommunity.com/t/53702/26"
+    },
+    {
+      "name": "ZK AV Club",
+      "source": "https://forum.zcashcommunity.com/t/53913/55"
+    },
+    {
+      "name": "Zcash en Español",
+      "source": "https://forum.zcashcommunity.com/t/53815/33"
+    },
+    {
+      "name": "Türkiye",
+      "source": "https://forum.zcashcommunity.com/t/56274/6"
+    },
+    {
+      "name": "Nigeria",
+      "source": "https://forum.zcashcommunity.com/t/53654/19"
+    },
+    {
+      "name": "Ghana",
+      "source": "https://forum.zcashcommunity.com/t/56214/15"
+    },
+    {
+      "name": "Arabia",
+      "source": "https://forum.zcashcommunity.com/t/57170/10"
+    },
+    {
+      "name": "Club Caracas",
+      "source": "https://forum.zcashcommunity.com/t/56445"
+    },
+    {
+      "name": "Club Barcelona",
+      "source": "https://forum.zcashcommunity.com/t/51247/71"
+    },
+    {
+      "name": "CodeRaiz México",
+      "source": "https://forum.zcashcommunity.com/t/55506"
+    },
+    {
+      "name": "Pesa Ya Siri / Tanzania",
+      "source": "https://forum.zcashcommunity.com/t/56593"
+    },
+    {
+      "name": "ruZcash",
+      "source": "https://forum.zcashcommunity.com/t/38485"
+    },
+    {
+      "name": "Boston Zcash",
+      "source": "https://forum.zcashcommunity.com/t/56748"
+    },
+    {
+      "name": "China",
+      "source": "https://forum.zcashcommunity.com/t/56438"
+    },
+    {
+      "name": "Querétaro",
+      "source": "https://forum.zcashcommunity.com/t/55764/14"
+    },
+    {
+      "name": "East Africa",
+      "source": "https://forum.zcashcommunity.com/t/57226"
+    },
+    {
+      "name": "France",
+      "source": "https://forum.zcashcommunity.com/t/5544"
+    },
+    {
+      "name": "Germany",
+      "source": "https://forum.zcashcommunity.com/t/50169"
+    },
+    {
+      "name": "India",
+      "source": "https://forum.zcashcommunity.com/t/54762/12"
+    },
+    {
+      "name": "Indonesia",
+      "source": "https://forum.zcashcommunity.com/t/38678"
+    },
+    {
+      "name": "Japan",
+      "source": "https://forum.zcashcommunity.com/t/54827"
+    },
+    {
+      "name": "Korea",
+      "source": "https://forum.zcashcommunity.com/t/56458/3"
+    },
+    {
+      "name": "Elzz",
+      "source": "https://forum.zcashcommunity.com/t/57390"
+    },
+    {
+      "name": "Ukraine",
+      "source": "https://forum.zcashcommunity.com/t/54059"
+    },
+    {
+      "name": "South Africa",
+      "source": "https://forum.zcashcommunity.com/t/57133/7"
+    },
+    {
+      "name": "Zcast",
+      "source": "https://forum.zcashcommunity.com/t/54291/34"
+    },
+    {
+      "name": "ZECsy",
+      "source": "https://forum.zcashcommunity.com/t/56509/5"
+    },
+    {
+      "name": "Belgium",
+      "source": "https://forum.zcashcommunity.com/t/56893"
+    },
+    {
+      "name": "PGPZ",
+      "source": "https://forum.zcashcommunity.com/t/56324/12"
+    },
+    {
+      "name": "Engage",
+      "source": "https://forum.zcashcommunity.com/t/55358/16"
+    },
+    {
+      "name": "The Zcash Daily",
+      "source": "https://forum.zcashcommunity.com/t/57219"
+    }
+  ],
+  "entryPoints": {
+    "ledger": {
+      "name": "OpenZcash disbursement ledger",
+      "url": "https://openzcash.org/api/zcg/data/disbursements?limit=3000"
+    },
+    "grantdata": {
+      "name": "OpenZcash grant rollup",
+      "url": "https://openzcash.org/api/zcg/data/grants"
+    },
+    "fpfissues": {
+      "name": "FPF ready-for-vote issue register",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues"
+    },
+    "roundapi": {
+      "name": "OpenZcash Q3 proposal register",
+      "url": "https://openzcash.org/api/zcg/coinholder/round"
+    },
+    "zconsite": {
+      "name": "Zcon7 official event page",
+      "url": "https://zfnd.org/zcon7/"
+    },
+    "treasury": {
+      "name": "ZecHub treasury mirror · source Aug 5",
+      "url": "https://openzcash.org/api/zechub/treasury"
+    },
+    "treasurysheet": {
+      "name": "ZecHub treasury source sheet",
+      "url": "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/edit"
+    },
+    "catalog": {
+      "name": "OpenZcash communities",
+      "url": "https://openzcash.org/communities"
+    },
+    "wallets": {
+      "name": "OpenZcash wallets",
+      "url": "https://openzcash.org/wallets"
+    },
+    "ecosystem": {
+      "name": "OpenZcash ecosystem",
+      "url": "https://openzcash.org/ecosystem"
+    }
+  },
+  "sourceNotes": "Resolve new period-specific meeting minutes, voting rounds, events and reports every month; do not retain old deadlines as current."
+}

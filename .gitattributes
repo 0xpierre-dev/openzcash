@@ -1,0 +1,4 @@
+# Preserve approved PDF bytes; these are documents, not source-code diffs.
+/public/monthly/editions/**/*.pdf binary
+# Keep vendored PDF.js distribution files byte-for-byte upstream.
+/public/monthly/pdfjs/** -whitespace

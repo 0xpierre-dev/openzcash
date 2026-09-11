@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   IconBalance,
+  IconBook,
   IconChart,
   IconCheck,
   IconClose,
@@ -53,6 +54,14 @@ const GRAD: Record<string, string> = {
 };
 
 const APPS: AppDef[] = [
+  {
+    id: "monthly",
+    label: "Monthly",
+    sub: "Ecosystem reports",
+    href: "/monthly",
+    Icon: IconBook,
+    grad: GRAD.amber,
+  },
   {
     id: "news",
     label: "News",

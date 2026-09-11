@@ -4,11 +4,13 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { AppShell } from "./app-shell";
 
-/** Routes that render bare (no top bar): the launcher, login and onboarding. */
+/** Monthly owns its compact header so a complete PDF page fits the viewport. */
 function isBare(pathname: string): boolean {
   return (
     pathname === "/" ||
     pathname === "/login" ||
+    pathname === "/monthly" ||
+    pathname.startsWith("/monthly/") ||
     pathname.startsWith("/onboarding")
   );
 }

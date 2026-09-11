@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "publication": "OpenZcash Monthly",
+  "language": "en",
+  "minimumDesignVersion": "3.7",
+  "pageWidth": 1200,
+  "pageHeight": 675,
+  "walletSlide": 7,
+  "walletLayout": "2x2",
+  "walletRoster": ["ZODL", "Zingo", "Vizor", "Zkool"],
+  "legacyReferences": {
+    "2026-09": "4e05c3b1515ff9f066a9c030be450bffc043168c757a28a0afd06a12fb8b2d53"
+  }
+}

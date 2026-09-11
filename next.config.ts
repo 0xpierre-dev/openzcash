@@ -18,6 +18,7 @@ const csp = [
   "img-src 'self' data: blob: https://i.ytimg.com",
   "font-src 'self'",
   "connect-src 'self' blob:",
+  "worker-src 'self'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -46,6 +47,15 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      // Monthly files are content-addressed. Corrections get a new directory.
+      {
+        source: "/monthly/editions/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/monthly/pdfjs/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
       // Heavy 3D assets (GLB models, graffiti textures) never change in place —
       // a new model gets a new filename. Without this, Next serves public/
       // files with max-age=0 and every office visitor re-downloads ~6MB.

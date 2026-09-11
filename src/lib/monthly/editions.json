@@ -1,0 +1,40 @@
+[
+  {
+    "id": "2026-09-01-to-10",
+    "month": "2026-09",
+    "label": "Sep 1–10",
+    "kind": "period",
+    "periodStart": "2026-09-01",
+    "periodEnd": "2026-09-10",
+    "financialMonth": "2026-09",
+    "designVersion": "Editorial 3.7",
+    "pdf": "/monthly/editions/2026-09-01-to-10/e4f57c352cd0/OpenZcash-Monthly-September-01-10-2026.pdf",
+    "cover": "/monthly/editions/2026-09-01-to-10/e4f57c352cd0/cover.jpg",
+    "manifest": "/monthly/editions/2026-09-01-to-10/e4f57c352cd0/pages.json",
+    "assetBase": "/monthly/editions/2026-09-01-to-10/e4f57c352cd0",
+    "sha256": "e4f57c352cd0ad67b441dc206b53a0e5a52dab2d4353b4b9cee30bd7b5c3e3d3",
+    "bytes": 2523592,
+    "pageCount": 44,
+    "pageWidth": 1200,
+    "pageHeight": 675
+  },
+  {
+    "id": "2026-09",
+    "month": "2026-09",
+    "label": "August close",
+    "kind": "reference",
+    "periodStart": "2026-08-01",
+    "periodEnd": "2026-09-10",
+    "financialMonth": "2026-08",
+    "designVersion": "Editorial 3.6",
+    "pdf": "/monthly/editions/2026-09/4e05c3b1515f/OpenZcash-Monthly-September-2026.pdf",
+    "cover": "/monthly/editions/2026-09/4e05c3b1515f/cover.jpg",
+    "manifest": "/monthly/editions/2026-09/4e05c3b1515f/pages.json",
+    "assetBase": "/monthly/editions/2026-09/4e05c3b1515f",
+    "sha256": "4e05c3b1515ff9f066a9c030be450bffc043168c757a28a0afd06a12fb8b2d53",
+    "bytes": 3420076,
+    "pageCount": 44,
+    "pageWidth": 1200,
+    "pageHeight": 675
+  }
+]

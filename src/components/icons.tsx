@@ -23,6 +23,13 @@ function svg(path: ReactNode) {
   };
 }
 
+export const IconBook = svg(
+  <>
+    <path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Z" />
+    <path d="M12 5v15" />
+  </>,
+);
+
 export const IconDashboard = svg(
   <>
     <rect x="3" y="3" width="7" height="9" rx="1.5" />
