@@ -1,5 +1,6 @@
 """Create dated, clearly labeled UI samples; not a monthly production export."""
 import argparse, copy, hashlib, io, json, math, subprocess
+import xml.etree.ElementTree as ET
 from decimal import Decimal
 from pathlib import Path
 from pypdf import PdfReader, PdfWriter
@@ -8,6 +9,9 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.colors import HexColor
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.svgpath import SvgPath
+from reportlab.graphics import renderPDF
 
 ROOT = Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser(description=__doc__)
@@ -43,36 +47,82 @@ def plain(value):
 def text(c,x,y,s,size=20,font='A',color=INK):
     c.setFillColor(HexColor(color)); c.setFont(font,size); c.drawString(x,y,plain(s))
 
+def centered_text(c,cx,y,s,size=20,font='A',color=INK):
+    value=plain(s)
+    text(c,cx-pdfmetrics.stringWidth(value,font,size)/2,y,value,size,font,color)
+
+def tracked_text(c,cx,y,s,size=13,tracking=1.6,color=INK):
+    value=plain(s)
+    width=pdfmetrics.stringWidth(value,'B',size)+(len(value)-1)*tracking
+    c.saveState()
+    t=c.beginText(cx-width/2,y);t.setFont('B',size);t.setCharSpace(tracking)
+    t.setFillColor(HexColor(color));t.textOut(value);c.drawText(t)
+    c.restoreState()
+
+def zcash_mark(c,cx,cy,size):
+    # Preserve the repository's exact brand paths. The SVG's visible circle
+    # occupies 270..810; only its placement/scale changes, not its geometry.
+    svg=ET.parse(ROOT/'public/zcash-mark.svg').getroot()
+    drawing=Drawing(1080,1080)
+    for path in svg.findall('{http://www.w3.org/2000/svg}path'):
+        drawing.add(SvgPath(path.attrib['d'],fillColor=HexColor(path.attrib['fill']),strokeColor=None))
+    c.saveState();c.translate(cx-size/2,cy+size/2);c.scale(size/540,-size/540);c.translate(-270,-270)
+    renderPDF.draw(drawing,c,0,0);c.restoreState()
+
+def zcash_cover_art(c,cx,cy,kind):
+    """Decorative engraved medallion; no axes, scales or implied data."""
+    c.saveState()
+    clip=c.beginPath();clip.rect(784,242,416,349);c.clipPath(clip,stroke=0,fill=0)
+    c.setStrokeColor(HexColor(INK if kind=='monthly' else PAPER));c.setStrokeAlpha(.19)
+    c.setLineWidth(.65)
+    for band in range(23):
+        radius=128+band*3.6;path=c.beginPath()
+        for step in range(361):
+            theta=step*math.tau/360
+            r=radius+7*math.sin(theta*3+band*.18)+3*math.sin(theta*7-band*.13)
+            x=cx+r*math.cos(theta)*1.045;y=cy+r*math.sin(theta)*.78
+            if step==0:path.moveTo(x,y)
+            else:path.lineTo(x,y)
+        path.close();c.drawPath(path,stroke=1,fill=0)
+    c.restoreState()
+    # Ink backing makes the official transparent Z cutout retain its contrast.
+    c.setFillColor(HexColor(INK));c.circle(cx,cy,112,stroke=0,fill=1)
+    zcash_mark(c,cx,cy,204)
+    c.setStrokeColor(HexColor(INK if kind=='monthly' else '#b7ccbf'));c.setLineWidth(.9)
+    c.circle(cx,cy,120,stroke=1,fill=0)
+
 def cover_page(kind):
     buf=io.BytesIO(); c=canvas.Canvas(buf,pagesize=(1200,675))
     accent = GOLD if kind == 'monthly' else GREEN
-    c.setFillColor(HexColor(INK)); c.rect(0,0,815,675,fill=1,stroke=0)
-    c.setFillColor(HexColor(accent)); c.rect(815,0,385,675,fill=1,stroke=0)
-    text(c,52,620,'OPENZCASH  /  SEPTEMBER 2026',16,'B',PAPER)
+    c.setFillColor(HexColor(INK)); c.rect(0,0,784,675,fill=1,stroke=0)
+    c.setFillColor(HexColor(accent)); c.rect(784,0,416,675,fill=1,stroke=0)
+    # A single masthead, generous title band and one baseline for the metrics.
+    tracked_text(c,392,618,'OPENZCASH',18,2.3,PAPER)
     if kind=='monthly':
-        text(c,47,402,'MONTHLY',150,'D',PAPER)
-        text(c,53,338,'Engineering. Wallets. Products.',30,'A',PAPER)
-        metrics=[('4','team briefs'),('4','core wallet updates'),('6','product announcements')]
+        title,subtitle='MONTHLY','Engineering. Wallets. Products.'
+        title_size=192
+        metrics=[('4',['Team','briefs']),('4',['Core wallet','updates']),('6',['Product','announcements'])]
     else:
-        text(c,47,402,'OPERATIONS',126,'D',PAPER)
-        text(c,53,338,'Funding. Decisions. Communities.',29,'A',PAPER)
-        metrics=[('$218.5k','grant payments'),(str(len(ZCG['requests'])),'ZCG under review'),(str(len(PROPOSALS)),'Coinholder requests')]
-    for i,(value,label) in enumerate(metrics):
-        x=53+i*246
-        c.setStrokeColor(HexColor('#5a6057')); c.line(x,237,x+209,237)
-        text(c,x,166,value,55,'D',PAPER); text(c,x,129,label,20,'A',PAPER)
-    right=INK if kind=='monthly' else PAPER
-    text(c,850,619,'ISSUE 09 / 2026',16,'B',right)
-    if kind=='monthly':
-        c.setFillColor(HexColor(INK));c.circle(1006,478,93,stroke=0,fill=1)
-        c.drawImage(str(SOURCE/'brand-assets/zcash.png'),926,398,width=160,height=160,mask='auto')
-    else:
-        c.setStrokeColor(HexColor(right));c.setLineWidth(4);c.circle(1006,478,84,stroke=1,fill=0)
-        c.setLineWidth(6); c.lines([(969,480,995,454),(995,454,1045,510)])
-    text(c,850,191,'09',119,'D',right)
-    text(c,853,122,'SEP 1-10',25,'B',right)
-    text(c,853,91,'Dated reference sample',17,'A',right)
-    text(c,53,51,'LAYOUT PREVIEW  /  SEPTEMBER 1-10, 2026',14,'B','#d4c27e')
+        title,subtitle='OPERATIONS','Funding. Decisions. Communities.'
+        title_size=160
+        metrics=[('$218.5k',['Grant','payments']),(str(len(ZCG['requests'])),['ZCG under','review']),(str(len(PROPOSALS)),['Coinholder','requests'])]
+    assert pdfmetrics.stringWidth(title,'D',title_size)<=656
+    centered_text(c,392,405,title,title_size,'D',PAPER)
+    centered_text(c,392,345,subtitle,27,'A','#d6d9d0')
+    cell=(656-48)/3
+    for i,(value,labels) in enumerate(metrics):
+        x=64+i*(cell+24);cx=x+cell/2
+        c.setStrokeColor(HexColor('#535c51'));c.setLineWidth(.85);c.line(x,251,x+cell,251)
+        assert pdfmetrics.stringWidth(value,'D',74)<=cell
+        centered_text(c,cx,174,value,74,'D',PAPER)
+        for row,label in enumerate(labels):centered_text(c,cx,127-row*25,label,21,'A','#d6d9d0')
+    right=INK if kind=='monthly' else PAPER;art_center=992
+    tracked_text(c,art_center,619,'ISSUE 09 / 2026',14,1.5,right)
+    zcash_cover_art(c,art_center,417,kind)
+    c.setStrokeColor(HexColor(INK if kind=='monthly' else '#8da99a'));c.setStrokeAlpha(.35)
+    c.setLineWidth(.8);c.line(860,229,1124,229);c.setStrokeAlpha(1)
+    centered_text(c,art_center,150,'SEP 1-10',49,'D',right)
+    tracked_text(c,art_center,107,'PARTIAL PERIOD',12,1.5,right)
     c.showPage();c.save();return PdfReader(buf).pages[0]
 
 def proposal_page(rows, number, start):
@@ -286,6 +336,7 @@ for kind,selection in [('monthly',monthly_selection),('operations',operations_se
         if kind=='monthly' and i==8:m['section']='Build'
         if kind=='operations' and isinstance(old,int) and old in (11,13,14):m['section']='Payments'
         if kind=='operations' and old==21:m['section']='NU7 polls'
+        m['text']=m['text'].strip()
         manifest.append(m);writer.add_outline_item(m['title'],i-1)
     filename=f'OpenZcash-{kind.title()}-Layout-Sample.pdf';p=dest/filename
     writer.add_metadata({'/Title':f'OpenZcash {kind.title()} - UI layout sample','/Subject':'Selected September 1-10, 2026 content. Not a new monthly close.','/Author':'OpenZcash'})
@@ -298,7 +349,7 @@ for kind,selection in [('monthly',monthly_selection),('operations',operations_se
         if int(image.stem.split('-')[-1]) > len(selection): image.unlink()
     (dest/'pages.json').write_text(json.dumps(manifest))
     base=f'/monthly/preview/{kind}';blob=p.read_bytes()
-    catalog[kind]={'id':'2026-09-01-to-10','month':'2026-09','label':'Sep 1-10','kind':'period','periodStart':'2026-09-01','periodEnd':'2026-09-10','financialMonth':'2026-09','designVersion':'Editorial 3.7 / UI sample','pdf':f'{base}/{filename}','cover':f'{base}/page-001.jpg','manifest':f'{base}/pages.json','assetBase':base,'sha256':hashlib.sha256(blob).hexdigest(),'bytes':len(blob),'pageCount':len(selection),'pageWidth':1200,'pageHeight':675}
+    catalog[kind]={'id':'2026-09-01-to-10','month':'2026-09','label':'Sep 1-10','kind':'period','periodStart':'2026-09-01','periodEnd':'2026-09-10','financialMonth':'2026-09','designVersion':'Editorial 4.0 / Covers 2','pdf':f'{base}/{filename}','cover':f'{base}/page-001.jpg','manifest':f'{base}/pages.json','assetBase':base,'sha256':hashlib.sha256(blob).hexdigest(),'bytes':len(blob),'pageCount':len(selection),'pageWidth':1200,'pageHeight':675}
     assert len(PdfReader(p).pages)==len(selection)
 sources=[{'name':v[0],'detail':v[1].split('/')[2],'url':v[1]} for v in DATA['sources'].values()]
 for row in [*ZCG['requests'],*ZCG['decisions']]:

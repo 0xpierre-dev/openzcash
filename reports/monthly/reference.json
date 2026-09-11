@@ -4,19 +4,25 @@
   "referenceCutoff": "2026-09-10",
   "documents": {
     "monthly": {
-      "pdf": "reports/monthly/standards/editorial-4.0/reference-monthly.pdf",
-      "sha256": "be5064e0ee42e20f463bab0b5a2c7dafea84f7769779e0187f5512975cb2dd5f",
+      "pdf": "reports/monthly/standards/editorial-4.0/covers-2/reference-monthly.pdf",
+      "sha256": "38273d41416f676fa3c1f4455e6e7646141277e6d091dc8e5b64c4857a690921",
       "pages": 10,
-      "manifest": "reports/monthly/standards/editorial-4.0/reference-monthly-pages.json"
+      "manifest": "reports/monthly/standards/editorial-4.0/covers-2/reference-monthly-pages.json"
     },
     "operations": {
-      "pdf": "reports/monthly/standards/editorial-4.0/reference-operations.pdf",
-      "sha256": "f05ff1934e25e517f1645549daf1bc4e9cbd75631f742a6679bef565cf131244",
+      "pdf": "reports/monthly/standards/editorial-4.0/covers-2/reference-operations.pdf",
+      "sha256": "d7acbd12b6f3edda94e8f6c9ebfd6b58798c5ce51934a2bac54687f2b12b85ae",
       "pages": 20,
-      "manifest": "reports/monthly/standards/editorial-4.0/reference-operations-pages.json"
+      "manifest": "reports/monthly/standards/editorial-4.0/covers-2/reference-operations-pages.json"
     }
   },
   "activeContract": "reports/monthly/reading-set-contract.json",
   "productionPrompt": "reports/monthly/OPENZCASH-MONTHLY-PROMPT.md",
-  "note": "Approved reading-set design only. These dated PDFs and counts are never the evidence, current publication or review sign-off for a future run. The fixed Monthly has 10 pages; Operations paginates the current data without a fixed page quota."
+  "note": "Approved reading-set design only. These dated PDFs and counts are never the evidence, current publication or review sign-off for a future run. The fixed Monthly has 10 pages; Operations paginates the current data without a fixed page quota.",
+  "coverRevision": 2,
+  "coverAsset": {
+    "path": "public/zcash-mark.svg",
+    "origin": "Existing OpenZcash repository vector asset; original path geometry and fill preserved",
+    "sha256": "1c0e89acb39c2b19ba77787e4d7fd0cea5b81288bfe9fb690a9217b56af638c8"
+  }
 }

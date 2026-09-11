@@ -1,6 +1,6 @@
 # OpenZcash Editorial
 
-Design system 4.0 · Monthly + Operations + Sources & Data
+Design system 4.0 · Cover revision 2 · Monthly + Operations + Sources & Data
 
 ## Information hierarchy
 
@@ -18,7 +18,8 @@ Use 52-point outer margins and a 1096-point content width. The top masthead and 
 
 | Role | Reference face | Reference size |
 | --- | --- | --- |
-| Cover headline | DIN Condensed Bold | 100–150 pt |
+| Cover headline | DIN Condensed Bold | Monthly 192 pt / Operations 160 pt |
+| Cover metrics / captions | DIN Condensed Bold / Gill Sans | 74 pt / 21 pt |
 | Page headline | DIN Condensed Bold | 44–50 pt |
 | Primary metric | DIN Alternate Bold / DIN Condensed Bold | 36–100 pt |
 | Body | Gill Sans | 18–22 pt |
@@ -47,7 +48,7 @@ Official assets keep their own colors. Vizor headings may echo its burgundy iden
 
 ## Page families
 
-- **Cover:** show the publication name once, as the main headline. Omit the small repeated masthead. Include the issue/date, one geometric issue device and three supported signals. Set the three metrics around 52 pt, with 19 pt captions on two aligned lines; fit longer values to their column width. Use 15–18 pt for the issue, date and supporting labels, and 24 pt for the evidence period. Keep conceptual graphics separate from data marks.
+- **Cover:** use the shared revision 2 composition in the reference PDFs. Divide the canvas into a 784 pt ink panel and a 416 pt identity panel: gold for Monthly, green for Operations. Center the single OPENZCASH masthead, publication title and short purpose on the left axis at x=392. Set three equal metric columns within x=64–720, with 24 pt gaps, 74 pt values and 21 pt captions on two aligned lines. Keep all value baselines equal and shorten number formatting before reducing type. Center the issue label, Zcash artwork and reporting period on the right axis at x=992. Use the original vector Zcash mark, retaining its gold color and geometry, with subtle decorative engraved contours on both publications. The contours have no data meaning. Set the reporting period around 49 pt, with a quiet 12 pt partial-period label only when applicable. Do not repeat the month as a giant decorative numeral or add cover-footer copy. Dates and metrics always come from the current issue.
 - **Navigation:** use chapter controls and PDF bookmarks. Monthly has no extra contents page; its tenth and final page carries concise highlights and a visible **Open Operations** button. The button opens the matching issue in the same reader, with a real public URL in the published PDF.
 - **Organization / project:** float the authentic logo directly on the paper background beside three or four concise updates. Remove decorative dark or colored logo panels. Center the logo, organization name and supporting label on the same column axis; use approximately 38 pt for names and 16 pt for status labels in high-contrast ink or muted text. Space update rows according to the actual text height so dividers never cross a second line. Include Zakura with its authentic flower and wordmark, centered release number and readable status.
 - **Wallets / Monthly page 6:** one equal 2×2 grid: ZODL top left, Zingo top right, Vizor bottom left, Zkool bottom right. Use original transparent marks, one name per cell, versions, platforms, release dates and concise changes. Keep the paper background, quiet dividers and restrained brand accents. Keep each slot even when there is no verified update; label that gap instead of inventing a release. Other wallets are supplementary coverage sourced from official repositories and OpenZcash Wallets, never a fifth cell. Funding and experimental release states remain explicit.
@@ -81,4 +82,4 @@ Render and inspect all pages before delivery. Compare the final PDF to the evide
 
 The reference is `reference.json` and its two immutable PDFs under `standards/editorial-4.0/`. Monthly is fixed at 10 pages: cover, four team pages, wallets, hardware, supporting stack, new products, highlights/handoff. Product announcements are page 9; highlights and the Operations button are page 10. Operations uses green rather than gold for its publication identity and expands through substantive sections and readable tables. Its sample has 20 pages; future counts follow current evidence. Source/register counts are never decorative fixed metrics.
 
-Monthly and Operations covers show their distinct publication name once. Preserve the approved dark left panel, restrained colored issue panel, date and three supported signals. Interior pages stay on the same paper background. Do not add filled panels behind wallets, project logos, charts, treasury values, deadline features or community metrics. Official event art and photos are the exception. Preserve a quiet folio in the top margin and clear footers.
+Monthly and Operations covers show their distinct publication name once. Cover revision 2 uses the shared centered composition and native vector Zcash artwork described above; `reference.json` selects that revision while earlier reference files remain available. Interior pages stay on the same paper background. Do not add filled panels behind wallets, project logos, charts, treasury values, deadline features or community metrics. Official event art and photos are the exception. Preserve a quiet folio in the top margin and clear footers.
