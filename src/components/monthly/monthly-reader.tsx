@@ -48,7 +48,7 @@ function EditionLibrary({ editions, edition }: { editions: MonthlyEdition[]; edi
   </div>;
 }
 
-export function MonthlyReader({ editions, edition, embedded = false, baseHref }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string }) {
+export function MonthlyReader({ editions, edition, embedded = false, baseHref, publicationName = "Monthly", onFollowLink }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string; publicationName?: string; onFollowLink?: (url: string) => boolean }) {
   const pageHref = baseHref || `/monthly/${edition.id}`;
   const [pageNumber, setPageNumber] = useState(1);
   const [pages, setPages] = useState<ReportPage[]>([]);
@@ -132,7 +132,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref }:
         canvas.width = Math.ceil(viewport.width);
         canvas.height = Math.ceil(viewport.height);
         canvas.setAttribute("role", "img");
-        canvas.setAttribute("aria-label", `Page ${pageNumber}: ${pages[pageNumber - 1]?.title || "OpenZcash Monthly"}`);
+        canvas.setAttribute("aria-label", `Page ${pageNumber}: ${pages[pageNumber - 1]?.title || `OpenZcash ${publicationName}`}`);
         const context = canvas.getContext("2d", { alpha: false });
         if (!context) throw new Error("Canvas unavailable");
         job = page.render({ canvasContext: context, viewport });
@@ -146,7 +146,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref }:
     }
     void render();
     return () => { active = false; job?.cancel(); };
-  }, [pdf, pageNumber, size.width, edition.pageWidth, pages]);
+  }, [pdf, pageNumber, size.width, edition.pageWidth, pages, publicationName]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -211,7 +211,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref }:
 
     <div className={styles.workspace}>
       <aside className={styles.library} aria-label="Monthly library"><EditionLibrary editions={editions} edition={edition} /></aside>
-      <main className={styles.reader} aria-label="Monthly report reader">
+      <main className={styles.reader} aria-label={`${publicationName} report reader`}>
         <div className={styles.readerHeading}>
           <div><span className={styles.eyebrow}>{monthLabel(edition.month)}</span><strong>{edition.label}<span className={styles.status}>{statusLabel(edition)}</span></strong></div>
           <div className={styles.readerActions}>
@@ -234,13 +234,13 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref }:
                 <div ref={canvasHost} className={styles.canvasHost} style={{ visibility: ready ? "visible" : "hidden" }} />
                 {ready && currentPage?.links.map((link, i) => {
                   const position = { left: `${link.x * 100}%`, top: `${link.y * 100}%`, width: `${link.w * 100}%`, height: `${link.h * 100}%` };
-                  return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
+                  return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" onClick={(event)=>{if(onFollowLink?.(link.url))event.preventDefault();}} aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
                 })}
                 {!ready && <div className={styles.loading} role="status">{error ? <><Icon name="book" /><strong>This edition couldn’t load.</strong><span>Try again, or open the PDF using the download button.</span><button onClick={retryLoad}>Try again</button></> : <><span className={styles.loader} /><span>Opening your report…</span></>}</div>}
               </div>
             </div>
           </div>
-          <div className={styles.pageCaption}><span>{currentPage?.title || "OpenZcash Monthly"}</span><small>Use ← → to turn pages</small></div>
+          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><small>Use ← → to turn pages</small></div>
         </div>
         <nav className={styles.filmstrip} aria-label="Page previews">
           <button className={styles.iconButton} disabled={pageNumber === 1} onClick={() => goTo(pageNumber - 1)} aria-label="Previous page" title="Previous page"><Icon name="left" /></button>

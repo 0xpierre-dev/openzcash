@@ -4,6 +4,6 @@ export const metadata = { title: "Reading set preview · OpenZcash", robots: { i
 
 export default async function PreviewPage({ searchParams }: { searchParams: Promise<{ publication?: string }> }) {
   const { publication } = await searchParams;
-  const initialView = publication === "voter" || publication === "sources" ? publication : "monthly";
+  const initialView = publication === "voter" ? "operations" : publication === "operations" || publication === "sources" ? publication : "monthly";
   return <MonthlyBundlePreview initialView={initialView} />;
 }
