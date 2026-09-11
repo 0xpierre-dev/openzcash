@@ -1,13 +1,22 @@
 {
-  "designVersion": "3.7",
-  "sampleCutoff": "2026-09-10",
-  "sampleEdition": "2026-09-01-to-10",
-  "samplePdf": "public/monthly/editions/2026-09-01-to-10/e4f57c352cd0/OpenZcash-Monthly-September-01-10-2026.pdf",
-  "samplePdfSha256": "e4f57c352cd0ad67b441dc206b53a0e5a52dab2d4353b4b9cee30bd7b5c3e3d3",
-  "reader": "https://openzcash.org/monthly/2026-09-01-to-10",
-  "productionGuide": "reports/monthly/README.md",
-  "publicationGuide": "reports/monthly/PUBLISHING.md",
-  "pdfRenderer": "reports/monthly/render_pdf.py",
-  "validator": "reports/monthly/validate_issue.py",
-  "note": "Paths are relative to the repository. This approved partial issue is a design reference only. Every new month requires fresh research, period-specific data and a new editorial and visual review. Private evidence stays in the issue workspace. Codex manages the recurring schedule separately."
+  "designVersion": "4.0",
+  "approvedOn": "2026-09-11",
+  "referenceCutoff": "2026-09-10",
+  "documents": {
+    "monthly": {
+      "pdf": "reports/monthly/standards/editorial-4.0/reference-monthly.pdf",
+      "sha256": "be5064e0ee42e20f463bab0b5a2c7dafea84f7769779e0187f5512975cb2dd5f",
+      "pages": 10,
+      "manifest": "reports/monthly/standards/editorial-4.0/reference-monthly-pages.json"
+    },
+    "operations": {
+      "pdf": "reports/monthly/standards/editorial-4.0/reference-operations.pdf",
+      "sha256": "f05ff1934e25e517f1645549daf1bc4e9cbd75631f742a6679bef565cf131244",
+      "pages": 20,
+      "manifest": "reports/monthly/standards/editorial-4.0/reference-operations-pages.json"
+    }
+  },
+  "activeContract": "reports/monthly/reading-set-contract.json",
+  "productionPrompt": "reports/monthly/OPENZCASH-MONTHLY-PROMPT.md",
+  "note": "Approved reading-set design only. These dated PDFs and counts are never the evidence, current publication or review sign-off for a future run. The fixed Monthly has 10 pages; Operations paginates the current data without a fixed page quota."
 }

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 2,
+  "standardId": "openzcash-editorial-4.0",
+  "publication": "OpenZcash Monthly",
+  "language": "en",
+  "pageWidth": 1200,
+  "pageHeight": 675,
+  "publicationOrder": [
+    "monthly",
+    "operations",
+    "sources"
+  ],
+  "pdfPublications": [
+    "monthly",
+    "operations"
+  ],
+  "sourcesIsPdf": false,
+  "monthly": {
+    "name": "Monthly",
+    "pageCount": 10,
+    "pageRoles": [
+      "cover",
+      "zf",
+      "shielded-labs",
+      "tachyon",
+      "zakura",
+      "wallets",
+      "hardware",
+      "supporting-stack",
+      "products",
+      "highlights-handoff"
+    ],
+    "walletSlide": 6,
+    "walletLayout": "2x2",
+    "walletRoster": [
+      "ZODL",
+      "Zingo",
+      "Vizor",
+      "Zkool"
+    ],
+    "productsSlide": 9,
+    "highlightsSlide": 10,
+    "nextPublication": "operations",
+    "forbiddenSections": [
+      "payments-ledger",
+      "zcg-decisions",
+      "zcg-open-proposals",
+      "coinholder-proposals",
+      "community-register",
+      "methodology",
+      "sources-appendix"
+    ]
+  },
+  "operations": {
+    "name": "Operations",
+    "referencePageCount": 20,
+    "fixedPageCount": false,
+    "content": [
+      "grant-payments",
+      "zcg-decisions",
+      "zcg-open-proposals",
+      "coinholder-votes-and-proposals",
+      "communities",
+      "project-status",
+      "treasury",
+      "events"
+    ],
+    "noGenericClosingPage": true
+  },
+  "sources": {
+    "name": "Sources & Data",
+    "registers": [
+      "sources",
+      "zcg",
+      "coinholder",
+      "communities"
+    ],
+    "completeReviewedUniverse": true,
+    "search": true,
+    "csvExport": true
+  },
+  "period": {
+    "timezone": "America/Sao_Paulo",
+    "cadence": "monthly",
+    "dayOfMonth": 1,
+    "localTime": "09:00",
+    "financialMonth": "previous-completed-calendar-month",
+    "comparisonMonth": "month-before-financial-month",
+    "evidenceCutoff": "actually-verified-during-run"
+  },
+  "quality": {
+    "freshResearchRequired": true,
+    "financialStates": [
+      "requested",
+      "approved",
+      "committed",
+      "paid"
+    ],
+    "balanceDateSeparateFromQuoteDate": true,
+    "readEveryRenderedPage": true,
+    "reviewBoundToBothPdfHashes": true,
+    "sameReaderHandoff": true,
+    "noOuterScrolling": true,
+    "productionLinksMustUsePublicOrigin": true,
+    "publishWholeReadingSetOnly": true
+  },
+  "reference": "reports/monthly/reference.json"
+}

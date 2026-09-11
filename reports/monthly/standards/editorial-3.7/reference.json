@@ -1,0 +1,13 @@
+{
+  "designVersion": "3.7",
+  "sampleCutoff": "2026-09-10",
+  "sampleEdition": "2026-09-01-to-10",
+  "samplePdf": "public/monthly/editions/2026-09-01-to-10/e4f57c352cd0/OpenZcash-Monthly-September-01-10-2026.pdf",
+  "samplePdfSha256": "e4f57c352cd0ad67b441dc206b53a0e5a52dab2d4353b4b9cee30bd7b5c3e3d3",
+  "reader": "https://openzcash.org/monthly/2026-09-01-to-10",
+  "productionGuide": "reports/monthly/README.md",
+  "publicationGuide": "reports/monthly/PUBLISHING.md",
+  "pdfRenderer": "reports/monthly/render_pdf.py",
+  "validator": "reports/monthly/validate_issue.py",
+  "note": "Paths are relative to the repository. This approved partial issue is a design reference only. Every new month requires fresh research, period-specific data and a new editorial and visual review. Private evidence stays in the issue workspace. Codex manages the recurring schedule separately."
+}
