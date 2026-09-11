@@ -47,10 +47,22 @@ export const MEMBERS: Member[] = [
     term: "to Jun 2027",
     facts: [
       {
+        label: "ZCG · re-elected Jun 2026",
+        source: "https://zfnd.org/zcg-election-results-june-2026/",
+        sourceLabel: "June 2026 election result",
+        tone: "current",
+      },
+      {
         label: "ZCG · fourth term",
         source:
           "https://forum.zcashcommunity.com/t/gguy-for-zcg-june-2026/56086",
         sourceLabel: "June 2026 nomination",
+        tone: "current",
+      },
+      {
+        label: "ZCG · since Jul 2023",
+        source: "https://zfnd.org/results-of-the-zcg-election-june-2023/",
+        sourceLabel: "June 2023 election result, published July 1, 2023",
         tone: "current",
       },
     ],
