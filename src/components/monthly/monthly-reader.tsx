@@ -242,9 +242,9 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
           <div className={styles.pageCaption}><span>{currentPage?.title || "OpenZcash Monthly"}</span><small>Use ← → to turn pages</small></div>
         </div>
         <nav className={styles.filmstrip} aria-label="Page previews">
-          <button className={styles.iconButton} disabled={thumbStart === 0} onClick={() => goTo(Math.max(1, thumbStart - 4))} aria-label="Previous five pages"><Icon name="left" /></button>
+          <button className={styles.iconButton} disabled={pageNumber === 1} onClick={() => goTo(pageNumber - 1)} aria-label="Previous page" title="Previous page"><Icon name="left" /></button>
           <div className={styles.thumbnails}>{visiblePages.map((p) => <button key={p.number} className={styles.thumbnail} aria-current={p.number === pageNumber ? "page" : undefined} aria-label={`Page ${p.number}: ${p.title}`} title={p.title} onClick={() => goTo(p.number)}><img src={`${edition.assetBase}/page-${String(p.number).padStart(3, "0")}.jpg`} width="360" height="203" alt="" /><span>{String(p.number).padStart(2, "0")}</span></button>)}</div>
-          <button className={styles.iconButton} disabled={thumbStart + 5 >= edition.pageCount} onClick={() => goTo(thumbStart + 6)} aria-label="Next five pages"><Icon name="right" /></button>
+          <button className={styles.iconButton} disabled={pageNumber === edition.pageCount} onClick={() => goTo(pageNumber + 1)} aria-label="Next page" title="Next page"><Icon name="right" /></button>
         </nav>
         <label className={styles.mobileProgress}><span>Page {pageNumber} of {edition.pageCount}</span><input aria-label="Turn to page" type="range" min="1" max={edition.pageCount} value={pageNumber} onChange={(e) => goTo(Number(e.target.value))} /></label>
       </main>

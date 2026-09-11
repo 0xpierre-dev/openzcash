@@ -57,6 +57,8 @@ One monthly task produces one unified English PDF. The authorized recurring publ
 
 The **Monthly** app at `/monthly` reads the approved PDF itself, using a pinned, same-origin PDF.js distribution. The PDF is not re-composed for the website. Desktop and mobile share page navigation, chapter selection, internal/source links and an optional download. Stable links use `/monthly/{edition-id}#7` for slide 7.
 
+Both the upper and lower arrows turn one page at a time. The thumbnail strip follows the selected page automatically; its arrows must never jump between groups of previews. The page counter, rendered PDF, selected thumbnail and shared URL stay synchronized, including at group boundaries and the first and last page.
+
 After completing the production sequence, import the issue into the local website:
 
 ```sh
