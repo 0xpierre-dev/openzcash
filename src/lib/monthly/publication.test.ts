@@ -2,8 +2,9 @@ import { createHash } from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { editionSchema, monthlyEditions } from "./catalog";
+import { editionSchema, monthlyEditions, monthlyReadingSets, readingSetSchema } from "./catalog";
 import { fitPage, pageFromHash, pageManifestSchema, sourceUrl } from "./reader";
+import { publicationTarget, publicationView } from "./reading-set";
 
 const publicFile = (path: string) => join(process.cwd(), "public", path);
 const hash = (data: Buffer) => createHash("sha256").update(data).digest("hex");
@@ -15,8 +16,8 @@ describe("monthly publication integrity", () => {
     expect(new Set(standard.map((e) => e.month)).size).toBe(standard.length);
   });
 
-  for (const edition of monthlyEditions) {
-    it(`${edition.id}: serves the exact reviewed PDF with its own complete page register`, () => {
+  for (const edition of [...monthlyEditions, ...monthlyReadingSets.map((set) => set.documents.operations)]) {
+    it(`${edition.id} / ${edition.sha256.slice(0, 12)}: serves the exact reviewed PDF with its own complete page register`, () => {
       const pdf = readFileSync(publicFile(edition.pdf));
       expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
       expect(pdf.length).toBe(edition.bytes);
@@ -38,14 +39,26 @@ describe("monthly publication integrity", () => {
     });
   }
 
-  it("keeps the wallet slide at page seven of the current design", () => {
+  it("preserves the approved ten-page reading order and public Operations handoff", () => {
     const latest = monthlyEditions[0];
     const pages = pageManifestSchema.parse(JSON.parse(readFileSync(publicFile(latest.manifest), "utf8")));
-    expect(latest.designVersion).toBe("Editorial 3.7");
-    expect(pages[6].section).toBe("Build & wallets");
-    expect(pages[6].title.toLowerCase()).toContain("wallet");
-    // ZODL and Zkool are wordmarks in the PDF, not text-layer names.
-    // The importer checks all four authored identities before admitting a PDF.
+    expect(latest.designVersion).toBe("Editorial 4.0 / Covers 2");
+    expect(pages).toHaveLength(10);
+    expect(pages[5].title.toLowerCase()).toContain("wallet");
+    expect(pages[8].title.toLowerCase()).toContain("products");
+    expect(pages[9].links).toContainEqual(expect.objectContaining({url:`https://openzcash.org/monthly/${latest.id}?publication=operations#1`}));
+    for (const set of monthlyReadingSets) for (const edition of Object.values(set.documents)) {
+      const manifest = JSON.parse(readFileSync(publicFile(edition.manifest), "utf8"));
+      expect(JSON.stringify(manifest)).not.toMatch(/localhost|127\.0\.0\.1|monthly-preview/);
+    }
+  });
+
+  it("rejects incomplete bundles and mismatched publication cutoffs", () => {
+    const set = monthlyReadingSets[0];
+    expect(set).toBeDefined();
+    expect(readingSetSchema.safeParse({...set, documents:{monthly:set.documents.monthly}}).success).toBe(false);
+    expect(readingSetSchema.safeParse({...set, evidenceCutoff:"2026-09-11"}).success).toBe(false);
+    expect(readingSetSchema.safeParse({...set, documents:{...set.documents, operations:{...set.documents.operations, id:"2026-10"}}}).success).toBe(false);
   });
 
   it("keeps the PDF module, worker and fonts from the same pinned distribution", () => {
@@ -65,6 +78,15 @@ describe("monthly publication integrity", () => {
 });
 
 describe("reader navigation", () => {
+  it("resolves a public cross-publication link inside the matching reader only", () => {
+    const path = "/monthly/2026-09-01-to-10";
+    expect(publicationTarget(`https://openzcash.org${path}?publication=operations#1`, path, "http://127.0.0.1:4194"))
+      .toEqual({view:"operations",page:1});
+    for (const href of [`https://example.com${path}?publication=operations#1`, "https://openzcash.org/monthly/2026-10?publication=operations#1"])
+      expect(publicationTarget(href,path,"https://openzcash.org")).toBeNull();
+    expect(publicationView("voter")).toBe("operations");
+    expect(publicationView("unknown")).toBe("monthly");
+  });
   it("bounds deep links and rejects invalid page fragments", () => {
     expect(pageFromHash("#7", 44)).toBe(7);
     expect(pageFromHash("#999", 44)).toBe(44);

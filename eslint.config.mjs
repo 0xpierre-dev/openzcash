@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Keep the pinned PDF.js distribution unchanged; publication tests verify its hashes.
+    "public/monthly/pdfjs/**",
   ]),
 ]);
 
