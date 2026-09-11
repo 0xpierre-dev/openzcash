@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { MonthlyReader } from "./monthly-reader";
-import { monthLabel, type MonthlyEdition, type MonthlyReadingSet } from "@/lib/monthly/catalog";
+import { editionLabel, type MonthlyEdition, type MonthlyReadingSet } from "@/lib/monthly/catalog";
 import { publicationTarget, publicationView, type PublicationView } from "@/lib/monthly/reading-set";
 import { sourceUrl } from "@/lib/monthly/reader";
 import styles from "./monthly-bundle-preview.module.css";
@@ -55,7 +55,7 @@ function SourcesPanel({data}: {data: MonthlyReadingSet}) {
   }
   return <section className={styles.dataPanel} aria-label="Sources and data explorer">
     <div className={styles.dataHeading}>
-      <div><span className={styles.eyebrow}>THE EVIDENCE BEHIND THE ISSUE</span><h1>Go deeper.</h1><p>Sources verified through {data.evidenceCutoff}.</p></div>
+      <div><span className={styles.eyebrow}>THE EVIDENCE BEHIND THE ISSUE</span><h1>Go deeper.</h1><p>Reporting period: {data.documents.monthly.periodStart} to {data.evidenceCutoff}.{data.reviewedAt ? ` Reviewed ${data.reviewedAt}.` : ""}</p></div>
       <button className={styles.export} onClick={exportCsv}><Symbol name="download"/>Export CSV</button>
     </div>
     <div className={styles.filters}>
@@ -111,7 +111,7 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
   return <div ref={root} className={styles.preview} data-publication={view}>
     <header className={styles.header}>
       <Link href="/monthly" className={styles.brand}><img src="/zcash-mark.svg" alt="" width="25" height="25"/><strong>OpenZcash</strong><i/><span>MONTHLY</span></Link>
-      <div className={styles.month}><select aria-label="Publication edition" value={data.id} onChange={e=>{window.location.href=`/monthly/${e.target.value}?publication=${view}`;}}>{editions.map(edition=><option key={edition.id} value={edition.id}>{monthLabel(edition.month)}{edition.kind==="reference"?` · ${edition.label}`:""}</option>)}</select><small>{docs.monthly.kind==="period"?`${docs.monthly.label} · Partial period`:docs.monthly.label}</small></div>
+      <div className={styles.month}><select aria-label="Publication edition" value={data.id} onChange={e=>{window.location.href=`/monthly/${e.target.value}?publication=${view}`;}}>{editions.map(edition=><option key={edition.id} value={edition.id}>{editionLabel(edition)}</option>)}</select><small>{docs.monthly.kind==="period"?"Partial period":docs.monthly.label}</small></div>
       <div className={styles.actions}>{preview&&<span className={styles.previewBadge}>Layout preview</span>}<button onClick={expand} aria-label={fullScreen?"Exit full screen":"Enter full screen"}><Symbol name="expand"/></button>{view!=="sources"?<a href={docs[view].pdf} download className={styles.download}><Symbol name="download"/><span>Download PDF</span></a>:null}</div>
     </header>
     <nav className={styles.tabBar} aria-label="Publications for this month">

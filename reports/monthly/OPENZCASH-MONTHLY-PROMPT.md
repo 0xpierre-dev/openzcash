@@ -12,14 +12,15 @@ This is an agent-led research and publishing workflow, not a blind refresh of ol
 
 ## Dates
 
-- Scheduled publication month: `{YYYY-MM}`.
+- Reporting issue month: `{YYYY-MM}` (the closed activity month).
+- Scheduled publication date: `{YYYY-MM-DD}` (stored separately).
 - Financial month: the previous completed calendar month.
 - Comparison month: the month before that financial month.
 - Developments window: the first day of the financial month through the supported evidence cutoff.
 - Evidence cutoff: actually verified from the current captures; retain source timestamps and timezone.
 - Upcoming events: the next 90 days, with separate event dates and state.
 
-Derive the intended month from the scheduled occurrence in America/Sao_Paulo. For October 1, 2026, close September 1–30, compare August, and separately date October 1 context. A late run must not silently change the intended financial close. Keep both PDFs and Sources & Data on the same issue identity and cutoff. A requested partial edition retains its inclusive dates and does not inherit a complete-month comparison.
+Derive the intended month from the scheduled occurrence in America/Sao_Paulo. For October 1, 2026, publish issue 2026-09 for September 1–30 and compare August. Use the activity month in the edition selector; store the publication/review date separately. Later retrospective sources may substantiate September activities, but October activities do not enter the September close. A late run must not silently change the intended financial close. Keep both PDFs and Sources & Data on the same issue identity and cutoff. A requested partial edition retains its inclusive dates and does not inherit a complete-month comparison.
 
 ## Monthly: fixed 10-page reading order
 
@@ -101,4 +102,6 @@ Export charts from the reviewed data at adequate resolution or as vectors. Prese
 4. Private evidence, transformations, asset provenance, page review, both artifact hashes and the production record.
 5. A concise completion or actionable failure message with period and verified URLs.
 
-Use `PUBLISHING.md` for the authorized recurring publication. A new run does not create another automation. Keep one standard reading set per publication month; partial editions retain their own identity. Revisions preserve existing dates unless refreshed research is explicitly within scope. Never silently return to the legacy one-PDF workflow.
+Use `PUBLISHING.md` for the authorized recurring publication. A new run does not create another automation. Keep one standard reading set per activity month; partial editions retain their own identity. Revisions preserve existing dates unless refreshed research is explicitly within scope. Never silently return to the legacy one-PDF workflow.
+
+The public archive uses one reader and one complete reading-set catalog. A completed monthly issue is the default; partial tests remain dated alternatives in the same selector. Never link a legacy single PDF as a separate edition UI.

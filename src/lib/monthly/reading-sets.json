@@ -29,12 +29,12 @@
         "periodEnd": "2026-09-10",
         "financialMonth": "2026-09",
         "designVersion": "Editorial 4.0 / Covers 2",
-        "pdf": "/monthly/editions/2026-09-01-to-10/cacdfbdfc293/OpenZcash-Operations-September-01-10-2026.pdf",
-        "cover": "/monthly/editions/2026-09-01-to-10/cacdfbdfc293/cover.jpg",
-        "manifest": "/monthly/editions/2026-09-01-to-10/cacdfbdfc293/pages.json",
-        "assetBase": "/monthly/editions/2026-09-01-to-10/cacdfbdfc293",
-        "sha256": "cacdfbdfc2937dca44812125b876c7f1325e0649146e9ee47aa61fc5c66e3d98",
-        "bytes": 2221236,
+        "pdf": "/monthly/editions/2026-09-01-to-10/5141db4463fd/OpenZcash-Operations-September-01-10-2026.pdf",
+        "cover": "/monthly/editions/2026-09-01-to-10/5141db4463fd/cover.jpg",
+        "manifest": "/monthly/editions/2026-09-01-to-10/5141db4463fd/pages.json",
+        "assetBase": "/monthly/editions/2026-09-01-to-10/5141db4463fd",
+        "sha256": "5141db4463fdfa89e8285705cf3e7a2038652bdb7169c55e5cc4f56197cb164f",
+        "bytes": 2484515,
         "pageCount": 20,
         "pageWidth": 1200,
         "pageHeight": 675
@@ -957,7 +957,7 @@
         "amount": 1203000
       },
       {
-        "name": "ZODL Q1 2026 Core Protocol Development",
+        "name": "ZODL Q1 & Q2 2026 Core Protocol Development",
         "detail": "ZODL",
         "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/33",
         "amount": 1950000
@@ -1169,6 +1169,1340 @@
       }
     ],
     "id": "2026-09-01-to-10",
-    "evidenceCutoff": "2026-09-10"
+    "evidenceCutoff": "2026-09-10",
+    "reviewedAt": "2026-09-11"
+  },
+  {
+    "sources": [
+      {
+        "name": "Zebra 6.3.0",
+        "detail": "Activity: 2026-08-10 to 2026-08-10. Published: 2026-08-10. released. ",
+        "url": "https://github.com/ZcashFoundation/zebra/releases/tag/v6.3.0"
+      },
+      {
+        "name": "Direct wallet serving",
+        "detail": "Activity: 2026-08-10 to 2026-08-23. Published: 2026-08-25. merged. ",
+        "url": "https://forum.zcashcommunity.com/t/57179/1"
+      },
+      {
+        "name": "Operator migration",
+        "detail": "Activity: 2026-08-10 to 2026-08-23. Published: 2026-08-25. reported. ",
+        "url": "https://forum.zcashcommunity.com/t/57179/1"
+      },
+      {
+        "name": "FROST",
+        "detail": "Activity: 2026-08-10 to 2026-08-23. Published: 2026-08-25. merged. ",
+        "url": "https://forum.zcashcommunity.com/t/57179/1"
+      },
+      {
+        "name": "Zero-indexer",
+        "detail": "Activity: 2026-08-18 to 2026-08-18. Published: 2026-08-18. integration. Not a claim of audited production availability. Zec.rocks described its deployment as an unsafe testbed.",
+        "url": "https://forum.zcashcommunity.com/t/57113/1"
+      },
+      {
+        "name": "Crosslink workshop",
+        "detail": "Activity: 2026-08-26 to 2026-08-26. Published: 2026-08-19. feature-network. Workshop occurrence corroborated by recording shared Aug 28 in post 84. Mainnet activation not claimed.",
+        "url": "https://forum.zcashcommunity.com/t/55210/83"
+      },
+      {
+        "name": "Community dashboard",
+        "detail": "Activity: 2026-08-29 to 2026-08-29. Published: 2026-08-29. community experiment. One node view; not a comprehensive index or official Shielded Labs product.",
+        "url": "https://forum.zcashcommunity.com/t/55210/85"
+      },
+      {
+        "name": "Common adoption",
+        "detail": "Activity: 2026-08-29 to 2026-08-29. Published: 2026-08-29. development. Use this August development fact; do not re-date July 28 Ironwood formal-verification completion as an August achievement.",
+        "url": "https://zakura.com/announcements/zakura-common/"
+      },
+      {
+        "name": "Protocol status",
+        "detail": "Activity: Context / no August delivery date. Published: Date not established. context. Evergreen status, not a distinct August release or activation.",
+        "url": "https://tachyon.z.cash/"
+      },
+      {
+        "name": "Zakura 1.3.0",
+        "detail": "Activity: 2026-08-31 to 2026-08-31. Published: 2026-08-31. released. ",
+        "url": "https://zakura.com/announcements/zakura-1-3-0/"
+      },
+      {
+        "name": "Experimental consensus",
+        "detail": "Activity: 2026-08-31 to 2026-08-31. Published: 2026-08-31. experimental. ",
+        "url": "https://zakura.com/announcements/zakura-1-3-0/"
+      },
+      {
+        "name": "Zakura Common",
+        "detail": "Activity: 2026-08-29 to 2026-08-29. Published: 2026-08-29. released. Avoid duplicating this whole text across Tachyon and Zakura pages; benchmark multipliers are team hardware results, not guaranteed user outcomes.",
+        "url": "https://zakura.com/announcements/zakura-common/"
+      },
+      {
+        "name": "ZODL",
+        "detail": "Activity: 2026-08-28 to 2026-08-28. Published: 2026-08-28. stable. GitHub published Aug 28; changelog header Aug 27. No claim about iOS version or store availability.",
+        "url": "https://github.com/zodl-inc/zodl-android/releases/tag/3.10.2-2569"
+      },
+      {
+        "name": "Zingo",
+        "detail": "Activity: 2026-08-17 to 2026-08-17. Published: 2026-08-17. stable. Latest captured August mobile build is prerelease 2.0.23-327 Aug 27. Do not label that mobile build stable.",
+        "url": "https://github.com/zingolabs/zingo-pc/releases/tag/zingo-pc-2.0.25-180"
+      },
+      {
+        "name": "Vizor",
+        "detail": "Activity: 2026-08-29 to 2026-08-29. Published: 2026-08-29. stable. ",
+        "url": "https://github.com/chainapsis/vizor-wallet/releases/tag/release/v0.0.53"
+      },
+      {
+        "name": "Zkool",
+        "detail": "Activity: 2026-08-27 to 2026-08-27. Published: 2026-08-27. released. GitHub release; app-store availability may lag.",
+        "url": "https://github.com/hhanh00/zkool2/releases/tag/zkool-v6.28.1"
+      },
+      {
+        "name": "Hito",
+        "detail": "Activity: 2026-08-31 to 2026-08-31. Published: 2026-08-31. team-reported mainnet test. More testing and stabilization remained. Do not import the broader September 1 milestone 3 completion claim.",
+        "url": "https://forum.zcashcommunity.com/t/55539/18"
+      },
+      {
+        "name": "ELLIPAL",
+        "detail": "Activity: 2026-08-17 to 2026-08-17. Published: 2026-08-17. grant approved. Funding approval is not shipped wallet support. Sep 7 implementation progress is excluded.",
+        "url": "https://forum.zcashcommunity.com/t/56856/2"
+      },
+      {
+        "name": "Vizor + Keystone",
+        "detail": "Activity: 2026-08-25 to 2026-08-25. Published: 2026-08-25. released. ",
+        "url": "https://github.com/chainapsis/vizor-wallet/releases/tag/release/v0.0.52"
+      },
+      {
+        "name": "OneKey",
+        "detail": "Activity: 2026-08-27 to 2026-08-27. Published: 2026-08-27. update requested. Optional source-register entry, not necessary slide filler. Exclude Sept 1 near-completion status.",
+        "url": "https://forum.zcashcommunity.com/t/54833/5"
+      },
+      {
+        "name": "ZODL Slipstream",
+        "detail": "Activity: 2026-08-08 to 2026-08-08. Published: 2026-08-12. shipped. ",
+        "url": "https://zodl.com/zodl-slipstream-a-faster-sync-engine-for-the-ironwood-era/"
+      },
+      {
+        "name": "Zaino",
+        "detail": "Activity: 2026-08-05 to 2026-08-29. Published: 2026-08-29. released. ",
+        "url": "https://github.com/zingolabs/zaino/releases/tag/0.9.0"
+      },
+      {
+        "name": "ZSA testnet",
+        "detail": "Activity: 2026-08-02 to 2026-08-02. Published: 2026-08-02. test network. Launched by hanh using zcash-shielded-assets repositories, not a QEDIT product release. No mainnet asset availability.",
+        "url": "https://forum.zcashcommunity.com/t/56884/1"
+      },
+      {
+        "name": "Zinder",
+        "detail": "Activity: 2026-08-19 to 2026-08-19. Published: 2026-08-19. alpha. ",
+        "url": "https://forum.zcashcommunity.com/t/57121/1"
+      },
+      {
+        "name": "0xramp",
+        "detail": "Activity: 2026-08-27 to 2026-08-27. Published: 2026-08-27. introduction. Avoid calling this the v 1 launch; that announcement is September 1. Do not import September volume/traction figures.",
+        "url": "https://forum.zcashcommunity.com/t/57215/1"
+      },
+      {
+        "name": "Konclave",
+        "detail": "Activity: 2026-08-27 to 2026-08-27. Published: 2026-08-27. beta. Do not use Sep 7 v 0.3.0/112 PR update or characterize beta as audited production custody.",
+        "url": "https://forum.zcashcommunity.com/t/57218/1"
+      },
+      {
+        "name": "Free2Z",
+        "detail": "Activity: 2026-08-25 to 2026-08-25. Published: 2026-08-25. development / testflight. Post 21 is the actual Free 2 Z update inside a Spanish-account topic; link to post 21, not topicroot.",
+        "url": "https://forum.zcashcommunity.com/t/55685/21"
+      },
+      {
+        "name": "RadioZec + GameHub",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-08-31. team-reported. ",
+        "url": "https://forum.zcashcommunity.com/t/53702/26"
+      },
+      {
+        "name": "Gleyo",
+        "detail": "Activity: 2026-08-12 to 2026-08-12. Published: 2026-08-12. funding request. Place request in Operations; do not label mainnet launch an August release or bring Sep 10 milestone into August.",
+        "url": "https://forum.zcashcommunity.com/t/56977/1"
+      },
+      {
+        "name": "ZecHub",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-09-01. retrospective team report. 79 completed/reviewed bounties; approval for payment is not proof of disbursement. 18.506 ZEC towards bounties is separately reported, not grant-ledger USD.",
+        "url": "https://forum.zcashcommunity.com/t/53686/57"
+      },
+      {
+        "name": "Brazil",
+        "detail": "Activity: 2026-08-12 to 2026-08-13. Published: 2026-08-31. organizer report. ",
+        "url": "https://forum.zcashcommunity.com/t/53702/26"
+      },
+      {
+        "name": "Nigeria",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-09-01. retrospective organizer report. ",
+        "url": "https://forum.zcashcommunity.com/t/53654/19"
+      },
+      {
+        "name": "East Africa",
+        "detail": "Activity: 2026-08-01 to 2026-08-28. Published: 2026-08-28. organizer report. Published Aug 28; do not imply full-month closing metrics.",
+        "url": "https://forum.zcashcommunity.com/t/57226/1"
+      },
+      {
+        "name": "India",
+        "detail": "Activity: 2026-08-01 to 2026-08-26. Published: 2026-08-26. organizer report. Attendee and wallet-creation figures are self-reported, not independently deduplicated users.",
+        "url": "https://forum.zcashcommunity.com/t/54762/12"
+      },
+      {
+        "name": "Arabia",
+        "detail": "Activity: 2026-08-01 to 2026-08-01. Published: 2026-09-02. retrospective organizer report. Exclude the July 31 Noir AMA even though it appears in the August report.",
+        "url": "https://forum.zcashcommunity.com/t/57170/10"
+      },
+      {
+        "name": "Elzz",
+        "detail": "Activity: 2026-08-31 to 2026-08-31. Published: 2026-09-02. retrospective organizer report. 112 registrations, >70 quest participants and 116 opening-class attendees are distinct self-reported counts; never sum as unique people.",
+        "url": "https://forum.zcashcommunity.com/t/57390/1"
+      },
+      {
+        "name": "Engage",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-09-04. retrospective team analytics. Actions are not unique people or adoption. Avoid using this-week  11 active participants as August monthly active users.",
+        "url": "https://forum.zcashcommunity.com/t/55358/16"
+      },
+      {
+        "name": "ZK AV Club",
+        "detail": "Activity: 2026-08-01 to 2026-08-28. Published: 2026-08-28. organizer report. Archivist starts in September and later uploads are planned, not completed Augustwork.",
+        "url": "https://forum.zcashcommunity.com/t/53913/55"
+      },
+      {
+        "name": "Z-Aid / Español",
+        "detail": "Activity: 2026-08-24 to 2026-08-24. Published: 2026-08-24. organizer report. Do not equate the target reached with $10,000 newlydonated or paidout.",
+        "url": "https://forum.zcashcommunity.com/t/56445/36"
+      },
+      {
+        "name": "Querétaro",
+        "detail": "Activity: 2026-08-02 to 2026-08-30. Published: 2026-09-03. retrospective organizer report. The August 30 report records 10 attendees; self-reported event participation, not unique ecosystem users.",
+        "url": "https://forum.zcashcommunity.com/t/55764/14"
+      },
+      {
+        "name": "NU7 ZCAP",
+        "detail": "Activity: 2026-08-27 to 2026-08-27. Published: 2026-08-27. open at August close. September 14 19:00 UTC is a future deadline announced in August, not September activity. Advisory poll, not automatic network activation.",
+        "url": "https://forum.zcashcommunity.com/t/57223/1"
+      },
+      {
+        "name": "NU7 Coinholders",
+        "detail": "Activity: 2026-08-25 to 2026-08-25. Published: 2026-08-25. open at August close. Use disabling v4 transactions, not deprecating Sprout. The original post was corrected August 16. September 30 is an implementation-readiness checkpoint, not a network activation date.",
+        "url": "https://forum.zcashcommunity.com/t/56912/1"
+      },
+      {
+        "name": "Q3 retroactive review",
+        "detail": "Activity: 2026-08-14 to 2026-08-14. Published: 2026-08-14. under review. The source table was corrected Aug 15, before cutoff. Requests are not approved funding. Preserve all 37 proposal rows and amounts, use the financial auditor reconciliation.",
+        "url": "https://forum.zcashcommunity.com/t/57056/1"
+      },
+      {
+        "name": "Zcon7",
+        "detail": "Activity: Context / no August delivery date. Published: 2026-06-12. upcoming context. OptionalAugust-end calendar context, not an August event or programlaunch. Liveprimarysourceverifiedthisaudit.",
+        "url": "https://forum.zcashcommunity.com/t/56175/1"
+      },
+      {
+        "name": "Zcash en Español",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-09-02. organizer report. The source mixes calendar-month and rolling 31-day channel statistics; avoid labeling every metric August-only.",
+        "url": "https://forum.zcashcommunity.com/t/53815/33"
+      },
+      {
+        "name": "Ghana",
+        "detail": "Activity: 2026-08-01 to 2026-08-03. Published: 2026-08-05. organizer report. This is an early-August event report, not a complete month-end report. Keep it instead of the September 8 update.",
+        "url": "https://forum.zcashcommunity.com/t/56214/14"
+      },
+      {
+        "name": "Türkiye",
+        "detail": "Activity: 2026-08-01 to 2026-08-19. Published: 2026-08-19. organizer report. The report spans July 19–August 19; omit its 74-post total and cumulative web analytics from August metrics. Rlay event dates are August 15–22; August 19 report documents activity already underway.",
+        "url": "https://forum.zcashcommunity.com/t/56274/6"
+      },
+      {
+        "name": "South Africa",
+        "detail": "Activity: 2026-08-01 to 2026-08-21. Published: 2026-08-21. organizer report. A fundraising announcement, not proof of event delivery, funds received or a grant approval.",
+        "url": "https://forum.zcashcommunity.com/t/57133/1"
+      },
+      {
+        "name": "Zcast",
+        "detail": "Activity: 2026-08-01 to 2026-08-24. Published: 2026-08-24. organizer report. Use as announced media programming; do not imply the European event occurred during August.",
+        "url": "https://forum.zcashcommunity.com/t/54291/34"
+      },
+      {
+        "name": "PGPZ",
+        "detail": "Activity: 2026-08-01 to 2026-08-31. Published: 2026-08-31. organizer report. The August 31 post summarizes the week of August 24. Funding approval belongs in the decision register; this is delivered reporting.",
+        "url": "https://forum.zcashcommunity.com/t/56324/12"
+      },
+      {
+        "name": "Paid grant ledger",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=3000",
+        "detail": "Payment dates August 1–31. Original sheet rows reconcile. Comparison: July 1–31."
+      },
+      {
+        "name": "ZCG decisions register",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=1164534734",
+        "detail": "Decision-date filter: August 1–31. 8 approvals,18 rejections,1 separate FPF screening outcome."
+      },
+      {
+        "name": "ZecHub treasury snapshot",
+        "url": "https://openzcash.org/zechub",
+        "detail": "Source holdings: August 5. 514.134 ZEC / $267,863.81 at source quote $521. No verified August31 balance or flows."
+      },
+      {
+        "name": "Historical open-queue coverage",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues",
+        "detail": "Seven identified requests; the complete August31 pending queue is not established. Zaino August budget unavailable."
+      },
+      {
+        "name": "Retrospective source policy",
+        "url": "https://openzcash.org/monthly/2026-08?publication=sources",
+        "detail": "September-published retrospectives may evidence August activities. September releases, payments and event outcomes are excluded."
+      },
+      {
+        "name": "Threshold (FROST) custody for shielded ZEC",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/358",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "Legitimacy Beyond Transparency: Zcash, Privacy, and Trust in Islamic Digital Finance",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/360",
+        "detail": "Filtered by FPF / Outside of Scope / Guidelines Not Met / decision 2026-08-03. FPF screening outcome, not a ZCG committee approval or rejection."
+      },
+      {
+        "name": "Zebra Mempool Adversarial Resilience Suite",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/362",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "ZIP-229 Conformance Suite: Cleanroom Testing for the Ironwood v6 Transaction Format",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/372",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "VibeQuest: Learn, Build, Prove",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/373",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "Zcash UK & Ireland Community Initiative",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/374",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "Ironwood Sentinel",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/376",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record."
+      },
+      {
+        "name": "Zcash Belgium Chapter",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/384",
+        "detail": "Rejected / decision 2026-08-07. Original source provides the decision record."
+      },
+      {
+        "name": "Apple Silicon Zero-Knowledge Proving: Mobile Halo2 and Tachyon Acceleration on M-Series and A-Series Chips",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/359",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "Zk-ComsmwasmVm + Community-Led Audit & Design Space Hackathon",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/369",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "ELLIPAL Zcash Ironwood Shielded Transaction Support",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/375",
+        "detail": "Approved / decision 2026-08-17. Ironwood shielded support for TITAN hardware wallet and companion app; approved Aug17."
+      },
+      {
+        "name": "Open Light Nodes",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/377",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "Shielded Compliance Bridge",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/379",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "Zcash Arabia (August to December 2026)",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/380",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "Shielded ZEC Privacy and Trust Architecture Framework",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/381",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "independent Zcash light-client infrastructure from South Asia (Zebra + Zaino, Singapore) — starter grant",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/385",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record."
+      },
+      {
+        "name": "Constant-Time Hardening and Explicit Timing Semantics for Zcash Rust Cryptography",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/342",
+        "detail": "Approved / decision 2026-08-21. Async approval; broader scope and the initial milestone discussed."
+      },
+      {
+        "name": "Test-Effectiveness Audit for Zebra: an independent regression witness for consensus-critical code",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/389",
+        "detail": "Rejected / decision 2026-08-31. Committee cited limited usefulness and false-positive concerns."
+      },
+      {
+        "name": "Rvess Pay ZEC to Mobile Money Integration",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/390",
+        "detail": "Rejected / decision 2026-08-31. Committee asked for more reuse of existing payment components."
+      },
+      {
+        "name": "Zcash WalletConnect Integration",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/391",
+        "detail": "Approved / decision 2026-08-31. Reusable Zcash integration requested beyond the Noir wallet."
+      },
+      {
+        "name": "Reusable Halo2 Verifier Security Testing Infrastructure (ZKCG Reference Implementation)",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/392",
+        "detail": "Rejected / decision 2026-08-31. Need and ability to detect circuit logic defects were not established."
+      },
+      {
+        "name": "SHPH (Post-Quantum Censorship-Resistant Network Layer)",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/394",
+        "detail": "Rejected / decision 2026-08-31. Committee raised scope, track-record and differentiation concerns."
+      },
+      {
+        "name": "BTCPayServer Multi-Store GraphQL Client",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/395",
+        "detail": "Approved / decision 2026-08-31. Multi-store support and migration to the Zkool GraphQL API."
+      },
+      {
+        "name": "Pretty Good Policy for Zcash",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/396#issuecomment-5373913974",
+        "detail": "Approved / decision 2026-08-31. Policy work approved; Paul recused from the discussion."
+      },
+      {
+        "name": "Zcash Hack-to-Dark At Devcon 8, Mumbai",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/398",
+        "detail": "Approved / decision 2026-08-31. Developer event proposed for November 3-4."
+      },
+      {
+        "name": "Zcash Arabia (August to December 2026",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400",
+        "detail": "Approved / decision 2026-08-31. August-December programme; Artkor and Zerodartz voted against."
+      },
+      {
+        "name": "ZECsy Community Building: 12 Months of Zcash on the Ground [Revised]",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/402",
+        "detail": "Approved / decision 2026-08-31. Nine-month milestones only; Hanh voted against."
+      },
+      {
+        "name": "0xramp",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Non-custodial ZEC and local-currency payment rails."
+      },
+      {
+        "name": "Privacy Literacy Lab Canada",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404",
+        "detail": "Known pending at August 31 / submitted 2026-08-30. Interactive privacy scenarios and a dated regulatory source map."
+      },
+      {
+        "name": "Recoverify",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403",
+        "detail": "Known pending at August 31 / submitted 2026-08-27. Verify wallet backups while the original wallet is still available."
+      },
+      {
+        "name": "Taking Zcash to the Streets",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401",
+        "detail": "Known pending at August 31 / submitted 2026-08-25. A Turkish video series and Istanbul street interviews."
+      },
+      {
+        "name": "Zaino security audit",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Independent audit; the final budget depends on scoping. August budget not verified."
+      },
+      {
+        "name": "Zcash World, Mumbai",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+        "detail": "Known pending at August 31 / submitted 2026-08-30. Public event and merchant onboarding around Devcon 8."
+      },
+      {
+        "name": "ZecBit: NFT infrastructure",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Proposed ZSA metadata, indexing and shielded payment infrastructure."
+      },
+      {
+        "name": "Zcash Grants Hub",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/24",
+        "detail": "Daniel Goh / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ShieldedScan",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/62",
+        "detail": "ShieldedScan / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZecKit Post-M3 Stabilization and Developer Adoption",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/44",
+        "detail": "Dapps over Apps / Requested, unawarded at August 31"
+      },
+      {
+        "name": "zcashtocash via ZcashLabs",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/60",
+        "detail": "ZcashLabs / Requested, unawarded at August 31"
+      },
+      {
+        "name": "zec-ironwood-reconcile",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/46",
+        "detail": "Steven Hert / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Gleyo",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/43",
+        "detail": "Gleyo / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Self-Sovereign Zcash Testnet Faucet",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/49",
+        "detail": "Jino Labs / Requested, unawarded at August 31"
+      },
+      {
+        "name": "CyphZec.com",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/59",
+        "detail": "Thomas Zarebczan / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZecLedger",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/42",
+        "detail": "ZecLedger / Requested, unawarded at August 31"
+      },
+      {
+        "name": "lightwalletd-rs",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/41",
+        "detail": "jpgonzalezra / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Blindvault",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/39",
+        "detail": "TIDJANI Walid / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zallet RPC Parity Harness",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/45",
+        "detail": "Creativesonchain / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zecmap",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/48",
+        "detail": "Batuhan / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Connaugh Zcash Videos",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/55",
+        "detail": "Connaugh / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZAP1 Attestation Protocol and Verification Tooling",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/31",
+        "detail": "Frontier Compute / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZecBooks",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/38",
+        "detail": "SaneApps / Requested, unawarded at August 31"
+      },
+      {
+        "name": "CipherPay",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/30",
+        "detail": "Atmosphere Labs (Kenbak) / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zafu Browser Extension",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/29",
+        "detail": "Rotko Networks OU / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zapp",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/40",
+        "detail": "Renee Chiu / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Open-Source Zcash Hardware-Wallet SDK",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/28",
+        "detail": "wh00hw / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Nozy Wallet",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/37",
+        "detail": "Leonine DAO / Requested, unawarded at August 31"
+      },
+      {
+        "name": "THORSwap / Metro",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/32",
+        "detail": "THORSwap Labs / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Expanding Zcash In Unstoppable Wallet",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/25",
+        "detail": "Horizontal Systems / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZcashNames",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/34",
+        "detail": "ZcashMe, Inc. / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Frontier Compute Zcash Security Research and Remediation Pack",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/63",
+        "detail": "Frontier Compute LLC / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zebra Critical Vulnerability Bug Bounty (CVE-2026-34202)",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/54",
+        "detail": "robustfengbin / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Bonus Grant — Ironwood zk-SNARK Formal Verification",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/52",
+        "detail": "Jason McGee / Requested, unawarded at August 31"
+      },
+      {
+        "name": "CipherScan",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/47",
+        "detail": "Kenbak / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Temporary Detectable Unlimited Mint and Sell Exploit",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/57",
+        "detail": "Alex Sol / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Five Critical Zebra Consensus Divergence Vulnerabilities",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/58",
+        "detail": "sangsoo-osec / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Zec.rocks (16 months of uptime)",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/61",
+        "detail": "Zec.rocks / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Ironwood external audit reimbursement",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/56",
+        "detail": "ValarGroup / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Ironwood zk-SNARK Formal Verification (Project Tachyon)",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/50",
+        "detail": "Tachyon Foundation / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Orchard Counterfeiting Vulnerability Bug Bounty",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/51",
+        "detail": "Taylor Hornby / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Bonus Grant — Orchard Counterfeiting Bug Bounty",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/53",
+        "detail": "Jason McGee / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ValarGroup Ironwood Work",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/64",
+        "detail": "ValarGroup / Requested, unawarded at August 31"
+      },
+      {
+        "name": "ZODL Q1 & Q2 2026 core protocol development",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/33",
+        "detail": "ZODL / Requested, unawarded at August 31"
+      },
+      {
+        "name": "Querétaro / August 2 meetup",
+        "url": "https://forum.zcashcommunity.com/t/55764/11",
+        "detail": "Original organizer report for the first August meetup."
+      },
+      {
+        "name": "Crosslink workshop recording",
+        "url": "https://forum.zcashcommunity.com/t/55210/84",
+        "detail": "Recording shared August28 corroborates the August26 workshop."
+      },
+      {
+        "name": "Zingo PC 2.0.24",
+        "url": "https://github.com/zingolabs/zingo-pc/releases/tag/zingo-pc-2.0.24-170",
+        "detail": "August10 release: dynamic server list. Supports the preceding-release statement."
+      },
+      {
+        "name": "Zaino 0.7.0",
+        "url": "https://github.com/zingolabs/zaino/releases/tag/0.7.0",
+        "detail": "Released August5."
+      },
+      {
+        "name": "Zaino 0.8.0",
+        "url": "https://github.com/zingolabs/zaino/releases/tag/0.8.0",
+        "detail": "Released August19."
+      },
+      {
+        "name": "ZecHub original treasury sheet",
+        "url": "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/edit",
+        "detail": "Original source behind the August5 treasury snapshot; source quote $521 per ZEC."
+      }
+    ],
+    "communities": [
+      {
+        "name": "ZecHub",
+        "detail": "August activity / published 2026-09-01. August: 79 completed bounties and 25 contributors; the team also launched bounty teams and improved wiki discovery.",
+        "url": "https://forum.zcashcommunity.com/t/53686/57"
+      },
+      {
+        "name": "Zcash Brazil",
+        "detail": "August activity / published 2026-08-31. Blockchain.RIO on August 12–13 combined privacy education, wallet onboarding and hands-on trivia.",
+        "url": "https://forum.zcashcommunity.com/t/53702/26"
+      },
+      {
+        "name": "ZK AV Club",
+        "detail": "August activity / published 2026-08-28. August work included the Top 25 Zcon video collection, archive preparation and announcement of the tenth-birthday short-film festival.",
+        "url": "https://forum.zcashcommunity.com/t/53913/55"
+      },
+      {
+        "name": "Zcash en Español",
+        "detail": "August activity / published 2026-09-02. The August report covers Spanish educational content, translations and a replacement X account.",
+        "url": "https://forum.zcashcommunity.com/t/53815/33"
+      },
+      {
+        "name": "Türkiye",
+        "detail": "August activity / published 2026-08-19. The team reported Zcash outreach at Rlay Blockchain Week and work on Zecmap during August.",
+        "url": "https://forum.zcashcommunity.com/t/56274/6"
+      },
+      {
+        "name": "Nigeria",
+        "detail": "August activity / published 2026-09-01. The August report records four businesses onboarded to accept ZEC, Web3 Lagos participation and Yoruba educational content.",
+        "url": "https://forum.zcashcommunity.com/t/53654/19"
+      },
+      {
+        "name": "Ghana",
+        "detail": "August activity / published 2026-08-05. The team held an August 3 financial-privacy meetup at the College of Health and Wellbeing in Kintampo.",
+        "url": "https://forum.zcashcommunity.com/t/56214/14"
+      },
+      {
+        "name": "Arabia",
+        "detail": "August activity / published 2026-09-02. The team held its first Algeria pilot meetup on August 1 and reported Arabic localization and education.",
+        "url": "https://forum.zcashcommunity.com/t/57170/10"
+      },
+      {
+        "name": "Club Caracas",
+        "detail": "Included via August Z-Aid reports; no standalone August monthly report verified.",
+        "url": "https://forum.zcashcommunity.com/t/56445/36"
+      },
+      {
+        "name": "Club Barcelona",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "CodeRaiz México",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Pesa Ya Siri / Tanzania",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "ruZcash",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Boston Zcash",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "China",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Querétaro",
+        "detail": "August activity / published 2026-09-03. The club held meetups on August 2 and August 30; the latter featured a NYM privacy workshop with Diana HR.",
+        "url": "https://forum.zcashcommunity.com/t/55764/14"
+      },
+      {
+        "name": "East Africa",
+        "detail": "August activity / published 2026-08-28. The August report documents local education, translation, events and community outreach.",
+        "url": "https://forum.zcashcommunity.com/t/57226/1"
+      },
+      {
+        "name": "France",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Germany",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "India",
+        "detail": "August activity / published 2026-08-26. The August update reports Surat and Ahmedabad outreach, a developer workshop and a Hindi localization contribution for ZODL.",
+        "url": "https://forum.zcashcommunity.com/t/54762/12"
+      },
+      {
+        "name": "Indonesia",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Japan",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Korea",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "Elzz",
+        "detail": "August activity / published 2026-09-02. Proof of Privacy / #ZcashClass26 began its live education phase on August 31.",
+        "url": "https://forum.zcashcommunity.com/t/57390/1"
+      },
+      {
+        "name": "Ukraine",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "South Africa",
+        "detail": "August activity / published 2026-08-21. The team opened a public donation campaign on August 21 for community operations and future events.",
+        "url": "https://forum.zcashcommunity.com/t/57133/1"
+      },
+      {
+        "name": "Zcast",
+        "detail": "August activity / published 2026-08-24. August live-session announcements covered ambassadorship, European Blockchain Convention preparation and cypherpunk values.",
+        "url": "https://forum.zcashcommunity.com/t/54291/34"
+      },
+      {
+        "name": "ZECsy · additional",
+        "detail": "Nine-month grant milestones approved August31. Later mixed-period field report excluded.",
+        "url": "https://forum.zcashcommunity.com/t/57394"
+      },
+      {
+        "name": "Belgium · additional",
+        "detail": "Application rejected August 7; distinct from community delivery.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/384"
+      },
+      {
+        "name": "PGPZ · additional",
+        "detail": "August activity / published 2026-08-31. August policy memos tracked public-policy developments relevant to Zcash and community advocacy.",
+        "url": "https://forum.zcashcommunity.com/t/56324/12"
+      },
+      {
+        "name": "Engage · additional",
+        "detail": "August activity / published 2026-09-04. The August analytics report records 458 engagement actions and 47 registered leaderboard users.",
+        "url": "https://forum.zcashcommunity.com/t/55358/16"
+      },
+      {
+        "name": "The Zcash Daily · additional",
+        "detail": "No dated August-only update verified in the reviewed sources. This does not establish inactivity.",
+        "url": "https://openzcash.org/communities"
+      }
+    ],
+    "requests": [
+      {
+        "name": "Zcash Grants Hub",
+        "detail": "Daniel Goh / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/24",
+        "amount": 3050
+      },
+      {
+        "name": "ShieldedScan",
+        "detail": "ShieldedScan / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/62",
+        "amount": 4060
+      },
+      {
+        "name": "ZecKit Post-M3 Stabilization and Developer Adoption",
+        "detail": "Dapps over Apps / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/44",
+        "amount": 5000
+      },
+      {
+        "name": "zcashtocash via ZcashLabs",
+        "detail": "ZcashLabs / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/60",
+        "amount": 6000
+      },
+      {
+        "name": "zec-ironwood-reconcile",
+        "detail": "Steven Hert / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/46",
+        "amount": 8250
+      },
+      {
+        "name": "Gleyo",
+        "detail": "Gleyo / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/43",
+        "amount": 9081.2
+      },
+      {
+        "name": "Self-Sovereign Zcash Testnet Faucet",
+        "detail": "Jino Labs / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/49",
+        "amount": 9280
+      },
+      {
+        "name": "CyphZec.com",
+        "detail": "Thomas Zarebczan / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/59",
+        "amount": 10000
+      },
+      {
+        "name": "ZecLedger",
+        "detail": "ZecLedger / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/42",
+        "amount": 10000
+      },
+      {
+        "name": "lightwalletd-rs",
+        "detail": "jpgonzalezra / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/41",
+        "amount": 10720
+      },
+      {
+        "name": "Blindvault",
+        "detail": "TIDJANI Walid / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/39",
+        "amount": 17000
+      },
+      {
+        "name": "Zallet RPC Parity Harness",
+        "detail": "Creativesonchain / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/45",
+        "amount": 20000
+      },
+      {
+        "name": "Zecmap",
+        "detail": "Batuhan / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/48",
+        "amount": 21300
+      },
+      {
+        "name": "Connaugh Zcash Videos",
+        "detail": "Connaugh / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/55",
+        "amount": 22000
+      },
+      {
+        "name": "ZAP1 Attestation Protocol and Verification Tooling",
+        "detail": "Frontier Compute / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/31",
+        "amount": 28000
+      },
+      {
+        "name": "ZecBooks",
+        "detail": "SaneApps / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/38",
+        "amount": 32000
+      },
+      {
+        "name": "CipherPay",
+        "detail": "Atmosphere Labs (Kenbak) / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/30",
+        "amount": 35000
+      },
+      {
+        "name": "Zafu Browser Extension",
+        "detail": "Rotko Networks OU / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/29",
+        "amount": 38000
+      },
+      {
+        "name": "Zapp",
+        "detail": "Renee Chiu / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/40",
+        "amount": 40000
+      },
+      {
+        "name": "Open-Source Zcash Hardware-Wallet SDK",
+        "detail": "wh00hw / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/28",
+        "amount": 40000
+      },
+      {
+        "name": "Nozy Wallet",
+        "detail": "Leonine DAO / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/37",
+        "amount": 60000
+      },
+      {
+        "name": "THORSwap / Metro",
+        "detail": "THORSwap Labs / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/32",
+        "amount": 60000
+      },
+      {
+        "name": "Expanding Zcash In Unstoppable Wallet",
+        "detail": "Horizontal Systems / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/25",
+        "amount": 80000
+      },
+      {
+        "name": "ZcashNames",
+        "detail": "ZcashMe, Inc. / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/34",
+        "amount": 122400
+      },
+      {
+        "name": "Frontier Compute Zcash Security Research and Remediation Pack",
+        "detail": "Frontier Compute LLC / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/63",
+        "amount": 136250
+      },
+      {
+        "name": "Zebra Critical Vulnerability Bug Bounty (CVE-2026-34202)",
+        "detail": "robustfengbin / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/54",
+        "amount": 150000
+      },
+      {
+        "name": "Bonus Grant — Ironwood zk-SNARK Formal Verification",
+        "detail": "Jason McGee / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/52",
+        "amount": 261058
+      },
+      {
+        "name": "CipherScan",
+        "detail": "Kenbak / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/47",
+        "amount": 375000
+      },
+      {
+        "name": "Temporary Detectable Unlimited Mint and Sell Exploit",
+        "detail": "Alex Sol / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/57",
+        "amount": 400000
+      },
+      {
+        "name": "Five Critical Zebra Consensus Divergence Vulnerabilities",
+        "detail": "sangsoo-osec / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/58",
+        "amount": 425000
+      },
+      {
+        "name": "Zec.rocks (16 months of uptime)",
+        "detail": "Zec.rocks / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/61",
+        "amount": 584992
+      },
+      {
+        "name": "Ironwood external audit reimbursement",
+        "detail": "ValarGroup / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/56",
+        "amount": 599000
+      },
+      {
+        "name": "Ironwood zk-SNARK Formal Verification (Project Tachyon)",
+        "detail": "Tachyon Foundation / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/50",
+        "amount": 738942
+      },
+      {
+        "name": "Orchard Counterfeiting Vulnerability Bug Bounty",
+        "detail": "Taylor Hornby / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/51",
+        "amount": 750000
+      },
+      {
+        "name": "Bonus Grant — Orchard Counterfeiting Bug Bounty",
+        "detail": "Jason McGee / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/53",
+        "amount": 750000
+      },
+      {
+        "name": "ValarGroup Ironwood Work",
+        "detail": "ValarGroup / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/64",
+        "amount": 1203000
+      },
+      {
+        "name": "ZODL Q1 & Q2 2026 core protocol development",
+        "detail": "ZODL / Requested, unawarded at August 31",
+        "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/33",
+        "amount": 1950000
+      }
+    ],
+    "zcg": [
+      {
+        "name": "Threshold (FROST) custody for shielded ZEC",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/358",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Legitimacy Beyond Transparency: Zcash, Privacy, and Trust in Islamic Digital Finance",
+        "detail": "Filtered by FPF / Outside of Scope / Guidelines Not Met / decision 2026-08-03. FPF screening outcome, not a ZCG committee approval or rejection.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/360",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Zebra Mempool Adversarial Resilience Suite",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/362",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "ZIP-229 Conformance Suite: Cleanroom Testing for the Ironwood v6 Transaction Format",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/372",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "VibeQuest: Learn, Build, Prove",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/373",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Zcash UK & Ireland Community Initiative",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/374",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Ironwood Sentinel",
+        "detail": "Rejected / decision 2026-08-03. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/376",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Zcash Belgium Chapter",
+        "detail": "Rejected / decision 2026-08-07. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/384",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Apple Silicon Zero-Knowledge Proving: Mobile Halo2 and Tachyon Acceleration on M-Series and A-Series Chips",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/359",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Zk-ComsmwasmVm + Community-Led Audit & Design Space Hackathon",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/369",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "ELLIPAL Zcash Ironwood Shielded Transaction Support",
+        "detail": "Approved / decision 2026-08-17. Ironwood shielded support for TITAN hardware wallet and companion app; approved Aug17.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/375",
+        "amount": 95000,
+        "amountLabel": "$95,000 requested"
+      },
+      {
+        "name": "Open Light Nodes",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/377",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Shielded Compliance Bridge",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/379",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Zcash Arabia (August to December 2026)",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/380",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Shielded ZEC Privacy and Trust Architecture Framework",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/381",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "independent Zcash light-client infrastructure from South Asia (Zebra + Zaino, Singapore) — starter grant",
+        "detail": "Rejected / decision 2026-08-17. Original source provides the decision record.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/385",
+        "amount": null,
+        "amountLabel": "Request amount not stated"
+      },
+      {
+        "name": "Constant-Time Hardening and Explicit Timing Semantics for Zcash Rust Cryptography",
+        "detail": "Approved / decision 2026-08-21. Async approval; broader scope and the initial milestone discussed.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/342",
+        "amount": 10000,
+        "amountLabel": "$10,000 requested"
+      },
+      {
+        "name": "Test-Effectiveness Audit for Zebra: an independent regression witness for consensus-critical code",
+        "detail": "Rejected / decision 2026-08-31. Committee cited limited usefulness and false-positive concerns.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/389",
+        "amount": 45000,
+        "amountLabel": "$45,000 requested"
+      },
+      {
+        "name": "Rvess Pay ZEC to Mobile Money Integration",
+        "detail": "Rejected / decision 2026-08-31. Committee asked for more reuse of existing payment components.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/390",
+        "amount": 32000,
+        "amountLabel": "$32,000 requested"
+      },
+      {
+        "name": "Zcash WalletConnect Integration",
+        "detail": "Approved / decision 2026-08-31. Reusable Zcash integration requested beyond the Noir wallet.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/391",
+        "amount": 50000,
+        "amountLabel": "$50,000 requested"
+      },
+      {
+        "name": "Reusable Halo2 Verifier Security Testing Infrastructure (ZKCG Reference Implementation)",
+        "detail": "Rejected / decision 2026-08-31. Need and ability to detect circuit logic defects were not established.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/392",
+        "amount": 4500,
+        "amountLabel": "$4,500 requested"
+      },
+      {
+        "name": "SHPH (Post-Quantum Censorship-Resistant Network Layer)",
+        "detail": "Rejected / decision 2026-08-31. Committee raised scope, track-record and differentiation concerns.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/394",
+        "amount": 25000,
+        "amountLabel": "$25,000 requested"
+      },
+      {
+        "name": "BTCPayServer Multi-Store GraphQL Client",
+        "detail": "Approved / decision 2026-08-31. Multi-store support and migration to the Zkool GraphQL API.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/395",
+        "amount": 16800,
+        "amountLabel": "$16,800 requested"
+      },
+      {
+        "name": "Pretty Good Policy for Zcash",
+        "detail": "Approved / decision 2026-08-31. Policy work approved; Paul recused from the discussion.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/396#issuecomment-5373913974",
+        "amount": 750000,
+        "amountLabel": "$750,000 requested"
+      },
+      {
+        "name": "Zcash Hack-to-Dark At Devcon 8, Mumbai",
+        "detail": "Approved / decision 2026-08-31. Developer event proposed for November 3-4.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/398",
+        "amount": 43524,
+        "amountLabel": "$43,524 requested"
+      },
+      {
+        "name": "Zcash Arabia (August to December 2026",
+        "detail": "Approved / decision 2026-08-31. August-December programme; Artkor and Zerodartz voted against.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400",
+        "amount": 27000,
+        "amountLabel": "$27,000 requested"
+      },
+      {
+        "name": "ZECsy Community Building: 12 Months of Zcash on the Ground [Revised]",
+        "detail": "Approved / decision 2026-08-31. Nine-month milestones only; Hanh voted against.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/402",
+        "amount": 550000,
+        "amountLabel": "$550,000 requested"
+      },
+      {
+        "name": "0xramp",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Non-custodial ZEC and local-currency payment rails.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408",
+        "amount": 206000,
+        "amountLabel": "$206,000"
+      },
+      {
+        "name": "Privacy Literacy Lab Canada",
+        "detail": "Known pending at August 31 / submitted 2026-08-30. Interactive privacy scenarios and a dated regulatory source map.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404",
+        "amount": 15000,
+        "amountLabel": "$15,000"
+      },
+      {
+        "name": "Recoverify",
+        "detail": "Known pending at August 31 / submitted 2026-08-27. Verify wallet backups while the original wallet is still available.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403",
+        "amount": 2990,
+        "amountLabel": "$2,990"
+      },
+      {
+        "name": "Taking Zcash to the Streets",
+        "detail": "Known pending at August 31 / submitted 2026-08-25. A Turkish video series and Istanbul street interviews.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401",
+        "amount": 6955,
+        "amountLabel": "$6,955"
+      },
+      {
+        "name": "Zaino security audit",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Independent audit; the final budget depends on scoping. August budget not verified.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407",
+        "amount": null,
+        "amountLabel": "August amount not verified"
+      },
+      {
+        "name": "Zcash World, Mumbai",
+        "detail": "Known pending at August 31 / submitted 2026-08-30. Public event and merchant onboarding around Devcon 8.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+        "amount": 20300,
+        "amountLabel": "$20,300"
+      },
+      {
+        "name": "ZecBit: NFT infrastructure",
+        "detail": "Known pending at August 31 / submitted 2026-08-31. Proposed ZSA metadata, indexing and shielded payment infrastructure.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+        "amount": 48000,
+        "amountLabel": "$48,000"
+      }
+    ],
+    "id": "2026-08",
+    "evidenceCutoff": "2026-08-31",
+    "reviewedAt": "2026-09-11",
+    "documents": {
+      "monthly": {
+        "id": "2026-08",
+        "month": "2026-08",
+        "label": "August 1–31",
+        "kind": "monthly",
+        "periodStart": "2026-08-01",
+        "periodEnd": "2026-08-31",
+        "financialMonth": "2026-08",
+        "designVersion": "Editorial 4.0 / Covers 2",
+        "pdf": "/monthly/editions/2026-08/feacb1e0abb0/OpenZcash-Monthly-August-2026.pdf",
+        "manifest": "/monthly/editions/2026-08/feacb1e0abb0/pages.json",
+        "pageCount": 10,
+        "cover": "/monthly/editions/2026-08/feacb1e0abb0/cover.jpg",
+        "assetBase": "/monthly/editions/2026-08/feacb1e0abb0",
+        "sha256": "feacb1e0abb0f1d587e8c5605f3992c09c8745915f2f35bb7ba363003e4fd4c1",
+        "bytes": 1258682,
+        "pageWidth": 1200,
+        "pageHeight": 675
+      },
+      "operations": {
+        "id": "2026-08",
+        "month": "2026-08",
+        "label": "August 1–31",
+        "kind": "monthly",
+        "periodStart": "2026-08-01",
+        "periodEnd": "2026-08-31",
+        "financialMonth": "2026-08",
+        "designVersion": "Editorial 4.0 / Covers 2",
+        "pdf": "/monthly/editions/2026-08/da6db1681bfe/OpenZcash-Operations-August-2026.pdf",
+        "manifest": "/monthly/editions/2026-08/da6db1681bfe/pages.json",
+        "pageCount": 27,
+        "cover": "/monthly/editions/2026-08/da6db1681bfe/cover.jpg",
+        "assetBase": "/monthly/editions/2026-08/da6db1681bfe",
+        "sha256": "da6db1681bfeaff3a60b622772c5d4b37f03d41e133121caf9cce3040c204d07",
+        "bytes": 1132255,
+        "pageWidth": 1200,
+        "pageHeight": 675
+      }
+    }
   }
 ]

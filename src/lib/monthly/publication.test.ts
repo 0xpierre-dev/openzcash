@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { editionSchema, monthlyEditions, monthlyReadingSets, readingSetSchema } from "./catalog";
+import { editionSchema, editionLabel, monthlyEditions, monthlyReadingSets, readingSetSchema } from "./catalog";
 import { fitPage, pageFromHash, pageManifestSchema, sourceUrl } from "./reader";
 import { publicationTarget, publicationView } from "./reading-set";
 
@@ -10,6 +10,17 @@ const publicFile = (path: string) => join(process.cwd(), "public", path);
 const hash = (data: Buffer) => createHash("sha256").update(data).digest("hex");
 
 describe("monthly publication integrity", () => {
+  it("offers only complete reading sets, with August separate from the September partial edition", () => {
+    expect(monthlyEditions.map((edition) => edition.id).sort()).toEqual(monthlyReadingSets.map((set) => set.id).sort());
+    const august = monthlyEditions.find((edition) => edition.id === "2026-08")!;
+    const september = monthlyEditions.find((edition) => edition.id === "2026-09-01-to-10")!;
+    expect(editionLabel(august)).toBe("August 2026");
+    expect(editionLabel(september)).toMatch(/September 2026 · Sep 1/);
+    expect(august.periodEnd).toBe("2026-08-31");
+    expect(monthlyEditions.some((edition) => edition.kind === "reference")).toBe(false);
+    expect(editionSchema.safeParse({...august, periodEnd:"2026-09-10"}).success).toBe(false);
+    expect(editionSchema.safeParse({...august, periodStart:"2026-08-02"}).success).toBe(false);
+  });
   it("has unique editions and at most one standard issue per publication month", () => {
     expect(new Set(monthlyEditions.map((e) => e.id)).size).toBe(monthlyEditions.length);
     const standard = monthlyEditions.filter((e) => e.kind === "monthly");

@@ -29,12 +29,14 @@ def calendar_for(scheduled_for):
     previous = start - dt.timedelta(days=1)
     return {'scheduledFor': day.isoformat(), 'timezone': 'America/Sao_Paulo',
             'localTime': '09:00', 'publicationMonth': day.strftime('%Y-%m'),
+            'reportingMonth': start.strftime('%Y-%m'), 'editionId': start.strftime('%Y-%m'),
             'financialMonth': start.strftime('%Y-%m'),
             'financialStart': start.isoformat(), 'financialEnd': end.isoformat(),
             'comparisonMonth': previous.strftime('%Y-%m'),
             'comparisonStart': previous.replace(day=1).isoformat(),
             'comparisonEnd': previous.isoformat(), 'windowStart': start.isoformat(),
-            'evidenceCutoff': None, 'cutoffRule': 'Verify from current sources during the run.'}
+            'evidenceCutoff': end.isoformat(), 'reviewedAt': None,
+            'cutoffRule': 'Include activity through the financial close; date the source review separately.'}
 
 
 def verify_contract(c):

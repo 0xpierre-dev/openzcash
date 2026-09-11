@@ -52,30 +52,6 @@ export const COINHOLDER_ROUND = {
   ],
 } as const;
 
-export const ROUND_BANDS: RoundBandSummary[] = [
-  {
-    key: "under_25k",
-    label: "Under $25,000",
-    count: 14,
-    totalUsdCents: 15_574_120,
-    sharePct: 1.7,
-  },
-  {
-    key: "mid_25k_150k",
-    label: "$25,000 – $150,000",
-    count: 12,
-    totalUsdCents: 82_165_000,
-    sharePct: 9.1,
-  },
-  {
-    key: "over_150k",
-    label: "Over $150,000",
-    count: 11,
-    totalUsdCents: 803_618_200,
-    sharePct: 89.2,
-  },
-];
-
 export const ROUND_BAND_LABEL: Record<RoundBand, string> = {
   under_25k: "Under $25k",
   mid_25k_150k: "$25k – $150k",
@@ -549,7 +525,7 @@ export const ROUND_PROPOSALS: RoundProposal[] = [
   },
   {
     rank: 37,
-    project: "ZODL Q1 2026 Core Protocol Development",
+    project: "ZODL Q1 & Q2 2026 Core Protocol Development",
     org: "ZODL",
     requestedUsdCents: 195000000,
     summary:
@@ -561,3 +537,15 @@ export const ROUND_PROPOSALS: RoundProposal[] = [
     band: "over_150k",
   },
 ];
+
+// Derive the summary from the same integer-cent rows served by the API.
+export const ROUND_BANDS: RoundBandSummary[] = ([
+  ["under_25k", "Under $25,000"],
+  ["mid_25k_150k", "$25,000 – $150,000"],
+  ["over_150k", "Over $150,000"],
+] as const).map(([key, label]) => {
+  const rows = ROUND_PROPOSALS.filter((proposal) => proposal.band === key);
+  const totalUsdCents = rows.reduce((sum, proposal) => sum + proposal.requestedUsdCents, 0);
+  return { key, label, count: rows.length, totalUsdCents,
+    sharePct: Math.round(totalUsdCents / COINHOLDER_ROUND.totalRequestedUsdCents * 1000) / 10 };
+});

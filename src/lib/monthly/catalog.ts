@@ -1,5 +1,4 @@
 import { z } from "zod";
-import editions from "./editions.json";
 import readingSets from "./reading-sets.json";
 
 const date = z.iso.date();
@@ -22,7 +21,11 @@ export const editionSchema = z.object({
   pageCount: z.number().int().positive(),
   pageWidth: z.literal(1200),
   pageHeight: z.literal(675),
-}).refine((e) => e.periodStart <= e.periodEnd && e.periodEnd.startsWith(e.month), "Invalid reporting period");
+}).refine((e) => e.periodStart <= e.periodEnd && e.periodStart.startsWith(e.month)
+  && e.periodEnd.startsWith(e.month) && e.financialMonth === e.month, "Invalid reporting period")
+  .refine((e) => e.kind !== "monthly" || (e.periodStart === `${e.month}-01`
+    && new Date(`${e.periodEnd}T00:00:00Z`).getUTCDate() === new Date(Number(e.month.slice(0, 4)), Number(e.month.slice(5)), 0).getDate()),
+  "A monthly close must cover the whole reporting month");
 
 export type MonthlyEdition = z.infer<typeof editionSchema>;
 const registerEntry = z.object({
@@ -38,6 +41,7 @@ const registerEntry = z.object({
 export const readingSetSchema = z.object({
   id: z.string(),
   evidenceCutoff: date,
+  reviewedAt: date.optional(),
   documents: z.object({ monthly: editionSchema, operations: editionSchema }),
   sources: z.array(registerEntry).min(1),
   communities: z.array(registerEntry),
@@ -45,9 +49,12 @@ export const readingSetSchema = z.object({
   zcg: z.array(registerEntry),
 }).superRefine((set, ctx) => {
   const { monthly, operations } = set.documents;
+  if (set.reviewedAt && set.reviewedAt < set.evidenceCutoff) {
+    ctx.addIssue({ code: "custom", message: "Source review cannot precede the reporting cutoff." });
+  }
   for (const doc of [monthly, operations]) {
     if (doc.id !== set.id || doc.periodEnd !== set.evidenceCutoff
-      || doc.month !== monthly.month || doc.periodStart !== monthly.periodStart
+      || doc.month !== monthly.month || doc.periodStart !== monthly.periodStart || doc.periodEnd !== monthly.periodEnd
       || doc.financialMonth !== monthly.financialMonth) {
       ctx.addIssue({ code: "custom", message: "Publications must share an issue and reporting cutoff." });
     }
@@ -57,13 +64,13 @@ export const readingSetSchema = z.object({
   }
 });
 export type MonthlyReadingSet = z.infer<typeof readingSetSchema>;
-export const monthlyReadingSets = z.array(readingSetSchema).parse(readingSets);
+export const monthlyReadingSets = z.array(readingSetSchema).min(1).parse(readingSets);
 const currentIds = new Set(monthlyReadingSets.map((set) => set.id));
 if (currentIds.size !== monthlyReadingSets.length) throw new Error("Duplicate monthly reading-set IDs.");
-export const monthlyEditions = [
-  ...monthlyReadingSets.map((set) => set.documents.monthly),
-  ...z.array(editionSchema).min(1).parse(editions).filter((edition) => !currentIds.has(edition.id)),
-].sort((a, b) => b.month.localeCompare(a.month)
+// Every selectable edition is a complete reading set in the same reader.
+// Retained legacy files are historical assets, never a second publication UI.
+export const monthlyEditions = monthlyReadingSets.map((set) => set.documents.monthly)
+  .sort((a, b) => b.month.localeCompare(a.month)
   || ({ monthly: 2, period: 1, reference: 0 }[b.kind] - { monthly: 2, period: 1, reference: 0 }[a.kind])
   || b.periodEnd.localeCompare(a.periodEnd));
 
@@ -73,4 +80,8 @@ export function monthLabel(month: string) {
 
 export function statusLabel(edition: MonthlyEdition) {
   return edition.kind === "period" ? "Partial period" : edition.kind === "reference" ? "Reference edition" : "Monthly edition";
+}
+
+export function editionLabel(edition: MonthlyEdition) {
+  return `${monthLabel(edition.month)}${edition.kind === "period" ? ` · ${edition.label}` : ""}`;
 }

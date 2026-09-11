@@ -86,7 +86,9 @@
     "localTime": "09:00",
     "financialMonth": "previous-completed-calendar-month",
     "comparisonMonth": "month-before-financial-month",
-    "evidenceCutoff": "actually-verified-during-run"
+    "evidenceCutoff": "last included activity date; reviewedAt records later verification",
+    "issueMonth": "activity-month / same as financialMonth",
+    "publicationDate": "separate from activity cutoff"
   },
   "quality": {
     "freshResearchRequired": true,
