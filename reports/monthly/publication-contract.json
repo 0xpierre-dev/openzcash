@@ -7,8 +7,15 @@
   "pageHeight": 675,
   "walletSlide": 7,
   "walletLayout": "2x2",
-  "walletRoster": ["ZODL", "Zingo", "Vizor", "Zkool"],
+  "walletRoster": [
+    "ZODL",
+    "Zingo",
+    "Vizor",
+    "Zkool"
+  ],
   "legacyReferences": {
     "2026-09": "4e05c3b1515ff9f066a9c030be450bffc043168c757a28a0afd06a12fb8b2d53"
-  }
+  },
+  "scope": "Legacy single-PDF importer only; never the specification for a new monthly reading set.",
+  "activeStandard": "reports/monthly/reading-set-contract.json"
 }

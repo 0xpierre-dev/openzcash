@@ -1,0 +1,657 @@
+{
+  "asOf": "2026-09-10",
+  "timeBasis": "UTC calendar dates; end-exclusive cutoff 2026-09-11T00:00:00Z",
+  "requests": [
+    {
+      "number": 408,
+      "title": "0xramp",
+      "fullTitle": "Grant Application - 0xramp: Non-custodial ZEC \u21ff local-fiat ramp for emerging markets",
+      "summary": "Non-custodial ZEC and local-currency payment rails.",
+      "applicant": "0xramp Labs",
+      "amount": 206000,
+      "amountMin": 206000,
+      "amountMax": 206000,
+      "amountLabel": "$206,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-08-31",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-0xramp-non-custodial-zec-local-fiat-ramp-for-emerging-markets/57271",
+      "sheetRow": 664,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 420,
+      "title": "24 Videos @zkMarketer",
+      "fullTitle": "Grant Application - 24 Videos @zkMarketer",
+      "summary": "24 documentary-style films over 12 weeks.",
+      "applicant": "Connaugh",
+      "amount": 60000,
+      "amountMin": 60000,
+      "amountMax": 60000,
+      "amountLabel": "$60,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-08",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/420",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-24-videos-zkmarketer/57494",
+      "sheetRow": 676,
+      "statusEvidence": "Sep 11 update is a comment; Sep 8 forum capture confirms the $60,000 request"
+    },
+    {
+      "number": 412,
+      "title": "Coin Wallet integration",
+      "fullTitle": "Grant Application - Zcash Integration in Coin Wallet (WebZjs + lightwalletd)",
+      "summary": "Shielded ZEC support across web, desktop and mobile.",
+      "applicant": "Coin Wallet",
+      "amount": 100000,
+      "amountMin": 100000,
+      "amountMax": 100000,
+      "amountLabel": "$100,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-03",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/412",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcash-integration-in-coin-wallet-webzjs-lightwalletd/57469",
+      "sheetRow": 668,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 414,
+      "title": "Colosseum: Crypto World's Fair",
+      "fullTitle": "Colosseum | Crypto World's Fair | Zcash Track",
+      "summary": "A Zcash track in the multi-chain developer competition.",
+      "applicant": "Colosseum",
+      "amount": 250000,
+      "amountMin": 250000,
+      "amountMax": 250000,
+      "amountLabel": "$250,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-03",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/414",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-proposal-colosseum-hackathon-zcash-track/57405",
+      "sheetRow": 670,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 415,
+      "title": "East Africa: Blockchain Festival",
+      "fullTitle": "Zcash East Africa @ Africa Blockchain Festival 2026",
+      "summary": "Nairobi booth, merchant spending and follow-up onboarding.",
+      "applicant": "Zcash East Africa",
+      "amount": 11040,
+      "amountMin": 11040,
+      "amountMax": 11040,
+      "amountLabel": "$11,040",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-04",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/415",
+      "forumUrl": "https://forum.zcashcommunity.com/t/zcash-east-africa-africa-blockchain-festival-2026/57437",
+      "sheetRow": 671,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 421,
+      "title": "Kestrel + ZecAuth",
+      "fullTitle": "Grant Application - Kestrel + ZecAuth: Open Zcash Wallet Connectivity with African Fiat On/Off-Ramps.",
+      "summary": "Wallet connectivity, a mobile wallet and African fiat integration.",
+      "applicant": "Kuvarpay Limited",
+      "amount": 12000,
+      "amountMin": 12000,
+      "amountMax": 12000,
+      "amountLabel": "$12,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-08",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/421",
+      "forumUrl": "https://forum.zcashcommunity.com/t/kestrel-zecauth-open-zcash-wallet-connectivity-with-african-fiat-on-off-ramps/57503",
+      "sheetRow": 677,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 404,
+      "title": "Privacy Literacy Lab Canada",
+      "fullTitle": "Grant Application - Zcash Privacy Literacy Lab Canada",
+      "summary": "Interactive privacy scenarios and a dated regulatory source map.",
+      "applicant": "Daniel Sultan",
+      "amount": 15000,
+      "amountMin": 15000,
+      "amountMax": 15000,
+      "amountLabel": "$15,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-08-30",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcash-privacy-literacy-lab-canada/57256",
+      "sheetRow": 662,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 403,
+      "title": "Recoverify",
+      "fullTitle": "Grant Application - Recoverify: Pre-Loss Backup Recovery Verification for Zcash Wallets",
+      "summary": "Verify wallet backups while the original wallet is still available.",
+      "applicant": "OneLabs",
+      "amount": 2990,
+      "amountMin": 2990,
+      "amountMax": 2990,
+      "amountLabel": "$2,990",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-08-27",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403",
+      "forumUrl": "https://forum.zcashcommunity.com/t/recoverify-backup-recovery-verification-for-zcash-wallets/57220",
+      "sheetRow": 660,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 401,
+      "title": "Taking Zcash to the Streets",
+      "fullTitle": "Taking Zcash to the Streets: Education & Real-World Feedback in T\u00fcrkiye",
+      "summary": "A Turkish video series and Istanbul street interviews.",
+      "applicant": "Crypto Epoch",
+      "amount": 6955,
+      "amountMin": 6955,
+      "amountMax": 6955,
+      "amountLabel": "$6,955",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-08-25",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401",
+      "forumUrl": "https://forum.zcashcommunity.com/t/zcash-in-the-real-world-education-and-street-interviews-in-turkiye/57187",
+      "sheetRow": 658,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 407,
+      "title": "Zaino security audit",
+      "fullTitle": "Grant Application - Security Audit of Zaino",
+      "summary": "Independent audit; the final budget depends on scoping.",
+      "applicant": "Cyfrin",
+      "amount": null,
+      "amountMin": 60000,
+      "amountMax": 120000,
+      "amountLabel": "$60k-$120k",
+      "amountBasis": "Indicative range; final scope not agreed",
+      "status": "Under review",
+      "submitted": "2026-08-31",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-security-audit-of-zaino/57265",
+      "sheetRow": 663,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 417,
+      "title": "Zcash awareness campaign",
+      "fullTitle": "Grant Application - Zcash Awareness, Education & Community Growth Campaign",
+      "summary": "Education and community content on X and Binance Square.",
+      "applicant": "coldheartedmen",
+      "amount": 5000,
+      "amountMin": 5000,
+      "amountMax": 5000,
+      "amountLabel": "$5,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-04",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/417",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcash-marketing-education-campaign-on-x-and-binance-square/57460",
+      "sheetRow": 673,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 419,
+      "title": "Zcash Flutter Wallet SDK",
+      "fullTitle": "Grant Application - Zcash Flutter Wallet SDK",
+      "summary": "Dart bindings for the official iOS and Android wallet SDKs.",
+      "applicant": "Hardik Jain",
+      "amount": 10000,
+      "amountMin": 10000,
+      "amountMax": 10000,
+      "amountLabel": "$10,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-08",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/419",
+      "forumUrl": "https://forum.zcashcommunity.com/t/zcash-flutter-wallet-sdk/57485",
+      "sheetRow": 674,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 411,
+      "title": "Zcash SeedSigner",
+      "fullTitle": "Grant Application - Zcash SeedSigner: DIY open source air gapped signer for shielded ZEC",
+      "summary": "An open-source, air-gapped signing device built from generic parts.",
+      "applicant": "Biglup Labs",
+      "amount": 65000,
+      "amountMin": 65000,
+      "amountMax": 65000,
+      "amountLabel": "$65,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-01",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/411",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcash-seedsigner-a-diy-open-source-air-gapped-signer-for-shielded-zec/57381",
+      "sheetRow": 667,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 405,
+      "title": "Zcash World, Mumbai",
+      "fullTitle": "Grant Application \u2014 Zcash World, Mumbai (Devcon 8 week)",
+      "summary": "Public event and merchant onboarding around Devcon 8.",
+      "applicant": "Zcash India",
+      "amount": 20300,
+      "amountMin": 20300,
+      "amountMax": 20300,
+      "amountLabel": "$20,300",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-08-30",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcash-world-mumbai-devcon-8-week/57253",
+      "sheetRow": 661,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 413,
+      "title": "zcashlib",
+      "fullTitle": "Grant Application - `zcashlib`: A Pure-JavaScript Zcash Library",
+      "summary": "Pure-JavaScript support for transparent and shielded Zcash.",
+      "applicant": "Coin Wallet",
+      "amount": 150000,
+      "amountMin": 150000,
+      "amountMax": 150000,
+      "amountLabel": "$150,000",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-03",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/413",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zcashlib-a-pure-javascript-zcash-library/57470",
+      "sheetRow": 669,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    },
+    {
+      "number": 418,
+      "title": "ZecScope",
+      "fullTitle": "Grant Application - ZecScope (Zcash network upgrade / ZIP tracker)",
+      "summary": "Track ZIPs, network upgrades and wallet readiness.",
+      "applicant": "aryaethn",
+      "amount": 36300,
+      "amountMin": 36300,
+      "amountMax": 36300,
+      "amountLabel": "$36,300",
+      "amountBasis": "Requested USD",
+      "status": "Under review",
+      "submitted": "2026-09-08",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/418",
+      "forumUrl": "https://forum.zcashcommunity.com/t/grant-application-zecscope-zcash-network-upgrade-zip-tracker/57479",
+      "sheetRow": 675,
+      "statusEvidence": "Issue unchanged since before cutoff; official sheet still lists ZCG to discuss"
+    }
+  ],
+  "decisions": [
+    {
+      "number": 342,
+      "title": "Constant-time hardening",
+      "fullTitle": "Constant-Time Hardening and Explicit Timing Semantics for Zcash Rust Cryptography",
+      "summary": "Async approval; broader scope and the initial milestone discussed.",
+      "applicant": "Eryx",
+      "amount": 10000,
+      "amountLabel": "$10,000",
+      "status": "Approved",
+      "decisionDate": "2026-08-21",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/342",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 608
+    },
+    {
+      "number": 391,
+      "title": "WalletConnect integration",
+      "fullTitle": "Zcash WalletConnect Integration",
+      "summary": "Reusable Zcash integration requested beyond the Noir wallet.",
+      "applicant": "Noir Wallet",
+      "amount": 50000,
+      "amountLabel": "$50,000",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/391",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 648
+    },
+    {
+      "number": 402,
+      "title": "ZECsy community building",
+      "fullTitle": "ZECsy Community Building: 12 Months of Zcash on the Ground [Revised]",
+      "summary": "Nine-month milestones only; Hanh voted against.",
+      "applicant": "readymouse",
+      "amount": 550000,
+      "amountLabel": "$550,000",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/402",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 659
+    },
+    {
+      "number": 395,
+      "title": "BTCPayServer GraphQL client",
+      "fullTitle": "BTCPayServer Multi-Store GraphQL Client",
+      "summary": "Multi-store support and migration to the Zkool GraphQL API.",
+      "applicant": "1337bytes",
+      "amount": 16800,
+      "amountLabel": "$16,800",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/395",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 652
+    },
+    {
+      "number": 396,
+      "title": "Pretty Good Policy for Zcash",
+      "fullTitle": "Pretty Good Policy for Zcash",
+      "summary": "Policy work approved; Paul recused from the discussion.",
+      "applicant": "Pretty Good Policy for Zcash",
+      "amount": 750000,
+      "amountLabel": "$750,000",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/396",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 653
+    },
+    {
+      "number": 398,
+      "title": "Hack-to-Dark, Mumbai",
+      "fullTitle": "Zcash Hack-to-Dark At Devcon 8, Mumbai",
+      "summary": "Developer event proposed for November 3-4.",
+      "applicant": "WebZero",
+      "amount": 43524,
+      "amountLabel": "$43,524",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/398",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 655
+    },
+    {
+      "number": 400,
+      "title": "Zcash Arabia",
+      "fullTitle": "Zcash Arabia (August to December 2026",
+      "summary": "August-December programme; Artkor and Zerodartz voted against.",
+      "applicant": "ZcashArabia",
+      "amount": 27000,
+      "amountLabel": "$27,000",
+      "status": "Approved",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 657
+    },
+    {
+      "number": 389,
+      "title": "Zebra test-effectiveness audit",
+      "fullTitle": "Test-Effectiveness Audit for Zebra: an independent regression witness for consensus-critical code",
+      "summary": "Committee cited limited usefulness and false-positive concerns.",
+      "applicant": "jiehuo100net",
+      "amount": 45000,
+      "amountLabel": "$45,000",
+      "status": "Declined",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/389",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 646
+    },
+    {
+      "number": 390,
+      "title": "Rvess Pay mobile-money integration",
+      "fullTitle": "Rvess Pay ZEC to Mobile Money Integration",
+      "summary": "Committee asked for more reuse of existing payment components.",
+      "applicant": "Rvess Pay",
+      "amount": 32000,
+      "amountLabel": "$32,000",
+      "status": "Declined",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/390",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 647
+    },
+    {
+      "number": 392,
+      "title": "Halo2 verifier testing infrastructure",
+      "fullTitle": "Reusable Halo2 Verifier Security Testing Infrastructure (ZKCG Reference Implementation)",
+      "summary": "Need and ability to detect circuit logic defects were not established.",
+      "applicant": "ZKCG \u2014 Sujyot Kamble",
+      "amount": 4500,
+      "amountLabel": "$4,500",
+      "status": "Declined",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/392",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 649
+    },
+    {
+      "number": 394,
+      "title": "SHPH network layer",
+      "fullTitle": "SHPH (Post-Quantum Censorship-Resistant Network Layer)",
+      "summary": "Committee raised scope, track-record and differentiation concerns.",
+      "applicant": "SHPH Project (mori-and-thebros)",
+      "amount": 25000,
+      "amountLabel": "$25,000",
+      "status": "Declined",
+      "decisionDate": "2026-08-31",
+      "published": "2026-09-02",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/394",
+      "decisionUrl": "https://forum.zcashcommunity.com/t/57394",
+      "sheetRow": 651
+    },
+    {
+      "number": 409,
+      "title": "ZecBit: NFT infrastructure",
+      "fullTitle": "ZecBit: NFT infrastructure for Zcash Shielded Assets",
+      "summary": "Proposed ZSA metadata, indexing and shielded payment infrastructure.",
+      "applicant": "ZecBit",
+      "amount": 48000,
+      "amountLabel": "$48,000",
+      "status": "Declined",
+      "decisionDate": "2026-09-04",
+      "published": "2026-09-04",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+      "decisionUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+      "sheetRow": 665
+    },
+    {
+      "number": 410,
+      "title": "ZEC Invoice Preflight",
+      "fullTitle": "ZEC Invoice Preflight: ZIP-321 Validation for Zcash Merchants",
+      "summary": "Proposed ZIP-321 request validation before merchants share a QR code.",
+      "applicant": "panagot",
+      "amount": 3000,
+      "amountLabel": "$3,000",
+      "status": "Declined",
+      "decisionDate": "2026-09-04",
+      "published": "2026-09-04",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/410",
+      "decisionUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/410",
+      "sheetRow": 666
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues?state=closed&since=2026-09-10T00%3A00%3A00Z&per_page=100",
+      "capturedAt": "2026-09-11T21:10:56.248252+00:00",
+      "sha256": "6b1c42d8405e42203c2c24b9df8b9d68a3f74bc5b586007a0d8f009606437472",
+      "link": null
+    },
+    {
+      "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+      "capturedAt": "2026-09-11T21:15:40.769231+00:00",
+      "sha256": "e31493fee2d2878127a85b9e0e22f392fac0a57e9674e3c1208229494e8b9796"
+    },
+    {
+      "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues/410",
+      "capturedAt": "2026-09-11T21:15:40.699892+00:00",
+      "sha256": "a111dfbbbaea87efb6a47f612d29966d48beb76dfe9b1b47db0b6ab5672567c7"
+    },
+    {
+      "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues/420/timeline?per_page=100",
+      "capturedAt": "2026-09-11T21:10:57.960210+00:00",
+      "sha256": "230adc2f8fcd4d2f0e9d5bea9832da47a50ecbf43cf81a08cbc84397ae34cc0d",
+      "link": null
+    },
+    {
+      "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues?state=open&per_page=100&sort=created&direction=desc",
+      "capturedAt": "2026-09-11T21:09:21.271238+00:00",
+      "sha256": "33a7127fbeeabcebc1c1e5d2c791d79ffa750f5b02faee32fb00b8f287585d02",
+      "link": null
+    },
+    {
+      "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1164534734",
+      "capturedAt": "2026-09-11T21:09:24.689397+00:00",
+      "sha256": "7e1848690271d7b08673c6a4f2914d35bc8fb17bbdb6c32547e63aac93bf54f5",
+      "link": null
+    }
+  ],
+  "excluded": [
+    {
+      "number": 422,
+      "reason": "Submitted after the issue cutoff"
+    },
+    {
+      "number": 402,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 400,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 398,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 396,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 395,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 391,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 375,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 342,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 340,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 339,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 335,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 332,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 329,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 323,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 298,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 256,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 234,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 228,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 179,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 162,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 157,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 155,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 153,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 152,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 150,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 128,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 96,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 53,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    },
+    {
+      "number": 30,
+      "reason": "Already decided or funded; review label alone is insufficient"
+    }
+  ],
+  "rules": [
+    "A surviving review label does not override a funding or decision record.",
+    "Published decisions retain both their decision date and publication date.",
+    "Requested amounts remain separate from approval budgets and paid milestones.",
+    "Zaino audit is an indicative $60,000-$120,000 range; no midpoint is asserted.",
+    "Flutter SDK amount is $10,000, including the Markdown-formatted request.",
+    "The Sep 11 submission is excluded from the Sep 1-10 issue."
+  ]
+}

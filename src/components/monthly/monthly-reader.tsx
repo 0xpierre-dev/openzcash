@@ -48,7 +48,8 @@ function EditionLibrary({ editions, edition }: { editions: MonthlyEdition[]; edi
   </div>;
 }
 
-export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[]; edition: MonthlyEdition }) {
+export function MonthlyReader({ editions, edition, embedded = false, baseHref, publicationName = "Monthly", onFollowLink }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string; publicationName?: string; onFollowLink?: (url: string) => boolean }) {
+  const pageHref = baseHref || `/monthly/${edition.id}`;
   const [pageNumber, setPageNumber] = useState(1);
   const [pages, setPages] = useState<ReportPage[]>([]);
   const [pdf, setPdf] = useState<PdfDocument | null>(null);
@@ -71,8 +72,8 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
     const next = Math.min(edition.pageCount, Math.max(1, Math.trunc(requested)));
     setPageNumber(next);
     // Keep the edition in shared URLs even when entered through /monthly.
-    window.history.replaceState(null, "", `/monthly/${edition.id}#${next}`);
-  }, [edition.id, edition.pageCount]);
+    window.history.replaceState(null, "", `${pageHref}#${next}`);
+  }, [pageHref, edition.pageCount]);
 
   useEffect(() => {
     const sync = () => setPageNumber(pageFromHash(window.location.hash, edition.pageCount));
@@ -131,7 +132,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
         canvas.width = Math.ceil(viewport.width);
         canvas.height = Math.ceil(viewport.height);
         canvas.setAttribute("role", "img");
-        canvas.setAttribute("aria-label", `Page ${pageNumber}: ${pages[pageNumber - 1]?.title || "OpenZcash Monthly"}`);
+        canvas.setAttribute("aria-label", `Page ${pageNumber}: ${pages[pageNumber - 1]?.title || `OpenZcash ${publicationName}`}`);
         const context = canvas.getContext("2d", { alpha: false });
         if (!context) throw new Error("Canvas unavailable");
         job = page.render({ canvasContext: context, viewport });
@@ -145,11 +146,11 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
     }
     void render();
     return () => { active = false; job?.cancel(); };
-  }, [pdf, pageNumber, size.width, edition.pageWidth, pages]);
+  }, [pdf, pageNumber, size.width, edition.pageWidth, pages, publicationName]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (libraryDialog.current?.open || event.altKey || event.metaKey || event.ctrlKey || (event.target as HTMLElement).closest("input, select, textarea, [contenteditable=true]")) return;
+      if (event.defaultPrevented || libraryDialog.current?.open || event.altKey || event.metaKey || event.ctrlKey || (event.target as HTMLElement).closest("input, select, textarea, [contenteditable=true], [role=tab]")) return;
       if (["ArrowRight", "PageDown"].includes(event.key)) { event.preventDefault(); goTo(pageNumber + 1); }
       if (["ArrowLeft", "PageUp"].includes(event.key)) { event.preventDefault(); goTo(pageNumber - 1); }
       if (event.key === "Home") { event.preventDefault(); goTo(1); }
@@ -178,7 +179,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
     } catch { setFocused(true); notify("Focus mode enabled. Full screen is unavailable in this browser."); }
   }
   async function sharePage() {
-    const url = `${window.location.origin}/monthly/${edition.id}#${pageNumber}`;
+    const url = `${window.location.origin}${pageHref}#${pageNumber}`;
     try { await navigator.clipboard.writeText(url); notify("Link to this page copied."); }
     catch { window.history.replaceState(null, "", url); notify("The address bar now links to this page. Copy it to share."); }
   }
@@ -195,7 +196,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
   const thumbStart = Math.floor((pageNumber - 1) / 5) * 5;
   const visiblePages = pages.slice(thumbStart, thumbStart + 5);
 
-  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""}`} data-edition={edition.id}>
+  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""}`} data-edition={edition.id}>
     <header className={styles.header}>
       <div className={styles.identity}>
         <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/zcash-mark.svg" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
@@ -210,7 +211,7 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
 
     <div className={styles.workspace}>
       <aside className={styles.library} aria-label="Monthly library"><EditionLibrary editions={editions} edition={edition} /></aside>
-      <main className={styles.reader} aria-label="Monthly report reader">
+      <main className={styles.reader} aria-label={`${publicationName} report reader`}>
         <div className={styles.readerHeading}>
           <div><span className={styles.eyebrow}>{monthLabel(edition.month)}</span><strong>{edition.label}<span className={styles.status}>{statusLabel(edition)}</span></strong></div>
           <div className={styles.readerActions}>
@@ -233,13 +234,13 @@ export function MonthlyReader({ editions, edition }: { editions: MonthlyEdition[
                 <div ref={canvasHost} className={styles.canvasHost} style={{ visibility: ready ? "visible" : "hidden" }} />
                 {ready && currentPage?.links.map((link, i) => {
                   const position = { left: `${link.x * 100}%`, top: `${link.y * 100}%`, width: `${link.w * 100}%`, height: `${link.h * 100}%` };
-                  return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
+                  return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" onClick={(event)=>{if(onFollowLink?.(link.url))event.preventDefault();}} aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
                 })}
                 {!ready && <div className={styles.loading} role="status">{error ? <><Icon name="book" /><strong>This edition couldn’t load.</strong><span>Try again, or open the PDF using the download button.</span><button onClick={retryLoad}>Try again</button></> : <><span className={styles.loader} /><span>Opening your report…</span></>}</div>}
               </div>
             </div>
           </div>
-          <div className={styles.pageCaption}><span>{currentPage?.title || "OpenZcash Monthly"}</span><small>Use ← → to turn pages</small></div>
+          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><small>Use ← → to turn pages</small></div>
         </div>
         <nav className={styles.filmstrip} aria-label="Page previews">
           <button className={styles.iconButton} disabled={pageNumber === 1} onClick={() => goTo(pageNumber - 1)} aria-label="Previous page" title="Previous page"><Icon name="left" /></button>

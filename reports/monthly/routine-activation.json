@@ -1,0 +1,10 @@
+{
+  "standardId": "openzcash-editorial-4.0",
+  "formatApproved": true,
+  "automationId": "openzcash-monthly",
+  "status": "pending-user-authorization",
+  "automaticPublicationEnabledForThisStandard": false,
+  "reason": "Automatic approval review rejected the scheduler update for recurring commits/deploy without explicit confirmation. Keep the existing scheduler unchanged; do not publish Editorial 4.0 until the native update is authorized and read back successfully.",
+  "proposedPromptSha256": "9866f48f6216208e7a6fdfc28a9aafdba96429e50034b39f190faae3fb1db424",
+  "checkedAt": "2026-09-11T22:00:58.275421+00:00"
+}

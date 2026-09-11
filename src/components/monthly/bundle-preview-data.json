@@ -1,0 +1,1170 @@
+{
+  "documents": {
+    "monthly": {
+      "id": "2026-09-01-to-10",
+      "month": "2026-09",
+      "label": "Sep 1-10",
+      "kind": "period",
+      "periodStart": "2026-09-01",
+      "periodEnd": "2026-09-10",
+      "financialMonth": "2026-09",
+      "designVersion": "Editorial 4.0 / Covers 2",
+      "pdf": "/monthly/preview/monthly/OpenZcash-Monthly-Layout-Sample.pdf",
+      "cover": "/monthly/preview/monthly/page-001.jpg",
+      "manifest": "/monthly/preview/monthly/pages.json",
+      "assetBase": "/monthly/preview/monthly",
+      "sha256": "38273d41416f676fa3c1f4455e6e7646141277e6d091dc8e5b64c4857a690921",
+      "bytes": 1142348,
+      "pageCount": 10,
+      "pageWidth": 1200,
+      "pageHeight": 675
+    },
+    "operations": {
+      "id": "2026-09-01-to-10",
+      "month": "2026-09",
+      "label": "Sep 1-10",
+      "kind": "period",
+      "periodStart": "2026-09-01",
+      "periodEnd": "2026-09-10",
+      "financialMonth": "2026-09",
+      "designVersion": "Editorial 4.0 / Covers 2",
+      "pdf": "/monthly/preview/operations/OpenZcash-Operations-Layout-Sample.pdf",
+      "cover": "/monthly/preview/operations/page-001.jpg",
+      "manifest": "/monthly/preview/operations/pages.json",
+      "assetBase": "/monthly/preview/operations",
+      "sha256": "d7acbd12b6f3edda94e8f6c9ebfd6b58798c5ce51934a2bac54687f2b12b85ae",
+      "bytes": 2221171,
+      "pageCount": 20,
+      "pageWidth": 1200,
+      "pageHeight": 675
+    }
+  },
+  "sources": [
+    {
+      "name": "OpenZcash paid-grant ledger",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/api/zcg/data/disbursements?limit=3000"
+    },
+    {
+      "name": "ZCG disbursements \u00b7 original sheet",
+      "detail": "docs.google.com",
+      "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474"
+    },
+    {
+      "name": "OpenZcash Q3 proposal rows",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/api/zcg/coinholder/round"
+    },
+    {
+      "name": "FPF \u00b7 Q3 review schedule and register",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57056"
+    },
+    {
+      "name": "FPF \u00b7 proposal status records",
+      "detail": "github.com",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues"
+    },
+    {
+      "name": "ZecHub \u00b7 treasury API capture",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/api/zechub/treasury"
+    },
+    {
+      "name": "ZecHub \u00b7 balance source sheet",
+      "detail": "docs.google.com",
+      "url": "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/edit"
+    },
+    {
+      "name": "CoinGecko \u00b7 dated ZEC/USD quote",
+      "detail": "api.coingecko.com",
+      "url": "https://api.coingecko.com/api/v3/simple/price?ids=zcash&vs_currencies=usd&include_last_updated_at=true"
+    },
+    {
+      "name": "OpenZcash \u00b7 community directory",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/communities"
+    },
+    {
+      "name": "OpenZcash \u00b7 ecosystem directory",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/api/ecosystem"
+    },
+    {
+      "name": "ZF engineering \u00b7 published Sep 9",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57511/1"
+    },
+    {
+      "name": "Crosslink \u00b7 community indexer Sep 6",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55210/87"
+    },
+    {
+      "name": "Nozy \u00b7 Crosslink testing Sep 7\u20138",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55210/89"
+    },
+    {
+      "name": "Nym light-wallet transport \u00b7 Sep updates",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57000"
+    },
+    {
+      "name": "ZSA testnet \u00b7 Sep 1 clarification",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56884/16"
+    },
+    {
+      "name": "Hito \u00b7 milestone 3 report Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55539/19"
+    },
+    {
+      "name": "OneKey \u00b7 progress report Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/54833/6"
+    },
+    {
+      "name": "ELLIPAL \u00b7 progress report Sep 7",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56856/3"
+    },
+    {
+      "name": "Vizor \u00b7 Ledger signing demo Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/45965/185"
+    },
+    {
+      "name": "Zecboat \u00b7 desktop beta Sep 6",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57464/1"
+    },
+    {
+      "name": "0xramp \u00b7 v1 announcement Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57215/16"
+    },
+    {
+      "name": "red\u00b7bridge \u00b7 website launch Sep 9",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55840/19"
+    },
+    {
+      "name": "ZecGuard \u00b7 launch and update",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57418/1"
+    },
+    {
+      "name": "Zpay.cash \u00b7 announcement Sep 9",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57527/1"
+    },
+    {
+      "name": "Konclave \u00b7 report published Sep 7",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57218/4"
+    },
+    {
+      "name": "Ballast \u00b7 pre-beta announcement Sep 10",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57543/1"
+    },
+    {
+      "name": "Gleyo \u00b7 milestone announcement Sep 10",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57541/1"
+    },
+    {
+      "name": "ZCG \u00b7 Aug 31 minutes published Sep 2",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57394"
+    },
+    {
+      "name": "Privacy Developers Residency \u00b7 Sep updates",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57193"
+    },
+    {
+      "name": "Ghana \u00b7 September update Sep 8",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56214/15"
+    },
+    {
+      "name": "ZecHub \u00b7 August report published Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/53686/57"
+    },
+    {
+      "name": "Nigeria \u00b7 August report published Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/53654/19"
+    },
+    {
+      "name": "Espa\u00f1ol \u00b7 August report published Sep 2",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/53815/33"
+    },
+    {
+      "name": "Arabia \u00b7 August report published Sep 2",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57170/10"
+    },
+    {
+      "name": "Elzz \u00b7 August report published Sep 2",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57390/1"
+    },
+    {
+      "name": "Engage \u00b7 August report published Sep 4",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55358/16"
+    },
+    {
+      "name": "ZECsy \u00b7 Amsterdam report Sep 10",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56509/5"
+    },
+    {
+      "name": "Barcelona \u00b7 collaboration announced Sep 8",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/51247/71"
+    },
+    {
+      "name": "Quer\u00e9taro \u00b7 Aug 30 meetup report Sep 3",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55764/14"
+    },
+    {
+      "name": "Zcast \u00b7 new episode Sep 1",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/54291/38"
+    },
+    {
+      "name": "South Africa \u00b7 campaign update Sep 4",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57133/7"
+    },
+    {
+      "name": "The Zcash Daily \u00b7 Sep 1\u201310 posts",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57219"
+    },
+    {
+      "name": "ZCAP \u00b7 NU7 advisory poll",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57223"
+    },
+    {
+      "name": "Coinholders \u00b7 NU7 advisory poll",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56912"
+    },
+    {
+      "name": "ZF \u00b7 Zcon7 program announced Sep 10",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57542/1"
+    },
+    {
+      "name": "Colosseum \u00b7 Zcash track proposal Sep 3",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57405/1"
+    },
+    {
+      "name": "East Africa \u00b7 festival proposal discussion",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/57437"
+    },
+    {
+      "name": "Zcon7 \u00b7 official event page",
+      "detail": "zfnd.org",
+      "url": "https://zfnd.org/zcon7/"
+    },
+    {
+      "name": "Arborist Call 131 \u00b7 Sep 3 notes",
+      "detail": "github.com",
+      "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20131%20-%20notes.md"
+    },
+    {
+      "name": "Project Tachyon \u00b7 September commits",
+      "detail": "github.com",
+      "url": "https://github.com/tachyon-zcash/tachyon/commits/main/"
+    },
+    {
+      "name": "Ragu \u00b7 September commits",
+      "detail": "github.com",
+      "url": "https://github.com/tachyon-zcash/ragu/commits/main/"
+    },
+    {
+      "name": "Project Tachyon \u00b7 official site",
+      "detail": "tachyon.z.cash",
+      "url": "https://tachyon.z.cash/"
+    },
+    {
+      "name": "Release 3.11.0 (2653)",
+      "detail": "github.com",
+      "url": "https://github.com/zodl-inc/zodl-android/releases/tag/3.11.0-2653"
+    },
+    {
+      "name": "v0.0.54",
+      "detail": "github.com",
+      "url": "https://github.com/chainapsis/vizor-wallet/releases/tag/release/v0.0.54"
+    },
+    {
+      "name": "v0.0.55-rc.0",
+      "detail": "github.com",
+      "url": "https://github.com/chainapsis/vizor-wallet/releases/tag/release/v0.0.55-rc.0"
+    },
+    {
+      "name": "v1.4.0",
+      "detail": "github.com",
+      "url": "https://github.com/zakura-core/zakura/releases/tag/v1.4.0"
+    },
+    {
+      "name": "Zcash Brazil \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/53702"
+    },
+    {
+      "name": "ZK AV Club \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/53913"
+    },
+    {
+      "name": "T\u00fcrkiye \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56274"
+    },
+    {
+      "name": "Club Caracas \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56445"
+    },
+    {
+      "name": "CodeRaiz M\u00e9xico \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/55506"
+    },
+    {
+      "name": "Pesa Ya Siri / Tanzania \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56593"
+    },
+    {
+      "name": "ruZcash \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/38485"
+    },
+    {
+      "name": "Boston Zcash \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56748"
+    },
+    {
+      "name": "China \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56438"
+    },
+    {
+      "name": "France \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/5544"
+    },
+    {
+      "name": "Germany \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/50169"
+    },
+    {
+      "name": "India \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/54762"
+    },
+    {
+      "name": "Indonesia \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/38678"
+    },
+    {
+      "name": "Japan \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/54827"
+    },
+    {
+      "name": "Korea \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56458/3"
+    },
+    {
+      "name": "Ukraine \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/54059"
+    },
+    {
+      "name": "Belgium \u00b7 additional \u00b7 checked source",
+      "detail": "forum.zcashcommunity.com",
+      "url": "https://forum.zcashcommunity.com/t/56893"
+    },
+    {
+      "name": "Zingo Mobile \u00b7 2.0.23, Sep 9",
+      "detail": "github.com",
+      "url": "https://github.com/zingolabs/zingo-mobile/releases/tag/zingo-2.0.23-317"
+    },
+    {
+      "name": "Zkool \u00b7 6.29.0, Sep 1",
+      "detail": "github.com",
+      "url": "https://github.com/hhanh00/zkool2/releases/tag/zkool-v6.29.0"
+    },
+    {
+      "name": "Zkool \u00b7 6.30.0-rc.6, Sep 5",
+      "detail": "github.com",
+      "url": "https://github.com/hhanh00/zkool2/releases/tag/zkool-v6.30.0-rc.6"
+    },
+    {
+      "name": "OpenZcash Wallets \u00b7 directory and repositories",
+      "detail": "openzcash.org",
+      "url": "https://openzcash.org/wallets"
+    },
+    {
+      "name": "ZCG #408: 0xramp",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408"
+    },
+    {
+      "name": "ZCG #420: 24 Videos @zkMarketer",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/420"
+    },
+    {
+      "name": "ZCG #412: Coin Wallet integration",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/412"
+    },
+    {
+      "name": "ZCG #414: Colosseum: Crypto World's Fair",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/414"
+    },
+    {
+      "name": "ZCG #415: East Africa: Blockchain Festival",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/415"
+    },
+    {
+      "name": "ZCG #421: Kestrel + ZecAuth",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/421"
+    },
+    {
+      "name": "ZCG #404: Privacy Literacy Lab Canada",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404"
+    },
+    {
+      "name": "ZCG #403: Recoverify",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403"
+    },
+    {
+      "name": "ZCG #401: Taking Zcash to the Streets",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401"
+    },
+    {
+      "name": "ZCG #407: Zaino security audit",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407"
+    },
+    {
+      "name": "ZCG #417: Zcash awareness campaign",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/417"
+    },
+    {
+      "name": "ZCG #419: Zcash Flutter Wallet SDK",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/419"
+    },
+    {
+      "name": "ZCG #411: Zcash SeedSigner",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/411"
+    },
+    {
+      "name": "ZCG #405: Zcash World, Mumbai",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405"
+    },
+    {
+      "name": "ZCG #413: zcashlib",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/413"
+    },
+    {
+      "name": "ZCG #418: ZecScope",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/418"
+    },
+    {
+      "name": "ZCG #342: Constant-time hardening",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/342"
+    },
+    {
+      "name": "ZCG #391: WalletConnect integration",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/391"
+    },
+    {
+      "name": "ZCG #402: ZECsy community building",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/402"
+    },
+    {
+      "name": "ZCG #395: BTCPayServer GraphQL client",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/395"
+    },
+    {
+      "name": "ZCG #396: Pretty Good Policy for Zcash",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/396"
+    },
+    {
+      "name": "ZCG #398: Hack-to-Dark, Mumbai",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/398"
+    },
+    {
+      "name": "ZCG #400: Zcash Arabia",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400"
+    },
+    {
+      "name": "ZCG #389: Zebra test-effectiveness audit",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/389"
+    },
+    {
+      "name": "ZCG #390: Rvess Pay mobile-money integration",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/390"
+    },
+    {
+      "name": "ZCG #392: Halo2 verifier testing infrastructure",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/392"
+    },
+    {
+      "name": "ZCG #394: SHPH network layer",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/394"
+    },
+    {
+      "name": "ZCG #409: ZecBit: NFT infrastructure",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409"
+    },
+    {
+      "name": "ZCG #410: ZEC Invoice Preflight",
+      "detail": "Original grant application",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/410"
+    },
+    {
+      "name": "ZCG proposal status sheet",
+      "detail": "Official proposal and decision register",
+      "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=1164534734"
+    }
+  ],
+  "communities": [
+    {
+      "name": "ZecHub",
+      "detail": "August report \u00b7 Sep 1 | Prior-month bounties, education and DAO disclosure",
+      "url": "https://forum.zcashcommunity.com/t/53686/57"
+    },
+    {
+      "name": "Zcash Brazil",
+      "detail": "No new report found | Sep 1 reply; August report was posted Aug 31. September payments are included.",
+      "url": "https://forum.zcashcommunity.com/t/53702"
+    },
+    {
+      "name": "ZK AV Club",
+      "detail": "No in-window report found | Latest checked monthly report predates Sep 1.",
+      "url": "https://forum.zcashcommunity.com/t/53913"
+    },
+    {
+      "name": "Zcash en Espa\u00f1ol",
+      "detail": "August report \u00b7 Sep 2 | Prior-month channel metrics and educational output.",
+      "url": "https://forum.zcashcommunity.com/t/53815/33"
+    },
+    {
+      "name": "T\u00fcrkiye",
+      "detail": "No in-window report found | Earlier education and Zecmap report retained as context.",
+      "url": "https://forum.zcashcommunity.com/t/56274"
+    },
+    {
+      "name": "Nigeria",
+      "detail": "August report \u00b7 Sep 1 | Prior-month merchant onboarding and outreach.",
+      "url": "https://forum.zcashcommunity.com/t/53654/19"
+    },
+    {
+      "name": "Ghana",
+      "detail": "September update \u00b7 Sep 8 | AMA, residency and upcoming Sep 12 meetup.",
+      "url": "https://forum.zcashcommunity.com/t/56214/15"
+    },
+    {
+      "name": "Arabia",
+      "detail": "August report \u00b7 Sep 2 | Prior-month education and local activity.",
+      "url": "https://forum.zcashcommunity.com/t/57170/10"
+    },
+    {
+      "name": "Club Caracas",
+      "detail": "Linked coverage | Regional channel coverage; no standalone in-window report located.",
+      "url": "https://forum.zcashcommunity.com/t/56445"
+    },
+    {
+      "name": "Club Barcelona",
+      "detail": "Announcement \u00b7 Sep 8 | JTX / JET Europa collaboration; event outcomes pending.",
+      "url": "https://forum.zcashcommunity.com/t/51247/71"
+    },
+    {
+      "name": "CodeRaiz M\u00e9xico",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/55506"
+    },
+    {
+      "name": "Pesa Ya Siri / Tanzania",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/56593"
+    },
+    {
+      "name": "ruZcash",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/38485"
+    },
+    {
+      "name": "Boston Zcash",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/56748"
+    },
+    {
+      "name": "China",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/56438"
+    },
+    {
+      "name": "Quer\u00e9taro",
+      "detail": "Published Sep 3 \u00b7 event Aug 30 | Nym collaboration; event falls before this activity window.",
+      "url": "https://forum.zcashcommunity.com/t/55764/14"
+    },
+    {
+      "name": "East Africa",
+      "detail": "Proposal update \u00b7 Sep 7 | Festival proposal clarifications; no approval inferred.",
+      "url": "https://forum.zcashcommunity.com/t/57437"
+    },
+    {
+      "name": "France",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/5544"
+    },
+    {
+      "name": "Germany",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/50169"
+    },
+    {
+      "name": "India",
+      "detail": "Linked coverage | ZecHub disclosure covers earlier DAO approval; no new standalone report found.",
+      "url": "https://forum.zcashcommunity.com/t/54762"
+    },
+    {
+      "name": "Indonesia",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/38678"
+    },
+    {
+      "name": "Japan",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/54827"
+    },
+    {
+      "name": "Korea",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/56458/3"
+    },
+    {
+      "name": "Elzz",
+      "detail": "August report \u00b7 Sep 2 | Prior-month Proof of Privacy education campaign.",
+      "url": "https://forum.zcashcommunity.com/t/57390/1"
+    },
+    {
+      "name": "Ukraine",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/54059"
+    },
+    {
+      "name": "South Africa",
+      "detail": "Campaign update \u00b7 Sep 4 | Donation campaign closing stage; proceeds unavailable.",
+      "url": "https://forum.zcashcommunity.com/t/57133/7"
+    },
+    {
+      "name": "Zcast",
+      "detail": "Episode update \u00b7 Sep 1 | Spanish-language interview with Ethereum Spain.",
+      "url": "https://forum.zcashcommunity.com/t/54291/38"
+    },
+    {
+      "name": "ZECsy",
+      "detail": "Sep 1\u20135 report \u00b7 Sep 10 | Amsterdam events, walking tours and payment demos.",
+      "url": "https://forum.zcashcommunity.com/t/56509/5"
+    },
+    {
+      "name": "Belgium",
+      "detail": "No in-window report found | Linked source and September forum search reviewed.",
+      "url": "https://forum.zcashcommunity.com/t/56893"
+    },
+    {
+      "name": "PGPZ",
+      "detail": "Decision published Sep 2 | Aug 31 approval minutes; no new weekly memo located.",
+      "url": "https://forum.zcashcommunity.com/t/57394"
+    },
+    {
+      "name": "Engage",
+      "detail": "August report \u00b7 Sep 4 | Prior-month rewarded engagement analytics.",
+      "url": "https://forum.zcashcommunity.com/t/55358/16"
+    },
+    {
+      "name": "The Zcash Daily",
+      "detail": "Posts \u00b7 Sep 1\u201310 | Community editorial coverage.",
+      "url": "https://forum.zcashcommunity.com/t/57219"
+    }
+  ],
+  "requests": [
+    {
+      "name": "Zcash Grants Hub",
+      "detail": "Daniel Goh",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/24",
+      "amount": 3050
+    },
+    {
+      "name": "ShieldedScan",
+      "detail": "ShieldedScan",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/62",
+      "amount": 4060
+    },
+    {
+      "name": "ZecKit Post-M3 Stabilization and Developer Adoption",
+      "detail": "Dapps over Apps",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/44",
+      "amount": 5000
+    },
+    {
+      "name": "zcashtocash via ZcashLabs",
+      "detail": "ZcashLabs",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/60",
+      "amount": 6000
+    },
+    {
+      "name": "zec-ironwood-reconcile",
+      "detail": "Steven Hert",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/46",
+      "amount": 8250
+    },
+    {
+      "name": "Gleyo",
+      "detail": "Gleyo",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/43",
+      "amount": 9081.2
+    },
+    {
+      "name": "Self-Sovereign Zcash Testnet Faucet",
+      "detail": "Jino Labs",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/49",
+      "amount": 9280
+    },
+    {
+      "name": "CyphZec.com",
+      "detail": "Thomas Zarebczan",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/59",
+      "amount": 10000
+    },
+    {
+      "name": "ZecLedger",
+      "detail": "ZecLedger",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/42",
+      "amount": 10000
+    },
+    {
+      "name": "lightwalletd-rs",
+      "detail": "jpgonzalezra",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/41",
+      "amount": 10720
+    },
+    {
+      "name": "Blindvault",
+      "detail": "TIDJANI Walid",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/39",
+      "amount": 17000
+    },
+    {
+      "name": "Zallet RPC Parity Harness",
+      "detail": "Creativesonchain",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/45",
+      "amount": 20000
+    },
+    {
+      "name": "Zecmap",
+      "detail": "Batuhan",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/48",
+      "amount": 21300
+    },
+    {
+      "name": "Connaugh Zcash Videos",
+      "detail": "Connaugh",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/55",
+      "amount": 22000
+    },
+    {
+      "name": "ZAP1 Attestation Protocol and Verification Tooling",
+      "detail": "Frontier Compute",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/31",
+      "amount": 28000
+    },
+    {
+      "name": "ZecBooks",
+      "detail": "SaneApps",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/38",
+      "amount": 32000
+    },
+    {
+      "name": "CipherPay",
+      "detail": "Atmosphere Labs (Kenbak)",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/30",
+      "amount": 35000
+    },
+    {
+      "name": "Zafu Browser Extension",
+      "detail": "Rotko Networks OU",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/29",
+      "amount": 38000
+    },
+    {
+      "name": "Zapp",
+      "detail": "Renee Chiu",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/40",
+      "amount": 40000
+    },
+    {
+      "name": "Open-Source Zcash Hardware-Wallet SDK",
+      "detail": "wh00hw",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/28",
+      "amount": 40000
+    },
+    {
+      "name": "Nozy Wallet",
+      "detail": "Leonine DAO",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/37",
+      "amount": 60000
+    },
+    {
+      "name": "THORSwap / Metro",
+      "detail": "THORSwap Labs",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/32",
+      "amount": 60000
+    },
+    {
+      "name": "Expanding Zcash In Unstoppable Wallet",
+      "detail": "Horizontal Systems",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/25",
+      "amount": 80000
+    },
+    {
+      "name": "ZcashNames",
+      "detail": "ZcashMe, Inc.",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/34",
+      "amount": 122400
+    },
+    {
+      "name": "Frontier Compute Zcash Security Research and Remediation Pack",
+      "detail": "Frontier Compute LLC",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/63",
+      "amount": 136250
+    },
+    {
+      "name": "Zebra Critical Vulnerability Bug Bounty (CVE-2026-34202)",
+      "detail": "robustfengbin",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/54",
+      "amount": 150000
+    },
+    {
+      "name": "Bonus Grant \u2014 Ironwood zk-SNARK Formal Verification",
+      "detail": "Jason McGee",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/52",
+      "amount": 261058
+    },
+    {
+      "name": "CipherScan",
+      "detail": "Kenbak",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/47",
+      "amount": 375000
+    },
+    {
+      "name": "Temporary Detectable Unlimited Mint and Sell Exploit",
+      "detail": "Alex Sol",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/57",
+      "amount": 400000
+    },
+    {
+      "name": "Five Critical Zebra Consensus Divergence Vulnerabilities",
+      "detail": "sangsoo-osec",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/58",
+      "amount": 425000
+    },
+    {
+      "name": "Zec.rocks (16 months of uptime)",
+      "detail": "Zec.rocks",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/61",
+      "amount": 584992
+    },
+    {
+      "name": "Ironwood external audit reimbursement",
+      "detail": "ValarGroup",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/56",
+      "amount": 599000
+    },
+    {
+      "name": "Ironwood zk-SNARK Formal Verification (Project Tachyon)",
+      "detail": "Tachyon Foundation",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/50",
+      "amount": 738942
+    },
+    {
+      "name": "Orchard Counterfeiting Vulnerability Bug Bounty",
+      "detail": "Taylor Hornby",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/51",
+      "amount": 750000
+    },
+    {
+      "name": "Bonus Grant \u2014 Orchard Counterfeiting Bug Bounty",
+      "detail": "Jason McGee",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/53",
+      "amount": 750000
+    },
+    {
+      "name": "ValarGroup Ironwood Work",
+      "detail": "ValarGroup",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/64",
+      "amount": 1203000
+    },
+    {
+      "name": "ZODL Q1 2026 Core Protocol Development",
+      "detail": "ZODL",
+      "url": "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/33",
+      "amount": 1950000
+    }
+  ],
+  "zcg": [
+    {
+      "name": "0xramp",
+      "detail": "Under review | Non-custodial ZEC and local-currency payment rails.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408",
+      "amount": 206000,
+      "amountLabel": "$206,000"
+    },
+    {
+      "name": "24 Videos @zkMarketer",
+      "detail": "Under review | 24 documentary-style films over 12 weeks.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/420",
+      "amount": 60000,
+      "amountLabel": "$60,000"
+    },
+    {
+      "name": "Coin Wallet integration",
+      "detail": "Under review | Shielded ZEC support across web, desktop and mobile.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/412",
+      "amount": 100000,
+      "amountLabel": "$100,000"
+    },
+    {
+      "name": "Colosseum: Crypto World's Fair",
+      "detail": "Under review | A Zcash track in the multi-chain developer competition.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/414",
+      "amount": 250000,
+      "amountLabel": "$250,000"
+    },
+    {
+      "name": "East Africa: Blockchain Festival",
+      "detail": "Under review | Nairobi booth, merchant spending and follow-up onboarding.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/415",
+      "amount": 11040,
+      "amountLabel": "$11,040"
+    },
+    {
+      "name": "Kestrel + ZecAuth",
+      "detail": "Under review | Wallet connectivity, a mobile wallet and African fiat integration.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/421",
+      "amount": 12000,
+      "amountLabel": "$12,000"
+    },
+    {
+      "name": "Privacy Literacy Lab Canada",
+      "detail": "Under review | Interactive privacy scenarios and a dated regulatory source map.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404",
+      "amount": 15000,
+      "amountLabel": "$15,000"
+    },
+    {
+      "name": "Recoverify",
+      "detail": "Under review | Verify wallet backups while the original wallet is still available.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403",
+      "amount": 2990,
+      "amountLabel": "$2,990"
+    },
+    {
+      "name": "Taking Zcash to the Streets",
+      "detail": "Under review | A Turkish video series and Istanbul street interviews.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401",
+      "amount": 6955,
+      "amountLabel": "$6,955"
+    },
+    {
+      "name": "Zaino security audit",
+      "detail": "Under review | Independent audit; the final budget depends on scoping.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407",
+      "amount": null,
+      "amountLabel": "$60k-$120k (indicative)"
+    },
+    {
+      "name": "Zcash awareness campaign",
+      "detail": "Under review | Education and community content on X and Binance Square.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/417",
+      "amount": 5000,
+      "amountLabel": "$5,000"
+    },
+    {
+      "name": "Zcash Flutter Wallet SDK",
+      "detail": "Under review | Dart bindings for the official iOS and Android wallet SDKs.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/419",
+      "amount": 10000,
+      "amountLabel": "$10,000"
+    },
+    {
+      "name": "Zcash SeedSigner",
+      "detail": "Under review | An open-source, air-gapped signing device built from generic parts.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/411",
+      "amount": 65000,
+      "amountLabel": "$65,000"
+    },
+    {
+      "name": "Zcash World, Mumbai",
+      "detail": "Under review | Public event and merchant onboarding around Devcon 8.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+      "amount": 20300,
+      "amountLabel": "$20,300"
+    },
+    {
+      "name": "zcashlib",
+      "detail": "Under review | Pure-JavaScript support for transparent and shielded Zcash.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/413",
+      "amount": 150000,
+      "amountLabel": "$150,000"
+    },
+    {
+      "name": "ZecScope",
+      "detail": "Under review | Track ZIPs, network upgrades and wallet readiness.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/418",
+      "amount": 36300,
+      "amountLabel": "$36,300"
+    },
+    {
+      "name": "Constant-time hardening",
+      "detail": "Approved | Async approval; broader scope and the initial milestone discussed.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/342",
+      "amount": 10000,
+      "amountLabel": "$10,000"
+    },
+    {
+      "name": "WalletConnect integration",
+      "detail": "Approved | Reusable Zcash integration requested beyond the Noir wallet.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/391",
+      "amount": 50000,
+      "amountLabel": "$50,000"
+    },
+    {
+      "name": "ZECsy community building",
+      "detail": "Approved | Nine-month milestones only; Hanh voted against.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/402",
+      "amount": 550000,
+      "amountLabel": "$550,000"
+    },
+    {
+      "name": "BTCPayServer GraphQL client",
+      "detail": "Approved | Multi-store support and migration to the Zkool GraphQL API.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/395",
+      "amount": 16800,
+      "amountLabel": "$16,800"
+    },
+    {
+      "name": "Pretty Good Policy for Zcash",
+      "detail": "Approved | Policy work approved; Paul recused from the discussion.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/396",
+      "amount": 750000,
+      "amountLabel": "$750,000"
+    },
+    {
+      "name": "Hack-to-Dark, Mumbai",
+      "detail": "Approved | Developer event proposed for November 3-4.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/398",
+      "amount": 43524,
+      "amountLabel": "$43,524"
+    },
+    {
+      "name": "Zcash Arabia",
+      "detail": "Approved | August-December programme; Artkor and Zerodartz voted against.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400",
+      "amount": 27000,
+      "amountLabel": "$27,000"
+    },
+    {
+      "name": "Zebra test-effectiveness audit",
+      "detail": "Declined | Committee cited limited usefulness and false-positive concerns.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/389",
+      "amount": 45000,
+      "amountLabel": "$45,000"
+    },
+    {
+      "name": "Rvess Pay mobile-money integration",
+      "detail": "Declined | Committee asked for more reuse of existing payment components.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/390",
+      "amount": 32000,
+      "amountLabel": "$32,000"
+    },
+    {
+      "name": "Halo2 verifier testing infrastructure",
+      "detail": "Declined | Need and ability to detect circuit logic defects were not established.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/392",
+      "amount": 4500,
+      "amountLabel": "$4,500"
+    },
+    {
+      "name": "SHPH network layer",
+      "detail": "Declined | Committee raised scope, track-record and differentiation concerns.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/394",
+      "amount": 25000,
+      "amountLabel": "$25,000"
+    },
+    {
+      "name": "ZecBit: NFT infrastructure",
+      "detail": "Declined | Proposed ZSA metadata, indexing and shielded payment infrastructure.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+      "amount": 48000,
+      "amountLabel": "$48,000"
+    },
+    {
+      "name": "ZEC Invoice Preflight",
+      "detail": "Declined | Proposed ZIP-321 request validation before merchants share a QR code.",
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/410",
+      "amount": 3000,
+      "amountLabel": "$3,000"
+    }
+  ]
+}
