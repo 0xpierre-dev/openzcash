@@ -13,9 +13,9 @@
       "cover": "/monthly/preview/monthly/page-001.jpg",
       "manifest": "/monthly/preview/monthly/pages.json",
       "assetBase": "/monthly/preview/monthly",
-      "sha256": "c485f94cc1bc8672e10f5bdf20ad1f3c605a4372f8f687415979f708a609c47a",
-      "bytes": 2312567,
-      "pageCount": 14,
+      "sha256": "49bdaa6bdd69fc420a209daf45736ffa595186864f75dd2bb3713cd76e0fe192",
+      "bytes": 2275196,
+      "pageCount": 13,
       "pageWidth": 1200,
       "pageHeight": 675
     },
@@ -32,9 +32,9 @@
       "cover": "/monthly/preview/voter/page-001.jpg",
       "manifest": "/monthly/preview/voter/pages.json",
       "assetBase": "/monthly/preview/voter",
-      "sha256": "9eb481f1874c5de341901f5c6840209e6ffbbf6d36dc7fc5c4a94802f8266f7d",
-      "bytes": 250422,
-      "pageCount": 4,
+      "sha256": "d7cae03efe8ab99b5f2aa84114cf102751ff242f9880f066ad8f2ecab3d2826a",
+      "bytes": 287438,
+      "pageCount": 6,
       "pageWidth": 1200,
       "pageHeight": 675
     }

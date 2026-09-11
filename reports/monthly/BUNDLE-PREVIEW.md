@@ -1,6 +1,8 @@
 # Monthly reading-set preview
 
-Open `/monthly-preview` in a local build. This is a UI proposal using the dated September 1–10 reference, not a new monthly production issue. The sample PDFs contain selected pages, new covers and navigation notes; the final concise editorial selection still needs its own complete production review.
+Open `/monthly-preview` in a local build. This is a UI proposal using the dated September 1–10 reference, not a new monthly production issue. The final concise editorial selection still needs its own complete production review.
+
+Monthly has 13 pages and ends with the Zcon7 update. Voter Supplement has 6 pages: a cover, NU7 advisory polling, and the complete 37-proposal Q3 register across four pages. Every proposal has its scope, applicant, exact USD request and a direct original proposal link in both the PDF and reader. The register is alphabetical, shows the September 10 cutoff, and identifies the $9,014,383.20 total as requested and unawarded. Neither document has a generic instructions or methodology closing page. Cover metrics describe the content rather than the sample's page count.
 
 The month selector owns the issue. Three visible tabs own the type of reading: Monthly, Voter Supplement, and Sources & Data. Text labels and icons identify the views; gold, green and slate accents reinforce the selection. The reader keeps each PDF's page position, count, download and URL independent. Both sets of arrows turn one page.
 
