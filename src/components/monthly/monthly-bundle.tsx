@@ -110,7 +110,7 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
   }
   return <div ref={root} className={styles.preview} data-publication={view}>
     <header className={styles.header}>
-      <Link href="/monthly" className={styles.brand}><img src="/zcash-mark.svg" alt="" width="25" height="25"/><strong>OpenZcash</strong><i/><span>MONTHLY</span></Link>
+      <Link href="/" className={styles.brand} aria-label="OpenZcash apps"><img src="/zcash-mark.svg" alt="" width="25" height="25"/><strong>OpenZcash</strong><i/><span>MONTHLY</span></Link>
       <div className={styles.month}><select aria-label="Publication edition" value={data.id} onChange={e=>{window.location.href=`/monthly/${e.target.value}?publication=${view}`;}}>{editions.map(edition=><option key={edition.id} value={edition.id}>{editionLabel(edition)}</option>)}</select><small>{docs.monthly.kind==="period"?"Partial period":docs.monthly.label}</small></div>
       <div className={styles.actions}>{preview&&<span className={styles.previewBadge}>Layout preview</span>}<button onClick={expand} aria-label={fullScreen?"Exit full screen":"Enter full screen"}><Symbol name="expand"/></button>{view!=="sources"?<a href={docs[view].pdf} download className={styles.download}><Symbol name="download"/><span>Download PDF</span></a>:null}</div>
     </header>
