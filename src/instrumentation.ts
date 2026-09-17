@@ -11,6 +11,7 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   if (process.env.NODE_ENV !== "production") return;
+  if (process.env.DISABLE_AUTO_REFRESH === "true") return;
 
   // Every 6h: the import is idempotent and cheap, and the signal warms are
   // TTL-guarded (applicant 6h, searches 24h), so most cycles only refresh

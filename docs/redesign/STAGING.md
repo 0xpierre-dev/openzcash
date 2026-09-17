@@ -32,8 +32,8 @@ specifically for this environment. Production credentials are not accepted.
 The administrator password is available only in Railway → redesign → zbo →
 Variables → ADMIN_PASSWORD. Do not copy it into documentation, commits or chat.
 
-`DISABLE_AUTO_REFRESH=true` pauses the automatic spreadsheet refresh and cron
-refresh endpoint so the accounting snapshot can be compared. Live external
+`DISABLE_AUTO_REFRESH=true` pauses the startup/recurring scheduler, automatic
+spreadsheet refresh and cron endpoint so the accounting snapshot can be compared. Live external
 prices, chain heights, feeds and proposal signals retain their existing read
 behavior and may change; this is not a frozen image of the entire internet.
 Any writes or manual imports affect only the test database. This environment has
@@ -63,7 +63,12 @@ This branch's Railway start command verifies the exact redesign environment ID
 and database before migrations run. It refuses to start against production.
 Search-engine indexing is disabled with metadata and response headers.
 
-Deploy from this branch with explicit environment and service identifiers:
+Railway's `redesign` environment is connected to `Michae2xl/openzcash`, branch
+`michae2xl/redesign-staging`. Pushes to this branch publish this test environment.
+The first successful GitHub deployment was `a856f3e0-a748-4572-b92e-18abea147705`.
+Production remains connected to its existing deployment configuration.
+
+For a manual CLI deployment, use explicit environment and service identifiers:
 
 ```sh
 railway up --project 5476eada-862a-47bd-9166-49be9933d33c \
@@ -79,7 +84,7 @@ No DNS or production-domain changes are part of this preview.
 ## Validation
 
 - TypeScript and production build passed.
-- 333 unit tests passed; 8 pre-existing integration tests skipped.
+- 335 unit tests passed; 8 pre-existing integration tests skipped.
 - Scoped ESLint: zero errors (two small local-image warnings).
 - 254 protected files checked byte-for-byte against production, with no changes.
 - Full public-table row comparison passed; see `data-parity.json`.

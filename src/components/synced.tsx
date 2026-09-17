@@ -21,8 +21,9 @@ export function syncedAgo(at: Date | null): string {
 export async function Synced({ className }: { className?: string }) {
   const at = await cached("latestImportAt", 60_000, () => latestImportAt());
   const validAt = at && Number.isFinite(at.getTime()) ? at : null;
+  const paused = process.env.DISABLE_AUTO_REFRESH === "true";
   // Allow one hour of collection/cache grace beyond the six-hour schedule.
-  const overdue = validAt && nowMs() - validAt.getTime() > 7 * 60 * 60_000;
+  const overdue = !paused && validAt && nowMs() - validAt.getTime() > 7 * 60 * 60_000;
   return (
     <p className={cn("text-xs text-stone-600", className)}>
       Last spreadsheet collection:{" "}
@@ -32,7 +33,7 @@ export async function Synced({ className }: { className?: string }) {
         </time>
       ) : "not recorded yet"}
       {overdue ? <span className="font-medium text-amber-800"> · Collection overdue</span> : null}
-      {" · "}scheduled every 6h. This is retrieval time, not the source publication date.
+      {" · "}{paused ? "Test snapshot; automatic collection is paused." : "scheduled every 6h."} This is retrieval time, not the source publication date.
     </p>
   );
 }
