@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FeatureLink } from "@/components/workspace";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import {
   getZechubProposals,
@@ -281,14 +281,15 @@ function ProposalRow({
 }
 
 export default async function ZechubDaoPage() {
-  const [proposals, snapshot, payouts, series, changes, quote] = await Promise.all([
-    getZechubProposals(40),
-    latestTreasurySnapshot(),
-    treasuryPayouts(),
-    treasurySeries(),
-    listChangelog(7, 10, "zechub").catch(() => []),
-    currentZecUsdQuote(),
-  ]);
+  const [proposals, snapshot, payouts, series, changes, quote] =
+    await Promise.all([
+      getZechubProposals(40),
+      latestTreasurySnapshot(),
+      treasuryPayouts(),
+      treasurySeries(),
+      listChangelog(7, 10, "zechub").catch(() => []),
+      currentZecUsdQuote(),
+    ]);
   const allocations = snapshot ? await treasuryAllocations(snapshot.id) : [];
   const previous = series.length >= 2 ? series[series.length - 2] : null;
 
@@ -305,9 +306,10 @@ export default async function ZechubDaoPage() {
   const displayUsd = (cents: bigint | null | undefined) =>
     cents == null ? "Unavailable" : formatUsdCents(cents);
   const quoteTime = quote?.quotedAt ?? quote?.fetchedAt;
-  const priceNote = quote && quoteTime
-    ? `CoinGecko${quote.stale ? " · stale quote" : ""} · ${quote.quotedAt ? "" : "retrieved "}${quoteTime.slice(0, 16).replace("T", " ")} UTC`
-    : `spreadsheet price · ${fmtDate(snapshot?.capturedOn ?? "")}`;
+  const priceNote =
+    quote && quoteTime
+      ? `CoinGecko${quote.stale ? " · stale quote" : ""} · ${quote.quotedAt ? "" : "retrieved "}${quoteTime.slice(0, 16).replace("T", " ")} UTC`
+      : `spreadsheet price · ${fmtDate(snapshot?.capturedOn ?? "")}`;
   const spendableUsdCents = zatToUsdCents(
     snapshot?.fpfUnreservedZat ?? null,
     snapshot?.zecPriceCents ?? null,
@@ -394,10 +396,17 @@ export default async function ZechubDaoPage() {
         }
       />
 
+      <nav className="ws-catalog-tabs" aria-label="ZecHub sections">
+        <a href="#treasury">Treasury overview</a>
+        <a href="#allocation">Allocations & payouts</a>
+        <a href="#governance">Governance</a>
+        <a href="/zechub/copilot">Research with Copilot ↗</a>
+      </nav>
+      <div id="treasury" />
       {snapshot ? (
         <>
           <SourceDateNotice date={snapshot.capturedOn} now={nowMs()} />
-          <section className="relative mb-6 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/[0.08] via-stone-50 to-stone-50 p-6 shadow-lg shadow-stone-300/50 ring-1 ring-inset ring-stone-900/5">
+          <section className="ws-treasury-hero">
             <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-amber-500/15 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-10 h-44 w-44 rounded-full bg-emerald-500/10 blur-3xl" />
             <div className="relative">
@@ -412,10 +421,13 @@ export default async function ZechubDaoPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-semibold text-stone-700 tnum sm:text-xl">
-                    {valuation?.totalUsdCents != null ? "≈ " : ""}{displayUsd(valuation?.totalUsdCents)}
+                    {valuation?.totalUsdCents != null ? "≈ " : ""}
+                    {displayUsd(valuation?.totalUsdCents)}
                   </p>
                   <p className="mt-1 text-xs text-stone-500">
-                    {quote ? "Indicative USD value of recorded ZEC" : "At the spreadsheet's recorded price"}
+                    {quote
+                      ? "Indicative USD value of recorded ZEC"
+                      : "At the spreadsheet's recorded price"}
                   </p>
                 </div>
               </div>
@@ -446,7 +458,10 @@ export default async function ZechubDaoPage() {
             />
           </section>
 
-          <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <section
+            id="treasury-metrics"
+            className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3"
+          >
             <Stat
               label="Available in source snapshot"
               value={formatUsdCents(spendableUsdCents, { compact: true })}
@@ -466,7 +481,10 @@ export default async function ZechubDaoPage() {
           </section>
 
           {allocationSegments.length > 0 ? (
-            <section className="mb-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
+            <section
+              id="allocation"
+              className="mb-8 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2"
+            >
               <div className="flex min-w-0 flex-col">
                 <h2 className="mb-3 text-sm font-semibold text-stone-700">
                   FPF allocation by category
@@ -589,7 +607,10 @@ export default async function ZechubDaoPage() {
         </section>
       ) : null}
 
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <section
+        id="governance"
+        className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3"
+      >
         <Stat
           label="Recent proposals"
           value={String(proposals.length)}
@@ -637,34 +658,13 @@ export default async function ZechubDaoPage() {
         </Card>
       )}
 
-      {/* Governance copilot — the ZecHub counterpart of /zcg/copilot. */}
-      <Link href="/zechub/copilot" className="group mt-6 block">
-        <div className="relative overflow-hidden rounded-2xl border border-stone-800/60 bg-gradient-to-br from-stone-900 via-stone-900 to-amber-950 p-6 shadow-lg shadow-stone-400/30 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-xl">
-          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-          <div className="relative flex items-center justify-between gap-4">
-            <div className="min-w-0">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/80 ring-1 ring-inset ring-white/15">
-                New · agent skill
-              </span>
-              <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                ZecHub Copilot
-              </h2>
-              <p className="mt-1 max-w-xl text-sm text-stone-300">
-                Ask your own agent why a vote passed or failed. It computes both
-                tests a proposal has to clear (67% of yes+no and 40% turnout),
-                names every voter, and reads the treasury without mistaking the
-                headline total for spendable money.
-              </p>
-            </div>
-            <span className="hidden shrink-0 items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/15 sm:inline-flex">
-              Get the skill{" "}
-              <span className="transition group-hover:translate-x-0.5">→</span>
-            </span>
-          </div>
-        </div>
-      </Link>
-
+      <FeatureLink
+        eyebrow="Governance research"
+        title="ZecHub Copilot"
+        description="Explore vote thresholds, voter records and treasury sources with your own agent. Headline balances and spendable funds remain distinct."
+        href="/zechub/copilot"
+        label="Explore Copilot"
+      />
       <p className="mt-4 text-xs text-stone-500">
         Treasury balances and payout records mirror the{" "}
         <a
@@ -681,8 +681,8 @@ export default async function ZechubDaoPage() {
           : ""}
         , re-imported every 6 hours. Indicative USD values apply the separately
         dated market quote to those recorded balances; they do not establish
-        current holdings or available funds. Proposals are read live from the DAO DAO
-        indexer. The{" "}
+        current holdings or available funds. Proposals are read live from the
+        DAO DAO indexer. The{" "}
         <span className="rounded bg-emerald-500/10 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
           funded
         </span>{" "}

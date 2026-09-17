@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import "./redesign.css";
+import "./workspace.css";
 import { ShellGate } from "@/components/shell-gate";
 import { TapFeedback } from "@/components/tap-feedback";
 

@@ -1,3 +1,12 @@
+import {
+  Facts,
+  RelatedLinks,
+  RecordLayout,
+  ProgressRail,
+  SectionHeading,
+  SourceNote,
+} from "@/components/workspace";
+import { CopyPageLink } from "@/components/record-actions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
@@ -39,15 +48,9 @@ export default async function GrantDetailPage({
 
   return (
     <>
-      <Link
-        href="/zcg/grants"
-        className="mb-4 inline-block text-xs text-stone-600 hover:text-stone-800"
-      >
-        ‹ All grants
-      </Link>
-
       <PageHeader
         title={g}
+        actions={<CopyPageLink />}
         subtitle={`${head.recipientNameRaw}${head.category ? ` · ${head.category}` : ""} · ${paid.length} of ${milestones.length} milestones paid`}
       />
 
@@ -77,56 +80,182 @@ export default async function GrantDetailPage({
         />
       </section>
 
-      <p className="mb-6 text-xs text-stone-600">
-        USD figures are budgeted milestone values. Unpaid entries may include
-        cancelled milestones and are not necessarily outstanding commitments.
-        Recorded payment does not independently verify delivery. Source links
-        open the live spreadsheet rows, which may have changed since collection.
-      </p>
+      <RecordLayout
+        aside={
+          <>
+            <Facts
+              title="Grant at a glance"
+              rows={[
+                [
+                  "Recipient",
+                  <Link
+                    key="recipient"
+                    href={`/zcg/recipient?r=${encodeURIComponent(head.recipientNameRaw ?? "")}`}
+                  >
+                    {head.recipientNameRaw}
+                  </Link>,
+                ],
+                ["Category", head.category ?? "Uncategorized"],
+                [
+                  "Status",
+                  STATUS_LABEL[head.grantStatus ?? ""] ??
+                    head.grantStatus ??
+                    "Unknown",
+                ],
+                ["Milestones", String(milestones.length)],
+                [
+                  "Source",
+                  <SourceRecordLink
+                    key="source"
+                    gid={head.sourceSheetGid}
+                    rowIndex={head.sourceRowIndex}
+                    importedAt={head.importedAt}
+                  />,
+                ],
+              ]}
+            />
+            <RelatedLinks
+              links={[
+                {
+                  href: "/zcg/schedule",
+                  label: "Payment schedule",
+                  description: "Future dated approvals",
+                },
+                {
+                  href: "/zcg/disbursements",
+                  label: "Full ledger",
+                  description: "All payment records",
+                },
+                { href: "/zcg/methodology", label: "How to read this record" },
+              ]}
+            />
+          </>
+        }
+      >
+        <ProgressRail paid={paid.length} total={milestones.length} />
+        <SectionHeading
+          title="Milestone history"
+          description="Budget, payment status and the original evidence for each entry."
+        />
+        {open.length > 0 ? (
+          <section className="mb-8">
+            <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
+              Unpaid milestones
+              <Badge tone="amber">{open.length}</Badge>
+            </h2>
+            <Card className="overflow-x-auto p-0">
+              <table className="w-full min-w-[34rem] text-left text-sm">
+                <thead className="text-[11px] uppercase tracking-wider text-stone-600">
+                  <tr className="border-b border-stone-200">
+                    <th className="px-4 py-3 font-medium">Milestone</th>
+                    <th className="px-4 py-3 font-medium">Deliverable</th>
+                    <th className="px-4 py-3 text-right font-medium">
+                      Budgeted USD
+                    </th>
+                    <th className="px-4 py-3 text-right font-medium">
+                      Estimated date
+                    </th>
+                    <th className="px-4 py-3 text-right font-medium">Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {open.map((m) => (
+                    <tr
+                      key={m.id}
+                      className="tbl-row border-b border-stone-200 last:border-0"
+                    >
+                      <td className="px-4 py-2.5 font-medium text-stone-900">
+                        {m.milestoneLabel ?? "·"}
+                      </td>
+                      <td className="max-w-[20rem] px-4 py-2.5 text-stone-600">
+                        <span className="block truncate">
+                          {m.deliverable ?? m.project ?? "·"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
+                        {formatUsdCents(m.amountUsdCents)}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
+                        {(m.estimatedPayoutDate ?? m.paidOutRaw) || "TBD"}
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <SourceRecordLink
+                          gid={m.sourceSheetGid}
+                          rowIndex={m.sourceRowIndex}
+                          importedAt={m.importedAt}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+          </section>
+        ) : null}
 
-      {open.length > 0 ? (
-        <section className="mb-8">
+        <section>
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-            Unpaid milestones
-            <Badge tone="amber">{open.length}</Badge>
+            Paid milestones
+            <Badge tone="emerald">{paid.length}</Badge>
           </h2>
           <Card className="overflow-x-auto p-0">
             <table className="w-full min-w-[34rem] text-left text-sm">
               <thead className="text-[11px] uppercase tracking-wider text-stone-600">
                 <tr className="border-b border-stone-200">
                   <th className="px-4 py-3 font-medium">Milestone</th>
-                  <th className="px-4 py-3 font-medium">Deliverable</th>
                   <th className="px-4 py-3 text-right font-medium">
                     Budgeted USD
                   </th>
-                  <th className="px-4 py-3 text-right font-medium">
-                    Estimated date
-                  </th>
+                  <th className="px-4 py-3 text-right font-medium">ZEC</th>
+                  <th className="px-4 py-3 text-right font-medium">ZEC/USD</th>
+                  <th className="px-4 py-3 text-right font-medium">Paid on</th>
                   <th className="px-4 py-3 text-right font-medium">Source</th>
                 </tr>
               </thead>
               <tbody>
-                {open.map((m) => (
+                {paid.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-4 py-8 text-center text-sm text-stone-600"
+                    >
+                      No milestones paid yet.
+                    </td>
+                  </tr>
+                ) : null}
+                {paid.map((m) => (
                   <tr
                     key={m.id}
                     className="tbl-row border-b border-stone-200 last:border-0"
                   >
                     <td className="px-4 py-2.5 font-medium text-stone-900">
                       {m.milestoneLabel ?? "·"}
-                    </td>
-                    <td className="max-w-[20rem] px-4 py-2.5 text-stone-600">
-                      <span className="block truncate">
-                        {m.deliverable ?? m.project ?? "·"}
-                      </span>
+                      <small className="block mt-1 font-normal text-stone-500">
+                        {m.deliverable ?? m.project}
+                      </small>
                     </td>
                     <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
                       {formatUsdCents(m.amountUsdCents)}
                     </td>
+                    <td className="px-4 py-2.5 text-right text-stone-700 tnum">
+                      {m.zecDisbursedZat != null
+                        ? formatZec(m.zecDisbursedZat, { symbol: false })
+                        : "·"}
+                    </td>
+                    <td className="px-4 py-2.5 text-right text-stone-600 tnum">
+                      {m.usdDisbursedZecRateCents != null
+                        ? formatUsdCents(m.usdDisbursedZecRateCents)
+                        : "·"}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
-                      {(m.estimatedPayoutDate ?? m.paidOutRaw) || "TBD"}
+                      {m.paidOutDate ?? "·"}
                     </td>
                     <td className="px-4 py-2.5 text-right">
-                      <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
+                      <SourceRecordLink
+                        gid={m.sourceSheetGid}
+                        rowIndex={m.sourceRowIndex}
+                        importedAt={m.importedAt}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -134,69 +263,13 @@ export default async function GrantDetailPage({
             </table>
           </Card>
         </section>
-      ) : null}
-
-      <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-          Paid milestones
-          <Badge tone="emerald">{paid.length}</Badge>
-        </h2>
-        <Card className="overflow-x-auto p-0">
-          <table className="w-full min-w-[34rem] text-left text-sm">
-            <thead className="text-[11px] uppercase tracking-wider text-stone-600">
-              <tr className="border-b border-stone-200">
-                <th className="px-4 py-3 font-medium">Milestone</th>
-                <th className="px-4 py-3 text-right font-medium">Budgeted USD</th>
-                <th className="px-4 py-3 text-right font-medium">ZEC</th>
-                <th className="px-4 py-3 text-right font-medium">ZEC/USD</th>
-                <th className="px-4 py-3 text-right font-medium">Paid on</th>
-                <th className="px-4 py-3 text-right font-medium">Source</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paid.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="px-4 py-8 text-center text-sm text-stone-600"
-                  >
-                    No milestones paid yet.
-                  </td>
-                </tr>
-              ) : null}
-              {paid.map((m) => (
-                <tr
-                  key={m.id}
-                  className="tbl-row border-b border-stone-200 last:border-0"
-                >
-                  <td className="px-4 py-2.5 font-medium text-stone-900">
-                    {m.milestoneLabel ?? "·"}
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
-                    {formatUsdCents(m.amountUsdCents)}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-stone-700 tnum">
-                    {m.zecDisbursedZat != null
-                      ? formatZec(m.zecDisbursedZat, { symbol: false })
-                      : "·"}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-stone-600 tnum">
-                    {m.usdDisbursedZecRateCents != null
-                      ? formatUsdCents(m.usdDisbursedZecRateCents)
-                      : "·"}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
-                    {m.paidOutDate ?? "·"}
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      </section>
+        <SourceNote>
+          USD figures are budgeted milestone values. Unpaid entries may include
+          cancelled milestones and are not necessarily outstanding commitments.
+          Recorded payment does not independently verify delivery. Source links
+          open live spreadsheet rows, which may have changed since collection.
+        </SourceNote>
+      </RecordLayout>
     </>
   );
 }

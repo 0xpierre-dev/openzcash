@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { downloadTableCsv } from "./record-actions";
 
 /**
  * Tabela filtrável estilo Excel — client component reutilizável.
@@ -44,7 +45,7 @@ export interface Column<T> {
   key: string;
   header: string;
   align?: "left" | "right" | "center";
-  /** Hide this column below the sm breakpoint (mobile) to reduce table width. */
+  /** Marks supplementary fields; these remain accessible via horizontal scroll on mobile. */
   mobileHidden?: boolean;
   sortable?: boolean;
   filterable?: boolean;
@@ -66,6 +67,8 @@ type SortDir = "asc" | "desc";
 export interface DataTableProps<T> {
   columns: Column<T>[];
   rows: T[];
+  initialPicks?: Record<string, string[]>;
+  initialQuery?: string;
   initialSort?: { key: string; dir: SortDir };
   /** Habilita a barra de busca global no topo. Default: true. */
   globalSearch?: boolean;
@@ -123,6 +126,8 @@ export function DataTable<T>({
   rows,
   initialSort,
   globalSearch = true,
+  initialPicks = {},
+  initialQuery = "",
   className,
   maxHeight = "max-h-[70vh]",
   rowKey,
@@ -132,9 +137,10 @@ export function DataTable<T>({
   );
   const [filters, setFilters] = useState<Record<string, string>>({});
   /** Valores marcados por coluna no modo "select" (vazio = sem filtro). */
-  const [picks, setPicks] = useState<Record<string, string[]>>({});
+  const [picks, setPicks] = useState<Record<string, string[]>>(initialPicks);
   const [openFilter, setOpenFilter] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
+  const [page, setPage] = useState(1);
 
   const colByKey = useMemo(() => {
     const m = new Map<string, Column<T>>();
@@ -165,6 +171,7 @@ export function DataTable<T>({
   }
 
   function togglePick(key: string, value: string) {
+    setPage(1);
     setPicks((prev) => {
       const cur = prev[key] ?? [];
       const next = cur.includes(value)
@@ -239,30 +246,137 @@ export function DataTable<T>({
     Object.values(picks).some((v) => v.length > 0);
 
   function setColumnFilter(key: string, value: string) {
+    setPage(1);
     setFilters((prev) => ({ ...prev, [key]: value }));
   }
 
+  const statusColumn = columns.find(
+    (c) => c.filterType === "select" && /status|verdict/i.test(c.key),
+  );
+  const statusValues = statusColumn
+    ? (distinctByCol.get(statusColumn.key) ?? [])
+    : [];
+  const pageSize = 25;
+  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const visible = sorted.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+  const clear = () => {
+    setQuery("");
+    setFilters({});
+    setPicks({});
+    setPage(1);
+  };
   return (
-    <div className={className}>
-      {globalSearch ? (
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search…"
-            className="w-full max-w-xs rounded-lg bg-white px-3 py-1.5 text-sm text-stone-800 ring-1 ring-stone-200 placeholder:text-stone-600 focus:ring-amber-500/40"
-          />
-          {isFiltered ? (
-            <span className="shrink-0 text-xs text-stone-600 tnum">
-              {sorted.length} of {rows.length} rows
-            </span>
-          ) : null}
+    <div className={cn("ws-data-table", className)}>
+      {statusColumn && (
+        <div
+          className="ws-status-tabs"
+          role="group"
+          aria-label={`Filter by ${statusColumn.header}`}
+        >
+          {["", ...statusValues].map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={
+                value
+                  ? (picks[statusColumn.key] ?? []).includes(value)
+                  : !(picks[statusColumn.key] ?? []).length
+              }
+              onClick={() => {
+                setPicks((p) => ({
+                  ...p,
+                  [statusColumn.key]: value ? [value] : [],
+                }));
+                setPage(1);
+              }}
+            >
+              {value || "All"}
+              <span>
+                {value
+                  ? rows.filter(
+                      (r) => cellText(statusColumn, r).trim() === value,
+                    ).length
+                  : rows.length}
+              </span>
+            </button>
+          ))}
         </div>
-      ) : null}
-
+      )}
+      <div className="ws-table-toolbar">
+        {globalSearch && (
+          <label className="ws-table-search">
+            <span aria-hidden>⌕</span>
+            <input
+              type="search"
+              aria-label="Search records"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setPage(1);
+              }}
+              placeholder="Search records…"
+            />
+          </label>
+        )}
+        <div className="ws-table-facets">
+          {columns
+            .filter((c) => c.filterType === "select" && c !== statusColumn)
+            .map((col) => (
+              <select
+                key={col.key}
+                aria-label={`Filter ${col.header}`}
+                value={
+                  (picks[col.key] ?? []).length === 1 ? picks[col.key][0] : ""
+                }
+                onChange={(e) => {
+                  setPicks((p) => ({
+                    ...p,
+                    [col.key]: e.target.value ? [e.target.value] : [],
+                  }));
+                  setPage(1);
+                }}
+              >
+                <option value="">
+                  All{" "}
+                  {col.header === "Category"
+                    ? "categories"
+                    : col.header.toLowerCase() + "s"}
+                </option>
+                {(distinctByCol.get(col.key) ?? []).map((value) => (
+                  <option key={value}>{value}</option>
+                ))}
+              </select>
+            ))}
+          {isFiltered && (
+            <button
+              type="button"
+              className="ws-button ws-button-quiet"
+              onClick={clear}
+            >
+              Clear filters
+            </button>
+          )}
+          <button
+            type="button"
+            className="ws-button"
+            onClick={() =>
+              downloadTableCsv(
+                columns.map((c) => c.header),
+                sorted.map((row) => columns.map((col) => cellText(col, row))),
+                "openzcash-records.csv",
+              )
+            }
+          >
+            ↓ Export CSV
+          </button>
+        </div>
+      </div>
       <div className={cn("overflow-auto scroll-thin", maxHeight)}>
-        <table className="w-full text-left text-sm">
+        <table className="w-full text-left text-sm" aria-label="Records">
           <thead className="tbl-head text-[11px] uppercase tracking-wider text-stone-600">
             <tr className="border-b border-stone-200">
               {columns.map((col) => {
@@ -276,10 +390,17 @@ export function DataTable<T>({
                 return (
                   <th
                     key={col.key}
+                    aria-sort={
+                      isSorted
+                        ? sort?.dir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : undefined
+                    }
                     className={cn(
                       "px-4 py-3 font-medium align-bottom",
                       align,
-                      col.mobileHidden && "hidden sm:table-cell",
+                      col.mobileHidden && "ws-optional-column",
                     )}
                   >
                     <div
@@ -409,9 +530,9 @@ export function DataTable<T>({
             </tr>
           </thead>
           <tbody>
-            {sorted.map((row, i) => (
+            {visible.map((row, i) => (
               <tr
-                key={rowKey ? rowKey(row) : i}
+                key={rowKey ? rowKey(row) : (currentPage - 1) * pageSize + i}
                 className="tbl-row border-b border-stone-200 last:border-0"
               >
                 {columns.map((col) => (
@@ -421,7 +542,7 @@ export function DataTable<T>({
                       "px-4 py-2.5 text-stone-700",
                       ALIGN_CLASS[col.align ?? "left"],
                       col.align === "right" && "tnum",
-                      col.mobileHidden && "hidden sm:table-cell",
+                      col.mobileHidden && "ws-optional-column",
                     )}
                   >
                     {col.render
@@ -443,6 +564,34 @@ export function DataTable<T>({
             ) : null}
           </tbody>
         </table>
+      </div>
+      <div className="ws-table-footer">
+        <span>
+          {sorted.length ? (currentPage - 1) * pageSize + 1 : 0}–
+          {Math.min(currentPage * pageSize, sorted.length)} of {sorted.length}{" "}
+          records{isFiltered ? ` · ${rows.length} before filters` : ""}
+        </span>
+        <div>
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => setPage(currentPage - 1)}
+            aria-label="Previous page"
+          >
+            ←
+          </button>
+          <span>
+            {currentPage} / {pageCount}
+          </span>
+          <button
+            type="button"
+            disabled={currentPage === pageCount}
+            onClick={() => setPage(currentPage + 1)}
+            aria-label="Next page"
+          >
+            →
+          </button>
+        </div>
       </div>
     </div>
   );

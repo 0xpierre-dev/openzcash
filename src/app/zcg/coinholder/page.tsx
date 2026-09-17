@@ -1,3 +1,4 @@
+import { FeatureLink, SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { currentLockboxZec } from "@/lib/zcash/lockbox-live";
@@ -210,37 +211,19 @@ export default async function CoinholderPage() {
           already paid, not this round.
         </p>
 
-        {/* Pre-vote diligence copilot — the coinholder counterpart of /zcg/copilot. */}
-        <Link href="/zcg/coinholder/copilot" className="group mt-4 block">
-          <div className="relative overflow-hidden rounded-2xl border border-stone-800/60 bg-gradient-to-br from-stone-900 via-stone-900 to-amber-950 p-6 shadow-lg shadow-stone-400/30 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-xl">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/80 ring-1 ring-inset ring-white/15">
-                  New · agent skill
-                </span>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                  Coinholder Copilot
-                </h2>
-                <p className="mt-1 max-w-xl text-sm text-stone-300">
-                  Run diligence with your own agent before you vote. Every
-                  applicant is checked against the payment ledger, prior round
-                  verdicts, and submitted evidence, with a citation on every
-                  figure.
-                </p>
-              </div>
-              <span className="hidden shrink-0 items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/15 sm:inline-flex">
-                Get the skill{" "}
-                <span className="transition group-hover:translate-x-0.5">
-                  →
-                </span>
-              </span>
-            </div>
-          </div>
-        </Link>
+        <FeatureLink
+          eyebrow="Research before voting"
+          title="Coinholder Copilot"
+          description="Inspect applicant history, prior round verdicts and submitted evidence with your own agent."
+          href="/zcg/coinholder/copilot"
+          label="Explore Copilot"
+        />
       </section>
 
+      <SectionHeading
+        title="Coinholder funding history"
+        description="Official paid amounts by classification and recipient, separate from the ZCG committee pool."
+      />
       <TotalsTables categoryRows={categoryRows} recipientRows={recipientRows} />
 
       {total > 0n ? (
@@ -256,6 +239,12 @@ export default async function CoinholderPage() {
         </Card>
       ) : null}
 
+      <FeatureLink
+        title="Explore the funded projects"
+        description="Applications, approved grants and original program sources from the Financial Privacy Foundation."
+        href="/zcg/fpf"
+        label="View FPF records"
+      />
       <Synced className="mt-6" />
     </>
   );

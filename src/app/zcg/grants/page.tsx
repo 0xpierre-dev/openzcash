@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FeatureLink, SourceNote } from "@/components/workspace";
 import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { grantsSummary, listGrants } from "@/lib/zcg/grants-repo";
@@ -23,7 +23,17 @@ function statusLabel(status: string | null): string {
   return STATUS_LABELS[status] ?? status.replace(/_/g, " ");
 }
 
-export default async function GrantsPage() {
+export default async function GrantsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    status?: string;
+    category?: string;
+    program?: string;
+    q?: string;
+  }>;
+}) {
+  const params = await searchParams;
   const [grants, summary, schedule] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
@@ -48,7 +58,7 @@ export default async function GrantsPage() {
     <>
       <PageHeader
         title="Grants"
-        subtitle="Each grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments."
+        subtitle="Follow every funded project, from approval to its final milestone."
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -65,6 +75,7 @@ export default async function GrantsPage() {
         />
         <Stat
           label="Paid"
+          tone="in"
           value={formatUsdCents(summary.paidCents, { compact: true })}
           sub="milestones already paid"
         />
@@ -75,22 +86,34 @@ export default async function GrantsPage() {
         />
       </section>
 
-      <div className="rd-schedule-link">
-        <div>
-          <small>Approved payments with a future date</small>
-          <strong className="tnum">
-            {formatUsdCents(schedule.totalCents)}
-          </strong>
-          <small>
-            {schedule.rows.length} payments · dated estimates from the ledger
-          </small>
-        </div>
-        <Link href="/zcg/schedule">View schedule & categories →</Link>
-      </div>
+      <FeatureLink
+        eyebrow="Scheduled payments"
+        title={formatUsdCents(schedule.totalCents)}
+        description={`${schedule.rows.length} approved payments with a future estimated date. Explore the total by month, recipient and category.`}
+        href="/zcg/schedule"
+        label="View payment schedule"
+      />
 
       <Card className="overflow-hidden p-0">
-        <div className="p-4">
-          <GrantsTable rows={rows} />
+        <div className="ws-ledger">
+          <GrantsTable
+            key={JSON.stringify(params)}
+            rows={rows}
+            initialPicks={{
+              ...(params.status
+                ? { status: [statusLabel(params.status)] }
+                : {}),
+              ...(params.category ? { category: [params.category] } : {}),
+              ...(params.program
+                ? {
+                    program: [
+                      params.program === "coinholder" ? "Coinholder" : "ZCG",
+                    ],
+                  }
+                : {}),
+            }}
+            initialQuery={params.q}
+          />
         </div>
       </Card>
 
@@ -99,6 +122,18 @@ export default async function GrantsPage() {
         milestones
       </p>
 
+      <FeatureLink
+        eyebrow="People behind the decisions"
+        title="Meet the ZCG committee"
+        description="Current members, public affiliations, disclosed roles and election records."
+        href="/zcg/committee"
+        label="View committee"
+      />
+      <SourceNote>
+        One project per row. Paid values use the ledger’s budgeted USD amounts;
+        open commitments exclude cancelled grants. Payment records do not
+        independently establish delivery.
+      </SourceNote>
       <Synced className="mt-4" />
     </>
   );

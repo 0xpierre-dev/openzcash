@@ -1,3 +1,4 @@
+import { EditorialIntro } from "@/components/workspace";
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { IconGrid } from "@/components/icons";
 
@@ -63,6 +64,29 @@ export default function Z3Page() {
         }
       />
 
+      <EditorialIntro
+        eyebrow="The modular Zcash stack"
+        title="Three components. One connected system."
+        description="Consensus, indexing and wallet operations each have a dedicated role in the Rust successor to zcashd."
+      />
+      <div className="ws-flow" aria-label="Z3 component architecture">
+        {COMPONENTS.map((c, i) => (
+          <div key={c.name}>
+            <small>
+              0{i + 1} · {c.org}
+            </small>
+            <strong>{c.name}</strong>
+            <span>
+              {i === 0
+                ? "Consensus node"
+                : i === 1
+                  ? "Indexing & lightwallet service"
+                  : "Full-node wallet"}
+            </span>
+            <Badge tone={c.tone}>{c.status}</Badge>
+          </div>
+        ))}
+      </div>
       <a href={DEPRECATION} target="_blank" rel="noreferrer" className="block">
         <Card interactive className="mb-6">
           <p className="text-[11px] font-medium uppercase tracking-wider text-stone-600">

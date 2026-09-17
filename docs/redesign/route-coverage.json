@@ -1,0 +1,186 @@
+{
+  "routes": [
+    {
+      "route": "/",
+      "treatment": "preserved"
+    },
+    {
+      "route": "/arborist",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/communities",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/defi",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/design-review",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/development",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/ecosystem",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/invites",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/lockbox",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/login",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/monthly",
+      "treatment": "preserved"
+    },
+    {
+      "route": "/monthly-preview",
+      "treatment": "preserved"
+    },
+    {
+      "route": "/monthly/[issue]",
+      "treatment": "preserved"
+    },
+    {
+      "route": "/news",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/onboarding",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/projects",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/shielded-labs",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/viewing-keys",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/wallets",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/z3",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/analytics",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/budget",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/coinholder",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/coinholder/copilot",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/committee",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/copilot",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/disbursements",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/fpf",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/grant",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/grants",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/maya",
+      "treatment": "redirect to /defi"
+    },
+    {
+      "route": "/zcg/meetings",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/methodology",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/office",
+      "treatment": "entrance only; original 3D room preserved"
+    },
+    {
+      "route": "/zcg/proposals",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/recipient",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/recipients",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/reconciliation",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/schedule",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/stipends",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zcg/totals",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zechub",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zechub/copilot",
+      "treatment": "workspace composition"
+    },
+    {
+      "route": "/zf",
+      "treatment": "workspace composition"
+    }
+  ],
+  "totalTemplates": 45,
+  "scope": "Native Next.js application, not static prototype routes"
+}

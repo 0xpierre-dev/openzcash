@@ -32,9 +32,15 @@ export type GrantTableRow = {
 
 interface GrantsTableProps {
   rows: GrantTableRow[];
+  initialPicks?: Record<string, string[]>;
+  initialQuery?: string;
 }
 
-export function GrantsTable({ rows }: GrantsTableProps) {
+export function GrantsTable({
+  rows,
+  initialPicks,
+  initialQuery,
+}: GrantsTableProps) {
   const columns: Column<GrantTableRow>[] = [
     {
       key: "grantKey",
@@ -46,7 +52,7 @@ export function GrantsTable({ rows }: GrantsTableProps) {
         <div className="max-w-[24rem]">
           <Link
             href={`/zcg/grant?g=${encodeURIComponent(r.grantKey)}`}
-            className="block truncate font-medium text-stone-900 hover:text-amber-700"
+            className="ws-grant-name"
           >
             {r.grantKey}
           </Link>
@@ -64,7 +70,14 @@ export function GrantsTable({ rows }: GrantsTableProps) {
       sortable: true,
       filterable: true,
       filterValue: (r) => r.grantee,
-      render: (r) => <span className="text-stone-600">{r.grantee}</span>,
+      render: (r) => (
+        <Link
+          className="ws-grantee"
+          href={`/zcg/recipient?r=${encodeURIComponent(r.grantee)}`}
+        >
+          {r.grantee}
+        </Link>
+      ),
     },
     {
       key: "category",
@@ -75,6 +88,18 @@ export function GrantsTable({ rows }: GrantsTableProps) {
       filterValue: (r) => r.category,
       render: (r) => (
         <span className="text-xs text-stone-600">{r.category || "·"}</span>
+      ),
+    },
+    {
+      key: "program",
+      header: "Program",
+      filterable: true,
+      filterType: "select",
+      filterValue: (r) => (r.program === "coinholder" ? "Coinholder" : "ZCG"),
+      render: (r) => (
+        <span className="text-xs text-stone-500">
+          {r.program === "coinholder" ? "Coinholder" : "ZCG"}
+        </span>
       ),
     },
     {
@@ -117,6 +142,20 @@ export function GrantsTable({ rows }: GrantsTableProps) {
           href={`/zcg/grant?g=${encodeURIComponent(r.grantKey)}`}
           className="inline-flex items-center gap-0.5 rounded-md px-2 py-1 text-xs tnum ring-1 ring-inset ring-stone-200 hover:ring-amber-500/40"
         >
+          <span className="ws-milestone-dots" aria-hidden>
+            {Array.from({ length: Math.min(r.milestoneCount, 8) }, (_, i) => (
+              <i
+                key={i}
+                data-paid={
+                  i <
+                  Math.round(
+                    (r.paidCount / Math.max(1, r.milestoneCount)) *
+                      Math.min(r.milestoneCount, 8),
+                  )
+                }
+              />
+            ))}
+          </span>
           <span className="text-amber-700">{r.paidCount}</span>
           <span className="text-stone-600">/{r.milestoneCount}</span>
         </Link>
@@ -137,7 +176,10 @@ export function GrantsTable({ rows }: GrantsTableProps) {
   return (
     <DataTable
       columns={columns}
+      initialPicks={initialPicks}
+      initialQuery={initialQuery}
       rows={rows}
+      rowKey={(r) => `${r.program}:${r.grantKey}`}
       initialSort={{ key: "usd", dir: "desc" }}
     />
   );

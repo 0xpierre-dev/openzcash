@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/ui";
 import Link from "next/link";
 import { Terminal } from "./terminal";
 import { AddToAgent } from "./add-to-agent";
@@ -49,30 +50,18 @@ const SOURCES = [
 
 export default function CopilotPage() {
   return (
-    <div className="antialiased">
-      <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight text-stone-900">
-            ZCG Copilot
-          </h1>
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-500/25">
-            agent skill
-          </span>
-        </div>
-        <Link
-          href="/zcg/proposals"
-          className="text-xs text-stone-500 hover:text-stone-800"
-        >
-          ‹ Proposals
-        </Link>
-      </div>
+    <div className="ws-copilot">
+      <PageHeader
+        title="ZCG Copilot"
+        subtitle="Source-backed research for Zcash grants and public spending."
+      />
 
-      <section className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
+      <section className="ws-copilot-hero">
         <div>
           <p className="font-mono text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700">
             An agent skill for Zcash funding
           </p>
-          <h2 className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-stone-900 sm:text-6xl">
+          <h2 className="ws-copilot-title">
             Every answer
             <br />
             has a receipt.
@@ -83,7 +72,7 @@ export default function CopilotPage() {
             Answers come from the live public ledger, GitHub, and the forum,
             with a citation on every figure, never from the model&apos;s memory.
           </p>
-          <div className="mt-8 inline-block border border-stone-900 bg-[#0b0d10] px-5 py-3.5 shadow-lg shadow-stone-400/30">
+          <div className="ws-install-command">
             <code className="font-mono text-sm text-emerald-400">
               npx skills add Michae2xl/openzcash --skill zcg-copilot
             </code>
@@ -102,7 +91,7 @@ export default function CopilotPage() {
         <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
           Ask things like
         </p>
-        <div className="mt-4 grid gap-px border border-stone-200 bg-stone-200 sm:grid-cols-2">
+        <div className="ws-prompt-grid">
           {USE_CASES.map((u) => (
             <div
               key={u.q}
@@ -124,7 +113,7 @@ export default function CopilotPage() {
         <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
           Grounded in four public sources
         </p>
-        <div className="mt-4 grid gap-px border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="ws-source-grid">
           {SOURCES.map((s) => (
             <div key={s.name} className="bg-white p-6">
               <p className="font-mono text-[13px] font-semibold text-stone-900">

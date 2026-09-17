@@ -1,3 +1,9 @@
+import {
+  EditorialIntro,
+  RecordLayout,
+  RelatedLinks,
+  Facts,
+} from "@/components/workspace";
 import { Suspense } from "react";
 import { OrgUpdates } from "@/components/org-updates";
 import { getFoundationUpdates } from "@/lib/org-updates/forum";
@@ -169,7 +175,6 @@ const ZCONS: Zcon[] = [
   },
 ];
 
-
 async function LiveUpdates() {
   const updates = await getFoundationUpdates(24);
   return (
@@ -205,134 +210,162 @@ export default async function ZfPage() {
         }
       />
 
-      <Suspense
-        fallback={
-          <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-600 shadow-sm">
-            Loading the latest Foundation updates...
-          </div>
+      <EditorialIntro
+        eyebrow="Engineering & governance"
+        title="The Zcash Foundation, in public"
+        description="Explore engineering updates, transparency reports, community events and the ZCAP membership record."
+      >
+        <Facts
+          title="Public archive"
+          rows={[
+            ["Transparency reports", String(reports.length)],
+            ["ZCAP members", String(zcap.length)],
+            ["Latest report", latest ? formatDate(latest.date) : "Unavailable"],
+          ]}
+        />
+      </EditorialIntro>
+      <RecordLayout
+        aside={
+          <RelatedLinks
+            title="Explore this organization"
+            links={[
+              { href: FORUM_CATEGORY, label: "Official Foundation forum" },
+              { href: ZCAP_SHEET_URL, label: "ZCAP membership source" },
+              { href: "/development", label: "Development activity" },
+              { href: "/z3", label: "Zebra & the Z3 stack" },
+            ]}
+          />
         }
       >
-        <div className="mb-6">
-          <LiveUpdates />
-        </div>
-      </Suspense>
-
-      <a
-        href={FORUM_CATEGORY}
-        target="_blank"
-        rel="noreferrer"
-        className="block"
-      >
-        <Card interactive className="mb-6">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-stone-600">
-            Community forum
-          </p>
-          <p className="mt-1 text-sm font-medium text-stone-900">
-            Zcash Foundation category
-          </p>
-          <p className="mt-1 text-xs text-stone-600">
-            Full archive of Foundation reports, updates and announcements.
-          </p>
-        </Card>
-      </a>
-
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-        Transparency reports
-        {latest ? (
-          <Badge tone="amber">newest {formatDate(latest.date)}</Badge>
-        ) : null}
-      </h2>
-
-      <Card className="space-y-1 p-2">
-        {reports.map((r) => (
-          <a
-            key={r.url}
-            href={r.url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100"
-          >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700">
-              <IconNews className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-stone-900">{r.title}</p>
-              <p className="truncate text-xs text-stone-600">{r.kind}</p>
+        <Suspense
+          fallback={
+            <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-600 shadow-sm">
+              Loading the latest Foundation updates...
             </div>
-            <span className="shrink-0 text-xs text-stone-600 tnum">
-              {formatDate(r.date)}
-            </span>
-          </a>
-        ))}
-      </Card>
+          }
+        >
+          <div className="mb-6">
+            <LiveUpdates />
+          </div>
+        </Suspense>
 
-      <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-stone-700">
-        Zcon conferences
-        <Badge tone="amber">next · Zcon7 · Cancún</Badge>
-      </h2>
-
-      <Card className="space-y-1 p-2">
-        {ZCONS.map((z) => (
-          <a
-            key={z.name}
-            href={z.url}
-            target="_blank"
-            rel="noreferrer"
-            className={`flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100 ${
-              z.upcoming
-                ? "bg-amber-500/[0.07] ring-1 ring-inset ring-amber-500/25"
-                : ""
-            }`}
-          >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700">
-              <IconUsers className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="flex items-center gap-2 text-sm font-medium text-stone-900">
-                {z.name}
-                {z.upcoming ? <Badge tone="amber">Upcoming</Badge> : null}
-              </p>
-              <p className="truncate text-xs text-stone-600">
-                {z.location}
-                {z.theme ? ` · “${z.theme}”` : ""}
-              </p>
-            </div>
-            <span className="shrink-0 text-xs text-stone-600 tnum">
-              {z.when}
-            </span>
-          </a>
-        ))}
-      </Card>
-
-      <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-stone-700">
-        Community Advisory Panel (ZCAP)
-        {zcap.length > 0 ? (
-          <Badge tone="amber">{zcap.length} members</Badge>
-        ) : null}
-      </h2>
-      <p className="mb-3 text-xs text-stone-600">
-        The volunteer panel that advises the Foundation and votes in ZCG
-        elections.{" "}
         <a
-          href={ZCAP_SHEET_URL}
+          href={FORUM_CATEGORY}
           target="_blank"
           rel="noreferrer"
-          className="text-amber-700 underline decoration-amber-500/40 underline-offset-2 hover:text-amber-800"
+          className="block"
         >
-          Public roster ↗
+          <Card interactive className="mb-6">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-stone-600">
+              Community forum
+            </p>
+            <p className="mt-1 text-sm font-medium text-stone-900">
+              Zcash Foundation category
+            </p>
+            <p className="mt-1 text-xs text-stone-600">
+              Full archive of Foundation reports, updates and announcements.
+            </p>
+          </Card>
         </a>
-      </p>
 
-      {zcap.length > 0 ? (
-        <ZcapTable members={zcap} />
-      ) : (
-        <Card>
-          <p className="text-sm text-stone-600">
-            Roster temporarily unavailable. The public sheet may be unreachable;
-            it refreshes automatically.
-          </p>
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
+          Transparency reports
+          {latest ? (
+            <Badge tone="amber">newest {formatDate(latest.date)}</Badge>
+          ) : null}
+        </h2>
+
+        <Card className="space-y-1 p-2">
+          {reports.map((r) => (
+            <a
+              key={r.url}
+              href={r.url}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700">
+                <IconNews className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-stone-900">{r.title}</p>
+                <p className="truncate text-xs text-stone-600">{r.kind}</p>
+              </div>
+              <span className="shrink-0 text-xs text-stone-600 tnum">
+                {formatDate(r.date)}
+              </span>
+            </a>
+          ))}
         </Card>
-      )}
+
+        <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-stone-700">
+          Zcon conferences
+          <Badge tone="amber">next · Zcon7 · Cancún</Badge>
+        </h2>
+
+        <Card className="space-y-1 p-2">
+          {ZCONS.map((z) => (
+            <a
+              key={z.name}
+              href={z.url}
+              target="_blank"
+              rel="noreferrer"
+              className={`flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100 ${
+                z.upcoming
+                  ? "bg-amber-500/[0.07] ring-1 ring-inset ring-amber-500/25"
+                  : ""
+              }`}
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-700">
+                <IconUsers className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="flex items-center gap-2 text-sm font-medium text-stone-900">
+                  {z.name}
+                  {z.upcoming ? <Badge tone="amber">Upcoming</Badge> : null}
+                </p>
+                <p className="truncate text-xs text-stone-600">
+                  {z.location}
+                  {z.theme ? ` · “${z.theme}”` : ""}
+                </p>
+              </div>
+              <span className="shrink-0 text-xs text-stone-600 tnum">
+                {z.when}
+              </span>
+            </a>
+          ))}
+        </Card>
+
+        <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-stone-700">
+          Community Advisory Panel (ZCAP)
+          {zcap.length > 0 ? (
+            <Badge tone="amber">{zcap.length} members</Badge>
+          ) : null}
+        </h2>
+        <p className="mb-3 text-xs text-stone-600">
+          The volunteer panel that advises the Foundation and votes in ZCG
+          elections.{" "}
+          <a
+            href={ZCAP_SHEET_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="text-amber-700 underline decoration-amber-500/40 underline-offset-2 hover:text-amber-800"
+          >
+            Public roster ↗
+          </a>
+        </p>
+
+        {zcap.length > 0 ? (
+          <ZcapTable members={zcap} />
+        ) : (
+          <Card>
+            <p className="text-sm text-stone-600">
+              Roster temporarily unavailable. The public sheet may be
+              unreachable; it refreshes automatically.
+            </p>
+          </Card>
+        )}
+      </RecordLayout>
     </>
   );
 }

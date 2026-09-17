@@ -1,3 +1,4 @@
+import { FeatureLink, SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { Synced } from "@/components/synced";
@@ -84,44 +85,44 @@ export default async function StipendsPage() {
       </section>
 
       {members.length > 0 ? (
-        <Card className="p-0">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-stone-100 text-left text-xs text-stone-600">
-                <th className="px-4 py-2.5 font-medium">Member</th>
-                <th className="px-4 py-2.5 text-right font-medium">Paid</th>
-                <th className="px-4 py-2.5 text-right font-medium">Payments</th>
-                <th className="hidden px-4 py-2.5 text-right font-medium sm:table-cell">
-                  Period
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stone-100">
-              {members.map((m) => (
-                <tr key={m.member} className="hover:bg-stone-50">
-                  <td className="px-4 py-2.5">
-                    <Link
-                      href={`/zcg/recipient?r=${encodeURIComponent(m.member)}`}
-                      className="font-medium text-stone-800 hover:text-amber-700"
-                    >
-                      {m.member}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
-                    {formatUsdCents(m.totalUsd, { compact: true })}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-stone-600 tnum">
-                    {m.payments}
-                  </td>
-                  <td className="hidden px-4 py-2.5 text-right text-xs text-stone-600 tnum sm:table-cell">
-                    {m.firstPaid ? m.firstPaid.slice(0, 7) : "?"} →{" "}
-                    {m.lastPaid ? m.lastPaid.slice(0, 7) : "?"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
+        <section>
+          <SectionHeading
+            title="Compensation by member"
+            count={members.length}
+            description="Open a profile to inspect every dated payment and its source."
+          />
+          <div className="ws-member-payments">
+            {members.map((m) => (
+              <Link
+                key={m.member}
+                href={`/zcg/recipient?r=${encodeURIComponent(m.member)}`}
+              >
+                <div className="ws-member-initial" aria-hidden>
+                  {m.member.slice(0, 1)}
+                </div>
+                <h2>{m.member}</h2>
+                <strong className="ws-amount-large">
+                  {formatUsdCents(m.totalUsd)}
+                </strong>
+                <dl>
+                  <div>
+                    <dt>Payments</dt>
+                    <dd>{m.payments}</dd>
+                  </div>
+                  <div>
+                    <dt>First payment</dt>
+                    <dd>{m.firstPaid || "Unknown"}</dd>
+                  </div>
+                  <div>
+                    <dt>Last payment</dt>
+                    <dd>{m.lastPaid || "Unknown"}</dd>
+                  </div>
+                </dl>
+                <span>Open payment history →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
       ) : (
         <Card>
           <p className="text-sm text-stone-600">
@@ -150,6 +151,12 @@ export default async function StipendsPage() {
         </p>
       </div>
 
+      <FeatureLink
+        title="The people behind ZCG"
+        description="See current terms, source-linked roles and the committee's election history."
+        href="/zcg/committee"
+        label="Meet the committee"
+      />
       <Synced className="mt-6" />
     </>
   );

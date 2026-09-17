@@ -1,3 +1,9 @@
+import {
+  EditorialIntro,
+  FeatureLink,
+  SectionHeading,
+} from "@/components/workspace";
+import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import Link from "next/link";
 import { Badge, PageHeader, Stat } from "@/components/ui";
 import {
@@ -137,29 +143,73 @@ const CHANGE_LABEL: Record<string, string> = {
 const changeLabel = (v: string | null) => (v && CHANGE_LABEL[v]) || v || "·";
 
 export default async function ZcgPage() {
-  const [s, lockbox, zcg, changes] = await Promise.all([
+  const [s, lockbox, zcg, changes, schedule] = await Promise.all([
     disbursementsSummary(),
     currentLockboxZec(),
     latestSnapshot("zcg_operating"),
     listChangelog(7, 12, "zcg").catch(() => []),
+    getPaymentSchedule(),
   ]);
 
   return (
     <>
       <PageHeader
-        title="ZCG · Ecosystem grants"
-        subtitle="Public accounting for Zcash Community Grants, imported from the official spreadsheet. An off-chain disbursement ledger that can be cross-referenced with the on-chain Lockbox/ZCG outflows."
+        title="Zcash Community Grants"
+        subtitle="Follow the projects, people and public funding behind the Zcash ecosystem."
         actions={
-          <Link
-            href="/zcg/copilot"
-            className="inline-flex items-center gap-2.5 rounded-xl border border-stone-900 bg-[#0b0d10] px-5 py-3 text-base font-semibold text-emerald-400 shadow-lg shadow-emerald-900/10 ring-1 ring-emerald-500/20 transition hover:-translate-y-0.5 hover:border-emerald-400/50 hover:shadow-emerald-500/20"
-          >
+          <Link href="/zcg/copilot" className="ws-button">
             <IconTerminal className="h-5 w-5" />
             ZCG Copilot
           </Link>
         }
       />
 
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat
+          label="Grants"
+          value={String(s.grantCount)}
+          sub={`${s.paidCount} payments made`}
+        />
+        <Stat
+          label="USD paid to date"
+          value={formatUsdCents(s.usdPaidCents, { compact: true })}
+          sub="budgeted value of paid entries"
+          tone="warn"
+        />
+        <Stat
+          label="ZEC paid (ledger)"
+          value={formatZecCompact(s.zecPaidZat, { symbol: false })}
+          sub="recorded by the spreadsheet"
+        />
+        <Stat
+          label="Recipients"
+          value={String(s.recipientCount)}
+          sub="orgs and individuals"
+        />
+      </section>
+
+      <FeatureLink
+        eyebrow="Scheduled payments"
+        title={formatUsdCents(schedule.totalCents)}
+        description={`${schedule.rows.length} approved future dated payments, with totals by month and category.`}
+        href="/zcg/schedule"
+        label="Open schedule"
+      />
+      <EditorialIntro
+        eyebrow="Public funding, in context"
+        title="Explore the full funding journey"
+        description="Start with approved grants, follow the payments and inspect the original records. Committee roles and election history remain connected to the work."
+      >
+        <div className="ws-quick-links">
+          <Link href="/zcg/grants">Browse grants →</Link>
+          <Link href="/zcg/proposals">Review proposals →</Link>
+          <Link href="/zcg/disbursements">Explore the ledger →</Link>
+        </div>
+      </EditorialIntro>
+      <SectionHeading
+        title="Treasury context"
+        description="Protocol funds and operating balances are separate from the off-chain payment ledger."
+      />
       <section className="mb-8 grid gap-6 lg:grid-cols-2">
         <div className="relative overflow-hidden rounded-2xl border border-amber-500/15 bg-gradient-to-br from-amber-500/[0.07] via-stone-50 to-stone-50 p-5 shadow-lg shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5">
           <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-amber-500/10 blur-3xl" />
@@ -199,30 +249,6 @@ export default async function ZcgPage() {
             <Badge tone="zinc">t-addr</Badge>
           </div>
         </div>
-      </section>
-
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
-          label="Grants"
-          value={String(s.grantCount)}
-          sub={`${s.paidCount} payments made`}
-        />
-        <Stat
-          label="USD paid to date"
-          value={formatUsdCents(s.usdPaidCents, { compact: true })}
-          sub="budgeted value of paid entries"
-          tone="warn"
-        />
-        <Stat
-          label="ZEC paid (ledger)"
-          value={formatZecCompact(s.zecPaidZat, { symbol: false })}
-          sub="recorded by the spreadsheet"
-        />
-        <Stat
-          label="Recipients"
-          value={String(s.recipientCount)}
-          sub="orgs and individuals"
-        />
       </section>
 
       <CurrentCommittee />
@@ -297,65 +323,29 @@ export default async function ZcgPage() {
 
       <ElectionsSection />
 
-      <section className="antialiased">
-        <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-sm font-semibold text-stone-700">Explore ZCG</h2>
-          <span className="text-xs text-stone-400">tap a card ↓</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+      <section className="ws-explore-section">
+        <SectionHeading
+          title="Explore ZCG"
+          description="Every public record, organized by the question you want to answer."
+        />
+        <div className="ws-nav-cards">
           {TILES.map((t) => (
-            <Link key={t.href} href={t.href} className="group block">
-              <div className="flex h-full flex-col gap-2 rounded-2xl border border-stone-200/80 bg-white p-3 shadow-sm shadow-stone-300/25 ring-1 ring-inset ring-stone-900/[0.04] transition duration-200 group-hover:-translate-y-0.5 group-hover:border-stone-300 group-hover:shadow-md group-hover:shadow-stone-400/20 sm:flex-row sm:items-center sm:gap-3">
-                <span
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${t.grad} text-white shadow-md shadow-stone-500/20 ring-1 ring-inset ring-white/25 sm:h-11 sm:w-11`}
-                >
-                  <t.Icon className="h-6 w-6 sm:h-[22px] sm:w-[22px]" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[15px] font-semibold leading-tight tracking-tight text-stone-900 line-clamp-2 sm:truncate">
-                    {t.label}
-                  </p>
-                  <p className="mt-0.5 hidden truncate text-xs font-medium text-stone-500 sm:block">
-                    {t.sub}
-                  </p>
-                </div>
-                <span className="hidden shrink-0 text-stone-300 transition group-hover:translate-x-0.5 group-hover:text-stone-500 sm:block">
-                  →
-                </span>
-              </div>
+            <Link key={t.href} href={t.href}>
+              <t.Icon className="h-5 w-5" />
+              <strong>{t.label}</strong>
+              <span>{t.sub}</span>
+              <b aria-hidden>↗</b>
             </Link>
           ))}
         </div>
       </section>
-
-      <section className="mt-8">
-        <Link href="/zcg/office" className="group block">
-          <div className="relative overflow-hidden rounded-2xl border border-stone-800/60 bg-gradient-to-br from-stone-900 via-stone-900 to-violet-950 p-6 shadow-lg shadow-stone-400/30 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-xl">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/80 ring-1 ring-inset ring-white/15">
-                  New · 3D
-                </span>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                  Step into the ZCG Office
-                </h2>
-                <p className="mt-1 max-w-xl text-sm text-stone-300">
-                  A living 3D room where every proposal under review walks the
-                  floor as a zebra, in front of the committee.
-                </p>
-              </div>
-              <span className="hidden shrink-0 items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/15 sm:inline-flex">
-                Enter{" "}
-                <span className="transition group-hover:translate-x-0.5">
-                  →
-                </span>
-              </span>
-            </div>
-          </div>
-        </Link>
-      </section>
+      <FeatureLink
+        eyebrow="Visit the office"
+        title="A different view of governance"
+        description="Step into the ZCG room to explore proposals and meet the committee in 3D."
+        href="/zcg/office"
+        label="Visit the office"
+      />
     </>
   );
 }

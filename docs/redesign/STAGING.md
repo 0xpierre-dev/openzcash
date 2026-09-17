@@ -41,10 +41,23 @@ its own infrastructure usage while it remains running.
 
 ## Design scope
 
-The shared interior layout introduces warm white surfaces, gold accents, grouped
-navigation, consistent tables/statistics, an all-screens directory, a committee
-page and a future-payment schedule. Existing route contracts, detail query
-parameters, forms and underlying data logic remain available.
+The interior pages now use the approved prototype compositions with the real
+application data and actions: a single navigation header and searchable app
+directory, funding summaries, status tabs, filter toolbars, paginated/exportable
+tables, record-detail layouts with source/context sidebars, editorial organization
+pages, wallet/community catalogues and a focused administration workspace.
+Existing route contracts, detail parameters, forms, calculations, source links
+and committee public-role tags remain available. `route-coverage.json` enumerates
+every native page template and its treatment.
+
+Grant and recipient records connect their payment history, milestone progress,
+original source rows and related records. Future payment totals, monthly and
+category summaries all use the existing schedule population. The grant list also
+accepts status, category, program and text query parameters. CSV exports include
+all filtered records across pages, preserve displayed units/precision, and treat
+source labels as spreadsheet text. Wallet search covers the original 18 complete
+records; communities retain all channel/funding/activity fields. The 112-project
+and 555-repository catalogues retain their source-backed detail dialogs.
 
 The home page, its app launcher and both treasury cards keep their production
 layout. Monthly routes, publications and generators are unchanged. The 3D room,
@@ -84,8 +97,8 @@ No DNS or production-domain changes are part of this preview.
 ## Validation
 
 - TypeScript and production build passed.
-- 335 unit tests passed; 8 pre-existing integration tests skipped.
-- Scoped ESLint: zero errors (two small local-image warnings).
+- 337 unit tests passed; 8 pre-existing integration tests skipped.
+- Full ESLint: zero errors; existing unused-variable/local-image warnings remain.
 - 254 protected files checked byte-for-byte against production, with no changes.
 - Full public-table row comparison passed; see `data-parity.json`.
 - 45 route checks passed, including real grant/recipient/Monthly detail URLs,
@@ -105,3 +118,15 @@ No DNS or production-domain changes are part of this preview.
   were introduced.
 - The production deployment and its existing upload-based source configuration
   remained unchanged. The redesign response headers disable indexing.
+
+### Composition revision — 17 September 2026
+
+The previous deployment supplied shared styling; this revision applies the actual
+page compositions throughout the native application. Local browser checks covered
+grant filtering/drilldown, source sidebars, wallet filtering, the app directory,
+committee tags, the ecosystem catalogue and mobile layouts. Local PostgreSQL is
+older than the production snapshot and lacks `zcg_publications`, so proposal/FPF/
+office rendering must be checked on Railway, whose independent snapshot includes
+that table. The local database was used in read-only mode and was not migrated.
+The protected home, Monthly templates/assets and original 3D room remain unchanged.
+No API, database schema or accounting repository changed in this composition revision.

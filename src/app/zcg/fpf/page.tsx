@@ -1,3 +1,4 @@
+import { RecordLayout, RelatedLinks } from "@/components/workspace";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { listGrants } from "@/lib/zcg/grants-repo";
 import { listProposals, proposalsFunnel } from "@/lib/zcg/proposals-repo";
@@ -49,7 +50,9 @@ export default async function FpfCoinholderGrantsPage() {
     cached(`listProposals:coinholder:${publicationDay()}`, LEDGER_TTL_MS, () =>
       listProposals({ program: "coinholder" }),
     ),
-    cached(`proposalsFunnel:${publicationDay()}`, LEDGER_TTL_MS, () => proposalsFunnel()),
+    cached(`proposalsFunnel:${publicationDay()}`, LEDGER_TTL_MS, () =>
+      proposalsFunnel(),
+    ),
     cached("links", LEDGER_TTL_MS, () => getLinks()),
   ]);
   const proposalFpf = links.proposal_fpf ?? "#";
@@ -107,17 +110,6 @@ export default async function FpfCoinholderGrantsPage() {
         }
       />
 
-      <Card className="mb-8">
-        <p className="text-sm leading-relaxed text-stone-600">
-          The Financial Privacy Foundation administers a separate, coinholder
-          directed grants program. The cycle runs end to end: a proposal is
-          opened on GitHub, the FPF handles vetting and compliance (KYC is
-          required above US$50k), coinholders then vote, and approved work is
-          paid as a retroactive grant. This universe is distinct from the
-          regular ZCG track.
-        </p>
-      </Card>
-
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
         <Stat
           label="Grants"
@@ -137,31 +129,56 @@ export default async function FpfCoinholderGrantsPage() {
         />
       </section>
 
-      <section className="mb-8">
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Coinholder grants
-        </h2>
-        <Card className="p-4">
-          <FpfGrantsTable grantRows={grantRows} />
-        </Card>
-        <p className="mt-3 text-xs text-stone-600">
-          {grants.length} grants · one approved project per row · amounts in USD
-          with ZEC equivalents tracked in the ledger.
-        </p>
-      </section>
+      <RecordLayout
+        aside={
+          <>
+            <RelatedLinks
+              title="Program resources"
+              links={[
+                { href: "/zcg/coinholder", label: "Coinholder funding pool" },
+                { href: proposalFpf, label: "Submit a proposal" },
+                { href: cryptpadMilestone, label: "Submit a milestone" },
+              ]}
+            />{" "}
+            <Card className="mb-8">
+              <p className="text-sm leading-relaxed text-stone-600">
+                The Financial Privacy Foundation administers a separate,
+                coinholder directed grants program. The cycle runs end to end: a
+                proposal is opened on GitHub, the FPF handles vetting and
+                compliance (KYC is required above US$50k), coinholders then
+                vote, and approved work is paid as a retroactive grant. This
+                universe is distinct from the regular ZCG track.
+              </p>
+            </Card>
+          </>
+        }
+      >
+        <section className="mb-8">
+          <h2 className="mb-3 text-sm font-semibold text-stone-700">
+            Coinholder grants
+          </h2>
+          <Card className="p-0 overflow-hidden">
+            <FpfGrantsTable grantRows={grantRows} />
+          </Card>
+          <p className="mt-3 text-xs text-stone-600">
+            {grants.length} grants · one approved project per row · amounts in
+            USD with ZEC equivalents tracked in the ledger.
+          </p>
+        </section>
 
-      <section>
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Coinholder proposals
-        </h2>
-        <Card className="p-4">
-          <FpfProposalsTable proposalRows={proposalRows} />
-        </Card>
-        <p className="mt-3 text-xs text-stone-600">
-          {proposals.length} proposals · the pipeline upstream of the grants
-          above · only approved proposals become paid grants.
-        </p>
-      </section>
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-stone-700">
+            Coinholder proposals
+          </h2>
+          <Card className="p-0 overflow-hidden">
+            <FpfProposalsTable proposalRows={proposalRows} />
+          </Card>
+          <p className="mt-3 text-xs text-stone-600">
+            {proposals.length} proposals · the pipeline upstream of the grants
+            above · only approved proposals become paid grants.
+          </p>
+        </section>
+      </RecordLayout>
     </>
   );
 }

@@ -73,7 +73,6 @@ function RecencyDot({ iso }: { iso?: string }) {
   );
 }
 
-
 /** Gold shield for the OGs: communities with five or more years of verified
  * public record. Computed from `since`, so entries age into it on their own. */
 function OgShield({ since }: { since?: number }) {
@@ -123,6 +122,7 @@ export function CommunitiesView({
   communities: Community[];
   activity: TopicActivity[];
 }) {
+  const [query, setQuery] = useState("");
   const [region, setRegion] = useState<Region | "all">("all");
   const [funding, setFunding] = useState<FundingFilter>("all");
   const [sort, setSort] = useState<SortMode>("activity");
@@ -141,6 +141,10 @@ export function CommunitiesView({
   const shown = useMemo(() => {
     const filtered = communities.filter(
       (c) =>
+        (!query ||
+          `${c.name} ${c.country} ${c.region}`
+            .toLowerCase()
+            .includes(query.toLowerCase())) &&
         (region === "all" || c.region === region) &&
         (funding === "all" ||
           (funding === "funded" ? c.zcg.funded : !c.zcg.funded)),
@@ -155,8 +159,7 @@ export function CommunitiesView({
           a.region.localeCompare(b.region) || key(b).localeCompare(key(a)),
       );
     return [...filtered].sort((a, b) => key(b).localeCompare(key(a)));
-  }, [communities, region, funding, sort, lastByCommunity]);
-
+  }, [communities, region, funding, sort, lastByCommunity, query]);
 
   const funded = communities.filter((c) => c.zcg.funded);
   const totalBudgeted = funded.reduce(
@@ -173,8 +176,35 @@ export function CommunitiesView({
 
   return (
     <>
+      {/* ---- Totals, at the bottom ---- */}
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat label="Communities" value={String(communities.length)} />
+        <Stat label="Countries" value={String(countries)} />
+        <Stat
+          label="Active this month"
+          value={`${activeMonth} of ${communities.length}`}
+        />
+        <Stat
+          label="ZCG-funded"
+          value={`${funded.length} of ${communities.length}`}
+          sub={`${usd(totalBudgeted)} budgeted, per the audited ledger`}
+          tone="warn"
+        />
+      </section>
       {/* ---- Filters + sort ---- */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
+      <div className="ws-filter-panel">
+        <input
+          type="search"
+          aria-label="Search communities"
+          placeholder="Find a community or country…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <span className="text-xs text-stone-500" aria-live="polite">
+          {shown.length} communities
+        </span>
+      </div>
+      <div className="ws-catalog-tabs">
         <button
           onClick={() => setRegion("all")}
           className={pill(region === "all")}
@@ -232,31 +262,25 @@ export function CommunitiesView({
       </div>
 
       {/* ---- The assessment list ---- */}
-      <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm ring-1 ring-inset ring-stone-900/5">
-        <div className="hidden grid-cols-[minmax(210px,1.1fr)_minmax(0,1.6fr)_150px_minmax(150px,0.9fr)] gap-4 border-b border-stone-200 bg-stone-50/60 px-5 py-2.5 md:grid">
-          {[
-            "Community",
-            "Latest forum activity",
-            "Funding",
-            "Channels",
-          ].map((h) => (
-            <p
-              key={h}
-              className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
-            >
-              {h}
-            </p>
-          ))}
+      <div className="ws-community-directory">
+        <div className="sr-only">
+          {["Community", "Latest forum activity", "Funding", "Channels"].map(
+            (h) => (
+              <p
+                key={h}
+                className="text-[11px] font-semibold uppercase tracking-wider text-stone-500"
+              >
+                {h}
+              </p>
+            ),
+          )}
         </div>
 
-        <ul className="divide-y divide-stone-100">
+        <ul className="ws-community-grid">
           {shown.map((c) => {
             const last = lastByCommunity.get(c.id);
             return (
-              <li
-                key={c.id}
-                className="grid grid-cols-1 gap-3 px-5 py-4 transition hover:bg-amber-500/[0.04] md:grid-cols-[minmax(210px,1.1fr)_minmax(0,1.6fr)_150px_minmax(150px,0.9fr)] md:items-center md:gap-4"
-              >
+              <li key={c.id} className="ws-community-card">
                 {/* Community */}
                 <div className="flex items-center gap-3">
                   {c.logo ? (
@@ -279,7 +303,10 @@ export function CommunitiesView({
                     <p className="truncate text-[11px] text-stone-500">
                       {c.country} · {c.language}
                       {c.since ? (
-                        <span className="text-stone-400"> · since {c.since}</span>
+                        <span className="text-stone-400">
+                          {" "}
+                          · since {c.since}
+                        </span>
                       ) : null}
                     </p>
                   </div>
@@ -310,7 +337,10 @@ export function CommunitiesView({
                         >
                           {timeAgo(last.lastPostedAt)}
                         </span>{" "}
-                        · {last.kind}{last.source === "forum" ? ` · ${last.postsCount} posts` : ""}
+                        · {last.kind}
+                        {last.source === "forum"
+                          ? ` · ${last.postsCount} posts`
+                          : ""}
                       </p>
                     </a>
                   ) : (
@@ -384,7 +414,12 @@ export function CommunitiesView({
                     </a>
                   ) : null}
                   {c.links.instagram ? (
-                    <a className="text-stone-600 hover:text-amber-800" href={c.links.instagram} target="_blank" rel="noreferrer">
+                    <a
+                      className="text-stone-600 hover:text-amber-800"
+                      href={c.links.instagram}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       Instagram
                     </a>
                   ) : null}
@@ -429,22 +464,6 @@ export function CommunitiesView({
           ) : null}
         </ul>
       </div>
-
-      {/* ---- Totals, at the bottom ---- */}
-      <section className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Communities" value={String(communities.length)} />
-        <Stat label="Countries" value={String(countries)} />
-        <Stat
-          label="Active this month"
-          value={`${activeMonth} of ${communities.length}`}
-        />
-        <Stat
-          label="ZCG-funded"
-          value={`${funded.length} of ${communities.length}`}
-          sub={`${usd(totalBudgeted)} budgeted, per the audited ledger`}
-          tone="warn"
-        />
-      </section>
     </>
   );
 }

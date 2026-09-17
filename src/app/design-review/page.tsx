@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { EditorialIntro } from "@/components/workspace";
 import { PageHeader } from "@/components/ui";
 import { DESIGN_GROUPS } from "@/lib/design-routes";
 export const metadata = { title: "Explore the redesign · OpenZcash" };
@@ -9,6 +10,17 @@ export default function DesignReviewPage() {
         title="A clearer view of Zcash."
         subtitle="Explore the new screens using the application’s real records. Follow a grant, compare payments, browse the ecosystem, or open the office."
       />
+      <EditorialIntro
+        eyebrow="Your OpenZcash workspace"
+        title="Start with a question. Follow the records."
+        description="The redesigned pages are connected to the system's data and tools. Choose an area below to explore funding, governance, development and the wider ecosystem."
+      >
+        <div className="ws-quick-links">
+          <Link href="/zcg/grants">Explore grants →</Link>
+          <Link href="/zcg/schedule">Upcoming payments →</Link>
+          <Link href="/ecosystem">Browse the ecosystem →</Link>
+        </div>
+      </EditorialIntro>
       <div className="rd-review-grid">
         {DESIGN_GROUPS.map((group) => (
           <section className="rd-review-group" key={group.name}>

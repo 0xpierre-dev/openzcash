@@ -1,3 +1,4 @@
+import { FeatureLink, SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import {
@@ -126,8 +127,32 @@ export default async function TotaisPage() {
     <>
       <PageHeader
         title="Totals & integrity check"
-        subtitle="Official aggregates from the ZCG spreadsheet (paid amounts by recipient and by classification), tagged by what each line is. They cross-check the ledger, since the spreadsheet only sums payments that actually settled."
+        subtitle="Where ZCG funding goes, with the official totals and ledger cross-check side by side."
       />
+
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat
+          label="Total paid"
+          value={formatUsdCents(total, { compact: true })}
+          sub="cumulative (spreadsheet)"
+          tone="warn"
+        />
+        <Stat
+          label="Future pipeline"
+          value={formatUsdCents(future, { compact: true })}
+          sub="milestones to pay"
+        />
+        <Stat
+          label="Categories"
+          value={String(cats.length)}
+          sub="ZCG classifications"
+        />
+        <Stat
+          label="Recipients"
+          value={String(external.length)}
+          sub="orgs (excludes internal buckets)"
+        />
+      </section>
 
       {/* Two separate funding pools — make it obvious which one this is. */}
       <div className="mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-stone-200 bg-stone-50/70 p-1.5">
@@ -207,30 +232,10 @@ export default async function TotaisPage() {
         </Card>
       </section>
 
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
-          label="Total paid"
-          value={formatUsdCents(total, { compact: true })}
-          sub="cumulative (spreadsheet)"
-          tone="warn"
-        />
-        <Stat
-          label="Future pipeline"
-          value={formatUsdCents(future, { compact: true })}
-          sub="milestones to pay"
-        />
-        <Stat
-          label="Categories"
-          value={String(cats.length)}
-          sub="ZCG classifications"
-        />
-        <Stat
-          label="Recipients"
-          value={String(external.length)}
-          sub="orgs (excludes internal buckets)"
-        />
-      </section>
-
+      <SectionHeading
+        title="Funding breakdown"
+        description="Filter classifications and recipients, then follow each line into the underlying ledger."
+      />
       <TotalsTables categoryRows={categoryRows} recipientRows={recipientRows} />
 
       <Card
@@ -293,6 +298,13 @@ export default async function TotaisPage() {
         </p>
       </Card>
 
+      <FeatureLink
+        eyebrow="Look ahead"
+        title="Approved future payments"
+        description="Keep historical totals separate from dated upcoming commitments."
+        href="/zcg/schedule"
+        label="View schedule"
+      />
       <Synced className="mt-6" />
     </>
   );

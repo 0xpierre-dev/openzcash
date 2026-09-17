@@ -1,3 +1,10 @@
+import {
+  SectionHeading,
+  RecordLayout,
+  RelatedLinks,
+  Facts,
+} from "@/components/workspace";
+import Link from "next/link";
 /* eslint-disable @next/next/no-img-element */
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { COMMUNITIES } from "@/lib/communities/data";
@@ -111,16 +118,28 @@ function rel(ts: string, now: number): string {
   return mo < 12 ? `${mo}mo ago` : `${Math.floor(d / 365)}y ago`;
 }
 
-export default async function NewsPage() {
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ source?: string; q?: string }>;
+}) {
+  const params = await searchParams;
   const items = await getNews();
+  const shown = items.filter(
+    (i) =>
+      (!params.source || i.source === params.source) &&
+      (!params.q ||
+        `${i.title} ${i.author ?? ""} ${i.kind ?? ""}`
+          .toLowerCase()
+          .includes(params.q.toLowerCase())),
+  );
   const latest = items[0]?.ts ?? "";
   const now = nowMs();
   const newCut = now - NEW_WINDOW_MS;
   const newCount = items.filter((i) => Date.parse(i.ts) > newCut).length;
   const fetchedAt = newsFetchedAt();
   const mins = fetchedAt ? Math.floor((now - fetchedAt) / 60_000) : null;
-  const fetchedAgo =
-    mins == null ? "" : mins < 1 ? "just now" : `${mins}m ago`;
+  const fetchedAgo = mins == null ? "" : mins < 1 ? "just now" : `${mins}m ago`;
 
   return (
     <>
@@ -129,70 +148,119 @@ export default async function NewsPage() {
         title="News"
         subtitle="The last seven days across the Zcash ecosystem: community forum, core GitHub releases, ZecHub DAO proposals, grant applications and new ledger entries. Refreshed hourly."
         actions={
-          newCount > 0 ? (
-            <Badge tone="rose">{newCount} new</Badge>
-          ) : undefined
+          newCount > 0 ? <Badge tone="rose">{newCount} new</Badge> : undefined
         }
       />
 
-      <p className="mb-3 text-xs text-stone-600">
-        Showing the last 7 days{fetchedAgo ? ` · updated ${fetchedAgo}` : ""}.
-        Older entries stay on their own pages.
-      </p>
+      <form className="ws-filter-panel" role="search">
+        <input
+          name="q"
+          type="search"
+          aria-label="Search news"
+          placeholder="Search this week's updates…"
+          defaultValue={params.q ?? ""}
+        />
+        <select
+          name="source"
+          aria-label="News source"
+          defaultValue={params.source ?? ""}
+        >
+          <option value="">All sources</option>
+          {Object.entries(SOURCE).map(([key, s]) => (
+            <option key={key} value={key}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+        <button className="ws-button">Search</button>
+        <Link href="/news">Reset</Link>
+      </form>
+      <RecordLayout
+        aside={
+          <>
+            <Facts
+              title="This week"
+              rows={[
+                ["Updates", String(items.length)],
+                ["New in 48 hours", String(newCount)],
+                ["Window", "Last 7 days"],
+                ["Updated", fetchedAgo || "Unavailable"],
+              ]}
+            />
+            <RelatedLinks
+              title="Follow a source"
+              links={Object.entries(SOURCE).map(([key, s]) => ({
+                href: `/news?source=${key}`,
+                label: s.label,
+                description: `${items.filter((i) => i.source === key).length} updates`,
+              }))}
+            />
+          </>
+        }
+      >
+        <SectionHeading title="Latest updates" count={shown.length} />
+        <p className="mb-3 text-xs text-stone-600">
+          Showing the last 7 days{fetchedAgo ? ` · updated ${fetchedAgo}` : ""}.
+          Older entries stay on their own pages.
+        </p>
 
-      <Card className="space-y-1 p-2">
-        {items.length === 0 ? (
-          <p className="px-3 py-8 text-center text-sm text-stone-600">
-            No recent activity. Sources may be momentarily unreachable.
-          </p>
-        ) : null}
-        {items.map((i: NewsItem) => {
-          const s = SOURCE[i.source];
-          const community = i.author
-            ? BY_HANDLE.get(i.author.toLowerCase())
-            : undefined;
-          const isNew = Date.parse(i.ts) > newCut;
-          const external = i.url.startsWith("http");
-          return (
-            <a
-              key={`${i.source}:${i.url}`}
-              href={i.url}
-              target={external ? "_blank" : undefined}
-              rel={external ? "noreferrer" : undefined}
-              className="flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100"
-            >
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white ring-1 ring-inset ring-stone-200"
-                title={community?.name}
+        <Card className="ws-news-feed p-0">
+          {shown.length === 0 ? (
+            <p className="px-3 py-8 text-center text-sm text-stone-600">
+              No updates match this view. Clear the filters or revisit the
+              source later.
+            </p>
+          ) : null}
+          {shown.map((i: NewsItem) => {
+            const s = SOURCE[i.source];
+            const community = i.author
+              ? BY_HANDLE.get(i.author.toLowerCase())
+              : undefined;
+            const isNew = Date.parse(i.ts) > newCut;
+            const external = i.url.startsWith("http");
+            return (
+              <a
+                key={`${i.source}:${i.url}`}
+                href={i.url}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
+                className="ws-news-item"
               >
-                {community ? (
-                  <span className="text-lg leading-none">{community.flag}</span>
-                ) : (
-                  s.logo
-                )}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 text-sm font-medium text-stone-900">
-                  <span className="truncate">{i.title}</span>
-                  {isNew ? (
-                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-rose-500" />
-                  ) : null}
-                </p>
-                <p className="truncate text-xs text-stone-600">
-                  {community
-                    ? community.name
-                    : i.source === "proposal" || i.source === "github"
-                      ? i.kind
-                      : s.label}
-                </p>
-              </div>
-              <span className="shrink-0 text-xs text-stone-600 tnum">
-                {rel(i.ts, now)}
-              </span>
-            </a>
-          );
-        })}
-      </Card>
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white ring-1 ring-inset ring-stone-200"
+                  title={community?.name}
+                >
+                  {community ? (
+                    <span className="text-lg leading-none">
+                      {community.flag}
+                    </span>
+                  ) : (
+                    s.logo
+                  )}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="flex items-center gap-2 text-sm font-medium text-stone-900">
+                    <span className="truncate">{i.title}</span>
+                    {isNew ? (
+                      <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-rose-500" />
+                    ) : null}
+                  </p>
+                  <p className="truncate text-xs text-stone-600">
+                    {community
+                      ? community.name
+                      : i.source === "proposal" || i.source === "github"
+                        ? i.kind
+                        : s.label}
+                  </p>
+                </div>
+                <span className="shrink-0 text-xs text-stone-600 tnum">
+                  {rel(i.ts, now)}
+                </span>
+              </a>
+            );
+          })}
+        </Card>
+      </RecordLayout>
     </>
   );
 }

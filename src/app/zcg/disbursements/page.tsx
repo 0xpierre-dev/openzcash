@@ -1,5 +1,8 @@
+import { formatUsdCents } from "@/lib/zcg/format";
+import { formatZecCompact } from "@/lib/zcash/units";
+import { SourceNote } from "@/components/workspace";
 import Link from "next/link";
-import { Card, PageHeader } from "@/components/ui";
+import { Card, PageHeader, Stat } from "@/components/ui";
 import {
   listDisbursements,
   overriddenDisbursementIds,
@@ -106,10 +109,43 @@ export default async function DesembolsosPage({
     <>
       <PageHeader
         title="Disbursements"
-        subtitle="ZCG off-chain ledger: each row is a milestone or payment (grant, contractor, bounty or monthly transfer) with budgeted USD, disbursed ZEC and the day's rate."
+        subtitle="Every recorded payment and milestone, with its original ledger evidence."
         actions={isAdmin ? <NewDisbursementForm /> : undefined}
       />
 
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat
+          label="Selected records"
+          value={String(rows.length)}
+          sub="current ledger selection"
+        />
+        <Stat
+          label="Paid entries"
+          value={String(rows.filter((r) => r.isPaid).length)}
+          sub="recorded as paid"
+          tone="in"
+        />
+        <Stat
+          label="USD paid"
+          value={formatUsdCents(
+            rows
+              .filter((r) => r.isPaid)
+              .reduce((s, r) => s + (r.amountUsdCents ?? 0n), 0n),
+            { compact: true },
+          )}
+          sub="budgeted value of paid entries"
+        />
+        <Stat
+          label="ZEC paid"
+          value={formatZecCompact(
+            rows
+              .filter((r) => r.isPaid)
+              .reduce((s, r) => s + (r.zecDisbursedZat ?? 0n), 0n),
+            { symbol: false },
+          )}
+          sub="recorded in the selected rows"
+        />
+      </section>
       {grant ? (
         <div className="mb-8 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-4 py-3">
           <p className="text-sm text-amber-800/80">
@@ -172,7 +208,11 @@ export default async function DesembolsosPage({
         </div>
       ) : null}
 
-      <div className="mb-8 flex flex-wrap gap-2">
+      <div
+        className="ws-catalog-tabs"
+        role="navigation"
+        aria-label="Ledger sources"
+      >
         {SHEETS.map((s) => {
           const active = sheet === s.id || (!sheet && !s.id);
           return (
@@ -194,7 +234,7 @@ export default async function DesembolsosPage({
         })}
       </div>
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden p-0">
         <DisbursementsTable rows={tableRows} isAdmin={isAdmin} />
       </Card>
 
@@ -208,6 +248,11 @@ export default async function DesembolsosPage({
         corrected in this back-office
       </p>
 
+      <SourceNote>
+        Amounts, exchange rates, classifications and source-row links remain
+        attached to each record. Use the table filters to inspect a recipient,
+        payment status or date.
+      </SourceNote>
       <Synced className="mt-4" />
     </>
   );
