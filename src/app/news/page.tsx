@@ -152,7 +152,11 @@ export default async function NewsPage({
         }
       />
 
-      <form className="ws-filter-panel" role="search">
+      <form
+        key={JSON.stringify([params.q ?? "", params.source ?? ""])}
+        className="ws-filter-panel"
+        role="search"
+      >
         <input
           name="q"
           type="search"

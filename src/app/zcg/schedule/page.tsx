@@ -50,7 +50,11 @@ export default async function SchedulePage({
           sub="unpaid entries with an earlier date"
         />
       </section>
-      <form className="ws-filter-panel" method="get">
+      <form
+        key={JSON.stringify([s.from, s.to, params.category ?? ""])}
+        className="ws-filter-panel"
+        method="get"
+      >
         <label className="text-xs text-stone-600">
           From
           <input
