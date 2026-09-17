@@ -35,7 +35,7 @@ export default function DesignReviewPage() {
           <Link href="/zcg/office">3D office ↗</Link> has a new entrance; the
           room stays the same. Grant and recipient details open from their
           respective lists. The existing Maya route continues to redirect to
-          reconciliation.
+          DeFi.
         </p>
       </section>
     </>

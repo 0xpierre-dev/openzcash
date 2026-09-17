@@ -77,7 +77,7 @@ export const DESIGN_GROUPS = [
 export function designGroup(path: string) {
   if (path === "/zcg/grant" || path === "/zcg/recipient")
     return DESIGN_GROUPS[0];
-  if (path === "/zcg/maya") return DESIGN_GROUPS[2];
+  if (path === "/zcg/maya") return DESIGN_GROUPS[3];
   return DESIGN_GROUPS.find((group) =>
     group.routes.some(([href]) => href === path),
   );

@@ -88,4 +88,20 @@ No DNS or production-domain changes are part of this preview.
 - Scoped ESLint: zero errors (two small local-image warnings).
 - 254 protected files checked byte-for-byte against production, with no changes.
 - Full public-table row comparison passed; see `data-parity.json`.
-- Browser and HTTP verification are recorded after deployment.
+- 45 route checks passed, including real grant/recipient/Monthly detail URLs,
+  the preserved `/monthly-preview` → `/monthly` and `/zcg/maya` → `/defi`
+  redirects, and anonymous administrator-page redirects to login. Communities
+  and Wallets had transient transport errors on the first pass and passed the
+  targeted recheck without code changes.
+- The separate administrator login and all three management pages passed.
+- Public API comparisons matched production exactly: 192 grants, 114 recipients
+  and all 1,012 disbursements. The 17 public tables were restored to the original
+  verified snapshot after fixing the startup scheduler; all 5,567 rows matched
+  the stored row digests again.
+- Browser checks covered category filtering, the grant-detail drilldown,
+  source-linked committee tags, office entrance and the rendered 3D room, and
+  returning to the original home layout. The unchanged 3D asset preloader logs
+  a WebAssembly CSP warning; the room still renders. No CSP or room changes
+  were introduced.
+- The production deployment and its existing upload-based source configuration
+  remained unchanged. The redesign response headers disable indexing.
