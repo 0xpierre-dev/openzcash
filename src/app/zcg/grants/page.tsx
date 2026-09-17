@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { grantsSummary, listGrants } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
@@ -22,9 +24,10 @@ function statusLabel(status: string | null): string {
 }
 
 export default async function GrantsPage() {
-  const [grants, summary] = await Promise.all([
+  const [grants, summary, schedule] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
+    getPaymentSchedule(),
   ]);
 
   const rows: GrantTableRow[] = grants.map((g) => ({
@@ -71,6 +74,19 @@ export default async function GrantsPage() {
           sub="committed, still to pay"
         />
       </section>
+
+      <div className="rd-schedule-link">
+        <div>
+          <small>Approved payments with a future date</small>
+          <strong className="tnum">
+            {formatUsdCents(schedule.totalCents)}
+          </strong>
+          <small>
+            {schedule.rows.length} payments · dated estimates from the ledger
+          </small>
+        </div>
+        <Link href="/zcg/schedule">View schedule & categories →</Link>
+      </div>
 
       <Card className="overflow-hidden p-0">
         <div className="p-4">

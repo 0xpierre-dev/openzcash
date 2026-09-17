@@ -44,7 +44,9 @@ export async function middleware(req: NextRequest) {
     const h = new Headers(req.headers);
     h.set("x-pathname", pathname);
     h.set("x-admin", isAdmin ? "1" : "0");
-    return NextResponse.next({ request: { headers: h } });
+    const response = NextResponse.next({ request: { headers: h } });
+    if (process.env.OPENZCASH_ENV === "redesign") response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+    return response;
   };
 
   if (!isAdminRoute(pathname)) return pass();

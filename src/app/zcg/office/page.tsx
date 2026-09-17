@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { officeUnderReview } from "@/lib/zcg/proposals-repo";
 import { OfficeCanvas } from "./office-canvas";
+import { OfficeEntrance } from "./office-entrance";
 import type { OfficeMember } from "./scene";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +44,7 @@ export default async function OfficePage() {
   const proposals = await officeUnderReview(100);
 
   return (
-    <>
+    <OfficeEntrance members={MEMBERS} proposalsCount={proposals.length}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-semibold tracking-tight text-stone-900">
@@ -99,6 +100,6 @@ export default async function OfficePage() {
         (modified: compressed, re-scaled, instanced). Low-poly furniture by
         Kenney (CC0) via the open-source Claw3D project (MIT).
       </p>
-    </>
+    </OfficeEntrance>
   );
 }

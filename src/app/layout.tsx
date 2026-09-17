@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import "./redesign.css";
 import { ShellGate } from "@/components/shell-gate";
 import { TapFeedback } from "@/components/tap-feedback";
 
@@ -21,6 +22,9 @@ export const metadata: Metadata = {
   description:
     "Public transparency for the Zcash Dev Fund: ZCG and FPF grant accounting, the live Lockbox, and governance, read-only and mirrored from the official sources.",
   applicationName: "OpenZcash",
+  ...(process.env.OPENZCASH_ENV === "redesign"
+    ? { robots: { index: false, follow: false } }
+    : {}),
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -53,7 +57,12 @@ export default async function RootLayout({
     >
       <body className="min-h-full">
         <TapFeedback />
-        <ShellGate isAdmin={isAdmin}>{children}</ShellGate>
+        <ShellGate
+          isAdmin={isAdmin}
+          isPreview={process.env.OPENZCASH_ENV === "redesign"}
+        >
+          {children}
+        </ShellGate>
       </body>
     </html>
   );

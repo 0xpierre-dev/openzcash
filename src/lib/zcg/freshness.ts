@@ -41,6 +41,7 @@ let lastTriggered = 0;
  * hide a persistently failing sibling tab.
  */
 export async function maybeAutoRefresh(): Promise<void> {
+  if (process.env.DISABLE_AUTO_REFRESH === "true") return;
   const now = Date.now();
   if (now - lastTriggered < COOLDOWN_MS) return;
   const at = await latestImportAt();
