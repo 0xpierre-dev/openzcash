@@ -93,7 +93,7 @@ async function compute(): Promise<MayaPosition | null> {
       dateLastAdded?: string;
     }[];
   };
-  type Earnings = { intervals: { startTime: string; pools: { pool: string; earnings: string; totalLiquidityFeesRune: string }[] }[] };
+  type Earnings = { intervals: { startTime: string; endTime: string; pools: { pool: string; earnings: string; totalLiquidityFeesRune: string }[] }[] };
   type Depths = { intervals: { startTime: string; units?: string; liquidityUnits?: string }[] };
   const [pool, member, oracleCents, cacao, earn, depths] = await Promise.all([
     getJson<Pool>(`${MIDGARD}/v2/pool/ZEC.ZEC`),
@@ -125,7 +125,8 @@ async function compute(): Promise<MayaPosition | null> {
   const unitsByMonth = new Map((depths?.intervals ?? []).map((d) => [d.startTime, Number(d.units ?? d.liquidityUnits ?? 0)]));
   const firstAdded = Number(p.dateFirstAdded ?? 0);
   const earnings = (earn?.intervals ?? [])
-    .filter((iv) => Number(iv.startTime) + 31 * 86_400 > firstAdded && firstAdded > 0)
+    // Only months that ended after the position opened.
+    .filter((iv) => firstAdded > 0 && Number(iv.endTime) > firstAdded)
     .map((iv) => {
       const z = iv.pools.find((x) => x.pool === "ZEC.ZEC");
       const pu = unitsByMonth.get(iv.startTime) ?? 0;
