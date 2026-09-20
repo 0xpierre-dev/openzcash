@@ -104,13 +104,11 @@ function OgShield({ since }: { since?: number }) {
   );
 }
 
-function pill(active: boolean, accent = false): string {
+function pill(active: boolean): string {
   return cn(
     "rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset transition",
     active
-      ? accent
-        ? "bg-amber-600 text-white ring-amber-600"
-        : "bg-stone-900 text-white ring-stone-900"
+      ? "bg-stone-900 text-white ring-stone-900"
       : "bg-white text-stone-600 ring-stone-300 hover:ring-stone-400",
   );
 }
@@ -231,7 +229,7 @@ export function CommunitiesView({
           <button
             key={key}
             onClick={() => setFunding(key)}
-            className={pill(funding === key, true)}
+            className={pill(funding === key)}
           >
             {label}
           </button>

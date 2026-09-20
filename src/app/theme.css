@@ -2076,3 +2076,57 @@
   color: #1c1917;
   --tw-ring-color: var(--accent);
 }
+
+/* ---------- Communities: one compact line per community ---------- */
+.rd-content .ws-community-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.rd-content .ws-community-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) 120px minmax(0, 0.9fr);
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 9px 16px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.rd-content .ws-community-card:first-child {
+  border-top: 0;
+}
+.rd-content .ws-community-card:hover {
+  background: var(--accent-soft);
+}
+.rd-content .ws-community-card > div + div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.rd-content .ws-community-card > div:first-child img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+.rd-content .ws-community-card .md\:line-clamp-2 {
+  display: none;
+}
+@media (max-width: 960px) {
+  .rd-content .ws-community-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .rd-content .ws-community-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
