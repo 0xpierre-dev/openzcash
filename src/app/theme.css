@@ -2135,3 +2135,21 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---------- Custody line under a position table ---------- */
+.rd-content .ws-custody {
+  margin: 12px 0 8px;
+}
+.rd-content .ws-custody p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.rd-content .ws-custody strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+.rd-content .ws-custody a {
+  color: var(--accent-ink);
+}

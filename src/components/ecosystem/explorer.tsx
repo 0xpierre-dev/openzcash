@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { EditorialIntro } from "@/components/workspace";
-import { Card, PageHeader, Stat } from "@/components/ui";
+import { Card, Stat } from "@/components/ui";
+import { OrgHeader } from "@/components/org-header";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type {
@@ -733,9 +733,10 @@ export function EcosystemExplorer({
 
   return (
     <div className={styles.explorer}>
-      <PageHeader
-        title={isDevelopment ? "Development" : "Ecosystem"}
-        subtitle={
+      <OrgHeader
+        name={isDevelopment ? "Development" : "Ecosystem"}
+        logo="/logos/ecosystem/zcash.png"
+        tagline={
           isDevelopment
             ? "Follow the code behind Zcash, from protocol infrastructure to applications."
             : "Discover the projects, tools and teams building with Zcash."
@@ -801,27 +802,6 @@ export function EcosystemExplorer({
         </button>
       </div>
 
-      <EditorialIntro
-        eyebrow={isDevelopment ? "Code & activity" : "Explore the ecosystem"}
-        title={
-          isDevelopment
-            ? "From repository to release"
-            : "A connected view of Zcash"
-        }
-        description={
-          isDevelopment
-            ? "Inspect repository activity, releases and project relationships. Measurement coverage and funding context remain attached to every record."
-            : "Browse by purpose, team or grant history. Open any project for its repositories, funding records and original sources."
-        }
-      >
-        <div className="ws-quick-links">
-          <Link href={isDevelopment ? "/ecosystem" : "/development"}>
-            {isDevelopment ? "Browse projects" : "Explore development"} →
-          </Link>
-          <Link href="/wallets">Wallet directory →</Link>
-          <Link href="/communities">Global communities →</Link>
-        </div>
-      </EditorialIntro>
       <div className={styles.filters} role="group" aria-label="Catalog filters">
         <label className={styles.search}>
           <svg
