@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, SectionHeading, SourceNote } from "@/components/workspace";
+import { SectionHeading, SourceNote } from "@/components/workspace";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { COINHOLDER_ROUND, ROUND_BANDS } from "@/lib/zcg/coinholder-round";
@@ -52,39 +52,7 @@ export default function CoinholderPage() {
         ))}
       </section>
 
-      <RecordLayout
-        aside={
-          <RelatedLinks
-            links={[
-              {
-                href: COINHOLDER_ROUND.sourceThreadUrl,
-                label: "FPF announcement",
-                description: "The round as announced on the forum",
-              },
-              {
-                href: COINHOLDER_ROUND.githubRepoUrl,
-                label: "GitHub submissions",
-                description: "Evidence for each proposal",
-              },
-              {
-                href: COINHOLDER_ROUND.dataDocUrl,
-                label: "Full data doc",
-                description: "Everything in one document for your own LLM",
-              },
-              {
-                href: "/zcg/coinholder/copilot",
-                label: "Coinholder Copilot",
-                description: "Research applicants before voting",
-              },
-              {
-                href: "/zcg/coinholder/pool",
-                label: "Coinholder pool",
-                description: "Balances and funding history",
-              },
-            ]}
-          />
-        }
-      >
+      <>
         <SectionHeading
           title="Proposals under review"
           count={COINHOLDER_ROUND.proposalCount}
@@ -99,7 +67,7 @@ export default function CoinholderPage() {
           signals that the requested amount was the blocker. Grants already paid
           from the pool are on the pool page, not in this round.
         </SourceNote>
-      </RecordLayout>
+      </>
     </>
   );
 }

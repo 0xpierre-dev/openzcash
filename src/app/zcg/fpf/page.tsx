@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks } from "@/components/workspace";
+
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { listGrants } from "@/lib/zcg/grants-repo";
 import { listProposals, proposalsFunnel } from "@/lib/zcg/proposals-repo";
@@ -116,30 +116,7 @@ export default async function FpfCoinholderGrantsPage() {
         />
       </section>
 
-      <RecordLayout
-        aside={
-          <>
-            <RelatedLinks
-              title="Program resources"
-              links={[
-                { href: "/zcg/coinholder/pool", label: "Coinholder pool" },
-                { href: proposalFpf, label: "Submit a proposal" },
-                { href: cryptpadMilestone, label: "Submit a milestone" },
-              ]}
-            />{" "}
-            <Card className="mb-8">
-              <p className="text-sm leading-relaxed text-stone-600">
-                The Financial Privacy Foundation administers a separate,
-                coinholder directed grants program. The cycle runs end to end: a
-                proposal is opened on GitHub, the FPF handles vetting and
-                compliance (KYC is required above US$50k), coinholders then
-                vote, and approved work is paid as a retroactive grant. This
-                universe is distinct from the regular ZCG track.
-              </p>
-            </Card>
-          </>
-        }
-      >
+      <>
         <section className="mb-8">
           <h2 className="mb-3 text-sm font-semibold text-stone-700">
             Coinholder grants
@@ -165,7 +142,7 @@ export default async function FpfCoinholderGrantsPage() {
             above · only approved proposals become paid grants.
           </p>
         </section>
-      </RecordLayout>
+      </>
     </>
   );
 }

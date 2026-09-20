@@ -1,8 +1,5 @@
 import {
   SectionHeading,
-  RecordLayout,
-  RelatedLinks,
-  Facts,
 } from "@/components/workspace";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { getDefiPools } from "@/lib/defi/pools";
@@ -125,26 +122,7 @@ export default async function DefiPage() {
         </div>
       )}
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="Two different records"
-              rows={[
-                ["Pool metrics", "Public Midgard API observations"],
-                ["Treasury allocation", "Historical ZCG transfer ledger"],
-                ["Yield", "Protocol-reported, variable"],
-              ]}
-            />
-            <RelatedLinks
-              links={[
-                { href: "/zcg/disbursements", label: "Public payment ledger" },
-                { href: "/zcg/reconciliation", label: "Treasury flow" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         {transfers.length > 0 ? (
           <section className="mt-10">
             <h2 className="mb-1 text-sm font-semibold text-stone-700">
@@ -218,7 +196,7 @@ export default async function DefiPage() {
           liquidity across many bridged pairs, not summed here to avoid
           double-counting their shared vault.
         </p>
-      </RecordLayout>
+      </>
     </>
   );
 }

@@ -1,8 +1,5 @@
 import {
   SectionHeading,
-  RecordLayout,
-  RelatedLinks,
-  Facts,
 } from "@/components/workspace";
 import { InvitesAdmin } from "@/components/invites-admin";
 import { PageHeader } from "@/components/ui";
@@ -20,33 +17,13 @@ export default async function ConvitesPage() {
         title="Onboarding invites"
         subtitle="Generate a link so a third party can register their own treasury (viewing key encrypted in the browser, or a transparent address). Each link carries a single-use token with an expiration date."
       />
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="How it works"
-              rows={[
-                ["Token", "Single use"],
-                ["Validity", "Expires at the specified date"],
-                ["Registration", "Encrypted key or public address"],
-              ]}
-            />
-            <RelatedLinks
-              title="Workspace"
-              links={[
-                { href: "/onboarding", label: "Treasury registration" },
-                { href: "/viewing-keys", label: "Registered treasuries" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         <SectionHeading
           title="Invitation management"
           description="Create and review one-time invitations to register treasury sources."
         />
         <InvitesAdmin invites={invites} />
-      </RecordLayout>
+      </>
     </>
   );
 }

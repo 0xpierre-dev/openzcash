@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
+
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { IconShield } from "@/components/icons";
 import { zcgReconciliation } from "@/lib/zcg/reconcile-onchain";
@@ -37,27 +37,7 @@ export default async function ZcgReconciliacaoPage() {
           <span>Individual entries from the spreadsheet</span>
         </div>
       </div>
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="Reconciliation scope"
-              rows={[
-                ["On-chain", "Aggregate treasury flow"],
-                ["Off-chain", "Public spreadsheet records"],
-                ["Individual matching", "Requires shielded viewing data"],
-              ]}
-            />
-            <RelatedLinks
-              links={[
-                { href: "/lockbox", label: "Lockbox treasury" },
-                { href: "/zcg/totals", label: "Ledger integrity check" },
-                { href: "/zcg/disbursements", label: "Payment ledger" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         {r.onchain ? (
           <section className="mb-8">
             <h2 className="mb-3 text-sm font-semibold text-stone-700">
@@ -172,7 +152,7 @@ export default async function ZcgReconciliacaoPage() {
             </p>
           </div>
         </Card>
-      </RecordLayout>
+      </>
     </>
   );
 }

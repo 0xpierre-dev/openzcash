@@ -1,8 +1,5 @@
 import {
   SectionHeading,
-  RecordLayout,
-  RelatedLinks,
-  Facts,
 } from "@/components/workspace";
 import Link from "next/link";
 import { IconAlert, IconKey, IconShield } from "@/components/icons";
@@ -89,28 +86,7 @@ export default async function ViewingKeysPage() {
         ) : null}
       </section>
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="Treasury accounting"
-              rows={[
-                ["Sources", "Shielded viewing keys and public addresses"],
-                ["Consolidation", "External flows counted once"],
-                ["Internal movement", "Tracked separately"],
-              ]}
-            />
-            <RelatedLinks
-              title="Manage sources"
-              links={[
-                { href: "/onboarding", label: "Register a treasury" },
-                { href: "/invites", label: "Onboarding invitations" },
-                { href: "/projects", label: "Recipient projects" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         <SectionHeading
           title="Connected treasuries"
           count={viewingKeys.length}
@@ -279,7 +255,7 @@ export default async function ViewingKeysPage() {
             </table>
           </Card>
         </section>
-      </RecordLayout>
+      </>
     </>
   );
 }

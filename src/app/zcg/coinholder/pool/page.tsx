@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, SectionHeading, SourceNote } from "@/components/workspace";
+import { SectionHeading, SourceNote } from "@/components/workspace";
 import { PageHeader, Stat } from "@/components/ui";
 import { currentLockboxZec } from "@/lib/zcash/lockbox-live";
 import { currentZecUsdCents, zatToUsdCents } from "@/lib/pricing/live-price";
@@ -90,34 +90,7 @@ export default async function CoinholderPoolPage() {
         />
       </section>
 
-      <RecordLayout
-        aside={
-          <RelatedLinks
-            links={[
-              {
-                href: "/zcg/coinholder",
-                label: "Coinholder Grants",
-                description: "The retroactive round under review",
-              },
-              {
-                href: "/zcg/fpf",
-                label: "FPF records",
-                description: "Applications, approved grants and sources",
-              },
-              {
-                href: "/lockbox",
-                label: "Lockbox",
-                description: "Live block rewards into the pool",
-              },
-              {
-                href: "/zcg/totals",
-                label: "ZCG totals",
-                description: "The committee pool, accounted separately",
-              },
-            ]}
-          />
-        }
-      >
+      <>
         <SectionHeading
           title="Funding history"
           description="Official paid amounts by classification and recipient, from the Coinholder Grants sheet."
@@ -131,7 +104,7 @@ export default async function CoinholderPoolPage() {
           does not independently verify delivery.
         </SourceNote>
         <Synced className="mt-6" />
-      </RecordLayout>
+      </>
     </>
   );
 }

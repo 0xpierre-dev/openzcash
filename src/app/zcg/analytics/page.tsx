@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
+
 import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { BarList } from "@/components/bar-list";
@@ -159,30 +159,7 @@ export default async function AnalyticsPage() {
         subtitle="Trends derived entirely from the disbursement ledger and totals we already import. No new data."
       />
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="About these insights"
-              rows={[
-                ["Basis", "Imported disbursement ledger"],
-                ["USD values", "Budgeted value of settled entries"],
-                ["Delivery", "Payment status is not delivery evidence"],
-              ]}
-            />
-            <RelatedLinks
-              title="Explore the analysis"
-              links={[
-                { href: "#spend", label: "Monthly spend" },
-                { href: "#concentration", label: "Funding concentration" },
-                { href: "#delivery", label: "Milestone progress" },
-                { href: "#categories", label: "Category momentum" },
-                { href: "#bounties", label: "Bounty payments" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         {/* #6 Spend over time */}
         <section id="spend" className="mb-8 ws-report-section">
           <h2 className="mb-3 text-sm font-semibold text-stone-700">
@@ -379,7 +356,7 @@ export default async function AnalyticsPage() {
             </Card>
           </section>
         ) : null}
-      </RecordLayout>
+      </>
       <Synced />
     </>
   );
