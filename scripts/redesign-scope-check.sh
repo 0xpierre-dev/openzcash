@@ -30,9 +30,10 @@ PRESERVED=(
   src/app/loading.tsx
   src/app/error.tsx
   # Monthly: rotas, leitor, geradores e publicações
+  # (the reader components in src/components/monthly follow the theme since
+  # 20/09: only the routes, the data and the published files stay frozen)
   src/app/monthly/
   src/app/monthly-preview/
-  src/components/monthly/
   src/lib/monthly/
   public/monthly/
   # a sala 3D: só a entrada (office/page.tsx, office-entrance.tsx) é do redesign

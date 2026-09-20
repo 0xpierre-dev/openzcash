@@ -4,7 +4,11 @@ Este documento substitui o plano de 8 de setembro de 2026 (branch
 `michae2xl/redesign-grant-org-structure`), que congelava a primeira tela de cada
 app e limitava o redesign às telas internas. A decisão tomada no ambiente de
 teste de 17 de setembro foi outra, e é a que vale: o redesign cobre o shell e
-todas as telas dos apps, inclusive a home; só o Monthly e a sala 3D ficam como estão.
+todas as telas dos apps, inclusive a home. A sala 3D fica como está; do Monthly
+ficam congelados as rotas, os dados e as edições publicadas, enquanto a casca
+do leitor (`components/monthly/*.module.css`) segue a paleta de produção desde
+20/09/2026 (recolorida por lightness: creme, stone e dourado no lugar do papel,
+dos cinza-esverdeados e do ouro antigo).
 
 ## 1. Fronteira
 
@@ -12,7 +16,7 @@ todas as telas dos apps, inclusive a home; só o Monthly e a sala 3D ficam como 
 
 | Grupo    | Arquivos                                                                                  |
 | -------- | ----------------------------------------------------------------------------------------- |
-| Monthly  | `src/app/monthly*/`, `components/monthly/`, `lib/monthly/`, `public/monthly/`             |
+| Monthly  | `src/app/monthly*/`, `lib/monthly/`, `public/monthly/` (a casca em `components/monthly/` segue o tema) |
 | Sala 3D  | `office/scene.tsx`, `office-canvas.tsx`, `proposal-dialog.tsx`, `public/office-assets/`   |
 
 **Do redesign**: `layout.tsx`, `app-shell.tsx`, `shell-gate.tsx`, os primitivos

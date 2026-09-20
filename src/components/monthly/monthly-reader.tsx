@@ -199,7 +199,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
   return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""}`} data-edition={edition.id}>
     <header className={styles.header}>
       <div className={styles.identity}>
-        <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/zcash-mark.svg" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
+        <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/logos/marks/openzcash.png" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
         <span className={styles.headerDivider} />
         <Link href="/monthly" className={styles.publicationName}>MONTHLY</Link>
       </div>
