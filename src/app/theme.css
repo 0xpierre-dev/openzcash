@@ -2354,3 +2354,32 @@
     overflow: visible;
   }
 }
+
+/* ---------- Monthly earnings bars ---------- */
+.rd-content .ws-earnings {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin: 12px 0 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.rd-content .ws-earnings span {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.rd-content .ws-earnings i {
+  display: block;
+  width: 100%;
+  max-width: 28px;
+  border-radius: 3px 3px 0 0;
+  background: var(--accent);
+}
+.rd-content .ws-earnings small {
+  font-size: 10px;
+  color: var(--dim);
+  white-space: nowrap;
+}

@@ -64,6 +64,15 @@ export const IconBalance = svg(
 export const IconArrowDown = svg(<path d="M12 5v14M19 12l-7 7-7-7" />);
 export const IconArrowUp = svg(<path d="M12 19V5M5 12l7-7 7 7" />);
 
+/** A rising line in a frame: positions and investments. */
+export const IconTrend = svg(
+  <>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M6.5 15.5l3.5-4 3 2.5 4.5-5.5" />
+    <path d="M14.5 8.5h3v3" />
+  </>,
+);
+
 export const IconShield = svg(
   <path d="M12 3 5 6v6c0 4 3 6.5 7 9 4-2.5 7-5 7-9V6l-7-3Z" />,
 );
