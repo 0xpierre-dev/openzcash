@@ -2153,3 +2153,48 @@
 .rd-content .ws-custody a {
   color: var(--accent-ink);
 }
+
+/* ---------- Live position block ---------- */
+.rd-content .ws-position {
+  margin: 14px 0 4px;
+  padding: 4px 16px 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.rd-content .ws-position dl {
+  margin: 0;
+}
+.rd-content .ws-position dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.rd-content .ws-position dl > div:first-child {
+  border-top: 0;
+}
+.rd-content .ws-position dt {
+  color: var(--dim);
+}
+.rd-content .ws-position dd {
+  margin: 0;
+  color: var(--ink);
+}
+.rd-content .ws-position > p {
+  margin: 10px 0 4px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--dim);
+}
+.rd-content .ws-position a {
+  color: var(--accent-ink);
+}
+@media (max-width: 720px) {
+  .rd-content .ws-position dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
