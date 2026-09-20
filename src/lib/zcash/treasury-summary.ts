@@ -22,6 +22,8 @@ export type TreasuryPool = {
   usd: string;
   /** Extra line, e.g. USD cash held alongside the ZEC. */
   sub?: string;
+  /** The same figures unabridged, for the bar's tooltip. */
+  exact: string;
 };
 
 export type TreasurySummary = {
@@ -71,6 +73,11 @@ async function compute(): Promise<TreasurySummary> {
             op.usdCashBalanceCents != null
               ? `${formatUsdCents(op.usdCashBalanceCents, { compact: true })} cash`
               : undefined,
+          exact: `${formatZec(op.zecBalanceZat ?? 0n, { symbol: false })} ZEC ≈ ${formatUsdCents(opUsdCents)}${
+            op.usdCashBalanceCents != null
+              ? ` · ${formatUsdCents(op.usdCashBalanceCents)} cash`
+              : ""
+          }`,
         }
       : null,
     lockbox: lock
@@ -80,6 +87,7 @@ async function compute(): Promise<TreasurySummary> {
           href: "/lockbox",
           zec: formatZec(lock.zat, { symbol: false }),
           usd: formatUsdCents(lockUsdCents, { compact: true }),
+          exact: `${formatZec(lock.zat, { symbol: false })} ZEC ≈ ${formatUsdCents(lockUsdCents)}`,
         }
       : null,
     height: height != null ? Number(height).toLocaleString("en-US") : null,

@@ -17,7 +17,12 @@ export async function TreasuryBar() {
     <div className="rd-treasury-inner">
       <div className="rd-treasury-pools">
         {pools.map((p) => (
-          <Link key={p.name} href={p.href} className="rd-treasury-pool">
+          <Link
+            key={p.name}
+            href={p.href}
+            className="rd-treasury-pool"
+            title={p.exact}
+          >
             <span className="rd-treasury-name">{p.name}</span>
             <span className="rd-treasury-zec tnum">
               {p.zec} <small>ZEC</small>

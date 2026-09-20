@@ -25,7 +25,11 @@ export default function CoinholderPage() {
         />
         <Stat
           label="Requested"
-          value={formatUsdCents(COINHOLDER_ROUND.totalRequestedUsdCents, { compact: true })}
+          value={
+            <span className="ws-exact-amount">
+              {formatUsdCents(COINHOLDER_ROUND.totalRequestedUsdCents)}
+            </span>
+          }
           sub="all proposals, USD"
           tone="warn"
         />

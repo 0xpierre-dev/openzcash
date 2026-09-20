@@ -232,6 +232,36 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Parity audit against production — 20 September 2026
+
+Method: route files of `origin/main` vs this branch; every public API
+endpoint fetched from openzcash.org and from the staging host and compared
+(counts, sums, statuses, titles); every public page fetched from both and
+its figures and headings compared, with the shell chrome stripped.
+
+- Routes: nothing from production is missing. Staging adds
+  `/api/nav-counts`, `/design-review`, `/zcg/committee`, `/zcg/schedule`
+  and `/zcg/coinholder/pool`.
+- API data identical: 192 grants (868 milestones, 674 paid, $23,071,608.07,
+  398,922.13 ZEC, same status counts), 1,015 disbursements ($25,976,143.96,
+  414,733.65 ZEC, 821 paid), 114 recipients, 16 proposals under review with
+  the same titles, the same Coinholder round, the same ZecHub treasury
+  snapshot, 50 / 4 / 66 feed entries.
+- Page figures: the only differences are live-price timing (Lockbox and
+  ZecHub USD valuations, DeFi TVL, ZEC price), tables that production
+  renders in full while staging paginates them (grants, disbursements,
+  recipients, totals, FPF, proposals; the data is the same), and figures
+  staging shows more precisely (stipends per member in full dollars).
+- Two precision gaps found and closed: the Coinholder round's requested
+  total is shown in full ($9,014,383.20, not $9M), and the treasury bar
+  carries the unabridged figures in each pool's tooltip (production's home
+  printed the operating cash in full).
+- Intentional differences, all requested during the redesign: the home is
+  the ZCG overview; committee elections live on `/zcg/committee`; the
+  grant detail merges paid and unpaid milestones into one timeline; the
+  copilot pages lost their display headlines; the Coinholder page split in
+  two; no pool switchers, launcher, trails or page footers.
+
 ### Coinholder split — 20 September 2026
 
 - `/zcg/coinholder` is the retroactive round only: proposals, requested
