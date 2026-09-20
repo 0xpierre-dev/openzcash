@@ -14,6 +14,11 @@ export const dynamic = "force-dynamic";
 
 const TTL_MS = 5 * 60_000;
 const fmt = (n: number) => n.toLocaleString("en-US");
+// A zero from a source that is still warming (Arborist right after a
+// deploy, for instance) would read as a fact; the item just shows no count.
+const put = (out: Record<string, string>, key: string, n: number | null | undefined) => {
+  if (n != null && n > 0) out[key] = fmt(n);
+};
 
 /**
  * Record counts for the shell's sidebar, keyed by route. Every source is
@@ -39,22 +44,18 @@ async function compute(): Promise<Record<string, string>> {
     catalog = null;
   }
   const out: Record<string, string> = {};
-  if (summary) {
-    out["/zcg/grants"] = fmt(summary.grantCount);
-    out["/zcg/disbursements"] = fmt(summary.count);
-    out["/zcg/recipients"] = fmt(summary.recipientCount);
-  }
-  if (proposals) out["/zcg/proposals"] = fmt(proposals.length);
-  if (queue) out["/zcg/office"] = fmt(queue.length);
-  if (schedule) out["/zcg/schedule"] = fmt(schedule.rows.length);
-  out["/zcg/committee"] = fmt(MEMBERS.length);
-  if (meetings) out["/zcg/meetings"] = fmt(meetings.length);
-  if (catalog) {
-    out["/ecosystem"] = fmt(catalog.registry.projects.length);
-    out["/development"] = fmt(catalog.snapshot.repositories.length);
-  }
-  out["/communities"] = fmt(COMMUNITIES.length);
-  if (calls) out["/arborist"] = fmt(calls.length);
+  put(out, "/zcg/grants", summary?.grantCount);
+  put(out, "/zcg/disbursements", summary?.count);
+  put(out, "/zcg/recipients", summary?.recipientCount);
+  put(out, "/zcg/proposals", proposals?.length);
+  put(out, "/zcg/office", queue?.length);
+  put(out, "/zcg/schedule", schedule?.rows.length);
+  put(out, "/zcg/committee", MEMBERS.length);
+  put(out, "/zcg/meetings", meetings?.length);
+  put(out, "/ecosystem", catalog?.registry.projects.length);
+  put(out, "/development", catalog?.snapshot.repositories.length);
+  put(out, "/communities", COMMUNITIES.length);
+  put(out, "/arborist", calls?.length);
   return out;
 }
 
