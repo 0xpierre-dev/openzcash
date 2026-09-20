@@ -1,10 +1,7 @@
 import {
-  EditorialIntro,
-  RecordLayout,
-  RelatedLinks,
-  Facts,
 } from "@/components/workspace";
-import { Badge, Card, PageHeader } from "@/components/ui";
+import { Badge, Card } from "@/components/ui";
+import { OrgHeader } from "@/components/org-header";
 import { IconShield } from "@/components/icons";
 import { Suspense } from "react";
 import { OrgUpdates } from "@/components/org-updates";
@@ -59,48 +56,24 @@ async function LiveUpdates() {
 export default function ShieldedLabsPage() {
   return (
     <>
-      <PageHeader
-        title="Shielded Labs"
-        subtitle="An independent, donation-funded Zcash organization and the first that has never taken Development Fund or block-reward money. It drives two protocol-economics efforts: Crosslink (hybrid Proof-of-Stake) and the Network Sustainability Mechanism."
-        actions={
-          <a
-            href={SITE}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-lg bg-amber-500/15 px-3 py-2 text-sm font-medium text-amber-700 ring-1 ring-inset ring-amber-500/30 hover:bg-amber-500/25"
-          >
-            shieldedlabs.net ↗
-          </a>
-        }
+      <OrgHeader
+        name="Shielded Labs"
+        logo="/logos/shielded-labs.png"
+        tagline="An independent, donation-funded Zcash organization and the first that has never taken Development Fund or block-reward money. It drives two protocol-economics efforts: Crosslink (hybrid Proof-of-Stake) and the Network Sustainability Mechanism."
+        links={[
+          { href: SITE, label: "shieldedlabs.net" },
+          { href: ROADMAP, label: "Roadmap & milestones" },
+          { href: GITHUB, label: "GitHub · ShieldedLabs" },
+          { href: NSM, label: "NSM overview" },
+        ]}
+        stats={[
+          { label: "Funding", value: "Donations", sub: "independent, never Dev Fund" },
+          { label: "Focus", value: "Protocol", sub: "economics & finality" },
+          { label: "Efforts", value: "2", sub: "Crosslink · NSM" },
+          { label: "Projects", value: "4", sub: "in the ecosystem registry" },
+        ]}
       />
-
-      <EditorialIntro
-        eyebrow="Protocol research"
-        title="Long-term resilience for Zcash"
-        description="Follow Crosslink and the Network Sustainability Mechanism, with direct links to specifications, milestones and public updates."
-      >
-        <Facts
-          title="Organization"
-          rows={[
-            ["Funding", "Independent donations"],
-            ["Focus", "Protocol economics & finality"],
-            ["Primary efforts", "Crosslink · NSM"],
-          ]}
-        />
-      </EditorialIntro>
-      <RecordLayout
-        aside={
-          <RelatedLinks
-            title="Primary sources"
-            links={[
-              { href: SITE, label: "Shielded Labs" },
-              { href: ROADMAP, label: "Roadmap & milestones" },
-              { href: GITHUB, label: "Code repositories" },
-              { href: NSM, label: "NSM overview" },
-            ]}
-          />
-        }
-      >
+      <>
         <a href={CROSSLINK} target="_blank" rel="noreferrer" className="block">
           <Card
             interactive
@@ -200,7 +173,7 @@ export default function ShieldedLabsPage() {
             <LiveUpdates />
           </div>
         </Suspense>
-      </RecordLayout>
+      </>
     </>
   );
 }

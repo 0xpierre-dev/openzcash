@@ -82,7 +82,7 @@ export const APPS: AppDef[] = [
   {
     id: "zodl",
     label: "ZODL",
-    href: "/ecosystem?org=zodl",
+    href: "/zodl",
     sub: "Zcash Open Development Lab",
     logo: "/logos/ecosystem/zodl-lab.png",
     icon: "terminal",
@@ -92,7 +92,7 @@ export const APPS: AppDef[] = [
   {
     id: "zakura",
     label: "Zakura",
-    href: "/ecosystem?project=zakura",
+    href: "/zakura",
     sub: "Full node · Valar & Tachyon",
     logo: "/logos/ecosystem/zakura.png",
     icon: "terminal",
@@ -101,7 +101,7 @@ export const APPS: AppDef[] = [
   {
     id: "tachyon",
     label: "Tachyon",
-    href: "/ecosystem?org=project-tachyon",
+    href: "/tachyon",
     sub: "Protocol research",
     logo: "/logos/ecosystem/tachyon.png",
     icon: "terminal",

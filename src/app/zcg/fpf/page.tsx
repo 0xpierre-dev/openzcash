@@ -1,5 +1,6 @@
 
-import { Card, PageHeader, Stat } from "@/components/ui";
+import { Card, Stat } from "@/components/ui";
+import { OrgHeader } from "@/components/org-header";
 import { listGrants } from "@/lib/zcg/grants-repo";
 import { listProposals, proposalsFunnel } from "@/lib/zcg/proposals-repo";
 import { getLinks } from "@/lib/zcg/governance-repo";
@@ -72,29 +73,14 @@ export default async function FpfCoinholderGrantsPage() {
 
   return (
     <>
-      <PageHeader
-        title="FPF · Coinholder Grants"
-        subtitle="Retroactive grants directed by coinholder vote, not by a committee. Run by the Financial Privacy Foundation on a quarterly cadence."
-        actions={
-          <div className="flex flex-wrap items-center gap-2">
-            <a
-              href={proposalFpf}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500/90 px-3.5 py-2 text-sm font-medium text-stone-900 shadow-sm shadow-amber-900/30 transition hover:bg-amber-400"
-            >
-              Submit a proposal ↗
-            </a>
-            <a
-              href={cryptpadMilestone}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-3.5 py-2 text-sm font-medium text-stone-700 shadow-sm transition hover:border-stone-400 hover:bg-stone-50"
-            >
-              Submit a milestone ↗
-            </a>
-          </div>
-        }
+      <OrgHeader
+        name="Financial Privacy Foundation"
+        logo="/logos/fpf.png"
+        tagline="Retroactive grants directed by coinholder vote, not by a committee. Run by the Financial Privacy Foundation on a quarterly cadence."
+        links={[
+          { href: proposalFpf, label: "Submit a proposal" },
+          { href: cryptpadMilestone, label: "Submit a milestone" },
+        ]}
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
