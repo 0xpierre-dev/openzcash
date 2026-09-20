@@ -40,7 +40,7 @@ export function OrgPage({ orgId, logo, tagline }: { orgId: string; logo: string;
         stats={[
           { label: "Projects", value: String(projects.length), sub: "in the ecosystem registry" },
           { label: "Repositories", value: String(repos.length), sub: "public, in the snapshot" },
-          { label: "Latest push", value: latestPush ? displayDate(latestPush) : "n/a", sub: "across its repositories" },
+          { label: "Latest push", value: latestPush ? displayDate(latestPush.slice(0, 10)) : "n/a", sub: "across its repositories" },
           { label: "Funding", value: org.funding.status.replace(/-/g, " "), sub: org.funding.label },
         ]}
       />
