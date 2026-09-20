@@ -2130,3 +2130,8 @@
     gap: 6px;
   }
 }
+.rd-content .ws-community-card .truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
