@@ -255,7 +255,7 @@ export function AppShell({
           </button>
           <Link href="/" className="rd-brand" aria-label="OpenZcash home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logos/apps/openzcash.png" width="68" height="68" alt="" />
+            <img src="/logos/marks/openzcash.png" width="68" height="68" alt="" />
             <span className="rd-brand-text">
               <strong>OpenZcash</strong>
             </span>
@@ -268,7 +268,7 @@ export function AppShell({
             aria-current={isHome ? "page" : undefined}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logos/pages/home.png" alt="" width={15} height={15} className="rd-side-page-icon" />
+            <img src="/logos/glyphs/home.png" alt="" width={15} height={15} className="rd-side-page-icon" />
             <span className="rd-side-label">Home</span>
             <small>treasuries · apps</small>
           </Link>

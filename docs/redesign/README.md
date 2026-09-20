@@ -93,8 +93,8 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
     cada app, oficial ou não, aparece num quadrado branco arredondado de 20px
     (`.rd-side-logo`), como o da ZF que o usuário aprovou. Logos oficiais em
     `public/logos/`; para apps sem logo, `scripts/gen-app-icons.mjs` gera o
-    glifo em tinta sobre transparente (`public/logos/apps/*.png`) e os glifos
-    de página em dourado (`public/logos/pages/*.png`). A ZF usa só o emblema
+    glifo em tinta sobre transparente (`public/logos/marks/*.png`) e os glifos
+    de página em dourado (`public/logos/glyphs/*.png`). A ZF usa só o emblema
     (cadeado-escudo, seis primeiras formas do SVG oficial), legível a 18px.
     Só os chevrons e o botão de fechar continuam vetoriais.
 12. Sidebar sem linhas e acompanhando o tema: painel creme `#f3efe6` no claro
