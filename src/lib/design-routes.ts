@@ -73,7 +73,8 @@ export const APPS: AppDef[] = [
     logo: "/logos/fpf.png",
     icon: "wallet",
     pages: [
-      { href: "/zcg/coinholder", label: "Coinholder", mark: "/logos/glyphs/coinholder.png" },
+      { href: "/zcg/coinholder", label: "Coinholder Grants", mark: "/logos/glyphs/coinholder.png" },
+      { href: "/zcg/coinholder/pool", label: "Coinholder pool", mark: "/logos/glyphs/coinholder.png" },
       { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
     ],
   },

@@ -122,7 +122,7 @@ export default async function FpfCoinholderGrantsPage() {
             <RelatedLinks
               title="Program resources"
               links={[
-                { href: "/zcg/coinholder", label: "Coinholder funding pool" },
+                { href: "/zcg/coinholder/pool", label: "Coinholder pool" },
                 { href: proposalFpf, label: "Submit a proposal" },
                 { href: cryptpadMilestone, label: "Submit a milestone" },
               ]}

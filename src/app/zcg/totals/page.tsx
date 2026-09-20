@@ -155,22 +155,6 @@ export default async function TotaisPage() {
       </section>
 
       {/* Two separate funding pools — make it obvious which one this is. */}
-      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-stone-200 bg-stone-50/70 p-1.5">
-        <span className="rounded-lg bg-amber-500/15 px-3 py-1.5 text-sm font-semibold text-amber-800 ring-1 ring-inset ring-amber-500/25">
-          ZCG grants pool
-        </span>
-        <Link
-          href="/zcg/coinholder"
-          className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 transition hover:bg-white hover:text-stone-900"
-        >
-          Coinholder grants pool →
-        </Link>
-        <span className="px-1 text-xs text-stone-600">
-          Two separate pools. You&apos;re viewing the{" "}
-          <span className="font-medium text-stone-700">ZCG</span> committee
-          pool.
-        </span>
-      </div>
 
       <section className="mb-8">
         <div className="mb-3 flex items-baseline justify-between gap-3">

@@ -57,7 +57,7 @@ export default async function TransacoesPage() {
             />
             <RelatedLinks
               links={[
-                { href: "/zcg/coinholder", label: "Coinholder grants pool" },
+                { href: "/zcg/coinholder/pool", label: "Coinholder pool" },
                 {
                   href: "/zcg/reconciliation",
                   label: "ZCG treasury reconciliation",
