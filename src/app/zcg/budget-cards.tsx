@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { Card } from "@/components/ui";
+import { spreadsheetSource } from "@/lib/zcg/source-links";
+import { ZCG_GIDS } from "@/lib/zcg/sheets";
 import { budgetSnapshot } from "@/lib/zcg/snapshots-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
@@ -41,9 +44,13 @@ export async function BudgetCards() {
           <div className="mt-3 flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-stone-600">
               Spent{" "}
-              <span className="font-medium text-stone-800 tnum">
-                {formatUsdCents(spentUsd)}
-              </span>
+              <Link
+                href="/zcg/disbursements?sheet=discretionary"
+                className="font-medium text-amber-700 tnum hover:underline"
+                title="Every discretionary payment, line by line"
+              >
+                {formatUsdCents(spentUsd)} →
+              </Link>
             </span>
             <span
               className={`font-medium tnum ${usdOver ? "text-rose-600" : "text-emerald-600"}`}
@@ -77,9 +84,13 @@ export async function BudgetCards() {
           <div className="mt-3 flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-stone-600">
               Spent{" "}
-              <span className="font-medium text-stone-800 tnum">
-                {formatZec(spentZec, { symbol: false })}
-              </span>
+              <Link
+                href="/zcg/disbursements?sheet=discretionary"
+                className="font-medium text-amber-700 tnum hover:underline"
+                title="Every discretionary payment, line by line"
+              >
+                {formatZec(spentZec, { symbol: false })} →
+              </Link>
             </span>
             <span className="font-medium text-emerald-600 tnum">
               Remaining {formatZec(remZec, { symbol: false })}
@@ -87,6 +98,23 @@ export async function BudgetCards() {
           </div>
         </Card>
       </div>
+      <p className="mt-3 text-xs text-stone-600">
+        Figures from the &ldquo;ZCG Discretionary Budget&rdquo; tab of the official
+        spreadsheet:{" "}
+        <a
+          href={spreadsheetSource(ZCG_GIDS.discretionary, null).sourceUrl ?? "#"}
+          target="_blank"
+          rel="noreferrer"
+          className="text-amber-700 hover:underline"
+        >
+          open the tab ↗
+        </a>{" "}
+        · the payments behind &ldquo;spent&rdquo; are{" "}
+        <Link href="/zcg/disbursements?sheet=discretionary" className="text-amber-700 hover:underline">
+          in the ledger →
+        </Link>
+        .
+      </p>
 
       <Card className="mt-4 border-amber-500/20 bg-amber-500/[0.06]">
         <p className="text-sm text-amber-800/80">
