@@ -30,10 +30,13 @@
   cursor: pointer;
 }
 .rd-header {
-  top: 35px;
   background: #fff;
   border-color: var(--ws-line);
   backdrop-filter: none;
+}
+/* The sticky header only clears the preview bar when that bar exists. */
+.rd-shell-preview .rd-header {
+  top: 35px;
 }
 .rd-header-inner {
   max-width: 1440px;
@@ -1809,4 +1812,35 @@
     padding-right: 0;
   }
 }
-.ws-editorial-side .ws-facts h2,.ws-editorial-side .ws-related h2{font-size:13px;font-weight:650;letter-spacing:0;line-height:1.4;margin:0 0 16px}
+.ws-editorial-side .ws-facts h2,
+.ws-editorial-side .ws-related h2 {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin: 0 0 16px;
+}
+/* Supplementary table columns stay off narrow screens (DataTable mobileHidden). */
+.ws-optional-column {
+  display: none;
+}
+@media (min-width: 640px) {
+  .ws-optional-column {
+    display: table-cell;
+  }
+}
+/* Rows-per-page control in the table footer. */
+.ws-table-pagesize {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rd-content .ws-table-pagesize select {
+  min-height: 28px;
+  padding: 2px 6px;
+  font-size: 11px;
+  border: 1px solid var(--ws-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ws-ink);
+}

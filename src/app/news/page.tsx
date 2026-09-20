@@ -211,8 +211,9 @@ export default async function NewsPage({
         <Card className="ws-news-feed p-0">
           {shown.length === 0 ? (
             <p className="px-3 py-8 text-center text-sm text-stone-600">
-              No updates match this view. Clear the filters or revisit the
-              source later.
+              {items.length === 0
+                ? "No recent activity. Sources may be momentarily unreachable."
+                : "No updates match this view. Clear the filters or revisit the source later."}
             </p>
           ) : null}
           {shown.map((i: NewsItem) => {

@@ -2,8 +2,30 @@
 import { useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { LogoutButton } from "./logout-button";
 import { DESIGN_GROUPS, designGroup } from "@/lib/design-routes";
+
+/**
+ * "Back" follows the trail, as the production BackButton did: a drill-down
+ * returns to its own list, any other ZCG screen returns to the ZCG home (not
+ * the launcher), a copilot returns to the app it serves, and every top-level
+ * screen returns to Apps.
+ */
+const DRILLDOWN: Record<string, { href: string; label: string }> = {
+  "/zcg/grant": { href: "/zcg/grants", label: "Grants" },
+  "/zcg/recipient": { href: "/zcg/recipients", label: "Recipients" },
+  "/zechub/copilot": { href: "/zechub", label: "ZecHub" },
+};
+
+function backTarget(pathname: string): { href: string; label: string } {
+  return (
+    DRILLDOWN[pathname] ??
+    (pathname.startsWith("/zcg/")
+      ? { href: "/zcg", label: "ZCG" }
+      : { href: "/", label: "Apps" })
+  );
+}
 
 export function AppShell({
   children,
@@ -15,22 +37,22 @@ export function AppShell({
   isPreview?: boolean;
 }) {
   const pathname = usePathname();
-  const group = designGroup(pathname);
+  // The "Manage" trail only exists for administrators; anonymous visitors on a
+  // public route such as /onboarding must not be offered admin pages.
+  const rawGroup = designGroup(pathname);
+  const group = rawGroup?.name === "Manage" && !isAdmin ? undefined : rawGroup;
   const current = group?.routes.find(([href]) => href === pathname)?.[1];
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
   const groups = DESIGN_GROUPS.filter((g) => g.name !== "Manage" || isAdmin);
   const close = () => dialog.current?.close();
-  const back =
-    pathname === "/zcg/grant"
-      ? "/zcg/grants"
-      : pathname === "/zcg/recipient"
-        ? "/zcg/recipients"
-        : group?.routes[0][0] === pathname
-          ? "/"
-          : (group?.routes[0][0] ?? "/");
+  const back = backTarget(pathname);
+  const allApps = isPreview ? "/design-review" : "/";
   return (
-    <div className="rd-shell" data-section={group?.name ?? "Explore"}>
+    <div
+      className={cn("rd-shell", isPreview && "rd-shell-preview")}
+      data-section={group?.name ?? "Explore"}
+    >
       <a href="#main-content" className="rd-skip">
         Skip to content
       </a>
@@ -46,7 +68,7 @@ export function AppShell({
               Current website ↗
             </a>
             <button type="button" onClick={() => dialog.current?.showModal()}>
-              Browse apps <span aria-hidden>⌘</span>
+              Browse apps
             </button>
           </div>
         </div>
@@ -55,9 +77,10 @@ export function AppShell({
         <div className="rd-header-inner">
           <div className="rd-brand-group">
             <Link
-              href={back}
+              href={back.href}
               className="rd-back"
-              aria-label="Back to parent page"
+              aria-label={`Back to ${back.label}`}
+              title={`Back to ${back.label}`}
             >
               ‹
             </Link>
@@ -67,7 +90,7 @@ export function AppShell({
             </Link>
           </div>
           <nav aria-label="Main navigation" className="rd-primary-nav">
-            <Link href="/">Apps & treasuries ↗</Link>
+            <Link href="/">Apps & treasuries</Link>
             <Link
               href="/ecosystem"
               aria-current={group?.name === "Ecosystem" ? "true" : undefined}
@@ -86,7 +109,7 @@ export function AppShell({
             >
               News
             </Link>
-            <Link href="/monthly">Monthly ↗</Link>
+            <Link href="/monthly">Monthly</Link>
           </nav>
           <div className="rd-header-actions">
             <button
@@ -94,7 +117,7 @@ export function AppShell({
               className="rd-explore"
               onClick={() => dialog.current?.showModal()}
             >
-              Explore <span aria-hidden>↗</span>
+              Explore <span aria-hidden>→</span>
             </button>
             {isAdmin && <LogoutButton />}
           </div>
@@ -125,7 +148,7 @@ export function AppShell({
                 .map(([href, label]) => (
                   <Link key={href} href={href}>
                     {label}
-                    <span aria-hidden>↗</span>
+                    <span aria-hidden>→</span>
                   </Link>
                 ))}
             </div>
@@ -139,8 +162,8 @@ export function AppShell({
           connected.
         </span>
         <div>
-          <Link href="/zcg/methodology">Sources & methodology ↗</Link>
-          <Link href="/design-review">All apps ↗</Link>
+          <Link href="/zcg/methodology">Sources & methodology →</Link>
+          <Link href={allApps}>All apps →</Link>
         </div>
       </footer>
       <dialog
@@ -183,7 +206,7 @@ export function AppShell({
                 {routes.map(([href, label]) => (
                   <Link key={href} href={href} onClick={close}>
                     {label}
-                    <span aria-hidden>↗</span>
+                    <span aria-hidden>→</span>
                   </Link>
                 ))}
               </section>
@@ -191,14 +214,9 @@ export function AppShell({
           })}
         </div>
         <div className="ws-dialog-foot">
-          <Link href="/design-review" onClick={close}>
+          <Link href={allApps} onClick={close}>
             Explore all apps →
           </Link>
-          {!isAdmin && (
-            <Link href="/login" onClick={close}>
-              Administrator sign in ↗
-            </Link>
-          )}
         </div>
       </dialog>
     </div>

@@ -37,7 +37,8 @@ export default async function GrantsPage({
   const [grants, summary, schedule] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
-    getPaymentSchedule(),
+    // Derived figure; the grants list must not depend on it.
+    getPaymentSchedule().catch(() => null),
   ]);
 
   const rows: GrantTableRow[] = grants.map((g) => ({
@@ -58,7 +59,7 @@ export default async function GrantsPage({
     <>
       <PageHeader
         title="Grants"
-        subtitle="Follow every funded project, from approval to its final milestone."
+        subtitle="Each grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments."
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -86,13 +87,15 @@ export default async function GrantsPage({
         />
       </section>
 
-      <FeatureLink
-        eyebrow="Scheduled payments"
-        title={formatUsdCents(schedule.totalCents)}
-        description={`${schedule.rows.length} approved payments with a future estimated date. Explore the total by month, recipient and category.`}
-        href="/zcg/schedule"
-        label="View payment schedule"
-      />
+      {schedule ? (
+        <FeatureLink
+          eyebrow="Scheduled payments"
+          title={formatUsdCents(schedule.totalCents)}
+          description={`${schedule.rows.length} unpaid milestones with a future estimated date, a different population from the open commitments above (which count every unpaid milestone). Explore the total by month and category.`}
+          href="/zcg/schedule"
+          label="View payment schedule"
+        />
+      ) : null}
 
       <Card className="overflow-hidden p-0">
         <div className="ws-ledger">

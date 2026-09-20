@@ -127,7 +127,7 @@ export default async function TotaisPage() {
     <>
       <PageHeader
         title="Totals & integrity check"
-        subtitle="Where ZCG funding goes, with the official totals and ledger cross-check side by side."
+        subtitle="Official aggregates from the ZCG spreadsheet (paid amounts by recipient and by classification), tagged by what each line is. They cross-check the ledger, since the spreadsheet only sums payments that actually settled."
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">

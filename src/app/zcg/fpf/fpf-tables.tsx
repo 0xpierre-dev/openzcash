@@ -171,6 +171,8 @@ export function FpfGrantsTable({ grantRows }: { grantRows: GrantTableRow[] }) {
       columns={grantColumns}
       rows={grantRows}
       initialSort={{ key: "_usd", dir: "desc" }}
+      statusTabs={false}
+      csvName="fpf-grants.csv"
     />
   );
 }
@@ -185,6 +187,8 @@ export function FpfProposalsTable({
       columns={proposalColumns}
       rows={proposalRows}
       initialSort={{ key: "_usd", dir: "desc" }}
+      statusTabs={false}
+      csvName="fpf-proposals.csv"
     />
   );
 }

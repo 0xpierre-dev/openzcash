@@ -659,11 +659,11 @@ export default async function ZechubDaoPage() {
       )}
 
       <FeatureLink
-        eyebrow="Governance research"
+        eyebrow="New · agent skill"
         title="ZecHub Copilot"
-        description="Explore vote thresholds, voter records and treasury sources with your own agent. Headline balances and spendable funds remain distinct."
+        description="Ask your own agent why a vote passed or failed. It computes both tests a proposal has to clear (67% of yes+no and 40% turnout), names every voter, and reads the treasury without mistaking the headline total for spendable money."
         href="/zechub/copilot"
-        label="Explore Copilot"
+        label="Get the skill"
       />
       <p className="mt-4 text-xs text-stone-500">
         Treasury balances and payout records mirror the{" "}

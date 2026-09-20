@@ -45,8 +45,11 @@ export interface Column<T> {
   key: string;
   header: string;
   align?: "left" | "right" | "center";
-  /** Marks supplementary fields; these remain accessible via horizontal scroll on mobile. */
+  /** Supplementary field: hidden below the `sm` breakpoint, where the table
+   *  keeps only its primary columns. */
   mobileHidden?: boolean;
+  /** `false` keeps the column out of the CSV export (e.g. admin controls). */
+  csv?: boolean;
   sortable?: boolean;
   filterable?: boolean;
   render?: (row: T) => ReactNode;
@@ -81,7 +84,16 @@ export interface DataTableProps<T> {
    * key — o que desalinha o estado de células interativas após sort/filtro.
    */
   rowKey?: (row: T) => string | number;
+  /** Quick status/verdict tabs derived from a "select" column. Pages that
+   *  already filter by status server-side pass `false`. Default: true. */
+  statusTabs?: boolean;
+  /** Rows per page; the reader can switch to 50, 100 or all. Default: 25. */
+  pageSize?: number;
+  /** File name of the CSV export. */
+  csvName?: string;
 }
+
+const PAGE_SIZES = [25, 50, 100];
 
 const ALIGN_CLASS: Record<NonNullable<Column<unknown>["align"]>, string> = {
   left: "text-left",
@@ -93,6 +105,15 @@ const ALIGN_CLASS: Record<NonNullable<Column<unknown>["align"]>, string> = {
 function cellText<T>(col: Column<T>, row: T): string {
   if (col.filterValue) return col.filterValue(row);
   if (col.render) return reactNodeToText(col.render(row));
+  const raw = (row as Record<string, unknown>)[col.key];
+  return raw == null ? "" : String(raw);
+}
+
+/** Text of a cell as displayed, for the CSV export (units and precision kept). */
+function exportText<T>(col: Column<T>, row: T): string {
+  if (col.render) {
+    return reactNodeToText(col.render(row)).replace(/\s+/g, " ").trim();
+  }
   const raw = (row as Record<string, unknown>)[col.key];
   return raw == null ? "" : String(raw);
 }
@@ -131,10 +152,15 @@ export function DataTable<T>({
   className,
   maxHeight = "max-h-[70vh]",
   rowKey,
+  statusTabs = true,
+  pageSize: initialPageSize = 25,
+  csvName = "openzcash-records.csv",
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<{ key: string; dir: SortDir } | null>(
     initialSort ?? null,
   );
+  /** 0 = every row on one page (the production behaviour, for Ctrl+F). */
+  const [pageSize, setPageSize] = useState(initialPageSize);
   const [filters, setFilters] = useState<Record<string, string>>({});
   /** Valores marcados por coluna no modo "select" (vazio = sem filtro). */
   const [picks, setPicks] = useState<Record<string, string[]>>(initialPicks);
@@ -250,19 +276,25 @@ export function DataTable<T>({
     setFilters((prev) => ({ ...prev, [key]: value }));
   }
 
-  const statusColumn = columns.find(
-    (c) => c.filterType === "select" && /status|verdict/i.test(c.key),
-  );
+  const statusColumn = statusTabs
+    ? columns.find(
+        (c) => c.filterType === "select" && /status|verdict/i.test(c.key),
+      )
+    : undefined;
   const statusValues = statusColumn
     ? (distinctByCol.get(statusColumn.key) ?? [])
     : [];
-  const pageSize = 25;
-  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
+  const effectiveSize = pageSize > 0 ? pageSize : Math.max(1, sorted.length);
+  const pageCount = Math.max(1, Math.ceil(sorted.length / effectiveSize));
   const currentPage = Math.min(page, pageCount);
   const visible = sorted.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
+    (currentPage - 1) * effectiveSize,
+    currentPage * effectiveSize,
   );
+  const sizeOptions = [...new Set([...PAGE_SIZES, initialPageSize])]
+    .filter((n) => n > 0)
+    .sort((a, b) => a - b);
+  const exportColumns = columns.filter((c) => c.csv !== false);
   const clear = () => {
     setQuery("");
     setFilters({});
@@ -365,9 +397,11 @@ export function DataTable<T>({
             className="ws-button"
             onClick={() =>
               downloadTableCsv(
-                columns.map((c) => c.header),
-                sorted.map((row) => columns.map((col) => cellText(col, row))),
-                "openzcash-records.csv",
+                exportColumns.map((c) => c.header),
+                sorted.map((row) =>
+                  exportColumns.map((col) => exportText(col, row)),
+                ),
+                csvName,
               )
             }
           >
@@ -532,7 +566,9 @@ export function DataTable<T>({
           <tbody>
             {visible.map((row, i) => (
               <tr
-                key={rowKey ? rowKey(row) : (currentPage - 1) * pageSize + i}
+                key={
+                  rowKey ? rowKey(row) : (currentPage - 1) * effectiveSize + i
+                }
                 className="tbl-row border-b border-stone-200 last:border-0"
               >
                 {columns.map((col) => (
@@ -567,11 +603,30 @@ export function DataTable<T>({
       </div>
       <div className="ws-table-footer">
         <span>
-          {sorted.length ? (currentPage - 1) * pageSize + 1 : 0}–
-          {Math.min(currentPage * pageSize, sorted.length)} of {sorted.length}{" "}
-          records{isFiltered ? ` · ${rows.length} before filters` : ""}
+          {sorted.length ? (currentPage - 1) * effectiveSize + 1 : 0}–
+          {Math.min(currentPage * effectiveSize, sorted.length)} of{" "}
+          {sorted.length} records
+          {isFiltered ? ` · ${rows.length} before filters` : ""}
         </span>
         <div>
+          <label className="ws-table-pagesize">
+            <span>Rows</span>
+            <select
+              aria-label="Rows per page"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setPage(1);
+              }}
+            >
+              {sizeOptions.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+              <option value={0}>All</option>
+            </select>
+          </label>
           <button
             type="button"
             disabled={currentPage === 1}

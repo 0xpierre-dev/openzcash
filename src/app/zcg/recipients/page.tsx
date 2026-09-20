@@ -49,7 +49,7 @@ export default async function RecebedoresPage() {
     <>
       <PageHeader
         title="Recipients"
-        subtitle="The people and organizations building Zcash. Explore their funding and payment history."
+        subtitle="Recorded payments to organizations and individuals across the ZCG and Coinholder ledgers. USD paid is the budgeted value of settled entries, not a current market valuation. Budgets are shown separately; committee stipends and internal operating costs are excluded."
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">

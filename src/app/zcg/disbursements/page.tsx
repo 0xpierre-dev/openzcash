@@ -6,6 +6,7 @@ import { Card, PageHeader, Stat } from "@/components/ui";
 import {
   listDisbursements,
   overriddenDisbursementIds,
+  summarizeDisbursements,
 } from "@/lib/zcg/disbursements-repo";
 import { disbTypeLabel } from "@/lib/zcg/format";
 import { getIsAdmin } from "@/lib/auth/admin";
@@ -46,21 +47,24 @@ export default async function DesembolsosPage({
   // fetch since the ledger repo has no date filter.
   const month =
     monthRaw && /^\d{4}-\d{2}$/.test(monthRaw) ? monthRaw : undefined;
-  const [isAdmin, fetched, overridden] = await Promise.all([
+  const selection = `${sheet ?? ""}:${grant ?? ""}:${category ?? ""}:${type ?? ""}:${month ?? ""}`;
+  const [isAdmin, fetched, overridden, summary] = await Promise.all([
     getIsAdmin(),
-    cached(
-      `disb:${sheet ?? ""}:${grant ?? ""}:${category ?? ""}:${type ?? ""}:${month ?? ""}`,
-      LEDGER_TTL_MS,
-      () =>
-        listDisbursements({
-          sheet,
-          grant,
-          category,
-          type,
-          limit: month ? 2000 : 400,
-        }),
+    cached(`disb:${selection}`, LEDGER_TTL_MS, () =>
+      listDisbursements({
+        sheet,
+        grant,
+        category,
+        type,
+        limit: month ? 2000 : 400,
+      }),
     ),
     cached("disb:overridden", LEDGER_TTL_MS, () => overriddenDisbursementIds()),
+    // Whole-population totals: the list above is capped at the most recent
+    // rows, and a KPI must never sum a truncated window.
+    cached(`disb:summary:${selection}`, LEDGER_TTL_MS, () =>
+      summarizeDisbursements({ sheet, grant, category, type, month }),
+    ),
   ]);
   const rows = month
     ? fetched.filter((d) => (d.paidOutDate ?? "").startsWith(month))
@@ -109,41 +113,35 @@ export default async function DesembolsosPage({
     <>
       <PageHeader
         title="Disbursements"
-        subtitle="Every recorded payment and milestone, with its original ledger evidence."
+        subtitle="ZCG off-chain ledger: each row is a milestone or payment (grant, contractor, bounty or monthly transfer) with budgeted USD, disbursed ZEC and the day's rate."
         actions={isAdmin ? <NewDisbursementForm /> : undefined}
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat
-          label="Selected records"
-          value={String(rows.length)}
-          sub="current ledger selection"
+          label="Records"
+          value={String(summary.count)}
+          sub={
+            sheet || grant || category || type || month
+              ? "in this ledger selection"
+              : "in the full ledger"
+          }
         />
         <Stat
           label="Paid entries"
-          value={String(rows.filter((r) => r.isPaid).length)}
+          value={String(summary.paidCount)}
           sub="recorded as paid"
           tone="in"
         />
         <Stat
           label="USD paid"
-          value={formatUsdCents(
-            rows
-              .filter((r) => r.isPaid)
-              .reduce((s, r) => s + (r.amountUsdCents ?? 0n), 0n),
-            { compact: true },
-          )}
+          value={formatUsdCents(summary.usdPaidCents, { compact: true })}
           sub="budgeted value of paid entries"
         />
         <Stat
           label="ZEC paid"
-          value={formatZecCompact(
-            rows
-              .filter((r) => r.isPaid)
-              .reduce((s, r) => s + (r.zecDisbursedZat ?? 0n), 0n),
-            { symbol: false },
-          )}
-          sub="recorded in the selected rows"
+          value={formatZecCompact(summary.zecPaidZat, { symbol: false })}
+          sub="recorded in the selected records"
         />
       </section>
       {grant ? (
@@ -239,8 +237,10 @@ export default async function DesembolsosPage({
       </Card>
 
       <p className="mt-4 text-xs text-stone-600">
-        {rows.length} disbursements{" "}
-        {sheet ? "in this category" : "(most recent)"} ·{" "}
+        {rows.length < summary.count
+          ? `${rows.length} most recent of ${summary.count} disbursements`
+          : `${rows.length} disbursements`}{" "}
+        {sheet ? "in this category" : ""} ·{" "}
         <span className="text-stone-600">from spreadsheet</span> = mirrored from
         the ZCG public sheet;{" "}
         <span className="text-amber-700">admin entry</span> /{" "}

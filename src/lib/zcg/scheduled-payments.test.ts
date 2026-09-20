@@ -43,13 +43,19 @@ describe("scheduled payment accounting", () => {
     "funds_returned",
     "rejected",
     "withdrawn",
-    "pending",
-    "",
-  ])("excludes unapproved or blocked status %s", (grantStatus) => {
+  ])("excludes grants ended by the verdict %s", (grantStatus) => {
     expect(scheduledPayments([row({ grantStatus })], today).rows).toHaveLength(
       0,
     );
   });
+  it.each(["open", "completed", "approved", "in_progress", "", null])(
+    "keeps milestones of live grants whatever the row status (%s)",
+    (grantStatus) => {
+      expect(
+        scheduledPayments([row({ grantStatus })], today).rows,
+      ).toHaveLength(1);
+    },
+  );
   it("blocks all milestones when another row records cancellation", () => {
     expect(
       scheduledPayments(

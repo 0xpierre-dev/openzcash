@@ -167,8 +167,12 @@ const columns: Column<ProposalTableRow>[] = [
     filterable: true,
     filterType: "select",
     sortValue: (r) => r.program,
-    filterValue: (r) => r.program === "coinholder" ? "Coinholder" : "ZCG",
-    render: (r) => <Badge tone="zinc">{r.program === "coinholder" ? "Coinholder" : "ZCG"}</Badge>,
+    filterValue: (r) => (r.program === "coinholder" ? "Coinholder" : "ZCG"),
+    render: (r) => (
+      <Badge tone="zinc">
+        {r.program === "coinholder" ? "Coinholder" : "ZCG"}
+      </Badge>
+    ),
   },
   {
     key: "title",
@@ -305,6 +309,7 @@ const manageColumn: Column<ProposalTableRow> = {
   key: "manage",
   header: "Manage",
   align: "right",
+  csv: false,
   render: (r) => <ProposalAdminControls id={r.id} status={r.status} />,
 };
 
@@ -329,6 +334,10 @@ export function ProposalsTable({ rows, isAdmin = false }: ProposalsTableProps) {
       rowKey={(row) => row.id}
       initialSort={{ key: "submitted", dir: "desc" }}
       maxHeight="max-h-[60vh]"
+      // The page already filters by published verdict (?status=); a second,
+      // client-only verdict filter would disagree with the funnel and the URL.
+      statusTabs={false}
+      csvName="zcg-proposals.csv"
     />
   );
 }

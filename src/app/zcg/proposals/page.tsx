@@ -278,7 +278,14 @@ export default async function PropostasPage({
         {byStatus.map((b) => (
           <Link
             key={b.status}
-            href={`/zcg/proposals?status=${b.status}`}
+            // Selecting the active verdict again clears the filter, and the
+            // page keeps its scroll position while the table re-renders.
+            href={
+              active === b.status
+                ? "/zcg/proposals"
+                : `/zcg/proposals?status=${b.status}`
+            }
+            scroll={false}
             aria-current={active === b.status ? "page" : undefined}
           >
             <span>{STATUS_LABEL[b.status] ?? b.status}</span>

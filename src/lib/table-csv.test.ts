@@ -20,12 +20,26 @@ describe("financial table export", () => {
         ['A "quoted", label\nwith a second line'],
         ["=1+1"],
         ["  +1"],
+        ["-1+1"],
         ["Normal name"],
       ],
     );
     expect(csv).toContain('"A ""quoted"", label\nwith a second line"');
     expect(csv).toContain('"\'=1+1"');
     expect(csv).toContain('"\'  +1"');
+    expect(csv).toContain('"\'-1+1"');
     expect(csv).toContain('"Normal name"');
+  });
+  it("keeps negative amounts such as clawbacks as numbers", () => {
+    const csv = tableCsv(
+      ["USD", "ZEC", "Share"],
+      [
+        ["-$1,000.00", "-12.5", "-3.2%"],
+        ["−4,859.7741499 ZEC", "-0.5", "12%"],
+      ],
+    );
+    expect(csv).toContain('"-$1,000.00","-12.5","-3.2%"');
+    expect(csv).toContain('"−4,859.7741499 ZEC","-0.5","12%"');
+    expect(csv).not.toContain("'-");
   });
 });

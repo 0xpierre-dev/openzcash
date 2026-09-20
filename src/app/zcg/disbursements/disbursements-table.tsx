@@ -216,6 +216,7 @@ export function DisbursementsTable({
       key: "manage",
       header: "Manage",
       align: "right",
+      csv: false,
       render: (r) =>
         r.edit ? (
           <DisbursementAdminControls
@@ -234,6 +235,7 @@ export function DisbursementsTable({
       rows={rows}
       rowKey={(r) => r.id}
       initialSort={{ key: "date", dir: "desc" }}
+      csvName="zcg-disbursements.csv"
     />
   );
 }

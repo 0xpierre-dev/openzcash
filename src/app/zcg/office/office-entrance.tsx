@@ -47,9 +47,10 @@ export function OfficeEntrance({
         ))}
       </div>
       <p className="text-xs leading-relaxed text-stone-600">
+        Each zebra is a grant proposal under review. Status changes appear the
+        next day (Brasília time), based on GitHub and the official spreadsheet.
         Drag to look around, scroll to zoom and select a proposal to read its
-        details. The room loads when you enter. Proposal status follows the
-        existing next-day publication schedule.
+        summary and application date. The room loads when you enter.
       </p>
     </>
   );

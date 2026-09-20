@@ -32,12 +32,21 @@ specifically for this environment. Production credentials are not accepted.
 The administrator password is available only in Railway → redesign → zbo →
 Variables → ADMIN_PASSWORD. Do not copy it into documentation, commits or chat.
 
-`DISABLE_AUTO_REFRESH=true` pauses the startup/recurring scheduler, automatic
-spreadsheet refresh and cron endpoint so the accounting snapshot can be compared. Live external
-prices, chain heights, feeds and proposal signals retain their existing read
-behavior and may change; this is not a frozen image of the entire internet.
-Any writes or manual imports affect only the test database. This environment has
-its own infrastructure usage while it remains running.
+`DISABLE_AUTO_REFRESH=true` pauses the automatic spreadsheet refresh, the
+ZecHub treasury mirror, the GitHub-decided verdict publication and the cron
+endpoint, so the accounting snapshot can be compared. The diligence signals for
+under-review proposals (an in-memory cache built from public GitHub and forum
+data) still warm at boot and every 6 hours, so the Diligence column renders in
+either mode. Live external prices, chain heights, feeds and proposal signals
+retain their existing read behavior and may change; this is not a frozen image
+of the entire internet. Any writes or manual imports affect only the test
+database. This environment has its own infrastructure usage while it remains
+running.
+
+Since 19 September 2026 the variable is set to `false` in the `redesign`
+environment: the parity comparison had been recorded, and the review now
+follows the live spreadsheet, exactly as production does. Set it back to `true`
+only for a new row-by-row comparison.
 
 ## Design scope
 
@@ -64,17 +73,26 @@ layout. Monthly routes, publications and generators are unchanged. The 3D room,
 canvas, proposal dialog and assets are unchanged; an entrance screen now mounts
 the original room after the user presses Enter.
 
-Scheduled payments use approved/open/completed grant-ledger entries that are
-unpaid, not test/internal, have a real estimate date today or later in Brasília
-time, and a positive known amount. Cancelled/vetoed/returned grants are excluded.
-The table, category subtotals, month subtotals and total share one population.
-Undated, overdue and unknown-amount entries are explicitly counted separately.
+Scheduled payments use grant-ledger entries that are unpaid, not test/internal,
+have a real estimate date today or later in Brasília time, and a positive known
+amount. Eligibility is decided by exclusion, like the grants summary: a
+milestone is dropped only when its own row, or any row of the same grant,
+carries an ending verdict (cancelled, keyholder veto, funds returned, rejected,
+withdrawn). The spreadsheet's status column is free-form, so an empty or
+unfamiliar status never silently removes a payment. The table, category
+subtotals, month subtotals and total share one population. Undated, overdue and
+unknown-amount entries are explicitly counted separately, and the grant-sheet
+rows behind the schedule are cached like every other ledger read.
 
 ## Deployment and migration boundary
 
-This branch's Railway start command verifies the exact redesign environment ID
-and database before migrations run. It refuses to start against production.
-Search-engine indexing is disabled with metadata and response headers.
+This branch's Railway start command runs `scripts/assert-redesign.mjs` before
+migrations. When `OPENZCASH_ENV=redesign` it verifies the exact redesign
+environment ID and the isolated database and refuses to start otherwise. In any
+other environment (production included) the check is skipped, so the branch can
+be deployed to production without editing the start command once approved; the
+preview bar, `noindex` metadata and response headers are likewise only active
+under `OPENZCASH_ENV=redesign`.
 
 Railway's `redesign` environment is connected to `Michae2xl/openzcash`, branch
 `michae2xl/redesign-staging`. Pushes to this branch publish this test environment.
@@ -90,9 +108,11 @@ railway up --project 5476eada-862a-47bd-9166-49be9933d33c \
 ```
 
 There is no automatic merge or migration to production. Review the pages and
-data first. A later production migration must deliberately remove the staging
-startup guard, retain production configuration, and deploy the reviewed changes.
-No DNS or production-domain changes are part of this preview.
+data first. A later production migration keeps the production configuration
+(no `OPENZCASH_ENV`, no `DISABLE_AUTO_REFRESH`) and deploys the reviewed
+changes; `/design-review` remains reachable by URL but is only linked from the
+shell in the preview environment. No DNS or production-domain changes are part
+of this preview.
 
 ## Validation
 
@@ -130,3 +150,61 @@ office rendering must be checked on Railway, whose independent snapshot includes
 that table. The local database was used in read-only mode and was not migrated.
 The protected home, Monthly templates/assets and original 3D room remain unchanged.
 No API, database schema or accounting repository changed in this composition revision.
+
+### Parity revision — 19 September 2026
+
+A page-by-page comparison of the live production site against this environment
+(visible text, table headers, row counts and the explanatory copy of every ZCG
+route) found information that the compositions had dropped, plus a few
+correctness issues in the new code. This revision restores parity and fixes them.
+
+Restored from production:
+
+- The methodological subtitles that say where each figure comes from: `/zcg`
+  (official spreadsheet, on-chain cross-reference), `/zcg/grants` (a grant
+  aggregates its milestones), `/zcg/disbursements` (each row's budgeted USD,
+  disbursed ZEC and the day's rate), `/zcg/totals` (settled payments only),
+  `/zcg/analytics` (no new data), `/zcg/recipients` and the recipient detail
+  (ranking excludes internal costs).
+- The office entrance now states the rule that status changes appear the next
+  day (Brasília time), as the room's own caption does.
+- The ZecHub Copilot promotion keeps the two vote tests (67% of yes+no, 40%
+  turnout) in its copy; the grant detail links back to the grants list; the ZCG
+  overview links to `/zcg/committee` and describes the office; the News empty
+  state distinguishes unreachable sources from empty filters.
+- "Back" follows the production trail again: a grant returns to Grants, a
+  recipient to Recipients, any other ZCG page to `/zcg`, the ZecHub copilot to
+  `/zechub`, and every top-level app to Apps. The control carries an accessible
+  label naming its destination.
+- Internal links use `→`; only links that leave OpenZcash use `↗` and open in a
+  new tab. The administrator sign-in link is no longer offered to anonymous
+  visitors, matching production; the "Manage" trail and directory group are
+  hidden from anonymous visitors, including on the public `/onboarding` route.
+
+Correctness fixes in the new code:
+
+- `/zcg/disbursements` KPI tiles summed only the 400 most recent rows of the
+  selection. They now come from a whole-population aggregate over the same
+  filters (`summarizeDisbursements`), and the footer states how many of the
+  selected records the list shows.
+- Scheduled payments no longer require the row status to be one of three
+  literals; see "Design scope" above for the exclusion rule.
+- `getPaymentSchedule()` is cached and no longer a hard dependency of `/zcg`
+  or `/zcg/grants` (a failure hides the schedule figure instead of the page).
+- CSV export keeps negative amounts (clawbacks) as numbers instead of
+  apostrophe-prefixed text, exports the displayed cell text, skips the
+  administrator "Manage" column and names the file after the table.
+- Tables offer 25/50/100 rows or "All" per page, restoring in-page search over a
+  whole ledger. `mobileHidden` columns are hidden again below the `sm`
+  breakpoint (the `ws-optional-column` class had no CSS rule).
+- The proposals and FPF tables no longer generate a second, client-only verdict
+  filter that disagreed with the published `?status=` funnel; selecting the
+  active verdict in the funnel clears it, without scrolling to the top.
+- The sticky header only offsets for the preview bar when that bar is rendered.
+- The diligence signals warm even when automatic refresh is paused.
+- The startup guard is conditional on `OPENZCASH_ENV=redesign` (see above).
+
+Not changed on purpose: the treasury cards removed from `/zcg` in the previous
+revision stay on the home launcher; the stipends page keeps its card layout;
+the office `MEMBERS` list and the committee page still read from
+`current-committee-data.ts`, which the redesign plan wants unified later.

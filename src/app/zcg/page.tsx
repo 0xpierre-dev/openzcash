@@ -68,6 +68,12 @@ const TILES: Tile[] = [
     Icon: IconVote,
   },
   {
+    href: "/zcg/committee",
+    label: "Committee",
+    sub: "Members, mandates & elections",
+    Icon: IconUsers,
+  },
+  {
     href: "/zcg/analytics",
     label: "Insights",
     sub: "Burn-rate & delivery",
@@ -140,14 +146,15 @@ export default async function ZcgPage() {
   const [s, changes, schedule] = await Promise.all([
     disbursementsSummary(),
     listChangelog(7, 12, "zcg").catch(() => []),
-    getPaymentSchedule(),
+    // Derived figure; never lets the app's first screen fail.
+    getPaymentSchedule().catch(() => null),
   ]);
 
   return (
     <div className="zcg-overview">
       <PageHeader
         title="Zcash Community Grants"
-        subtitle="Follow the projects, people and public funding behind the Zcash ecosystem."
+        subtitle="Public accounting for Zcash Community Grants, imported from the official spreadsheet. An off-chain disbursement ledger that can be cross-referenced with the on-chain Lockbox/ZCG outflows."
       />
 
       <section className="zcg-overview-metrics" aria-label="Funding summary">
@@ -175,8 +182,8 @@ export default async function ZcgPage() {
       </section>
 
       <nav className="zcg-overview-primary" aria-label="Grant records">
-        {PRIMARY_ROUTES.map(
-          (href) => TILES.find((tile) => tile.href === href)!,
+        {PRIMARY_ROUTES.map((href) =>
+          TILES.find((tile) => tile.href === href)!,
         ).map((tile) => (
           <Link key={tile.href} href={tile.href}>
             <tile.Icon className="h-5 w-5" />
@@ -205,25 +212,27 @@ export default async function ZcgPage() {
         </nav>
       </details>
 
-      <section
-        className="zcg-overview-schedule"
-        aria-labelledby="overview-schedule-title"
-      >
-        <div>
-          <h2 id="overview-schedule-title">Scheduled payments</h2>
-          <p className="zcg-overview-schedule-value tnum">
-            {formatUsdCents(schedule.totalCents)}
+      {schedule ? (
+        <section
+          className="zcg-overview-schedule"
+          aria-labelledby="overview-schedule-title"
+        >
+          <div>
+            <h2 id="overview-schedule-title">Scheduled payments</h2>
+            <p className="zcg-overview-schedule-value tnum">
+              {formatUsdCents(schedule.totalCents)}
+            </p>
+          </div>
+          <p className="zcg-overview-schedule-note">
+            <strong>{schedule.rows.length} approved future payments</strong>
+            Unpaid milestones with an estimated date, summed from the ledger.
+            View totals by month and category.
           </p>
-        </div>
-        <p className="zcg-overview-schedule-note">
-          <strong>{schedule.rows.length} approved future payments</strong>
-          Unpaid milestones with an estimated date. View totals by month and
-          category.
-        </p>
-        <Link className="ws-button" href="/zcg/schedule">
-          Open schedule <span aria-hidden>→</span>
-        </Link>
-      </section>
+          <Link className="ws-button" href="/zcg/schedule">
+            Open schedule <span aria-hidden>→</span>
+          </Link>
+        </section>
+      ) : null}
 
       <CurrentCommittee />
 
@@ -299,8 +308,11 @@ export default async function ZcgPage() {
 
       <Link className="zcg-overview-office" href="/zcg/office">
         <span>
-          <strong>Visit the ZCG office</strong>
-          <small>Meet the committee and explore proposals in 3D.</small>
+          <strong>Step into the ZCG office</strong>
+          <small>
+            A living 3D room where every proposal under review walks the floor
+            as a zebra, in front of the committee.
+          </small>
         </span>
         <span aria-hidden>→</span>
       </Link>

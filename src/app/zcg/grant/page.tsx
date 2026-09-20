@@ -117,6 +117,11 @@ export default async function GrantDetailPage({
             <RelatedLinks
               links={[
                 {
+                  href: "/zcg/grants",
+                  label: "All grants",
+                  description: "Back to the approved projects list",
+                },
+                {
                   href: "/zcg/schedule",
                   label: "Payment schedule",
                   description: "Future dated approvals",

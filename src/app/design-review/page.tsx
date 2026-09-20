@@ -2,8 +2,14 @@ import Link from "next/link";
 import { EditorialIntro } from "@/components/workspace";
 import { PageHeader } from "@/components/ui";
 import { DESIGN_GROUPS } from "@/lib/design-routes";
+import { getIsAdmin } from "@/lib/auth/admin";
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Explore the redesign · OpenZcash" };
-export default function DesignReviewPage() {
+export default async function DesignReviewPage() {
+  // Management pages are only offered to a signed-in administrator, as in the
+  // app directory; anonymous reviewers see the public workspace.
+  const isAdmin = await getIsAdmin();
+  const groups = DESIGN_GROUPS.filter((g) => g.name !== "Manage" || isAdmin);
   return (
     <>
       <PageHeader
@@ -22,14 +28,14 @@ export default function DesignReviewPage() {
         </div>
       </EditorialIntro>
       <div className="rd-review-grid">
-        {DESIGN_GROUPS.map((group) => (
+        {groups.map((group) => (
           <section className="rd-review-group" key={group.name}>
             <h2>{group.name}</h2>
             <p>{group.description}</p>
             {group.routes.map(([href, label]) => (
               <Link key={href} href={href}>
                 {label}
-                <span aria-hidden>↗</span>
+                <span aria-hidden>→</span>
               </Link>
             ))}
           </section>
@@ -39,12 +45,12 @@ export default function DesignReviewPage() {
         <h2>Familiar, by design</h2>
         <p>
           <Link href="/">
-            The home page, app launcher and both treasury cards ↗
+            The home page, app launcher and both treasury cards →
           </Link>{" "}
           keep their current layout.{" "}
-          <Link href="/monthly">Monthly and its editions ↗</Link> keep the
+          <Link href="/monthly">Monthly and its editions →</Link> keep the
           existing publication format. The{" "}
-          <Link href="/zcg/office">3D office ↗</Link> has a new entrance; the
+          <Link href="/zcg/office">3D office →</Link> has a new entrance; the
           room stays the same. Grant and recipient details open from their
           respective lists. The existing Maya route continues to redirect to
           DeFi.

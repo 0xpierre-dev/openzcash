@@ -156,7 +156,7 @@ export default async function AnalyticsPage() {
     <>
       <PageHeader
         title="Insights"
-        subtitle="Understand the pace, concentration and direction of ZCG funding."
+        subtitle="Trends derived entirely from the disbursement ledger and totals we already import. No new data."
       />
 
       <RecordLayout

@@ -70,7 +70,7 @@ export default async function RecipientPage({
       <PageHeader
         title={name}
         actions={<CopyPageLink />}
-        subtitle="Projects, payment history and public records in one place."
+        subtitle={`${open.length} unpaid and ${paid.length} paid entries in the public ledger. This detail view includes committee stipends, grants and reimbursements; the recipient ranking excludes internal costs.`}
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">

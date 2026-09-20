@@ -51,6 +51,14 @@ export function Facts({
   );
 }
 
+const isExternal = (href: string) => /^https?:\/\//i.test(href);
+
+/**
+ * Sidebar list of connected records. Internal routes render as client-side
+ * links with "→"; external sources open in a new tab with "↗", following the
+ * site-wide convention (↗ = leaves OpenZcash). An empty list renders nothing,
+ * so a heading never appears without items.
+ */
 export function RelatedLinks({
   title = "Connected records",
   links,
@@ -58,18 +66,31 @@ export function RelatedLinks({
   title?: string;
   links: { href: string; label: string; description?: string }[];
 }) {
+  if (links.length === 0) return null;
   return (
     <section className="ws-related">
       <h2>{title}</h2>
-      {links.map((l) => (
-        <Link key={l.href} href={l.href}>
-          <span>
-            <strong>{l.label}</strong>
-            {l.description && <small>{l.description}</small>}
-          </span>
-          <span aria-hidden>↗</span>
-        </Link>
-      ))}
+      {links.map((l) => {
+        const body = (
+          <>
+            <span>
+              <strong>{l.label}</strong>
+              {l.description && <small>{l.description}</small>}
+            </span>
+            <span aria-hidden>{isExternal(l.href) ? "↗" : "→"}</span>
+          </>
+        );
+        const key = `${l.href}|${l.label}`;
+        return isExternal(l.href) ? (
+          <a key={key} href={l.href} target="_blank" rel="noreferrer">
+            {body}
+          </a>
+        ) : (
+          <Link key={key} href={l.href}>
+            {body}
+          </Link>
+        );
+      })}
     </section>
   );
 }
@@ -185,7 +206,7 @@ export function SourceNote({
   return (
     <div className="ws-source-note">
       <p>{children}</p>
-      <Link href={href}>{label} ↗</Link>
+      <Link href={href}>{label} →</Link>
     </div>
   );
 }

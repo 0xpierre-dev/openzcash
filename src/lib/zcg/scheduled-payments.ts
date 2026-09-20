@@ -19,7 +19,14 @@ export function validDay(value: string | undefined | null): value is string {
     new Date(value).toISOString().slice(0, 10) === value
   );
 }
-const APPROVED = new Set(["open", "approved", "completed"]);
+/**
+ * Verdicts that end a grant. The spreadsheet's grant status is free-form
+ * (today: open, completed, cancelled, keyholder_veto), so eligibility is
+ * decided by exclusion, exactly like the grants summary ("committed" is every
+ * non-cancelled milestone): a milestone counts unless its own row, or any row
+ * of the same grant, carries one of these statuses. An empty or unfamiliar
+ * status never silently removes a payment from the schedule.
+ */
 const BLOCKED = new Set([
   "cancelled",
   "keyholder_veto",
@@ -45,7 +52,6 @@ export function scheduledPayments<T extends ScheduleRow>(
       !r.isPaid &&
       !r.isTest &&
       !r.isInternal &&
-      APPROVED.has(r.grantStatus ?? "") &&
       !blocked.has(`${r.sourceSheet}:${r.project}`),
   );
   const dated = eligible.filter((r) => validDay(r.estimatedPayoutDate));
