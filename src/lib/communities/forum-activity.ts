@@ -42,8 +42,30 @@ export interface TopicActivity {
   /** ISO timestamp of the newest post in the topic. */
   lastPostedAt: string;
   postsCount: number;
-  /** Where the signal came from: the forum, or a YouTube upload. */
-  source: "forum" | "youtube";
+  /** Where the signal came from: the forum, a YouTube upload or a Telegram
+   *  post. X, Instagram and TikTok have no free read API: links only. */
+  source: "forum" | "youtube" | "telegram";
+}
+
+/** Newest post date on a public Telegram channel, from its web preview
+ *  (t.me/s/<channel>, no API key). Private groups have no preview. */
+async function fetchTelegramLatest(url: string): Promise<string | null> {
+  const name = url.replace(/^https?:\/\/t\.me\//, "").replace(/^s\//, "").split(/[/?#]/)[0];
+  if (!name || name.startsWith("+") || name.startsWith("joinchat")) return null;
+  try {
+    const res = await fetch(`https://t.me/s/${name}`, {
+      headers: { "user-agent": "Mozilla/5.0 (compatible; OpenZcash/1.0)" },
+      signal: AbortSignal.timeout(5_000),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    const dates = [...html.matchAll(/<time[^>]*datetime="([^"]+)"/g)].map((m) => m[1]);
+    if (dates.length === 0) return null;
+    return dates.sort().at(-1) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 interface DiscourseTopic {
@@ -156,6 +178,26 @@ async function refresh(
       }),
   );
   results.push(...ytResults);
+  // Telegram public channels expose their newest posts on the web preview.
+  const tgResults = await Promise.all(
+    communities
+      .filter((c) => c.links.telegram)
+      .map(async (c): Promise<TopicActivity | null> => {
+        const at = await fetchTelegramLatest(c.links.telegram!);
+        if (!at) return null;
+        return {
+          topicId: -2,
+          communityId: c.id,
+          title: "Latest Telegram post",
+          url: c.links.telegram!,
+          kind: "post",
+          lastPostedAt: at,
+          postsCount: 0,
+          source: "telegram" as const,
+        };
+      }),
+  );
+  results.push(...tgResults);
   const items = results
     .filter((x): x is TopicActivity => x !== null)
     .sort((a, b) => b.lastPostedAt.localeCompare(a.lastPostedAt));
