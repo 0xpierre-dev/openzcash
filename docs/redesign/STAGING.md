@@ -232,6 +232,16 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Canvas alignment — 20 September 2026
+
+After review on a dark-mode system: the light workspace is now the default
+everywhere (dark only through the toggle, remembered per browser); sidebar
+items carry a line icon and their record count from `/api/nav-counts`
+(cached five minutes, read after the page paints, every source optional);
+editorial intros, feature links, treasury heroes and quick links are flat
+surfaces with hairlines; the home launcher lists apps as compact rows and
+keeps reorder, hide and the unread News badge.
+
 ### Composition revision — 20 September 2026 (approved canvas)
 
 The three screens the canvas defined now follow it: the ZCG overview (two
