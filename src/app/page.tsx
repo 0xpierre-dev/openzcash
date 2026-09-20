@@ -1,5 +1,6 @@
+import { SectionHeading } from "@/components/workspace";
+import { PageHeader } from "@/components/ui";
 import { AppLauncher } from "@/components/app-launcher";
-import { LogoutButton } from "@/components/logout-button";
 import { getIsAdmin } from "@/lib/auth/admin";
 import { latestImportAt, maybeAutoRefresh } from "@/lib/zcg/freshness";
 import { TreasuryOverview } from "./treasury-overview";
@@ -17,6 +18,11 @@ function syncedAgo(at: Date | null): string {
   return `synced ${Math.floor(hrs / 24)}d ago`;
 }
 
+/**
+ * The home page now lives inside the shell: the two treasuries at a glance,
+ * then the app launcher (reorder or hide apps; the choice stays in this
+ * browser). The shell's bottom bar keeps the treasuries in view everywhere.
+ */
 export default async function LauncherPage() {
   const [isAdmin, lastImport] = await Promise.all([
     getIsAdmin(),
@@ -26,44 +32,26 @@ export default async function LauncherPage() {
   void maybeAutoRefresh();
 
   return (
-    <div className="app-vignette min-h-screen">
-      <div className="relative z-10 mx-auto max-w-5xl px-6 py-5 md:py-7">
-        <header className="mb-5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img
-              src="/zcash-mark.svg"
-              alt="OpenZcash"
-              className="h-11 w-11 object-contain"
-            />
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight text-stone-900">
-                OpenZcash
-              </h1>
-              <p className="text-xs text-stone-600">
-                Dev Fund treasury and public transparency
-              </p>
-            </div>
-          </div>
-          <div className="shrink-0">
-            {/* Admin sign-in hidden for now — /login is still reachable by URL. */}
-            {isAdmin ? (
-              <div className="w-20">
-                <LogoutButton />
-              </div>
-            ) : null}
-          </div>
-        </header>
+    <>
+      <PageHeader
+        title="OpenZcash"
+        subtitle="Dev Fund treasury and public transparency: ZCG and FPF grant accounting, the live Lockbox and governance, read-only and mirrored from the official sources."
+      />
 
+      <TreasuryOverview />
+
+      <section className="oz-launcher mt-10">
+        <SectionHeading
+          title="Apps"
+          description="Every record set, side by side. Edit to reorder or hide apps; the choice stays in this browser."
+        />
         <AppLauncher isAdmin={isAdmin} />
+      </section>
 
-        <TreasuryOverview />
-
-        <p className="mt-6 text-center text-xs text-stone-600">
-          ZCG and FPF grant accounting for the Zcash Dev Fund.
-          <span className="mx-1 text-stone-300">·</span>
-          Spreadsheet {syncedAgo(lastImport)}, auto-refreshes daily
-        </p>
-      </div>
-    </div>
+      <p className="mt-8 text-xs text-stone-600">
+        ZCG and FPF grant accounting for the Zcash Dev Fund · Spreadsheet{" "}
+        {syncedAgo(lastImport)}, auto-refreshes daily
+      </p>
+    </>
   );
 }

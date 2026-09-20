@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { DESIGN_GROUPS, designGroup } from "@/lib/design-routes";
  * "Back" follows the trail, as the production BackButton did: a drill-down
  * returns to its own list, any other ZCG screen returns to the ZCG home (not
  * the launcher), a copilot returns to the app it serves, and every top-level
- * screen returns to Apps.
+ * screen returns to Home.
  */
 const DRILLDOWN: Record<string, { href: string; label: string }> = {
   "/zcg/grant": { href: "/zcg/grants", label: "Grants" },
@@ -23,18 +23,58 @@ function backTarget(pathname: string): { href: string; label: string } {
     DRILLDOWN[pathname] ??
     (pathname.startsWith("/zcg/")
       ? { href: "/zcg", label: "ZCG" }
-      : { href: "/", label: "Apps" })
+      : { href: "/", label: "Home" })
   );
 }
+
+type Theme = "light" | "dark" | "system";
+const THEME_KEY = "oz-theme";
+const GROUPS_KEY = "oz-nav-groups";
+const THEME_ORDER: Theme[] = ["system", "light", "dark"];
+const THEME_LABEL: Record<Theme, string> = {
+  system: "Theme follows the system",
+  light: "Light theme",
+  dark: "Dark theme",
+};
+
+function Icon({ d, size = 15 }: { d: string; size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={d}></path>
+    </svg>
+  );
+}
+const ICON = {
+  menu: "M2.5 4h11M2.5 8h11M2.5 12h11",
+  search: "M11 11l3 3M3 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0z",
+  home: "M2.5 7.5L8 3l5.5 4.5V13H9.5V9.5h-3V13H2.5z",
+  sun: "M8 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3 3l1 1M12 12l1 1M13 3l-1 1M4 12l-1 1",
+  moon: "M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z",
+  system: "M2.5 3.5h11v7h-11zM6 13.5h4M8 10.5v3",
+  close: "M4 4l8 8M12 4l-8 8",
+};
 
 export function AppShell({
   children,
   isAdmin = false,
   isPreview = false,
+  footer,
 }: {
   children: ReactNode;
   isAdmin?: boolean;
   isPreview?: boolean;
+  /** Server-rendered treasury bar, pinned to the bottom of every page. */
+  footer?: ReactNode;
 }) {
   const pathname = usePathname();
   // The "Manage" trail only exists for administrators; anonymous visitors on a
@@ -42,40 +82,166 @@ export function AppShell({
   const rawGroup = designGroup(pathname);
   const group = rawGroup?.name === "Manage" && !isAdmin ? undefined : rawGroup;
   const current = group?.routes.find(([href]) => href === pathname)?.[1];
+  const groups = DESIGN_GROUPS.filter((g) => g.name !== "Manage" || isAdmin);
+  const back = backTarget(pathname);
+  const isHome = pathname === "/";
+
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
-  const groups = DESIGN_GROUPS.filter((g) => g.name !== "Manage" || isAdmin);
+  const [navOpen, setNavOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>("system");
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const close = () => dialog.current?.close();
-  const back = backTarget(pathname);
-  const allApps = isPreview ? "/design-review" : "/";
+  const openDialog = () => dialog.current?.showModal();
+
+  // Per-browser conveniences: the theme and which sidebar groups stay open.
+  // Read after mount (reading storage during render breaks hydration).
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    try {
+      const t = window.localStorage.getItem(THEME_KEY) as Theme | null;
+      if (t && THEME_ORDER.includes(t)) setTheme(t);
+      const g = window.localStorage.getItem(GROUPS_KEY);
+      if (g) setOpenGroups(JSON.parse(g) as Record<string, boolean>);
+    } catch {
+      /* private mode or blocked storage: defaults apply */
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  // The drawer closes on navigation; ⌘K / Ctrl+K opens the record search.
+  useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
+    setNavOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        if (dialog.current?.open) close();
+        else openDialog();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function cycleTheme() {
+    const next = THEME_ORDER[(THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length];
+    setTheme(next);
+    try {
+      window.localStorage.setItem(THEME_KEY, next);
+    } catch {
+      /* ignore */
+    }
+  }
+  function toggleGroup(name: string, fallbackOpen: boolean) {
+    const next = { ...openGroups, [name]: !(openGroups[name] ?? fallbackOpen) };
+    setOpenGroups(next);
+    try {
+      window.localStorage.setItem(GROUPS_KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
     <div
       className={cn("rd-shell", isPreview && "rd-shell-preview")}
-      data-section={group?.name ?? "Explore"}
+      data-theme={theme === "system" ? undefined : theme}
+      data-nav={navOpen ? "open" : undefined}
+      data-section={group?.name ?? (isHome ? "Home" : "Explore")}
     >
       <a href="#main-content" className="rd-skip">
         Skip to content
       </a>
-      {isPreview && (
-        <div className="rd-preview">
-          <span>
-            <i />
-            OpenZcash preview
-            <span className="rd-preview-note"> / New workspace</span>
-          </span>
-          <div className="rd-preview-actions">
+
+      <aside className="rd-side" aria-label="OpenZcash">
+        <div className="rd-side-brand">
+          <Link href="/" className="rd-brand" aria-label="OpenZcash home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/zcash-mark.svg" width="28" height="28" alt="" />
+            <span>OpenZcash</span>
+          </Link>
+          <span className="rd-side-tag">{isPreview ? "preview" : "public"}</span>
+          <button
+            type="button"
+            className="rd-side-close"
+            onClick={() => setNavOpen(false)}
+            aria-label="Close menu"
+          >
+            <Icon d={ICON.close} />
+          </button>
+        </div>
+        <nav className="rd-side-nav" aria-label="Apps">
+          <Link
+            href="/"
+            className="rd-side-item rd-side-home"
+            aria-current={isHome ? "page" : undefined}
+          >
+            <Icon d={ICON.home} />
+            <span>Home</span>
+            <small>treasuries · apps</small>
+          </Link>
+          {groups.map((g) => {
+            const containsCurrent = g.routes.some(([href]) => href === pathname) ||
+              (g.name === "Funding" &&
+                (pathname === "/zcg/grant" || pathname === "/zcg/recipient"));
+            const open = openGroups[g.name] ?? containsCurrent;
+            return (
+              <section key={g.name} className="rd-side-group" data-open={open}>
+                <button
+                  type="button"
+                  className="rd-side-group-title"
+                  aria-expanded={open}
+                  onClick={() => toggleGroup(g.name, containsCurrent)}
+                >
+                  <span>{g.name}</span>
+                  <span aria-hidden>{open ? "−" : "+"}</span>
+                </button>
+                {open
+                  ? g.routes.map(([href, label]) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className="rd-side-item"
+                        aria-current={href === pathname ? "page" : undefined}
+                      >
+                        <span>{label}</span>
+                      </Link>
+                    ))
+                  : null}
+              </section>
+            );
+          })}
+        </nav>
+        <div className="rd-side-foot">
+          <Link href="/zcg/methodology">Sources &amp; methodology</Link>
+          {isPreview ? (
             <a href="https://openzcash.org" target="_blank" rel="noreferrer">
               Current website ↗
             </a>
-            <button type="button" onClick={() => dialog.current?.showModal()}>
-              Browse apps
-            </button>
-          </div>
+          ) : null}
+          {isAdmin ? <LogoutButton /> : null}
         </div>
-      )}
-      <header className="rd-header">
-        <div className="rd-header-inner">
-          <div className="rd-brand-group">
+      </aside>
+      <div
+        className="rd-backdrop"
+        aria-hidden="true"
+        onClick={() => setNavOpen(false)}
+      />
+
+      <div className="rd-body">
+        <header className="rd-topbar">
+          <button
+            type="button"
+            className="rd-icon-button rd-menu"
+            onClick={() => setNavOpen(true)}
+            aria-label="Open menu"
+          >
+            <Icon d={ICON.menu} size={17} />
+          </button>
+          {!isHome ? (
             <Link
               href={back.href}
               className="rd-back"
@@ -84,88 +250,97 @@ export function AppShell({
             >
               ‹
             </Link>
-            <Link href="/" className="rd-brand">
-              <img src="/zcash-mark.svg" width="30" height="30" alt="" />
-              <span>OpenZcash</span>
+          ) : null}
+          <nav className="rd-breadcrumb" aria-label="Breadcrumb">
+            <Link href={group?.routes[0][0] ?? "/"}>
+              {group?.name ?? "Home"}
             </Link>
-          </div>
-          <nav aria-label="Main navigation" className="rd-primary-nav">
-            <Link href="/">Apps & treasuries</Link>
-            <Link
-              href="/ecosystem"
-              aria-current={group?.name === "Ecosystem" ? "true" : undefined}
-            >
-              Ecosystem
-            </Link>
-            <Link
-              href="/zcg/grants"
-              aria-current={group?.name === "Funding" ? "true" : undefined}
-            >
-              Grants
-            </Link>
-            <Link
-              href="/news"
-              aria-current={pathname === "/news" ? "page" : undefined}
-            >
-              News
-            </Link>
-            <Link href="/monthly">Monthly</Link>
+            {!isHome ? (
+              <>
+                <span aria-hidden>›</span>
+                <span>
+                  {current ??
+                    (pathname === "/zcg/grant"
+                      ? "Grant detail"
+                      : pathname === "/zcg/recipient"
+                        ? "Recipient detail"
+                        : "All apps")}
+                </span>
+              </>
+            ) : null}
           </nav>
-          <div className="rd-header-actions">
+          <button
+            type="button"
+            className="rd-search"
+            onClick={openDialog}
+            aria-label="Search records and apps"
+          >
+            <Icon d={ICON.search} size={14} />
+            <span>Search records, grants, apps…</span>
+            <kbd>⌘K</kbd>
+          </button>
+          <div className="rd-topbar-actions">
+            <Link href="/zcg/copilot" className="rd-button rd-button-primary">
+              Ask Copilot
+            </Link>
             <button
               type="button"
-              className="rd-explore"
-              onClick={() => dialog.current?.showModal()}
+              className="rd-icon-button"
+              onClick={cycleTheme}
+              aria-label={THEME_LABEL[theme]}
+              title={THEME_LABEL[theme]}
             >
-              Explore <span aria-hidden>→</span>
+              <Icon
+                d={
+                  theme === "dark"
+                    ? ICON.moon
+                    : theme === "light"
+                      ? ICON.sun
+                      : ICON.system
+                }
+                size={16}
+              />
             </button>
-            {isAdmin && <LogoutButton />}
           </div>
-        </div>
-      </header>
-      <main id="main-content" className="rd-main">
-        <nav className="rd-breadcrumb" aria-label="Breadcrumb">
-          <Link href={group?.routes[0][0] ?? "/"}>
-            {group?.name ?? "Apps & treasuries"}
-          </Link>
-          <span aria-hidden>›</span>
-          <span>
-            {current ??
-              (pathname === "/zcg/grant"
-                ? "Grant detail"
-                : pathname === "/zcg/recipient"
-                  ? "Recipient detail"
-                  : "All apps")}
-          </span>
-        </nav>
-        <div className="rd-content">{children}</div>
-        {group && (
-          <nav className="ws-page-trail" aria-label="Related pages">
-            <span>{group.name}</span>
+        </header>
+
+        <main id="main-content" className="rd-main">
+          <div className="rd-content">{children}</div>
+          {group && (
+            <nav className="ws-page-trail" aria-label="Related pages">
+              <span>{group.name}</span>
+              <div>
+                {group.routes
+                  .filter(([href]) => href !== pathname)
+                  .map(([href, label]) => (
+                    <Link key={href} href={href}>
+                      {label}
+                      <span aria-hidden>→</span>
+                    </Link>
+                  ))}
+              </div>
+            </nav>
+          )}
+          <footer className="rd-footer">
+            <span>
+              <strong>OpenZcash</strong>
+              <span aria-hidden> / </span>Public transparency, thoughtfully
+              connected.
+            </span>
             <div>
-              {group.routes
-                .filter(([href]) => href !== pathname)
-                .map(([href, label]) => (
-                  <Link key={href} href={href}>
-                    {label}
-                    <span aria-hidden>→</span>
-                  </Link>
-                ))}
+              <Link href="/zcg/methodology">Sources &amp; methodology →</Link>
+              <Link href={isPreview ? "/design-review" : "/"}>All apps →</Link>
             </div>
-          </nav>
-        )}
-      </main>
-      <footer className="rd-footer">
-        <span>
-          <strong>OpenZcash</strong>
-          <span aria-hidden> / </span>Public transparency, thoughtfully
-          connected.
-        </span>
-        <div>
-          <Link href="/zcg/methodology">Sources & methodology →</Link>
-          <Link href={allApps}>All apps →</Link>
-        </div>
-      </footer>
+          </footer>
+        </main>
+
+        {footer ? (
+          <footer className="rd-treasury-bar" aria-label="Treasury at a glance">
+            {footer}
+          </footer>
+        ) : null}
+      </div>
+
       <dialog
         aria-labelledby="app-directory-title"
         className="ws-app-dialog"
@@ -214,8 +389,8 @@ export function AppShell({
           })}
         </div>
         <div className="ws-dialog-foot">
-          <Link href={allApps} onClick={close}>
-            Explore all apps →
+          <Link href="/" onClick={close}>
+            All apps and treasuries →
           </Link>
         </div>
       </dialog>

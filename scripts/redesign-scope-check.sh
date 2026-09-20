@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Guarda de escopo do redesign (docs/redesign/README.md, §2 e §6).
 #
-# O redesign cobre o shell e todas as telas internas. Este script FALHA se a
-# branch alterar algo do conjunto PRESERVADO (launcher, Monthly, a sala 3D e
-# seus assets) e AVISA se alterar um módulo de dados/contrato que precisa
+# O redesign cobre o shell, a home e todas as telas. Este script FALHA se a
+# branch alterar algo do conjunto PRESERVADO (Monthly, a sala 3D e seus assets) e AVISA se alterar um módulo de dados/contrato que precisa
 # continuar aditivo (repositórios contábeis, importadores, política de
 # publicação, rotas de API).
 #
@@ -27,11 +26,7 @@ fi
 
 # Preservado byte a byte. Entradas terminadas em "/" cobrem o diretório inteiro.
 PRESERVED=(
-  # launcher (/) e tokens globais
-  src/app/page.tsx
-  src/app/treasury-overview.tsx
-  src/components/app-launcher.tsx
-  src/app/globals.css
+  # estados globais de carregamento e erro
   src/app/loading.tsx
   src/app/error.tsx
   # Monthly: rotas, leitor, geradores e publicações

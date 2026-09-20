@@ -1,9 +1,9 @@
 .explorer {
-  color: #292524;
+  color: var(--ink);
   min-width: 0;
 }
 .explorer :is(button, a, select, summary):focus-visible {
-  outline: 2px solid #d97706;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -18,22 +18,22 @@
   gap: 4px;
   font-size: 12px;
   padding: 3px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #fff;
+  background: var(--surface);
 }
 .tabs a {
   padding: 5px 12px;
   border-radius: 999px;
-  color: #57534e;
+  color: var(--muted);
   font-weight: 500;
 }
 .tabs a:hover {
-  background: #f5f5f4;
+  background: var(--surface2);
 }
 .tabs a[aria-current="page"] {
-  background: #292524;
-  color: #fff;
+  background: var(--ink);
+  color: var(--surface);
 }
 .stats {
   display: grid;
@@ -46,12 +46,12 @@
   gap: 8px 20px;
   flex-wrap: wrap;
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
   line-height: 1.6;
   margin: 10px 0 22px;
 }
 .dataNote button {
-  color: #92400e;
+  color: var(--accent);
   cursor: pointer;
   text-align: left;
 }
@@ -73,11 +73,11 @@
   flex: 1;
   min-width: 190px;
   height: 36px;
-  background: #fff;
-  border: 1px solid #d6d3d1;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
   padding: 0 11px;
-  color: #78716c;
+  color: var(--muted);
 }
 .search svg {
   flex-shrink: 0;
@@ -88,23 +88,23 @@
   outline: none;
   background: transparent;
   font-size: 12px;
-  color: #292524;
+  color: var(--ink);
   box-shadow: none;
 }
 .search:focus-within {
-  outline: 2px solid #d97706;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 .filters select {
   height: 36px;
   max-width: 170px;
   min-width: 0;
-  background: #fff;
-  border: 1px solid #d6d3d1;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
   padding: 0 24px 0 10px;
   font-size: 12px;
-  color: #57534e;
+  color: var(--muted);
   text-overflow: ellipsis;
 }
 .caption {
@@ -115,11 +115,11 @@
   min-height: 32px;
   margin-bottom: 12px;
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
 }
 .caption strong {
   font-weight: 500;
-  color: #57534e;
+  color: var(--muted);
 }
 .resultActions {
   display: flex;
@@ -129,7 +129,7 @@
 }
 .periods {
   display: flex;
-  background: #e7e5e4;
+  background: var(--line);
   border-radius: 8px;
   padding: 3px;
   gap: 2px;
@@ -138,18 +138,18 @@
   font-size: 11px;
   padding: 4px 11px;
   border-radius: 5px;
-  color: #57534e;
+  color: var(--muted);
   cursor: pointer;
   white-space: nowrap;
 }
 .periods button[aria-pressed="true"] {
-  background: #fff;
-  color: #292524;
+  background: var(--surface);
+  color: var(--ink);
   box-shadow: 0 1px 3px #29252415;
   font-weight: 600;
 }
 .textButton {
-  color: #92400e;
+  color: var(--accent);
   font-size: 11px;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -172,7 +172,7 @@
     box-shadow 0.15s;
 }
 .cardSurface:hover {
-  border-color: var(--category-border, #d6d3d1);
+  border-color: var(--category-border, var(--line-strong));
   box-shadow: 0 4px 16px #2925240a;
 }
 .cardTop {
@@ -191,10 +191,10 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  background: #fff;
-  color: #78716c;
+  background: var(--surface);
+  color: var(--muted);
   border-radius: 13px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   box-shadow: 0 1px 2px #29252406;
   overflow: hidden;
 }
@@ -232,7 +232,7 @@
 }
 .cardTop p {
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
   margin-top: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -269,34 +269,34 @@
   font-size: 10px;
   line-height: 16px;
   padding: 2px 6px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 6px;
-  color: #57534e;
-  background: #fafaf9;
+  color: var(--muted);
+  background: var(--surface);
   white-space: nowrap;
 }
 .mutedBadge {
-  color: #78716c;
-  background: #f5f5f4;
+  color: var(--muted);
+  background: var(--surface2);
 }
 .noticeBadge {
   display: inline-flex;
   font-size: 10px;
   line-height: 16px;
   padding: 2px 6px;
-  border: 1px solid #fcd34d;
+  border: 1px solid var(--accent-muted);
   border-radius: 6px;
-  color: #92400e;
-  background: #fffbeb;
+  color: var(--accent);
+  background: var(--accent-soft);
 }
 .notice {
-  border-left: 2px solid #d97706;
+  border-left: 2px solid var(--accent);
   border-radius: 0 8px 8px 0;
-  background: #fffbeb;
+  background: var(--accent-soft);
   padding: 12px;
   margin: 12px 0;
   font-size: 12px;
-  color: #92400e;
+  color: var(--accent);
 }
 .notice p {
   margin: 5px 0;
@@ -313,25 +313,25 @@
   gap: 10px;
   margin-top: auto;
   padding-top: 11px;
-  border-top: 1px solid #e7e5e4;
+  border-top: 1px solid var(--line);
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
 }
 .cardBottom button {
   font-weight: 500;
-  color: #57534e;
+  color: var(--muted);
   cursor: pointer;
   border-radius: 5px;
   padding: 3px 0 3px 8px;
 }
 .cardBottom button:hover {
-  color: #92400e;
+  color: var(--accent);
 }
 .tablePanel {
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 16px;
   overflow: hidden;
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 1px 2px #29252408;
 }
 .tableScroll {
@@ -347,14 +347,14 @@
   font-size: 12px;
 }
 .table th {
-  background: #f5f5f4;
-  color: #78716c;
+  background: var(--surface2);
+  color: var(--muted);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.045em;
   text-transform: uppercase;
   padding: 11px 16px;
-  border-bottom: 1px solid #e7e5e4;
+  border-bottom: 1px solid var(--line);
   white-space: nowrap;
 }
 .table th:nth-child(1) {
@@ -374,7 +374,7 @@
 }
 .table td {
   padding: 12px 16px;
-  border-bottom: 1px solid #e7e5e4;
+  border-bottom: 1px solid var(--line);
   vertical-align: middle;
 }
 .table tr:last-child td {
@@ -386,18 +386,18 @@
 .repoTitle {
   font-size: 13px;
   font-weight: 600;
-  color: #292524;
+  color: var(--ink);
   text-align: left;
   cursor: pointer;
   overflow-wrap: anywhere;
   line-height: 1.5;
 }
 .repoTitle span {
-  color: #a8a29e;
+  color: var(--line-strong);
   font-weight: 400;
 }
 .repoTitle:hover {
-  color: #92400e;
+  color: var(--accent);
 }
 .repoIdentity {
   display: flex;
@@ -414,7 +414,7 @@
   gap: 5px 7px;
   margin-top: 3px;
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
   overflow-wrap: anywhere;
 }
 .repoMeta .badge {
@@ -427,24 +427,24 @@
 .numeric {
   font-variant-numeric: tabular-nums;
   font-size: 13px;
-  color: #292524;
+  color: var(--ink);
   font-weight: 500;
   white-space: nowrap;
 }
 .small {
   font-size: 10px;
-  color: #78716c;
+  color: var(--muted);
   line-height: 1.6;
 }
 .date {
   font-size: 11px;
-  color: #57534e;
+  color: var(--muted);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 .release {
   display: block;
-  color: #92400e;
+  color: var(--accent);
   font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -457,15 +457,15 @@
   gap: 20px;
   margin-top: 20px;
   font-size: 11px;
-  color: #78716c;
+  color: var(--muted);
 }
 .pagination button {
-  border: 1px solid #d6d3d1;
-  background: #fff;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
   border-radius: 8px;
   padding: 7px 12px;
   cursor: pointer;
-  color: #57534e;
+  color: var(--muted);
 }
 .pagination button:disabled {
   opacity: 0.4;
@@ -474,16 +474,16 @@
 .empty {
   text-align: center;
   padding: 48px 20px;
-  background: #fff;
-  border: 1px dashed #d6d3d1;
+  background: var(--surface);
+  border: 1px dashed var(--line-strong);
   border-radius: 16px;
-  color: #78716c;
+  color: var(--muted);
   font-size: 12px;
 }
 .empty h2 {
   font-size: 16px;
   font-weight: 600;
-  color: #292524;
+  color: var(--ink);
   margin-bottom: 8px;
 }
 .empty p {
@@ -491,24 +491,24 @@
 }
 .methodology {
   margin-top: 20px;
-  border-top: 1px solid #e7e5e4;
+  border-top: 1px solid var(--line);
   padding-top: 14px;
   font-size: 12px;
-  color: #57534e;
+  color: var(--muted);
   line-height: 1.75;
   scroll-margin-top: 85px;
 }
 .methodology summary {
   cursor: pointer;
   font-weight: 500;
-  color: #57534e;
+  color: var(--muted);
   font-size: 11px;
 }
 .methodology p {
   margin: 12px 0;
 }
 .methodology a {
-  color: #92400e;
+  color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -522,7 +522,7 @@
 .coverageTable th {
   text-align: left;
   padding: 8px;
-  border-bottom: 1px solid #e7e5e4;
+  border-bottom: 1px solid var(--line);
 }
 .organizationGrid {
   display: grid;
@@ -532,14 +532,14 @@
 }
 .organizationCard {
   padding: 16px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
 }
 .organizationCard h3 {
   font-size: 13px;
   font-weight: 600;
-  color: #292524;
+  color: var(--ink);
   margin-bottom: 5px;
 }
 .organizationIdentity {
@@ -558,7 +558,7 @@
 }
 .organizationCard button {
   font-size: 11px;
-  color: #92400e;
+  color: var(--accent);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -568,11 +568,11 @@
   max-height: 86dvh;
   overflow: auto;
   padding: 24px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 16px;
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 24px 90px #29252430;
-  color: #292524;
+  color: var(--ink);
 }
 .dialog::backdrop {
   background: #29252455;
@@ -599,7 +599,7 @@
 }
 .dialogHeader button {
   font-size: 22px;
-  color: #78716c;
+  color: var(--muted);
   cursor: pointer;
   width: 28px;
   height: 28px;
@@ -608,13 +608,13 @@
 .dialog p {
   font-size: 12px;
   line-height: 1.75;
-  color: #57534e;
+  color: var(--muted);
   margin: 12px 0;
 }
 .dialog h3 {
   font-size: 12px;
   font-weight: 600;
-  color: #292524;
+  color: var(--ink);
   margin: 22px 0 10px;
 }
 .dialogLinks {
@@ -625,14 +625,14 @@
 }
 .dialogLinks a {
   font-size: 11px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 7px 10px;
-  color: #92400e;
+  color: var(--accent);
   overflow-wrap: anywhere;
 }
 .event {
-  border-left: 2px solid #fcd34d;
+  border-left: 2px solid var(--accent-muted);
   padding-left: 12px;
   margin: 13px 0;
 }
@@ -645,7 +645,7 @@
 }
 .event a {
   font-size: 10px;
-  color: #92400e;
+  color: var(--accent);
   text-decoration: underline;
 }
 .footer {
@@ -654,8 +654,8 @@
   gap: 15px;
   margin-top: 24px;
   padding-top: 14px;
-  border-top: 1px solid #e7e5e4;
-  color: #78716c;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.8;
 }
@@ -664,7 +664,7 @@
   gap: 20px;
 }
 .footer a {
-  color: #92400e;
+  color: var(--accent);
 }
 @media (prefers-reduced-motion: reduce) {
   .cardSurface {
@@ -745,14 +745,14 @@
 /* Approved catalog composition. */
 .projectSummary {
   font-size: 12px;
-  color: #766b5c;
+  color: var(--muted);
   line-height: 1.75;
   margin: -2px 0 20px;
   flex: 1;
 }
 .cardSurface {
   padding: 24px !important;
-  background: #fffefa !important;
+  background: var(--surface) !important;
 }
 .cardTop h2 {
   font-size: 16px;
@@ -763,38 +763,38 @@
 }
 .filters {
   padding: 18px;
-  background: #fffefa;
-  border: 1px solid #e9e3d6;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 14px;
   gap: 10px;
 }
 .search {
   height: 39px;
-  border-color: #e9e3d6;
+  border-color: var(--line);
   border-radius: 10px;
 }
 .filters select {
   height: 39px;
-  border-color: #e9e3d6;
+  border-color: var(--line);
   border-radius: 10px;
   max-width: 180px;
 }
 .tablePanel {
-  border-color: #e9e3d6;
+  border-color: var(--line);
 }
 .table th {
-  background: #faf7f0;
+  background: var(--accent-soft);
 }
 .table td {
   padding: 18px 16px;
 }
 .tabs a[aria-current="page"] {
-  background: #f6ead2;
-  color: #916722;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .dialog {
-  border-color: #e9e3d6;
-  background: #fffdf8;
+  border-color: var(--line);
+  background: var(--surface);
 }
 .dialog h2 {
   letter-spacing: -0.5px;

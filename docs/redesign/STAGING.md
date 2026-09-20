@@ -68,8 +68,9 @@ source labels as spreadsheet text. Wallet search covers the original 18 complete
 records; communities retain all channel/funding/activity fields. The 112-project
 and 555-repository catalogues retain their source-backed detail dialogs.
 
-The home page, its app launcher and both treasury cards keep their production
-layout. Monthly routes, publications and generators are unchanged. The 3D room,
+The home page now lives inside the shell (treasury cards, then the app
+launcher), and both treasuries are pinned to the bottom of every shell page.
+Monthly routes, publications and generators are unchanged. The 3D room,
 canvas, proposal dialog and assets are unchanged; an entrance screen now mounts
 the original room after the user presses Enter.
 
@@ -206,6 +207,30 @@ Correctness fixes in the new code:
 
 Not changed on purpose: the treasury cards removed from `/zcg` in the previous
 revision stay on the home launcher; the stipends page keeps its card layout.
+
+### Visual system revision — 20 September 2026
+
+The warm amber/beige skin was replaced by the approved direction (Mercury as
+the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
+
+- `src/app/theme.css` holds the tokens (light and dark), the shell layout and a
+  remap of the Tailwind colour utilities the pages already use, so no page
+  changed its markup or lost data. `redesign.css` and `workspace.css` were
+  re-skinned mechanically: every warm hex colour now reads a token.
+- New shell: dark sidebar with the official Zcash mark, grouped navigation
+  (open groups remembered per browser), top bar with the back control, the
+  trail, record search (⌘K / Ctrl+K), an "Ask Copilot" action and a theme
+  toggle (system → light → dark, remembered per browser). The dark theme is
+  near-black with a light gold-to-black gradient, the house identity.
+- The two treasuries (ZCG operating and the Lockbox / Coinholder pool) are
+  pinned to the bottom of every shell page, streamed from one cached
+  projection (`lib/zcash/treasury-summary.ts`) that the home cards use too.
+- The home page (`/`) now lives inside the shell: treasury cards, then the app
+  launcher with its reorder/hide behaviour. Monthly and the 3D room are the
+  only pages that keep their previous chrome; the scope guard and
+  `route-coverage.json` reflect that.
+- Font: Geist for the workspace (Arcadia, the reference's face, is
+  proprietary); Inter remains for Monthly.
 
 ### Governance revision — 20 September 2026
 

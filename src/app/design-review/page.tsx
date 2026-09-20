@@ -44,10 +44,9 @@ export default async function DesignReviewPage() {
       <section className="rd-preserved">
         <h2>Familiar, by design</h2>
         <p>
-          <Link href="/">
-            The home page, app launcher and both treasury cards →
-          </Link>{" "}
-          keep their current layout.{" "}
+          <Link href="/">The home page →</Link> now lives inside the shell:
+          the two treasuries at a glance, then the app launcher, and both
+          treasuries stay pinned to the bottom of every page.{" "}
           <Link href="/monthly">Monthly and its editions →</Link> keep the
           existing publication format. The{" "}
           <Link href="/zcg/office">3D office →</Link> has a new entrance; the

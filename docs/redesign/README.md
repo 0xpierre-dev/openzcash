@@ -4,7 +4,7 @@ Este documento substitui o plano de 8 de setembro de 2026 (branch
 `michae2xl/redesign-grant-org-structure`), que congelava a primeira tela de cada
 app e limitava o redesign às telas internas. A decisão tomada no ambiente de
 teste de 17 de setembro foi outra, e é a que vale: o redesign cobre o shell e
-todas as telas dos apps; só o launcher, o Monthly e a sala 3D ficam como estão.
+todas as telas dos apps, inclusive a home; só o Monthly e a sala 3D ficam como estão.
 
 ## 1. Fronteira
 
@@ -12,7 +12,6 @@ todas as telas dos apps; só o launcher, o Monthly e a sala 3D ficam como estão
 
 | Grupo    | Arquivos                                                                                  |
 | -------- | ----------------------------------------------------------------------------------------- |
-| Launcher | `src/app/page.tsx`, `treasury-overview.tsx`, `components/app-launcher.tsx`, `globals.css` |
 | Monthly  | `src/app/monthly*/`, `components/monthly/`, `lib/monthly/`, `public/monthly/`             |
 | Sala 3D  | `office/scene.tsx`, `office-canvas.tsx`, `proposal-dialog.tsx`, `public/office-assets/`   |
 
@@ -29,6 +28,10 @@ internas, inclusive a entrada do office (`office/page.tsx`,
 Guarda mecânica: `scripts/redesign-scope-check.sh [base]` (padrão `origin/main`).
 Uma exceção aprovada passa por `REDESIGN_ALLOW=caminho`.
 
+Desde 20/09 a home (`src/app/page.tsx`, `treasury-overview.tsx`,
+`components/app-launcher.tsx`) também faz parte do redesign: ela vive dentro
+do shell e as duas tesourarias ficam fixas no rodapé de todas as páginas.
+
 ## 2. Onde vive
 
 - Branch: `michae2xl/redesign-staging` (base `origin/main`). Worktree local:
@@ -41,20 +44,32 @@ Uma exceção aprovada passa por `REDESIGN_ALLOW=caminho`.
 
 ## 3. Princípios
 
-1. Fundo branco-quente e dourado: `amber-700` para texto e ações, `amber-500` a
-   10–15% para superfícies; escala `stone` para texto. Cores novas só via tokens
-   `--ws-*` em `workspace.css`.
-2. Verde e rosa só para fluxos reais de caixa (entrada/saída, sobre/sob orçamento).
-3. Número é sempre `.tnum`; valor monetário em `amber-700/90` nas tabelas.
+Direção visual aprovada em 20/09/2026 (referência: Mercury; mockups em
+https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
+
+1. Um sistema de tokens em `src/app/theme.css`, carregado por último: fundo
+   neutro frio, superfícies brancas separadas por hairline, um único acento
+   (`--accent`, índigo) para estado e ação, dourado Zcash só na marca. Tema
+   escuro = preto com gradiente leve de dourado (`data-theme` no shell, ou o
+   sistema). Nenhuma página define cor: as utilidades Tailwind que as páginas
+   usam são remapeadas para os tokens dentro de `.rd-content`.
+2. Verde e vermelho só para fluxos reais de caixa (entrada/saída, sobre/sob
+   orçamento) e vereditos que os exigem.
+3. Número é sempre `.tnum`, ganha destaque por tamanho, não por cor; centavos
+   e unidades em tamanho menor.
 4. Toda cifra tem fonte. Link interno termina em `→`; link externo em `↗` e abre
    em nova aba (`RelatedLinks` faz isso sozinho).
-5. Toda tela começa com `PageHeader`: título e um subtítulo de uma frase que diz
-   de onde o dado vem. Copy editorial entra em `EditorialIntro`, nunca no lugar
-   da proveniência.
-6. Um único controle de voltar: o `‹` do shell, que segue a trilha (grant →
-   grants, recipient → recipients, `/zcg/*` → `/zcg`, copilot → seu app, o resto
-   → Apps). Nenhum `‹` inline. Links contextuais de escape ("Totals →") são
-   permitidos porque não são "voltar".
+5. Toda tela começa com `PageHeader`: título (28/400) e um subtítulo de uma
+   frase que diz de onde o dado vem. Copy editorial entra em `EditorialIntro`,
+   nunca no lugar da proveniência. As estatísticas (`Stat`) formam uma faixa
+   única dividida por hairlines, sem cards coloridos.
+6. Navegação: sidebar escura com grupos (Funding, Governance, Treasuries,
+   Ecosystem, Research, Manage para admin), barra superior com voltar, trilha,
+   busca (⌘K) e alternador de tema; rodapé fixo com as duas tesourarias. Um
+   único controle de voltar: o `‹` do shell, que segue a trilha (grant →
+   grants, recipient → recipients, `/zcg/*` → `/zcg`, copilot → seu app, o
+   resto → Home). Nenhum `‹` inline. Links contextuais de escape ("Totals →")
+   são permitidos porque não são "voltar".
 7. Rótulos de status vêm de `src/lib/zcg/status-labels.ts` (grant, veredito ZCG,
    veredito coinholder). Nenhuma tela define o próprio mapa.
 8. Tabelas usam `DataTable`: 25/50/100 linhas ou todas, CSV com o texto exibido,

@@ -2,7 +2,7 @@
   "routes": [
     {
       "route": "/",
-      "treatment": "preserved"
+      "treatment": "workspace composition (shell home: treasuries and app launcher)"
     },
     {
       "route": "/arborist",
