@@ -18,12 +18,15 @@ import {
 } from "@/components/icons";
 import type { ComponentType } from "react";
 import { disbursementsSummary } from "@/lib/zcg/disbursements-repo";
+import { listProposals } from "@/lib/zcg/proposals-repo";
+import { publicationDay } from "@/lib/zcg/publication-policy";
+import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
+import { currentElection, getElections } from "@/lib/zcg/governance-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZecCompact } from "@/lib/zcash/units";
-import { ElectionsSection } from "./elections-section";
-import { CurrentCommittee } from "./current-committee";
 import { listChangelog } from "@/lib/zcg/changelog";
 import { proposalStatusLabel } from "@/lib/zcg/status-labels";
+import { MEMBERS, SEATED_FROM } from "./current-committee-data";
 import "./overview.css";
 
 export const dynamic = "force-dynamic";
@@ -36,92 +39,22 @@ type Tile = {
   Icon: ComponentType<{ className?: string }>;
 };
 
-// Primary records stay visible; specialist tools remain one click away.
+// Every ZCG tool stays one click away; the four primary records carry counts.
 const TILES: Tile[] = [
-  {
-    href: "/zcg/totals",
-    label: "Totals",
-    sub: "Where the money goes",
-    Icon: IconChart,
-  },
-  {
-    href: "/zcg/grants",
-    label: "Grants",
-    sub: "Approved projects",
-    Icon: IconGrant,
-  },
-  {
-    href: "/zcg/disbursements",
-    label: "Disbursements",
-    sub: "The full ledger",
-    Icon: IconReceipt,
-  },
-  {
-    href: "/zcg/recipients",
-    label: "Recipients",
-    sub: "By amount received",
-    Icon: IconUsers,
-  },
-  {
-    href: "/zcg/proposals",
-    label: "Proposals",
-    sub: "Governance funnel",
-    Icon: IconVote,
-  },
-  {
-    href: "/zcg/committee",
-    label: "Committee",
-    sub: "Members, mandates & elections",
-    Icon: IconUsers,
-  },
-  {
-    href: "/zcg/analytics",
-    label: "Insights",
-    sub: "Burn-rate & delivery",
-    Icon: IconArrowUp,
-  },
-  {
-    href: "/zcg/stipends",
-    label: "Stipends",
-    sub: "Committee pay",
-    Icon: IconCoins,
-  },
-  {
-    href: "/zcg/budget",
-    label: "Budget",
-    sub: "Discretionary · USD × ZEC",
-    Icon: IconBalance,
-  },
-  {
-    href: "/zcg/coinholder",
-    label: "Coinholder",
-    sub: "FPF grants pool",
-    Icon: IconWallet,
-  },
-  {
-    href: "/zcg/reconciliation",
-    label: "Reconciliation",
-    sub: "On-chain ↔ ledger",
-    Icon: IconShield,
-  },
-  {
-    href: "/zcg/meetings",
-    label: "Meetings",
-    sub: "Committee minutes",
-    Icon: IconNews,
-  },
-  {
-    href: "/zcg/methodology",
-    label: "Methodology",
-    sub: "Sources & API",
-    Icon: IconCheck,
-  },
-  {
-    href: "/zcg/copilot",
-    label: "ZCG Copilot",
-    sub: "Ask about public records",
-    Icon: IconTerminal,
-  },
+  { href: "/zcg/totals", label: "Totals", sub: "Where the money goes", Icon: IconChart },
+  { href: "/zcg/grants", label: "Grants", sub: "Approved projects", Icon: IconGrant },
+  { href: "/zcg/disbursements", label: "Disbursements", sub: "The full ledger", Icon: IconReceipt },
+  { href: "/zcg/recipients", label: "Recipients", sub: "By amount received", Icon: IconUsers },
+  { href: "/zcg/proposals", label: "Proposals", sub: "Governance funnel", Icon: IconVote },
+  { href: "/zcg/committee", label: "Committee", sub: "Members, mandates & elections", Icon: IconUsers },
+  { href: "/zcg/analytics", label: "Insights", sub: "Burn-rate & delivery", Icon: IconArrowUp },
+  { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", Icon: IconCoins },
+  { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", Icon: IconBalance },
+  { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF grants pool", Icon: IconWallet },
+  { href: "/zcg/reconciliation", label: "Reconciliation", sub: "On-chain ↔ ledger", Icon: IconShield },
+  { href: "/zcg/meetings", label: "Meetings", sub: "Committee minutes", Icon: IconNews },
+  { href: "/zcg/methodology", label: "Methodology", sub: "Sources & API", Icon: IconCheck },
+  { href: "/zcg/copilot", label: "ZCG Copilot", sub: "Ask about public records", Icon: IconTerminal },
 ];
 
 const PRIMARY_ROUTES = [
@@ -133,13 +66,40 @@ const PRIMARY_ROUTES = [
 
 const changeLabel = (v: string | null) => proposalStatusLabel(v);
 
+function formatDay(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][(m ?? 1) - 1];
+  return `${month} ${d}, ${y}`;
+}
+
 export default async function ZcgPage() {
-  const [s, changes, schedule] = await Promise.all([
+  const [s, changes, schedule, proposals, elections] = await Promise.all([
     disbursementsSummary(),
     listChangelog(7, 12, "zcg").catch(() => []),
     // Derived figure; never lets the app's first screen fail.
     getPaymentSchedule().catch(() => null),
+    // Same published (D-1) list and cache entry as /zcg/proposals.
+    cached(`listProposals:all:${publicationDay()}`, LEDGER_TTL_MS, () =>
+      listProposals({}),
+    ).catch(() => null),
+    getElections().catch(() => []),
   ]);
+  const underReview = proposals
+    ? proposals.filter((p) => p.status === "under_review").length
+    : null;
+  const liveElection = currentElection(elections);
+  const next = schedule?.rows[0] ?? null;
+  const [dollars, cents] = formatUsdCents(schedule?.totalCents ?? 0n).split(".");
+
+  const primaryCounts: Record<string, string> = {
+    "/zcg/grants": `${s.grantCount} approved projects`,
+    "/zcg/proposals":
+      proposals && underReview != null
+        ? `${proposals.length} · ${underReview} under review`
+        : "Governance funnel",
+    "/zcg/disbursements": `${s.count.toLocaleString("en-US")} ledger rows`,
+    "/zcg/recipients": `${s.recipientCount} · by amount received`,
+  };
 
   return (
     <div className="zcg-overview">
@@ -152,7 +112,7 @@ export default async function ZcgPage() {
         <Stat
           label="Grants"
           value={String(s.grantCount)}
-          sub={`${s.paidCount} payments made`}
+          sub={`approved projects · ${s.paidCount} payments made`}
         />
         <Stat
           label="USD paid to date"
@@ -172,6 +132,114 @@ export default async function ZcgPage() {
         />
       </section>
 
+      {liveElection ? (
+        <Link href="/zcg/committee" className="zcg-live-vote">
+          <span className="zcg-live-dot" aria-hidden />
+          <strong>Live · a community vote is happening right now</strong>
+          <span>
+            {liveElection.title} · {liveElection.seats} seats
+            {liveElection.votingCloses
+              ? ` · voting closes ${formatDay(liveElection.votingCloses)}`
+              : ""}
+          </span>
+          <span aria-hidden>→</span>
+        </Link>
+      ) : null}
+
+      <div className="zcg-two">
+        <section
+          className="zcg-overview-schedule"
+          aria-labelledby="overview-schedule-title"
+        >
+          <div className="zcg-card-head">
+            <h2 id="overview-schedule-title">Scheduled payments</h2>
+            <Link href="/zcg/schedule">Open schedule →</Link>
+          </div>
+          {schedule ? (
+            <>
+              <p className="zcg-overview-schedule-value tnum">
+                {dollars}
+                <small>.{cents ?? "00"}</small>
+              </p>
+              <p className="zcg-overview-schedule-note">
+                <strong>{schedule.rows.length} approved future payments</strong>
+                Unpaid milestones with an estimated date, summed from the ledger.
+                A different population from open commitments, which count every
+                unpaid milestone. View totals by month and category.
+              </p>
+              {next ? (
+                <p className="zcg-overview-next">
+                  <span>
+                    Next · <b className="tnum">{next.estimatedPayoutDate}</b> ·{" "}
+                    <Link href={`/zcg/grant?g=${encodeURIComponent(next.project ?? "")}`}>
+                      {next.project}
+                    </Link>
+                    {next.milestoneLabel ? `, ${next.milestoneLabel}` : ""}
+                  </span>
+                  <b className="tnum">{formatUsdCents(next.amountUsdCents)}</b>
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <p className="zcg-overview-schedule-note">
+              The schedule is temporarily unavailable.
+            </p>
+          )}
+        </section>
+
+        <section className="zcg-changes" aria-labelledby="overview-changes-title">
+          <div className="zcg-card-head">
+            <h2 id="overview-changes-title">Changed this week</h2>
+            <a href="/api/feeds/zcg.xml" title="Subscribe to changes via RSS">
+              RSS ↗
+            </a>
+          </div>
+          {changes.length > 0 ? (
+            <ul>
+              {changes.map((c) => (
+                <li key={c.id}>
+                  <span className="zcg-change-text">
+                    {c.kind === "proposal_status" ? (
+                      <Link href={`/zcg/proposals?status=${c.toVal ?? ""}`}>
+                        <span className="zcg-change-title">{c.title}</span>
+                        <span className="zcg-change-muted">
+                          {" "}
+                          moved {changeLabel(c.fromVal)} →{" "}
+                        </span>
+                        <span className="zcg-change-title">
+                          {changeLabel(c.toVal)}
+                        </span>
+                      </Link>
+                    ) : c.kind === "proposal_new" ? (
+                      <Link href="/zcg/proposals?status=under_review">
+                        <span className="zcg-change-muted">New proposal · </span>
+                        <span className="zcg-change-title">{c.title}</span>
+                      </Link>
+                    ) : (
+                      <Link href="/zcg/disbursements">
+                        <span className="zcg-change-title">{c.title}</span>
+                        <span className="zcg-change-muted"> · {c.detail}</span>
+                      </Link>
+                    )}
+                  </span>
+                  <span className="zcg-change-date tnum">
+                    {c.at.toISOString().slice(5, 10).replace("-", "/")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="zcg-overview-schedule-note">
+              No changes recorded in the last seven days.
+            </p>
+          )}
+          <p className="zcg-card-foot">
+            Automatic diff between daily imports of the official spreadsheet:
+            new proposals, verdict changes, and newly recorded payments.
+          </p>
+        </section>
+      </div>
+
       <nav className="zcg-overview-primary" aria-label="Grant records">
         {PRIMARY_ROUTES.map((href) =>
           TILES.find((tile) => tile.href === href)!,
@@ -180,12 +248,32 @@ export default async function ZcgPage() {
             <tile.Icon className="h-5 w-5" />
             <span>
               <strong>{tile.label}</strong>
-              <small>{tile.sub}</small>
+              <small>{primaryCounts[tile.href] ?? tile.sub}</small>
             </span>
             <span aria-hidden>→</span>
           </Link>
         ))}
       </nav>
+
+      <section className="zcg-committee-row" aria-label="Current committee">
+        <div className="zcg-avatars">
+          {MEMBERS.map((m) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={m.name} src={m.img} alt="" width={30} height={30} />
+          ))}
+        </div>
+        <div>
+          <strong>
+            Current committee · {MEMBERS.length} seats · from {SEATED_FROM}
+          </strong>
+          <small>
+            {MEMBERS.map((m) => m.name).join(", ")} · source-linked roles,
+            terms, elections, stipends and minutes
+          </small>
+        </div>
+        <Link href="/zcg/committee">Committee →</Link>
+      </section>
+
       <details className="zcg-overview-tools">
         <summary>More ZCG tools</summary>
         <nav aria-label="More ZCG tools">
@@ -202,100 +290,6 @@ export default async function ZcgPage() {
           )}
         </nav>
       </details>
-
-      {schedule ? (
-        <section
-          className="zcg-overview-schedule"
-          aria-labelledby="overview-schedule-title"
-        >
-          <div>
-            <h2 id="overview-schedule-title">Scheduled payments</h2>
-            <p className="zcg-overview-schedule-value tnum">
-              {formatUsdCents(schedule.totalCents)}
-            </p>
-          </div>
-          <p className="zcg-overview-schedule-note">
-            <strong>{schedule.rows.length} approved future payments</strong>
-            Unpaid milestones with an estimated date, summed from the ledger.
-            View totals by month and category.
-          </p>
-          <Link className="ws-button" href="/zcg/schedule">
-            Open schedule <span aria-hidden>→</span>
-          </Link>
-        </section>
-      ) : null}
-
-      <CurrentCommittee />
-
-      {changes.length > 0 ? (
-        <section className="mb-8">
-          <div className="mb-3 flex items-baseline justify-between gap-3">
-            <h2 className="text-sm font-semibold text-stone-700">
-              Changed this week
-            </h2>
-            <a
-              href="/api/feeds/zcg.xml"
-              className="text-xs text-stone-400 hover:text-amber-700"
-              title="Subscribe to changes via RSS"
-            >
-              RSS ↗
-            </a>
-          </div>
-          <div className="rounded-2xl border border-stone-200 bg-white shadow-sm shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5">
-            <ul className="divide-y divide-stone-100">
-              {changes.map((c) => (
-                <li
-                  key={c.id}
-                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm"
-                >
-                  <span className="min-w-0 flex-1 overflow-hidden">
-                    {c.kind === "proposal_status" ? (
-                      <Link
-                        href={`/zcg/proposals?status=${c.toVal ?? ""}`}
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="font-medium">{c.title}</span>
-                        <span className="text-stone-500">
-                          {" "}
-                          moved {changeLabel(c.fromVal)} →{" "}
-                        </span>
-                        <span className="font-medium">
-                          {changeLabel(c.toVal)}
-                        </span>
-                      </Link>
-                    ) : c.kind === "proposal_new" ? (
-                      <Link
-                        href="/zcg/proposals?status=under_review"
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="text-stone-500">New proposal: </span>
-                        <span className="font-medium">{c.title}</span>
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/zcg/disbursements"
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="font-medium">{c.title}</span>
-                        <span className="text-stone-500"> · {c.detail}</span>
-                      </Link>
-                    )}
-                  </span>
-                  <span className="shrink-0 text-xs text-stone-400 tnum">
-                    {c.at.toISOString().slice(5, 10).replace("-", "/")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p className="mt-2 text-xs text-stone-500">
-            Automatic diff between daily imports of the official spreadsheet:
-            new proposals, verdict changes, and newly recorded payments.
-          </p>
-        </section>
-      ) : null}
-
-      <ElectionsSection />
 
       <Link className="zcg-overview-office" href="/zcg/office">
         <span>

@@ -833,3 +833,167 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Record meta pills, status cells and the selection strip ---------- */
+.ws-record-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: -14px 0 22px;
+  font-size: 12.5px;
+}
+.ws-record-meta > a {
+  color: var(--accent-ink);
+}
+.ws-record-meta-sep,
+.ws-record-meta-label {
+  color: var(--dim);
+}
+.ws-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ws-pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ws-pill-accent {
+  border-color: transparent;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.ws-pill-pos {
+  border-color: transparent;
+  background: var(--pos-soft);
+  color: var(--pos);
+}
+.ws-pill-neg {
+  border-color: transparent;
+  background: var(--neg-soft);
+  color: var(--neg);
+}
+.ws-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.ws-status .ws-pill {
+  height: 22px;
+  padding: 0 9px;
+}
+.rd-content .oz-stat .ws-stat-of {
+  font-size: 16px;
+  color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
+}
+.ws-selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.ws-selection strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.ws-selection-warn {
+  color: var(--warn);
+}
+.ws-selection-clear {
+  margin-left: auto;
+  color: var(--accent-ink);
+}
+
+/* Proposal verdict funnel as text tabs with counts, underline on the active one. */
+.rd-shell .ws-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 0 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.rd-shell .ws-pipeline a {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 10px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.rd-shell .ws-pipeline a:hover {
+  color: var(--ink);
+}
+.rd-shell .ws-pipeline span {
+  display: inline;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rd-shell .ws-pipeline strong {
+  display: inline;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+.rd-shell .ws-pipeline i {
+  display: none;
+}
+.rd-shell .ws-pipeline a[aria-current] {
+  border-bottom-color: var(--accent);
+  background: transparent;
+}
+.rd-shell .ws-pipeline a[aria-current] span {
+  color: var(--ink);
+  font-weight: 500;
+}
+.rd-shell .ws-pipeline a[aria-current] strong {
+  color: var(--muted);
+}
+
+.rd-content .oz-stat .ws-stat-bar {
+  display: block;
+  height: 4px;
+  margin: 6px 0 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.rd-content .oz-stat .ws-stat-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.rd-content th button svg,
+.rd-content th button + button {
+  opacity: 0.55;
+}
+.rd-content th:hover button svg,
+.rd-content th:hover button + button {
+  opacity: 1;
+}

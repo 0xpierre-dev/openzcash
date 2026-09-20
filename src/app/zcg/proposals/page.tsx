@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { listProposals, type ProposalRow } from "@/lib/zcg/proposals-repo";
 import { nowMs } from "@/lib/utils";
+import { formatUsdCents } from "@/lib/zcg/format";
 import { getIsAdmin } from "@/lib/auth/admin";
 import { getLinks } from "@/lib/zcg/governance-repo";
 import { ProposalsTable, type ProposalTableRow } from "./proposals-table";
@@ -217,6 +218,29 @@ export default async function PropostasPage({
     ? withAgeing.filter((r) => r.status === active)
     : withAgeing;
 
+  // One-line reading of the selection: how many, how long they have waited,
+  // how much they ask for, how many are past the committee's average.
+  const daysList = shownRows
+    .map((r) => r.daysInReview)
+    .filter((d): d is number => typeof d === "number")
+    .sort((a, b) => a - b);
+  const medianDays = daysList.length
+    ? daysList.length % 2
+      ? daysList[(daysList.length - 1) / 2]
+      : Math.round(
+          (daysList[daysList.length / 2 - 1] + daysList[daysList.length / 2]) / 2,
+        )
+    : null;
+  const amounts = shownRows
+    .map((r) => r.amountUsd)
+    .filter((a): a is number => typeof a === "number" && a > 0);
+  const selection = {
+    medianDays,
+    withAmount: amounts.length,
+    requestedUsd: Math.round(amounts.reduce((s, a) => s + a, 0)),
+    overdue: shownRows.filter((r) => r.reviewOverdue).length,
+  };
+
   return (
     <>
       <PageHeader
@@ -292,16 +316,33 @@ export default async function PropostasPage({
         ))}
       </nav>
       {active ? (
-        <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-stone-500">Filtered to</span>
-          <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 font-medium text-amber-800">
-            {STATUS_LABEL[active] ?? active} · {shownRows.length}
+        <div className="ws-selection" role="status">
+          <span>
+            <strong>{shownRows.length}</strong>{" "}
+            {(STATUS_LABEL[active] ?? active).toLowerCase()}
           </span>
-          <Link
-            href="/zcg/proposals"
-            scroll={false}
-            className="font-medium text-stone-500 hover:text-stone-700"
-          >
+          {selection.medianDays != null ? (
+            <span>
+              median <strong>{selection.medianDays} d</strong> in review
+            </span>
+          ) : null}
+          {selection.withAmount > 0 ? (
+            <span>
+              <strong className="tnum">
+                {formatUsdCents(BigInt(selection.requestedUsd) * 100n, {
+                  compact: false,
+                })}
+              </strong>{" "}
+              requested across {selection.withAmount} with an amount
+            </span>
+          ) : null}
+          {selection.overdue > 0 ? (
+            <span>
+              <strong className="ws-selection-warn">{selection.overdue}</strong>{" "}
+              past the {avgDecisionDays ?? "·"} d average
+            </span>
+          ) : null}
+          <Link href="/zcg/proposals" scroll={false} className="ws-selection-clear">
             Clear ✕
           </Link>
         </div>
