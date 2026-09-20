@@ -66,9 +66,10 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    única dividida por hairlines, sem cards coloridos.
 6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps com
    ZCG em primeiro lugar e aberto por padrão, seguido de Lockbox, ZF, FPF,
-   Shielded Labs, ZecHub DAO, Z3, Zakura, Ecosystem, Wallets, Communities,
-   DeFi, Arborist Calls, News, Monthly (Manage só para admin), cada um com logo
-   oficial quando existe e suas páginas internas. Os apps "de entrada"
+   Shielded Labs, ZecHub DAO, Z3, Zakura, ZODL, Ecosystem, Wallets,
+   Communities, DeFi, Arborist Calls, News, Monthly (Manage só para admin),
+   cada um com logo oficial quando existe e suas páginas internas. Zakura e
+   ZODL abrem seus registros no Ecosystem (`?project=zakura`, `?org=zodl`). Os apps "de entrada"
    (Monthly, News, Lockbox) não abrem mais a lista. Tudo deriva dele: a sidebar (app com logo, páginas
    expansíveis, contagens), a trilha "Home › App › Página › Detalhe" no topo,
    o único controle de voltar (detalhe → lista, página → app, app → Home), as
@@ -88,14 +89,20 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
     guarda de isolamento; `DISABLE_AUTO_REFRESH=true` congela a contabilidade
     (a diligência continua a aquecer). Sem essas variáveis o código se comporta
     como produção.
-11. Marcas são sempre PNG: logos oficiais em `public/logos/`, e para apps e
-    páginas sem logo os arquivos gerados por `scripts/gen-app-icons.mjs`
-    (`public/logos/apps/*.png`, `public/logos/pages/*.png`, a partir dos
-    ícones de `src/components/icons.tsx`). Nenhum SVG inline como marca na
-    sidebar, no launcher ou no diálogo ⌘K; só os chevrons de expandir e o
-    botão de fechar continuam vetoriais. O topo da sidebar é um banner
-    (`.rd-side-banner`, estilo Discord) com o ícone oficial, o nome e a tag
-    do ambiente.
+11. Marcas são sempre PNG e todas no mesmo tile: na sidebar e no diálogo ⌘K
+    cada app, oficial ou não, aparece num quadrado branco arredondado de 20px
+    (`.rd-side-logo`), como o da ZF que o usuário aprovou. Logos oficiais em
+    `public/logos/`; para apps sem logo, `scripts/gen-app-icons.mjs` gera o
+    glifo em tinta sobre transparente (`public/logos/apps/*.png`) e os glifos
+    de página em dourado (`public/logos/pages/*.png`). A ZF usa só o emblema
+    (cadeado-escudo, seis primeiras formas do SVG oficial), legível a 18px.
+    Só os chevrons e o botão de fechar continuam vetoriais.
+12. Sidebar sem linhas e acompanhando o tema: painel creme `#f3efe6` no claro
+    e quase-preto no escuro (tokens `--side-*` nos dois blocos), sem borda à
+    direita, sem guia vertical nas páginas aninhadas, sem separador no rodapé
+    e sem trilho de scrollbar. O topo é um banner (`.rd-side-banner`) com a
+    marca oficial centralizada a 68px e o nome abaixo; sem tag de ambiente e
+    sem frase.
 
 ## 4. Estado das trilhas
 

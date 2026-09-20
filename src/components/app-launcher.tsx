@@ -235,6 +235,15 @@ const APPS: AppDef[] = [
     logo: "/logos/ecosystem/zakura.png",
   },
   {
+    id: "zodl",
+    label: "ZODL",
+    sub: "Zcash Open Development Lab",
+    href: "/ecosystem?org=zodl",
+    Icon: IconGlobe,
+    grad: GRAD.zinc,
+    logo: "/logos/ecosystem/zodl-lab.png",
+  },
+  {
     id: "shielded-labs",
     label: "Shielded Labs",
     sub: "Crosslink · NSM",

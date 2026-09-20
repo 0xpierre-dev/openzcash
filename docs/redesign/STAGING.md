@@ -232,6 +232,22 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Sidebar revision — 20 September 2026
+
+- The banner is centred: the official mark at 68px over the gold band, the
+  name below, no environment tag and no tagline. The band follows the theme
+  (cream and gold in light, black and gold in dark).
+- The sidebar follows the theme: cream panel in light, near-black in dark,
+  through the `--side-*` tokens. No lines anywhere: no right border, no
+  guide line on nested pages, no footer separator, no scrollbar track.
+- Every app mark sits on the same white rounded tile, the treatment the ZF
+  logo already had. Generated marks are now ink glyphs on transparent; ZF
+  shows its padlock-shield emblem alone (the wordmark was unreadable).
+- ZODL (Zcash Open Development Lab) joins the menu and the launcher after
+  Zakura, with its ecosystem logo, opening `/ecosystem?org=zodl`; the
+  explorer now accepts `?org=` and selects that organisation's record.
+- The `/zcg/schedule` menu label is "Scheduled" so it never truncates.
+
 ### Clean system — 20 September 2026
 
 - Every mark is a PNG: official logos where they exist, otherwise badges

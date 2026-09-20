@@ -245,7 +245,6 @@ export function AppShell({
 
       <aside className="rd-side" aria-label="OpenZcash">
         <div className="rd-side-banner">
-          <span className="rd-side-tag">{isPreview ? "preview" : "public"}</span>
           <button
             type="button"
             className="rd-side-close"
@@ -256,10 +255,9 @@ export function AppShell({
           </button>
           <Link href="/" className="rd-brand" aria-label="OpenZcash home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/icon-192.png" width="44" height="44" alt="" />
+            <img src="/logos/apps/openzcash.png" width="68" height="68" alt="" />
             <span className="rd-brand-text">
               <strong>OpenZcash</strong>
-              <small>Dev Fund transparency</small>
             </span>
           </Link>
         </div>

@@ -588,7 +588,17 @@ export function EcosystemExplorer({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setProjectId(project);
     }
-  }, [catalog.registry.projects]);
+    // `?org=` opens an organization the way the menu opens ZODL: its
+    // projects filtered and its funding record selected.
+    const org = params.get("org");
+    const organizationRecord = org
+      ? catalog.registry.organizations.find((item) => item.id === org)
+      : undefined;
+    if (organizationRecord) {
+      setOrganization(organizationRecord.id);
+      setSelection({ kind: "organization", value: organizationRecord });
+    }
+  }, [catalog.registry.projects, catalog.registry.organizations]);
   const isDevelopment = mode === "development";
   const filters = {
     query,
