@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
+
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { IconList } from "@/components/icons";
 import { getIsAdmin } from "@/lib/auth/admin";
@@ -62,30 +62,7 @@ export default async function MeetingsPage() {
         }
       />
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="Meeting archive"
-              rows={[
-                ["Records", String(meetings.length)],
-                [
-                  "Latest meeting",
-                  latest ? formatDate(latest.meetingDate) : "Unavailable",
-                ],
-                ["Source", "Zcash Community Forum"],
-              ]}
-            />
-            <RelatedLinks
-              links={[
-                { href: forumCategory, label: "Official discussion forum" },
-                { href: proposalZcg, label: "Submit a ZCG proposal" },
-                { href: "/zcg/committee", label: "Current committee" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         <div className="mb-6 grid gap-4 sm:grid-cols-2">
           <a href={forumCategory} target="_blank" rel="noreferrer">
             <Card interactive className="h-full">
@@ -188,7 +165,7 @@ export default async function MeetingsPage() {
             </Card>
           </section>
         ) : null}
-      </RecordLayout>
+      </>
     </>
   );
 }

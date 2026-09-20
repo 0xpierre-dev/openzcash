@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
+
 import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { Synced } from "@/components/synced";
@@ -52,33 +52,7 @@ export default function MethodologyPage() {
         subtitle="OpenZcash is a read-only mirror: it never holds spend keys and moves no funds. Every figure comes from public sources. Here is how."
       />
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="The evidence model"
-              rows={[
-                ["Access", "Public data, read-only"],
-                ["Sources", "Spreadsheet, chain, GitHub and forum"],
-                [
-                  "USD semantics",
-                  "Budgeted, paid and market values stay distinct",
-                ],
-              ]}
-            />
-            <RelatedLinks
-              links={[
-                {
-                  href: "/zcg/reconciliation",
-                  label: "On-chain reconciliation",
-                },
-                { href: "/zcg/totals", label: "Spreadsheet integrity" },
-                { href: "/zcg/schedule", label: "Future payment estimates" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         <Section title="Where the data comes from">
           <ul className="space-y-2">
             {SOURCES.map((s) => (
@@ -195,7 +169,7 @@ export default function MethodologyPage() {
             ).
           </p>
         </Section>
-      </RecordLayout>
+      </>
       <Synced className="mt-6" />
     </>
   );

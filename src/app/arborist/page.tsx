@@ -1,4 +1,4 @@
-import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
+
 import { Suspense } from "react";
 import { PageHeader, Stat } from "@/components/ui";
 import {
@@ -121,29 +121,7 @@ export default function ArboristPage() {
         subtitle="The Zcash protocol's standing engineering call: agendas, moderators, notes and recordings, reconciled from the community notes and official video feed."
       />
 
-      <RecordLayout
-        aside={
-          <>
-            <Facts
-              title="Protocol engineering"
-              rows={[
-                ["Format", "Standing community call"],
-                ["Archive", "Agendas, notes and recordings"],
-                ["Publication", "Community notes + official video"],
-              ]}
-            />
-            <RelatedLinks
-              title="Archive sources"
-              links={[
-                { href: ARBORIST_REPO_URL, label: "Community notes" },
-                { href: ARBORIST_YOUTUBE_URL, label: "Official recordings" },
-                { href: ARBORIST_FORUM_URL, label: "Scheduling announcements" },
-                { href: "/development", label: "Development directory" },
-              ]}
-            />
-          </>
-        }
-      >
+      <>
         <Suspense
           fallback={
             <div className="rounded-2xl border border-stone-200 bg-white p-10 text-center text-sm text-stone-600 shadow-sm">
@@ -179,7 +157,7 @@ export default function ArboristPage() {
           archive; later calls use the full notes. Dates, durations and
           participants are parsed from those source records.
         </p>
-      </RecordLayout>
+      </>
     </>
   );
 }
