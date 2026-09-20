@@ -32,6 +32,8 @@ export type AppDef = {
 };
 
 export const APPS: AppDef[] = [
+  { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
+  { id: "news", label: "News", href: "/news", sub: "What's new", logo: "/logos/marks/news.png", icon: "news", pages: [] },
   {
     id: "zcg",
     label: "ZCG",
@@ -59,7 +61,6 @@ export const APPS: AppDef[] = [
     ],
   },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [] },
-  { id: "zf", label: "ZF", href: "/zf", sub: "Reports & Zcon", logo: "/logos/marks/zf.png", icon: "balance", pages: [] },
   {
     id: "fpf",
     label: "FPF",
@@ -72,17 +73,17 @@ export const APPS: AppDef[] = [
       { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
     ],
   },
-  { id: "shielded-labs", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
+  { id: "zf", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/marks/zf.png", icon: "balance", pages: [] },
   {
-    id: "zechub",
-    label: "ZecHub DAO",
-    href: "/zechub",
-    sub: "Latest proposals",
-    logo: "/logos/zechub.png",
-    icon: "globe",
-    pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot", mark: "/logos/glyphs/copilot.png" }],
+    id: "zodl",
+    label: "ZODL",
+    href: "/ecosystem?org=zodl",
+    sub: "Zcash Open Development Lab",
+    logo: "/logos/ecosystem/zodl-lab.png",
+    icon: "terminal",
+    pages: [],
   },
-  { id: "z3", label: "Z3", href: "/z3", sub: "zcashd successor", logo: "/logos/marks/z3.png", icon: "terminal", pages: [] },
+  { id: "shielded-labs", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
   {
     id: "zakura",
     label: "Zakura",
@@ -93,14 +94,24 @@ export const APPS: AppDef[] = [
     pages: [],
   },
   {
-    id: "zodl",
-    label: "ZODL",
-    href: "/ecosystem?org=zodl",
-    sub: "Zcash Open Development Lab",
-    logo: "/logos/ecosystem/zodl-lab.png",
+    id: "tachyon",
+    label: "Tachyon",
+    href: "/ecosystem?org=project-tachyon",
+    sub: "Protocol research",
+    logo: "/logos/ecosystem/tachyon.png",
     icon: "terminal",
     pages: [],
   },
+  {
+    id: "zechub",
+    label: "ZecHub DAO",
+    href: "/zechub",
+    sub: "Latest proposals",
+    logo: "/logos/zechub.png",
+    icon: "globe",
+    pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot", mark: "/logos/glyphs/copilot.png" }],
+  },
+  { id: "z3", label: "Z3", href: "/z3", sub: "zcashd successor", logo: "/logos/marks/z3.png", icon: "terminal", pages: [] },
   {
     id: "ecosystem",
     label: "Ecosystem",
@@ -114,8 +125,6 @@ export const APPS: AppDef[] = [
   { id: "communities", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
   { id: "defi", label: "DeFi", href: "/defi", sub: "ZEC liquidity", logo: "/logos/marks/defi.png", icon: "swap", pages: [] },
   { id: "arborist", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
-  { id: "news", label: "News", href: "/news", sub: "What's new", logo: "/logos/marks/news.png", icon: "news", pages: [] },
-  { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
   {
     id: "manage",
     label: "Manage",

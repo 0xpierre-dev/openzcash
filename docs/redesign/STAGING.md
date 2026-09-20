@@ -232,6 +232,17 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Marks and order — 20 September 2026
+
+- App marks sit bare on the sidebar, no white tile in either theme; the
+  generated ink glyphs invert to light in the dark theme.
+- Order: Monthly and News on top, then ZCG (open), Lockbox, FPF, the
+  organisations (Zcash Foundation, ZODL, Shielded Labs, Zakura, Tachyon,
+  ZecHub DAO), then Z3, Ecosystem, Wallets, Communities, DeFi, Arborist
+  Calls, Manage. "ZF" reads "Zcash Foundation".
+- Tachyon joins with its GitHub organisation avatar (see
+  `docs/ecosystem-branding.md`), opening `/ecosystem?org=project-tachyon`.
+
 ### Detox — 20 September 2026
 
 - The home is the ZCG overview: `/` redirects to `/zcg`, the banner links

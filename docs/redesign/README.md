@@ -65,11 +65,12 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    nunca no lugar da proveniência. As estatísticas (`Stat`) formam uma faixa
    única dividida por hairlines, sem cards coloridos.
 6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps com
-   ZCG em primeiro lugar e aberto por padrão, seguido de Lockbox, ZF, FPF,
-   Shielded Labs, ZecHub DAO, Z3, Zakura, ZODL, Ecosystem, Wallets,
-   Communities, DeFi, Arborist Calls, News, Monthly (Manage só para admin),
-   cada um com logo oficial quando existe e suas páginas internas. Zakura e
-   ZODL abrem seus registros no Ecosystem (`?project=zakura`, `?org=zodl`).
+   Monthly e News no topo, depois ZCG (aberto por padrão), Lockbox, FPF, as
+   organizações na ordem Zcash Foundation, ZODL, Shielded Labs, Zakura,
+   Tachyon, ZecHub DAO, e por fim Z3, Ecosystem, Wallets, Communities, DeFi,
+   Arborist Calls (Manage só para admin), cada um com logo oficial quando
+   existe e suas páginas internas. Zakura, ZODL e Tachyon abrem seus registros
+   no Ecosystem (`?project=zakura`, `?org=zodl`, `?org=project-tachyon`).
    A home é a visão geral do ZCG: `/` redireciona para `/zcg`, o banner leva
    para lá e não existe item "Home". As tesourarias vivem só na barra do
    rodapé, cada uma ligando à própria página; a antiga home com o launcher
@@ -94,9 +95,9 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
     guarda de isolamento; `DISABLE_AUTO_REFRESH=true` congela a contabilidade
     (a diligência continua a aquecer). Sem essas variáveis o código se comporta
     como produção.
-11. Marcas são sempre PNG e todas no mesmo tile: na sidebar e no diálogo ⌘K
-    cada app, oficial ou não, aparece num quadrado branco arredondado de 20px
-    (`.rd-side-logo`), como o da ZF que o usuário aprovou. Logos oficiais em
+11. Marcas são sempre PNG e soltas: na sidebar e no diálogo ⌘K cada app
+    aparece a 20px sem nenhum fundo atrás, em qualquer tema (`.rd-side-logo`);
+    os glifos gerados são tinta e invertem para claro no escuro. Logos oficiais em
     `public/logos/`; para apps sem logo, `scripts/gen-app-icons.mjs` gera o
     glifo em tinta sobre transparente (`public/logos/marks/*.png`) e os glifos
     de página em dourado (`public/logos/glyphs/*.png`). A ZF usa só o emblema

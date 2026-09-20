@@ -25,6 +25,7 @@ The registry's existing logos remain unchanged. Only the files below are added. 
 | `zcash-foundation.png` | [Zcash Foundation](https://github.com/ZcashFoundation) | [Avatar](https://avatars.githubusercontent.com/u/26173891?v=4&s=128) |
 | `shielded-labs.png` | [Shielded Labs](https://github.com/ShieldedLabs) | [Avatar](https://avatars.githubusercontent.com/u/123885412?v=4&s=128) |
 | `zodl-lab.png` | [ZODL](https://github.com/zodl-inc) | [Avatar](https://avatars.githubusercontent.com/u/8797295?v=4&s=128) |
+| `tachyon.png` | [Project Tachyon](https://github.com/tachyon-zcash) | [Avatar](https://avatars.githubusercontent.com/u/237353586?v=4&s=128) |
 | `zingolabs.png` | [Zingo Labs](https://github.com/zingolabs) | [Avatar](https://avatars.githubusercontent.com/u/70598323?v=4&s=128) |
 | `zechub.jpg` | [ZecHub](https://github.com/ZecHub) | [Avatar](https://avatars.githubusercontent.com/u/108132802?v=4&s=128) |
 | `qedit.jpg` | [QEDIT](https://github.com/QED-it) | [Avatar](https://avatars.githubusercontent.com/u/24523976?v=4&s=128) |

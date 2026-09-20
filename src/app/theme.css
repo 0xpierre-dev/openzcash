@@ -1101,16 +1101,17 @@
   flex: 1;
   min-width: 0;
 }
+/* App marks sit bare on the sidebar: no tile behind them in either theme. */
 .rd-side-logo {
-  box-sizing: border-box;
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  padding: 2px;
   border-radius: 5px;
   object-fit: contain;
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(28, 25, 23, 0.07);
+}
+/* Generated glyphs are drawn in ink; the dark theme flips them to light. */
+.rd-shell[data-theme="dark"] .rd-side-logo-glyph {
+  filter: invert(1);
 }
 .rd-side-toggle {
   display: inline-flex;

@@ -120,7 +120,11 @@ function AppMark({ app, size = 18 }: { app: AppDef; size?: number }) {
         alt=""
         width={size}
         height={size}
-        className="rd-side-logo"
+        className={
+          app.logo.startsWith("/logos/marks/")
+            ? "rd-side-logo rd-side-logo-glyph"
+            : "rd-side-logo"
+        }
       />
     );
   }
