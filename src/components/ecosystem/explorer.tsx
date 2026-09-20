@@ -606,6 +606,8 @@ export function EcosystemExplorer({
       setOrganization("");
       setProjectId(projectRecord.id);
     } else {
+      // Plain /ecosystem (the menu's Ecosystem entry): no record preselected.
+      setOrganization("");
       setProjectId(null);
     }
   }, [projectParam, orgParam, registryProjects, registryOrganizations]);
