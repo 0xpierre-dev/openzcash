@@ -1,6 +1,7 @@
 import { SectionHeading, SourceNote } from "@/components/workspace";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { getDefiPools } from "@/lib/defi/pools";
+import { getMayaPosition, ZCG_MAYA_MEMBER, ZCG_MAYA_ZEC_ADDRESS } from "@/lib/defi/maya-position";
 import { latestSnapshot, mayaTransfers } from "@/lib/zcg/snapshots-repo";
 import { currentZecUsdCents, zatToUsdCents } from "@/lib/pricing/live-price";
 import { formatUsdCents } from "@/lib/zcg/format";
@@ -37,11 +38,12 @@ function signed(cents: bigint): string {
 }
 
 export default async function DefiPage() {
-  const [pools, transfers, maya, liveCents] = await Promise.all([
+  const [pools, transfers, maya, liveCents, live] = await Promise.all([
     getDefiPools(),
     mayaTransfers(),
     latestSnapshot("maya_liquidity").catch(() => null),
     currentZecUsdCents().catch(() => null),
+    getMayaPosition(),
   ]);
   const totalZec = pools.reduce((s, p) => s + p.zecDepth, 0);
   const totalTvl = pools.reduce((s, p) => s + p.tvlUsd, 0);
@@ -50,12 +52,15 @@ export default async function DefiPage() {
   const seededOn = transfers.map((t) => t.transferredAt).filter(Boolean).sort()[0] ?? null;
   // What the contributed ZEC would be worth today, at the live price.
   const zecTodayCents = liveCents != null ? zatToUsdCents(lpZec, liveCents) : null;
-  // What the position is actually worth, from the sheet's hand-updated KPIs.
-  const walletCents = maya?.usdCashBalanceCents ?? null;
-  const walletZec = maya?.zecBalanceZat ?? null;
+  // What the position is actually worth: live from Midgard when it answers,
+  // otherwise the sheet's hand-updated KPIs.
+  const sheetCents = maya?.usdCashBalanceCents ?? null;
   const kpiAsOf = maya?.status?.replace(/^kpis as of /i, "") ?? null;
-  const vsCost = walletCents != null ? walletCents - lpUsd : null;
-  const vsHolding = walletCents != null && zecTodayCents != null ? walletCents - zecTodayCents : null;
+  const positionCents = live?.totalCents != null ? BigInt(live.totalCents) : sheetCents;
+  const vsCost = positionCents != null ? positionCents - lpUsd : null;
+  const vsHolding = positionCents != null && zecTodayCents != null ? positionCents - zecTodayCents : null;
+  const n2 = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  const n0 = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 0 });
   const mayaTab = spreadsheetSource(ZCG_GIDS.maya, null).sourceUrl;
 
   return (
@@ -84,11 +89,13 @@ export default async function DefiPage() {
             />
             <Stat
               label="Position now"
-              value={walletCents != null ? formatUsdCents(walletCents, { compact: true }) : "n/a"}
+              value={positionCents != null ? formatUsdCents(positionCents, { compact: true }) : "n/a"}
               sub={
-                walletZec != null
-                  ? `${formatZec(walletZec, { symbol: false })} ZEC + CACAO in the wallet`
-                  : "wallet value from the sheet"
+                live
+                  ? `${n2(live.zecNow)} ZEC + ${n0(live.cacaoNow)} CACAO · live`
+                  : maya?.zecBalanceZat != null
+                    ? `${formatZec(maya.zecBalanceZat, { symbol: false })} ZEC + CACAO · sheet`
+                    : "position value"
               }
               tone={vsCost != null ? (vsCost >= 0n ? "in" : "out") : "default"}
             />
@@ -127,6 +134,59 @@ export default async function DefiPage() {
               </tbody>
             </table>
           </Card>
+          {live ? (
+            <div className="ws-position">
+              <span className="ws-copilot-label">The position, live from Maya</span>
+              <dl>
+                <div>
+                  <dt>Went in{live.firstAdded ? ` · ${live.firstAdded}` : ""}</dt>
+                  <dd className="tnum">{n2(live.zecAdded)} ZEC + {n0(live.cacaoAdded)} CACAO</dd>
+                </div>
+                <div>
+                  <dt>Withdrawn</dt>
+                  <dd className="tnum">
+                    {live.zecWithdrawn === 0 && live.cacaoWithdrawn === 0
+                      ? "nothing"
+                      : `${n2(live.zecWithdrawn)} ZEC + ${n0(live.cacaoWithdrawn)} CACAO`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Holds today · {(live.share * 100).toFixed(1)}% of the pool</dt>
+                  <dd className="tnum">{n2(live.zecNow)} ZEC + {n0(live.cacaoNow)} CACAO</dd>
+                </div>
+                <div>
+                  <dt>Valued at</dt>
+                  <dd className="tnum">
+                    {live.zecLegCents != null ? formatUsdCents(BigInt(live.zecLegCents), { compact: true }) : "n/a"} in ZEC
+                    {live.zecUsd != null ? ` (${usd0(live.zecUsd)}/ZEC)` : ""} +{" "}
+                    {live.cacaoLegCents != null ? formatUsdCents(BigInt(live.cacaoLegCents), { compact: true }) : "n/a"} in CACAO
+                    {live.cacaoUsd != null ? ` ($${live.cacaoUsd.toFixed(4)}/CACAO, ${live.cacaoPriceSource === "coingecko" ? "CoinGecko" : "pool-implied"})` : ""}
+                  </dd>
+                </div>
+                {live.midgardCents != null ? (
+                  <div>
+                    <dt>Midgard&rsquo;s own quote</dt>
+                    <dd className="tnum">
+                      {formatUsdCents(BigInt(live.midgardCents), { compact: true })}
+                      {sheetCents != null ? ` · the sheet's KPI${kpiAsOf ? ` (${kpiAsOf})` : ""}: ${formatUsdCents(sheetCents, { compact: true })}` : ""}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+              <p>
+                Member{" "}
+                <a href={`https://www.mayascan.org/address/${ZCG_MAYA_MEMBER}`} target="_blank" rel="noreferrer">
+                  {ZCG_MAYA_MEMBER.slice(0, 12)}…{ZCG_MAYA_MEMBER.slice(-4)} ↗
+                </a>
+                {" · ZEC address "}
+                <a href={`https://mainnet.zcashexplorer.app/address/${ZCG_MAYA_ZEC_ADDRESS}`} target="_blank" rel="noreferrer">
+                  {ZCG_MAYA_ZEC_ADDRESS.slice(0, 10)}…{ZCG_MAYA_ZEC_ADDRESS.slice(-4)} ↗
+                </a>
+                . Midgard prices CACAO far below CoinGecko, which is why its
+                quote and the sheet&rsquo;s KPI sit under the valuation above.
+              </p>
+            </div>
+          ) : null}
           <div className="ws-custody">
             <span className="ws-copilot-label">Custody</span>
             <p>
@@ -152,11 +212,12 @@ export default async function DefiPage() {
             </p>
           </div>
           <SourceNote>
-            A liquidity position holds both sides of the pool, so as ZEC rose the
-            pool sold ZEC for CACAO: the wallet now holds far fewer ZEC than were
-            contributed. &ldquo;Versus holding&rdquo; compares the position with
-            simply keeping the contributed ZEC. Fee revenue is not yet reported
-            in the sheet.
+            Half of the contributed ZEC was swapped into CACAO to form the pair,
+            and as ZEC rose the pool kept selling ZEC for CACAO: nothing was
+            withdrawn, but the position holds far fewer ZEC than went in.
+            &ldquo;Versus holding&rdquo; compares the position with simply
+            keeping the contributed ZEC. Fee revenue is not yet reported in the
+            sheet.
           </SourceNote>
         </section>
       ) : null}
