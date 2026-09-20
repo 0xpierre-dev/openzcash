@@ -87,7 +87,7 @@ export default async function CommitteePage() {
           }
           sub={
             stipends
-              ? `${stipends.members.length} members · ${stipends.totalPayments} payments`
+              ? `${stipends.members.length} members · ${stipends.totalPayments} payments · monthly tab, 2026`
               : "ledger temporarily unavailable"
           }
           tone="warn"

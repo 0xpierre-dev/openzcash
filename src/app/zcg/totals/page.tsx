@@ -16,12 +16,13 @@ import {
   type RecipientRow,
 } from "./totals-tables";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
+import { bountyUsd, getDiscretionaryLines } from "@/lib/zcg/discretionary";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Totals ZCG · OpenZcash" };
 
 export default async function TotaisPage() {
-  const [cats, recips, grand, ledgerGrantsPaid] = await Promise.all([
+  const [cats, recips, grand, ledgerGrantsPaid, discretionary] = await Promise.all([
     cached("totals:cats:zcg_grants", LEDGER_TTL_MS, () =>
       categoryTotals("zcg_grants"),
     ),
@@ -32,7 +33,10 @@ export default async function TotaisPage() {
       grandTotal("zcg_grants"),
     ),
     cached("totals:ledgerGrants", LEDGER_TTL_MS, () => ledgerGrantsPaidCents()),
+    // What the discretionary budget paid for; never blocks the page.
+    getDiscretionaryLines().catch(() => []),
   ]);
+  const opsBounties = bountyUsd(discretionary);
 
   const total = grand[0]?.usdPaidToDateCents ?? 0n;
   // The grand-total row has no future column; sum the per-recipient pipeline.
@@ -79,7 +83,10 @@ export default async function TotaisPage() {
     },
     {
       label: "ZCG operations",
-      sub: "the committee's own budget: travel, conferences, tooling",
+      sub:
+        opsBounties > 0
+          ? `the discretionary budget, mostly security bounties (${formatUsdCents(opsBounties, { compact: true })}), plus tooling, sponsorships and reimbursements`
+          : "the committee's discretionary budget: bounties, tooling, sponsorships, reimbursements",
       usd: opsUsd,
       bar: "bg-amber-500/70",
       tone: "amber" as const,
@@ -208,10 +215,16 @@ export default async function TotaisPage() {
               audits &amp; bug bounties
             </span>{" "}
             (the <span className="font-medium">Audits</span> classification).
-            Bounties also appear as milestones inside individual grants, and
-            ZCG&apos;s own travel &amp; conference costs sit inside the{" "}
+            The{" "}
             <span className="font-medium text-amber-700">ZCG operations</span>{" "}
-            budget above. The pool has no standalone &ldquo;travel&rdquo; line.
+            budget above is the discretionary tab
+            {discretionary.length > 0
+              ? `: ${discretionary
+                  .map((l) => `${l.label} ${formatUsdCents(l.usd, { compact: true })}`)
+                  .join(" · ")}`
+              : ""}
+            . Security bounty payouts and bounty matches sit there, not in the
+            grants; the pool has no standalone &ldquo;travel&rdquo; line.
           </p>
         </Card>
       </section>

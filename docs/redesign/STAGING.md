@@ -232,6 +232,14 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Shipped — 20 September 2026
+
+Merged into `main` through pull request #3 (merge `a414f06`) and live on
+openzcash.org: `/` answers 307 to `/zcg`, no preview tag, no `X-Robots-Tag`,
+manifest opens on `/zcg`, API counts unchanged. Production carries neither
+`OPENZCASH_ENV` nor `DISABLE_AUTO_REFRESH`. This branch stays the staging
+line for the next cycle.
+
 ### Parity audit against production — 20 September 2026
 
 Method: route files of `origin/main` vs this branch; every public API
