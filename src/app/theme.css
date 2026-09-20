@@ -1294,16 +1294,19 @@
 }
 
 /* ---------- Scheduled payments: the months as a strip of filters ---------- */
+/* Equal columns that fill the row; when the months do not fit, the next row
+   keeps the same columns instead of a lone card. */
 .rd-content .ws-month-strip {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
   gap: 8px;
   margin: 0 0 22px;
 }
 .rd-content .ws-month-strip a {
   display: grid;
   gap: 2px;
-  min-width: 118px;
+  min-width: 0;
+  white-space: nowrap;
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
