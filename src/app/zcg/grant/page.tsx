@@ -1,21 +1,22 @@
+import {
+  Facts,
+  RelatedLinks,
+  RecordLayout,
+  SectionHeading,
+  SourceNote,
+} from "@/components/workspace";
+import { CopyPageLink } from "@/components/record-actions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, PageHeader, Stat } from "@/components/ui";
+import { Card, PageHeader, Stat } from "@/components/ui";
 import { grantMilestones } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
 import { SourceRecordLink } from "@/components/source-record-link";
+import { grantStatusLabel } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grant detail · OpenZcash" };
-
-const STATUS_LABEL: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Veto",
-  funds_returned: "Returned",
-};
 
 export default async function GrantDetailPage({
   searchParams,
@@ -36,167 +37,250 @@ export default async function GrantDetailPage({
   const open = milestones.filter((m) => !m.isPaid);
   const paidUsd = paid.reduce((s, m) => s + (m.amountUsdCents ?? 0n), 0n);
   const openUsd = open.reduce((s, m) => s + (m.amountUsdCents ?? 0n), 0n);
+  const paidZec = paid.reduce((s, m) => s + (m.zecDisbursedZat ?? 0n), 0n);
+  const status = grantStatusLabel(head.grantStatus, "Unknown");
+  const program =
+    head.sourceSheet === "coinholder_grants" ? "Coinholder" : "ZCG regular";
+  const pct = milestones.length
+    ? Math.round((paid.length / milestones.length) * 100)
+    : 0;
+
+  // One timeline: paid milestones in payment order, then the unpaid ones by
+  // estimated date (undated last). Every field of both former tables stays.
+  const timeline = [
+    ...[...paid].sort((a, b) =>
+      (a.paidOutDate ?? "").localeCompare(b.paidOutDate ?? ""),
+    ),
+    ...[...open].sort((a, b) =>
+      (a.estimatedPayoutDate ?? "9999").localeCompare(
+        b.estimatedPayoutDate ?? "9999",
+      ),
+    ),
+  ];
 
   return (
     <>
-      <Link
-        href="/zcg/grants"
-        className="mb-4 inline-block text-xs text-stone-600 hover:text-stone-800"
-      >
-        ‹ All grants
-      </Link>
-
       <PageHeader
         title={g}
+        actions={<CopyPageLink />}
         subtitle={`${head.recipientNameRaw}${head.category ? ` · ${head.category}` : ""} · ${paid.length} of ${milestones.length} milestones paid`}
       />
+
+      <div className="ws-record-meta">
+        <span
+          className={
+            head.grantStatus === "completed"
+              ? "ws-pill ws-pill-pos"
+              : head.grantStatus === "cancelled" ||
+                  head.grantStatus === "keyholder_veto" ||
+                  head.grantStatus === "funds_returned"
+                ? "ws-pill ws-pill-neg"
+                : "ws-pill ws-pill-accent"
+          }
+        >
+          <i aria-hidden />
+          {status}
+        </span>
+        <span className="ws-pill">{head.category ?? "Uncategorized"}</span>
+        <span className="ws-pill">{program}</span>
+        <span className="ws-record-meta-sep" aria-hidden>
+          ·
+        </span>
+        <span className="ws-record-meta-label">Recipient</span>
+        <Link
+          href={`/zcg/recipient?r=${encodeURIComponent(head.recipientNameRaw ?? "")}`}
+        >
+          {head.recipientNameRaw} →
+        </Link>
+      </div>
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat
           label="Grant value"
           value={formatUsdCents(totalUsd, { compact: true })}
-          sub="sum of milestones"
+          sub={`sum of ${milestones.length} ${milestones.length === 1 ? "milestone" : "milestones"}`}
         />
         <Stat
           label="Paid"
           value={formatUsdCents(paidUsd, { compact: true })}
-          sub={`${paid.length} ${paid.length === 1 ? "milestone" : "milestones"}`}
+          sub={`${paid.length} ${paid.length === 1 ? "milestone" : "milestones"}${
+            paidZec > 0n ? ` · ${formatZec(paidZec, { symbol: false })} ZEC` : ""
+          }`}
+          tone={paid.length > 0 ? "in" : "default"}
         />
         <Stat
           label="Unpaid budget"
           value={formatUsdCents(openUsd, { compact: true })}
-          sub={`${open.length} ${open.length === 1 ? "milestone" : "milestones"}`}
+          sub={`${open.length} ${open.length === 1 ? "milestone" : "milestones"}, estimated dates`}
         />
         <Stat
-          label="Status"
+          label="Progress"
           value={
-            STATUS_LABEL[head.grantStatus ?? ""] ?? head.grantStatus ?? "·"
+            <>
+              {paid.length}{" "}
+              <span className="ws-stat-of">of {milestones.length}</span>
+            </>
           }
-          sub="grant level"
-          tone={head.grantStatus === "completed" ? "in" : "warn"}
+          sub={
+            <>
+              <span className="ws-stat-bar" aria-hidden>
+                <span style={{ width: `${pct}%` }} />
+              </span>
+              {pct}% of milestones paid
+            </>
+          }
         />
       </section>
 
-      <p className="mb-6 text-xs text-stone-600">
-        USD figures are budgeted milestone values. Unpaid entries may include
-        cancelled milestones and are not necessarily outstanding commitments.
-        Recorded payment does not independently verify delivery. Source links
-        open the live spreadsheet rows, which may have changed since collection.
-      </p>
-
-      {open.length > 0 ? (
-        <section className="mb-8">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-            Unpaid milestones
-            <Badge tone="amber">{open.length}</Badge>
-          </h2>
-          <Card className="overflow-x-auto p-0">
-            <table className="w-full min-w-[34rem] text-left text-sm">
-              <thead className="text-[11px] uppercase tracking-wider text-stone-600">
-                <tr className="border-b border-stone-200">
-                  <th className="px-4 py-3 font-medium">Milestone</th>
-                  <th className="px-4 py-3 font-medium">Deliverable</th>
-                  <th className="px-4 py-3 text-right font-medium">
-                    Budgeted USD
-                  </th>
-                  <th className="px-4 py-3 text-right font-medium">
-                    Estimated date
-                  </th>
-                  <th className="px-4 py-3 text-right font-medium">Source</th>
-                </tr>
-              </thead>
-              <tbody>
-                {open.map((m) => (
-                  <tr
-                    key={m.id}
-                    className="tbl-row border-b border-stone-200 last:border-0"
+      <RecordLayout
+        aside={
+          <>
+            <Facts
+              title="Grant at a glance"
+              rows={[
+                [
+                  "Recipient",
+                  <Link
+                    key="recipient"
+                    href={`/zcg/recipient?r=${encodeURIComponent(head.recipientNameRaw ?? "")}`}
                   >
-                    <td className="px-4 py-2.5 font-medium text-stone-900">
-                      {m.milestoneLabel ?? "·"}
-                    </td>
-                    <td className="max-w-[20rem] px-4 py-2.5 text-stone-600">
-                      <span className="block truncate">
-                        {m.deliverable ?? m.project ?? "·"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
-                      {formatUsdCents(m.amountUsdCents)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
-                      {(m.estimatedPayoutDate ?? m.paidOutRaw) || "TBD"}
-                    </td>
-                    <td className="px-4 py-2.5 text-right">
-                      <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Card>
-        </section>
-      ) : null}
-
-      <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-700">
-          Paid milestones
-          <Badge tone="emerald">{paid.length}</Badge>
-        </h2>
+                    {head.recipientNameRaw}
+                  </Link>,
+                ],
+                ["Category", head.category ?? "Uncategorized"],
+                ["Program", program],
+                ["Status", status],
+                ["Milestones", String(milestones.length)],
+                [
+                  "First payment",
+                  paid.length > 0
+                    ? [...paid]
+                        .map((m) => m.paidOutDate ?? "")
+                        .filter(Boolean)
+                        .sort()[0] || "·"
+                    : "none yet",
+                ],
+                [
+                  "Source",
+                  <SourceRecordLink
+                    key="source"
+                    gid={head.sourceSheetGid}
+                    rowIndex={head.sourceRowIndex}
+                    importedAt={head.importedAt}
+                  />,
+                ],
+              ]}
+            />
+            <RelatedLinks
+              links={[
+                {
+                  href: "/zcg/grants",
+                  label: "All grants",
+                  description: "Back to the approved projects list",
+                },
+                {
+                  href: "/zcg/schedule",
+                  label: "Payment schedule",
+                  description: `${open.filter((m) => m.estimatedPayoutDate).length} future dated milestones`,
+                },
+                {
+                  href: "/zcg/disbursements",
+                  label: "Full ledger",
+                  description: "All payment records",
+                },
+                { href: "/zcg/methodology", label: "How to read this record" },
+              ]}
+            />
+          </>
+        }
+      >
+        <SectionHeading
+          title="Milestones"
+          count={milestones.length}
+          description="Budget, payment status and the original evidence for each entry, paid milestones first. Payment status follows the ledger; delivery evidence should be checked at the source."
+        />
         <Card className="overflow-x-auto p-0">
-          <table className="w-full min-w-[34rem] text-left text-sm">
+          <table className="w-full min-w-[44rem] text-left text-sm">
             <thead className="text-[11px] uppercase tracking-wider text-stone-600">
               <tr className="border-b border-stone-200">
+                <th className="px-4 py-3 font-medium">#</th>
                 <th className="px-4 py-3 font-medium">Milestone</th>
-                <th className="px-4 py-3 text-right font-medium">Budgeted USD</th>
-                <th className="px-4 py-3 text-right font-medium">ZEC</th>
-                <th className="px-4 py-3 text-right font-medium">ZEC/USD</th>
-                <th className="px-4 py-3 text-right font-medium">Paid on</th>
+                <th className="px-4 py-3 text-right font-medium">
+                  Budgeted USD
+                </th>
+                <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 text-right font-medium">Source</th>
               </tr>
             </thead>
             <tbody>
-              {paid.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="px-4 py-8 text-center text-sm text-stone-600"
-                  >
-                    No milestones paid yet.
-                  </td>
-                </tr>
-              ) : null}
-              {paid.map((m) => (
+              {timeline.map((m, i) => (
                 <tr
                   key={m.id}
                   className="tbl-row border-b border-stone-200 last:border-0"
                 >
-                  <td className="px-4 py-2.5 font-medium text-stone-900">
-                    {m.milestoneLabel ?? "·"}
+                  <td className="px-4 py-2.5 text-stone-500 tnum">{i + 1}</td>
+                  <td className="max-w-[22rem] px-4 py-2.5">
+                    <span className="block font-medium text-stone-900">
+                      {m.milestoneLabel && !/^\d+$/.test(m.milestoneLabel)
+                        ? m.milestoneLabel
+                        : `Milestone ${m.milestoneLabel ?? m.milestoneSeq ?? i + 1}`}
+                    </span>
+                    <span className="block truncate text-xs text-stone-500">
+                      {m.deliverable ?? m.project ?? "·"}
+                    </span>
                   </td>
-                  <td className="px-4 py-2.5 text-right font-medium text-amber-700/90 tnum">
+                  <td className="px-4 py-2.5 text-right font-medium text-stone-900 tnum">
                     {formatUsdCents(m.amountUsdCents)}
                   </td>
-                  <td className="px-4 py-2.5 text-right text-stone-700 tnum">
-                    {m.zecDisbursedZat != null
-                      ? formatZec(m.zecDisbursedZat, { symbol: false })
-                      : "·"}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-stone-600 tnum">
-                    {m.usdDisbursedZecRateCents != null
-                      ? formatUsdCents(m.usdDisbursedZecRateCents)
-                      : "·"}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-stone-600 tnum">
-                    {m.paidOutDate ?? "·"}
+                  <td className="px-4 py-2.5">
+                    {m.isPaid ? (
+                      <span className="ws-status">
+                        <span className="ws-pill ws-pill-pos">Paid</span>
+                        <span className="text-xs text-stone-600 tnum">
+                          {m.paidOutDate ?? "·"}
+                          {m.zecDisbursedZat != null
+                            ? ` · ${formatZec(m.zecDisbursedZat, { symbol: false })} ZEC`
+                            : ""}
+                          {m.usdDisbursedZecRateCents != null
+                            ? ` at ${formatUsdCents(m.usdDisbursedZecRateCents)}`
+                            : ""}
+                        </span>
+                      </span>
+                    ) : m.estimatedPayoutDate ? (
+                      <span className="ws-status">
+                        <span className="ws-pill ws-pill-accent">Scheduled</span>
+                        <span className="text-xs text-stone-600 tnum">
+                          estimated {m.estimatedPayoutDate}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="ws-status">
+                        <span className="ws-pill">Unpaid</span>
+                        <span className="text-xs text-stone-600 tnum">
+                          {m.paidOutRaw || "no date recorded"}
+                        </span>
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-2.5 text-right">
-                    <SourceRecordLink gid={m.sourceSheetGid} rowIndex={m.sourceRowIndex} importedAt={m.importedAt} />
+                    <SourceRecordLink
+                      gid={m.sourceSheetGid}
+                      rowIndex={m.sourceRowIndex}
+                      importedAt={m.importedAt}
+                    />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </Card>
-      </section>
+        <SourceNote>
+          USD figures are budgeted milestone values. Unpaid entries may include
+          cancelled milestones and are not necessarily outstanding commitments.
+          Recorded payment does not independently verify delivery. Source links
+          open live spreadsheet rows, which may have changed since collection.
+        </SourceNote>
+      </RecordLayout>
     </>
   );
 }

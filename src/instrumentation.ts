@@ -11,6 +11,17 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   if (process.env.NODE_ENV !== "production") return;
+  // DISABLE_AUTO_REFRESH freezes the accounting snapshot: no spreadsheet
+  // import, no treasury mirror and no published verdicts. The diligence
+  // signals are an in-memory cache built from public GitHub/forum data, so
+  // they still warm — otherwise the under-review table silently loses its
+  // Diligence column in a paused environment.
+  const paused = process.env.DISABLE_AUTO_REFRESH === "true";
+  if (paused) {
+    console.log(
+      "[cron] automatic refresh paused (DISABLE_AUTO_REFRESH); diligence signals still warm",
+    );
+  }
 
   // Every 6h: the import is idempotent and cheap, and the signal warms are
   // TTL-guarded (applicant 6h, searches 24h), so most cycles only refresh
@@ -18,13 +29,29 @@ export async function register() {
   const CYCLE_MS = 6 * 60 * 60 * 1000;
 
   const run = async () => {
+    if (!paused) await refreshAll();
+    // Diligence signals for the under-review set. Long-running by design
+    // (GitHub search API pacing), so it trails everything else.
+    try {
+      const { warmDiligence } = await import("@/lib/zcg/diligence");
+      const d = await warmDiligence();
+      console.log(`[cron] diligence ok=${d.ok} proposals=${d.proposals}`);
+    } catch (e) {
+      console.error(
+        "[cron] diligence warm failed:",
+        e instanceof Error ? e.message : e,
+      );
+    }
+  };
+
+  const refreshAll = async () => {
     try {
       const { refreshZcg } = await import("@/lib/zcg/refresh");
       const r = await refreshZcg();
       const tabs = [
         ...r.disbursements.map((x) => `${x.gid}=${x.status}`),
-        ...r.snapshots.map((x) =>
-          `${x.scope}=${x.ok ? (x.sheetStatus ?? "ok") : "error"}`,
+        ...r.snapshots.map(
+          (x) => `${x.scope}=${x.ok ? (x.sheetStatus ?? "ok") : "error"}`,
         ),
         ...r.proposals.map((x) => `${x.gid}=${x.status}`),
         ...r.totals.map((x) => `${x.gid}=${x.status}`),
@@ -63,18 +90,6 @@ export async function register() {
     } catch (e) {
       console.error(
         "[cron] issue amounts warm failed:",
-        e instanceof Error ? e.message : e,
-      );
-    }
-    // Diligence signals for the under-review set. Long-running by design
-    // (GitHub search API pacing), so it trails everything else.
-    try {
-      const { warmDiligence } = await import("@/lib/zcg/diligence");
-      const d = await warmDiligence();
-      console.log(`[cron] diligence ok=${d.ok} proposals=${d.proposals}`);
-    } catch (e) {
-      console.error(
-        "[cron] diligence warm failed:",
         e instanceof Error ? e.message : e,
       );
     }

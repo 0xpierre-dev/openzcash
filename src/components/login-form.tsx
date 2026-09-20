@@ -61,6 +61,10 @@ export function LoginForm() {
         </p>
       </div>
       <input
+        id="admin-password"
+        aria-label="Administrator password"
+        autoComplete="current-password"
+        required
         type="password"
         autoFocus
         value={password}
@@ -76,7 +80,10 @@ export function LoginForm() {
         {busy ? "Signing in…" : "Sign in"}
       </button>
       {error ? (
-        <p className="rounded-lg bg-rose-500/10 px-3 py-2 text-sm text-rose-700 ring-1 ring-inset ring-rose-500/20">
+        <p
+          role="alert"
+          className="rounded-lg bg-rose-500/10 px-3 py-2 text-sm text-rose-700 ring-1 ring-inset ring-rose-500/20"
+        >
           {error}
         </p>
       ) : null}

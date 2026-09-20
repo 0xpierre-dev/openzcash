@@ -8,7 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "OpenZcash",
     description:
       "Public transparency for the Zcash Dev Fund — Lockbox, ZCG and FPF grants, treasury and governance.",
-    start_url: "/",
+    // The home is the ZCG overview; open the installed app there directly.
+    start_url: "/zcg",
     scope: "/",
     display: "standalone",
     orientation: "portrait",

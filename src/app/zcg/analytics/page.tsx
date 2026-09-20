@@ -1,3 +1,4 @@
+import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
 import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { BarList } from "@/components/bar-list";
@@ -158,203 +159,227 @@ export default async function AnalyticsPage() {
         subtitle="Trends derived entirely from the disbursement ledger and totals we already import. No new data."
       />
 
-      {/* #6 Spend over time */}
-      <section className="mb-8">
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Spend over time
-        </h2>
-        <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
-          <Link href="/zcg/disbursements" className="block">
-            <Stat
-              label="Paid to date"
-              value={formatUsdCents(totalPaid, { compact: true })}
-              sub="settled milestones"
-              tone="warn"
+      <RecordLayout
+        aside={
+          <>
+            <Facts
+              title="About these insights"
+              rows={[
+                ["Basis", "Imported disbursement ledger"],
+                ["USD values", "Budgeted value of settled entries"],
+                ["Delivery", "Payment status is not delivery evidence"],
+              ]}
             />
-          </Link>
-          <Stat
-            label="Avg monthly burn"
-            value={formatUsdCents(burn12, { compact: true })}
-            sub="trailing 12 months"
-          />
-          <Link
-            href={
-              busiest.m
-                ? `/zcg/disbursements?month=${busiest.m}`
-                : "/zcg/disbursements"
-            }
-            className="block"
-          >
-            <Stat
-              label="Busiest month"
-              value={formatUsdCents(busiest.v, { compact: true })}
-              sub={busiest.m ? monthLabel(busiest.m) : "n/a"}
+            <RelatedLinks
+              title="Explore the analysis"
+              links={[
+                { href: "#spend", label: "Monthly spend" },
+                { href: "#concentration", label: "Funding concentration" },
+                { href: "#delivery", label: "Milestone progress" },
+                { href: "#categories", label: "Category momentum" },
+                { href: "#bounties", label: "Bounty payments" },
+              ]}
             />
-          </Link>
-        </div>
-        <Card>
-          <p className="mb-2 text-xs text-stone-600">
-            Monthly paid disbursements · last 24 months
-          </p>
-          <BarList items={monthBars} />
-        </Card>
-      </section>
-
-      {/* #9 Funding concentration */}
-      <section className="mb-8">
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          How concentrated is the funding?
-        </h2>
-        <div className="grid grid-cols-3 gap-4">
-          <Link href="/zcg/recipients" className="block">
-            <Stat
-              label="Top recipient"
-              value={`${top1.toFixed(1)}%`}
-              sub="of all grants"
-            />
-          </Link>
-          <Link href="/zcg/recipients" className="block">
-            <Stat
-              label="Top 10"
-              value={`${top10.toFixed(1)}%`}
-              sub={`of ${external.length} recipients`}
-              tone="warn"
-            />
-          </Link>
-          <Link href="/zcg/recipients" className="block">
-            <Stat
-              label="Top 25"
-              value={`${top25.toFixed(1)}%`}
-              sub="of all grants"
-            />
-          </Link>
-        </div>
-      </section>
-
-      {/* #12 Grant delivery */}
-      <section className="mb-8">
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Grant payment progress
-        </h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-          <Link href="/zcg/grants" className="block">
-            <Stat
-              label="Grants"
-              value={String(withMs.length)}
-              sub="with milestones"
-            />
-          </Link>
-          <Link href="/zcg/grants" className="block">
-            <Stat
-              label="Fully paid"
-              value={`${fullyPaidPct}%`}
-              sub={`${fullyPaid} of ${withMs.length} paid out`}
-            />
-          </Link>
-          <Link href="/zcg/grants" className="block">
-            <Stat
-              label="Payments remaining"
-              value={String(inDelivery)}
-              sub="open, milestones remaining"
-            />
-          </Link>
-        </div>
-        <p className="mt-3 text-xs text-stone-600">
-          Payment progress follows the ledger. A paid milestone is not independent
-          verification of a deliverable or its impact.
-        </p>
-      </section>
-
-      {/* Where the money flows now (category momentum) */}
-      <section className="mb-8">
-        <h2 className="mb-3 text-sm font-semibold text-stone-700">
-          Where the money flows now
-        </h2>
-        <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
-          <Link href="/zcg/disbursements" className="block">
-            <Stat
-              label="Paid last 12 months"
-              value={formatUsdCents(total12Cat, { compact: true })}
-              sub="categorized grant spend"
-              tone="warn"
-            />
-          </Link>
-          {heating ? (
-            <Link
-              href={`/zcg/disbursements?category=${encodeURIComponent(heating.category)}`}
-              className="block"
-            >
-              <Stat
-                label="Heating up"
-                value={heating.category}
-                sub={`+${heating.deltaPp.toFixed(1)}pp vs all-time share`}
-              />
-            </Link>
-          ) : null}
-          {cooling ? (
-            <Link
-              href={`/zcg/disbursements?category=${encodeURIComponent(cooling.category)}`}
-              className="block"
-            >
-              <Stat
-                label="Cooling down"
-                value={cooling.category}
-                sub={`${cooling.deltaPp.toFixed(1)}pp vs all-time share`}
-              />
-            </Link>
-          ) : null}
-        </div>
-        <Card>
-          <p className="mb-2 text-xs text-stone-600">
-            Paid in the last 12 months by category. The ▲▼ delta compares each
-            category&apos;s share of the last 12 months with its all-time share,
-            in percentage points.
-          </p>
-          <BarList items={flowBars} />
-        </Card>
-      </section>
-
-      {/* #11 Bounties */}
-      {bounties.length > 0 ? (
-        <section className="mb-8">
+          </>
+        }
+      >
+        {/* #6 Spend over time */}
+        <section id="spend" className="mb-8 ws-report-section">
           <h2 className="mb-3 text-sm font-semibold text-stone-700">
-            Bounties paid
+            Spend over time
           </h2>
-          <Card className="p-0">
-            <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-4 py-2.5 text-xs text-stone-600">
-              <span>{bounties.length} bounty payments</span>
-              <span className="font-medium text-amber-700 tnum">
-                {formatUsdCents(bountyTotal, { compact: true })} total
-              </span>
-            </div>
-            <div className="divide-y divide-stone-100">
-              {bounties.map((b) => (
-                <Link
-                  key={b.id}
-                  href={`/zcg/disbursements?type=${encodeURIComponent(b.rawType)}`}
-                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm transition hover:bg-stone-50"
-                >
-                  <span className="min-w-0 flex-1 truncate font-medium text-stone-800">
-                    {b.recipient}
-                    {b.project ? (
-                      <span className="ml-2 font-normal text-stone-600">
-                        {b.project}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="shrink-0 rounded bg-sky-500/10 px-1.5 py-px text-[10px] font-medium text-sky-700">
-                    {b.type}
-                  </span>
-                  <span className="w-20 shrink-0 text-right text-xs text-stone-600 tnum">
-                    {formatUsdCents(b.usd, { compact: true })}
-                  </span>
-                </Link>
-              ))}
-            </div>
+          <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
+            <Link href="/zcg/disbursements" className="block">
+              <Stat
+                label="Paid to date"
+                value={formatUsdCents(totalPaid, { compact: true })}
+                sub="settled milestones"
+                tone="warn"
+              />
+            </Link>
+            <Stat
+              label="Avg monthly burn"
+              value={formatUsdCents(burn12, { compact: true })}
+              sub="trailing 12 months"
+            />
+            <Link
+              href={
+                busiest.m
+                  ? `/zcg/disbursements?month=${busiest.m}`
+                  : "/zcg/disbursements"
+              }
+              className="block"
+            >
+              <Stat
+                label="Busiest month"
+                value={formatUsdCents(busiest.v, { compact: true })}
+                sub={busiest.m ? monthLabel(busiest.m) : "n/a"}
+              />
+            </Link>
+          </div>
+          <Card>
+            <p className="mb-2 text-xs text-stone-600">
+              Monthly paid disbursements · last 24 months
+            </p>
+            <BarList items={monthBars} />
           </Card>
         </section>
-      ) : null}
 
+        {/* #9 Funding concentration */}
+        <section id="concentration" className="mb-8 ws-report-section">
+          <h2 className="mb-3 text-sm font-semibold text-stone-700">
+            How concentrated is the funding?
+          </h2>
+          <div className="grid grid-cols-3 gap-4">
+            <Link href="/zcg/recipients" className="block">
+              <Stat
+                label="Top recipient"
+                value={`${top1.toFixed(1)}%`}
+                sub="of all grants"
+              />
+            </Link>
+            <Link href="/zcg/recipients" className="block">
+              <Stat
+                label="Top 10"
+                value={`${top10.toFixed(1)}%`}
+                sub={`of ${external.length} recipients`}
+                tone="warn"
+              />
+            </Link>
+            <Link href="/zcg/recipients" className="block">
+              <Stat
+                label="Top 25"
+                value={`${top25.toFixed(1)}%`}
+                sub="of all grants"
+              />
+            </Link>
+          </div>
+        </section>
+
+        {/* #12 Grant delivery */}
+        <section id="delivery" className="mb-8 ws-report-section">
+          <h2 className="mb-3 text-sm font-semibold text-stone-700">
+            Grant payment progress
+          </h2>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+            <Link href="/zcg/grants" className="block">
+              <Stat
+                label="Grants"
+                value={String(withMs.length)}
+                sub="with milestones"
+              />
+            </Link>
+            <Link href="/zcg/grants" className="block">
+              <Stat
+                label="Fully paid"
+                value={`${fullyPaidPct}%`}
+                sub={`${fullyPaid} of ${withMs.length} paid out`}
+              />
+            </Link>
+            <Link href="/zcg/grants" className="block">
+              <Stat
+                label="Payments remaining"
+                value={String(inDelivery)}
+                sub="open, milestones remaining"
+              />
+            </Link>
+          </div>
+          <p className="mt-3 text-xs text-stone-600">
+            Payment progress follows the ledger. A paid milestone is not
+            independent verification of a deliverable or its impact.
+          </p>
+        </section>
+
+        {/* Where the money flows now (category momentum) */}
+        <section id="categories" className="mb-8 ws-report-section">
+          <h2 className="mb-3 text-sm font-semibold text-stone-700">
+            Where the money flows now
+          </h2>
+          <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
+            <Link href="/zcg/disbursements" className="block">
+              <Stat
+                label="Paid last 12 months"
+                value={formatUsdCents(total12Cat, { compact: true })}
+                sub="categorized grant spend"
+                tone="warn"
+              />
+            </Link>
+            {heating ? (
+              <Link
+                href={`/zcg/disbursements?category=${encodeURIComponent(heating.category)}`}
+                className="block"
+              >
+                <Stat
+                  label="Heating up"
+                  value={heating.category}
+                  sub={`+${heating.deltaPp.toFixed(1)}pp vs all-time share`}
+                />
+              </Link>
+            ) : null}
+            {cooling ? (
+              <Link
+                href={`/zcg/disbursements?category=${encodeURIComponent(cooling.category)}`}
+                className="block"
+              >
+                <Stat
+                  label="Cooling down"
+                  value={cooling.category}
+                  sub={`${cooling.deltaPp.toFixed(1)}pp vs all-time share`}
+                />
+              </Link>
+            ) : null}
+          </div>
+          <Card>
+            <p className="mb-2 text-xs text-stone-600">
+              Paid in the last 12 months by category. The ▲▼ delta compares each
+              category&apos;s share of the last 12 months with its all-time
+              share, in percentage points.
+            </p>
+            <BarList items={flowBars} />
+          </Card>
+        </section>
+
+        {/* #11 Bounties */}
+        {bounties.length > 0 ? (
+          <section id="bounties" className="mb-8 ws-report-section">
+            <h2 className="mb-3 text-sm font-semibold text-stone-700">
+              Bounties paid
+            </h2>
+            <Card className="p-0">
+              <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-4 py-2.5 text-xs text-stone-600">
+                <span>{bounties.length} bounty payments</span>
+                <span className="font-medium text-amber-700 tnum">
+                  {formatUsdCents(bountyTotal, { compact: true })} total
+                </span>
+              </div>
+              <div className="divide-y divide-stone-100">
+                {bounties.map((b) => (
+                  <Link
+                    key={b.id}
+                    href={`/zcg/disbursements?type=${encodeURIComponent(b.rawType)}`}
+                    className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm transition hover:bg-stone-50"
+                  >
+                    <span className="min-w-0 flex-1 truncate font-medium text-stone-800">
+                      {b.recipient}
+                      {b.project ? (
+                        <span className="ml-2 font-normal text-stone-600">
+                          {b.project}
+                        </span>
+                      ) : null}
+                    </span>
+                    <span className="shrink-0 rounded bg-sky-500/10 px-1.5 py-px text-[10px] font-medium text-sky-700">
+                      {b.type}
+                    </span>
+                    <span className="w-20 shrink-0 text-right text-xs text-stone-600 tnum">
+                      {formatUsdCents(b.usd, { compact: true })}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </Card>
+          </section>
+        ) : null}
+      </RecordLayout>
       <Synced />
     </>
   );

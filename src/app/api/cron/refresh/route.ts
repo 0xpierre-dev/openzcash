@@ -28,6 +28,10 @@ export async function GET(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  if (process.env.DISABLE_AUTO_REFRESH === "true") {
+    return Response.json({ ok: true, skipped: "Snapshot preserved for design comparison" });
+  }
+
   try {
     const r = await refreshZcg();
     // Trail the refresh with the signal warm-ups, fire-and-forget. Issue

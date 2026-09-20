@@ -1,5 +1,6 @@
+import Link from "next/link";
 /* eslint-disable @next/next/no-img-element */
-import { Badge, Card, PageHeader } from "@/components/ui";
+import { Badge, PageHeader } from "@/components/ui";
 import { COMMUNITIES } from "@/lib/communities/data";
 import {
   getNews,
@@ -15,35 +16,6 @@ export const metadata = { title: "News · OpenZcash" };
 
 const NEW_WINDOW_MS = 48 * 60 * 60 * 1000;
 
-/** GitHub octocat mark (official path, monochrome). */
-function GitHubMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
-      <path
-        fill="#24292f"
-        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
-      />
-    </svg>
-  );
-}
-
-/** Simplified Google Sheets glyph (green document with a white grid). */
-function SheetsMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
-      <path
-        fill="#188038"
-        d="M3.5 0h6L14 4.5V14a2 2 0 0 1-2 2H3.5a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2Z"
-      />
-      <path fill="#8fd0a9" d="M9.5 0 14 4.5H9.5V0Z" />
-      <path
-        fill="#fff"
-        d="M4.5 7h7v6h-7V7Zm1.2 1.2v1h1.9v-1H5.7Zm3.2 0v1h1.9v-1H8.9Zm-3.2 2.2v1h1.9v-1H5.7Zm3.2 0v1h1.9v-1H8.9Z"
-      />
-    </svg>
-  );
-}
-
 /**
  * Forum handle to community, so a post by a community lead is badged with
  * that community instead of the generic forum mark. Handles are matched
@@ -56,50 +28,15 @@ const BY_HANDLE = new Map(
   ]),
 );
 
-/** Each source shows its real brand mark, all served locally (strict CSP). */
-const SOURCE: Record<NewsSource, { label: string; logo: React.ReactNode }> = {
-  forum: {
-    label: "Forum",
-    logo: <img src="/zcash-mark.svg" alt="" className="h-6 w-6" />,
-  },
-  github: {
-    label: "GitHub",
-    logo: <GitHubMark className="h-5 w-5" />,
-  },
-  sheet: {
-    label: "Spreadsheet",
-    logo: <SheetsMark className="h-5 w-5" />,
-  },
-  proposal: {
-    label: "Proposal",
-    logo: (
-      <img
-        src="/logos/zcg.png"
-        alt=""
-        className="h-5 w-5 rounded object-contain"
-      />
-    ),
-  },
-  dao: {
-    label: "ZecHub DAO",
-    logo: (
-      <img
-        src="/logos/zechub.png"
-        alt=""
-        className="h-5 w-5 rounded object-contain"
-      />
-    ),
-  },
-  application: {
-    label: "Application",
-    logo: (
-      <img
-        src="/logos/zcg.png"
-        alt=""
-        className="h-5 w-5 rounded object-contain"
-      />
-    ),
-  },
+/** Each source shows its mark, a PNG served locally (strict CSP). Ink glyphs
+ * flip to light in the dark theme. */
+const SOURCE: Record<NewsSource, { label: string; mark: string; glyph?: boolean }> = {
+  forum: { label: "Forum", mark: "/logos/marks/openzcash.png" },
+  github: { label: "GitHub", mark: "/logos/marks/github.png", glyph: true },
+  sheet: { label: "Spreadsheet", mark: "/logos/marks/sheets.png", glyph: true },
+  proposal: { label: "Proposal", mark: "/logos/zcg.png" },
+  dao: { label: "ZecHub DAO", mark: "/logos/zechub.png" },
+  application: { label: "Application", mark: "/logos/zcg.png" },
 };
 
 function rel(ts: string, now: number): string {
@@ -111,16 +48,31 @@ function rel(ts: string, now: number): string {
   return mo < 12 ? `${mo}mo ago` : `${Math.floor(d / 365)}y ago`;
 }
 
-export default async function NewsPage() {
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ source?: string; q?: string }>;
+}) {
+  const params = await searchParams;
   const items = await getNews();
+  const shown = items.filter(
+    (i) =>
+      (!params.source || i.source === params.source) &&
+      (!params.q ||
+        `${i.title} ${i.author ?? ""} ${i.kind ?? ""}`
+          .toLowerCase()
+          .includes(params.q.toLowerCase())),
+  );
   const latest = items[0]?.ts ?? "";
   const now = nowMs();
   const newCut = now - NEW_WINDOW_MS;
   const newCount = items.filter((i) => Date.parse(i.ts) > newCut).length;
   const fetchedAt = newsFetchedAt();
   const mins = fetchedAt ? Math.floor((now - fetchedAt) / 60_000) : null;
-  const fetchedAgo =
-    mins == null ? "" : mins < 1 ? "just now" : `${mins}m ago`;
+  const fetchedAgo = mins == null ? "" : mins < 1 ? "just now" : `${mins}m ago`;
+  const q = params.q ? `&q=${encodeURIComponent(params.q)}` : "";
+  const countBySource = (key: string) =>
+    items.filter((i) => i.source === key).length;
 
   return (
     <>
@@ -129,70 +81,115 @@ export default async function NewsPage() {
         title="News"
         subtitle="The last seven days across the Zcash ecosystem: community forum, core GitHub releases, ZecHub DAO proposals, grant applications and new ledger entries. Refreshed hourly."
         actions={
-          newCount > 0 ? (
-            <Badge tone="rose">{newCount} new</Badge>
-          ) : undefined
+          newCount > 0 ? <Badge tone="rose">{newCount} new</Badge> : undefined
         }
       />
 
-      <p className="mb-3 text-xs text-stone-600">
-        Showing the last 7 days{fetchedAgo ? ` · updated ${fetchedAgo}` : ""}.
-        Older entries stay on their own pages.
+      <nav className="ws-pipeline" aria-label="News sources">
+        <Link
+          href={params.q ? `/news?q=${encodeURIComponent(params.q)}` : "/news"}
+          aria-current={!params.source ? "page" : undefined}
+        >
+          <span>All sources</span>
+          <strong>{items.length}</strong>
+        </Link>
+        {Object.entries(SOURCE).map(([key, s]) => (
+          <Link
+            key={key}
+            href={`/news?source=${key}${q}`}
+            aria-current={params.source === key ? "page" : undefined}
+          >
+            <span>{s.label}</span>
+            <strong>{countBySource(key)}</strong>
+          </Link>
+        ))}
+      </nav>
+
+      <form
+        key={JSON.stringify([params.q ?? "", params.source ?? ""])}
+        className="ws-news-search"
+        role="search"
+      >
+        <input
+          name="q"
+          type="search"
+          aria-label="Search news"
+          placeholder="Search this week's updates…"
+          defaultValue={params.q ?? ""}
+        />
+        {params.source ? (
+          <input type="hidden" name="source" value={params.source} />
+        ) : null}
+        <button className="ws-button">Search</button>
+        {params.q ? (
+          <Link href={params.source ? `/news?source=${params.source}` : "/news"}>
+            Clear
+          </Link>
+        ) : null}
+      </form>
+
+      <p className="ws-news-meta">
+        {shown.length === items.length
+          ? `${items.length} updates`
+          : `${shown.length} of ${items.length} updates`}
+        {" · "}
+        {newCount} new in 48 hours · last 7 days
+        {fetchedAgo ? ` · updated ${fetchedAgo}` : ""}. Older entries stay on
+        their own pages.
       </p>
 
-      <Card className="space-y-1 p-2">
-        {items.length === 0 ? (
-          <p className="px-3 py-8 text-center text-sm text-stone-600">
-            No recent activity. Sources may be momentarily unreachable.
+      <div className="ws-news-list">
+        {shown.length === 0 ? (
+          <p className="ws-news-empty">
+            {items.length === 0
+              ? "No recent activity. Sources may be momentarily unreachable."
+              : "No updates match this view. Clear the filters or revisit the source later."}
           </p>
         ) : null}
-        {items.map((i: NewsItem) => {
+        {shown.map((i: NewsItem) => {
           const s = SOURCE[i.source];
           const community = i.author
             ? BY_HANDLE.get(i.author.toLowerCase())
             : undefined;
           const isNew = Date.parse(i.ts) > newCut;
           const external = i.url.startsWith("http");
+          const kind = community
+            ? community.name
+            : i.source === "proposal" || i.source === "github"
+              ? (i.kind ?? s.label)
+              : (i.kind ?? "");
           return (
             <a
               key={`${i.source}:${i.url}`}
               href={i.url}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
-              className="flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-stone-100"
+              className="ws-news-row"
             >
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white ring-1 ring-inset ring-stone-200"
-                title={community?.name}
-              >
-                {community ? (
-                  <span className="text-lg leading-none">{community.flag}</span>
-                ) : (
-                  s.logo
-                )}
+              {community ? (
+                <span className="ws-news-flag" title={community.name}>
+                  {community.flag}
+                </span>
+              ) : (
+                <img
+                  src={s.mark}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className={s.glyph ? "ws-news-mark ws-news-mark-glyph" : "ws-news-mark"}
+                />
+              )}
+              <span className="ws-news-title">
+                <span>{i.title}</span>
+                {isNew ? <i className="ws-news-new" aria-label="new" /> : null}
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 text-sm font-medium text-stone-900">
-                  <span className="truncate">{i.title}</span>
-                  {isNew ? (
-                    <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-rose-500" />
-                  ) : null}
-                </p>
-                <p className="truncate text-xs text-stone-600">
-                  {community
-                    ? community.name
-                    : i.source === "proposal" || i.source === "github"
-                      ? i.kind
-                      : s.label}
-                </p>
-              </div>
-              <span className="shrink-0 text-xs text-stone-600 tnum">
-                {rel(i.ts, now)}
-              </span>
+              <span className="ws-news-kind">{kind}</span>
+              <span className="ws-news-source">{s.label}</span>
+              <span className="ws-news-date tnum">{rel(i.ts, now)}</span>
             </a>
           );
         })}
-      </Card>
+      </div>
     </>
   );
 }

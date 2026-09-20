@@ -1,3 +1,5 @@
+import { FeatureLink, SourceNote } from "@/components/workspace";
+import { formatZecCompact } from "@/lib/zcash/units";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { recipientTotals } from "@/lib/zcg/disbursements-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
@@ -50,7 +52,7 @@ export default async function RecebedoresPage() {
         subtitle="Recorded payments to organizations and individuals across the ZCG and Coinholder ledgers. USD paid is the budgeted value of settled entries, not a current market valuation. Budgets are shown separately; committee stipends and internal operating costs are excluded."
       />
 
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat
           label="Recipients"
           value={String(external.length)}
@@ -67,19 +69,39 @@ export default async function RecebedoresPage() {
           value={formatUsdCents(maxUsd, { compact: true })}
           sub={external[0]?.recipientName ?? "n/a"}
         />
+        <Stat
+          label="ZEC paid"
+          value={formatZecCompact(
+            external.reduce((s, r) => s + r.externalPaidZecZat, 0n),
+            { symbol: false },
+          )}
+          sub="recorded external payments"
+          tone="in"
+        />
       </section>
 
-      <Card className="p-4">
+      <Card className="p-0 overflow-hidden">
         <RecipientsTable rows={rows} />
       </Card>
 
       <p className="mt-3 text-xs text-stone-600">
-        Budgeted USD includes all recorded entries, including unpaid or cancelled
-        milestones. It is not money received or an outstanding commitment. Paid
-        amounts remain counted if a grant was later cancelled; delivery and impact
-        are not independently verified here.
+        Budgeted USD includes all recorded entries, including unpaid or
+        cancelled milestones. It is not money received or an outstanding
+        commitment. Paid amounts remain counted if a grant was later cancelled;
+        delivery and impact are not independently verified here.
       </p>
 
+      <SourceNote>
+        USD paid is the budgeted value of settled entries, not a current market
+        valuation. Committee stipends and internal operating costs are excluded
+        from this ranking.
+      </SourceNote>
+      <FeatureLink
+        title="Committee compensation"
+        description="View the separate stipend ledger and follow each member's payment history."
+        href="/zcg/stipends"
+        label="View stipends"
+      />
       <Synced className="mt-4" />
     </>
   );

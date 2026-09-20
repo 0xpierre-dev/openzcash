@@ -16,7 +16,7 @@ type Ev =
   | { kind: "pause"; ms: number };
 
 const USD = ({ v }: { v: string }) => (
-  <span className="text-amber-300">{v}</span>
+  <span className="ws-t-usd">{v}</span>
 );
 
 const EVENTS: Ev[] = [
@@ -34,7 +34,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-emerald-400">Funded:</span> Payment
+        <span className="ws-t-pos">Funded:</span> Payment
         Gateway with BTCPay, <USD v="$120,000" /> paid (2022) · Elemental ZEC
         payment processor, <USD v="$51,144" /> (6/6 milestones) · CoinPayments,{" "}
         <USD v="$76,800" /> before cancellation
@@ -45,7 +45,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-sky-400">Under review now:</span>{" "}
+        <span className="ws-t-accent">Under review now:</span>{" "}
         Rozo Merchant POS (#336), <USD v="$48,000" /> requested
       </p>
     ),
@@ -54,7 +54,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-rose-400">Declined:</span> weave-zec
+        <span className="ws-t-neg">Declined:</span> weave-zec
         ($48k), ZecPay ($44k), ZAPS ($120k)...
       </p>
     ),
@@ -62,7 +62,7 @@ const EVENTS: Ev[] = [
   {
     kind: "line",
     node: (
-      <p className="text-[11px] text-stone-600">
+      <p className="ws-t-note">
         sources: openzcash.org/api/zcg/data/grants · /api/zcg/office · github
         #336
       </p>
@@ -77,7 +77,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-rose-400">No.</span> It is under
+        <span className="ws-t-neg">No.</span> It is under
         review right now (#334, <USD v="$122,600" /> requested). It is not the
         completed 2024 Zenith Full Node Wallet grant (<USD v="$124,800" />{" "}
         paid). Same name, different application.
@@ -87,7 +87,7 @@ const EVENTS: Ev[] = [
   {
     kind: "line",
     node: (
-      <p className="text-[11px] text-stone-600">
+      <p className="ws-t-note">
         sources: /api/zcg/office · github #334 · /api/zcg/data/grants
       </p>
     ),
@@ -101,7 +101,7 @@ const LOOP_HOLD_MS = 6500; // hold the finished transcript, then restart
 
 function Cursor() {
   return (
-    <span className="ml-0.5 inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] animate-pulse bg-emerald-400/90" />
+    <span className="ws-t-cursor" />
   );
 }
 
@@ -155,51 +155,44 @@ export function Terminal() {
   const current = EVENTS[idx];
 
   return (
-    <div className="overflow-hidden border border-stone-900 bg-[#0b0d10] shadow-2xl shadow-stone-400/40">
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-        <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-        <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-        <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-        <span className="ml-auto font-mono text-[11px] tracking-wide text-stone-500">
-          your agent
-        </span>
-      </div>
+    <div className="ws-terminal">
+      <div className="ws-terminal-head">your agent</div>
       <div
         ref={bodyRef}
-        className="h-[420px] space-y-4 overflow-hidden p-5 font-mono text-[13px] leading-relaxed antialiased sm:h-[460px]"
+        className="ws-terminal-body"
       >
         {EVENTS.slice(0, idx).map((ev, i) => {
           if (ev.kind === "pause") return null;
           if (ev.kind === "cmd")
             return (
-              <p key={i} className="text-stone-100">
-                <span className="mr-2 text-emerald-400">❯</span>
+              <p key={i} className="ws-t-ink">
+                <span className="ws-t-prompt">❯</span>
                 {ev.text}
               </p>
             );
           if (ev.kind === "status")
             return (
-              <p key={i} className="text-stone-500">
-                <span className="mr-2 text-emerald-500">●</span>
+              <p key={i} className="ws-t-dim">
+                <span className="ws-t-prompt">●</span>
                 {ev.text}
               </p>
             );
           return (
-            <div key={i} className="text-stone-300">
+            <div key={i} className="ws-t-body">
               {ev.node}
             </div>
           );
         })}
         {current?.kind === "cmd" ? (
-          <p className="text-stone-100">
-            <span className="mr-2 text-emerald-400">❯</span>
+          <p className="ws-t-ink">
+            <span className="ws-t-prompt">❯</span>
             {current.text.slice(0, typed)}
             <Cursor />
           </p>
         ) : null}
         {done ? (
-          <p className="text-stone-100">
-            <span className="mr-2 text-emerald-400">❯</span>
+          <p className="ws-t-ink">
+            <span className="ws-t-prompt">❯</span>
             <Cursor />
           </p>
         ) : null}

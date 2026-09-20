@@ -22,15 +22,19 @@ export type DisbFilters = {
   limit?: number;
 };
 
-export async function listDisbursements(
-  opts: DisbFilters = {},
-): Promise<DisbRow[]> {
-  const db = getDb();
+/** WHERE clauses shared by the list and its aggregate, so both describe the
+ *  same population. `month` (YYYY-MM) narrows by paid-out month. */
+function disbConds(opts: DisbFilters & { month?: string }) {
   const conds = [];
   if (opts.sheet) conds.push(eq(zcgDisbursements.sourceSheet, opts.sheet));
   if (opts.type) conds.push(eq(zcgDisbursements.disbursementType, opts.type));
   if (opts.grant) conds.push(eq(zcgDisbursements.project, opts.grant));
   if (opts.category) conds.push(eq(zcgDisbursements.category, opts.category));
+  if (opts.month) {
+    conds.push(
+      sql`${zcgDisbursements.paidOutDate}::text like ${`${opts.month}-%`}`,
+    );
+  }
   if (opts.search) {
     // Topic search: match recipient, project title, OR milestone label — a
     // search for "BTCPay" must find "Payment Gateway with BTCPay" (recipient
@@ -44,8 +48,14 @@ export async function listDisbursements(
       )!,
     );
   }
+  return conds;
+}
 
-  return db
+export async function listDisbursements(
+  opts: DisbFilters = {},
+): Promise<DisbRow[]> {
+  const conds = disbConds(opts);
+  return getDb()
     .select()
     .from(zcgDisbursements)
     .where(conds.length ? and(...conds) : undefined)
@@ -54,6 +64,38 @@ export async function listDisbursements(
       desc(zcgDisbursements.importedAt),
     )
     .limit(opts.limit ?? 250);
+}
+
+export type DisbSelectionSummary = {
+  /** Rows matching the filters, regardless of the list's row limit. */
+  count: number;
+  paidCount: number;
+  /** Budgeted USD of paid entries. */
+  usdPaidCents: bigint;
+  zecPaidZat: bigint;
+};
+
+/** Totals over the SAME filtered population as `listDisbursements`, without
+ *  the row limit, so a KPI tile never sums a truncated window of the ledger. */
+export async function summarizeDisbursements(
+  opts: Omit<DisbFilters, "limit"> & { month?: string } = {},
+): Promise<DisbSelectionSummary> {
+  const conds = disbConds(opts);
+  const [r] = await getDb()
+    .select({
+      count: sql<number>`count(*)::int`,
+      paidCount: sql<number>`count(*) filter (where ${zcgDisbursements.isPaid})::int`,
+      usdPaidCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where ${zcgDisbursements.isPaid}),0)`,
+      zecPaidZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where ${zcgDisbursements.isPaid}),0)`,
+    })
+    .from(zcgDisbursements)
+    .where(conds.length ? and(...conds) : undefined);
+  return {
+    count: r?.count ?? 0,
+    paidCount: r?.paidCount ?? 0,
+    usdPaidCents: BigInt(r?.usdPaidCents ?? "0"),
+    zecPaidZat: BigInt(r?.zecPaidZat ?? "0"),
+  };
 }
 
 export type RecipientTotal = {
@@ -106,8 +148,12 @@ export async function recipientTotals(): Promise<RecipientTotal[]> {
       externalPaidUsdCents: sql<string>`coalesce(sum(${zcgDisbursements.amountUsdCents}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal}),0)`,
       externalPaidZecZat: sql<string>`coalesce(sum(${zcgDisbursements.zecDisbursedZat}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal}),0)`,
       externalPaymentCount: sql<number>`count(*) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal})::int`,
-      externalLastPaid: sql<string | null>`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal})`,
-      lastPaid: sql<string | null>`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid})`,
+      externalLastPaid: sql<
+        string | null
+      >`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid} and not ${zcgDisbursements.isInternal})`,
+      lastPaid: sql<
+        string | null
+      >`max(${zcgDisbursements.paidOutDate}) filter (where ${zcgDisbursements.isPaid})`,
     })
     .from(zcgDisbursements)
     .groupBy(zcgDisbursements.recipientKey)

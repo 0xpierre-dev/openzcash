@@ -7,12 +7,9 @@ import { AppShell } from "./app-shell";
 /** Monthly owns its compact header so a complete PDF page fits the viewport. */
 function isBare(pathname: string): boolean {
   return (
-    pathname === "/" ||
-    pathname === "/login" ||
     pathname === "/monthly" ||
     pathname === "/monthly-preview" ||
-    pathname.startsWith("/monthly/") ||
-    pathname.startsWith("/onboarding")
+    pathname.startsWith("/monthly/")
   );
 }
 
@@ -25,11 +22,20 @@ function isBare(pathname: string): boolean {
 export function ShellGate({
   isAdmin,
   children,
+  isPreview = false,
+  footer,
 }: {
   isAdmin: boolean;
   children: ReactNode;
+  isPreview?: boolean;
+  /** Server-rendered treasury bar, pinned to the bottom of shell pages. */
+  footer?: ReactNode;
 }) {
   const pathname = usePathname();
   if (isBare(pathname)) return <>{children}</>;
-  return <AppShell isAdmin={isAdmin}>{children}</AppShell>;
+  return (
+    <AppShell isAdmin={isAdmin} isPreview={isPreview} footer={footer}>
+      {children}
+    </AppShell>
+  );
 }

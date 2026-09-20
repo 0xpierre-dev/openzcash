@@ -1,211 +1,103 @@
+import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import Link from "next/link";
-import { Badge, PageHeader, Stat } from "@/components/ui";
-import {
-  IconArrowUp,
-  IconBalance,
-  IconChart,
-  IconCheck,
-  IconCoins,
-  IconGrant,
-  IconNews,
-  IconReceipt,
-  IconShield,
-  IconTerminal,
-  IconUsers,
-  IconVote,
-  IconWallet,
-} from "@/components/icons";
-import type { ComponentType } from "react";
+import { PageHeader, Stat } from "@/components/ui";
 import { disbursementsSummary } from "@/lib/zcg/disbursements-repo";
-import { latestSnapshot } from "@/lib/zcg/snapshots-repo";
-import { currentLockboxZec } from "@/lib/zcash/lockbox-live";
+import { listProposals, officeUnderReview } from "@/lib/zcg/proposals-repo";
+import { publicationDay } from "@/lib/zcg/publication-policy";
+import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
+import { currentElection, getElections } from "@/lib/zcg/governance-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
-import { formatZec, formatZecCompact } from "@/lib/zcash/units";
-import { ElectionsSection } from "./elections-section";
-import { CurrentCommittee } from "./current-committee";
+import { formatZecCompact } from "@/lib/zcash/units";
 import { listChangelog } from "@/lib/zcg/changelog";
+import { proposalStatusLabel } from "@/lib/zcg/status-labels";
+import { MEMBERS, SEATED_FROM } from "./current-committee-data";
+import { maybeAutoRefresh } from "@/lib/zcg/freshness";
+import "./overview.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZCG · OpenZcash" };
 
-type Tile = {
-  href: string;
-  label: string;
-  sub: string;
-  grad: string;
-  Icon: ComponentType<{ className?: string }>;
-};
+type Tile = { href: string; label: string; sub: string; mark: string };
 
-// App-style navigation into every ZCG detail screen — one colour per app.
+// Every ZCG tool stays one click away; the four primary records carry counts.
+// Marks are the sidebar's page glyphs (PNG).
+const glyph = (name: string) => `/logos/glyphs/${name}.png`;
 const TILES: Tile[] = [
-  {
-    href: "/zcg/totals",
-    label: "Totals",
-    sub: "Where the money goes",
-    grad: "from-amber-400 to-orange-500",
-    Icon: IconChart,
-  },
-  {
-    href: "/zcg/grants",
-    label: "Grants",
-    sub: "Approved projects",
-    grad: "from-emerald-400 to-teal-500",
-    Icon: IconGrant,
-  },
-  {
-    href: "/zcg/disbursements",
-    label: "Disbursements",
-    sub: "The full ledger",
-    grad: "from-sky-400 to-blue-500",
-    Icon: IconReceipt,
-  },
-  {
-    href: "/zcg/recipients",
-    label: "Recipients",
-    sub: "By amount received",
-    grad: "from-violet-400 to-purple-500",
-    Icon: IconUsers,
-  },
-  {
-    href: "/zcg/proposals",
-    label: "Proposals",
-    sub: "Governance funnel",
-    grad: "from-rose-400 to-pink-500",
-    Icon: IconVote,
-  },
-  {
-    href: "/zcg/analytics",
-    label: "Insights",
-    sub: "Burn-rate & delivery",
-    grad: "from-fuchsia-400 to-purple-500",
-    Icon: IconArrowUp,
-  },
-  {
-    href: "/zcg/stipends",
-    label: "Stipends",
-    sub: "Committee pay",
-    grad: "from-teal-400 to-cyan-500",
-    Icon: IconCoins,
-  },
-  {
-    href: "/zcg/budget",
-    label: "Budget",
-    sub: "Discretionary · USD × ZEC",
-    grad: "from-orange-400 to-amber-500",
-    Icon: IconBalance,
-  },
-  {
-    href: "/zcg/coinholder",
-    label: "Coinholder",
-    sub: "FPF grants pool",
-    grad: "from-cyan-400 to-sky-500",
-    Icon: IconWallet,
-  },
-  {
-    href: "/zcg/reconciliation",
-    label: "Reconciliation",
-    sub: "On-chain ↔ ledger",
-    grad: "from-lime-400 to-emerald-500",
-    Icon: IconShield,
-  },
-  {
-    href: "/zcg/meetings",
-    label: "Meetings",
-    sub: "Committee minutes",
-    grad: "from-pink-400 to-rose-500",
-    Icon: IconNews,
-  },
-  {
-    href: "/zcg/methodology",
-    label: "Methodology",
-    sub: "Sources & API",
-    grad: "from-slate-400 to-slate-600",
-    Icon: IconCheck,
-  },
+  { href: "/zcg/totals", label: "Totals", sub: "Where the money goes", mark: glyph("totals") },
+  { href: "/zcg/grants", label: "Grants", sub: "Approved projects", mark: glyph("grants") },
+  { href: "/zcg/disbursements", label: "Disbursements", sub: "The full ledger", mark: glyph("disbursements") },
+  { href: "/zcg/recipients", label: "Recipients", sub: "By amount received", mark: glyph("recipients") },
+  { href: "/zcg/proposals", label: "Proposals", sub: "Governance funnel", mark: glyph("proposals") },
+  { href: "/zcg/committee", label: "Committee", sub: "Members, mandates & elections", mark: glyph("committee") },
+  { href: "/zcg/analytics", label: "Insights", sub: "Burn-rate & delivery", mark: glyph("insights") },
+  { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", mark: glyph("stipends") },
+  { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", mark: glyph("budget") },
+  { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF retroactive round", mark: glyph("coinholder") },
+  { href: "/zcg/reconciliation", label: "Reconciliation", sub: "On-chain ↔ ledger", mark: glyph("reconciliation") },
+  { href: "/zcg/meetings", label: "Meetings", sub: "Committee minutes", mark: glyph("meetings") },
+  { href: "/zcg/methodology", label: "Methodology", sub: "Sources & API", mark: glyph("methodology") },
+  { href: "/zcg/copilot", label: "ZCG Copilot", sub: "Ask about public records", mark: glyph("copilot") },
 ];
 
-const CHANGE_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Filtered",
-  under_review: "Under review",
-  pending: "Pending",
-  vetoed: "Vetoed",
-};
-const changeLabel = (v: string | null) => (v && CHANGE_LABEL[v]) || v || "·";
+const PRIMARY_ROUTES = [
+  "/zcg/grants",
+  "/zcg/proposals",
+  "/zcg/disbursements",
+  "/zcg/recipients",
+];
+
+const changeLabel = (v: string | null) => proposalStatusLabel(v);
+
+function formatDay(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][(m ?? 1) - 1];
+  return `${month} ${d}, ${y}`;
+}
 
 export default async function ZcgPage() {
-  const [s, lockbox, zcg, changes] = await Promise.all([
+  // The home is the stale-on-load fallback for the mirror: the boot scheduler
+  // refreshes every 6h, and a render older than that kicks a re-import too.
+  void maybeAutoRefresh();
+  const [s, changes, schedule, proposals, queue, elections] = await Promise.all([
     disbursementsSummary(),
-    currentLockboxZec(),
-    latestSnapshot("zcg_operating"),
     listChangelog(7, 12, "zcg").catch(() => []),
+    // Derived figure; never lets the app's first screen fail.
+    getPaymentSchedule().catch(() => null),
+    // Same published (D-1) list and cache entry as /zcg/proposals.
+    cached(`listProposals:all:${publicationDay()}`, LEDGER_TTL_MS, () =>
+      listProposals({}),
+    ).catch(() => null),
+    // The published review queue, the same set the 3D office walks.
+    officeUnderReview(100).catch(() => null),
+    getElections().catch(() => []),
   ]);
+  const underReview = queue ? queue.length : null;
+  const liveElection = currentElection(elections);
+  const next = schedule?.rows[0] ?? null;
+  const [dollars, cents] = formatUsdCents(schedule?.totalCents ?? 0n).split(".");
+
+  const primaryCounts: Record<string, string> = {
+    "/zcg/grants": `${s.grantCount} approved projects`,
+    "/zcg/proposals":
+      proposals && underReview != null
+        ? `${proposals.length} · ${underReview} under review`
+        : "Governance funnel",
+    "/zcg/disbursements": `${s.count.toLocaleString("en-US")} ledger rows`,
+    "/zcg/recipients": `${s.recipientCount} · by amount received`,
+  };
 
   return (
-    <>
+    <div className="zcg-overview">
       <PageHeader
-        title="ZCG · Ecosystem grants"
+        title="Zcash Community Grants"
         subtitle="Public accounting for Zcash Community Grants, imported from the official spreadsheet. An off-chain disbursement ledger that can be cross-referenced with the on-chain Lockbox/ZCG outflows."
-        actions={
-          <Link
-            href="/zcg/copilot"
-            className="inline-flex items-center gap-2.5 rounded-xl border border-stone-900 bg-[#0b0d10] px-5 py-3 text-base font-semibold text-emerald-400 shadow-lg shadow-emerald-900/10 ring-1 ring-emerald-500/20 transition hover:-translate-y-0.5 hover:border-emerald-400/50 hover:shadow-emerald-500/20"
-          >
-            <IconTerminal className="h-5 w-5" />
-            ZCG Copilot
-          </Link>
-        }
       />
 
-      <section className="mb-8 grid gap-6 lg:grid-cols-2">
-        <div className="relative overflow-hidden rounded-2xl border border-amber-500/15 bg-gradient-to-br from-amber-500/[0.07] via-stone-50 to-stone-50 p-5 shadow-lg shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5">
-          <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-amber-500/10 blur-3xl" />
-          <div className="relative flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-amber-700/70">
-                Lockbox · Dev Fund vault
-              </p>
-              <p className="mt-1.5 break-words text-2xl font-bold leading-none tracking-tight text-stone-900 tnum sm:text-3xl">
-                {lockbox != null ? formatZec(lockbox.zat) : "·"}
-              </p>
-              <p className="mt-2 text-xs text-stone-600">
-                protocol pool (ZIP 1015/1016) · live · +0.1875 ZEC/block
-              </p>
-            </div>
-            <Badge tone="amber">ZIP-271</Badge>
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl border border-stone-200 bg-gradient-to-b from-white to-stone-50 p-5 shadow-sm shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-stone-600">
-                ZCG operating
-              </p>
-              <p className="mt-1.5 break-words text-2xl font-bold leading-none tracking-tight text-stone-900 tnum sm:text-3xl">
-                {zcg?.zecBalanceZat != null
-                  ? formatZec(zcg.zecBalanceZat)
-                  : "·"}
-              </p>
-              <p className="mt-2 text-xs text-stone-600 tnum">
-                {zcg?.usdCashBalanceCents != null
-                  ? `+ ${formatUsdCents(zcg.usdCashBalanceCents)} in cash`
-                  : "transparent address t3ev37Q2…"}
-              </p>
-            </div>
-            <Badge tone="zinc">t-addr</Badge>
-          </div>
-        </div>
-      </section>
-
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <section className="zcg-overview-metrics" aria-label="Funding summary">
         <Stat
           label="Grants"
           value={String(s.grantCount)}
-          sub={`${s.paidCount} payments made`}
+          sub={`approved projects · ${s.paidCount} payments made`}
         />
         <Stat
           label="USD paid to date"
@@ -225,137 +117,176 @@ export default async function ZcgPage() {
         />
       </section>
 
-      <CurrentCommittee />
+      {liveElection ? (
+        <Link href="/zcg/committee" className="zcg-live-vote">
+          <span className="zcg-live-dot" aria-hidden />
+          <strong>Live · a community vote is happening right now</strong>
+          <span>
+            {liveElection.title} · {liveElection.seats} seats
+            {liveElection.votingCloses
+              ? ` · voting closes ${formatDay(liveElection.votingCloses)}`
+              : ""}
+          </span>
+          <span aria-hidden>→</span>
+        </Link>
+      ) : null}
 
-      {changes.length > 0 ? (
-        <section className="mb-8">
-          <div className="mb-3 flex items-baseline justify-between gap-3">
-            <h2 className="text-sm font-semibold text-stone-700">
-              Changed this week
-            </h2>
-            <a
-              href="/api/feeds/zcg.xml"
-              className="text-xs text-stone-400 hover:text-amber-700"
-              title="Subscribe to changes via RSS"
-            >
+      <div className="zcg-two">
+        <div className="zcg-col">
+        <section
+          className="zcg-overview-schedule"
+          aria-labelledby="overview-schedule-title"
+        >
+          <div className="zcg-card-head">
+            <h2 id="overview-schedule-title">Scheduled payments</h2>
+            <Link href="/zcg/schedule">Open schedule →</Link>
+          </div>
+          {schedule ? (
+            <>
+              <p className="zcg-overview-schedule-value tnum">
+                {dollars}
+                <small>.{cents ?? "00"}</small>
+              </p>
+              <p className="zcg-overview-schedule-note">
+                <strong>{schedule.rows.length} approved future payments</strong>
+                Unpaid milestones with an estimated date, summed from the ledger.
+                A different population from open commitments, which count every
+                unpaid milestone. View totals by month and category.
+              </p>
+              {next ? (
+                <p className="zcg-overview-next">
+                  <span>
+                    Next · <b className="tnum">{next.estimatedPayoutDate}</b> ·{" "}
+                    <Link href={`/zcg/grant?g=${encodeURIComponent(next.project ?? "")}`}>
+                      {next.project}
+                    </Link>
+                    {next.milestoneLabel ? `, ${next.milestoneLabel}` : ""}
+                  </span>
+                  <b className="tnum">{formatUsdCents(next.amountUsdCents)}</b>
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <p className="zcg-overview-schedule-note">
+              The schedule is temporarily unavailable.
+            </p>
+          )}
+        </section>
+
+        <nav className="zcg-tools" aria-label="More ZCG tools">
+          {TILES.filter((tile) => !PRIMARY_ROUTES.includes(tile.href)).map(
+            (tile) => (
+              <Link key={tile.href} href={tile.href}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={tile.mark} alt="" width={16} height={16} />
+                <span>
+                  <strong>{tile.label}</strong>
+                  <small>{tile.sub}</small>
+                </span>
+              </Link>
+            ),
+          )}
+        </nav>
+        </div>
+
+        <section className="zcg-changes" aria-labelledby="overview-changes-title">
+          <div className="zcg-card-head">
+            <h2 id="overview-changes-title">Changed this week</h2>
+            <a href="/api/feeds/zcg.xml" title="Subscribe to changes via RSS">
               RSS ↗
             </a>
           </div>
-          <div className="rounded-2xl border border-stone-200 bg-white shadow-sm shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5">
-            <ul className="divide-y divide-stone-100">
+          {changes.length > 0 ? (
+            <ul>
               {changes.map((c) => (
-                <li
-                  key={c.id}
-                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm"
-                >
-                  <span className="min-w-0 flex-1 overflow-hidden">
+                <li key={c.id}>
+                  <span className="zcg-change-text">
                     {c.kind === "proposal_status" ? (
-                      <Link
-                        href={`/zcg/proposals?status=${c.toVal ?? ""}`}
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="font-medium">{c.title}</span>
-                        <span className="text-stone-500">
+                      <Link href={`/zcg/proposals?status=${c.toVal ?? ""}`}>
+                        <span className="zcg-change-title">{c.title}</span>
+                        <span className="zcg-change-muted">
                           {" "}
                           moved {changeLabel(c.fromVal)} →{" "}
                         </span>
-                        <span className="font-medium">
+                        <span className="zcg-change-title">
                           {changeLabel(c.toVal)}
                         </span>
                       </Link>
                     ) : c.kind === "proposal_new" ? (
-                      <Link
-                        href="/zcg/proposals?status=under_review"
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="text-stone-500">New proposal: </span>
-                        <span className="font-medium">{c.title}</span>
+                      <Link href="/zcg/proposals?status=under_review">
+                        <span className="zcg-change-muted">New proposal · </span>
+                        <span className="zcg-change-title">{c.title}</span>
                       </Link>
                     ) : (
-                      <Link
-                        href="/zcg/disbursements"
-                        className="block truncate text-stone-800 hover:text-amber-700"
-                      >
-                        <span className="font-medium">{c.title}</span>
-                        <span className="text-stone-500"> · {c.detail}</span>
+                      <Link href="/zcg/disbursements">
+                        <span className="zcg-change-title">{c.title}</span>
+                        <span className="zcg-change-muted"> · {c.detail}</span>
                       </Link>
                     )}
                   </span>
-                  <span className="shrink-0 text-xs text-stone-400 tnum">
+                  <span className="zcg-change-date tnum">
                     {c.at.toISOString().slice(5, 10).replace("-", "/")}
                   </span>
                 </li>
               ))}
             </ul>
-          </div>
-          <p className="mt-2 text-xs text-stone-500">
+          ) : (
+            <p className="zcg-overview-schedule-note">
+              No changes recorded in the last seven days.
+            </p>
+          )}
+          <p className="zcg-card-foot">
             Automatic diff between daily imports of the official spreadsheet:
             new proposals, verdict changes, and newly recorded payments.
           </p>
         </section>
-      ) : null}
+      </div>
 
-      <ElectionsSection />
+      <nav className="zcg-overview-primary" aria-label="Grant records">
+        {PRIMARY_ROUTES.map((href) =>
+          TILES.find((tile) => tile.href === href)!,
+        ).map((tile) => (
+          <Link key={tile.href} href={tile.href}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={tile.mark} alt="" width={18} height={18} />
+            <span>
+              <strong>{tile.label}</strong>
+              <small>{primaryCounts[tile.href] ?? tile.sub}</small>
+            </span>
+            <span aria-hidden>→</span>
+          </Link>
+        ))}
+      </nav>
 
-      <section className="antialiased">
-        <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-sm font-semibold text-stone-700">Explore ZCG</h2>
-          <span className="text-xs text-stone-400">tap a card ↓</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
-          {TILES.map((t) => (
-            <Link key={t.href} href={t.href} className="group block">
-              <div className="flex h-full flex-col gap-2 rounded-2xl border border-stone-200/80 bg-white p-3 shadow-sm shadow-stone-300/25 ring-1 ring-inset ring-stone-900/[0.04] transition duration-200 group-hover:-translate-y-0.5 group-hover:border-stone-300 group-hover:shadow-md group-hover:shadow-stone-400/20 sm:flex-row sm:items-center sm:gap-3">
-                <span
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${t.grad} text-white shadow-md shadow-stone-500/20 ring-1 ring-inset ring-white/25 sm:h-11 sm:w-11`}
-                >
-                  <t.Icon className="h-6 w-6 sm:h-[22px] sm:w-[22px]" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[15px] font-semibold leading-tight tracking-tight text-stone-900 line-clamp-2 sm:truncate">
-                    {t.label}
-                  </p>
-                  <p className="mt-0.5 hidden truncate text-xs font-medium text-stone-500 sm:block">
-                    {t.sub}
-                  </p>
-                </div>
-                <span className="hidden shrink-0 text-stone-300 transition group-hover:translate-x-0.5 group-hover:text-stone-500 sm:block">
-                  →
-                </span>
-              </div>
-            </Link>
+      <section className="zcg-committee-row" aria-label="Current committee">
+        <div className="zcg-avatars">
+          {MEMBERS.map((m) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={m.name} src={m.img} alt="" width={30} height={30} />
           ))}
         </div>
+        <div>
+          <strong>
+            Current committee · {MEMBERS.length} seats · from {SEATED_FROM}
+          </strong>
+          <small>
+            {MEMBERS.map((m) => m.name).join(", ")} · source-linked roles,
+            terms, elections, stipends and minutes
+          </small>
+        </div>
+        <Link href="/zcg/committee">Committee →</Link>
       </section>
 
-      <section className="mt-8">
-        <Link href="/zcg/office" className="group block">
-          <div className="relative overflow-hidden rounded-2xl border border-stone-800/60 bg-gradient-to-br from-stone-900 via-stone-900 to-violet-950 p-6 shadow-lg shadow-stone-400/30 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-xl">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-12 left-1/3 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/80 ring-1 ring-inset ring-white/15">
-                  New · 3D
-                </span>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                  Step into the ZCG Office
-                </h2>
-                <p className="mt-1 max-w-xl text-sm text-stone-300">
-                  A living 3D room where every proposal under review walks the
-                  floor as a zebra, in front of the committee.
-                </p>
-              </div>
-              <span className="hidden shrink-0 items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 transition group-hover:bg-white/15 sm:inline-flex">
-                Enter{" "}
-                <span className="transition group-hover:translate-x-0.5">
-                  →
-                </span>
-              </span>
-            </div>
-          </div>
-        </Link>
-      </section>
-    </>
+      <Link className="zcg-overview-office" href="/zcg/office">
+        <span>
+          <strong>Step into the ZCG office</strong>
+          <small>
+            A living 3D room where every proposal under review walks the floor
+            as a zebra, in front of the committee.
+          </small>
+        </span>
+        <span aria-hidden>→</span>
+      </Link>
+    </div>
   );
 }

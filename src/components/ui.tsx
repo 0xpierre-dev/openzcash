@@ -14,7 +14,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-2xl border p-5 shadow-sm ring-1 ring-inset",
+        "oz-card rounded-2xl border p-5 shadow-sm ring-1 ring-inset",
         interactive
           ? "cursor-pointer border-amber-500/30 bg-gradient-to-br from-amber-500/[0.09] to-white shadow-amber-600/10 ring-amber-500/10 transition hover:border-amber-500/50 hover:shadow-md hover:shadow-amber-600/15"
           : "border-stone-200 bg-gradient-to-b from-white to-stone-50 shadow-stone-300/40 ring-stone-900/5",
@@ -36,7 +36,7 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
+    <header className="oz-page-heading mb-8 flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-stone-900">
           {title}
@@ -85,7 +85,7 @@ export function Stat({
 }) {
   const a = STAT_ACCENT[tone];
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-stone-200/80 bg-gradient-to-b from-white to-stone-50 p-4 shadow-sm shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5 transition duration-300 hover:-translate-y-0.5 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-700/10">
+    <div className="oz-stat group relative overflow-hidden rounded-2xl border border-stone-200/80 bg-gradient-to-b from-white to-stone-50 p-4 shadow-sm shadow-stone-300/40 ring-1 ring-inset ring-stone-900/5 transition duration-300 hover:-translate-y-0.5 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-700/10">
       {/* soft gold glow, brightening on hover */}
       <span className="pointer-events-none absolute -right-6 -top-8 h-24 w-24 rounded-full bg-amber-400/15 blur-2xl transition-opacity duration-300 group-hover:bg-amber-400/25" />
       <span

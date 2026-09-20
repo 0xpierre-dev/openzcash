@@ -1,3 +1,9 @@
+import {
+  EditorialIntro,
+  RecordLayout,
+  RelatedLinks,
+  Facts,
+} from "@/components/workspace";
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { IconShield } from "@/components/icons";
 import { Suspense } from "react";
@@ -68,97 +74,133 @@ export default function ShieldedLabsPage() {
         }
       />
 
-      <Suspense
-        fallback={
-          <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-600 shadow-sm">
-            Loading the latest posts...
-          </div>
+      <EditorialIntro
+        eyebrow="Protocol research"
+        title="Long-term resilience for Zcash"
+        description="Follow Crosslink and the Network Sustainability Mechanism, with direct links to specifications, milestones and public updates."
+      >
+        <Facts
+          title="Organization"
+          rows={[
+            ["Funding", "Independent donations"],
+            ["Focus", "Protocol economics & finality"],
+            ["Primary efforts", "Crosslink · NSM"],
+          ]}
+        />
+      </EditorialIntro>
+      <RecordLayout
+        aside={
+          <RelatedLinks
+            title="Primary sources"
+            links={[
+              { href: SITE, label: "Shielded Labs" },
+              { href: ROADMAP, label: "Roadmap & milestones" },
+              { href: GITHUB, label: "Code repositories" },
+              { href: NSM, label: "NSM overview" },
+            ]}
+          />
         }
       >
-        <div className="mb-6">
-          <LiveUpdates />
-        </div>
-      </Suspense>
-
-      <a href={CROSSLINK} target="_blank" rel="noreferrer" className="block">
-        <Card
-          interactive
-          className="mb-6 border-amber-500/20 bg-amber-500/[0.05]"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-amber-700/80">
-                <IconShield className="h-3.5 w-3.5" />
-                Crosslink
-              </p>
-              <p className="mt-1.5 text-sm font-medium text-stone-900">
-                Hybrid Proof-of-Work + Proof-of-Stake with BFT finality
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-stone-600">
-                Gives Zcash the combined security of PoW and PoS and lets people
-                get paid to hold ZEC. PoW and BFT finality are integrated;
-                staking &amp; tokenomics are in development, with hardening and
-                productionization (final ZIPs + audits) slated for 2026.
-              </p>
+        <a href={CROSSLINK} target="_blank" rel="noreferrer" className="block">
+          <Card
+            interactive
+            className="mb-6 border-amber-500/20 bg-amber-500/[0.05]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-amber-700/80">
+                  <IconShield className="h-3.5 w-3.5" />
+                  Crosslink
+                </p>
+                <p className="mt-1.5 text-sm font-medium text-stone-900">
+                  Hybrid Proof-of-Work + Proof-of-Stake with BFT finality
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-stone-600">
+                  Gives Zcash the combined security of PoW and PoS and lets
+                  people get paid to hold ZEC. PoW and BFT finality are
+                  integrated; staking &amp; tokenomics are in development, with
+                  hardening and productionization (final ZIPs + audits) slated
+                  for 2026.
+                </p>
+              </div>
+              <Badge tone="amber">Milestone 4</Badge>
             </div>
-            <Badge tone="amber">Milestone 4</Badge>
-          </div>
-        </Card>
-      </a>
-
-      <h2 className="mb-1 text-sm font-semibold text-stone-700">
-        Network Sustainability Mechanism (NSM)
-      </h2>
-      <p className="mb-3 text-xs text-stone-600">
-        Three proposed changes to ZEC supply economics.{" "}
-        <a
-          href={NSM}
-          target="_blank"
-          rel="noreferrer"
-          className="text-amber-700 underline decoration-amber-500/40 underline-offset-2 hover:text-amber-800"
-        >
-          Overview ↗
+          </Card>
         </a>
-      </p>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        {ZIPS.map((z) => (
+        <h2 className="mb-1 text-sm font-semibold text-stone-700">
+          Network Sustainability Mechanism (NSM)
+        </h2>
+        <p className="mb-3 text-xs text-stone-600">
+          Three proposed changes to ZEC supply economics.{" "}
           <a
-            key={z.id}
-            href={z.url}
+            href={NSM}
             target="_blank"
             rel="noreferrer"
-            className="block"
+            className="text-amber-700 underline decoration-amber-500/40 underline-offset-2 hover:text-amber-800"
           >
-            <Card interactive className="h-full">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold text-stone-900">
-                  {z.title}
+            Overview ↗
+          </a>
+        </p>
+
+        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+          {ZIPS.map((z) => (
+            <a
+              key={z.id}
+              href={z.url}
+              target="_blank"
+              rel="noreferrer"
+              className="block"
+            >
+              <Card interactive className="h-full">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-stone-900">
+                    {z.title}
+                  </p>
+                  <Badge tone="zinc">{z.id}</Badge>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-stone-600">
+                  {z.desc}
                 </p>
-                <Badge tone="zinc">{z.id}</Badge>
-              </div>
-              <p className="mt-2 text-xs leading-relaxed text-stone-600">
-                {z.desc}
-              </p>
+              </Card>
+            </a>
+          ))}
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <a href={ROADMAP} target="_blank" rel="noreferrer" className="block">
+            <Card
+              interactive
+              className="flex items-center justify-between gap-3"
+            >
+              <span className="text-sm font-medium text-stone-900">
+                Roadmap
+              </span>
+              <span className="text-xs text-stone-600">milestones ↗</span>
             </Card>
           </a>
-        ))}
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <a href={ROADMAP} target="_blank" rel="noreferrer" className="block">
-          <Card interactive className="flex items-center justify-between gap-3">
-            <span className="text-sm font-medium text-stone-900">Roadmap</span>
-            <span className="text-xs text-stone-600">milestones ↗</span>
-          </Card>
-        </a>
-        <a href={GITHUB} target="_blank" rel="noreferrer" className="block">
-          <Card interactive className="flex items-center justify-between gap-3">
-            <span className="text-sm font-medium text-stone-900">GitHub</span>
-            <span className="text-xs text-stone-600">ShieldedLabs ↗</span>
-          </Card>
-        </a>
-      </div>
+          <a href={GITHUB} target="_blank" rel="noreferrer" className="block">
+            <Card
+              interactive
+              className="flex items-center justify-between gap-3"
+            >
+              <span className="text-sm font-medium text-stone-900">GitHub</span>
+              <span className="text-xs text-stone-600">ShieldedLabs ↗</span>
+            </Card>
+          </a>
+        </div>
+        <Suspense
+          fallback={
+            <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-600 shadow-sm">
+              Loading the latest posts...
+            </div>
+          }
+        >
+          <div className="mb-6">
+            <LiveUpdates />
+          </div>
+        </Suspense>
+      </RecordLayout>
     </>
   );
 }

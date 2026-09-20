@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PROPOSAL_STATUS_LABEL } from "@/lib/zcg/status-labels";
 
 // Inlined (not imported from the zod schema) to keep zod out of the client bundle.
 const STATUSES = [
@@ -14,16 +15,7 @@ const STATUSES = [
   "filtered",
   "vetoed",
 ] as const;
-const STATUS_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Filtered",
-  under_review: "Under review",
-  pending: "Pending",
-  vetoed: "Vetoed",
-};
+const STATUS_LABEL = PROPOSAL_STATUS_LABEL;
 
 async function api(method: string, body: unknown) {
   const res = await fetch("/api/zcg/proposals", {

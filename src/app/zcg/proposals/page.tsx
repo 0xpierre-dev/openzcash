@@ -1,10 +1,9 @@
+import { FeatureLink, SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
-import {
-  listProposals,
-  type ProposalRow,
-} from "@/lib/zcg/proposals-repo";
-import { cn, nowMs } from "@/lib/utils";
+import { listProposals, type ProposalRow } from "@/lib/zcg/proposals-repo";
+import { nowMs } from "@/lib/utils";
+import { formatUsdCents } from "@/lib/zcg/format";
 import { getIsAdmin } from "@/lib/auth/admin";
 import { getLinks } from "@/lib/zcg/governance-repo";
 import { ProposalsTable, type ProposalTableRow } from "./proposals-table";
@@ -23,28 +22,13 @@ import {
 import { issueNumberFromLink } from "@/lib/zcg/issue-link";
 import { Synced } from "@/components/synced";
 import { publicationDay } from "@/lib/zcg/publication-policy";
+import { PROPOSAL_STATUS_LABEL } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZCG Proposals · OpenZcash" };
 
-const STATUS_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Filtered",
-  under_review: "Under review",
-  pending: "Pending",
-  vetoed: "Vetoed",
-};
-
-function barColor(status: string) {
-  if (status === "approved") return "bg-emerald-500/70";
-  if (status === "rejected" || status === "vetoed") return "bg-rose-500/70";
-  if (status === "pending" || status === "under_review")
-    return "bg-amber-500/70";
-  return "bg-stone-400/70";
-}
+// Verdict wording is shared with the overview changelog and the admin form.
+const STATUS_LABEL = PROPOSAL_STATUS_LABEL;
 
 function toTableRow(p: ProposalRow): ProposalTableRow {
   return {
@@ -68,7 +52,9 @@ export default async function PropostasPage({
   const { status: filterRaw } = await searchParams;
   const [isAdmin, all, links, applications] = await Promise.all([
     getIsAdmin(),
-    cached(`listProposals:all:${publicationDay()}`, LEDGER_TTL_MS, () => listProposals({})),
+    cached(`listProposals:all:${publicationDay()}`, LEDGER_TTL_MS, () =>
+      listProposals({}),
+    ),
     cached("links", LEDGER_TTL_MS, () => getLinks()),
     getGrantApplications(40),
   ]);
@@ -87,7 +73,8 @@ export default async function PropostasPage({
   // Cache-only reads, warmed by the same cron.
   const issueAmounts = getIssueAmounts();
   const [missingIssues, issueDecisions] = await Promise.all([
-    getMissingIssues(), getIssueDecisions(),
+    getMissingIssues(),
+    getIssueDecisions(),
   ]);
 
   // A sheet row still marked under review whose GitHub application was
@@ -117,7 +104,8 @@ export default async function PropostasPage({
       // hierarchy: a DECIDED source beats an undecided one (the sheet still
       // wins whenever it has decided), so a closed+labelled issue overrides a
       // sheet row stuck on "under review" (real case: #333 declined upstream).
-      const n = r.program === "zcg" ? issueNumberFromLink(r.platformLink) : null;
+      const n =
+        r.program === "zcg" ? issueNumberFromLink(r.platformLink) : null;
       const amt = n != null ? issueAmounts.get(n) : undefined;
       const dec =
         n != null && r.status === "under_review"
@@ -140,7 +128,10 @@ export default async function PropostasPage({
       source: "github" as const,
       platformLink: app.url ?? r.platformLink,
       amountUsd: app.amountUsd,
-      diligence: r.status === "under_review" ? diligence.get(app.number) ?? null : null,
+      diligence:
+        r.status === "under_review"
+          ? (diligence.get(app.number) ?? null)
+          : null,
     };
   });
 
@@ -177,7 +168,8 @@ export default async function PropostasPage({
   for (const row of allRows) {
     statusCounts.set(row.status, (statusCounts.get(row.status) ?? 0) + 1);
   }
-  const byStatus = [...statusCounts].map(([status, count]) => ({ status, count }))
+  const byStatus = [...statusCounts]
+    .map(([status, count]) => ({ status, count }))
     .sort((a, b) => b.count - a.count || a.status.localeCompare(b.status));
   const total = allRows.length;
   const approved = byStatus.find((b) => b.status === "approved")?.count ?? 0;
@@ -186,7 +178,9 @@ export default async function PropostasPage({
 
   // #8 How fast does ZCG decide? Average committee turnaround, from the dates
   // already recorded on each proposal.
-  const decided = all.filter((p) => p.program === "zcg" && p.decisionTurnaroundDays != null);
+  const decided = all.filter(
+    (p) => p.program === "zcg" && p.decisionTurnaroundDays != null,
+  );
   const avgDecisionDays = decided.length
     ? Math.round(
         decided.reduce((s, p) => s + (p.decisionTurnaroundDays ?? 0), 0) /
@@ -210,7 +204,10 @@ export default async function PropostasPage({
     return {
       ...r,
       daysInReview: days,
-      reviewOverdue: r.program === "zcg" && avgDecisionDays != null && days > avgDecisionDays,
+      reviewOverdue:
+        r.program === "zcg" &&
+        avgDecisionDays != null &&
+        days > avgDecisionDays,
     };
   });
 
@@ -221,10 +218,33 @@ export default async function PropostasPage({
     ? withAgeing.filter((r) => r.status === active)
     : withAgeing;
 
+  // One-line reading of the selection: how many, how long they have waited,
+  // how much they ask for, how many are past the committee's average.
+  const daysList = shownRows
+    .map((r) => r.daysInReview)
+    .filter((d): d is number => typeof d === "number")
+    .sort((a, b) => a - b);
+  const medianDays = daysList.length
+    ? daysList.length % 2
+      ? daysList[(daysList.length - 1) / 2]
+      : Math.round(
+          (daysList[daysList.length / 2 - 1] + daysList[daysList.length / 2]) / 2,
+        )
+    : null;
+  const amounts = shownRows
+    .map((r) => r.amountUsd)
+    .filter((a): a is number => typeof a === "number" && a > 0);
+  const selection = {
+    medianDays,
+    withAmount: amounts.length,
+    requestedUsd: Math.round(amounts.reduce((s, a) => s + a, 0)),
+    overdue: shownRows.filter((r) => r.reviewOverdue).length,
+  };
+
   return (
     <>
       <PageHeader
-        title="Proposals · Pipeline"
+        title="Proposals"
         subtitle="ZCG and Coinholder proposal history. Status changes are published the next day (Brasília time). Approval is not evidence of payment or delivery."
         actions={
           <a
@@ -263,89 +283,77 @@ export default async function PropostasPage({
         />
       </section>
 
-      <section className="mb-8">
-        <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-sm font-semibold text-stone-700">
-            Funnel by verdict
-          </h2>
-          <span className="text-xs text-stone-400">click to filter ↓</span>
-        </div>
-        <Card className="space-y-1.5">
-          {byStatus.map((b) => {
-            const isActive = active === b.status;
-            return (
-              <Link
-                key={b.status}
-                href={
-                  isActive
-                    ? "/zcg/proposals"
-                    : `/zcg/proposals?status=${b.status}`
-                }
-                scroll={false}
-                className={cn(
-                  "block rounded-lg px-2.5 py-1.5 transition",
-                  isActive
-                    ? "bg-amber-500/10 ring-1 ring-inset ring-amber-500/30"
-                    : "hover:bg-stone-100",
-                )}
-              >
-                <div className="flex items-center justify-between gap-2 text-xs">
-                  <span
-                    className={cn(
-                      "flex items-center gap-1.5",
-                      isActive
-                        ? "font-semibold text-amber-800"
-                        : "text-stone-700",
-                    )}
-                  >
-                    {STATUS_LABEL[b.status] ?? b.status}
-                    {isActive ? (
-                      <span className="text-amber-600">✓</span>
-                    ) : null}
-                  </span>
-                  <span
-                    className={cn(
-                      "tnum",
-                      isActive
-                        ? "font-semibold text-amber-800"
-                        : "text-stone-600",
-                    )}
-                  >
-                    {b.count}
-                  </span>
-                </div>
-                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-stone-100">
-                  <div
-                    className={cn("h-full rounded-full", barColor(b.status))}
-                    style={{
-                      width: `${maxStatus ? Math.max((b.count / maxStatus) * 100, 1.5) : 0}%`,
-                    }}
-                  />
-                </div>
-              </Link>
-            );
-          })}
-        </Card>
-      </section>
-
-      {active ? (
-        <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-stone-500">Filtered to</span>
-          <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 font-medium text-amber-800">
-            {STATUS_LABEL[active] ?? active} · {shownRows.length}
-          </span>
+      <SectionHeading
+        title="Application pipeline"
+        description="Explore the published status of each proposal. Select a verdict to narrow the records."
+      />
+      <nav className="ws-pipeline" aria-label="Proposal verdicts">
+        <Link href="/zcg/proposals" aria-current={!active ? "page" : undefined}>
+          <span>All proposals</span>
+          <strong>{total}</strong>
+        </Link>
+        {byStatus.map((b) => (
           <Link
-            href="/zcg/proposals"
+            key={b.status}
+            // Selecting the active verdict again clears the filter, and the
+            // page keeps its scroll position while the table re-renders.
+            href={
+              active === b.status
+                ? "/zcg/proposals"
+                : `/zcg/proposals?status=${b.status}`
+            }
             scroll={false}
-            className="font-medium text-stone-500 hover:text-stone-700"
+            aria-current={active === b.status ? "page" : undefined}
           >
+            <span>{STATUS_LABEL[b.status] ?? b.status}</span>
+            <strong>{b.count}</strong>
+            <i
+              style={{
+                width: `${maxStatus ? (b.count / maxStatus) * 100 : 0}%`,
+              }}
+            />
+          </Link>
+        ))}
+      </nav>
+      {active ? (
+        <div className="ws-selection" role="status">
+          <span>
+            <strong>{shownRows.length}</strong>{" "}
+            {(STATUS_LABEL[active] ?? active).toLowerCase()}
+          </span>
+          {selection.medianDays != null ? (
+            <span>
+              median <strong>{selection.medianDays} d</strong> in review
+            </span>
+          ) : null}
+          {selection.withAmount > 0 ? (
+            <span>
+              <strong className="tnum">
+                {formatUsdCents(BigInt(selection.requestedUsd) * 100n, {
+                  compact: false,
+                })}
+              </strong>{" "}
+              requested across {selection.withAmount} with an amount
+            </span>
+          ) : null}
+          {selection.overdue > 0 ? (
+            <span>
+              <strong className="ws-selection-warn">{selection.overdue}</strong>{" "}
+              past the {avgDecisionDays ?? "·"} d average
+            </span>
+          ) : null}
+          <Link href="/zcg/proposals" scroll={false} className="ws-selection-clear">
             Clear ✕
           </Link>
         </div>
       ) : null}
 
-      <Card className="overflow-hidden">
-        <ProposalsTable rows={shownRows} isAdmin={isAdmin} />
+      <Card className="overflow-hidden p-0">
+        <ProposalsTable
+          key={active ?? "all"}
+          rows={shownRows}
+          isAdmin={isAdmin}
+        />
       </Card>
 
       <p className="mt-3 text-xs text-stone-500">
@@ -395,34 +403,13 @@ export default async function PropostasPage({
 
       <Synced className="mt-4" />
 
-      {/* ZCG Copilot teaser — links the agent skill from the proposals context. */}
-      <section className="mt-8">
-        <Link href="/zcg/copilot" className="group block">
-          <div className="relative overflow-hidden border border-stone-900 bg-[#0b0d10] p-5 antialiased shadow-lg shadow-stone-400/30 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-xl">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl" />
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-400">
-                  ZCG Copilot · agent skill
-                </span>
-                <h2 className="mt-2 text-lg font-semibold tracking-tight text-white sm:text-xl">
-                  Every answer has a receipt.
-                </h2>
-                <p className="mt-1.5 max-w-xl font-mono text-xs leading-relaxed text-stone-500">
-                  ❯ Find any grants for merchants to accept Zcash. Funded, under
-                  review, declined. Exact totals, cited.
-                </p>
-              </div>
-              <span className="hidden shrink-0 items-center gap-2 border border-white/15 bg-black/60 px-4 py-2 font-mono text-sm text-emerald-400 transition group-hover:border-emerald-400/40 sm:inline-flex">
-                Open{" "}
-                <span className="transition group-hover:translate-x-0.5">
-                  →
-                </span>
-              </span>
-            </div>
-          </div>
-        </Link>
-      </section>
+      <FeatureLink
+        eyebrow="Research with sources"
+        title="Ask the ZCG Copilot"
+        description="Explore funded, under-review and declined proposals with links to the public evidence."
+        href="/zcg/copilot"
+        label="Open Copilot"
+      />
     </>
   );
 }

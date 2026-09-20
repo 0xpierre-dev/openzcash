@@ -1,3 +1,4 @@
+import { RecordLayout, RelatedLinks, Facts } from "@/components/workspace";
 import { PageHeader } from "@/components/ui";
 import { LockboxLiveFeed } from "@/components/lockbox-live-feed";
 import { currentZecUsdCents } from "@/lib/pricing/live-price";
@@ -42,12 +43,38 @@ export default async function TransacoesPage() {
         title="Lockbox · live funding"
         subtitle="Real-time view of the Zcash deferred Dev Fund. Every block mined adds 0.1875 ZEC (12% of the block subsidy) to the in-protocol Lockbox. This is the protocol funding stream read straight from the chain tip, not viewing-key data."
       />
-      <LockboxLiveFeed
-        initialHeight={initialHeight}
-        zecUsd={zecUsd}
-        baselineZec={baselineZec}
-        baselineHeight={baselineHeight}
-      />
+      <RecordLayout
+        aside={
+          <>
+            <Facts
+              title="How the Lockbox grows"
+              rows={[
+                ["Contribution", "0.1875 ZEC per block"],
+                ["Share", "12% of the block subsidy"],
+                ["Record", "Protocol funding stream"],
+                ["Source", "Chain tip and recorded baseline"],
+              ]}
+            />
+            <RelatedLinks
+              links={[
+                { href: "/zcg/coinholder/pool", label: "Coinholder pool" },
+                {
+                  href: "/zcg/reconciliation",
+                  label: "ZCG treasury reconciliation",
+                },
+                { href: "/zcg/methodology", label: "Sources & methodology" },
+              ]}
+            />
+          </>
+        }
+      >
+        <LockboxLiveFeed
+          initialHeight={initialHeight}
+          zecUsd={zecUsd}
+          baselineZec={baselineZec}
+          baselineHeight={baselineHeight}
+        />
+      </RecordLayout>
     </>
   );
 }

@@ -17,7 +17,7 @@ type Ev =
   | { kind: "pause"; ms: number };
 
 const USD = ({ v }: { v: string }) => (
-  <span className="text-amber-300">{v}</span>
+  <span className="ws-t-usd">{v}</span>
 );
 
 const EVENTS: Ev[] = [
@@ -35,7 +35,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-emerald-400">The ask:</span> #21
+        <span className="ws-t-pos">The ask:</span> #21
         Nozy Wallet (Leonine DAO), <USD v="$60,000" /> retroactive, for a
         shielded-first wallet: CLI, desktop, companion API
       </p>
@@ -45,7 +45,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-rose-400">History:</span> rejected
+        <span className="ws-t-neg">History:</span> rejected
         at <USD v="$21,000" /> in the Oct 2025 round, back now at nearly 3× that
         ask
       </p>
@@ -55,7 +55,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-sky-400">Ledger:</span> no paid ZCG
+        <span className="ws-t-accent">Ledger:</span> no paid ZCG
         or Coinholder rows, so approval would be their first public funding
       </p>
     ),
@@ -63,7 +63,7 @@ const EVENTS: Ev[] = [
   {
     kind: "line",
     node: (
-      <p className="text-[11px] text-stone-600">
+      <p className="ws-t-note">
         sources: /api/zcg/coinholder/round · ZCG sheet (Coinholder tab) ·
         /api/zcg/data/grants
       </p>
@@ -81,7 +81,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-emerald-400">
+        <span className="ws-t-pos">
           Funded and delivered:
         </span>{" "}
         Horizontal Systems has <USD v="$48,000" /> paid (Unstoppable Wallet,
@@ -93,7 +93,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-sky-400">Two tracks:</span> ZcashMe,
+        <span className="ws-t-accent">Two tracks:</span> ZcashMe,
         Inc asks <USD v="$122,400" /> for ZcashNames here, plus an open $92,200
         ZCG grant with 0 ZEC settled
       </p>
@@ -103,7 +103,7 @@ const EVENTS: Ev[] = [
     kind: "line",
     node: (
       <p>
-        <span className="font-semibold text-rose-400">Same org, twice:</span>{" "}
+        <span className="ws-t-neg">Same org, twice:</span>{" "}
         ValarGroup #32 + #36 add up to a <USD v="$1,802,000" /> combined ask
       </p>
     ),
@@ -111,7 +111,7 @@ const EVENTS: Ev[] = [
   {
     kind: "line",
     node: (
-      <p className="text-[11px] text-stone-600">
+      <p className="ws-t-note">
         sources: /api/zcg/data/grants · /api/zcg/data/recipients ·
         /api/zcg/coinholder/round
       </p>
@@ -126,7 +126,7 @@ const LOOP_HOLD_MS = 6500; // hold the finished transcript, then restart
 
 function Cursor() {
   return (
-    <span className="ml-0.5 inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] animate-pulse bg-emerald-400/90" />
+    <span className="ws-t-cursor" />
   );
 }
 
@@ -180,51 +180,44 @@ export function Terminal() {
   const current = EVENTS[idx];
 
   return (
-    <div className="overflow-hidden border border-stone-900 bg-[#0b0d10] shadow-2xl shadow-stone-400/40">
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-        <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-        <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-        <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-        <span className="ml-auto font-mono text-[11px] tracking-wide text-stone-500">
-          your agent
-        </span>
-      </div>
+    <div className="ws-terminal">
+      <div className="ws-terminal-head">your agent</div>
       <div
         ref={bodyRef}
-        className="h-[420px] space-y-4 overflow-hidden p-5 font-mono text-[13px] leading-relaxed antialiased sm:h-[460px]"
+        className="ws-terminal-body"
       >
         {EVENTS.slice(0, idx).map((ev, i) => {
           if (ev.kind === "pause") return null;
           if (ev.kind === "cmd")
             return (
-              <p key={i} className="text-stone-100">
-                <span className="mr-2 text-emerald-400">❯</span>
+              <p key={i} className="ws-t-ink">
+                <span className="ws-t-prompt">❯</span>
                 {ev.text}
               </p>
             );
           if (ev.kind === "status")
             return (
-              <p key={i} className="text-stone-500">
-                <span className="mr-2 text-emerald-500">●</span>
+              <p key={i} className="ws-t-dim">
+                <span className="ws-t-prompt">●</span>
                 {ev.text}
               </p>
             );
           return (
-            <div key={i} className="text-stone-300">
+            <div key={i} className="ws-t-body">
               {ev.node}
             </div>
           );
         })}
         {current?.kind === "cmd" ? (
-          <p className="text-stone-100">
-            <span className="mr-2 text-emerald-400">❯</span>
+          <p className="ws-t-ink">
+            <span className="ws-t-prompt">❯</span>
             {current.text.slice(0, typed)}
             <Cursor />
           </p>
         ) : null}
         {done ? (
-          <p className="text-stone-100">
-            <span className="mr-2 text-emerald-400">❯</span>
+          <p className="ws-t-ink">
+            <span className="ws-t-prompt">❯</span>
             <Cursor />
           </p>
         ) : null}

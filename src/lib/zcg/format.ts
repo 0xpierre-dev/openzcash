@@ -1,3 +1,5 @@
+import { grantStatusLabel } from "./status-labels";
+
 /** Format USD cents consistently across server and browser ICU versions. */
 export function formatUsdCents(
   cents: bigint | number | null | undefined,
@@ -22,17 +24,10 @@ export function formatUsdCents(
   }).format(n);
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Keyholder veto",
-  funds_returned: "Funds returned",
-};
-
+/** Row-level grant status in the ledger tables; same vocabulary as
+ *  `status-labels.ts`, with "·" for an empty cell. */
 export function disbStatusLabel(status: string | null): string {
-  if (!status) return "·";
-  return STATUS_LABELS[status] ?? status.replace(/_/g, " ");
+  return grantStatusLabel(status, "·");
 }
 
 const TYPE_LABELS: Record<string, string> = {

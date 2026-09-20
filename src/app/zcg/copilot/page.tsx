@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Terminal } from "./terminal";
-import { AddToAgent } from "./add-to-agent";
+import { CopilotPage } from "@/components/copilot/copilot-page";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -47,108 +47,31 @@ const SOURCES = [
   },
 ];
 
-export default function CopilotPage() {
+export default function ZcgCopilotPage() {
   return (
-    <div className="antialiased">
-      <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight text-stone-900">
-            ZCG Copilot
-          </h1>
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-500/25">
-            agent skill
-          </span>
-        </div>
-        <Link
-          href="/zcg/proposals"
-          className="text-xs text-stone-500 hover:text-stone-800"
-        >
-          ‹ Proposals
-        </Link>
-      </div>
-
-      <section className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
-        <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700">
-            An agent skill for Zcash funding
-          </p>
-          <h2 className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-stone-900 sm:text-6xl">
-            Every answer
-            <br />
-            has a receipt.
-          </h2>
-          <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-stone-600">
-            A skill that turns your coding agent into a ZCG grants copilot. Ask
-            about grants, spending, recipients, and proposals under review.
-            Answers come from the live public ledger, GitHub, and the forum,
-            with a citation on every figure, never from the model&apos;s memory.
-          </p>
-          <div className="mt-8 inline-block border border-stone-900 bg-[#0b0d10] px-5 py-3.5 shadow-lg shadow-stone-400/30">
-            <code className="font-mono text-sm text-emerald-400">
-              npx skills add Michae2xl/openzcash --skill zcg-copilot
-            </code>
-          </div>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-stone-400">
-            BYO-LLM · no key · no hosted service
-          </p>
-          <div className="mt-8">
-            <AddToAgent />
-          </div>
-        </div>
-        <Terminal />
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Ask things like
-        </p>
-        <div className="mt-4 grid gap-px border border-stone-200 bg-stone-200 sm:grid-cols-2">
-          {USE_CASES.map((u) => (
-            <div
-              key={u.q}
-              className="bg-white p-6 transition-colors hover:bg-stone-50"
-            >
-              <p className="font-mono text-[13px] leading-relaxed text-stone-900">
-                <span className="mr-1.5 text-emerald-600">❯</span>
-                {u.q}
-              </p>
-              <p className="mt-2.5 text-xs leading-relaxed text-stone-500">
-                {u.a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Grounded in four public sources
-        </p>
-        <div className="mt-4 grid gap-px border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4">
-          {SOURCES.map((s) => (
-            <div key={s.name} className="bg-white p-6">
-              <p className="font-mono text-[13px] font-semibold text-stone-900">
-                {s.name}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-stone-500">
-                {s.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-stone-400">
+    <CopilotPage
+      title="ZCG Copilot"
+      subtitle="Source-backed research for Zcash grants and public spending."
+      skill="zcg-copilot"
+      intro={
+        <>
+          A skill that turns your coding agent into a ZCG grants copilot. Ask
+          about grants, spending, recipients, and proposals under review.
+          Answers come from the live public ledger, GitHub, and the forum, with
+          a citation on every figure, never from the model&apos;s memory.
+        </>
+      }
+      examples={USE_CASES}
+      sources={SOURCES}
+      note={
+        <>
           The skill also encodes the data&apos;s real failure modes: same-title
           collisions between re-applications, requested vs paid confusion,
           milestone double counting. Methodology:{" "}
-          <Link
-            href="/zcg/methodology"
-            className="text-amber-700 hover:underline"
-          >
-            how we compute this
-          </Link>
-          .
-        </p>
-      </section>
-    </div>
+          <Link href="/zcg/methodology">how we compute this</Link>.
+        </>
+      }
+      terminal={<Terminal />}
+    />
   );
 }

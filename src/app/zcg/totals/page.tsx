@@ -1,3 +1,4 @@
+import { FeatureLink, SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import {
@@ -129,23 +130,31 @@ export default async function TotaisPage() {
         subtitle="Official aggregates from the ZCG spreadsheet (paid amounts by recipient and by classification), tagged by what each line is. They cross-check the ledger, since the spreadsheet only sums payments that actually settled."
       />
 
+      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat
+          label="Total paid"
+          value={formatUsdCents(total, { compact: true })}
+          sub="cumulative (spreadsheet)"
+          tone="warn"
+        />
+        <Stat
+          label="Future pipeline"
+          value={formatUsdCents(future, { compact: true })}
+          sub="milestones to pay"
+        />
+        <Stat
+          label="Categories"
+          value={String(cats.length)}
+          sub="ZCG classifications"
+        />
+        <Stat
+          label="Recipients"
+          value={String(external.length)}
+          sub="orgs (excludes internal buckets)"
+        />
+      </section>
+
       {/* Two separate funding pools — make it obvious which one this is. */}
-      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-stone-200 bg-stone-50/70 p-1.5">
-        <span className="rounded-lg bg-amber-500/15 px-3 py-1.5 text-sm font-semibold text-amber-800 ring-1 ring-inset ring-amber-500/25">
-          ZCG grants pool
-        </span>
-        <Link
-          href="/zcg/coinholder"
-          className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 transition hover:bg-white hover:text-stone-900"
-        >
-          Coinholder grants pool →
-        </Link>
-        <span className="px-1 text-xs text-stone-600">
-          Two separate pools. You&apos;re viewing the{" "}
-          <span className="font-medium text-stone-700">ZCG</span> committee
-          pool.
-        </span>
-      </div>
 
       <section className="mb-8">
         <div className="mb-3 flex items-baseline justify-between gap-3">
@@ -207,30 +216,10 @@ export default async function TotaisPage() {
         </Card>
       </section>
 
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
-          label="Total paid"
-          value={formatUsdCents(total, { compact: true })}
-          sub="cumulative (spreadsheet)"
-          tone="warn"
-        />
-        <Stat
-          label="Future pipeline"
-          value={formatUsdCents(future, { compact: true })}
-          sub="milestones to pay"
-        />
-        <Stat
-          label="Categories"
-          value={String(cats.length)}
-          sub="ZCG classifications"
-        />
-        <Stat
-          label="Recipients"
-          value={String(external.length)}
-          sub="orgs (excludes internal buckets)"
-        />
-      </section>
-
+      <SectionHeading
+        title="Funding breakdown"
+        description="Filter classifications and recipients, then follow each line into the underlying ledger."
+      />
       <TotalsTables categoryRows={categoryRows} recipientRows={recipientRows} />
 
       <Card
@@ -293,6 +282,13 @@ export default async function TotaisPage() {
         </p>
       </Card>
 
+      <FeatureLink
+        eyebrow="Look ahead"
+        title="Approved future payments"
+        description="Keep historical totals separate from dated upcoming commitments."
+        href="/zcg/schedule"
+        label="View schedule"
+      />
       <Synced className="mt-6" />
     </>
   );

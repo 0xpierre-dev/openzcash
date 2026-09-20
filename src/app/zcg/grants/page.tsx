@@ -1,27 +1,26 @@
+import { SourceNote } from "@/components/workspace";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { grantsSummary, listGrants } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { GrantsTable, type GrantTableRow } from "./grants-table";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { Synced } from "@/components/synced";
+import { grantStatusLabel as statusLabel } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grants ZCG · OpenZcash" };
 
-const STATUS_LABELS: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Veto",
-  funds_returned: "Funds returned",
-};
-
-function statusLabel(status: string | null): string {
-  if (!status) return "Unknown";
-  return STATUS_LABELS[status] ?? status.replace(/_/g, " ");
-}
-
-export default async function GrantsPage() {
+export default async function GrantsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    status?: string;
+    category?: string;
+    program?: string;
+    q?: string;
+  }>;
+}) {
+  const params = await searchParams;
   const [grants, summary] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
@@ -62,6 +61,7 @@ export default async function GrantsPage() {
         />
         <Stat
           label="Paid"
+          tone="in"
           value={formatUsdCents(summary.paidCents, { compact: true })}
           sub="milestones already paid"
         />
@@ -73,16 +73,33 @@ export default async function GrantsPage() {
       </section>
 
       <Card className="overflow-hidden p-0">
-        <div className="p-4">
-          <GrantsTable rows={rows} />
+        <div className="ws-ledger">
+          <GrantsTable
+            key={JSON.stringify(params)}
+            rows={rows}
+            initialPicks={{
+              ...(params.status
+                ? { status: [statusLabel(params.status)] }
+                : {}),
+              ...(params.category ? { category: [params.category] } : {}),
+              ...(params.program
+                ? {
+                    program: [
+                      params.program === "coinholder" ? "Coinholder" : "ZCG",
+                    ],
+                  }
+                : {}),
+            }}
+            initialQuery={params.q}
+          />
         </div>
       </Card>
 
-      <p className="mt-4 text-xs text-stone-600">
-        {grants.length} grants · one project per row · click to view its
-        milestones
-      </p>
-
+      <SourceNote>
+        One project per row. Paid values use the ledger’s budgeted USD amounts;
+        open commitments exclude cancelled grants. Payment records do not
+        independently establish delivery.
+      </SourceNote>
       <Synced className="mt-4" />
     </>
   );
