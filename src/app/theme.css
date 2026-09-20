@@ -1905,3 +1905,55 @@
     display: none;
   }
 }
+
+/* ---------- Reconciliation of two scopes: three lines, one sum ---------- */
+.rd-content .ws-reconcile {
+  margin: 0 0 28px;
+  padding: 4px 16px 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.rd-content .ws-reconcile h2 {
+  margin: 10px 0 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rd-content .ws-reconcile-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px 120px;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+.rd-content .ws-reconcile-row strong {
+  text-align: right;
+  font-weight: 500;
+  color: var(--ink);
+}
+.rd-content .ws-reconcile-row a {
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--accent-ink);
+}
+.rd-content .ws-reconcile-sum {
+  border-top: 2px solid var(--line-strong);
+}
+.rd-content .ws-reconcile-sum strong {
+  color: var(--accent-ink);
+}
+@media (max-width: 720px) {
+  .rd-content .ws-reconcile-row {
+    grid-template-columns: minmax(0, 1fr) 110px;
+  }
+  .rd-content .ws-reconcile-row a,
+  .rd-content .ws-reconcile-row > span:last-child {
+    display: none;
+  }
+}

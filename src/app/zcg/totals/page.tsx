@@ -99,7 +99,7 @@ export default async function TotaisPage() {
       label: "Committee stipends",
       sub:
         stipendTab && stipendTab.totalUsd > 0
-          ? `cumulative, every cohort · ${formatUsdCents(stipendTab.totalUsd, { compact: true })} of it in the 2026 monthly tab`
+          ? `cumulative, every cohort · ${formatUsdCents(stipendTab.totalUsd, { compact: true })} of it in the 2026 monthly tab · click for the split`
           : "cumulative salaries paid to ZCG members, every cohort",
       usd: stipendsUsd,
       bar: "bg-violet-500/70",
