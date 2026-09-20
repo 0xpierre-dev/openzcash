@@ -44,6 +44,11 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Don't advertise the framework/version in responses.
   poweredByHeader: false,
+  // The home is the ZCG overview. A server redirect answers before any
+  // rendering (the page-level redirect would stream behind loading.tsx).
+  async redirects() {
+    return [{ source: "/", destination: "/zcg", permanent: false }];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
