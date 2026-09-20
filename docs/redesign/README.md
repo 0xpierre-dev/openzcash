@@ -64,11 +64,12 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    frase que diz de onde o dado vem. Copy editorial entra em `EditorialIntro`,
    nunca no lugar da proveniência. As estatísticas (`Stat`) formam uma faixa
    única dividida por hairlines, sem cards coloridos.
-6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps na
-   ordem do launcher de produção (Monthly, News, Lockbox, ZCG, ZF, FPF, DeFi,
-   Z3, Zakura, Shielded Labs, ZecHub DAO, Arborist Calls, Communities, Wallets,
-   Ecosystem; Manage só para admin), cada um com logo oficial quando existe e
-   suas páginas internas. Tudo deriva dele: a sidebar (app com logo, páginas
+6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps com
+   ZCG em primeiro lugar e aberto por padrão, seguido de Lockbox, ZF, FPF,
+   Shielded Labs, ZecHub DAO, Z3, Zakura, Ecosystem, Wallets, Communities,
+   DeFi, Arborist Calls, News, Monthly (Manage só para admin), cada um com logo
+   oficial quando existe e suas páginas internas. Os apps "de entrada"
+   (Monthly, News, Lockbox) não abrem mais a lista. Tudo deriva dele: a sidebar (app com logo, páginas
    expansíveis, contagens), a trilha "Home › App › Página › Detalhe" no topo,
    o único controle de voltar (detalhe → lista, página → app, app → Home), as
    páginas irmãs no rodapé e o diálogo ⌘K. Nenhum `‹` inline. Links
@@ -78,12 +79,23 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 8. Tabelas usam `DataTable`: 25/50/100 linhas ou todas, CSV com o texto exibido,
    `mobileHidden` para colunas secundárias, `statusTabs={false}` quando a página
    já filtra por status na URL.
-9. Mobile primeiro: `grid-cols-2` nas estatísticas, nada de scroll horizontal
-   fora das tabelas; verificar a 390px e 1280px.
+9. Zero scroll lateral, em qualquer largura: `.rd-body` corta o overflow,
+   tabelas ocupam a coluna e quebram o conteúdo das células (`overflow-wrap`),
+   o layout de registro cai para uma coluna abaixo de 1100px e a barra de
+   tesourarias quebra linha. Verificar `scrollWidth <= innerWidth` em 390,
+   1024 e 1440px nas listas, no detalhe de grant e nos desembolsos.
 10. Ambiente: `OPENZCASH_ENV=redesign` liga a barra de preview, o `noindex` e a
     guarda de isolamento; `DISABLE_AUTO_REFRESH=true` congela a contabilidade
     (a diligência continua a aquecer). Sem essas variáveis o código se comporta
     como produção.
+11. Marcas são sempre PNG: logos oficiais em `public/logos/`, e para apps e
+    páginas sem logo os arquivos gerados por `scripts/gen-app-icons.mjs`
+    (`public/logos/apps/*.png`, `public/logos/pages/*.png`, a partir dos
+    ícones de `src/components/icons.tsx`). Nenhum SVG inline como marca na
+    sidebar, no launcher ou no diálogo ⌘K; só os chevrons de expandir e o
+    botão de fechar continuam vetoriais. O topo da sidebar é um banner
+    (`.rd-side-banner`, estilo Discord) com o ícone oficial, o nome e a tag
+    do ambiente.
 
 ## 4. Estado das trilhas
 
