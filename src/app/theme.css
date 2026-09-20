@@ -438,20 +438,11 @@
   grid-area: usd;
   color: var(--muted);
 }
-.rd-treasury-right {
+.rd-treasury-meta {
   grid-column: 3;
   justify-self: end;
-  display: grid;
-  justify-items: end;
-  row-gap: 3px;
-  text-align: right;
-  white-space: nowrap;
-}
-.rd-treasury-meta {
   color: var(--dim);
-}
-.rd-treasury-link {
-  color: var(--accent-ink);
+  white-space: nowrap;
 }
 
 /* ---------- Primitives: heading, stats strip, cards, tables, inputs ---------- */
@@ -484,6 +475,8 @@
   box-shadow: -1px -1px 0 0 var(--line);
   padding: 18px 22px;
   transform: none;
+  /* Every figure centred in its cell, the same padding on every cell. */
+  text-align: center;
 }
 .rd-content .oz-stat:hover {
   transform: none;
@@ -586,20 +579,6 @@
 }
 
 /* ---------- Home: launcher tiles in the same system ---------- */
-.rd-content .oz-launcher .bg-\[\#efeae0\] {
-  background-color: var(--surface2);
-}
-.rd-content .oz-launcher .bg-gradient-to-br {
-  background-image: none;
-  background-color: var(--accent-soft);
-}
-.rd-content .oz-launcher .bg-gradient-to-br .text-white {
-  color: var(--accent-ink);
-}
-.rd-content .oz-launcher .shadow-md,
-.rd-content .oz-launcher .shadow-lg {
-  box-shadow: none;
-}
 .rd-content .oz-pool .num-lg {
   font-weight: 400;
 }
@@ -824,7 +803,7 @@
     flex-wrap: wrap;
     gap: 8px 20px;
   }
-  .rd-treasury-right {
+  .rd-treasury-meta {
     display: none;
   }
   .rd-treasury-pool {

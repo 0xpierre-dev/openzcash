@@ -2,46 +2,12 @@
   font-size: clamp(27px, 2.8vw, 34px);
 }
 
+/* The summary uses the shell's shared stat strip (theme.css); only the
+   column count lives here. */
 .zcg-overview-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-bottom: 24px;
-  padding: 20px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat {
-  padding: 0 22px;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  transform: none;
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat:first-child {
-  padding-left: 0;
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat + .oz-stat {
-  border-left: 1px solid var(--line);
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat > span {
-  display: none;
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat > p {
-  padding: 0;
-}
-
-.zcg-overview .zcg-overview-metrics .oz-stat .num-lg {
-  margin: 8px 0 4px;
-  color: var(--ink);
-  background: none;
-  font-size: 27px;
-  letter-spacing: -0.7px;
 }
 
 .zcg-overview-primary {

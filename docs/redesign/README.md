@@ -71,8 +71,9 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    cada um com logo oficial quando existe e suas páginas internas. Zakura e
    ZODL abrem seus registros no Ecosystem (`?project=zakura`, `?org=zodl`).
    A home é a visão geral do ZCG: `/` redireciona para `/zcg`, o banner leva
-   para lá e não existe item "Home". As tesourarias e o launcher vivem em
-   `/treasury`, alcançado pela barra do rodapé e pelo diálogo ⌘K. Os apps "de entrada"
+   para lá e não existe item "Home". As tesourarias vivem só na barra do
+   rodapé, cada uma ligando à própria página; a antiga home com o launcher
+   de apps foi removida (a sidebar e o ⌘K são o diretório). Os apps "de entrada"
    (Monthly, News, Lockbox) não abrem mais a lista. Tudo deriva dele: a sidebar (app com logo, páginas
    expansíveis, contagens), a trilha "App › Página › Detalhe" no topo, o
    único controle de voltar (detalhe → lista, página → app, app → ZCG) e o

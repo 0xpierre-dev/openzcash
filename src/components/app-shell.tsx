@@ -359,9 +359,6 @@ export function AppShell({
             </Link>
           ) : null}
           <nav className="rd-breadcrumb" aria-label="Breadcrumb">
-            {!place && pathname === "/treasury" ? (
-              <span>Treasury at a glance</span>
-            ) : null}
             {place ? (
               <>
                 {place.page ? (
@@ -474,11 +471,6 @@ export function AppShell({
               </section>
             ) : null;
           })}
-        </div>
-        <div className="ws-dialog-foot">
-          <Link href="/treasury" onClick={close}>
-            Treasuries and all apps →
-          </Link>
         </div>
       </dialog>
     </div>

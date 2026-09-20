@@ -2,9 +2,10 @@ import Link from "next/link";
 import { getTreasurySummary } from "@/lib/zcash/treasury-summary";
 
 /**
- * The two treasuries, pinned to the bottom of every shell page. Server
- * component streamed into the client shell through a Suspense boundary, so
- * a slow price or chain source never delays the page itself.
+ * The two treasuries, pinned to the bottom of every shell page; each pool
+ * links to its own page. Server component streamed into the client shell
+ * through a Suspense boundary, so a slow price or chain source never delays
+ * the page itself.
  */
 export async function TreasuryBar() {
   const t = await getTreasurySummary();
@@ -28,16 +29,11 @@ export async function TreasuryBar() {
           </Link>
         ))}
       </div>
-      <div className="rd-treasury-right">
-        <span className="rd-treasury-meta tnum">
-          {t.height ? `block ${t.height}` : ""}
-          {t.height && t.price ? " · " : ""}
-          {t.price ? `ZEC ${t.price}` : ""}
-        </span>
-        <Link href="/treasury" className="rd-treasury-link">
-          Treasury at a glance →
-        </Link>
-      </div>
+      <span className="rd-treasury-meta tnum">
+        {t.height ? `block ${t.height}` : ""}
+        {t.height && t.price ? " · " : ""}
+        {t.price ? `ZEC ${t.price}` : ""}
+      </span>
     </div>
   );
 }

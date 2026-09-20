@@ -236,7 +236,11 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 
 - The home is the ZCG overview: `/` redirects to `/zcg`, the banner links
   there, the "Home" item is gone. The former home (treasuries and launcher)
-  lives at `/treasury`, reached from the treasury bar and the ⌘K dialog.
+  was removed altogether: the treasuries live in the bottom bar, each pool
+  linking to its page, and the sidebar and ⌘K are the app directory.
+- The stat strip is one shared component everywhere: the ZCG overview
+  dropped its flush-left variant (the first figure touched the box edge)
+  and every figure is centred in its cell.
 - The breadcrumb reads "App › Page › Detail"; the back control goes detail →
   list, page → app, app → ZCG. The sibling-page trail and the page footer
   are gone; the sidebar is the index.
