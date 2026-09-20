@@ -127,9 +127,9 @@ export const APPS: AppDef[] = [
     pages: [{ href: "/development", label: "Development", mark: "/logos/glyphs/development.png" },
       { href: "/defi", label: "DeFi", mark: "/logos/glyphs/defi.png" },
       { href: "/z3", label: "Z3", mark: "/logos/glyphs/z3.png" },
+      { href: "/wallets", label: "Wallets", mark: "/logos/glyphs/wallets.png" },
     ],
   },
-  { id: "wallets", label: "Wallets", href: "/wallets", sub: "Self-custody · shielded", logo: "/logos/marks/wallets.png", icon: "wallet", pages: [] },
   {
     id: "manage",
     label: "Manage",
