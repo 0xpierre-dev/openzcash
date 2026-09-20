@@ -7,7 +7,7 @@ import { getStipendSummary, type MemberStipend } from "@/lib/zcg/stipends";
 import { categoryTotals } from "@/lib/zcg/totals-repo";
 import { classifyLabel } from "@/lib/zcg/classification-tags";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
-import { MEMBERS } from "../current-committee-data";
+import { COHORTS, MEMBERS } from "../current-committee-data";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** "2026-01-05" → "Jan 2026". */
@@ -15,11 +15,12 @@ function monthOf(iso: string): string {
   const [y, m] = iso.split("-").map(Number);
   return m ? `${MONTHS[m - 1]} ${y}` : iso;
 }
-/** A stipend line belongs to a seated member when the seat's name is in it. */
-function isCurrent(m: MemberStipend): boolean {
+/** The seat behind a stipend line, when the seat's name is in it. */
+function seatOf(m: MemberStipend) {
   const who = m.member.toLowerCase();
-  return MEMBERS.some((seat) => who.includes(seat.name.toLowerCase()));
+  return MEMBERS.find((seat) => who.includes(seat.name.toLowerCase()));
 }
+const isCurrent = (m: MemberStipend) => seatOf(m) !== undefined;
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Committee stipends · OpenZcash" };
@@ -75,43 +76,58 @@ export default async function StipendsPage() {
 
       {members.length > 0 ? (
         [
-          { title: "Current committee", list: current, description: "Seated members, summed from the monthly-payments tab. Open a profile to inspect every dated payment and its source." },
+          { title: "Current committee", list: current, description: "Seated members, summed from the monthly-payments tab. Open a line to inspect every dated payment and its source." },
           { title: "Former members", list: former, description: "Members whose seat ended within the tab's range. Earlier cohorts are not in this tab; their stipends only exist in the all-time classification above." },
         ]
           .filter((g) => g.list.length > 0)
           .map(({ title, list, description }) => (
             <section key={title} className="mb-8">
               <SectionHeading title={title} count={list.length} description={description} />
-              <div className="ws-member-payments">
-            {list.map((m) => (
-              <Link
-                key={m.member}
-                href={`/zcg/recipient?r=${encodeURIComponent(m.member)}`}
-              >
-                <div className="ws-member-initial" aria-hidden>
-                  {m.member.slice(0, 1)}
+              <div className="ws-stipend-list">
+                <div className="ws-stipend-head" aria-hidden>
+                  <span>Member</span>
+                  <span>Paid</span>
+                  <span>Payments</span>
+                  <span>Period</span>
+                  <span />
                 </div>
-                <h2>{m.member}</h2>
-                <strong className="ws-amount-large">
-                  {formatUsdCents(m.totalUsd)}
-                </strong>
-                <dl>
-                  <div>
-                    <dt>Payments</dt>
-                    <dd>{m.payments}</dd>
-                  </div>
-                  <div>
-                    <dt>First payment</dt>
-                    <dd>{m.firstPaid || "Unknown"}</dd>
-                  </div>
-                  <div>
-                    <dt>Last payment</dt>
-                    <dd>{m.lastPaid || "Unknown"}</dd>
-                  </div>
-                </dl>
-                <span>Open payment history →</span>
-              </Link>
-            ))}
+                {list.map((m) => {
+                  const seat = seatOf(m);
+                  return (
+                    <Link
+                      key={m.member}
+                      href={`/zcg/recipient?r=${encodeURIComponent(m.member)}`}
+                      className="ws-stipend-row"
+                    >
+                      <span className="ws-stipend-who">
+                        {seat ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={seat.img} alt="" width={32} height={32} />
+                        ) : (
+                          <i aria-hidden>{m.member.slice(0, 1)}</i>
+                        )}
+                        <span>
+                          <strong>{seat?.name ?? m.member}</strong>
+                          <small>
+                            {seat
+                              ? `${COHORTS[seat.cohort].label} · ${seat.term}`
+                              : "seat ended"}
+                          </small>
+                        </span>
+                      </span>
+                      <strong className="ws-stipend-amount tnum">
+                        {formatUsdCents(m.totalUsd)}
+                      </strong>
+                      <span className="tnum">{m.payments}</span>
+                      <span className="ws-stipend-period tnum">
+                        {m.firstPaid && m.lastPaid
+                          ? `${monthOf(m.firstPaid)} → ${monthOf(m.lastPaid)}`
+                          : "Unknown"}
+                      </span>
+                      <span aria-hidden>→</span>
+                    </Link>
+                  );
+                })}
               </div>
             </section>
           ))
