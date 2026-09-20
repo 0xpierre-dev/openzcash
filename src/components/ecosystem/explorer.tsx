@@ -803,7 +803,7 @@ export function EcosystemExplorer({
       </div>
 
       <div className={styles.filters} role="group" aria-label="Catalog filters">
-        <label className={styles.search}>
+        <label className={`${styles.search} ws-field`}>
           <svg
             width="15"
             height="15"

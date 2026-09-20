@@ -2198,3 +2198,159 @@
     gap: 2px;
   }
 }
+
+/* ---------- Controls: one size, one radius, one border, everywhere ----------
+   Fields (inputs, selects) are 36px, radius 8, hairline border, surface
+   background, 13px text. A field wrapped in a box (.ws-field: the table
+   search, the explorer search) draws the box, and the input inside it is
+   bare. Toolbar buttons match the field height. These selectors outrank the
+   legacy rules in workspace.css and redesign.css. */
+.rd-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select):not(.ws-field > *) {
+  box-sizing: border-box;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 34px;
+  box-shadow: none;
+}
+.rd-content select:not(.ws-field > *) {
+  padding-right: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.rd-content textarea {
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  box-shadow: none;
+}
+.rd-content :is(input, select, textarea)::placeholder {
+  color: var(--dim);
+}
+.rd-content :is(input, select, textarea):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+/* The box that wraps a search input: it is the field. */
+.rd-content .ws-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--dim);
+  font-size: 13px;
+}
+.rd-content .ws-field:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.rd-content .ws-field > span,
+.rd-content .ws-field > svg {
+  flex-shrink: 0;
+  font-size: 15px;
+  color: var(--dim);
+}
+.rd-content .ws-field > input:not([type="checkbox"]):not([type="radio"]) {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: normal;
+  box-shadow: none;
+  outline: none;
+}
+/* Toolbar and form buttons sit on the field height. */
+.rd-content .ws-button,
+.rd-content .ws-table-facets button,
+.rd-content .ws-filter-panel button {
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 13px;
+  line-height: 34px;
+}
+.rd-content .ws-table-facets select {
+  max-width: 200px;
+}
+/* Table foot: rows-per-page select and the pager share a 30px line. */
+.rd-content .ws-table-footer select:not(.ws-field > *) {
+  height: 30px;
+  min-height: 30px;
+  padding: 0 26px 0 10px;
+  line-height: 28px;
+  font-size: 12.5px;
+}
+.rd-content .ws-table-footer button {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+/* Tab rows never push their controls out of the column. */
+.rd-content .ws-catalog-tabs {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+/* Legacy sizes that no longer apply. */
+.rd-content .ws-filter-panel {
+  align-items: end;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+/* ---------- Phones: wide tables scroll inside their card, tab rows wrap ---------- */
+@media (max-width: 720px) {
+  .rd-content .ws-table-wrap,
+  .rd-content .ws-ledger,
+  .rd-content .overflow-x-auto,
+  .rd-content .overflow-hidden:has(> table),
+  .rd-content .p-0:has(> table) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rd-content .ws-table-wrap table,
+  .rd-content .ws-ledger table,
+  .rd-content .overflow-x-auto > table,
+  .rd-content .overflow-hidden > table,
+  .rd-content .p-0 > table {
+    min-width: max-content;
+  }
+  .rd-content td,
+  .rd-content th {
+    overflow-wrap: normal;
+  }
+  .rd-content .ws-status-tabs,
+  .rd-content .ws-pipeline {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
