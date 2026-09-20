@@ -1,7 +1,38 @@
 import { describe, expect, it } from "vitest";
-import { MEMBERS } from "./current-committee-data";
+import {
+  COHORTS,
+  MEMBERS,
+  membersByCohort,
+  officeMembers,
+} from "./current-committee-data";
 
 describe("current committee public record", () => {
+  it("seats the 3D office from the same source-linked facts", () => {
+    const office = officeMembers();
+    expect(office.map((m) => m.name)).toEqual(MEMBERS.map((m) => m.name));
+    for (const seat of office) {
+      const member = MEMBERS.find((m) => m.name === seat.name)!;
+      expect(seat.img).toBe(member.img);
+      for (const tag of seat.tags) {
+        expect(member.facts.map((f) => f.label)).toContain(tag);
+      }
+    }
+    // A current role leads the caption when the member has one.
+    expect(office.find((m) => m.name === "hanh")?.tags[0]).toBe(
+      "Zkool · creator (current)",
+    );
+  });
+
+  it("groups every seat into one of the two cohorts", () => {
+    const groups = membersByCohort();
+    expect(groups.flatMap((g) => g.members)).toHaveLength(MEMBERS.length);
+    for (const g of groups) {
+      expect(COHORTS[g.cohort].termEnds).toBeTruthy();
+      for (const m of g.members)
+        expect(m.term).toContain(COHORTS[g.cohort].termEnds.slice(0, 3));
+    }
+  });
+
   it("keeps all five forum profiles and facts source-linked", () => {
     expect(MEMBERS).toHaveLength(5);
 
@@ -47,9 +78,11 @@ describe("current committee public record", () => {
       "/zcg/grant?g=zaino%20-%20Stability%2C%20Performance%20%26%20Testing",
       "/zcg/grant?g=Maintenance%20and%20Improvements%20to%20Coin%20Voting",
     ]);
-    expect(hanh?.ledgerFacts?.every((fact) => fact.source.includes("docs.google.com"))).toBe(
-      true,
-    );
+    expect(
+      hanh?.ledgerFacts?.every((fact) =>
+        fact.source.includes("docs.google.com"),
+      ),
+    ).toBe(true);
   });
 
   it("keeps Paul's current role separate from the grant-linked organization", () => {

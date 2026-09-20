@@ -205,6 +205,28 @@ Correctness fixes in the new code:
 - The startup guard is conditional on `OPENZCASH_ENV=redesign` (see above).
 
 Not changed on purpose: the treasury cards removed from `/zcg` in the previous
-revision stay on the home launcher; the stipends page keeps its card layout;
-the office `MEMBERS` list and the committee page still read from
-`current-committee-data.ts`, which the redesign plan wants unified later.
+revision stay on the home launcher; the stipends page keeps its card layout.
+
+### Governance revision — 20 September 2026
+
+Closes the open items of the organisational trail (`docs/redesign/README.md`,
+§4):
+
+- `/zcg/committee` now answers "who decides, for how long, and paid how":
+  seats and source-linked roles, terms by cohort, election history, stipend
+  totals per member (former members marked), the last five meeting minutes,
+  the discretionary budget cards and the ZCAP voter count with a link to `/zf`.
+  Each block degrades on its own if its source is unreachable.
+- One source for the committee: the 3D office derives its seats from
+  `officeMembers()` in `current-committee-data.ts`; the seat caption is the
+  member's leading source-linked fact. The unsourced office tags are gone.
+- Stipend aggregation moved to `lib/zcg/stipends-summary.ts` (pure, tested)
+  and `lib/zcg/stipends.ts` (cached ledger read), shared by both pages.
+- Status labels come from `lib/zcg/status-labels.ts` everywhere (grant status,
+  ZCG verdicts, coinholder verdicts); the six local maps are gone. Grant
+  status wording is now uniform ("Keyholder veto", "Funds returned").
+- The last inline `‹` links (office, stipends, disbursement banners) are gone;
+  the shell's back control is the only "back".
+- `docs/redesign/README.md` replaces the 8 September plan with the boundary
+  actually adopted (launcher, Monthly and the 3D room preserved; everything
+  else in scope) and `scripts/redesign-scope-check.sh` guards that set.

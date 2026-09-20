@@ -3,7 +3,7 @@ import { Card, PageHeader, Stat } from "@/components/ui";
 import { listGrants } from "@/lib/zcg/grants-repo";
 import { listProposals, proposalsFunnel } from "@/lib/zcg/proposals-repo";
 import { getLinks } from "@/lib/zcg/governance-repo";
-import { disbStatusLabel, formatUsdCents } from "@/lib/zcg/format";
+import { formatUsdCents } from "@/lib/zcg/format";
 import {
   FpfGrantsTable,
   FpfProposalsTable,
@@ -12,34 +12,21 @@ import {
 } from "./fpf-tables";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { publicationDay } from "@/lib/zcg/publication-policy";
+import {
+  COINHOLDER_VERDICT_LABEL,
+  grantStatusLabel as sharedGrantStatusLabel,
+} from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
   title: "FPF · Coinholder Grants · OpenZcash",
 };
 
-const GRANT_STATUS_LABEL: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Keyholder veto",
-  funds_returned: "Funds returned",
-};
-
-const PROPOSAL_VERDICT_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Not considered",
-  under_review: "Under review",
-  pending: "Pending vote",
-  vetoed: "Keyholder veto",
-};
+// Shared vocabularies; the coinholder programme keeps its own verdict wording.
+const PROPOSAL_VERDICT_LABEL = COINHOLDER_VERDICT_LABEL;
 
 function grantStatusLabel(status: string | null): string {
-  if (!status) return "·";
-  return GRANT_STATUS_LABEL[status] ?? disbStatusLabel(status);
+  return sharedGrantStatusLabel(status, "·");
 }
 
 export default async function FpfCoinholderGrantsPage() {

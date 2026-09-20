@@ -6,22 +6,10 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { GrantsTable, type GrantTableRow } from "./grants-table";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { Synced } from "@/components/synced";
+import { grantStatusLabel as statusLabel } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grants ZCG · OpenZcash" };
-
-const STATUS_LABELS: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Veto",
-  funds_returned: "Funds returned",
-};
-
-function statusLabel(status: string | null): string {
-  if (!status) return "Unknown";
-  return STATUS_LABELS[status] ?? status.replace(/_/g, " ");
-}
 
 export default async function GrantsPage({
   searchParams,

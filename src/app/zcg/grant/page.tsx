@@ -14,17 +14,13 @@ import { grantMilestones } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
 import { SourceRecordLink } from "@/components/source-record-link";
+import { GRANT_STATUS_LABEL } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grant detail · OpenZcash" };
 
-const STATUS_LABEL: Record<string, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  open: "Open",
-  keyholder_veto: "Veto",
-  funds_returned: "Returned",
-};
+// Same wording as the grants list, the FPF tables and the admin form.
+const STATUS_LABEL = GRANT_STATUS_LABEL;
 
 export default async function GrantDetailPage({
   searchParams,

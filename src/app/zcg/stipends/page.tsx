@@ -3,66 +3,19 @@ import Link from "next/link";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { Synced } from "@/components/synced";
 import { formatUsdCents } from "@/lib/zcg/format";
-import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
-import { listDisbursements } from "@/lib/zcg/disbursements-repo";
+import { getStipendSummary } from "@/lib/zcg/stipends";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Committee stipends · OpenZcash" };
 
-type MemberStipend = {
-  member: string;
-  totalUsd: number;
-  payments: number;
-  firstPaid: string;
-  lastPaid: string;
-};
-
 export default async function StipendsPage() {
-  const rows = await cached("stipends:monthly", LEDGER_TTL_MS, () =>
-    listDisbursements({ sheet: "monthly", limit: 1000 }),
-  );
-
-  const byMember = new Map<string, MemberStipend>();
-  for (const d of rows) {
-    const member = d.recipientNameRaw || "Unknown";
-    const usd = d.amountUsdCents != null ? Number(d.amountUsdCents) : 0;
-    const date = d.paidOutDate ?? "";
-    const cur = byMember.get(member);
-    if (!cur) {
-      byMember.set(member, {
-        member,
-        totalUsd: usd,
-        payments: 1,
-        firstPaid: date,
-        lastPaid: date,
-      });
-    } else {
-      cur.totalUsd += usd;
-      cur.payments += 1;
-      if (date && (!cur.firstPaid || date < cur.firstPaid))
-        cur.firstPaid = date;
-      if (date && date > cur.lastPaid) cur.lastPaid = date;
-    }
-  }
-  const members = [...byMember.values()].sort(
-    (a, b) => b.totalUsd - a.totalUsd,
-  );
-  const total = members.reduce((s, m) => s + m.totalUsd, 0);
-  const totalPayments = members.reduce((s, m) => s + m.payments, 0);
+  const { members, totalUsd: total, totalPayments } = await getStipendSummary();
 
   return (
     <>
       <PageHeader
         title="Committee stipends"
         subtitle="Monthly stipends paid to each ZCG committee member. This is the committee's own compensation, not a grant. Mirrored from the ZCG monthly-payments sheet."
-        actions={
-          <Link
-            href="/zcg/totals"
-            className="text-xs text-stone-600 hover:text-stone-800"
-          >
-            ‹ Totals
-          </Link>
-        }
       />
 
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">

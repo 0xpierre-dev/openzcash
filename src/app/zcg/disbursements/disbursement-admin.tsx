@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { GRANT_STATUS_LABEL } from "@/lib/zcg/status-labels";
 
 const SHEETS: { v: string; l: string }[] = [
   { v: "grants_disbursed", l: "Grant" },
@@ -21,11 +22,7 @@ const STATUSES = [
 ] as const;
 const STATUS_LABEL: Record<string, string> = {
   "": "(none)",
-  completed: "Completed",
-  open: "Open",
-  cancelled: "Cancelled",
-  keyholder_veto: "Keyholder veto",
-  funds_returned: "Funds returned",
+  ...GRANT_STATUS_LABEL,
 };
 
 /** Editable shape carried from the server row into the form. */

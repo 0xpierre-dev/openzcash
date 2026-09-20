@@ -9,6 +9,7 @@ import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import {
   MEMBERS,
   OFFICIAL_LEDGER_URL,
+  SEATED_FROM,
   type FactTone,
   type LedgerFact,
   type Member,
@@ -158,7 +159,7 @@ function MemberCard({
                 Ledger record unavailable
               </span>
             )}
-            {m.ledgerFacts?.map((fact) => (
+            {m.ledgerFacts?.map((fact) =>
               fact.href ? (
                 <Link
                   key={fact.label}
@@ -187,8 +188,8 @@ function MemberCard({
                 >
                   {fact.label} ↗
                 </a>
-              )
-            ))}
+              ),
+            )}
           </div>
           {record ? (
             <Link
@@ -232,7 +233,7 @@ export async function CurrentCommittee() {
           Current committee
         </h2>
         <span className="text-xs font-medium text-stone-600">
-          5 seats · from July 2026
+          {MEMBERS.length} seats · from {SEATED_FROM}
         </span>
       </div>
 

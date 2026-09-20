@@ -21,20 +21,13 @@ import {
 import { issueNumberFromLink } from "@/lib/zcg/issue-link";
 import { Synced } from "@/components/synced";
 import { publicationDay } from "@/lib/zcg/publication-policy";
+import { PROPOSAL_STATUS_LABEL } from "@/lib/zcg/status-labels";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZCG Proposals · OpenZcash" };
 
-const STATUS_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Filtered",
-  under_review: "Under review",
-  pending: "Pending",
-  vetoed: "Vetoed",
-};
+// Verdict wording is shared with the overview changelog and the admin form.
+const STATUS_LABEL = PROPOSAL_STATUS_LABEL;
 
 function toTableRow(p: ProposalRow): ProposalTableRow {
   return {

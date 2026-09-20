@@ -169,7 +169,7 @@ export default async function DesembolsosPage({
             href="/zcg/totals"
             className="text-xs text-stone-600 hover:text-stone-800"
           >
-            ‹ Back to totals
+            Totals →
           </Link>
         </div>
       ) : null}
@@ -186,7 +186,7 @@ export default async function DesembolsosPage({
             href="/zcg/analytics"
             className="text-xs text-stone-600 hover:text-stone-800"
           >
-            ‹ Back to insights
+            Insights →
           </Link>
         </div>
       ) : null}
@@ -201,7 +201,7 @@ export default async function DesembolsosPage({
             href="/zcg/analytics"
             className="text-xs text-stone-600 hover:text-stone-800"
           >
-            ‹ Back to insights
+            Insights →
           </Link>
         </div>
       ) : null}

@@ -32,6 +32,30 @@ export interface Member {
   ledgerFacts?: LedgerFact[];
 }
 
+/** Month the current composition took office (June 2026 election results). */
+export const SEATED_FROM = "July 2026";
+
+export type Cohort = Member["cohort"];
+
+/** The two half-yearly cohorts that make up the committee. Term ends come
+ *  from each member's public record (`term`); the election that filled the
+ *  seats is listed on the committee page's election history. */
+export const COHORTS: Record<
+  Cohort,
+  { label: string; elected: string; termEnds: string }
+> = {
+  "dec-2025": {
+    label: "December 2025 cohort",
+    elected: "December 2025 election",
+    termEnds: "December 2026",
+  },
+  "june-2026": {
+    label: "June 2026 cohort",
+    elected: "June 2026 election",
+    termEnds: "June 2027",
+  },
+};
+
 export const OFFICIAL_LEDGER_URL = `https://docs.google.com/spreadsheets/d/${ZCG_SHEET_ID}/edit`;
 const ledgerRangeUrl = (gid: string, range: string) =>
   `${OFFICIAL_LEDGER_URL}#gid=${gid}&range=${range}`;
@@ -182,3 +206,32 @@ export const MEMBERS: Member[] = [
     ledger: { recipient: "Artkor", relation: "direct" },
   },
 ];
+
+/** Members grouped by cohort, in seating order. */
+export function membersByCohort(): { cohort: Cohort; members: Member[] }[] {
+  return (Object.keys(COHORTS) as Cohort[]).map((cohort) => ({
+    cohort,
+    members: MEMBERS.filter((m) => m.cohort === cohort),
+  }));
+}
+
+const TONE_ORDER: FactTone[] = ["current", "identity", "past"];
+
+/**
+ * The 3D office reads the same public record as the committee cards: each
+ * seat's caption is the member's leading source-linked fact (current role
+ * first, then identity, then history). A committee change is one edit, here.
+ */
+export function officeMembers(): {
+  name: string;
+  img: string;
+  tags: string[];
+}[] {
+  return MEMBERS.map((m) => ({
+    name: m.name,
+    img: m.img,
+    tags: [...m.facts]
+      .sort((a, b) => TONE_ORDER.indexOf(a.tone) - TONE_ORDER.indexOf(b.tone))
+      .map((f) => f.label),
+  }));
+}

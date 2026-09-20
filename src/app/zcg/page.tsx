@@ -23,6 +23,7 @@ import { formatZecCompact } from "@/lib/zcash/units";
 import { ElectionsSection } from "./elections-section";
 import { CurrentCommittee } from "./current-committee";
 import { listChangelog } from "@/lib/zcg/changelog";
+import { proposalStatusLabel } from "@/lib/zcg/status-labels";
 import "./overview.css";
 
 export const dynamic = "force-dynamic";
@@ -130,17 +131,7 @@ const PRIMARY_ROUTES = [
   "/zcg/recipients",
 ];
 
-const CHANGE_LABEL: Record<string, string> = {
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-  cancelled: "Cancelled",
-  filtered: "Filtered",
-  under_review: "Under review",
-  pending: "Pending",
-  vetoed: "Vetoed",
-};
-const changeLabel = (v: string | null) => (v && CHANGE_LABEL[v]) || v || "·";
+const changeLabel = (v: string | null) => proposalStatusLabel(v);
 
 export default async function ZcgPage() {
   const [s, changes, schedule] = await Promise.all([
