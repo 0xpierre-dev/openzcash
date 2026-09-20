@@ -305,12 +305,25 @@ function parseBalanceSheet(
  * ZEC) à esquerda e um bloco de KPIs à direita. Para o snapshot de liquidez
  * pegamos os KPIs (USD em carteira, ZEC em carteira); CACAO é ignorado.
  */
-function parseMayaSnapshot(
+export function parseMayaSnapshot(
   rows: string[][],
   gid: string,
   importedAt: Date,
 ): BalanceInput {
-  const map = buildLabelMap(rows);
+  // The KPI block sits to the right of the transfers table (label in one
+  // column, value in the next), so the label map is built from every column,
+  // not just the first one like the balance tabs.
+  const map = new Map<string, string[]>();
+  let kpiAsOf: string | null = null;
+  for (const r of rows) {
+    for (let c = 0; c < r.length; c++) {
+      const label = normLabel(r[c] ?? "");
+      if (!label) continue;
+      const asOf = /^kpis as of (.+?)\s*$/i.exec(r[c] ?? "");
+      if (asOf) kpiAsOf = asOf[1].replace(/[:\s]*utc[:\s]*$/i, "").replace(/:$/, "").trim();
+      if (!map.has(label)) map.set(label, r.slice(c + 1));
+    }
+  }
   const scope = "maya_liquidity";
   const capturedAt = importedAt;
   return {
@@ -319,18 +332,20 @@ function parseMayaSnapshot(
     capturedAt,
     blockHeight: null,
     blockTime: null,
-    status: null,
-    // KPIs ficam na coluna após o rótulo; varremos col 0..2 dos valores.
+    // The sheet's own "KPIs as of <date>" stamp, so the page can say how
+    // fresh the wallet figures are (they are updated by hand, not live).
+    status: kpiAsOf ? `kpis as of ${kpiAsOf}` : null,
     zecBalanceZat: parseZecToZat(pickMulti(map, ["ZEC"])),
     usdCashBalanceCents: parseUsdCents(pickMulti(map, ["USD Value in Wallet"])),
     zecusdPriceCents: null,
     usdValueOfZecCents: parseUsdCents(
-      pickMulti(map, ["Current Value of ZEC transferred (USD)"]),
+      pickMulti(map, ["Current Value of ZEC transferred (USD)", "Current Value of ZEC transferred ("]),
     ),
     usdTotalHoldingsCents: null,
     usdGrantsApprovedCents: null,
     usdMilestonesPaidCents: null,
     futureGrantLiabilitiesCents: null,
+    // CACAO held in the wallet, in its own unit (never added to ZEC).
     zecReceivablesZat: null,
     sourceSheetGid: gid,
     importedAt,

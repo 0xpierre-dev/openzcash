@@ -22,10 +22,11 @@ describe("compact catalog presentation", () => {
     expect(html).not.toContain("Integration preview");
   });
 
-  it.each(["ecosystem", "development"] as const)("uses the shared page header and stats in %s", mode => {
+  it.each(["ecosystem", "development"] as const)("uses the organisation header with the Zcash mark and the stats in %s", mode => {
     const html = render(mode);
     expect(html).toContain(`${mode === "development" ? "Development" : "Ecosystem"}</h1>`);
-    expect(html).toContain("text-2xl font-semibold tracking-tight text-stone-900");
+    expect(html).toContain('class="ws-org-head"');
+    expect(html).toContain("/logos/ecosystem/zcash.png");
     expect(html).toContain("Catalog statistics");
     expect(html).toContain("bg-clip-text text-transparent");
     expect(html).not.toContain("Follow the code.");
