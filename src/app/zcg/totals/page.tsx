@@ -17,12 +17,13 @@ import {
 } from "./totals-tables";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { bountyUsd, getDiscretionaryLines } from "@/lib/zcg/discretionary";
+import { getStipendSummary } from "@/lib/zcg/stipends";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Totals ZCG · OpenZcash" };
 
 export default async function TotaisPage() {
-  const [cats, recips, grand, ledgerGrantsPaid, discretionary] = await Promise.all([
+  const [cats, recips, grand, ledgerGrantsPaid, discretionary, stipendTab] = await Promise.all([
     cached("totals:cats:zcg_grants", LEDGER_TTL_MS, () =>
       categoryTotals("zcg_grants"),
     ),
@@ -35,6 +36,8 @@ export default async function TotaisPage() {
     cached("totals:ledgerGrants", LEDGER_TTL_MS, () => ledgerGrantsPaidCents()),
     // What the discretionary budget paid for; never blocks the page.
     getDiscretionaryLines().catch(() => []),
+    // The monthly-payments tab, the narrower scope the stipends page sums.
+    getStipendSummary().catch(() => null),
   ]);
   const opsBounties = bountyUsd(discretionary);
 
@@ -94,7 +97,10 @@ export default async function TotaisPage() {
     },
     {
       label: "Committee stipends",
-      sub: "salaries paid to ZCG members",
+      sub:
+        stipendTab && stipendTab.totalUsd > 0
+          ? `cumulative, every cohort · ${formatUsdCents(stipendTab.totalUsd, { compact: true })} of it in the 2026 monthly tab`
+          : "cumulative salaries paid to ZCG members, every cohort",
       usd: stipendsUsd,
       bar: "bg-violet-500/70",
       tone: "violet" as const,
