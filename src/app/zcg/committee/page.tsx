@@ -53,7 +53,12 @@ export default async function CommitteePage() {
     getZcapMembers().catch(() => null),
   ]);
   const latestMinutes = meetings.slice(0, LATEST_MINUTES);
-  const currentNames = new Set(MEMBERS.map((m) => m.name.toLowerCase()));
+  // A stipend line belongs to a seated member when the seat's name is in it
+  // ("PGP for Crypto (Paul Brigner)" is Paul Brigner's line).
+  const seatOf = (member: string) =>
+    MEMBERS.find((seat) => member.toLowerCase().includes(seat.name.toLowerCase()));
+  const seated = stipends ? stipends.members.filter((m) => seatOf(m.member)) : [];
+  const former = stipends ? stipends.members.filter((m) => !seatOf(m.member)) : [];
   const seats = MEMBERS.length;
 
   return (
@@ -87,7 +92,7 @@ export default async function CommitteePage() {
           }
           sub={
             stipends
-              ? `${stipends.members.length} members · ${stipends.totalPayments} payments · monthly tab, 2026`
+              ? `${seated.length} seated${former.length ? ` + ${former.length} former` : ""} · ${stipends.totalPayments} payments · monthly tab, 2026`
               : "ledger temporarily unavailable"
           }
           tone="warn"
@@ -158,8 +163,8 @@ export default async function CommitteePage() {
         <Card>
           <SectionHeading
             title="Compensation"
-            count={stipends ? stipends.members.length : undefined}
-            description="Monthly stipends paid to committee members, summed from the monthly-payments tab. Former members stay in the record."
+            count={stipends ? seated.length : undefined}
+            description={`Monthly stipends paid to the seated members, summed from the monthly-payments tab (2026).${former.length ? ` ${former.length} former member${former.length > 1 ? "s" : ""} listed below.` : ""}`}
             action={
               <Link
                 href="/zcg/stipends"
@@ -171,17 +176,15 @@ export default async function CommitteePage() {
           />
           {stipends && stipends.members.length > 0 ? (
             <div>
-              {stipends.members.map((m) => (
+              {[...seated, ...former].map((m) => (
                 <div className="rd-breakdown" key={m.member}>
                   <span>
                     <Link
                       href={`/zcg/recipient?r=${encodeURIComponent(m.member)}`}
                       className="hover:text-amber-700"
                     >
-                      {m.member}
-                      {currentNames.has(m.member.toLowerCase())
-                        ? ""
-                        : " · former"}
+                      {seatOf(m.member)?.name ?? m.member}
+                      {seatOf(m.member) ? "" : " · former"}
                     </Link>
                     <small>
                       {m.payments} payments
