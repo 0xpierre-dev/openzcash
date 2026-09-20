@@ -4,6 +4,7 @@ import Link from "next/link";
 import { EditorialIntro } from "@/components/workspace";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type {
   Catalog,
   ClassifiedRepository,
@@ -39,6 +40,7 @@ import { BrandMark, CategoryBadge } from "./identity";
 import { categoryStyle } from "./presentation";
 
 type Mode = "ecosystem" | "development";
+const isDevelopmentMode = (mode: Mode) => mode === "development";
 type Selection =
   | { kind: "project"; value: Project }
   | { kind: "repository"; value: ClassifiedRepository }
@@ -576,29 +578,40 @@ export function EcosystemExplorer({
   const [selection, setSelection] = useState<Selection | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
   const methodologyRef = useRef<HTMLDetailsElement>(null);
+  // The URL is the source of truth for what the menu opens: `?org=zodl`
+  // filters to an organisation and shows its record above the results,
+  // `?project=zakura` filters to a project. Applied after hydration, so server
+  // and client markup begin identically, and again on every client
+  // navigation, so ZODL → Zakura → Tachyon never keeps a stale panel open.
+  // Null outside the app router (static renders in tests).
+  const searchParams = useSearchParams() as ReturnType<typeof useSearchParams> | null;
+  const projectParam = searchParams?.get("project") ?? null;
+  const orgParam = searchParams?.get("org") ?? null;
+  const registryProjects = catalog.registry.projects;
+  const registryOrganizations = catalog.registry.organizations;
   useEffect(() => {
-    // URL filters are applied after hydration, so server and client markup
-    // begin identically and direct links from project details remain usable.
-    const params = new URLSearchParams(window.location.search);
-    const project = params.get("project");
-    if (
-      project &&
-      catalog.registry.projects.some((item) => item.id === project)
-    ) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setProjectId(project);
-    }
-    // `?org=` opens an organization the way the menu opens ZODL: its
-    // projects filtered and its funding record selected.
-    const org = params.get("org");
-    const organizationRecord = org
-      ? catalog.registry.organizations.find((item) => item.id === org)
+    const projectRecord = projectParam
+      ? registryProjects.find((item) => item.id === projectParam)
       : undefined;
+    const organizationRecord = orgParam
+      ? registryOrganizations.find((item) => item.id === orgParam)
+      : undefined;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelection(null);
+    setPage(1);
     if (organizationRecord) {
       setOrganization(organizationRecord.id);
-      setSelection({ kind: "organization", value: organizationRecord });
+      setProjectId(null);
+    } else if (projectRecord) {
+      setOrganization("");
+      setProjectId(projectRecord.id);
+    } else {
+      setProjectId(null);
     }
-  }, [catalog.registry.projects, catalog.registry.organizations]);
+  }, [projectParam, orgParam, registryProjects, registryOrganizations]);
+  const activeOrganization = !isDevelopmentMode(mode)
+    ? registryOrganizations.find((item) => item.id === organization)
+    : undefined;
   const isDevelopment = mode === "development";
   const filters = {
     query,
@@ -937,6 +950,39 @@ export function EcosystemExplorer({
           )}
         </div>
       </div>
+
+      {activeOrganization ? (
+        <section
+          className={styles.orgPanel}
+          aria-label={activeOrganization.name}
+        >
+          <div className={styles.orgPanelHead}>
+            <BrandMark
+              brand={organizationBrand(activeOrganization.id)}
+              category="Other"
+              compact
+            />
+            <div>
+              <h2>{activeOrganization.name}</h2>
+              <p>{activeOrganization.description}</p>
+            </div>
+          </div>
+          <div className={styles.orgPanelBody}>
+            <OrganizationFunding organization={activeOrganization} />
+            <p className={styles.small}>
+              <External url={activeOrganization.website}>Website ↗</External>
+              {(activeOrganization.githubOwners ?? []).map((owner) => (
+                <span key={owner}>
+                  {" · "}
+                  <External url={`https://github.com/${owner}`}>
+                    GitHub {owner} ↗
+                  </External>
+                </span>
+              ))}
+            </p>
+          </div>
+        </section>
+      ) : null}
 
       {resultCount === 0 ? (
         <div className={styles.empty}>

@@ -802,3 +802,45 @@
 .grid {
   gap: 18px;
 }
+
+/* The organisation the menu opened (ZODL, Tachyon…): its record above the
+   results instead of a dialog on arrival. */
+.orgPanel {
+  margin: 4px 0 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line, #e9e3d6);
+  border-radius: 12px;
+  background: var(--surface, #ffffff);
+}
+.orgPanelHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.orgPanelHead h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink, #1c1917);
+}
+.orgPanelHead p {
+  margin: 0;
+  max-width: 70ch;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted, #57534e);
+}
+.orgPanelBody {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line, #e9e3d6);
+  font-size: 13px;
+  color: var(--muted, #57534e);
+}
+.orgPanelBody > p:first-child {
+  margin: 0 0 8px;
+  color: var(--ink, #1c1917);
+}
+.orgPanelBody a {
+  color: var(--accent-ink, #92600f);
+}

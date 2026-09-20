@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { EcosystemExplorer } from "@/components/ecosystem/explorer";
 import { loadEcosystemCatalog } from "@/lib/ecosystem/data";
 
@@ -7,5 +8,10 @@ export const metadata = {
 };
 
 export default function DevelopmentPage() {
-  return <EcosystemExplorer catalog={loadEcosystemCatalog()} mode="development" />;
+  return (
+    // useSearchParams inside the explorer needs a boundary for the static shell.
+    <Suspense fallback={null}>
+      <EcosystemExplorer catalog={loadEcosystemCatalog()} mode="development" />
+    </Suspense>
+  );
 }
