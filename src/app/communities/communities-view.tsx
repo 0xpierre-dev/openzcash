@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Stat } from "@/components/ui";
-import type { Community, Region } from "@/lib/communities/data";
+import type { Community, CommunityLinks, Region } from "@/lib/communities/data";
 import type { TopicActivity } from "@/lib/communities/forum-activity";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,24 @@ import { cn } from "@/lib/utils";
  * grey = quiet). Filters and the list are the whole page; totals sit at
  * the bottom.
  */
+
+/** Channel order in the directory line; the key is the links field. */
+const CHANNELS = [
+  ["x", "X"],
+  ["instagram", "Instagram"],
+  ["tiktok", "TikTok"],
+  ["youtube", "YouTube"],
+  ["telegram", "Telegram"],
+  ["discord", "Discord"],
+  ["whatsapp", "WhatsApp"],
+  ["facebook", "Facebook"],
+  ["linkedin", "LinkedIn"],
+  ["bluesky", "Bluesky"],
+  ["substack", "Substack"],
+  ["medium", "Medium"],
+  ["linktree", "Linktree"],
+  ["site", "Site"],
+] as const satisfies readonly (readonly [keyof CommunityLinks, string])[];
 
 const REGIONS: Region[] = [
   "Africa",
@@ -335,15 +353,17 @@ export function CommunitiesView({
                         >
                           {timeAgo(last.lastPostedAt)}
                         </span>{" "}
-                        · {last.kind}
+                        ·{" "}
                         {last.source === "forum"
-                          ? ` · ${last.postsCount} posts`
-                          : ""}
+                          ? `forum ${last.kind} · ${last.postsCount} posts`
+                          : last.source === "youtube"
+                            ? "YouTube upload"
+                            : "Telegram post"}
                       </p>
                     </a>
                   ) : (
                     <p className="text-[11px] text-stone-400">
-                      No tracked forum activity
+                      No tracked activity (forum, YouTube, Telegram)
                     </p>
                   )}
                 </div>
@@ -379,68 +399,20 @@ export function CommunitiesView({
                   ) : null}
                 </div>
 
-                {/* Channels */}
+                {/* Channels: every official account, links only where no
+                    public feed exists (X, Instagram, TikTok, Facebook). */}
                 <div className="flex flex-wrap gap-x-2.5 gap-y-1 text-[11px] font-medium">
-                  {c.links.x ? (
+                  {CHANNELS.filter(([key]) => c.links[key]).map(([key, label]) => (
                     <a
+                      key={key}
                       className="text-stone-600 hover:text-amber-800"
-                      href={c.links.x}
+                      href={c.links[key]}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      X
+                      {label}
                     </a>
-                  ) : null}
-                  {c.links.telegram ? (
-                    <a
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links.telegram}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Telegram
-                    </a>
-                  ) : null}
-                  {c.links.discord ? (
-                    <a
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links.discord}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Discord
-                    </a>
-                  ) : null}
-                  {c.links.instagram ? (
-                    <a
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Instagram
-                    </a>
-                  ) : null}
-                  {c.links.youtube ? (
-                    <a
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links.youtube}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      YouTube
-                    </a>
-                  ) : null}
-                  {c.links.site ? (
-                    <a
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links.site}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Site
-                    </a>
-                  ) : null}
+                  ))}
                   {c.links.forumUser ? (
                     <a
                       className="text-stone-600 hover:text-amber-800"
