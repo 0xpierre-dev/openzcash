@@ -1,11 +1,10 @@
 import {
-  EditorialIntro,
-  Facts,
 } from "@/components/workspace";
 import { Suspense } from "react";
 import { OrgUpdates } from "@/components/org-updates";
 import { getFoundationUpdates } from "@/lib/org-updates/forum";
-import { Badge, Card, PageHeader } from "@/components/ui";
+import { Badge, Card } from "@/components/ui";
+import { OrgHeader } from "@/components/org-header";
 import { IconNews, IconUsers } from "@/components/icons";
 import { ZcapTable } from "@/components/zcap-table";
 import { getZcapMembers, ZCAP_SHEET_URL } from "@/lib/zcap/members";
@@ -193,35 +192,22 @@ export default async function ZfPage() {
 
   return (
     <>
-      <PageHeader
-        title="Zcash Foundation"
-        subtitle="Live engineering updates, Zebra releases and announcements from the Foundation forum, plus every quarterly transparency report and the Zcon conference series."
-        actions={
-          <a
-            href={FORUM_CATEGORY}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-lg bg-amber-500/15 px-3 py-2 text-sm font-medium text-amber-700 ring-1 ring-inset ring-amber-500/30 hover:bg-amber-500/25"
-          >
-            Foundation on the forum ↗
-          </a>
-        }
+      <OrgHeader
+        name="Zcash Foundation"
+        logo="/logos/ecosystem/zcash-foundation.png"
+        tagline="Live engineering updates, Zebra releases and announcements from the Foundation forum, plus every quarterly transparency report and the Zcon conference series."
+        links={[
+          { href: "https://zfnd.org/", label: "zfnd.org" },
+          { href: FORUM_CATEGORY, label: "Foundation on the forum" },
+          { href: "https://github.com/ZcashFoundation", label: "GitHub · ZcashFoundation" },
+        ]}
+        stats={[
+          { label: "Transparency reports", value: String(reports.length), sub: "quarterly, all published" },
+          { label: "ZCAP members", value: String(zcap.length), sub: "the panel that elects ZCG" },
+          { label: "Latest report", value: latest ? formatDate(latest.date) : "n/a", sub: "publication date" },
+          { label: "Projects", value: "4", sub: "Zebra, FROST, Z3, Zeeder" },
+        ]}
       />
-
-      <EditorialIntro
-        eyebrow="Engineering & governance"
-        title="The Zcash Foundation, in public"
-        description="Explore engineering updates, transparency reports, community events and the ZCAP membership record."
-      >
-        <Facts
-          title="Public archive"
-          rows={[
-            ["Transparency reports", String(reports.length)],
-            ["ZCAP members", String(zcap.length)],
-            ["Latest report", latest ? formatDate(latest.date) : "Unavailable"],
-          ]}
-        />
-      </EditorialIntro>
       <>
         <Suspense
           fallback={

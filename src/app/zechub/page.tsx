@@ -1,5 +1,6 @@
 import { FeatureLink } from "@/components/workspace";
-import { Badge, Card, PageHeader, Stat } from "@/components/ui";
+import { Badge, Card, Stat } from "@/components/ui";
+import { OrgHeader } from "@/components/org-header";
 import {
   getZechubProposals,
   ZECHUB_DAO_URL,
@@ -371,29 +372,15 @@ export default async function ZechubDaoPage() {
 
   return (
     <>
-      <PageHeader
-        title="ZecHub DAO"
-        subtitle="ZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote."
-        actions={
-          <div className="flex items-center gap-2">
-            <a
-              href={SHEET_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-lg bg-stone-200/70 px-3 py-2 text-sm font-medium text-stone-700 ring-1 ring-inset ring-stone-300 hover:bg-stone-200"
-            >
-              Treasury sheet ↗
-            </a>
-            <a
-              href={`${ZECHUB_DAO_URL}/proposals`}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-lg bg-amber-500/15 px-3 py-2 text-sm font-medium text-amber-700 ring-1 ring-inset ring-amber-500/30 hover:bg-amber-500/25"
-            >
-              daodao.zone ↗
-            </a>
-          </div>
-        }
+      <OrgHeader
+        name="ZecHub DAO"
+        logo="/logos/zechub.png"
+        tagline="ZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote."
+        links={[
+          { href: `${ZECHUB_DAO_URL}/proposals`, label: "daodao.zone" },
+          { href: SHEET_URL, label: "Treasury sheet" },
+          { href: "https://github.com/ZecHub", label: "GitHub · ZecHub" },
+        ]}
       />
 
       <nav className="ws-catalog-tabs" aria-label="ZecHub sections">
