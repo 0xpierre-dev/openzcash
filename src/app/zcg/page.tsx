@@ -30,6 +30,7 @@ const TILES: Tile[] = [
   { href: "/zcg/proposals", label: "Proposals", sub: "Governance funnel", mark: glyph("proposals") },
   { href: "/zcg/committee", label: "Committee", sub: "Members, mandates & elections", mark: glyph("committee") },
   { href: "/zcg/analytics", label: "Insights", sub: "Burn-rate & delivery", mark: glyph("insights") },
+  { href: "/zcg/investments", label: "Investments", sub: "Maya liquidity position", mark: glyph("investments") },
   { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", mark: glyph("stipends") },
   { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", mark: glyph("budget") },
   { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF retroactive round", mark: glyph("coinholder") },

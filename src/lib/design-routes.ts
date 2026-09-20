@@ -52,6 +52,7 @@ export const APPS: AppDef[] = [
       { href: "/zcg/disbursements", label: "Disbursements", mark: "/logos/glyphs/disbursements.png" },
       { href: "/zcg/recipients", label: "Recipients", mark: "/logos/glyphs/recipients.png" },
       { href: "/zcg/schedule", label: "Scheduled", mark: "/logos/glyphs/schedule.png" },
+      { href: "/zcg/investments", label: "Investments", mark: "/logos/glyphs/investments.png" },
       { href: "/zcg/committee", label: "Committee", mark: "/logos/glyphs/committee.png" },
       { href: "/zcg/meetings", label: "Meetings", mark: "/logos/glyphs/meetings.png" },
       { href: "/zcg/office", label: "ZCG Office", mark: "/logos/glyphs/office.png" },

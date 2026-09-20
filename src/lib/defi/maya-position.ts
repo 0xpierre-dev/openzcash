@@ -42,6 +42,14 @@ export type MayaPosition = {
   totalCents: number | null;
   /** Midgard's own USD figure for the position, for reference. */
   midgardCents: number | null;
+  /** ZCG's share of the pool's earnings, month by month, since it joined.
+   *  Earnings accrue into the pool depth (they are inside the position),
+   *  they are not paid out. In CACAO. */
+  earnings: { month: string; share: number; poolEarningsCacao: number; zcgEarningsCacao: number; zcgFeesCacao: number }[];
+  earningsCacao: number;
+  feesCacao: number;
+  earningsCents: number | null;
+  feesCents: number | null;
 };
 
 let cache: { at: number; value: MayaPosition | null } | null = null;
@@ -60,12 +68,21 @@ async function getJson<T>(url: string): Promise<T | null> {
   }
 }
 
+/** CoinGecko's CACAO price, cached 15 min; the last good value is kept when
+ *  CoinGecko rate-limits, so the valuation does not flip between sources. */
+let cacaoCache: { at: number; usd: number } | null = null;
 async function cacaoPriceUsd(): Promise<number | null> {
+  const now = Date.now();
+  if (cacaoCache && now - cacaoCache.at < 15 * 60_000) return cacaoCache.usd;
   const j = await getJson<{ cacao?: { usd?: number } }>(
     "https://api.coingecko.com/api/v3/simple/price?ids=cacao&vs_currencies=usd",
   );
   const p = j?.cacao?.usd;
-  return typeof p === "number" && p > 0 ? p : null;
+  if (typeof p === "number" && p > 0) {
+    cacaoCache = { at: now, usd: p };
+    return p;
+  }
+  return cacaoCache?.usd ?? null;
 }
 
 const day = (unix: string | undefined) =>
@@ -85,11 +102,15 @@ async function compute(): Promise<MayaPosition | null> {
       dateLastAdded?: string;
     }[];
   };
-  const [pool, member, oracleCents, cacao] = await Promise.all([
+  type Earnings = { intervals: { startTime: string; endTime: string; pools: { pool: string; earnings: string; totalLiquidityFeesRune: string }[] }[] };
+  type Depths = { intervals: { startTime: string; units?: string; liquidityUnits?: string }[] };
+  const [pool, member, oracleCents, cacao, earn, depths] = await Promise.all([
     getJson<Pool>(`${MIDGARD}/v2/pool/ZEC.ZEC`),
     getJson<Member>(`${MIDGARD}/v2/member/${ZCG_MAYA_MEMBER}`),
     currentZecUsdCents().catch(() => null),
     cacaoPriceUsd(),
+    getJson<Earnings>(`${MIDGARD}/v2/history/earnings?interval=month&count=36`),
+    getJson<Depths>(`${MIDGARD}/v2/history/depths/ZEC.ZEC?interval=month&count=36`),
   ]);
   const p = member?.pools.find((x) => x.pool === "ZEC.ZEC");
   if (!pool || !p) return null;
@@ -108,6 +129,30 @@ async function compute(): Promise<MayaPosition | null> {
   const cacaoPriceSource = cacao ? "coingecko" : cacaoUsd != null ? "pool" : null;
   const zecLegCents = zecUsd != null ? Math.round(zecNow * zecUsd * 100) : null;
   const cacaoLegCents = cacaoUsd != null ? Math.round(cacaoNow * cacaoUsd * 100) : null;
+  // Earnings month by month: the pool's earnings times ZCG's share of the
+  // pool units in that month, from the first month it was in.
+  const unitsByMonth = new Map((depths?.intervals ?? []).map((d) => [d.startTime, Number(d.units ?? d.liquidityUnits ?? 0)]));
+  const firstAdded = Number(p.dateFirstAdded ?? 0);
+  const earnings = (earn?.intervals ?? [])
+    // Only months that ended after the position opened.
+    .filter((iv) => firstAdded > 0 && Number(iv.endTime) > firstAdded)
+    .map((iv) => {
+      const z = iv.pools.find((x) => x.pool === "ZEC.ZEC");
+      const pu = unitsByMonth.get(iv.startTime) ?? 0;
+      const sh = pu > 0 ? units / pu : 0;
+      const poolEarningsCacao = z ? Number(z.earnings) / 1e10 : 0;
+      const poolFeesCacao = z ? Number(z.totalLiquidityFeesRune) / 1e10 : 0;
+      return {
+        month: new Date(Number(iv.startTime) * 1000).toISOString().slice(0, 7),
+        share: sh,
+        poolEarningsCacao,
+        zcgEarningsCacao: poolEarningsCacao * sh,
+        zcgFeesCacao: poolFeesCacao * sh,
+      };
+    })
+    .filter((m) => m.poolEarningsCacao !== 0 || m.zcgFeesCacao !== 0);
+  const earningsCacao = earnings.reduce((s, m) => s + m.zcgEarningsCacao, 0);
+  const feesCacao = earnings.reduce((s, m) => s + m.zcgFeesCacao, 0);
   const midgardZec = Number(pool.assetPriceUSD);
   const midgardCents =
     midgardZec > 0 && cacaoPerZec > 0
@@ -131,6 +176,11 @@ async function compute(): Promise<MayaPosition | null> {
     cacaoLegCents,
     totalCents: zecLegCents != null && cacaoLegCents != null ? zecLegCents + cacaoLegCents : null,
     midgardCents,
+    earnings,
+    earningsCacao,
+    feesCacao,
+    earningsCents: cacaoUsd != null ? Math.round(earningsCacao * cacaoUsd * 100) : null,
+    feesCents: cacaoUsd != null ? Math.round(feesCacao * cacaoUsd * 100) : null,
   };
 }
 
