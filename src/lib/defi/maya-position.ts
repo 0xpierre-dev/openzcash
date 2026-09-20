@@ -68,12 +68,21 @@ async function getJson<T>(url: string): Promise<T | null> {
   }
 }
 
+/** CoinGecko's CACAO price, cached 15 min; the last good value is kept when
+ *  CoinGecko rate-limits, so the valuation does not flip between sources. */
+let cacaoCache: { at: number; usd: number } | null = null;
 async function cacaoPriceUsd(): Promise<number | null> {
+  const now = Date.now();
+  if (cacaoCache && now - cacaoCache.at < 15 * 60_000) return cacaoCache.usd;
   const j = await getJson<{ cacao?: { usd?: number } }>(
     "https://api.coingecko.com/api/v3/simple/price?ids=cacao&vs_currencies=usd",
   );
   const p = j?.cacao?.usd;
-  return typeof p === "number" && p > 0 ? p : null;
+  if (typeof p === "number" && p > 0) {
+    cacaoCache = { at: now, usd: p };
+    return p;
+  }
+  return cacaoCache?.usd ?? null;
 }
 
 const day = (unix: string | undefined) =>
