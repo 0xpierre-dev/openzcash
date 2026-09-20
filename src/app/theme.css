@@ -42,37 +42,8 @@
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
-/* Dark: near-black with a light gold-to-black gradient, the house identity. */
-@media (prefers-color-scheme: dark) {
-  .rd-shell:not([data-theme="light"]) {
-    --bg: #0e0e13;
-    --surface: #16161f;
-    --surface2: #1b1b26;
-    --line: rgba(180, 183, 200, 0.14);
-    --line-strong: rgba(180, 183, 200, 0.28);
-    --ink: #f2f3f8;
-    --muted: #a0a3b2;
-    --dim: #767a8b;
-    --accent: #7d8cf2;
-    --accent-ink: #a9b4f7;
-    --accent-soft: rgba(125, 140, 242, 0.16);
-    --accent-muted: rgba(125, 140, 242, 0.4);
-    --pos: #4cc38a;
-    --pos-soft: rgba(76, 195, 138, 0.14);
-    --neg: #f08c7a;
-    --neg-soft: rgba(240, 140, 122, 0.14);
-    --warn: #e3b341;
-    --warn-soft: rgba(227, 179, 65, 0.14);
-    --side-bg: #0a0a0f;
-    --side-ink: #d5d7e0;
-    --side-dim: #8a8da0;
-    color-scheme: dark;
-    background:
-      radial-gradient(1100px 620px at 100% -10%, rgba(244, 183, 40, 0.16), transparent 60%),
-      radial-gradient(800px 520px at -10% 110%, rgba(244, 183, 40, 0.07), transparent 55%),
-      var(--bg);
-  }
-}
+/* Dark: near-black with a light gold-to-black gradient, the house identity.
+   Chosen with the toggle only; the default is always the light workspace. */
 .rd-shell[data-theme="dark"] {
   --bg: #0e0e13;
   --surface: #16161f;
@@ -996,4 +967,103 @@
 .rd-content th:hover button svg,
 .rd-content th:hover button + button {
   opacity: 1;
+}
+
+/* ---------- Compact hero and feature blocks: surfaces with hairlines, no tint ---------- */
+.rd-shell .ws-editorial {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-bottom: 24px;
+}
+.rd-shell .ws-editorial h2 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 6px 0 8px;
+}
+.rd-shell .ws-editorial p {
+  font-size: 13px;
+  line-height: 1.55;
+}
+.rd-shell .ws-editorial-side .ws-facts,
+.rd-shell .ws-editorial-side .ws-related {
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: var(--surface2);
+}
+.rd-shell .ws-feature-link {
+  gap: 20px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  margin: 20px 0;
+}
+.rd-shell .ws-feature-link h2 {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 4px 0;
+}
+.rd-shell .ws-feature-link p {
+  font-size: 13px;
+  line-height: 1.55;
+}
+.rd-shell .ws-feature-link small {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+.rd-shell .ws-treasury-hero {
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.rd-shell .ws-quick-links a {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 13px;
+  color: var(--accent-ink);
+}
+.rd-shell .ws-copilot-hero {
+  border-radius: 12px;
+  padding: 24px;
+}
+.rd-shell .ws-nav-cards > a,
+.rd-shell .ws-navigation-card {
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.rd-content .zcg-overview .zcg-overview-schedule,
+.rd-content .zcg-overview .zcg-changes {
+  align-items: stretch;
+}
+
+/* Sidebar items: icon, label, count. */
+.rd-side-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--side-dim);
+}
+.rd-side-item:hover .rd-side-icon,
+.rd-side-item[aria-current="page"] .rd-side-icon {
+  color: #ffffff;
+}
+.rd-side-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

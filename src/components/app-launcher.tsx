@@ -407,7 +407,7 @@ export function AppLauncher({ isAdmin = false }: { isAdmin?: boolean }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {visible.map((app) => (
           <div
             key={app.id}
@@ -466,13 +466,8 @@ export function AppLauncher({ isAdmin = false }: { isAdmin?: boolean }) {
                 onClick={() => restore(app.id)}
                 className="flex flex-col items-center gap-2 opacity-60 transition hover:opacity-100"
               >
-                <span
-                  className={cn(
-                    "flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg ring-1 ring-stone-900/5",
-                    app.grad,
-                  )}
-                >
-                  <app.Icon className="h-6 w-6 text-white" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 bg-stone-100">
+                  <app.Icon className="h-5 w-5 text-stone-600" />
                 </span>
                 <span className="text-xs text-stone-600">{app.label}</span>
               </button>
@@ -487,7 +482,7 @@ export function AppLauncher({ isAdmin = false }: { isAdmin?: boolean }) {
             <IconShield className="h-4 w-4 text-amber-600" /> Admin · data
             management
           </p>
-          <div className="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {ADMIN_APPS.map((app) => (
               <div
                 key={app.id}
@@ -507,27 +502,27 @@ function LauncherTile({ app, editing }: { app: AppDef; editing: boolean }) {
   const card = (
     <div
       className={cn(
-        "w-full rounded-xl border border-stone-200 bg-white p-1.5 shadow-md shadow-stone-300/40 transition duration-150 active:scale-[0.95] active:shadow-sm active:duration-75",
-        editing
-          ? "animate-pulse"
-          : "group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-stone-400/30",
+        "oz-tile flex w-full items-center gap-3 rounded-xl border border-stone-200 bg-white px-3 py-2.5 text-left transition",
+        editing ? "animate-pulse" : "group-hover:border-stone-300",
       )}
     >
-      <div className="flex aspect-[5/4] items-center justify-center rounded-lg bg-[#efeae0]">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-stone-100">
         {app.logo ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={app.logo}
-            alt={app.label}
-            className="h-12 w-12 object-contain transition group-hover:scale-105"
-          />
+          <img src={app.logo} alt="" className="h-6 w-6 object-contain" />
         ) : (
-          <app.Icon className="h-9 w-9 text-stone-600 transition group-hover:text-amber-700" />
+          <app.Icon className="h-4.5 w-4.5 text-stone-600" />
         )}
-      </div>
-      <p className="truncate whitespace-nowrap px-1 pb-1 pt-1.5 text-center text-sm font-bold text-stone-900 sm:text-base md:text-[17px]">
-        {app.label}
-      </p>
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate text-sm font-medium text-stone-900">
+          {app.label}
+        </span>
+        <span className="block truncate text-xs text-stone-500">{app.sub}</span>
+      </span>
+      <span aria-hidden className="ml-auto text-stone-400">
+        →
+      </span>
     </div>
   );
   if (editing) return card;

@@ -5,6 +5,73 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "./logout-button";
 import { DESIGN_GROUPS, designGroup } from "@/lib/design-routes";
+import {
+  IconArrowUp,
+  IconBalance,
+  IconBook,
+  IconChart,
+  IconCheck,
+  IconCoins,
+  IconDashboard,
+  IconGlobe,
+  IconGrant,
+  IconGrid,
+  IconKey,
+  IconList,
+  IconMail,
+  IconNews,
+  IconPencil,
+  IconReceipt,
+  IconShield,
+  IconSigma,
+  IconSwap,
+  IconTerminal,
+  IconUsers,
+  IconVote,
+  IconWallet,
+} from "./icons";
+import type { ComponentType } from "react";
+
+/** One line icon per route, from the set the launcher and the ZCG tiles use. */
+const ROUTE_ICON: Record<string, ComponentType<{ className?: string }>> = {
+  "/zcg": IconDashboard,
+  "/zcg/grants": IconGrant,
+  "/zcg/recipients": IconUsers,
+  "/zcg/disbursements": IconReceipt,
+  "/zcg/schedule": IconList,
+  "/zcg/totals": IconChart,
+  "/zcg/analytics": IconArrowUp,
+  "/zcg/fpf": IconWallet,
+  "/zcg/coinholder": IconCoins,
+  "/zcg/proposals": IconVote,
+  "/zcg/committee": IconUsers,
+  "/zcg/meetings": IconBook,
+  "/zcg/stipends": IconCoins,
+  "/zcg/budget": IconBalance,
+  "/zcg/office": IconGrid,
+  "/lockbox": IconShield,
+  "/zcg/reconciliation": IconCheck,
+  "/zechub": IconGlobe,
+  "/zf": IconBalance,
+  "/shielded-labs": IconShield,
+  "/z3": IconTerminal,
+  "/ecosystem": IconGlobe,
+  "/wallets": IconWallet,
+  "/communities": IconUsers,
+  "/defi": IconSwap,
+  "/development": IconTerminal,
+  "/news": IconNews,
+  "/arborist": IconSigma,
+  "/zcg/methodology": IconBook,
+  "/zcg/copilot": IconTerminal,
+  "/zcg/coinholder/copilot": IconTerminal,
+  "/zechub/copilot": IconTerminal,
+  "/projects": IconGrid,
+  "/viewing-keys": IconKey,
+  "/invites": IconMail,
+  "/onboarding": IconPencil,
+  "/login": IconShield,
+};
 
 /**
  * "Back" follows the trail, as the production BackButton did: a drill-down
@@ -27,14 +94,14 @@ function backTarget(pathname: string): { href: string; label: string } {
   );
 }
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark";
 const THEME_KEY = "oz-theme";
 const GROUPS_KEY = "oz-nav-groups";
-const THEME_ORDER: Theme[] = ["system", "light", "dark"];
+// The light workspace is the default everywhere; dark is a per-browser choice.
+const THEME_ORDER: Theme[] = ["light", "dark"];
 const THEME_LABEL: Record<Theme, string> = {
-  system: "Theme follows the system",
-  light: "Light theme",
-  dark: "Dark theme",
+  light: "Light theme (switch to dark)",
+  dark: "Dark theme (switch to light)",
 };
 
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -60,7 +127,6 @@ const ICON = {
   home: "M2.5 7.5L8 3l5.5 4.5V13H9.5V9.5h-3V13H2.5z",
   sun: "M8 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3 3l1 1M12 12l1 1M13 3l-1 1M4 12l-1 1",
   moon: "M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z",
-  system: "M2.5 3.5h11v7h-11zM6 13.5h4M8 10.5v3",
   close: "M4 4l8 8M12 4l-8 8",
 };
 
@@ -89,8 +155,9 @@ export function AppShell({
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
   const [navOpen, setNavOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme>("system");
+  const [theme, setTheme] = useState<Theme>("light");
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const [counts, setCounts] = useState<Record<string, string>>({});
   const close = () => dialog.current?.close();
   const openDialog = () => dialog.current?.showModal();
 
@@ -107,6 +174,18 @@ export function AppShell({
       /* private mode or blocked storage: defaults apply */
     }
     /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  // Record counts beside the sidebar items, read after the page paints.
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetch("/api/nav-counts", { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((d: Record<string, string>) => setCounts(d ?? {}))
+      .catch(() => {
+        /* counts are a convenience; the navigation works without them */
+      });
+    return () => ctrl.abort();
   }, []);
 
   // The drawer closes on navigation; ⌘K / Ctrl+K opens the record search.
@@ -148,7 +227,7 @@ export function AppShell({
   return (
     <div
       className={cn("rd-shell", isPreview && "rd-shell-preview")}
-      data-theme={theme === "system" ? undefined : theme}
+      data-theme={theme}
       data-nav={navOpen ? "open" : undefined}
       data-section={group?.name ?? (isHome ? "Home" : "Explore")}
     >
@@ -200,16 +279,27 @@ export function AppShell({
                   <span aria-hidden>{open ? "−" : "+"}</span>
                 </button>
                 {open
-                  ? g.routes.map(([href, label]) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        className="rd-side-item"
-                        aria-current={href === pathname ? "page" : undefined}
-                      >
-                        <span>{label}</span>
-                      </Link>
-                    ))
+                  ? g.routes.map(([href, label]) => {
+                      const RouteIcon = ROUTE_ICON[href];
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="rd-side-item"
+                          aria-current={href === pathname ? "page" : undefined}
+                        >
+                          {RouteIcon ? (
+                            <RouteIcon className="rd-side-icon" />
+                          ) : (
+                            <span className="rd-side-icon" aria-hidden />
+                          )}
+                          <span className="rd-side-label">{label}</span>
+                          {counts[href] ? (
+                            <small className="tnum">{counts[href]}</small>
+                          ) : null}
+                        </Link>
+                      );
+                    })
                   : null}
               </section>
             );
@@ -290,16 +380,7 @@ export function AppShell({
               aria-label={THEME_LABEL[theme]}
               title={THEME_LABEL[theme]}
             >
-              <Icon
-                d={
-                  theme === "dark"
-                    ? ICON.moon
-                    : theme === "light"
-                      ? ICON.sun
-                      : ICON.system
-                }
-                size={16}
-              />
+              <Icon d={theme === "dark" ? ICON.moon : ICON.sun} size={16} />
             </button>
           </div>
         </header>
