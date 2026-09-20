@@ -232,6 +232,17 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### No side columns — 20 September 2026
+
+- `RecordLayout` no longer draws a right column: the aside (facts, connected
+  records, program resources) becomes a compact foot under the content, a
+  flat grid with hairlines and small-caps titles. Every page that used the
+  layout is full width now; nothing in the asides was dropped.
+- News is a dense back-office list: source tabs with counts (the former
+  "Follow a source"), one search, a meta line (the former "This week"), and
+  rows of mark · title · kind · source · date. Marks are PNG: the brand
+  glyphs for GitHub and Google Sheets come from `simple-icons`.
+
 ### Office entrance and overview tools — 20 September 2026
 
 - The ZCG office entrance is a quiet card on the theme (surface, hairline,

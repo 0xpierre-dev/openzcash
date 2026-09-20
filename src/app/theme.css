@@ -1170,15 +1170,189 @@
 .rd-content th.whitespace-nowrap {
   white-space: normal;
 }
+/* No side columns: the record aside (facts, connected records) becomes a
+   compact foot under the content, in a flat grid with hairlines. */
 .rd-content .ws-record-layout {
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 285px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
 }
-@media (max-width: 1100px) {
-  .rd-content .ws-record-layout {
-    grid-template-columns: minmax(0, 1fr);
+.rd-content .ws-record-aside {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px 40px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.rd-content .ws-record-aside .ws-facts,
+.rd-content .ws-record-aside .ws-related,
+.rd-content .ws-record-aside .rd-card,
+.rd-content .ws-record-aside .oz-card {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+.rd-content .ws-record-aside h2 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rd-content .ws-record-aside .ws-facts dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0 24px;
+}
+.rd-content .ws-record-aside .ws-facts dl > div {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+}
+.rd-content .ws-record-aside .ws-facts dd {
+  max-width: 60%;
+}
+.rd-content .ws-record-aside .ws-facts > p {
+  margin-top: 10px;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+.rd-content .ws-record-aside .ws-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+}
+.rd-content .ws-record-aside .ws-related h2 {
+  width: 100%;
+}
+.rd-content .ws-record-aside .ws-related > a {
+  display: inline-flex;
+  gap: 5px;
+  padding: 4px 0;
+  border: 0;
+  font-size: 12.5px;
+}
+.rd-content .ws-record-aside .ws-related small {
+  display: inline;
+  margin: 0 0 0 4px;
+  font-size: 11.5px;
+}
+
+/* ---------- News: source tabs, one search, a dense list ---------- */
+.rd-content .ws-news-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+.rd-content .ws-news-search input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+.rd-content .ws-news-search a {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.rd-content .ws-news-meta {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--dim);
+}
+.rd-content .ws-news-list {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.rd-content .ws-news-empty {
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rd-content .ws-news-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) minmax(120px, 0.45fr) 110px 76px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 13px;
+  text-decoration: none;
+}
+.rd-content .ws-news-row:first-child {
+  border-top: 0;
+}
+.rd-content .ws-news-row:hover {
+  background: var(--accent-soft);
+}
+.rd-content .ws-news-mark {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: contain;
+}
+.rd-shell[data-theme="dark"] .ws-news-mark-glyph {
+  filter: invert(1);
+}
+.rd-content .ws-news-flag {
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+}
+.rd-content .ws-news-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-weight: 500;
+}
+.rd-content .ws-news-title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rd-content .ws-news-new {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neg);
+}
+.rd-content .ws-news-kind,
+.rd-content .ws-news-source {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.rd-content .ws-news-date {
+  font-size: 12px;
+  color: var(--dim);
+  text-align: right;
+}
+@media (max-width: 720px) {
+  .rd-content .ws-news-row {
+    grid-template-columns: 20px minmax(0, 1fr) 70px;
   }
-  .rd-content .ws-record-aside {
-    position: static;
+  .rd-content .ws-news-kind,
+  .rd-content .ws-news-source {
+    display: none;
   }
 }
 .rd-content img,

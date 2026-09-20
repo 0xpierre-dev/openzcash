@@ -3,7 +3,7 @@
 // Run from the repository root: node scripts/gen-app-icons.mjs
 import sharp from "sharp";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { siClaude, siCursor, siGithubcopilot, siOpencode, siWindsurf } from "simple-icons";
+import { siClaude, siCursor, siGithub, siGithubcopilot, siGooglesheets, siOpencode, siWindsurf } from "simple-icons";
 const src = readFileSync("src/components/icons.tsx", "utf8");
 function shape(name) {
   const head = `export const ${name} = svg(`;
@@ -60,3 +60,10 @@ for (const [id, d] of Object.entries(AGENTS)) {
   await sharp(Buffer.from(svg)).png().toFile(`public/logos/agents/${id}.png`);
 }
 await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l7.8 4.5v9L12 21 4.2 16.5v-9z"/><circle cx="12" cy="12" r="2.6" fill="${INK}" stroke="none"/></svg>`)).png().toFile("public/logos/agents/codex.png");
+
+// News source marks (GitHub, Google Sheets): brand glyphs in ink, inverted in
+// the dark theme like the other generated glyphs.
+for (const [id, d] of Object.entries({ github: siGithub.path, sheets: siGooglesheets.path })) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24"><path fill="${INK}" d="${d}"/></svg>`;
+  await sharp(Buffer.from(svg)).png().toFile(`public/logos/marks/${id}.png`);
+}
