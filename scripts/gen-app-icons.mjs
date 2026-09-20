@@ -36,7 +36,7 @@ for (const [id, icon] of Object.entries(APPS)) {
   await sharp(Buffer.from(svg)).png().toFile(`public/logos/marks/${id}.png`);
 }
 // Inner-page glyphs: brand gold on transparent, legible on both sidebar themes.
-const PAGES = { grants: "IconGrant", proposals: "IconVote", disbursements: "IconReceipt", recipients: "IconUsers", schedule: "IconList", totals: "IconChart", insights: "IconArrowUp", reconciliation: "IconCheck", committee: "IconUsers", meetings: "IconBook", stipends: "IconCoins", budget: "IconBalance", office: "IconDashboard", methodology: "IconBook", copilot: "IconTerminal", coinholder: "IconCoins", development: "IconTerminal", "viewing-keys": "IconKey", invites: "IconMail", onboarding: "IconPencil", login: "IconShield", overview: "IconDashboard", home: "IconGrid" };
+const PAGES = { grants: "IconGrant", proposals: "IconVote", disbursements: "IconReceipt", recipients: "IconUsers", schedule: "IconList", totals: "IconChart", insights: "IconArrowUp", reconciliation: "IconCheck", committee: "IconUsers", meetings: "IconBook", stipends: "IconCoins", budget: "IconBalance", office: "IconDashboard", methodology: "IconBook", copilot: "IconTerminal", coinholder: "IconCoins", development: "IconTerminal", defi: "IconSwap", z3: "IconTerminal", "viewing-keys": "IconKey", invites: "IconMail", onboarding: "IconPencil", login: "IconShield", overview: "IconDashboard", home: "IconGrid" };
 for (const [id, icon] of Object.entries(PAGES)) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#b7791f" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${shape(icon)}</svg>`;
   await sharp(Buffer.from(svg)).png().toFile(`public/logos/glyphs/${id}.png`);
