@@ -2323,3 +2323,31 @@
   padding: 14px 16px;
   border-radius: 12px;
 }
+
+/* ---------- Phones: wide tables scroll inside their card, tab rows wrap ---------- */
+@media (max-width: 720px) {
+  .rd-content .ws-table-wrap,
+  .rd-content .ws-ledger,
+  .rd-content .overflow-x-auto,
+  .rd-content .overflow-hidden:has(> table),
+  .rd-content .p-0:has(> table) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rd-content .ws-table-wrap table,
+  .rd-content .ws-ledger table,
+  .rd-content .overflow-x-auto > table,
+  .rd-content .overflow-hidden > table,
+  .rd-content .p-0 > table {
+    min-width: max-content;
+  }
+  .rd-content td,
+  .rd-content th {
+    overflow-wrap: normal;
+  }
+  .rd-content .ws-status-tabs,
+  .rd-content .ws-pipeline {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
