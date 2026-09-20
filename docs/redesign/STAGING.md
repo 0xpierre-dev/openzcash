@@ -232,6 +232,16 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Coinholder split — 20 September 2026
+
+- `/zcg/coinholder` is the retroactive round only: proposals, requested
+  total, review and poll dates, size bands, the proposals table and the
+  ballot note. `/zcg/coinholder/pool` is the money: live ZIP-1016 balance,
+  value, paid to date, receivables and the funding history tables.
+- The "two pools" switchers on this page and on ZCG totals are gone; the
+  foot links connect round, pool, FPF records, Lockbox and ZCG totals. The
+  FPF app lists Coinholder Grants, Coinholder pool and Coinholder Copilot.
+
 ### No side columns — 20 September 2026
 
 - `RecordLayout` no longer draws a right column: the aside (facts, connected
