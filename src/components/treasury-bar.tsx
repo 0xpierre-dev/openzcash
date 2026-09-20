@@ -14,18 +14,20 @@ export async function TreasuryBar() {
   );
   return (
     <div className="rd-treasury-inner">
-      {pools.map((p) => (
-        <Link key={p.name} href={p.href} className="rd-treasury-pool">
-          <span className="rd-treasury-name">{p.name}</span>
-          <span className="rd-treasury-zec tnum">
-            {p.zec} <small>ZEC</small>
-          </span>
-          <span className="rd-treasury-usd tnum">
-            ≈ {p.usd}
-            {p.sub ? ` · ${p.sub}` : ""}
-          </span>
-        </Link>
-      ))}
+      <div className="rd-treasury-pools">
+        {pools.map((p) => (
+          <Link key={p.name} href={p.href} className="rd-treasury-pool">
+            <span className="rd-treasury-name">{p.name}</span>
+            <span className="rd-treasury-zec tnum">
+              {p.zec} <small>ZEC</small>
+            </span>
+            <span className="rd-treasury-usd tnum">
+              ≈ {p.usd}
+              {p.sub ? ` · ${p.sub}` : ""}
+            </span>
+          </Link>
+        ))}
+      </div>
       <div className="rd-treasury-right">
         <span className="rd-treasury-meta tnum">
           {t.height ? `block ${t.height}` : ""}
