@@ -168,6 +168,9 @@ export function placeOf(pathname: string): Place | undefined {
   const detail = DETAILS[pathname];
   const target = detail ? detail.parent : pathname;
   for (const app of APPS) {
+    // An app that opens a record by query (Zakura, ZODL, Tachyon) never
+    // claims the plain path: /ecosystem belongs to the Ecosystem app.
+    if (app.href.includes("?")) continue;
     if (pathOf(app.href) === target && !detail) return { app };
     const page = app.pages.find((p) => pathOf(p.href) === target);
     if (page) {
