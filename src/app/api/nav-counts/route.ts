@@ -9,6 +9,7 @@ import { loadEcosystemCatalog } from "@/lib/ecosystem/data";
 import { COMMUNITIES } from "@/lib/communities/data";
 import { getArboristCalls } from "@/lib/arborist/notes";
 import { MEMBERS } from "@/app/zcg/current-committee-data";
+import { mayaTransfers } from "@/lib/zcg/snapshots-repo";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ const put = (out: Record<string, string>, key: string, n: number | null | undefi
  * in-process for five minutes; the sidebar reads it after the page paints.
  */
 async function compute(): Promise<Record<string, string>> {
-  const [summary, proposals, queue, schedule, meetings, calls] =
+  const [summary, proposals, queue, schedule, meetings, calls, mayaRows] =
     await Promise.all([
       disbursementsSummary().catch(() => null),
       cached(`listProposals:all:${publicationDay()}`, TTL_MS, () =>
@@ -36,7 +37,12 @@ async function compute(): Promise<Record<string, string>> {
       getPaymentSchedule().catch(() => null),
       getMeetings().catch(() => null),
       getArboristCalls().catch(() => null),
+      mayaTransfers().catch(() => null),
     ]);
+  // Distinct positions: the Maya transfers all go to one wallet today.
+  const investments = mayaRows
+    ? new Set(mayaRows.map((r) => (r.project ?? "").trim().toLowerCase()).filter(Boolean)).size
+    : null;
   let catalog: ReturnType<typeof loadEcosystemCatalog> | null = null;
   try {
     catalog = loadEcosystemCatalog();
@@ -50,6 +56,9 @@ async function compute(): Promise<Record<string, string>> {
   put(out, "/zcg/proposals", proposals?.length);
   put(out, "/zcg/office", queue?.length);
   put(out, "/zcg/schedule", schedule?.rows.length);
+  // One position today, the Maya liquidity seed; counted from the ledger's
+  // Maya transfers so a second position shows up without a code change.
+  put(out, "/zcg/investments", investments);
   put(out, "/zcg/committee", MEMBERS.length);
   put(out, "/zcg/meetings", meetings?.length);
   put(out, "/ecosystem", catalog?.registry.projects.length);
