@@ -232,6 +232,18 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Office entrance and overview tools — 20 September 2026
+
+- The ZCG office entrance is a quiet card on the theme (surface, hairline,
+  ink and muted text, gold button) instead of the black-and-green hero. The
+  door is a PNG illustration (`public/illustrations/zcg-door.png`, drawn in
+  `scripts/gen-illustrations.mjs`): a gold arch, the door ajar, and a zebra
+  peeking out and looking at you. Gold, ink and white only, so it sits on
+  both themes.
+- The ZCG overview no longer hides "More ZCG tools" in a details block at
+  the foot: the tools sit under the scheduled-payments card, filling the
+  left column beside the week's changes. Tiles use the page glyph PNGs.
+
 ### Copilots, Lockbox and committee — 20 September 2026
 
 - The three copilot pages (ZCG, Coinholder, ZecHub) share one quiet layout

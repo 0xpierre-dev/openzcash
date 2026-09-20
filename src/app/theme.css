@@ -1564,3 +1564,79 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------- ZCG office entrance: a quiet card, the door on the theme ---------- */
+.rd-content .rd-office-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  min-height: 0;
+  padding: 40px 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.rd-shell[data-theme="dark"] .rd-content .rd-office-entry {
+  background: var(--surface2);
+}
+.rd-content .rd-office-copy {
+  padding: 0;
+}
+.rd-content .rd-office-copy > span {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rd-content .rd-office-copy h1 {
+  margin: 14px 0 16px;
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.rd-content .rd-office-copy p {
+  max-width: 40ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.rd-content .rd-office-copy button {
+  margin: 22px 0 12px;
+  padding: 10px 16px;
+  gap: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.rd-content .rd-office-copy button:hover {
+  background: var(--accent-ink);
+}
+.rd-content .rd-office-copy small {
+  font-size: 12px;
+  color: var(--dim);
+}
+.rd-content .rd-office-art {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  background: none;
+}
+.rd-content .rd-office-art img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+@media (max-width: 960px) {
+  .rd-content .rd-office-entry {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 20px;
+  }
+}

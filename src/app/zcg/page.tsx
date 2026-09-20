@@ -1,22 +1,6 @@
 import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import Link from "next/link";
 import { PageHeader, Stat } from "@/components/ui";
-import {
-  IconArrowUp,
-  IconBalance,
-  IconChart,
-  IconCheck,
-  IconCoins,
-  IconGrant,
-  IconNews,
-  IconReceipt,
-  IconShield,
-  IconTerminal,
-  IconUsers,
-  IconVote,
-  IconWallet,
-} from "@/components/icons";
-import type { ComponentType } from "react";
 import { disbursementsSummary } from "@/lib/zcg/disbursements-repo";
 import { listProposals, officeUnderReview } from "@/lib/zcg/proposals-repo";
 import { publicationDay } from "@/lib/zcg/publication-policy";
@@ -32,29 +16,26 @@ import "./overview.css";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZCG · OpenZcash" };
 
-type Tile = {
-  href: string;
-  label: string;
-  sub: string;
-  Icon: ComponentType<{ className?: string }>;
-};
+type Tile = { href: string; label: string; sub: string; mark: string };
 
 // Every ZCG tool stays one click away; the four primary records carry counts.
+// Marks are the sidebar's page glyphs (PNG).
+const glyph = (name: string) => `/logos/glyphs/${name}.png`;
 const TILES: Tile[] = [
-  { href: "/zcg/totals", label: "Totals", sub: "Where the money goes", Icon: IconChart },
-  { href: "/zcg/grants", label: "Grants", sub: "Approved projects", Icon: IconGrant },
-  { href: "/zcg/disbursements", label: "Disbursements", sub: "The full ledger", Icon: IconReceipt },
-  { href: "/zcg/recipients", label: "Recipients", sub: "By amount received", Icon: IconUsers },
-  { href: "/zcg/proposals", label: "Proposals", sub: "Governance funnel", Icon: IconVote },
-  { href: "/zcg/committee", label: "Committee", sub: "Members, mandates & elections", Icon: IconUsers },
-  { href: "/zcg/analytics", label: "Insights", sub: "Burn-rate & delivery", Icon: IconArrowUp },
-  { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", Icon: IconCoins },
-  { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", Icon: IconBalance },
-  { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF grants pool", Icon: IconWallet },
-  { href: "/zcg/reconciliation", label: "Reconciliation", sub: "On-chain ↔ ledger", Icon: IconShield },
-  { href: "/zcg/meetings", label: "Meetings", sub: "Committee minutes", Icon: IconNews },
-  { href: "/zcg/methodology", label: "Methodology", sub: "Sources & API", Icon: IconCheck },
-  { href: "/zcg/copilot", label: "ZCG Copilot", sub: "Ask about public records", Icon: IconTerminal },
+  { href: "/zcg/totals", label: "Totals", sub: "Where the money goes", mark: glyph("totals") },
+  { href: "/zcg/grants", label: "Grants", sub: "Approved projects", mark: glyph("grants") },
+  { href: "/zcg/disbursements", label: "Disbursements", sub: "The full ledger", mark: glyph("disbursements") },
+  { href: "/zcg/recipients", label: "Recipients", sub: "By amount received", mark: glyph("recipients") },
+  { href: "/zcg/proposals", label: "Proposals", sub: "Governance funnel", mark: glyph("proposals") },
+  { href: "/zcg/committee", label: "Committee", sub: "Members, mandates & elections", mark: glyph("committee") },
+  { href: "/zcg/analytics", label: "Insights", sub: "Burn-rate & delivery", mark: glyph("insights") },
+  { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", mark: glyph("stipends") },
+  { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", mark: glyph("budget") },
+  { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF grants pool", mark: glyph("coinholder") },
+  { href: "/zcg/reconciliation", label: "Reconciliation", sub: "On-chain ↔ ledger", mark: glyph("reconciliation") },
+  { href: "/zcg/meetings", label: "Meetings", sub: "Committee minutes", mark: glyph("meetings") },
+  { href: "/zcg/methodology", label: "Methodology", sub: "Sources & API", mark: glyph("methodology") },
+  { href: "/zcg/copilot", label: "ZCG Copilot", sub: "Ask about public records", mark: glyph("copilot") },
 ];
 
 const PRIMARY_ROUTES = [
@@ -147,6 +128,7 @@ export default async function ZcgPage() {
       ) : null}
 
       <div className="zcg-two">
+        <div className="zcg-col">
         <section
           className="zcg-overview-schedule"
           aria-labelledby="overview-schedule-title"
@@ -186,6 +168,22 @@ export default async function ZcgPage() {
             </p>
           )}
         </section>
+
+        <nav className="zcg-tools" aria-label="More ZCG tools">
+          {TILES.filter((tile) => !PRIMARY_ROUTES.includes(tile.href)).map(
+            (tile) => (
+              <Link key={tile.href} href={tile.href}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={tile.mark} alt="" width={16} height={16} />
+                <span>
+                  <strong>{tile.label}</strong>
+                  <small>{tile.sub}</small>
+                </span>
+              </Link>
+            ),
+          )}
+        </nav>
+        </div>
 
         <section className="zcg-changes" aria-labelledby="overview-changes-title">
           <div className="zcg-card-head">
@@ -245,7 +243,8 @@ export default async function ZcgPage() {
           TILES.find((tile) => tile.href === href)!,
         ).map((tile) => (
           <Link key={tile.href} href={tile.href}>
-            <tile.Icon className="h-5 w-5" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={tile.mark} alt="" width={18} height={18} />
             <span>
               <strong>{tile.label}</strong>
               <small>{primaryCounts[tile.href] ?? tile.sub}</small>
@@ -273,23 +272,6 @@ export default async function ZcgPage() {
         </div>
         <Link href="/zcg/committee">Committee →</Link>
       </section>
-
-      <details className="zcg-overview-tools">
-        <summary>More ZCG tools</summary>
-        <nav aria-label="More ZCG tools">
-          {TILES.filter((tile) => !PRIMARY_ROUTES.includes(tile.href)).map(
-            (tile) => (
-              <Link key={tile.href} href={tile.href}>
-                <tile.Icon className="h-4 w-4" />
-                <span>
-                  <strong>{tile.label}</strong>
-                  <small>{tile.sub}</small>
-                </span>
-              </Link>
-            ),
-          )}
-        </nav>
-      </details>
 
       <Link className="zcg-overview-office" href="/zcg/office">
         <span>

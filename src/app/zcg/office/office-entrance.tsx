@@ -34,13 +34,14 @@ export function OfficeEntrance({
           </small>
         </div>
         <div className="rd-office-art" aria-hidden="true">
-          <div className="rd-office-door" />
-          <span>Zcash Community Grants</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/zcg-door.png" width={520} height={420} alt="" />
         </div>
       </section>
       <div className="rd-office-members">
         {members.map((m) => (
           <span key={m.name}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={m.img} width={30} height={30} alt="" />
             {m.name}
           </span>

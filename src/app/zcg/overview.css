@@ -428,3 +428,55 @@
     margin-left: 0;
   }
 }
+
+/* The left column stacks the schedule and the tools under it; both cards keep
+   their own height beside the week's changes. */
+.zcg-two > .zcg-col {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  min-width: 0;
+}
+.zcg-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.zcg-tools a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 8px;
+  border-radius: 8px;
+  color: var(--muted);
+}
+.zcg-tools a:hover {
+  background: var(--accent-soft);
+}
+.zcg-tools img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.zcg-tools strong {
+  display: block;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+.zcg-tools small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+@media (max-width: 720px) {
+  .zcg-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
