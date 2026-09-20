@@ -69,11 +69,11 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    nunca no lugar da proveniência. As estatísticas (`Stat`) formam uma faixa
    única dividida por hairlines, sem cards coloridos.
 6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps com
-   Monthly e News no topo, depois ZCG (aberto por padrão), Lockbox, FPF, as
+   Monthly e News no topo, depois ZCG (aberto por padrão), FPF, as
    organizações na ordem Zcash Foundation, ZODL, Shielded Labs, Zakura,
-   Tachyon, ZecHub DAO, e por fim Z3, Ecosystem, Wallets, Communities, DeFi,
-   Arborist Calls (Manage só para admin), cada um com logo oficial quando
-   existe e suas páginas internas. Zakura, ZODL e Tachyon abrem seus registros
+   Tachyon, ZecHub DAO, depois Arborist Calls, Communities e Ecosystem, que
+   agrupa Development, DeFi, Z3 e Wallets como páginas (Manage só para
+   admin; Lockbox oculto), cada um com logo oficial quando existe. Zakura, ZODL e Tachyon abrem seus registros
    no Ecosystem (`?project=zakura`, `?org=zodl`, `?org=project-tachyon`).
    A home é a visão geral do ZCG: `/` redireciona para `/zcg`, o banner leva
    para lá e não existe item "Home". As tesourarias vivem só na barra do
