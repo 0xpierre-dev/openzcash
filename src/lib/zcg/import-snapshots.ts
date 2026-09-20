@@ -319,8 +319,8 @@ export function parseMayaSnapshot(
     for (let c = 0; c < r.length; c++) {
       const label = normLabel(r[c] ?? "");
       if (!label) continue;
-      const asOf = /^kpis as of (.+?)\s*$/i.exec(label);
-      if (asOf) kpiAsOf = asOf[1].replace(/\s*utc$/i, "").trim();
+      const asOf = /^kpis as of (.+?)\s*$/i.exec(r[c] ?? "");
+      if (asOf) kpiAsOf = asOf[1].replace(/[:\s]*utc[:\s]*$/i, "").replace(/:$/, "").trim();
       if (!map.has(label)) map.set(label, r.slice(c + 1));
     }
   }

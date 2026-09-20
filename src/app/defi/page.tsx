@@ -134,7 +134,7 @@ export default async function DefiPage() {
               {MAYA_SIGNERS.map((s, i) => (
                 <span key={s.name}>
                   {i > 0 ? (i === MAYA_SIGNERS.length - 1 ? " and " : ", ") : ""}
-                  <strong>{s.name}</strong> ({s.org})
+                  <strong>{s.name}</strong>{` (${s.org})`}
                 </span>
               ))}
               . Any two of the three can move the position.{" "}

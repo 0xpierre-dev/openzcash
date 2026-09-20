@@ -18,6 +18,6 @@ describe("parseMayaSnapshot", () => {
     expect(snap.usdCashBalanceCents).toBe(10_657_700n);
     expect(snap.zecBalanceZat).toBe(22_397_000_000n);
     expect(snap.usdValueOfZecCents).toBe(371_824_414n);
-    expect(snap.status).toBe("kpis as of september 16, 2026");
+    expect(snap.status).toBe("kpis as of September 16, 2026");
   });
 });
