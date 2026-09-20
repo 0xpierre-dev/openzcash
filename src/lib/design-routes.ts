@@ -165,13 +165,13 @@ export function placeOf(pathname: string): Place | undefined {
   return undefined;
 }
 
-/** Back control: a detail returns to its list, a page to its app, an app to Home. */
+/** Back control: a detail returns to its list, a page to its app, an app to ZCG, the home. */
 export function backOf(pathname: string): { href: string; label: string } {
   const place = placeOf(pathname);
-  if (!place) return { href: "/", label: "Home" };
+  if (!place) return { href: "/zcg", label: "ZCG" };
   if (place.detail) return { href: place.detail.parent.href, label: place.detail.parent.label };
   if (place.page) return { href: place.app.href, label: place.app.label };
-  return { href: "/", label: "Home" };
+  return { href: "/zcg", label: "ZCG" };
 }
 
 /** Grouped view of the same model, for directories and the design-review page. */

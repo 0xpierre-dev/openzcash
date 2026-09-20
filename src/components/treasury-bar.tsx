@@ -26,14 +26,16 @@ export async function TreasuryBar() {
           </span>
         </Link>
       ))}
-      <span className="rd-treasury-meta tnum">
-        {t.height ? `block ${t.height}` : ""}
-        {t.height && t.price ? " · " : ""}
-        {t.price ? `ZEC ${t.price}` : ""}
-      </span>
-      <Link href="/" className="rd-treasury-link">
-        Treasury at a glance →
-      </Link>
+      <div className="rd-treasury-right">
+        <span className="rd-treasury-meta tnum">
+          {t.height ? `block ${t.height}` : ""}
+          {t.height && t.price ? " · " : ""}
+          {t.price ? `ZEC ${t.price}` : ""}
+        </span>
+        <Link href="/treasury" className="rd-treasury-link">
+          Treasury at a glance →
+        </Link>
+      </div>
     </div>
   );
 }

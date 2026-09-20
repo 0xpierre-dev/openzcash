@@ -1,57 +1,8 @@
-import { SectionHeading } from "@/components/workspace";
-import { PageHeader } from "@/components/ui";
-import { AppLauncher } from "@/components/app-launcher";
-import { getIsAdmin } from "@/lib/auth/admin";
-import { latestImportAt, maybeAutoRefresh } from "@/lib/zcg/freshness";
-import { TreasuryOverview } from "./treasury-overview";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "OpenZcash · Dev Fund transparency" };
 
-function syncedAgo(at: Date | null): string {
-  if (!at) return "not imported yet";
-  const mins = Math.floor((Date.now() - at.getTime()) / 60_000);
-  if (mins < 1) return "synced just now";
-  if (mins < 60) return `synced ${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `synced ${hrs}h ago`;
-  return `synced ${Math.floor(hrs / 24)}d ago`;
-}
-
-/**
- * The home page now lives inside the shell: the two treasuries at a glance,
- * then the app launcher (reorder or hide apps; the choice stays in this
- * browser). The shell's bottom bar keeps the treasuries in view everywhere.
- */
-export default async function LauncherPage() {
-  const [isAdmin, lastImport] = await Promise.all([
-    getIsAdmin(),
-    latestImportAt(),
-  ]);
-  // Self-heal: kick a background re-import if the spreadsheet data is stale.
-  void maybeAutoRefresh();
-
-  return (
-    <>
-      <PageHeader
-        title="OpenZcash"
-        subtitle="Dev Fund treasury and public transparency: ZCG and FPF grant accounting, the live Lockbox and governance, read-only and mirrored from the official sources."
-      />
-
-      <TreasuryOverview />
-
-      <section className="oz-launcher mt-10">
-        <SectionHeading
-          title="Apps"
-          description="Every record set, side by side. Edit to reorder or hide apps; the choice stays in this browser."
-        />
-        <AppLauncher isAdmin={isAdmin} />
-      </section>
-
-      <p className="mt-8 text-xs text-stone-600">
-        ZCG and FPF grant accounting for the Zcash Dev Fund · Spreadsheet{" "}
-        {syncedAgo(lastImport)}, auto-refreshes daily
-      </p>
-    </>
-  );
+/** The home is the ZCG overview; the treasuries live in the bar and at /treasury. */
+export default function HomePage() {
+  redirect("/zcg");
 }

@@ -1,5 +1,4 @@
-import { FeatureLink, SourceNote } from "@/components/workspace";
-import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
+import { SourceNote } from "@/components/workspace";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { grantsSummary, listGrants } from "@/lib/zcg/grants-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
@@ -22,11 +21,9 @@ export default async function GrantsPage({
   }>;
 }) {
   const params = await searchParams;
-  const [grants, summary, schedule] = await Promise.all([
+  const [grants, summary] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
-    // Derived figure; the grants list must not depend on it.
-    getPaymentSchedule().catch(() => null),
   ]);
 
   const rows: GrantTableRow[] = grants.map((g) => ({
@@ -75,16 +72,6 @@ export default async function GrantsPage({
         />
       </section>
 
-      {schedule ? (
-        <FeatureLink
-          eyebrow="Scheduled payments"
-          title={formatUsdCents(schedule.totalCents)}
-          description={`${schedule.rows.length} unpaid milestones with a future estimated date, a different population from the open commitments above (which count every unpaid milestone). Explore the total by month and category.`}
-          href="/zcg/schedule"
-          label="View payment schedule"
-        />
-      ) : null}
-
       <Card className="overflow-hidden p-0">
         <div className="ws-ledger">
           <GrantsTable
@@ -108,18 +95,6 @@ export default async function GrantsPage({
         </div>
       </Card>
 
-      <p className="mt-4 text-xs text-stone-600">
-        {grants.length} grants · one project per row · click to view its
-        milestones
-      </p>
-
-      <FeatureLink
-        eyebrow="People behind the decisions"
-        title="Meet the ZCG committee"
-        description="Current members, public affiliations, disclosed roles and election records."
-        href="/zcg/committee"
-        label="View committee"
-      />
       <SourceNote>
         One project per row. Paid values use the ledger’s budgeted USD amounts;
         open commitments exclude cancelled grants. Payment records do not

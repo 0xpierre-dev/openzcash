@@ -158,7 +158,7 @@ export function AppShell({
   const place = rawPlace?.app.admin && !isAdmin ? undefined : rawPlace;
   const apps = APPS.filter((a) => !a.admin || isAdmin);
   const back = backOf(pathname);
-  const isHome = pathname === "/";
+  const isHome = pathname === "/zcg" || pathname === "/";
 
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
@@ -237,7 +237,7 @@ export function AppShell({
       className={cn("rd-shell", isPreview && "rd-shell-preview")}
       data-theme={theme}
       data-nav={navOpen ? "open" : undefined}
-      data-section={place?.app.label ?? (isHome ? "Home" : "Explore")}
+      data-section={place?.app.label ?? "Explore"}
     >
       <a href="#main-content" className="rd-skip">
         Skip to content
@@ -253,7 +253,7 @@ export function AppShell({
           >
             <Glyph d={GLYPH.close} />
           </button>
-          <Link href="/" className="rd-brand" aria-label="OpenZcash home">
+          <Link href="/zcg" className="rd-brand" aria-label="OpenZcash home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logos/marks/openzcash.png" width="68" height="68" alt="" />
             <span className="rd-brand-text">
@@ -262,16 +262,6 @@ export function AppShell({
           </Link>
         </div>
         <nav className="rd-side-nav" aria-label="Apps">
-          <Link
-            href="/"
-            className="rd-side-item rd-side-home"
-            aria-current={isHome ? "page" : undefined}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logos/glyphs/home.png" alt="" width={15} height={15} className="rd-side-page-icon" />
-            <span className="rd-side-label">Home</span>
-            <small>treasuries · apps</small>
-          </Link>
           {apps.map((app) => {
             const isCurrentApp = place?.app.id === app.id;
             const open = app.pages.length
@@ -369,10 +359,11 @@ export function AppShell({
             </Link>
           ) : null}
           <nav className="rd-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
+            {!place && pathname === "/treasury" ? (
+              <span>Treasury at a glance</span>
+            ) : null}
             {place ? (
               <>
-                <span aria-hidden>›</span>
                 {place.page ? (
                   <Link href={place.app.href}>{place.app.label}</Link>
                 ) : (
@@ -394,11 +385,6 @@ export function AppShell({
                     <span>{place.detail.label}</span>
                   </>
                 ) : null}
-              </>
-            ) : !isHome ? (
-              <>
-                <span aria-hidden>›</span>
-                <span>All apps</span>
               </>
             ) : null}
           </nav>
@@ -430,37 +416,6 @@ export function AppShell({
 
         <main id="main-content" className="rd-main">
           <div className="rd-content">{children}</div>
-          {place && place.app.pages.length > 0 ? (
-            <nav className="ws-page-trail" aria-label={`${place.app.label} pages`}>
-              <span>{place.app.label}</span>
-              <div>
-                {[{ href: place.app.href, label: "Overview" }, ...place.app.pages]
-                  .filter(
-                    (p) =>
-                      p.href !== pathname &&
-                      p.href !== place.page?.href &&
-                      p.href !== place.detail?.parent.href,
-                  )
-                  .map((p) => (
-                    <Link key={p.href} href={p.href}>
-                      {p.label}
-                      <span aria-hidden>→</span>
-                    </Link>
-                  ))}
-              </div>
-            </nav>
-          ) : null}
-          <footer className="rd-footer">
-            <span>
-              <strong>OpenZcash</strong>
-              <span aria-hidden> / </span>Public transparency, thoughtfully
-              connected.
-            </span>
-            <div>
-              <Link href="/zcg/methodology">Sources &amp; methodology →</Link>
-              <Link href={isPreview ? "/design-review" : "/"}>All apps →</Link>
-            </div>
-          </footer>
         </main>
 
         {footer ? (
@@ -521,8 +476,8 @@ export function AppShell({
           })}
         </div>
         <div className="ws-dialog-foot">
-          <Link href="/" onClick={close}>
-            All apps and treasuries →
+          <Link href="/treasury" onClick={close}>
+            Treasuries and all apps →
           </Link>
         </div>
       </dialog>

@@ -1,7 +1,5 @@
 import {
   EditorialIntro,
-  RecordLayout,
-  RelatedLinks,
   Facts,
 } from "@/components/workspace";
 import { Suspense } from "react";
@@ -224,19 +222,7 @@ export default async function ZfPage() {
           ]}
         />
       </EditorialIntro>
-      <RecordLayout
-        aside={
-          <RelatedLinks
-            title="Explore this organization"
-            links={[
-              { href: FORUM_CATEGORY, label: "Official Foundation forum" },
-              { href: ZCAP_SHEET_URL, label: "ZCAP membership source" },
-              { href: "/development", label: "Development activity" },
-              { href: "/z3", label: "Zebra & the Z3 stack" },
-            ]}
-          />
-        }
-      >
+      <>
         <Suspense
           fallback={
             <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-600 shadow-sm">
@@ -365,7 +351,7 @@ export default async function ZfPage() {
             </p>
           </Card>
         )}
-      </RecordLayout>
+      </>
     </>
   );
 }

@@ -1,8 +1,4 @@
-import {
-  SectionHeading,
-  RecordLayout,
-  RelatedLinks,
-} from "@/components/workspace";
+import { SectionHeading } from "@/components/workspace";
 import Link from "next/link";
 import { Card, PageHeader, Stat } from "@/components/ui";
 import { SourceRecordLink } from "@/components/source-record-link";
@@ -11,6 +7,20 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { Synced } from "@/components/synced";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Scheduled payments · OpenZcash" };
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+/** "2026-10" → "Oct 2026". */
+function monthLabel(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  return `${MONTHS[(m ?? 1) - 1]} ${y}`;
+}
+/** "2026-10" → "2026-10-31", the month's last day. */
+function monthEnd(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return `${ym}-${String(last).padStart(2, "0")}`;
+}
+
 export default async function SchedulePage({
   searchParams,
 }: {
@@ -22,7 +32,7 @@ export default async function SchedulePage({
     <>
       <PageHeader
         title="Scheduled payments"
-        subtitle="Approved commitments with a future payment estimate. Plan by month, category and project."
+        subtitle="Approved commitments with a future payment estimate. Plan by month and project."
       />
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat
@@ -93,130 +103,108 @@ export default async function SchedulePage({
           Reset
         </Link>
       </form>
-      <RecordLayout
-        aside={
-          <>
-            {" "}
-            <div className="ws-schedule-breakdowns">
-              <Card>
-                <h2>By category</h2>
-                {s.byCategory.length ? (
-                  s.byCategory.map((g) => (
-                    <div className="rd-breakdown" key={g.label}>
-                      <span>
-                        {g.label}
-                        <small>{g.count} payments</small>
-                      </span>
-                      <strong className="tnum">
-                        {formatUsdCents(g.cents)}
-                      </strong>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-xs text-stone-600">
-                    No scheduled payments in this selection.
-                  </p>
-                )}
-              </Card>
-              <Card>
-                <h2>By month</h2>
-                {s.byMonth.map((g) => (
-                  <div className="rd-breakdown" key={g.label}>
-                    <span>
-                      {g.label}
-                      <small>{g.count} payments</small>
-                    </span>
-                    <strong className="tnum">{formatUsdCents(g.cents)}</strong>
-                  </div>
-                ))}
-              </Card>
-            </div>
-            <RelatedLinks
-              links={[
-                { href: "/zcg/grants", label: "All grant commitments" },
-                { href: "/zcg/disbursements", label: "Recorded payments" },
-              ]}
-            />
-          </>
-        }
-      >
-        <SectionHeading
-          title="Upcoming payments"
-          count={s.rows.length}
-          description="Estimated dates, budgeted USD and the source of each approved milestone."
-        />
-        <Card className="overflow-x-auto p-0">
-          <table className="w-full min-w-[780px] text-left">
-            <thead>
-              <tr>
-                {[
-                  "Estimated date",
-                  "Grant / milestone",
-                  "Recipient",
-                  "Category",
-                  "Budgeted USD",
-                  "Source",
-                ].map((h) => (
-                  <th className="px-4" key={h}>
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {s.rows.map((r) => (
-                <tr key={r.id} className="tbl-row border-b">
-                  <td className="whitespace-nowrap px-4 tnum">
-                    {r.estimatedPayoutDate}
-                  </td>
-                  <td className="px-4">
-                    <Link
-                      href={`/zcg/grant?g=${encodeURIComponent(r.project!)}`}
-                      className="font-medium text-stone-900 hover:text-amber-700"
-                    >
-                      {r.project}
-                    </Link>
-                    <span className="mt-1 block text-[11px] text-stone-500">
-                      {r.milestoneLabel ?? r.deliverable ?? "Milestone"}
-                    </span>
-                  </td>
-                  <td className="px-4">
-                    <Link
-                      href={`/zcg/recipient?r=${encodeURIComponent(r.recipientNameRaw ?? "")}`}
-                    >
-                      {r.recipientNameRaw}
-                    </Link>
-                  </td>
-                  <td className="px-4">{r.category ?? "Uncategorized"}</td>
-                  <td className="whitespace-nowrap px-4 font-medium text-amber-800 tnum">
-                    {formatUsdCents(r.amountUsdCents)}
-                  </td>
-                  <td className="px-4">
-                    <SourceRecordLink
-                      gid={r.sourceSheetGid}
-                      rowIndex={r.sourceRowIndex}
-                      importedAt={r.importedAt}
-                    />
-                  </td>
-                </tr>
+      {s.byMonth.length ? (
+        <nav className="ws-month-strip" aria-label="Scheduled value by month">
+          {s.byMonth.map((g) => {
+            const from = `${g.label}-01`;
+            const to = monthEnd(g.label);
+            const category = params.category
+              ? `&category=${encodeURIComponent(params.category)}`
+              : "";
+            return (
+              <Link
+                key={g.label}
+                href={`/zcg/schedule?from=${from}&to=${to}${category}`}
+                aria-current={s.from === from && s.to === to ? "page" : undefined}
+              >
+                <span>{monthLabel(g.label)}</span>
+                <strong className="tnum">
+                  {formatUsdCents(g.cents, { compact: true })}
+                </strong>
+                <small>
+                  {g.count} {g.count === 1 ? "payment" : "payments"}
+                </small>
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
+      <SectionHeading
+        title="Upcoming payments"
+        count={s.rows.length}
+        description="Estimated dates, budgeted USD and the source of each approved milestone."
+      />
+      <Card className="overflow-x-auto p-0">
+        <table className="w-full text-left">
+          <thead>
+            <tr>
+              {[
+                "Estimated date",
+                "Grant / milestone",
+                "Recipient",
+                "Category",
+                "Budgeted USD",
+                "Source",
+              ].map((h) => (
+                <th className="px-4" key={h}>
+                  {h}
+                </th>
               ))}
-            </tbody>
-          </table>
-          {!s.rows.length && (
-            <p className="p-8 text-center text-sm text-stone-600">
-              No approved future payments match these filters.
-            </p>
-          )}
-        </Card>
-        <p className="mt-5 text-xs leading-relaxed text-stone-600">
-          Dates are estimates, not payment confirmations. Cancelled, vetoed,
-          returned, test and internal entries are excluded. {s.unknownAmount}{" "}
-          dated entries have an unknown amount; {s.nonpositive} have a
-          non-positive amount. Neither is counted as a future payment. Undated
-          and past estimates remain available in each grant’s original milestone
-          table. Day boundary: Brasília time.
-        </p>
-      </RecordLayout>
+            </tr>
+          </thead>
+          <tbody>
+            {s.rows.map((r) => (
+              <tr key={r.id} className="tbl-row border-b">
+                <td className="whitespace-nowrap px-4 tnum">
+                  {r.estimatedPayoutDate}
+                </td>
+                <td className="px-4">
+                  <Link
+                    href={`/zcg/grant?g=${encodeURIComponent(r.project!)}`}
+                    className="font-medium text-stone-900 hover:text-amber-700"
+                  >
+                    {r.project}
+                  </Link>
+                  <span className="mt-1 block text-[11px] text-stone-500">
+                    {r.milestoneLabel ?? r.deliverable ?? "Milestone"}
+                  </span>
+                </td>
+                <td className="px-4">
+                  <Link
+                    href={`/zcg/recipient?r=${encodeURIComponent(r.recipientNameRaw ?? "")}`}
+                  >
+                    {r.recipientNameRaw}
+                  </Link>
+                </td>
+                <td className="px-4">{r.category ?? "Uncategorized"}</td>
+                <td className="whitespace-nowrap px-4 font-medium text-amber-800 tnum">
+                  {formatUsdCents(r.amountUsdCents)}
+                </td>
+                <td className="px-4">
+                  <SourceRecordLink
+                    gid={r.sourceSheetGid}
+                    rowIndex={r.sourceRowIndex}
+                    importedAt={r.importedAt}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {!s.rows.length && (
+          <p className="p-8 text-center text-sm text-stone-600">
+            No approved future payments match these filters.
+          </p>
+        )}
+      </Card>
+      <p className="mt-5 text-xs leading-relaxed text-stone-600">
+        Dates are estimates, not payment confirmations. Cancelled, vetoed,
+        returned, test and internal entries are excluded. {s.unknownAmount}{" "}
+        dated entries have an unknown amount; {s.nonpositive} have a
+        non-positive amount. Neither is counted as a future payment. Undated
+        and past estimates remain available in each grant’s original milestone
+        table. Day boundary: Brasília time.
+      </p>
       <Synced className="mt-4" />
     </>
   );

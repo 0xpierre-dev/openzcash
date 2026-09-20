@@ -69,12 +69,16 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    Shielded Labs, ZecHub DAO, Z3, Zakura, ZODL, Ecosystem, Wallets,
    Communities, DeFi, Arborist Calls, News, Monthly (Manage só para admin),
    cada um com logo oficial quando existe e suas páginas internas. Zakura e
-   ZODL abrem seus registros no Ecosystem (`?project=zakura`, `?org=zodl`). Os apps "de entrada"
+   ZODL abrem seus registros no Ecosystem (`?project=zakura`, `?org=zodl`).
+   A home é a visão geral do ZCG: `/` redireciona para `/zcg`, o banner leva
+   para lá e não existe item "Home". As tesourarias e o launcher vivem em
+   `/treasury`, alcançado pela barra do rodapé e pelo diálogo ⌘K. Os apps "de entrada"
    (Monthly, News, Lockbox) não abrem mais a lista. Tudo deriva dele: a sidebar (app com logo, páginas
-   expansíveis, contagens), a trilha "Home › App › Página › Detalhe" no topo,
-   o único controle de voltar (detalhe → lista, página → app, app → Home), as
-   páginas irmãs no rodapé e o diálogo ⌘K. Nenhum `‹` inline. Links
-   contextuais de escape ("Totals →") são permitidos porque não são "voltar".
+   expansíveis, contagens), a trilha "App › Página › Detalhe" no topo, o
+   único controle de voltar (detalhe → lista, página → app, app → ZCG) e o
+   diálogo ⌘K. Nenhum `‹` inline, nenhuma trilha de páginas irmãs nem rodapé
+   de página: a sidebar já é o índice. Links contextuais de escape
+   ("Totals →") são permitidos porque não são "voltar".
 7. Rótulos de status vêm de `src/lib/zcg/status-labels.ts` (grant, veredito ZCG,
    veredito coinholder). Nenhuma tela define o próprio mapa.
 8. Tabelas usam `DataTable`: 25/50/100 linhas ou todas, CSV com o texto exibido,
@@ -97,6 +101,13 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
     de página em dourado (`public/logos/glyphs/*.png`). A ZF usa só o emblema
     (cadeado-escudo, seis primeiras formas do SVG oficial), legível a 18px.
     Só os chevrons e o botão de fechar continuam vetoriais.
+13. Detox: nada miúdo sem motivo. Sem hambúrguer no desktop, sem blocos de
+    destaque que repetem uma página que existe (o cronograma na lista de
+    grants, o comitê no fim da lista), sem asides só de links ao lado de
+    tabelas (Scheduled e ZF ocupam a coluna inteira; o cronograma mostra os
+    meses como faixa de filtros em vez de um card por categoria). A barra
+    das tesourarias usa a mesma faixa dourada do banner (`--band`), com o
+    nome de cada pool em cima e os valores numa só linha de base.
 12. Sidebar sem linhas e acompanhando o tema: painel creme `#f3efe6` no claro
     e quase-preto no escuro (tokens `--side-*` nos dois blocos), sem borda à
     direita, sem guia vertical nas páginas aninhadas, sem separador no rodapé

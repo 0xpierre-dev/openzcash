@@ -232,6 +232,24 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Detox — 20 September 2026
+
+- The home is the ZCG overview: `/` redirects to `/zcg`, the banner links
+  there, the "Home" item is gone. The former home (treasuries and launcher)
+  lives at `/treasury`, reached from the treasury bar and the ⌘K dialog.
+- The breadcrumb reads "App › Page › Detail"; the back control goes detail →
+  list, page → app, app → ZCG. The sibling-page trail and the page footer
+  are gone; the sidebar is the index.
+- The hamburger only shows in the mobile drawer. The treasury bar sits on
+  the banner's gold band (`--band`), each pool with its name above and the
+  figures on one baseline, meta and link stacked on the right.
+- Grants no longer carries the scheduled-payments block nor the committee
+  promo. Scheduled drops the category card and the aside: the table spans
+  the column and the months are a strip of filters. ZF drops its links
+  aside for the same reason.
+- The ZCG overview's two cards keep their own heights (no stretched empty
+  card).
+
 ### Sidebar revision — 20 September 2026
 
 - The banner is centred: the official mark at 68px over the gold band, the
