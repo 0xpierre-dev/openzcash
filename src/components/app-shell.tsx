@@ -160,7 +160,8 @@ export function AppShell({
   // Data-management pages exist for administrators only; an anonymous visitor
   // on the public /onboarding route gets no trail into them.
   const place = rawPlace?.app.admin && !isAdmin ? undefined : rawPlace;
-  const apps = APPS.filter((a) => !a.admin || isAdmin);
+  // Hidden apps (Lockbox) open only from the treasury bar.
+  const apps = APPS.filter((a) => (!a.admin || isAdmin) && !a.hidden);
   const back = backOf(pathname);
   const isHome = pathname === "/zcg" || pathname === "/";
 
@@ -301,7 +302,7 @@ export function AppShell({
                 </div>
                 {open ? (
                   <div className="rd-side-pages">
-                    {app.pages.map((p) => {
+                    {app.pages.filter((p) => !p.hidden).map((p) => {
                       const active =
                         place?.page?.href === p.href ||
                         place?.detail?.parent.href === p.href;
@@ -458,7 +459,7 @@ export function AppShell({
             const q = query.toLowerCase();
             const entries = [
               { href: app.href, label: app.pages.length ? "Overview" : app.label },
-              ...app.pages,
+              ...app.pages.filter((p) => !p.hidden),
             ].filter((p) => (p.label + " " + app.label + " " + app.sub).toLowerCase().includes(q));
             return entries.length ? (
               <section key={app.id}>

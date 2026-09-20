@@ -107,6 +107,11 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
     de página em dourado (`public/logos/glyphs/*.png`). A ZF usa só o emblema
     (cadeado-escudo, seis primeiras formas do SVG oficial), legível a 18px.
     Só os chevrons e o botão de fechar continuam vetoriais.
+14. Apps e páginas podem ser `hidden` no modelo: ficam fora da sidebar e do
+    ⌘K mas mantêm rota, trilha e voltar. Hoje: Lockbox (abre pelo pool da
+    barra), Stipends e Budget (o comitê já traz os dois). As três telas de
+    Copilot usam um só layout mínimo (`components/copilot/`), com marcas de
+    agentes do `simple-icons` em PNG.
 13. Detox: nada miúdo sem motivo. Sem hambúrguer no desktop, sem blocos de
     destaque que repetem uma página que existe (o cronograma na lista de
     grants, o comitê no fim da lista), sem asides só de links ao lado de

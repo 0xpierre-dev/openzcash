@@ -1055,10 +1055,6 @@
   font-size: 13px;
   color: var(--accent-ink);
 }
-.rd-shell .ws-copilot-hero {
-  border-radius: 12px;
-  padding: 24px;
-}
 .rd-shell .ws-nav-cards > a,
 .rd-shell .ws-navigation-card {
   border-radius: 12px;
@@ -1332,4 +1328,239 @@
 .rd-content .ws-month-strip small {
   font-size: 11px;
   color: var(--dim);
+}
+
+/* ---------- Copilot pages: install, demo, examples, sources ---------- */
+.rd-content .ws-copilot-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 40px;
+  align-items: start;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+}
+/* Specific enough to beat the old hero eyebrow rule in workspace.css. */
+.rd-content .ws-copilot-hero .ws-copilot-intro,
+.rd-content .ws-copilot-hero > div > p.ws-copilot-intro:first-child {
+  max-width: 52ch;
+  margin: 0 0 18px;
+  font-family: inherit;
+  font-size: 14.5px;
+  letter-spacing: 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.rd-content .ws-copilot section > p.ws-copilot-note {
+  letter-spacing: 0;
+}
+.rd-content .ws-install {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.rd-content .ws-install code {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  white-space: nowrap;
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.rd-content .ws-install button {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.rd-content .ws-install button:hover {
+  border-color: var(--line-strong);
+}
+.rd-content .ws-copilot-fine {
+  margin: 10px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--dim);
+}
+.rd-content .ws-copilot-fine a,
+.rd-content .ws-copilot-note a {
+  color: var(--accent-ink);
+}
+.rd-content .ws-copilot-fine code {
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 11px;
+}
+.rd-content .ws-copilot-label {
+  margin: 24px 0 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rd-content .ws-agent-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rd-content .ws-agent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.rd-content .ws-agent-chip:hover {
+  border-color: var(--line-strong);
+}
+.rd-content .ws-agent-chip small {
+  font-size: 11px;
+  color: var(--dim);
+}
+.rd-content .ws-agent-mark {
+  width: 16px;
+  height: 16px;
+}
+.rd-shell[data-theme="dark"] .ws-agent-mark {
+  filter: invert(1);
+}
+.rd-content .ws-copilot-demo {
+  min-width: 0;
+}
+.rd-content .ws-terminal {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface2);
+}
+.rd-content .ws-terminal-head {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.rd-content .ws-terminal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 420px;
+  overflow: hidden;
+  padding: 16px 18px;
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.rd-content .ws-terminal-body p {
+  margin: 0;
+}
+.rd-content .ws-t-ink { color: var(--ink); }
+.rd-content .ws-t-body { color: var(--muted); }
+.rd-content .ws-t-dim { color: var(--dim); }
+.rd-content .ws-t-note { font-size: 11px; color: var(--dim); }
+.rd-content .ws-t-prompt { margin-right: 8px; color: var(--accent-ink); }
+.rd-content .ws-t-usd { color: var(--accent-ink); }
+.rd-content .ws-t-pos { font-weight: 500; color: var(--pos); }
+.rd-content .ws-t-neg { font-weight: 500; color: var(--neg); }
+.rd-content .ws-t-accent { font-weight: 500; color: var(--accent-ink); }
+.rd-content .ws-t-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 2px;
+  transform: translateY(0.18em);
+  background: var(--accent);
+  animation: ws-blink 1s steps(2) infinite;
+}
+@keyframes ws-blink {
+  50% { opacity: 0; }
+}
+.rd-content .ws-copilot-block {
+  margin-top: 36px;
+}
+.rd-content .ws-copilot-block h2 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.rd-content .ws-copilot-examples,
+.rd-content .ws-copilot-sources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rd-content .ws-copilot-examples li,
+.rd-content .ws-copilot-sources li {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.rd-content .ws-copilot-q {
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.rd-content .ws-copilot-q::before {
+  content: "❯ ";
+  color: var(--accent-ink);
+}
+.rd-content .ws-copilot-a {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.rd-content .ws-copilot-sources strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.rd-content .ws-copilot-sources span {
+  display: block;
+  margin-top: 3px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.rd-content .ws-copilot-note {
+  max-width: 72ch;
+  margin: 16px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--dim);
+}
+.rd-content .ws-copilot-note code {
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 11px;
+}
+@media (max-width: 960px) {
+  .rd-content .ws-copilot-hero,
+  .rd-content .ws-copilot-examples,
+  .rd-content .ws-copilot-sources {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

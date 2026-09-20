@@ -1,6 +1,5 @@
-import { PageHeader } from "@/components/ui";
 import { Terminal } from "./terminal";
-import { AddToAgent } from "../../zcg/copilot/add-to-agent";
+import { CopilotPage } from "@/components/copilot/copilot-page";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -47,86 +46,25 @@ const SOURCES = [
   },
 ];
 
-export default function ZechubCopilotPage() {
+export default function ZecHubCopilotPage() {
   return (
-    <div className="ws-copilot">
-      <PageHeader
-        title="ZecHub Copilot"
-        subtitle="Explore DAO votes, treasury records and governance thresholds."
-      />
-
-      <section className="ws-copilot-hero">
-        <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.35em] text-amber-700">
-            An agent skill for the ZecHub DAO
-          </p>
-          <h2 className="ws-copilot-title">
-            More yes than no
-            <br />
-            is not a win.
-          </h2>
-          <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-stone-600">
-            ZecHub decides its funding on-chain, and the rule is stricter than
-            it looks: a proposal needs 67% of yes+no <em>and</em> 40% turnout.
-            This skill turns your coding agent into a copilot that computes both
-            tests from the live indexer, names every voter, and reads the
-            treasury without falling into its traps. Every figure comes with a
-            citation.
-          </p>
-          <div className="ws-install-command">
-            <code className="font-mono text-sm text-emerald-400">
-              npx skills add Michae2xl/openzcash --skill zechub-copilot
-            </code>
-          </div>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-stone-400">
-            BYO-LLM · no key · no hosted service
-          </p>
-          <div className="mt-8">
-            <AddToAgent skill="zechub-copilot" />
-          </div>
-        </div>
-        <Terminal />
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Ask things like
-        </p>
-        <div className="ws-prompt-grid">
-          {USE_CASES.map((u) => (
-            <div
-              key={u.q}
-              className="bg-white p-6 transition-colors hover:bg-stone-50"
-            >
-              <p className="font-mono text-[13px] leading-relaxed text-stone-900">
-                <span className="mr-1.5 text-amber-600">❯</span>
-                {u.q}
-              </p>
-              <p className="mt-2.5 text-xs leading-relaxed text-stone-500">
-                {u.a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Grounded in four public sources
-        </p>
-        <div className="ws-source-grid">
-          {SOURCES.map((s) => (
-            <div key={s.name} className="bg-white p-6">
-              <p className="font-mono text-[13px] font-semibold text-stone-900">
-                {s.name}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-stone-500">
-                {s.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-stone-400">
+    <CopilotPage
+      title="ZecHub Copilot"
+      subtitle="Explore DAO votes, treasury records and governance thresholds."
+      skill="zechub-copilot"
+      intro={
+        <>
+          ZecHub decides its funding on-chain, and the rule is stricter than it
+          looks: a proposal needs 67% of yes+no <em>and</em> 40% turnout. This
+          skill turns your coding agent into a copilot that computes both tests
+          from the live indexer, names every voter, and reads the treasury
+          without falling into its traps. Every figure comes with a citation.
+        </>
+      }
+      examples={USE_CASES}
+      sources={SOURCES}
+      note={
+        <>
           The skill encodes the traps that produce wrong answers: abstentions
           that carry quorum without diluting the threshold, <code>closed</code>{" "}
           and <code>rejected</code> both meaning defeat, milestones marked
@@ -134,8 +72,9 @@ export default function ZechubCopilotPage() {
           snapshotted per proposal, and the difference between what the DAO
           holds on-chain and what ZecHub can actually spend. It is read-only and
           never submits or votes.
-        </p>
-      </section>
-    </div>
+        </>
+      }
+      terminal={<Terminal />}
+    />
   );
 }

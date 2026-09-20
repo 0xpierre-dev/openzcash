@@ -1,7 +1,5 @@
 import Link from "next/link";
 import {
-  EditorialIntro,
-  RelatedLinks,
   SectionHeading,
   SourceNote,
 } from "@/components/workspace";
@@ -105,25 +103,6 @@ export default async function CommitteePage() {
         />
       </section>
 
-      <EditorialIntro
-        eyebrow="Governance"
-        title={`${seats} seats. Public decisions.`}
-        description="Meet the current members, inspect their public roles and follow their recorded connections to the ecosystem. Every figure on this page links back to the record it comes from."
-      >
-        <RelatedLinks
-          links={[
-            { href: "/zcg/meetings", label: "Committee meetings" },
-            { href: "/zcg/stipends", label: "Compensation history" },
-            { href: "/zcg/budget", label: "Discretionary budget" },
-            { href: "/zcg/proposals", label: "Proposal decisions" },
-            {
-              href: "/zf",
-              label: "ZCAP roster",
-              description: "The panel that votes in ZCG elections",
-            },
-          ]}
-        />
-      </EditorialIntro>
 
       <CurrentCommittee />
 

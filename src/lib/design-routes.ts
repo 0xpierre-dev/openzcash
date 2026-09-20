@@ -10,9 +10,13 @@ export type AppPage = {
   label: string;
   /** PNG glyph shown beside the page in the sidebar. */
   mark?: string;
+  /** Kept in the model (breadcrumb, back) but not listed in the sidebar or ⌘K. */
+  hidden?: boolean;
 };
 
 export type AppDef = {
+  /** Kept in the model (breadcrumb, back) but not listed in the sidebar or ⌘K. */
+  hidden?: boolean;
   id: string;
   label: string;
   /** Landing route of the app. */
@@ -53,14 +57,14 @@ export const APPS: AppDef[] = [
       { href: "/zcg/reconciliation", label: "Reconciliation", mark: "/logos/glyphs/reconciliation.png" },
       { href: "/zcg/committee", label: "Committee", mark: "/logos/glyphs/committee.png" },
       { href: "/zcg/meetings", label: "Meetings", mark: "/logos/glyphs/meetings.png" },
-      { href: "/zcg/stipends", label: "Stipends", mark: "/logos/glyphs/stipends.png" },
-      { href: "/zcg/budget", label: "Budget", mark: "/logos/glyphs/budget.png" },
+      { href: "/zcg/stipends", label: "Stipends", mark: "/logos/glyphs/stipends.png", hidden: true },
+      { href: "/zcg/budget", label: "Budget", mark: "/logos/glyphs/budget.png", hidden: true },
       { href: "/zcg/office", label: "ZCG Office", mark: "/logos/glyphs/office.png" },
       { href: "/zcg/methodology", label: "Sources & API", mark: "/logos/glyphs/methodology.png" },
       { href: "/zcg/copilot", label: "ZCG Copilot", mark: "/logos/glyphs/copilot.png" },
     ],
   },
-  { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [] },
+  { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
   {
     id: "fpf",
     label: "FPF",
@@ -73,7 +77,7 @@ export const APPS: AppDef[] = [
       { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
     ],
   },
-  { id: "zf", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/marks/zf.png", icon: "balance", pages: [] },
+  { id: "zf", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/ecosystem/zcash-foundation.png", icon: "balance", pages: [] },
   {
     id: "zodl",
     label: "ZODL",

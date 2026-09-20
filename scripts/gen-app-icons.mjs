@@ -2,7 +2,8 @@
 // apps without an official logo, inner-page glyphs, and the ZF and brand vectors.
 // Run from the repository root: node scripts/gen-app-icons.mjs
 import sharp from "sharp";
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { siClaude, siCursor, siGithubcopilot, siOpencode, siWindsurf } from "simple-icons";
 const src = readFileSync("src/components/icons.tsx", "utf8");
 function shape(name) {
   const head = `export const ${name} = svg(`;
@@ -48,3 +49,14 @@ const zfPaths = zf.match(/<path\b[\s\S]*?<\/path>|<path\b[^>]*?\/>/g) ?? [];
 const zfEmblem = zf.slice(0, zf.indexOf("<path")) + zfPaths.slice(0, 6).join("") + "</g></svg>";
 await sharp(Buffer.from(zfEmblem)).resize(400, 400, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).trim().resize(232, 232, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).extend({ top: 12, bottom: 12, left: 12, right: 12, background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toFile("public/logos/marks/zf.png");
 await sharp("public/zcash-mark.svg").resize(256, 256, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toFile("public/logos/marks/openzcash.png");
+
+// Agent marks for the copilot pages: brand glyphs from simple-icons, in ink on
+// transparent (the dark theme inverts them). Codex has no published mark and
+// keeps a plain hexagon.
+const AGENTS = { "claude-code": siClaude.path, cursor: siCursor.path, opencode: siOpencode.path, windsurf: siWindsurf.path, "github-copilot": siGithubcopilot.path };
+mkdirSync("public/logos/agents", { recursive: true });
+for (const [id, d] of Object.entries(AGENTS)) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24"><path fill="${INK}" d="${d}"/></svg>`;
+  await sharp(Buffer.from(svg)).png().toFile(`public/logos/agents/${id}.png`);
+}
+await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l7.8 4.5v9L12 21 4.2 16.5v-9z"/><circle cx="12" cy="12" r="2.6" fill="${INK}" stroke="none"/></svg>`)).png().toFile("public/logos/agents/codex.png");

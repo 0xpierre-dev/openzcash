@@ -232,6 +232,24 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Copilots, Lockbox and committee — 20 September 2026
+
+- The three copilot pages (ZCG, Coinholder, ZecHub) share one quiet layout
+  (`components/copilot/copilot-page.tsx`): intro, install command with a
+  copy button, agent chips, the demo transcript, the questions it answers
+  and the sources it reads. No display headline, no cards, no shadows.
+- The transcripts keep their animation but use the palette: ink text, gold
+  figures, verdicts in the pos/neg/accent tokens, no terminal chrome.
+- Agent marks are brand glyphs from `simple-icons` rasterised in ink
+  (`public/logos/agents/`, inverted in the dark theme); Codex has no
+  published mark and keeps a plain glyph.
+- Lockbox is hidden from the sidebar and ⌘K (`hidden` on the app); it opens
+  from the Lockbox pool in the treasury bar. Stipends and Budget are hidden
+  pages for the same reason: the committee page already carries both.
+- The committee page drops its editorial block and connected-records panel.
+- The Zcash Foundation mark is its GitHub avatar (legible on both themes);
+  the generated emblem is no longer used.
+
 ### Monthly palette — 20 September 2026
 
 - The Monthly reader keeps its structure (own header, edition library, PDF

@@ -1,7 +1,6 @@
-import { PageHeader } from "@/components/ui";
 import Link from "next/link";
 import { Terminal } from "./terminal";
-import { AddToAgent } from "./add-to-agent";
+import { CopilotPage } from "@/components/copilot/copilot-page";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -48,96 +47,31 @@ const SOURCES = [
   },
 ];
 
-export default function CopilotPage() {
+export default function ZcgCopilotPage() {
   return (
-    <div className="ws-copilot">
-      <PageHeader
-        title="ZCG Copilot"
-        subtitle="Source-backed research for Zcash grants and public spending."
-      />
-
-      <section className="ws-copilot-hero">
-        <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.35em] text-emerald-700">
-            An agent skill for Zcash funding
-          </p>
-          <h2 className="ws-copilot-title">
-            Every answer
-            <br />
-            has a receipt.
-          </h2>
-          <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-stone-600">
-            A skill that turns your coding agent into a ZCG grants copilot. Ask
-            about grants, spending, recipients, and proposals under review.
-            Answers come from the live public ledger, GitHub, and the forum,
-            with a citation on every figure, never from the model&apos;s memory.
-          </p>
-          <div className="ws-install-command">
-            <code className="font-mono text-sm text-emerald-400">
-              npx skills add Michae2xl/openzcash --skill zcg-copilot
-            </code>
-          </div>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-stone-400">
-            BYO-LLM · no key · no hosted service
-          </p>
-          <div className="mt-8">
-            <AddToAgent />
-          </div>
-        </div>
-        <Terminal />
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Ask things like
-        </p>
-        <div className="ws-prompt-grid">
-          {USE_CASES.map((u) => (
-            <div
-              key={u.q}
-              className="bg-white p-6 transition-colors hover:bg-stone-50"
-            >
-              <p className="font-mono text-[13px] leading-relaxed text-stone-900">
-                <span className="mr-1.5 text-emerald-600">❯</span>
-                {u.q}
-              </p>
-              <p className="mt-2.5 text-xs leading-relaxed text-stone-500">
-                {u.a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-16">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-stone-400">
-          Grounded in four public sources
-        </p>
-        <div className="ws-source-grid">
-          {SOURCES.map((s) => (
-            <div key={s.name} className="bg-white p-6">
-              <p className="font-mono text-[13px] font-semibold text-stone-900">
-                {s.name}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-stone-500">
-                {s.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-stone-400">
+    <CopilotPage
+      title="ZCG Copilot"
+      subtitle="Source-backed research for Zcash grants and public spending."
+      skill="zcg-copilot"
+      intro={
+        <>
+          A skill that turns your coding agent into a ZCG grants copilot. Ask
+          about grants, spending, recipients, and proposals under review.
+          Answers come from the live public ledger, GitHub, and the forum, with
+          a citation on every figure, never from the model&apos;s memory.
+        </>
+      }
+      examples={USE_CASES}
+      sources={SOURCES}
+      note={
+        <>
           The skill also encodes the data&apos;s real failure modes: same-title
           collisions between re-applications, requested vs paid confusion,
           milestone double counting. Methodology:{" "}
-          <Link
-            href="/zcg/methodology"
-            className="text-amber-700 hover:underline"
-          >
-            how we compute this
-          </Link>
-          .
-        </p>
-      </section>
-    </div>
+          <Link href="/zcg/methodology">how we compute this</Link>.
+        </>
+      }
+      terminal={<Terminal />}
+    />
   );
 }
