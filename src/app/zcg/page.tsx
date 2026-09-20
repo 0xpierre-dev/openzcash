@@ -18,7 +18,7 @@ import {
 } from "@/components/icons";
 import type { ComponentType } from "react";
 import { disbursementsSummary } from "@/lib/zcg/disbursements-repo";
-import { listProposals } from "@/lib/zcg/proposals-repo";
+import { listProposals, officeUnderReview } from "@/lib/zcg/proposals-repo";
 import { publicationDay } from "@/lib/zcg/publication-policy";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { currentElection, getElections } from "@/lib/zcg/governance-repo";
@@ -73,7 +73,7 @@ function formatDay(iso: string): string {
 }
 
 export default async function ZcgPage() {
-  const [s, changes, schedule, proposals, elections] = await Promise.all([
+  const [s, changes, schedule, proposals, queue, elections] = await Promise.all([
     disbursementsSummary(),
     listChangelog(7, 12, "zcg").catch(() => []),
     // Derived figure; never lets the app's first screen fail.
@@ -82,11 +82,11 @@ export default async function ZcgPage() {
     cached(`listProposals:all:${publicationDay()}`, LEDGER_TTL_MS, () =>
       listProposals({}),
     ).catch(() => null),
+    // The published review queue, the same set the 3D office walks.
+    officeUnderReview(100).catch(() => null),
     getElections().catch(() => []),
   ]);
-  const underReview = proposals
-    ? proposals.filter((p) => p.status === "under_review").length
-    : null;
+  const underReview = queue ? queue.length : null;
   const liveElection = currentElection(elections);
   const next = schedule?.rows[0] ?? null;
   const [dollars, cents] = formatUsdCents(schedule?.totalCents ?? 0n).split(".");

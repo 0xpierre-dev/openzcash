@@ -232,6 +232,16 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Composition revision — 20 September 2026 (approved canvas)
+
+The three screens the canvas defined now follow it: the ZCG overview (two
+columns with the scheduled payments and the week's changes, primary records
+with live counts, compact committee row, live-vote banner), the proposals
+list (verdict funnel as text tabs, selection strip with median days in
+review, requested total and rows past the average turnaround) and the grant
+detail (meta pills, progress in the summary strip, one milestone timeline).
+The full committee cards and the election history remain on `/zcg/committee`.
+
 ### Governance revision — 20 September 2026
 
 Closes the open items of the organisational trail (`docs/redesign/README.md`,
