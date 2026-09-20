@@ -11,6 +11,7 @@ import { formatZecCompact } from "@/lib/zcash/units";
 import { listChangelog } from "@/lib/zcg/changelog";
 import { proposalStatusLabel } from "@/lib/zcg/status-labels";
 import { MEMBERS, SEATED_FROM } from "./current-committee-data";
+import { maybeAutoRefresh } from "@/lib/zcg/freshness";
 import "./overview.css";
 
 export const dynamic = "force-dynamic";
@@ -54,6 +55,9 @@ function formatDay(iso: string): string {
 }
 
 export default async function ZcgPage() {
+  // The home is the stale-on-load fallback for the mirror: the boot scheduler
+  // refreshes every 6h, and a render older than that kicks a re-import too.
+  void maybeAutoRefresh();
   const [s, changes, schedule, proposals, queue, elections] = await Promise.all([
     disbursementsSummary(),
     listChangelog(7, 12, "zcg").catch(() => []),
