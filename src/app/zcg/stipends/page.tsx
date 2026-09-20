@@ -5,6 +5,7 @@ import { Synced } from "@/components/synced";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { getStipendSummary, type MemberStipend } from "@/lib/zcg/stipends";
 import { categoryTotals } from "@/lib/zcg/totals-repo";
+import { spreadsheetSource } from "@/lib/zcg/source-links";
 import { classifyLabel } from "@/lib/zcg/classification-tags";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { COHORTS, MEMBERS } from "../current-committee-data";
@@ -34,9 +35,10 @@ export default async function StipendsPage() {
       categoryTotals("zcg_grants"),
     ).catch(() => []),
   ]);
-  const allTimeUsd = cats
-    .filter((c) => classifyLabel(c.label).kind === "stipends")
-    .reduce((s, c) => s + Number(c.usdPaidToDateCents), 0);
+  const stipendCats = cats.filter((c) => classifyLabel(c.label).kind === "stipends");
+  const allTimeUsd = stipendCats.reduce((s, c) => s + Number(c.usdPaidToDateCents), 0);
+  const pivotSource = spreadsheetSource(stipendCats[0]?.sourceSheetGid ?? null, null).sourceUrl;
+  const beforeTabUsd = Math.max(allTimeUsd - total, 0);
   const dates = members.flatMap((m) => [m.firstPaid, m.lastPaid]).filter(Boolean).sort();
   const scope =
     dates.length > 0 ? `${monthOf(dates[0])} → ${monthOf(dates[dates.length - 1])}` : "monthly tab";
@@ -73,6 +75,40 @@ export default async function StipendsPage() {
           sub="monthly transfers"
         />
       </section>
+
+      {allTimeUsd > 0 ? (
+        <section className="ws-reconcile" aria-label="Where the two stipend figures differ">
+          <h2>Where the difference is</h2>
+          <div className="ws-reconcile-row">
+            <span>Cumulative classification, every cohort</span>
+            <strong className="tnum">{formatUsdCents(allTimeUsd)}</strong>
+            {pivotSource ? (
+              <a href={pivotSource} target="_blank" rel="noreferrer">
+                totals tab ↗
+              </a>
+            ) : (
+              <span />
+            )}
+          </div>
+          <div className="ws-reconcile-row">
+            <span>
+              Itemised in the monthly-payments tab · {scope} · {totalPayments}{" "}
+              payments
+            </span>
+            <strong className="tnum">− {formatUsdCents(total)}</strong>
+            <Link href="/zcg/disbursements?sheet=monthly">every payment →</Link>
+          </div>
+          <div className="ws-reconcile-row ws-reconcile-sum">
+            <span>
+              Paid before the tab begins. The spreadsheet only carries this
+              part as a total, so it cannot be opened payment by payment or by
+              member.
+            </span>
+            <strong className="tnum">{formatUsdCents(beforeTabUsd)}</strong>
+            <span />
+          </div>
+        </section>
+      ) : null}
 
       {members.length > 0 ? (
         [
