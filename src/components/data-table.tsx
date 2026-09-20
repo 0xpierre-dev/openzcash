@@ -340,7 +340,7 @@ export function DataTable<T>({
       )}
       <div className="ws-table-toolbar">
         {globalSearch && (
-          <label className="ws-table-search">
+          <label className="ws-table-search ws-field">
             <span aria-hidden>⌕</span>
             <input
               type="search"
