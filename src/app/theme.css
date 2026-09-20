@@ -5,30 +5,30 @@
  * markup or data when the palette changes.
  */
 .rd-shell {
-  --bg: #f5f5f8;
+  --bg: #faf8f4;
   --surface: #ffffff;
-  --surface2: #fafafc;
-  --line: #e5e6ec;
-  --line-strong: #d5d7e0;
-  --ink: #16161f;
-  --muted: #5c5f6e;
-  --dim: #8b8e9c;
-  --accent: #4b5fe0;
-  --accent-ink: #3646b8;
-  --accent-soft: #eef0fc;
-  --accent-muted: rgba(75, 95, 224, 0.35);
-  --pos: #1f8a5b;
-  --pos-soft: #e8f6ef;
-  --neg: #b42318;
-  --neg-soft: #fcebe9;
-  --warn: #8a5a00;
-  --warn-soft: #fbf3de;
+  --surface2: #f6f3ec;
+  --line: #e9e3d6;
+  --line-strong: #d8cfba;
+  --ink: #1c1917;
+  --muted: #57534e;
+  --dim: #78716c;
+  --accent: #b7791f;
+  --accent-ink: #92600f;
+  --accent-soft: rgba(183, 121, 31, 0.1);
+  --accent-muted: rgba(183, 121, 31, 0.35);
+  --pos: #15803d;
+  --pos-soft: rgba(21, 128, 61, 0.1);
+  --neg: #be123c;
+  --neg-soft: rgba(190, 18, 60, 0.1);
+  --warn: #92600f;
+  --warn-soft: rgba(183, 121, 31, 0.12);
   --gold: #f4b728;
-  --side-bg: #12121a;
-  --side-ink: #d5d7e0;
-  --side-dim: #8a8da0;
-  --side-line: rgba(180, 183, 200, 0.14);
-  --side-active: rgba(180, 183, 200, 0.16);
+  --side-bg: #1c1917;
+  --side-ink: #e7e5e4;
+  --side-dim: #a8a29e;
+  --side-line: rgba(255, 255, 255, 0.08);
+  --side-active: rgba(255, 255, 255, 0.1);
   --rd-line: var(--line);
   --rd-gold: var(--accent);
   --ws-line: var(--line);
@@ -45,25 +45,25 @@
 /* Dark: near-black with a light gold-to-black gradient, the house identity.
    Chosen with the toggle only; the default is always the light workspace. */
 .rd-shell[data-theme="dark"] {
-  --bg: #0e0e13;
-  --surface: #16161f;
-  --surface2: #1b1b26;
-  --line: rgba(180, 183, 200, 0.14);
-  --line-strong: rgba(180, 183, 200, 0.28);
-  --ink: #f2f3f8;
-  --muted: #a0a3b2;
-  --dim: #767a8b;
-  --accent: #7d8cf2;
-  --accent-ink: #a9b4f7;
-  --accent-soft: rgba(125, 140, 242, 0.16);
-  --accent-muted: rgba(125, 140, 242, 0.4);
-  --pos: #4cc38a;
-  --pos-soft: rgba(76, 195, 138, 0.14);
-  --neg: #f08c7a;
-  --neg-soft: rgba(240, 140, 122, 0.14);
+  --bg: #0f0e0c;
+  --surface: #171613;
+  --surface2: #1d1b18;
+  --line: rgba(231, 229, 228, 0.12);
+  --line-strong: rgba(231, 229, 228, 0.24);
+  --ink: #f5f5f4;
+  --muted: #a8a29e;
+  --dim: #78716c;
+  --accent: #d9a441;
+  --accent-ink: #e8c06a;
+  --accent-soft: rgba(217, 164, 65, 0.14);
+  --accent-muted: rgba(217, 164, 65, 0.4);
+  --pos: #4ade80;
+  --pos-soft: rgba(74, 222, 128, 0.14);
+  --neg: #fb7185;
+  --neg-soft: rgba(251, 113, 133, 0.14);
   --warn: #e3b341;
   --warn-soft: rgba(227, 179, 65, 0.14);
-  --side-bg: #0a0a0f;
+  --side-bg: #0a0908;
   color-scheme: dark;
   background:
     radial-gradient(1100px 620px at 100% -10%, rgba(244, 183, 40, 0.16), transparent 60%),
@@ -87,7 +87,7 @@
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(180deg, rgba(244, 183, 40, 0.06), transparent 28%),
+    linear-gradient(180deg, rgba(244, 183, 40, 0.08), transparent 30%),
     var(--side-bg);
   color: var(--side-ink);
   border-right: 1px solid var(--side-line);
@@ -638,7 +638,7 @@
   color: var(--accent-ink);
 }
 .rd-content .text-amber-700\/90 {
-  color: var(--ink);
+  color: var(--accent-ink);
 }
 .rd-content .bg-amber-50,
 .rd-content .bg-amber-500\/10,
@@ -1066,4 +1066,70 @@
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ---------- Sidebar: apps with official logos, expandable pages ---------- */
+.rd-side-app {
+  display: flex;
+  flex-direction: column;
+}
+.rd-side-app-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.rd-side-app-row > .rd-side-item {
+  flex: 1;
+  min-width: 0;
+}
+.rd-side-logo {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.92);
+}
+.rd-side-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--side-dim);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.rd-side-toggle:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.rd-side-app[data-open="true"] .rd-side-toggle {
+  transform: rotate(90deg);
+}
+.rd-side-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 6px 12px;
+  padding-left: 10px;
+  border-left: 1px solid var(--side-line);
+}
+.rd-side-page {
+  min-height: 28px;
+  font-size: 13px;
+}
+.ws-app-directory h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ws-app-directory h3 .rd-side-logo {
+  background: transparent;
+}
+.ws-app-directory h3 .rd-side-icon {
+  color: var(--muted);
 }

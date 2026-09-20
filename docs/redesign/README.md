@@ -47,12 +47,13 @@ do shell e as duas tesourarias ficam fixas no rodapé de todas as páginas.
 Direção visual aprovada em 20/09/2026 (referência: Mercury; mockups em
 https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 
-1. Um sistema de tokens em `src/app/theme.css`, carregado por último: fundo
-   neutro frio, superfícies brancas separadas por hairline, um único acento
-   (`--accent`, índigo) para estado e ação, dourado Zcash só na marca. Tema
-   escuro = preto com gradiente leve de dourado (`data-theme` no shell, ou o
-   sistema). Nenhuma página define cor: as utilidades Tailwind que as páginas
-   usam são remapeadas para os tokens dentro de `.rd-content`.
+1. Um sistema de tokens em `src/app/theme.css`, carregado por último, com a
+   paleta de produção: creme `#faf8f4`, superfícies brancas separadas por
+   hairline, texto na escala stone, dourado `#b7791f` como único acento para
+   estado, ação e valores monetários nas tabelas. Tema claro é o padrão em
+   qualquer sistema; o escuro (preto com gradiente leve de dourado) só pelo
+   botão. Nenhuma página define cor: as utilidades Tailwind que as páginas usam
+   são remapeadas para os tokens dentro de `.rd-content`.
 2. Verde e vermelho só para fluxos reais de caixa (entrada/saída, sobre/sob
    orçamento) e vereditos que os exigem.
 3. Número é sempre `.tnum`, ganha destaque por tamanho, não por cor; centavos
@@ -63,13 +64,15 @@ https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
    frase que diz de onde o dado vem. Copy editorial entra em `EditorialIntro`,
    nunca no lugar da proveniência. As estatísticas (`Stat`) formam uma faixa
    única dividida por hairlines, sem cards coloridos.
-6. Navegação: sidebar escura com grupos (Funding, Governance, Treasuries,
-   Ecosystem, Research, Manage para admin), barra superior com voltar, trilha,
-   busca (⌘K) e alternador de tema; rodapé fixo com as duas tesourarias. Um
-   único controle de voltar: o `‹` do shell, que segue a trilha (grant →
-   grants, recipient → recipients, `/zcg/*` → `/zcg`, copilot → seu app, o
-   resto → Home). Nenhum `‹` inline. Links contextuais de escape ("Totals →")
-   são permitidos porque não são "voltar".
+6. Navegação: o modelo em `src/lib/design-routes.ts` é uma lista de apps na
+   ordem do launcher de produção (Monthly, News, Lockbox, ZCG, ZF, FPF, DeFi,
+   Z3, Zakura, Shielded Labs, ZecHub DAO, Arborist Calls, Communities, Wallets,
+   Ecosystem; Manage só para admin), cada um com logo oficial quando existe e
+   suas páginas internas. Tudo deriva dele: a sidebar (app com logo, páginas
+   expansíveis, contagens), a trilha "Home › App › Página › Detalhe" no topo,
+   o único controle de voltar (detalhe → lista, página → app, app → Home), as
+   páginas irmãs no rodapé e o diálogo ⌘K. Nenhum `‹` inline. Links
+   contextuais de escape ("Totals →") são permitidos porque não são "voltar".
 7. Rótulos de status vêm de `src/lib/zcg/status-labels.ts` (grant, veredito ZCG,
    veredito coinholder). Nenhuma tela define o próprio mapa.
 8. Tabelas usam `DataTable`: 25/50/100 linhas ou todas, CSV com o texto exibido,

@@ -232,6 +232,20 @@ the reference; mockups at https://claude.ai/artifact/Q8VGqjxTubVq1BaJCNbvZY):
 - Font: Geist for the workspace (Arcadia, the reference's face, is
   proprietary); Inter remains for Monthly.
 
+### Hierarchy and palette — 20 September 2026
+
+- The workspace returns to the production palette (cream, stone, gold) in
+  `theme.css`; the dark theme keeps the black-and-gold identity behind the
+  toggle.
+- Navigation follows the production app hierarchy (`lib/design-routes.ts`):
+  one sidebar entry per app in launcher order, official logos where they
+  exist (ZCG, ZF, FPF, Zakura, Shielded Labs, ZecHub DAO, Arborist Calls,
+  Communities), inner pages nested and expandable, Monthly listed first, and
+  Zakura (the Valar Group / Project Tachyon full node) added to the menu and
+  the launcher, opening its ecosystem record.
+- Every page's trail derives from that model: breadcrumb Home › App › Page ›
+  Detail, back control to the parent, sibling pages at the foot of the page.
+
 ### Canvas alignment — 20 September 2026
 
 After review on a dark-mode system: the light workspace is now the default

@@ -211,6 +211,15 @@ const APPS: AppDef[] = [
     defaultHidden: true,
   },
   {
+    id: "zakura",
+    label: "Zakura",
+    sub: "Full node · Valar & Tachyon",
+    href: "/ecosystem?project=zakura",
+    Icon: IconGlobe,
+    grad: GRAD.zinc,
+    logo: "/logos/ecosystem/zakura.png",
+  },
+  {
     id: "shielded-labs",
     label: "Shielded Labs",
     sub: "Crosslink · NSM",

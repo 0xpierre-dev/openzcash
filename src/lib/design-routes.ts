@@ -1,84 +1,172 @@
-/** Detail pages keep the existing query parameters and data. */
-export const DESIGN_GROUPS = [
+/**
+ * The navigation model of the workspace: one entry per app, in the order the
+ * production launcher established, with the official logo where one exists
+ * and the app's inner pages beneath it. Every trail (breadcrumb, back control,
+ * related pages) derives from this list, so a route's place in the hierarchy
+ * is defined once.
+ */
+export type AppPage = { href: string; label: string };
+
+export type AppDef = {
+  id: string;
+  label: string;
+  /** Landing route of the app. */
+  href: string;
+  /** One-line description, as on the launcher tiles. */
+  sub: string;
+  /** Official logo under /public, when the organisation has one. */
+  logo?: string;
+  /** Line icon key (see the shell) for apps without a logo. */
+  icon: string;
+  /** Inner pages, in reading order. */
+  pages: AppPage[];
+  /** Data-management apps, shown to administrators only. */
+  admin?: boolean;
+};
+
+export const APPS: AppDef[] = [
+  { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", icon: "book", pages: [] },
+  { id: "news", label: "News", href: "/news", sub: "What's new", icon: "news", pages: [] },
+  { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", icon: "shield", pages: [] },
   {
-    name: "Funding",
-    description: "Follow grants from approval to the last payment.",
-    routes: [
-      ["/zcg", "Overview"],
-      ["/zcg/grants", "Grants"],
-      ["/zcg/recipients", "Recipients"],
-      ["/zcg/disbursements", "Disbursements"],
-      ["/zcg/schedule", "Scheduled payments"],
-      ["/zcg/totals", "Totals"],
-      ["/zcg/analytics", "Insights"],
-      ["/zcg/fpf", "FPF"],
-      ["/zcg/coinholder", "Coinholder"],
+    id: "zcg",
+    label: "ZCG",
+    href: "/zcg",
+    sub: "Dev Fund",
+    logo: "/logos/zcg.png",
+    icon: "grant",
+    pages: [
+      { href: "/zcg/grants", label: "Grants" },
+      { href: "/zcg/proposals", label: "Proposals" },
+      { href: "/zcg/disbursements", label: "Disbursements" },
+      { href: "/zcg/recipients", label: "Recipients" },
+      { href: "/zcg/schedule", label: "Scheduled payments" },
+      { href: "/zcg/totals", label: "Totals" },
+      { href: "/zcg/analytics", label: "Insights" },
+      { href: "/zcg/reconciliation", label: "Reconciliation" },
+      { href: "/zcg/committee", label: "Committee" },
+      { href: "/zcg/meetings", label: "Meetings" },
+      { href: "/zcg/stipends", label: "Stipends" },
+      { href: "/zcg/budget", label: "Budget" },
+      { href: "/zcg/office", label: "ZCG Office" },
+      { href: "/zcg/methodology", label: "Sources & API" },
+      { href: "/zcg/copilot", label: "ZCG Copilot" },
     ],
   },
+  { id: "zf", label: "ZF", href: "/zf", sub: "Reports & Zcon", logo: "/logos/zf.svg", icon: "balance", pages: [] },
   {
-    name: "Governance",
-    description: "The people, proposals and decisions behind the grants.",
-    routes: [
-      ["/zcg/proposals", "Proposals"],
-      ["/zcg/committee", "Committee"],
-      ["/zcg/meetings", "Meetings"],
-      ["/zcg/stipends", "Stipends"],
-      ["/zcg/budget", "Budget"],
-      ["/zcg/office", "ZCG Office"],
+    id: "fpf",
+    label: "FPF",
+    href: "/zcg/fpf",
+    sub: "Coinholder grants",
+    logo: "/logos/fpf.png",
+    icon: "wallet",
+    pages: [
+      { href: "/zcg/coinholder", label: "Coinholder" },
+      { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot" },
     ],
   },
+  { id: "defi", label: "DeFi", href: "/defi", sub: "ZEC liquidity", icon: "swap", pages: [] },
+  { id: "z3", label: "Z3", href: "/z3", sub: "zcashd successor", icon: "terminal", pages: [] },
   {
-    name: "Treasuries",
-    description: "Public balances, movements and source reconciliation.",
-    routes: [
-      ["/lockbox", "Lockbox"],
-      ["/zcg/reconciliation", "Reconciliation"],
-      ["/zechub", "ZecHub"],
-      ["/zf", "Zcash Foundation"],
-      ["/shielded-labs", "Shielded Labs"],
-      ["/z3", "Z3"],
-    ],
+    id: "zakura",
+    label: "Zakura",
+    href: "/ecosystem?project=zakura",
+    sub: "Full node · Valar & Tachyon",
+    logo: "/logos/ecosystem/zakura.png",
+    icon: "terminal",
+    pages: [],
+  },
+  { id: "shielded-labs", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
+  {
+    id: "zechub",
+    label: "ZecHub DAO",
+    href: "/zechub",
+    sub: "Latest proposals",
+    logo: "/logos/zechub.png",
+    icon: "globe",
+    pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot" }],
+  },
+  { id: "arborist", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
+  { id: "communities", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
+  { id: "wallets", label: "Wallets", href: "/wallets", sub: "Self-custody · shielded", icon: "wallet", pages: [] },
+  {
+    id: "ecosystem",
+    label: "Ecosystem",
+    href: "/ecosystem",
+    sub: "Projects & maintainers",
+    icon: "globe",
+    pages: [{ href: "/development", label: "Development" }],
   },
   {
-    name: "Ecosystem",
-    description: "Discover the projects and communities building on Zcash.",
-    routes: [
-      ["/ecosystem", "Projects"],
-      ["/wallets", "Wallets"],
-      ["/communities", "Communities"],
-      ["/defi", "DeFi"],
-      ["/development", "Development"],
-      ["/news", "News"],
-      ["/arborist", "Arborist calls"],
+    id: "manage",
+    label: "Manage",
+    href: "/projects",
+    sub: "Data management",
+    icon: "grid",
+    admin: true,
+    pages: [
+      { href: "/viewing-keys", label: "Viewing keys" },
+      { href: "/invites", label: "Invites" },
+      { href: "/onboarding", label: "Register treasury" },
+      { href: "/login", label: "Sign in" },
     ],
   },
-  {
-    name: "Research",
-    description: "Read the records, consult sources and explore with Copilot.",
-    routes: [
-      ["/zcg/methodology", "Sources & API"],
-      ["/zcg/copilot", "ZCG Copilot"],
-      ["/zcg/coinholder/copilot", "Coinholder Copilot"],
-      ["/zechub/copilot", "ZecHub Copilot"],
-    ],
-  },
-  {
-    name: "Manage",
-    description: "Manage this environment using its own administrator access.",
-    routes: [
-      ["/projects", "Recipients & projects"],
-      ["/viewing-keys", "Viewing keys"],
-      ["/invites", "Invitations"],
-      ["/onboarding", "Register treasury"],
-      ["/login", "Sign in"],
-    ],
-  },
-] as const;
-export function designGroup(path: string) {
-  if (path === "/zcg/grant" || path === "/zcg/recipient")
-    return DESIGN_GROUPS[0];
-  if (path === "/zcg/maya") return DESIGN_GROUPS[3];
-  return DESIGN_GROUPS.find((group) =>
-    group.routes.some(([href]) => href === path),
-  );
+];
+
+/** Detail routes and the list page they belong to. */
+const DETAILS: Record<string, { parent: string; label: string }> = {
+  "/zcg/grant": { parent: "/zcg/grants", label: "Grant detail" },
+  "/zcg/recipient": { parent: "/zcg/recipients", label: "Recipient detail" },
+};
+
+const pathOf = (href: string) => href.split("?")[0];
+
+export type Place = {
+  app: AppDef;
+  /** The inner page, when the route is not the app's landing page. */
+  page?: AppPage;
+  /** The detail record, when the route is a drill-down of a page. */
+  detail?: { parent: AppPage; label: string };
+};
+
+/** Where a route sits in the hierarchy. Undefined for Home and unknown routes. */
+export function placeOf(pathname: string): Place | undefined {
+  const detail = DETAILS[pathname];
+  const target = detail ? detail.parent : pathname;
+  for (const app of APPS) {
+    if (pathOf(app.href) === target && !detail) return { app };
+    const page = app.pages.find((p) => pathOf(p.href) === target);
+    if (page) {
+      return detail
+        ? { app, page, detail: { parent: page, label: detail.label } }
+        : { app, page };
+    }
+  }
+  return undefined;
+}
+
+/** Back control: a detail returns to its list, a page to its app, an app to Home. */
+export function backOf(pathname: string): { href: string; label: string } {
+  const place = placeOf(pathname);
+  if (!place) return { href: "/", label: "Home" };
+  if (place.detail) return { href: place.detail.parent.href, label: place.detail.parent.label };
+  if (place.page) return { href: place.app.href, label: place.app.label };
+  return { href: "/", label: "Home" };
+}
+
+/** Grouped view of the same model, for directories and the design-review page. */
+export const DESIGN_GROUPS = APPS.map((app) => ({
+  name: app.label,
+  description: app.sub,
+  admin: app.admin ?? false,
+  routes: [
+    [app.href, app.pages.length ? "Overview" : app.label] as [string, string],
+    ...app.pages.map((p) => [p.href, p.label] as [string, string]),
+  ],
+}));
+
+export function designGroup(pathname: string) {
+  const place = placeOf(pathname);
+  return place ? DESIGN_GROUPS.find((g) => g.name === place.app.label) : undefined;
 }

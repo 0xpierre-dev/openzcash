@@ -9,7 +9,7 @@ export default async function DesignReviewPage() {
   // Management pages are only offered to a signed-in administrator, as in the
   // app directory; anonymous reviewers see the public workspace.
   const isAdmin = await getIsAdmin();
-  const groups = DESIGN_GROUPS.filter((g) => g.name !== "Manage" || isAdmin);
+  const groups = DESIGN_GROUPS.filter((g) => !g.admin || isAdmin);
   return (
     <>
       <PageHeader
