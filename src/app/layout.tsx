@@ -46,10 +46,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F5F5F8" },
-    { media: "(prefers-color-scheme: dark)", color: "#0E0E13" },
-  ],
+  // The shell is light by default (the theme toggle is per browser, not per
+  // OS), so the browser chrome follows the cream canvas.
+  themeColor: "#faf8f4",
   width: "device-width",
   initialScale: 1,
 };

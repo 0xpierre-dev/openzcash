@@ -61,6 +61,7 @@ const APPS: AppDef[] = [
     href: "/monthly",
     Icon: IconBook,
     grad: GRAD.amber,
+    logo: "/logos/apps/monthly.png",
   },
   {
     id: "news",
@@ -69,6 +70,7 @@ const APPS: AppDef[] = [
     href: "/news",
     Icon: IconNews,
     grad: GRAD.rose,
+    logo: "/logos/apps/news.png",
   },
   {
     id: "lockbox",
@@ -78,6 +80,7 @@ const APPS: AppDef[] = [
     Icon: IconShield,
     grad: GRAD.amber,
     defaultHidden: true,
+    logo: "/logos/apps/lockbox.png",
   },
   {
     id: "tesouros",
@@ -87,6 +90,7 @@ const APPS: AppDef[] = [
     Icon: IconKey,
     grad: GRAD.violet,
     admin: true,
+    logo: "/logos/pages/viewing-keys.png",
   },
   {
     id: "projetos",
@@ -96,6 +100,7 @@ const APPS: AppDef[] = [
     Icon: IconCheck,
     grad: GRAD.emerald,
     admin: true,
+    logo: "/logos/apps/manage.png",
   },
   {
     id: "convites",
@@ -105,6 +110,7 @@ const APPS: AppDef[] = [
     Icon: IconMail,
     grad: GRAD.rose,
     admin: true,
+    logo: "/logos/pages/invites.png",
   },
   {
     id: "zcg",
@@ -122,6 +128,7 @@ const APPS: AppDef[] = [
     href: "/zcg/grants",
     Icon: IconGrant,
     grad: GRAD.amber,
+    logo: "/logos/pages/grants.png",
   },
   {
     id: "disbursements",
@@ -131,6 +138,7 @@ const APPS: AppDef[] = [
     Icon: IconReceipt,
     grad: GRAD.sky,
     defaultHidden: true,
+    logo: "/logos/pages/disbursements.png",
   },
   {
     id: "recipients",
@@ -140,6 +148,7 @@ const APPS: AppDef[] = [
     Icon: IconUsers,
     grad: GRAD.emerald,
     defaultHidden: true,
+    logo: "/logos/pages/recipients.png",
   },
   {
     id: "proposals",
@@ -148,6 +157,7 @@ const APPS: AppDef[] = [
     href: "/zcg/proposals",
     Icon: IconVote,
     grad: GRAD.violet,
+    logo: "/logos/pages/proposals.png",
   },
   {
     id: "totals",
@@ -157,6 +167,7 @@ const APPS: AppDef[] = [
     Icon: IconSigma,
     grad: GRAD.amber,
     defaultHidden: true,
+    logo: "/logos/pages/totals.png",
   },
   {
     id: "meetings",
@@ -165,6 +176,7 @@ const APPS: AppDef[] = [
     href: "/zcg/meetings",
     Icon: IconNews,
     grad: GRAD.violet,
+    logo: "/logos/pages/meetings.png",
   },
   {
     id: "zf",
@@ -191,6 +203,7 @@ const APPS: AppDef[] = [
     href: "/zcg/coinholder",
     Icon: IconCoins,
     grad: GRAD.amber,
+    logo: "/logos/pages/coinholder.png",
   },
   {
     id: "defi",
@@ -200,6 +213,7 @@ const APPS: AppDef[] = [
     Icon: IconChart,
     grad: GRAD.emerald,
     defaultHidden: true,
+    logo: "/logos/apps/defi.png",
   },
   {
     id: "z3",
@@ -209,6 +223,7 @@ const APPS: AppDef[] = [
     Icon: IconGrid,
     grad: GRAD.violet,
     defaultHidden: true,
+    logo: "/logos/apps/z3.png",
   },
   {
     id: "zakura",
@@ -262,6 +277,7 @@ const APPS: AppDef[] = [
     href: "/wallets",
     Icon: IconWallet,
     grad: GRAD.emerald,
+    logo: "/logos/apps/wallets.png",
   },
   {
     id: "ecosystem",
@@ -270,6 +286,7 @@ const APPS: AppDef[] = [
     href: "/ecosystem",
     Icon: IconGlobe,
     grad: GRAD.amber,
+    logo: "/logos/apps/ecosystem.png",
   },
   {
     id: "development",
@@ -278,6 +295,7 @@ const APPS: AppDef[] = [
     href: "/development",
     Icon: IconChart,
     grad: GRAD.amber,
+    logo: "/logos/pages/development.png",
   },
 ];
 

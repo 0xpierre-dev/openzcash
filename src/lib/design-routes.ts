@@ -5,7 +5,12 @@
  * related pages) derives from this list, so a route's place in the hierarchy
  * is defined once.
  */
-export type AppPage = { href: string; label: string };
+export type AppPage = {
+  href: string;
+  label: string;
+  /** PNG glyph shown beside the page in the sidebar. */
+  mark?: string;
+};
 
 export type AppDef = {
   id: string;
@@ -20,14 +25,13 @@ export type AppDef = {
   icon: string;
   /** Inner pages, in reading order. */
   pages: AppPage[];
+  /** Expanded in the sidebar by default (the visitor can still collapse it). */
+  open?: boolean;
   /** Data-management apps, shown to administrators only. */
   admin?: boolean;
 };
 
 export const APPS: AppDef[] = [
-  { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", icon: "book", pages: [] },
-  { id: "news", label: "News", href: "/news", sub: "What's new", icon: "news", pages: [] },
-  { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", icon: "shield", pages: [] },
   {
     id: "zcg",
     label: "ZCG",
@@ -35,25 +39,27 @@ export const APPS: AppDef[] = [
     sub: "Dev Fund",
     logo: "/logos/zcg.png",
     icon: "grant",
+    open: true,
     pages: [
-      { href: "/zcg/grants", label: "Grants" },
-      { href: "/zcg/proposals", label: "Proposals" },
-      { href: "/zcg/disbursements", label: "Disbursements" },
-      { href: "/zcg/recipients", label: "Recipients" },
-      { href: "/zcg/schedule", label: "Scheduled payments" },
-      { href: "/zcg/totals", label: "Totals" },
-      { href: "/zcg/analytics", label: "Insights" },
-      { href: "/zcg/reconciliation", label: "Reconciliation" },
-      { href: "/zcg/committee", label: "Committee" },
-      { href: "/zcg/meetings", label: "Meetings" },
-      { href: "/zcg/stipends", label: "Stipends" },
-      { href: "/zcg/budget", label: "Budget" },
-      { href: "/zcg/office", label: "ZCG Office" },
-      { href: "/zcg/methodology", label: "Sources & API" },
-      { href: "/zcg/copilot", label: "ZCG Copilot" },
+      { href: "/zcg/grants", label: "Grants", mark: "/logos/pages/grants.png" },
+      { href: "/zcg/proposals", label: "Proposals", mark: "/logos/pages/proposals.png" },
+      { href: "/zcg/disbursements", label: "Disbursements", mark: "/logos/pages/disbursements.png" },
+      { href: "/zcg/recipients", label: "Recipients", mark: "/logos/pages/recipients.png" },
+      { href: "/zcg/schedule", label: "Scheduled payments", mark: "/logos/pages/schedule.png" },
+      { href: "/zcg/totals", label: "Totals", mark: "/logos/pages/totals.png" },
+      { href: "/zcg/analytics", label: "Insights", mark: "/logos/pages/insights.png" },
+      { href: "/zcg/reconciliation", label: "Reconciliation", mark: "/logos/pages/reconciliation.png" },
+      { href: "/zcg/committee", label: "Committee", mark: "/logos/pages/committee.png" },
+      { href: "/zcg/meetings", label: "Meetings", mark: "/logos/pages/meetings.png" },
+      { href: "/zcg/stipends", label: "Stipends", mark: "/logos/pages/stipends.png" },
+      { href: "/zcg/budget", label: "Budget", mark: "/logos/pages/budget.png" },
+      { href: "/zcg/office", label: "ZCG Office", mark: "/logos/pages/office.png" },
+      { href: "/zcg/methodology", label: "Sources & API", mark: "/logos/pages/methodology.png" },
+      { href: "/zcg/copilot", label: "ZCG Copilot", mark: "/logos/pages/copilot.png" },
     ],
   },
-  { id: "zf", label: "ZF", href: "/zf", sub: "Reports & Zcon", logo: "/logos/zf.svg", icon: "balance", pages: [] },
+  { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/apps/lockbox.png", icon: "shield", pages: [] },
+  { id: "zf", label: "ZF", href: "/zf", sub: "Reports & Zcon", logo: "/logos/apps/zf.png", icon: "balance", pages: [] },
   {
     id: "fpf",
     label: "FPF",
@@ -62,20 +68,9 @@ export const APPS: AppDef[] = [
     logo: "/logos/fpf.png",
     icon: "wallet",
     pages: [
-      { href: "/zcg/coinholder", label: "Coinholder" },
-      { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot" },
+      { href: "/zcg/coinholder", label: "Coinholder", mark: "/logos/pages/coinholder.png" },
+      { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/pages/copilot.png" },
     ],
-  },
-  { id: "defi", label: "DeFi", href: "/defi", sub: "ZEC liquidity", icon: "swap", pages: [] },
-  { id: "z3", label: "Z3", href: "/z3", sub: "zcashd successor", icon: "terminal", pages: [] },
-  {
-    id: "zakura",
-    label: "Zakura",
-    href: "/ecosystem?project=zakura",
-    sub: "Full node · Valar & Tachyon",
-    logo: "/logos/ecosystem/zakura.png",
-    icon: "terminal",
-    pages: [],
   },
   { id: "shielded-labs", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
   {
@@ -85,31 +80,46 @@ export const APPS: AppDef[] = [
     sub: "Latest proposals",
     logo: "/logos/zechub.png",
     icon: "globe",
-    pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot" }],
+    pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot", mark: "/logos/pages/copilot.png" }],
   },
-  { id: "arborist", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
-  { id: "communities", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
-  { id: "wallets", label: "Wallets", href: "/wallets", sub: "Self-custody · shielded", icon: "wallet", pages: [] },
+  { id: "z3", label: "Z3", href: "/z3", sub: "zcashd successor", logo: "/logos/apps/z3.png", icon: "terminal", pages: [] },
+  {
+    id: "zakura",
+    label: "Zakura",
+    href: "/ecosystem?project=zakura",
+    sub: "Full node · Valar & Tachyon",
+    logo: "/logos/ecosystem/zakura.png",
+    icon: "terminal",
+    pages: [],
+  },
   {
     id: "ecosystem",
     label: "Ecosystem",
     href: "/ecosystem",
     sub: "Projects & maintainers",
+    logo: "/logos/apps/ecosystem.png",
     icon: "globe",
-    pages: [{ href: "/development", label: "Development" }],
+    pages: [{ href: "/development", label: "Development", mark: "/logos/pages/development.png" }],
   },
+  { id: "wallets", label: "Wallets", href: "/wallets", sub: "Self-custody · shielded", logo: "/logos/apps/wallets.png", icon: "wallet", pages: [] },
+  { id: "communities", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
+  { id: "defi", label: "DeFi", href: "/defi", sub: "ZEC liquidity", logo: "/logos/apps/defi.png", icon: "swap", pages: [] },
+  { id: "arborist", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
+  { id: "news", label: "News", href: "/news", sub: "What's new", logo: "/logos/apps/news.png", icon: "news", pages: [] },
+  { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/apps/monthly.png", icon: "book", pages: [] },
   {
     id: "manage",
     label: "Manage",
     href: "/projects",
     sub: "Data management",
+    logo: "/logos/apps/manage.png",
     icon: "grid",
     admin: true,
     pages: [
-      { href: "/viewing-keys", label: "Viewing keys" },
-      { href: "/invites", label: "Invites" },
-      { href: "/onboarding", label: "Register treasury" },
-      { href: "/login", label: "Sign in" },
+      { href: "/viewing-keys", label: "Viewing keys", mark: "/logos/pages/viewing-keys.png" },
+      { href: "/invites", label: "Invites", mark: "/logos/pages/invites.png" },
+      { href: "/onboarding", label: "Register treasury", mark: "/logos/pages/onboarding.png" },
+      { href: "/login", label: "Sign in", mark: "/logos/pages/login.png" },
     ],
   },
 ];

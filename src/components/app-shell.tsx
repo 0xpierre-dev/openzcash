@@ -128,6 +128,17 @@ function AppMark({ app, size = 18 }: { app: AppDef; size?: number }) {
   return <Icon className="rd-side-icon" />;
 }
 
+function PageMark({ mark, href }: { mark?: string; href: string }) {
+  if (mark) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={mark} alt="" width={15} height={15} className="rd-side-page-icon" />
+    );
+  }
+  const Icon = PAGE_ICON[href];
+  return Icon ? <Icon className="rd-side-icon" /> : <span className="rd-side-icon" aria-hidden />;
+}
+
 export function AppShell({
   children,
   isAdmin = false,
@@ -233,12 +244,7 @@ export function AppShell({
       </a>
 
       <aside className="rd-side" aria-label="OpenZcash">
-        <div className="rd-side-brand">
-          <Link href="/" className="rd-brand" aria-label="OpenZcash home">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/zcash-mark.svg" width="28" height="28" alt="" />
-            <span>OpenZcash</span>
-          </Link>
+        <div className="rd-side-banner">
           <span className="rd-side-tag">{isPreview ? "preview" : "public"}</span>
           <button
             type="button"
@@ -248,6 +254,14 @@ export function AppShell({
           >
             <Glyph d={GLYPH.close} />
           </button>
+          <Link href="/" className="rd-brand" aria-label="OpenZcash home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/icon-192.png" width="44" height="44" alt="" />
+            <span className="rd-brand-text">
+              <strong>OpenZcash</strong>
+              <small>Dev Fund transparency</small>
+            </span>
+          </Link>
         </div>
         <nav className="rd-side-nav" aria-label="Apps">
           <Link
@@ -255,14 +269,15 @@ export function AppShell({
             className="rd-side-item rd-side-home"
             aria-current={isHome ? "page" : undefined}
           >
-            <Glyph d={GLYPH.home} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logos/pages/home.png" alt="" width={15} height={15} className="rd-side-page-icon" />
             <span className="rd-side-label">Home</span>
             <small>treasuries · apps</small>
           </Link>
           {apps.map((app) => {
             const isCurrentApp = place?.app.id === app.id;
             const open = app.pages.length
-              ? (openApps[app.id] ?? isCurrentApp)
+              ? (openApps[app.id] ?? (isCurrentApp || app.open === true))
               : false;
             const appActive = isCurrentApp && !place?.page;
             return (
@@ -286,7 +301,7 @@ export function AppShell({
                       className="rd-side-toggle"
                       aria-expanded={open}
                       aria-label={`${open ? "Collapse" : "Expand"} ${app.label}`}
-                      onClick={() => toggleApp(app.id, isCurrentApp)}
+                      onClick={() => toggleApp(app.id, isCurrentApp || app.open === true)}
                     >
                       <Glyph d={GLYPH.chevron} size={12} />
                     </button>
@@ -295,7 +310,6 @@ export function AppShell({
                 {open ? (
                   <div className="rd-side-pages">
                     {app.pages.map((p) => {
-                      const PageIcon = PAGE_ICON[p.href];
                       const active =
                         place?.page?.href === p.href ||
                         place?.detail?.parent.href === p.href;
@@ -306,11 +320,7 @@ export function AppShell({
                           className="rd-side-item rd-side-page"
                           aria-current={active ? "page" : undefined}
                         >
-                          {PageIcon ? (
-                            <PageIcon className="rd-side-icon" />
-                          ) : (
-                            <span className="rd-side-icon" aria-hidden />
-                          )}
+                          <PageMark mark={p.mark} href={p.href} />
                           <span className="rd-side-label">{p.label}</span>
                           {counts[p.href] ? (
                             <small className="tnum">{counts[p.href]}</small>
