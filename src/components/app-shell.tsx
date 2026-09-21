@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LogoutButton } from "./logout-button";
+import { ScrollHints } from "./scroll-hints";
 import { APPS, backOf, placeOf, type AppDef } from "@/lib/design-routes";
 import {
   IconArrowUp,
@@ -206,6 +207,13 @@ export function AppShell({
     /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setNavOpen(false);
   }, [pathname]);
+  // The page behind an open drawer stays put.
+  useEffect(() => {
+    document.body.style.overflow = navOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [navOpen]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -417,6 +425,7 @@ export function AppShell({
         </header>
 
         <main id="main-content" className="rd-main">
+          <ScrollHints />
           <div className="rd-content">{children}</div>
         </main>
 

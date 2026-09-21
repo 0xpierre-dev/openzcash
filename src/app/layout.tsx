@@ -51,6 +51,9 @@ export const viewport: Viewport = {
   themeColor: "#faf8f4",
   width: "device-width",
   initialScale: 1,
+  // The installed app paints under the notch and the home indicator; the
+  // shell pads its bars with env(safe-area-inset-*) (theme.css, "Phones").
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({
