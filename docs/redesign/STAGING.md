@@ -85,6 +85,19 @@ subtotals, month subtotals and total share one population. Undated, overdue and
 unknown-amount entries are explicitly counted separately, and the grant-sheet
 rows behind the schedule are cached like every other ledger read.
 
+### Phones and the installed app (20 Sep 2026)
+
+The shell paints under the notch and the home indicator (`viewport-fit=cover`)
+and pads its bars with `env(safe-area-inset-*)`. On a phone the treasury bar is
+one line per pool (52px, the band continuing under the home indicator), the top
+bar controls are 40px, the record search is a full-screen sheet, the drawer
+locks the page behind it, and every field renders at 16px so iOS does not zoom
+on focus. The stat strip is two per row with real hairlines; organisation heads
+stack the actions on their own row; the overview tiles keep mark, text and
+arrow. Data tables lose their capped height (no nested vertical scroll) and
+scroll sideways inside the card, with the hidden edge faded
+(`scroll-hints.tsx` sets `data-scroll-x` on the scroller).
+
 ## Deployment and migration boundary
 
 This branch's Railway start command runs `scripts/assert-redesign.mjs` before

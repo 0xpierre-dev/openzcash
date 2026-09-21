@@ -139,14 +139,11 @@
 }
 
 @media (max-width: 1050px) {
+  /* Mark, text, arrow: the same three columns, tighter. */
   .zcg-overview-primary > a {
-    grid-template-columns: minmax(0, 1fr) 12px;
-    gap: 7px;
-    padding: 16px;
-  }
-
-  .zcg-overview-primary > a > svg {
-    display: none;
+    grid-template-columns: 18px minmax(0, 1fr) 12px;
+    gap: 10px;
+    padding: 16px 14px;
   }
 
   .zcg-overview-schedule {
@@ -171,24 +168,6 @@
   .zcg-overview-primary,
   .zcg-overview-tools nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .zcg-overview-metrics {
-    gap: 22px 0;
-    padding: 18px 0;
-  }
-
-  .zcg-overview .zcg-overview-metrics .oz-stat {
-    padding: 0 14px;
-  }
-
-  .zcg-overview .zcg-overview-metrics .oz-stat:nth-child(odd) {
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  .zcg-overview .zcg-overview-metrics .oz-stat .num-lg {
-    font-size: 24px;
   }
 
   .zcg-overview-primary > a:nth-child(odd) {
