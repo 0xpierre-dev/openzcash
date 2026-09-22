@@ -26,8 +26,31 @@ npx skills add Michae2xl/openzcash --skill zcg-copilot
 
 Uses the [`skills`](https://github.com/vercel-labs/skills) CLI, which discovers
 skills under the repo's `skills/` directory. Works with Claude Code, Cursor,
-opencode, and the other agents it supports. You can also just copy this folder
-into your agent's skills directory.
+opencode, and the other agents it supports.
+
+### Direct install (clone + copy)
+
+Prefer doing it yourself? Clone the repo and copy the skill folder into your
+agent's skills directory:
+
+```bash
+git clone https://github.com/Michae2xl/openzcash.git
+cp -r openzcash/skills/zcg-copilot <your-agent>/skills/
+```
+
+Default skills directories per agent:
+
+| Agent | Project Path | Global Path |
+|-------|--------------|-------------|
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` |
+| OpenClaw | `skills/` | `~/.openclaw/skills/` |
+| Codex | `.agents/skills/` | `~/.codex/skills/` |
+| Cursor | `.agents/skills/` | `~/.cursor/skills/` |
+| OpenCode | `.agents/skills/` | `~/.config/opencode/skills/` |
+
+Generic option: `.agents/skills/` (project) or `~/.agents/skills/` (global) works
+with most agents that follow the Agent Skills convention, so copying there is a
+safe default when in doubt.
 
 ## Ask things like
 
