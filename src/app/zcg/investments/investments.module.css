@@ -1,0 +1,913 @@
+.page {
+  --investment-trade: #548991;
+  --investment-synth: #999083;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.page a {
+  color: var(--accent-ink);
+  text-underline-offset: 4px;
+}
+.page a:hover {
+  text-decoration: underline;
+}
+.page h2,
+.page h3 {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+.page h2 {
+  font-size: 19px;
+  line-height: 1.3;
+}
+.page h3 {
+  font-size: 17px;
+  line-height: 1.4;
+}
+.page button {
+  cursor: pointer;
+}
+.page button:focus-visible,
+.page summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.page p {
+  text-wrap: pretty;
+}
+.eyebrow {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fine {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.textLink {
+  font-size: 12px;
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+.hero {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  background: var(--surface);
+  margin-bottom: 20px;
+}
+.heroTop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 0;
+}
+.heroTop > a {
+  font-size: 11px;
+}
+.protocol {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.protocol h2 {
+  font-size: 18px;
+  margin-top: 2px;
+}
+.protocolMark {
+  width: 60px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #101c1c;
+}
+.protocolMark img {
+  display: block;
+  width: 44px;
+  height: 20px;
+  object-fit: contain;
+}
+.heroBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  padding: 28px;
+  gap: 32px;
+  background: radial-gradient(
+    ellipse at 0 100%,
+    var(--accent-soft),
+    transparent 65%
+  );
+}
+.heroVolume {
+  align-self: center;
+}
+.heroNumber {
+  font-size: clamp(42px, 5.6vw, 76px);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.065em;
+  margin: 10px 0 12px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.heroVolume > p:not(.heroNumber):not(.eyebrow):not(.fine) {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.heroVolume > .fine {
+  margin-top: 5px;
+  max-width: 390px;
+}
+.heroMetrics {
+  display: grid;
+  gap: 14px;
+  border-left: 1px solid var(--line);
+  padding-left: 32px;
+}
+.metric {
+  min-width: 0;
+}
+.metric dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+.metric dd {
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+.metric p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 3px;
+}
+.heroMetrics .metric dd {
+  font-size: 25px;
+  line-height: 1.15;
+  margin-top: 3px;
+}
+.heroMetrics .metric p {
+  font-size: 10px;
+  line-height: 1.4;
+}
+.sourceStrip {
+  padding: 12px 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 10px 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 10px;
+  background: var(--surface2);
+}
+.sourceStrip > a {
+  margin-left: auto;
+}
+.sourceStrip .fine {
+  font-size: 10px;
+}
+.sourceStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+}
+.sourceStatus i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pos);
+}
+.sourceStatus i[data-warning="true"] {
+  background: var(--accent);
+}
+.activityGrid,
+.earningsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(270px, 1fr);
+  gap: 20px;
+}
+.panel {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+}
+.panel > .eyebrow,
+.panelHeading .eyebrow,
+.holderNote > .eyebrow {
+  margin-bottom: 6px;
+}
+.panelHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.chartToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 20px;
+}
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.segmented button,
+.periods button {
+  font: inherit;
+  font-size: 11px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  padding: 6px 10px;
+  min-height: 32px;
+}
+.segmented button[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 1px 3px #00000012;
+}
+.periods {
+  display: inline-flex;
+  gap: 3px;
+}
+.periods button[aria-pressed="true"] {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+.chartReadout {
+  display: flex;
+  flex-direction: column;
+  min-height: 91px;
+  padding-bottom: 18px;
+}
+.chartReadout > span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.chartReadout strong {
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+.chartReadout small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.chartFrame {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0 32px;
+}
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 0 0 39px;
+  height: 200px;
+  color: var(--muted);
+  font-size: 9px;
+  text-align: right;
+  line-height: 1;
+}
+.plot {
+  height: 200px;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.chartSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.gridLine {
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+.zeroLine {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.hitTargets {
+  display: grid;
+  position: absolute;
+  inset: 0;
+}
+.hitTarget {
+  position: relative;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  width: 100%;
+  min-width: 0;
+  border-radius: 0;
+}
+.hitTarget:hover,
+.hitTarget[data-selected="true"] {
+  background: var(--accent-soft);
+}
+.page .hitTarget:active {
+  transform: none;
+}
+.zeroPoint {
+  position: absolute;
+  width: 5px;
+  height: 3px;
+  left: calc(50% - 2.5px);
+  background: var(--muted);
+  transform: translateY(-100%);
+  border-radius: 1px;
+}
+.xAxis {
+  display: grid;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.xAxis span {
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+.xAxis span:last-child {
+  text-align: right;
+  direction: rtl;
+}
+.chartData {
+  margin: 8px 0 16px;
+}
+.chartData summary {
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  width: fit-content;
+}
+.chartData[open] summary {
+  margin-bottom: 12px;
+}
+.stackedBar {
+  height: 10px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 3px;
+  gap: 3px;
+  margin: 25px 0;
+  background: var(--surface2);
+}
+.stackedBar span {
+  height: 100%;
+}
+.mixList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mixList li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.mixList li:first-child {
+  padding-top: 0;
+}
+.mixList li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.mixList li > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+.mixList i,
+.allocation i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.mixList strong {
+  font-weight: 500;
+}
+.mixList li > div > span {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+}
+.mixList p {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  padding: 5px 0 0 15px;
+}
+.mixList b {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+.mixList small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.recent {
+  padding-top: 20px;
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.recent > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.recent strong {
+  font-size: 21px;
+  font-weight: 500;
+}
+.recent > p {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 5px 0 10px;
+}
+.recent > .fine {
+  font-size: 10px;
+}
+.treasury {
+  margin: 42px 0 22px;
+  scroll-margin-top: 95px;
+}
+.sectionHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.sectionHeading h2 {
+  font-size: 25px;
+  margin: 7px 0;
+}
+.sectionHeading p {
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 650px;
+  line-height: 1.7;
+}
+.chip {
+  flex-shrink: 0;
+  align-self: flex-start;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.sectionHeading .chip {
+  align-self: center;
+}
+.positionMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 23px 0;
+  margin-bottom: 20px;
+}
+.positionMetrics .metric {
+  padding: 0 24px;
+  border-left: 1px solid var(--line);
+}
+.positionMetrics .metric:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.positionMetrics .metric dd {
+  margin-top: 8px;
+  font-size: 32px;
+}
+.positive {
+  color: var(--pos);
+}
+.negative {
+  color: var(--neg);
+}
+.positionGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px;
+}
+.comparison {
+  margin: 24px 0;
+  display: grid;
+  gap: 22px;
+}
+.comparison > div > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.comparison strong {
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.comparisonTrack {
+  height: 9px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.comparisonTrack span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+.positionGrid .fine + .fine {
+  margin-top: 12px;
+}
+.allocation {
+  margin: 0 0 18px;
+}
+.allocation > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.allocation dt {
+  font-size: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+.allocation dt small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.allocation dd {
+  font-size: 16px;
+  text-align: right;
+  font-weight: 500;
+}
+.allocation dd small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 3px;
+}
+.withdrawal {
+  font-size: 11px;
+  margin-top: 18px;
+  color: var(--muted);
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.holderNote {
+  align-self: start;
+  padding: 25px 10px 20px 16px;
+}
+.holderNote h2 {
+  font-size: 25px;
+  max-width: 280px;
+  margin: 10px 0 20px;
+  letter-spacing: -0.04em;
+}
+.holderNote > p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.85;
+  margin: 12px 0;
+}
+.holderNote > div {
+  border-top: 1px solid var(--line-strong);
+  margin: 23px 0;
+  padding-top: 19px;
+}
+.holderNote > div > span:first-child {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.holderNote strong {
+  display: block;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  margin: 5px 0;
+}
+.holderNote a {
+  font-size: 11px;
+}
+.audit {
+  border-top: 1px solid var(--line-strong);
+  margin: 34px 0 12px;
+}
+.audit > details {
+  border-bottom: 1px solid var(--line);
+}
+.audit > details > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+.audit > details > summary::-webkit-details-marker {
+  display: none;
+}
+.audit > details > summary::after {
+  content: "+";
+  font-size: 20px;
+  margin-left: auto;
+  font-weight: 400;
+  color: var(--muted);
+}
+.audit > details[open] > summary::after {
+  content: "−";
+}
+.audit > details > summary .fine {
+  font-weight: 400;
+}
+.auditBody {
+  padding-bottom: 24px;
+}
+.tableScroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.page table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 11px;
+  text-align: left;
+  background: var(--surface);
+}
+.page th,
+.page td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.page thead {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 10px;
+}
+.page th {
+  font-weight: 500;
+}
+.page td {
+  color: var(--muted);
+}
+.page tbody tr:last-child th,
+.page tbody tr:last-child td {
+  border-bottom: 0;
+}
+.custodyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px;
+  margin: 24px 0 0;
+}
+.custodyGrid h3 {
+  font-size: 13px;
+}
+.custodyGrid p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 8px 0 12px;
+}
+.custodyGrid a,
+.sourceLinks {
+  font-size: 11px;
+}
+.sourceLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+}
+.methodology {
+  list-style: disc;
+  padding-left: 18px;
+  margin: 0 0 22px;
+  display: grid;
+  gap: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.methodology strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.empty {
+  padding: 26px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (min-width: 1450px) {
+  .heroMetrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 22px;
+  }
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+}
+@media (max-width: 1050px) {
+  .activityGrid,
+  .earningsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .holderNote {
+    padding: 20px 8px;
+  }
+  .holderNote h2 {
+    max-width: none;
+  }
+}
+@media (max-width: 700px) {
+  .heroTop {
+    padding: 20px 20px 0;
+  }
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 20px;
+    gap: 26px;
+  }
+  .heroNumber {
+    font-size: 58px;
+  }
+  .heroMetrics {
+    padding: 20px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .heroMetrics .metric dd {
+    font-size: 22px;
+  }
+  .heroMetrics .metric p {
+    font-size: 10px;
+  }
+  .heroMetrics .metric dt {
+    font-size: 10px;
+  }
+  .sourceStrip {
+    padding: 12px 20px;
+    gap: 6px 14px;
+  }
+  .sourceStrip > a {
+    margin-left: 0;
+  }
+  .panel {
+    padding: 20px 16px;
+  }
+  .positionGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .positionMetrics {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+  .positionMetrics .metric,
+  .positionMetrics .metric:first-child {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 17px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+  }
+  .positionMetrics .metric:first-child {
+    border-top: 0;
+  }
+  .positionMetrics .metric dd {
+    font-size: 28px;
+    margin-top: 0;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .positionMetrics .metric p {
+    grid-column: 1;
+    margin-top: 0;
+  }
+  .sectionHeading {
+    align-items: flex-start;
+  }
+  .sectionHeading .chip {
+    align-self: flex-start;
+    margin-top: 22px;
+  }
+  .sectionHeading p {
+    font-size: 11px;
+  }
+  .custodyGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .audit > details > summary {
+    font-size: 13px;
+  }
+  .audit > details > summary .fine {
+    font-size: 10px;
+  }
+  .chartReadout small {
+    min-height: 28px;
+  }
+  .chartReadout strong {
+    font-size: 26px;
+  }
+  .xAxis {
+    font-size: 8px;
+  }
+  .yAxis {
+    flex-basis: 34px;
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero,
+  .activityGrid {
+    animation: arrive 0.35s ease-out both;
+  }
+  .activityGrid {
+    animation-delay: 0.06s;
+  }
+  @keyframes arrive {
+    from {
+      opacity: 0.4;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

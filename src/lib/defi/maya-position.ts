@@ -18,6 +18,8 @@ const MIDGARD = "https://midgard.mayachain.info";
 const TTL_MS = 5 * 60_000;
 
 export type MayaPosition = {
+  fetchedAt: string;
+  stale: boolean;
   /** Share of the pool held by the member, 0..1. */
   share: number;
   /** Today's composition, from the share of the pool depths. */
@@ -159,6 +161,8 @@ async function compute(): Promise<MayaPosition | null> {
       ? Math.round((zecNow * midgardZec + cacaoNow * (midgardZec / cacaoPerZec)) * 100)
       : null;
   return {
+    fetchedAt: new Date().toISOString(),
+    stale: false,
     share,
     zecNow,
     cacaoNow,
@@ -190,5 +194,5 @@ export async function getMayaPosition(): Promise<MayaPosition | null> {
   if (cache && now - cache.at < TTL_MS) return cache.value;
   const value = await compute().catch(() => null);
   if (value) cache = { at: now, value };
-  return value ?? cache?.value ?? null;
+  return value ?? (cache?.value ? { ...cache.value, stale: true } : null);
 }
