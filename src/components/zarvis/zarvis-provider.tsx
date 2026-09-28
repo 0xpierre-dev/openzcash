@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import type { ZarvisEvent, ZarvisExpression, ZarvisSource, ZarvisStatus } from "@/lib/zarvis/types";
+import type { AnswerProvenance, ZarvisEvent, ZarvisExpression, ZarvisSource, ZarvisStatus } from "@/lib/zarvis/types";
 import { sessionPreferences, type ZarvisSession } from "@/lib/zarvis/session";
 import { answerExpression, completionExpression, progressExpression } from "@/lib/zarvis/expression";
 import type { ResponseDepth } from "@/lib/zarvis/depth";
@@ -8,7 +8,7 @@ import { conversationContext, MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
 
 export type DisplayMessage = {
   id: string; role: "user" | "assistant"; content: string;
-  feedbackToken?: string; session?: ZarvisSession; sources?: ZarvisSource[]; incomplete?: boolean; pose?: ZarvisExpression;
+  feedbackToken?: string; session?: ZarvisSession; sources?: ZarvisSource[]; provenance?: AnswerProvenance; incomplete?: boolean; pose?: ZarvisExpression;
 };
 type ChatState = {
   messages: DisplayMessage[]; draft: string; setDraft: (value: string) => void;
@@ -107,7 +107,7 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
         if (event.type === "replace") { setReplying(true); text = event.text; update({ content: text }); }
         if (event.type === "error") throw new Error(event.message);
         if (event.type === "done") {
-          completed = true; update({ sources: event.sources, feedbackToken: event.feedbackToken, incomplete: false, pose: completionExpression(history.findLast((m) => m.role === "user")?.content ?? questionText, text) });
+          completed = true; update({ sources: event.sources, provenance: event.provenance, feedbackToken: event.feedbackToken, incomplete: false, pose: completionExpression(history.findLast((m) => m.role === "user")?.content ?? questionText, text) });
         }
       };
       try {

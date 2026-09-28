@@ -39,6 +39,10 @@ describe("Zarvis API", () => {
     const response = await POST(request()); expect(response.status).toBe(200);
     const events = (await response.text()).trim().split("\n").map((line) => JSON.parse(line));
     expect(events.at(-1).type).toBe("done");
+    expect(typeof events.at(-1).feedbackToken).toBe("string");
+    mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "replace", text: "Direct." }); emit({ type: "done", sources: [], provenance: { route: "local", model: null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "pt" } }); });
+    const direct = (await (await POST(request())).text()).trim().split("\n").map((line) => JSON.parse(line));
+    expect(direct.at(-1)).toMatchObject({ type: "done", provenance: { route: "local", model: null, language: "pt" }, feedbackToken: expect.any(String) });
     mocks.answer.mockRejectedValueOnce(new Error("provider-secret-sentinel"));
     const failure = await (await POST(request())).text();
     expect(failure).toContain('"type":"error"'); expect(failure).not.toContain("provider-secret");

@@ -53,6 +53,27 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     expect(mocks.client).not.toHaveBeenCalled(); expect(mocks.create).not.toHaveBeenCalled();
     expect(result.text).toBeTruthy(); expect(result.text).not.toMatch(/NaN|undefined/); expect(result.emitted.at(-1)?.type).toBe("done");
   });
+  it.each([
+    "Quais são os saldos do ZCG?", "Quanto o ZCG tem em ZEC?", "Saldo do Lockbox", "Qual é o preço do ZEC?", "Quanto custa o Zcash?",
+    "O que é ZIP 317?", "Qual é o último ZIP?", "Quanto o ZCG pagou em grants no total?",
+    "Uma IVK identifica o remetente?", "Como funciona a privacidade do Zcash?", "Onde encontro carteiras Zcash?", "De onde vem os dados do OpenZcash?",
+  ])("answers a Portuguese question in Portuguese on the zero-cost path: %s", async (question) => {
+    const result = await run([user(question)]);
+    expect(result.metrics).toMatchObject({ route: "local", modelCalls: 0 });
+    expect(result.text).toMatch(/\b(?:é|uma|não|blindad|carteira|dados|saldo|estimativa|reportado|Cotação|registro|Status no documento|Criado|Created)\b/);
+    expect(result.text).not.toMatch(/reported holdings|Quoted |A shielded|Use the |OpenZcash mirrors|does not identify|Document status|The payment ledger|In \*\*/);
+    expect(result.emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "local", model: null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "pt" } });
+  });
+  it("keeps a Portuguese follow-up in Portuguese after an English question, and the reverse", async () => {
+    expect((await run(history("What does ZCG hold?", "e o Lockbox?"))).text).toContain("Lockbox — estimativa");
+    expect((await run(history("Quanto o ZCG tem em ZEC?", "and the Lockbox?"))).text).toContain("Lockbox — estimate");
+  });
+  it("routes a Spanish question to the model instead of an English template", async () => {
+    mocks.create.mockResolvedValueOnce((async function* () { yield { type: "response.completed", response: { status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: "Una respuesta con fuentes.", annotations: [] }] }], usage: { input_tokens: 100, output_tokens: 20 } } }; })());
+    const result = await run([user("¿Cuál es el precio actual de ZEC?")]);
+    expect(result.metrics).toMatchObject({ route: "model", modelCalls: 1 });
+    expect(result.emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", model: "grok-4.7", language: "en" } });
+  });
   it("answers the treasuries starter locally with dated, aged figures instead of the grounding fallback", async () => {
     const starter = STARTERS.find((s) => s.label === "Explore the treasuries");
     const result = await run([user(starter!.question)]);

@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
+import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
+import type { AnswerProvenance } from "@/lib/zarvis/types";
 import { useZarvis } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
 import { ZarvisDepthSelect } from "./zarvis-depth-select";
@@ -13,6 +15,9 @@ function answerHref(href: string) {
   try { const url = new URL(href); if (url.hostname === "openzcash.org" && url.pathname === "/zcg/treasury-calculator" && url.searchParams.get("zarvis") === "1") return url.pathname + url.search; } catch { /* invalid links are filtered before rendering */ }
   return href;
 }
+// A static note, not a live region: the notice arrives together with its text, which screen readers would not announce as a status anyway.
+const notice = (p: AnswerProvenance) => { const text = fallbackNotice(p); return text ? <span className="zarvis-provenance-notice" role="note">{text}</span> : null; };
+const retrieved = (iso?: string) => { const text = iso ? retrievedLabel(iso) : undefined; return text ? <small>{text}</small> : null; };
 export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   const chat = useZarvis();
   const scroll = useRef<HTMLDivElement>(null);
@@ -42,6 +47,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
       {empty ? <div className="zarvis-welcome">
         <ZarvisCompanion/>
         <h2>What would you like to know<br/>about Zcash?</h2>
+        <p className="zarvis-welcome-note">Ask in your language: Zarvis answers in Portuguese, Spanish, English and more.</p>
         <div className="zarvis-starters">{STARTERS.map((starter) => <button key={starter.label} type="button" onClick={() => { chat.setDraft(starter.question); input.current?.focus(); }}>
           <span>{starter.label}</span>
         </button>)}</div>
@@ -55,7 +61,11 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
         </div> : null}
         {message.content ? <div className="zarvis-prose"><Markdown skipHtml allowedElements={["p", "a", "strong", "em", "ul", "ol", "li", "h1", "h2", "h3", "h4", "blockquote", "code", "pre", "br", "hr"]} urlTransform={(url) => safeSourceUrl(url) ?? ""} components={{ a: ({ href, children }) => href ? <a href={answerHref(href)} target="_blank" rel="noopener noreferrer">{children}</a> : <span>{children}</span> }}>{message.content}</Markdown></div> : null}
         {message.role === "assistant" && message.content && !chat.busy && message.incomplete ? <small className="zarvis-incomplete">Incomplete response</small> : null}
-        {message.sources?.length ? <details className="zarvis-answer-sources"><summary>{message.sources.length} source{message.sources.length === 1 ? "" : "s"} consulted</summary><ol>{message.sources.map((source) => <li key={source.url}><a href={answerHref(source.url)} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>{source.retrievedAt ? <small>Retrieved {new Date(source.retrievedAt).toLocaleString()}</small> : null}</li>)}</ol></details> : null}
+        {message.role === "assistant" && message.provenance && !message.incomplete ? <div className="zarvis-provenance">
+          <span className={`zarvis-provenance-badge zarvis-provenance-${message.provenance.route}`}>{provenanceLabel(message.provenance, message.sources?.length ?? 0, chat.status?.provider)}</span>
+          {notice(message.provenance)}
+        </div> : null}
+        {message.sources?.length ? <details className="zarvis-answer-sources"><summary>{message.sources.length} source{message.sources.length === 1 ? "" : "s"} consulted</summary><ol>{message.sources.map((source) => <li key={source.url}><a href={answerHref(source.url)} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>{retrieved(source.retrievedAt)}</li>)}</ol></details> : null}
         {message.role === "assistant" && message.content && !message.incomplete ? <button className="zarvis-text-button zarvis-copy" type="button" onClick={async () => {
           try { await navigator.clipboard.writeText(message.content); setCopied(message.id); } catch { setCopied(null); }
         }}>{copied === message.id ? "Copied" : "Copy answer"}</button> : null}
@@ -80,7 +90,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
       {chat.error ? <div className="zarvis-notice" role="alert">{chat.error}{chat.messages.some((m) => m.role === "user") && !chat.busy ? <button type="button" className="zarvis-text-button" onClick={() => { follow.current = true; void chat.send(undefined, true); }}>Retry</button> : null}</div> : null}
       <form className="zarvis-composer" onSubmit={(e) => { e.preventDefault(); submit(); }}>
         <label className="sr-only" htmlFor={compact ? "zarvis-dock-question" : "zarvis-question"}>Your question</label>
-        <textarea ref={input} id={compact ? "zarvis-dock-question" : "zarvis-question"} value={chat.draft} onChange={(e) => chat.setDraft(e.target.value)} maxLength={MAX_QUESTION_LENGTH} rows={2} placeholder="Ask Zarvis about Zcash…" onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!chat.busy) submit(); } }}/>
+        <textarea ref={input} id={compact ? "zarvis-dock-question" : "zarvis-question"} value={chat.draft} onChange={(e) => chat.setDraft(e.target.value)} maxLength={MAX_QUESTION_LENGTH} rows={2} placeholder="Ask Zarvis about Zcash, in any language…" onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!chat.busy) submit(); } }}/>
         <div className="zarvis-composer-bottom"><div className="zarvis-depth-control">
           <ZarvisDepthSelect value={chat.depth} disabled={chat.busy} onChange={chat.setDepth}/>
           <span className="zarvis-character-count">{chat.draft.length > 1_600 ? `${chat.draft.length} / ${MAX_QUESTION_LENGTH}` : ""}</span></div>
