@@ -1,0 +1,30 @@
+import type { ZechubProposal } from "@/lib/dao/zechub";
+
+/** ZecHub DAO proposals (DAO DAO on Juno) filtered by what a question names: a proposal number, a status word or title words. Pure; the reader in src/lib/dao/zechub.ts fetches and caches. */
+export const DAO_ROWS = 12;
+export const DAO_NOTE = "ZecHub DAO proposals read from the public DAO DAO indexer and cached about ten minutes; only the newest proposals are listed. Vote figures are voting-power tallies as indexed. A passed or executed proposal is a decision of the ZecHub DAO about its own funds, not a Zcash protocol, ZCG or Zcash Foundation decision.";
+const STATUS_WORDS: Record<string, string> = { open: "open", aberta: "open", abertas: "open", passed: "passed", aprovada: "passed", aprovadas: "passed", passou: "passed", executed: "executed", executada: "executed", executadas: "executed", rejected: "rejected", rejeitada: "rejected", rejeitadas: "rejected", closed: "closed", fechada: "closed", fechadas: "closed", expired: "closed" };
+const NOISE = new Set("zechub zec hub dao daodao proposal proposals proposta propostas vote votes voted voting votacao votacoes latest last recent newest ultimo ultima ultimos ultimas which what how many quantas quais qual is are was were the a an of on in for to and or about sobre o os a as um uma de do da dos das no na e ou que status".split(" "));
+const normalize = (value: string) => value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+
+export function daoFilter(query: string) {
+  const q = normalize(query);
+  const numbers = [...new Set([...q.matchAll(/(?:\ba|#|\bproposals?\s*#?|\bpropostas?\s*#?)\s*(\d{1,5})\b/g)].map((m) => Number(m[1])))];
+  const words = q.match(/[a-z0-9][a-z0-9-]*/g) ?? [];
+  const statuses = [...new Set(words.map((w) => STATUS_WORDS[w]).filter((s): s is string => Boolean(s)))];
+  const tokens = words.filter((w) => !NOISE.has(w) && !(w in STATUS_WORDS) && !/^\d+$/.test(w) && w.length >= 3);
+  return { numbers, statuses, tokens };
+}
+const row = (p: ZechubProposal) => ({ ref: p.ref, title: p.title, status: p.status, createdAt: p.createdAt, votes: { yes: p.yes, no: p.no, abstain: p.abstain }, url: p.url });
+export function daoContext(proposals: ZechubProposal[], query: string, meta: { url: string; fetchedAt: string }) {
+  const { numbers, statuses, tokens } = daoFilter(query);
+  const score = (p: ZechubProposal) => { const hay = normalize(`${p.title} ${p.status}`); return tokens.reduce((n, t) => n + Number(hay.includes(t)), 0); };
+  const selected = numbers.length ? proposals.filter((p) => numbers.includes(p.id))
+    : statuses.length ? proposals.filter((p) => statuses.includes(normalize(p.status)))
+      : tokens.length ? proposals.map((p) => ({ p, s: score(p) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s).map((x) => x.p)
+        : proposals;
+  const byStatus: Record<string, number> = {};
+  for (const p of proposals) byStatus[p.status] = (byStatus[p.status] ?? 0) + 1;
+  const latest = proposals[0];
+  return { daoFetchedAt: meta.fetchedAt, dao: meta.url, proposalsListed: proposals.length, latestProposal: latest ? { ref: latest.ref, title: latest.title, status: latest.status, createdAt: latest.createdAt } : null, byStatus, filter: { numbers, statuses, words: tokens }, matched: selected.length, proposals: selected.slice(0, DAO_ROWS).map(row), note: DAO_NOTE };
+}

@@ -85,7 +85,9 @@ export function relevantTopics(query: string): Array<typeof lookupSchema._output
     [/\b(?:scheduled?|upcoming payments|agendad\w*)\b/, "schedule"],
     [/\b(?:maya|investments?|investimentos?)\b/, "investments"],
     [/\b(?:monthly|mensal|relatorios?)\b/, "monthly"],
-    [/\b(?:zec?hub)\b/, "zechub"],
+    [/\b(?:zec ?hub dao|dao (?:da |do |de )?zec ?hub|daodao|dao (?:proposals?|votes?|propostas?|votacao|votacoes))\b/, "zechub_dao"],
+    [/\b(?:forum|forums|foruns|discourse|forum ?thread|forumzcashcommunitycom)\b|\bwhat (?:did|does|do|is|are|were|was) (?:the )?(?:community|people|users|folks) (?:say|saying|said|think|thinking|discuss|discussing)\b|\bo que (?:a comunidade|as pessoas) (?:diz|disse|dizem|disseram|acha|acham|fala|falou|discute|discutiu)\b/, "forum"],
+    [/\b(?:zec?hub)\b(?! dao)/, "zechub"],
     [/\b(?:coinholder)\b/, "coinholder"],
     [/\b(?:news|noticias)\b/, "news"],
     [/\b(?:arborist|arboretum|engineering calls?|reuni(?:ao|oes) (?:de engenharia|arborist)|calls? #?\s?\d{1,4})\b|#\d{1,4}\b.*\bcalls?\b/, "arborist"],
@@ -106,7 +108,7 @@ export function relevantTopics(query: string): Array<typeof lookupSchema._output
   return topics.slice(0, 2);
 }
 /** Topics whose readers filter by the question itself (a call number, a month, a wallet or community name, an outcome). */
-const QUERY_TOPICS = new Set<typeof lookupSchema._output.topic>(["arborist", "wallets", "communities", "decisions", "price_history"]);
+const QUERY_TOPICS = new Set<typeof lookupSchema._output.topic>(["arborist", "wallets", "communities", "decisions", "price_history", "forum", "zechub_dao"]);
 export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal, priorSession: ZarvisSession = {}): Promise<LocalPlan> {
   signal.throwIfAborted();
   const session = sessionPreferences(priorSession, messages);
