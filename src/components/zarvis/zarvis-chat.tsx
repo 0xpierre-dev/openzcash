@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
 import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
+import type { AnswerProvenance } from "@/lib/zarvis/types";
 import { useZarvis } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
 import { ZarvisDepthSelect } from "./zarvis-depth-select";
@@ -14,6 +15,9 @@ function answerHref(href: string) {
   try { const url = new URL(href); if (url.hostname === "openzcash.org" && url.pathname === "/zcg/treasury-calculator" && url.searchParams.get("zarvis") === "1") return url.pathname + url.search; } catch { /* invalid links are filtered before rendering */ }
   return href;
 }
+// A static note, not a live region: the notice arrives together with its text, which screen readers would not announce as a status anyway.
+const notice = (p: AnswerProvenance) => { const text = fallbackNotice(p); return text ? <span className="zarvis-provenance-notice" role="note">{text}</span> : null; };
+const retrieved = (iso?: string) => { const text = iso ? retrievedLabel(iso) : undefined; return text ? <small>{text}</small> : null; };
 export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   const chat = useZarvis();
   const scroll = useRef<HTMLDivElement>(null);
@@ -59,9 +63,9 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
         {message.role === "assistant" && message.content && !chat.busy && message.incomplete ? <small className="zarvis-incomplete">Incomplete response</small> : null}
         {message.role === "assistant" && message.provenance && !message.incomplete ? <div className="zarvis-provenance">
           <span className={`zarvis-provenance-badge zarvis-provenance-${message.provenance.route}`}>{provenanceLabel(message.provenance, message.sources?.length ?? 0, chat.status?.provider)}</span>
-          {fallbackNotice(message.provenance) ? <span className="zarvis-provenance-notice" role="status">{fallbackNotice(message.provenance)}</span> : null}
+          {notice(message.provenance)}
         </div> : null}
-        {message.sources?.length ? <details className="zarvis-answer-sources"><summary>{message.sources.length} source{message.sources.length === 1 ? "" : "s"} consulted</summary><ol>{message.sources.map((source) => <li key={source.url}><a href={answerHref(source.url)} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>{source.retrievedAt && retrievedLabel(source.retrievedAt) ? <small>{retrievedLabel(source.retrievedAt)}</small> : null}</li>)}</ol></details> : null}
+        {message.sources?.length ? <details className="zarvis-answer-sources"><summary>{message.sources.length} source{message.sources.length === 1 ? "" : "s"} consulted</summary><ol>{message.sources.map((source) => <li key={source.url}><a href={answerHref(source.url)} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>{retrieved(source.retrievedAt)}</li>)}</ol></details> : null}
         {message.role === "assistant" && message.content && !message.incomplete ? <button className="zarvis-text-button zarvis-copy" type="button" onClick={async () => {
           try { await navigator.clipboard.writeText(message.content); setCopied(message.id); } catch { setCopied(null); }
         }}>{copied === message.id ? "Copied" : "Copy answer"}</button> : null}

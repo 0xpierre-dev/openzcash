@@ -3,22 +3,27 @@ import type { ZarvisSession } from "./session";
 import type { ChatMessage } from "./types";
 
 export type AnswerLanguage = "en" | "pt" | "other";
-/** Function words plus the few domain nouns the direct templates accept. A word may count for several languages; only a strict majority decides. */
+/** Function words weigh 2 and the few domain nouns the direct templates accept weigh 1, so "Como funciona a viewing key?" is Portuguese. A word may count for several languages. */
+const FUNCTION_WORD = 2, DOMAIN_NOUN = 1;
 const words = {
-  en: "what whats how the is are does do did and or in of for to an it its my this that these those where which who when with about much many can could should will was were has have had not no yes hi hello thanks thank explain price today now latest current treasury balance balances holdings paid grants viewing key keys",
-  pt: "como onde quais qual quanto quantos quanta quantas sao esta estao foi tem ha saldo saldos dados dizem mostram que de do da dos das um uma o os as para com nao e em no na nos nas ao aos por mais sim ola oi obrigado obrigada valeu explique pagou pagaram preco cotacao custa hoje agora ultimo ultima atual atuais quando ela ele pode meus minha meu isso esse essa tesouro tesouraria carteiras chave chaves cenario cenarios vezes limitacoes",
-  es: "como donde cuales cual cuanto cuantos son esta estan fue tiene hay saldo datos dicen muestran que de del al un una el los las la para con no y en si hola gracias explica precio cotizacion cuesta hoy ahora ultimo ultima actual actuales cuando puede mis mi eso ese esa tesoreria carteras billeteras clave claves escenario",
-  fr: "comment ou quel quelle quels quelles combien est sont sera solde donnees disent montrent que de du des un une le les la pour avec pas ne et en dans sur oui bonjour merci prix cours coute aujourd'hui maintenant dernier derniere actuel actuelle quand peut mes mon ma cela ce cette tresorerie portefeuille cle cles scenario",
+  en: ["what whats how the is are does do did and or in of for to an it its my this that these those where which who when with about much many can could should will was were has have had not no yes hi hello thanks thank explain today now on at by from as into up out over", "a price latest current treasury balance balances holdings paid grants viewing key keys"],
+  pt: ["como onde quais qual quanto quantos quanta quantas sao esta estao foi tem ha dizem mostram que de do da dos das um uma o a os as para com nao e em no na nos nas ao aos por mais sim ola oi obrigado obrigada valeu explique pagou pagaram custa hoje agora ultimo ultima atual atuais quando ela ele pode meus minha meu isso esse essa", "saldo saldos dados preco cotacao tesouro tesouraria carteiras chave chaves cenario cenarios vezes limitacoes"],
+  es: ["como donde cuales cual cuanto cuantos es son esta estan fue tiene hay dicen muestran que de del al un una el los las la para con no y en si hola gracias explica cuesta hoy ahora ultimo ultima actual actuales cuando puede mis mi eso ese esa", "saldo datos precio cotizacion tesoreria carteras billeteras clave claves escenario"],
+  fr: ["comment ou quel quelle quels quelles combien est sont sera disent montrent que de du des un une le les la pour avec pas ne et en dans sur oui bonjour merci coute aujourd'hui maintenant dernier derniere actuel actuelle quand peut mes mon ma cela ce cette", "solde donnees prix cours tresorerie portefeuille cle cles scenario"],
 } as const;
 type Known = keyof typeof words;
-const lexicon = Object.fromEntries(Object.entries(words).map(([language, list]) => [language, new Set(list.split(" "))])) as Record<Known, Set<string>>;
+const lexicon = Object.fromEntries(Object.entries(words).map(([language, [functionWords, nouns]]) => [language,
+  new Map([...functionWords.split(" ").map((w) => [w, FUNCTION_WORD] as const), ...nouns.split(" ").map((w) => [w, DOMAIN_NOUN] as const)])])) as Record<Known, Map<string, number>>;
 
-/** The language of one turn when its own words decide it; ties and wordless turns ("2025", "ZIP 317") return undefined. */
+/** The language of one turn when its own words decide it. Wordless turns ("2025", "ZIP 317") and ties involving English ("Zashi on OS") return undefined; a tie between Portuguese and Spanish or French ("Saldo ZCG") goes to Portuguese, the only one of them with direct templates. */
 export function questionLanguage(question: string): AnswerLanguage | undefined {
   const tokens = normalizeQuestion(question).replace(/[¿¡]/g, "").split(" ").filter(Boolean);
-  const ranked = (Object.keys(lexicon) as Known[]).map((language) => [language, tokens.filter((token) => lexicon[language].has(token)).length] as const).sort((a, b) => b[1] - a[1]);
-  if (!ranked[0][1] || ranked[0][1] === ranked[1][1]) return;
-  return ranked[0][0] === "en" || ranked[0][0] === "pt" ? ranked[0][0] : "other";
+  const ranked = (Object.keys(lexicon) as Known[]).map((language) => [language, tokens.reduce((score, token) => score + (lexicon[language].get(token) ?? 0), 0)] as const).sort((a, b) => b[1] - a[1]);
+  const best = ranked[0][1];
+  if (!best) return;
+  const tied = ranked.filter(([, score]) => score === best).map(([language]) => language);
+  if (tied.includes("en")) return tied.length === 1 ? "en" : undefined;
+  return tied.includes("pt") ? "pt" : "other";
 }
 
 /** An explicit stored preference wins; otherwise the latest decisive user turn, so short follow-ups keep the language of the question they continue. */
