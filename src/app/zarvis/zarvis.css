@@ -97,7 +97,8 @@
 .zarvis-answer-sources li { background: var(--surface2); padding: 8px 10px; border-radius: 8px; }
 .zarvis-answer-sources a { color: var(--ink); }
 .zarvis-answer-sources small { display: block; font-size: 9px; color: var(--dim); margin-top: 3px; }
-.zarvis-copy { margin-top: 8px; font-size: 10px; justify-self: start; }
+.zarvis-share { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; }
+.zarvis-copy { font-size: 10px; justify-self: start; }
 .zarvis-progress { font-size: 12px; line-height: 1.5; color: var(--muted); }
 .zarvis-thinking { height: 6px; width: 6px; border-radius: 50%; background: var(--accent); animation: zarvis-pulse 1.5s ease-in-out infinite; }
 @keyframes zarvis-pulse { 50% { opacity: .3; } }

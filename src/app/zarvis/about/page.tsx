@@ -45,7 +45,7 @@ export default function AboutZarvisPage() {
       </Section>
       <Section title="What is kept, and for how long">
         <ul className="space-y-1.5">
-          <li><span className="font-medium text-stone-800">In your browser:</span> the conversation stays in page memory. Reloading or New chat clears it. Questions are never put in page URLs, and shared calculator links carry only scenario assumptions.</li>
+          <li><span className="font-medium text-stone-800">In your browser:</span> the conversation stays in page memory while you move around the site, including the Monthly pages. Reloading or New chat clears it. Zarvis never writes your question into the page address; “Copy question link” under an answer makes a link that carries that one question and only fills the composer when opened. Shared calculator links carry only scenario assumptions.</li>
           <li><span className="font-medium text-stone-800">At OpenZcash:</span> no question or answer is written to a database or a log. What is recorded per request is the route, the outcome, the duration, the token counts and the estimated cost; per day, those counts by route. Feedback sends your rating without the conversation text. Hosting access logs and short-lived abuse counters, keyed by a hash of the network address, are separate.</li>
           <li><span className="font-medium text-stone-800">At the model provider:</span> for model answers, the recent turns and the retrieved records are sent to {PROVIDER_RETENTION.provider}, which {PROVIDER_RETENTION.summary} Read on {shortDate(PROVIDER_RETENTION.readOn)} at <a href={PROVIDER_RETENTION.url} target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">the provider&apos;s security FAQ ↗</a>.</li>
         </ul>

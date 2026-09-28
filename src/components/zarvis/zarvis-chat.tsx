@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
 import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
+import { answerClipboard, questionLink, sharedQuestion, withoutSharedQuestion } from "@/lib/zarvis/share";
 import type { AnswerProvenance } from "@/lib/zarvis/types";
 import { portugueseBrowser, useZarvis } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
@@ -69,9 +70,18 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           {notice(message.provenance)}
         </div> : null}
         {message.sources?.length ? <details className="zarvis-answer-sources"><summary>{message.sources.length} source{message.sources.length === 1 ? "" : "s"} consulted</summary><ol>{message.sources.map((source) => <li key={source.url}><a href={answerHref(source.url)} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>{retrieved(source.retrievedAt)}</li>)}</ol></details> : null}
-        {message.role === "assistant" && message.content && !message.incomplete ? <button className="zarvis-text-button zarvis-copy" type="button" onClick={async () => {
-          try { await navigator.clipboard.writeText(message.content); setCopied(message.id); } catch { setCopied(null); }
-        }}>{copied === message.id ? "Copied" : "Copy answer"}</button> : null}
+        {message.role === "assistant" && message.content && !message.incomplete ? <span className="zarvis-share">
+          <button className="zarvis-text-button zarvis-copy" type="button" onClick={async () => {
+            try { await navigator.clipboard.writeText(message.content); setCopied(`${message.id}:text`); } catch { setCopied(null); }
+          }}>{copied === `${message.id}:text` ? "Copied" : "Copy answer"}</button>
+          <button className="zarvis-text-button zarvis-copy" type="button" onClick={async () => {
+            const question = chat.messages.slice(0, index).findLast((m) => m.role === "user")?.content;
+            try { await navigator.clipboard.writeText(answerClipboard({ question, content: message.content, sources: message.sources, provenance: message.provenance, provider: chat.status?.provider, askedAt: new Date().toISOString() })); setCopied(`${message.id}:sources`); } catch { setCopied(null); }
+          }}>{copied === `${message.id}:sources` ? "Copied with sources" : "Copy with sources"}</button>
+          {(() => { const question = chat.messages.slice(0, index).findLast((m) => m.role === "user")?.content ?? ""; const link = questionLink(question, typeof window === "undefined" ? undefined : `${window.location.origin}/zarvis`); return link ? <button className="zarvis-text-button zarvis-copy" type="button" title="A link that opens Zarvis with this question ready to send" onClick={async () => {
+            try { await navigator.clipboard.writeText(link); setCopied(`${message.id}:link`); } catch { setCopied(null); }
+          }}>{copied === `${message.id}:link` ? "Link copied" : "Copy question link"}</button> : null; })()}
+        </span> : null}
         {message.feedbackToken && !message.incomplete ? <span className="zarvis-feedback" aria-label="Rate this answer">
           {feedback[message.id] === "helpful" || feedback[message.id] === "unhelpful" ? <small>Thanks for your feedback</small> : <>
             {[true, false].map((helpful) => <button key={String(helpful)} className="zarvis-text-button" type="button" disabled={feedback[message.id] === "sending"} aria-label={helpful ? "Helpful answer" : "Unhelpful answer"} onClick={async () => {
@@ -103,11 +113,23 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           </button> : <button type="submit" className="zarvis-send" disabled={!chat.status?.available || !chat.draft.trim() || waiting} aria-label="Send question">↑</button>}
         </div>
       </form>
-      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Questions are not put in page URLs. Shared calculator links contain only scenario assumptions. Feedback sends your rating without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
+      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Zarvis never writes your question into the page address; a link you copy with “Copy question link” carries that one question, and opening it only fills the composer. Shared calculator links contain only scenario assumptions. Feedback sends your rating without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
     </div>
   </section>;
 }
 
+/** A shared link (/zarvis?q=…) fills the composer once and leaves the address bar; nothing is sent until the visitor decides. */
+function SharedQuestion() {
+  const { setDraft } = useZarvis();
+  useEffect(() => {
+    const question = sharedQuestion(window.location.search);
+    if (!question) return;
+    setDraft(question);
+    window.history.replaceState(window.history.state, "", withoutSharedQuestion(window.location.href));
+    document.getElementById("zarvis-question")?.focus();
+  }, [setDraft]);
+  return null;
+}
 export function ZarvisPage() {
-  return <div className="zarvis-page"><h1 className="sr-only">Zarvis · Your Zcash guide</h1><ZarvisChat/></div>;
+  return <div className="zarvis-page"><h1 className="sr-only">Zarvis · Your Zcash guide</h1><SharedQuestion/><ZarvisChat/></div>;
 }
