@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ZarvisDock } from "./zarvis/zarvis-dock";
 import { ZarvisMark } from "./zarvis/zarvis-mark";
+import { useZarvisOptional } from "./zarvis/zarvis-provider";
 import { LogoutButton } from "./logout-button";
 import { ScrollHints } from "./scroll-hints";
 import { APPS, backOf, placeOf, type AppDef } from "@/lib/design-routes";
@@ -175,6 +176,7 @@ export function AppShell({
 
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
+  const chat = useZarvisOptional();
   const [navOpen, setNavOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>("light");
   const [openApps, setOpenApps] = useState<Record<string, boolean>>({});
@@ -468,11 +470,28 @@ export function AppShell({
         </div>
         <input
           aria-label="Find an app"
-          placeholder="Find an app, record or source…"
+          placeholder="Find an app, record or source, or ask Zarvis…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <div className="ws-app-directory">
+          {chat && query.trim() ? (
+            <section>
+              <h3>Zarvis</h3>
+              <Link
+                href="/zarvis"
+                onClick={() => {
+                  // The palette text becomes the draft; nothing is sent until the visitor presses send.
+                  chat.setDraft(query.trim());
+                  setQuery("");
+                  close();
+                }}
+              >
+                Ask Zarvis: “{query.trim()}”
+                <span aria-hidden>→</span>
+              </Link>
+            </section>
+          ) : null}
           {apps.map((app) => {
             const q = query.toLowerCase();
             const entries = [

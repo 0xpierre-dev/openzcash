@@ -31,6 +31,8 @@ export function useZarvis() {
   if (!context) throw new Error("Zarvis provider missing");
   return context;
 }
+/** For chrome that may render outside the provider: null instead of an error. */
+export function useZarvisOptional() { return useContext(Context); }
 
 export function ZarvisProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
