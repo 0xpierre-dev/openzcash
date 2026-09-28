@@ -5,6 +5,7 @@ import { matchDirectFaq, type FaqId } from "./direct-faq";
 export type DirectIntent =
   | { type: "price" }
   | { type: "mining" }
+  | { type: "arborist" }
   | { type: "ledger"; filters: LedgerQuery }
   | { type: "treasury"; fund: "zcg" | "lockbox" | "both" }
   | { type: "faq"; id: FaqId }
@@ -38,6 +39,7 @@ function resolve(q: string, previous?: DirectIntent): DirectIntent | undefined {
   if (/^(?:(?:answer|reply|respond|responda|responde)(?: to me)? (?:in|em) (?:english|ingles|portuguese|portugues)|(?:use|usar|mostre em|show amounts in) (?:usd|dollars|dolares)|keep answers short|be brief|seja breve|respostas curtas)$/.test(q)) return { type: "preference" };
   if (/^(?:(?:qual (?:e )?(?:o )?(?:preco|cotacao) (?:atual )?d[oa] |quanto (?:esta|custa) (?:o )?)(?:zec|zcash)(?: (?:hoje|agora|em usd|em dolar|em dolares))?|(?:what is|what's|whats) (?:the )?(?:current )?(?:zec|zcash) (?:price|usd price)(?: (?:today|now|in usd))?|(?:zec|zcash) (?:price|preco|cotacao)(?: (?:today|now|hoje|agora))?|how much is (?:one |1 )?(?:zec|zcash)(?: (?:worth|in usd|today|now))?)$/.test(q)) return { type: "price" };
   if (/^(?:qual (?:e )?o (?:hashrate|solrate) (?:atual )?(?:da rede |do |de )?(?:zcash|zec)(?: (?:hoje|agora))?|(?:what is|what's) (?:the )?(?:current )?(?:zcash|zec)(?: network)? (?:hashrate|solrate)(?: (?:today|now))?)(?: (?:cite (?:a fonte a data e a janela de medicao|a data e a janela)|include (?:the )?source (?:date|time) and (?:averaging )?window))?$/.test(q)) return { type: "mining" };
+  if (/^(?:(?:what|which|when) (?:is|was) the (?:latest|last|most recent|newest) arborist call|(?:the )?(?:latest|last|most recent|newest) arborist call|qual (?:foi |e |é )?(?:a |o )?(?:ultima|ultimo|mais recente) (?:arborist call|call (?:do|da) arborist|reuniao (?:do |da )?arborist)|(?:a )?ultima arborist call)$/.test(q)) return { type: "arborist" };
   for (const pattern of ledgerPatterns) {
     const m = q.match(pattern);
     if (m) {

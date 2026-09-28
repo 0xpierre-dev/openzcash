@@ -110,6 +110,8 @@ const markets = cachedFeed(async () => {
 const supply = cachedFeed(async () =>
   parseSupply(await json(`${CIPHER}/api/blockchain-info`)),
 );
+/** The reconciled node supply on its own, for readers that need pools and height without the whole dashboard. */
+export const chainSupplyFeed = () => supply();
 const holdings = cachedFeed(async () => {
   const [labelRaw, richRaw] = await Promise.all([
     json(`${CIPHER}/api/labels`),

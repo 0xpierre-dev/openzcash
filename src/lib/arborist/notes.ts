@@ -241,6 +241,11 @@ async function youtubeFallback(
   return result;
 }
 
+/** When the archive currently served was assembled; null before the first successful sweep. */
+export function arboristFetchedAt(): string | null {
+  return cache ? new Date(cache.at).toISOString() : null;
+}
+
 /** Every Arborist call, newest first. Cached ~1h in-process; concurrent
  * refreshes share one sweep, and a stale cache is served while it runs. */
 export async function getArboristCalls(): Promise<ArboristCall[]> {

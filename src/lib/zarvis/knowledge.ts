@@ -13,7 +13,7 @@ const aliases: Record<string, string[]> = {
   pagamento: ["paid", "payment", "disbursement"], pagamentos: ["paid", "payments", "disbursements"], pago: ["paid"], pagos: ["paid"], gastou: ["paid", "spending"], gastos: ["spending", "budget"],
   projeto: ["project", "grant"], projetos: ["projects", "grants"], beneficiario: ["recipient"], beneficiarios: ["recipients"], proposta: ["proposal"], propostas: ["proposals"],
   tesouro: ["treasury"], tesouros: ["treasuries", "treasury"], saldo: ["balance"], saldos: ["balances"], preco: ["price"], cotacao: ["price"],
-  carteira: ["wallet"], carteiras: ["wallets"], privacidade: ["privacy"], blindada: ["shielded"], blindadas: ["shielded"], chave: ["key"], chaves: ["keys"],
+  carteira: ["wallet"], carteiras: ["wallets"], padrao: ["default"], pais: ["country"], regiao: ["region"], idioma: ["language"], privacidade: ["privacy"], blindada: ["shielded"], blindadas: ["shielded"], chave: ["key"], chaves: ["keys"],
   metodologia: ["methodology", "compute"], fontes: ["sources"], dados: ["data"], calculado: ["computed"], calcular: ["compute"], diferenca: ["difference"],
   governanca: ["governance"], reuniao: ["meeting"], reunioes: ["meetings"], eleicao: ["election"], eleicoes: ["elections"], membros: ["members"], comite: ["committee"],
   cerimonia: ["ceremony"], historia: ["history"], mineracao: ["mining"], oferta: ["supply"], orcamento: ["budget"], comunidade: ["community"], comunidades: ["communities"],
@@ -132,6 +132,8 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
   const zips = requestedZips(query);
   const blossomSpacing = /\bblossom\b/.test(normalizedQuery) && /block|bloco|spacing|intervalo|seconds|segundos/.test(normalizedQuery);
   const monthly = /\b(?:monthly|mensais|mensal)\b/.test(normalizedQuery);
+  // The wallet catalog and community directory are indexed per record; a question naming them should reach those records before generic ZIP text.
+  const directory = /\b(?:wallets?|carteiras?)\b/.test(normalizedQuery) ? "https://openzcash.org/wallets" : /\b(?:communit(?:y|ies)|comunidades?|embaixador\w*|ambassadors?)\b/.test(normalizedQuery) ? "https://openzcash.org/communities" : null;
   const scored = normalized.map(({ doc, title, tokens: body, length }, i) => {
     let score = 0;
     for (const token of tokens) {
@@ -144,6 +146,7 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
     if (!zips.length && score > 0) {
       if (blossomSpacing && doc.url.endsWith("zip-0208")) score += 25;
       if (monthly && doc.url.startsWith("https://openzcash.org/monthly")) score *= 3;
+      if (directory && doc.url === directory && doc.kind === "site documentation") score *= 3;
     }
     if (historical && score > 0) {
       if (doc.kind !== "navigation") {

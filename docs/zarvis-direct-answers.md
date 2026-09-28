@@ -18,12 +18,15 @@ Auto and Quick use reviewed text or validated public-data formatting for the com
 | Scoped grant payments | How much did coinholders pay in grants to Zingo in 2025? | Program/year and literal project/recipient/milestone fragment |
 | Numbered ZIPs | What is ZIP 317? | Exact document, revision-specific status, Created and official abstract excerpt |
 | Latest ZIP | What is the latest ZIP? | Fresh catalog ordered by declared Created date, not publication or highest number |
+| Latest Arborist call | What was the latest Arborist call? / Qual foi a última reunião arborist? | Newest call in the cached notes/recordings archive: number, meeting date, moderator, agenda, notes and recording links; a recording without notes is labelled provisional; an unreadable archive links to /arborist instead of inventing a call |
 
 Reviewed fact/navigation topics have English and Portuguese text. Numbered ZIP abstracts are quoted in their original language, explicitly labeled as English in Portuguese answers. They are not model translations or technical analyses.
 
 The language of a direct answer is the language of the question, decided by `src/lib/zarvis/language.ts` (weighted word majority with function words above domain nouns, Portuguese winning ties with Spanish or French, previous-turn fallback, explicit stored preference first), not by the pattern that matched: "Quais são os saldos do ZCG?", "Uma IVK identifica o remetente?", "Onde encontro carteiras Zcash?", "Saldo do Lockbox", "Saldo ZCG" and "Como funciona a viewing key?" answer in Portuguese, while "and the Lockbox?" after a Portuguese question answers in English. A Spanish or French question matches no direct pattern and goes to the model. Direct answers arrive with `provenance.route = "local"` and `model = null`, and the chat labels them "Direct from OpenZcash data · no AI" / "Direto dos dados OpenZcash · sem IA".
 
 ## Context
+
+"Latest Arborist call" is the only Arborist template; "what was discussed in the latest call about Zaino" or "call #131" keeps model synthesis with the `arborist` topic pre-filtered by the question.
 
 Supported follow-ups retain the known subject: “e em 2025?” keeps the ledger program and project; “e o Lockbox?” switches the fund; “and how old are the data?” keeps the fund and restates its dated stamps; “when was it created?” keeps the exact ZIP number. Greetings, thanks and supported EN/PT, USD and brief-response preferences do not erase that subject. Explicit stored preferences are respected.
 
