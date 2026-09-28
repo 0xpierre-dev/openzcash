@@ -232,6 +232,12 @@ Under every completed answer: **Copy answer** (the Markdown text, as before), **
 
 The conversation now survives the Monthly pages: `ShellGate` mounts `ZarvisProvider` above the chrome decision, so a bare route unmounts the shell and the dock but not the state. Reload and New chat still clear it, as documented.
 
+## Command palette (2026-09-28)
+
+The ⌘K directory ("Find an app, record or source, or ask Zarvis…") shows an "Ask Zarvis: “…”" row above the app list whenever the box has text. Choosing it puts the text into the chat draft (the provider is mounted above the shell) and opens `/zarvis`; nothing is sent until the visitor presses send.
+
+GitHub Actions: `zarvis-quality.yml` was removed on 2026-09-28. Every run in this private repository ended in `startup_failure` before a job existed (40 on that day alone) and each one e-mailed the owner; the same gate (typecheck, tests, eslint, `knowledge:check`) runs locally before every merge and is recorded in each PR's test plan.
+
 ## Public about page (2026-09-28)
 
 `/zarvis/about` (linked from the welcome screen, the privacy details and the sidebar footer) is the visitor-facing account of this document: the two answer kinds and which questions are answered without a model (`DIRECT_ROUTES` in `src/lib/zarvis/about.ts`), the configured model and whether hosted search is on (read from `zarvisConfig()` at request time), the per-network question limits as sentences (`quotaLines`: the site-wide caps and the spending ceiling are mentioned, never their values, and an active `ZARVIS_QUOTA_PAUSE_UNTIL` window shows its UTC expiry), what is kept where and for how long (browser memory; counts only at OpenZcash; the provider's 30-day abuse-audit retention, quoted from https://docs.x.ai/developers/faq/security with the date it was read), the limitations, the complete standing system prompt as deployed (`systemPrompt("quick")`, rendered in a collapsible block), the public health endpoint and a dated incident list (`INCIDENTS`). Add every production incident there with its window, what happened and what changed; the page test asserts that no API key or cap value is rendered.
