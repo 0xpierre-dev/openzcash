@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 const mocks = vi.hoisted(() => ({ create: vi.fn(), lookup: vi.fn(), prepare: vi.fn(), ledger: vi.fn(), config: vi.fn(), scenario: vi.fn(), zips: vi.fn() }));
-vi.mock("openai", () => ({ default: class { responses = { create: mocks.create }; } }));
+vi.mock("openai", async (original) => ({ ...await original<object>(), default: class { responses = { create: mocks.create }; } }));
 vi.mock("./config", () => ({ zarvisConfig: mocks.config }));
 vi.mock("./data", async (original) => ({ ...await original<object>(), lookupPublicData: mocks.lookup }));
 vi.mock("./local", async (original) => ({ ...await original<object>(), prepareLocal: mocks.prepare, lookupLedger: mocks.ledger }));

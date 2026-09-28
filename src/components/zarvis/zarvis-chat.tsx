@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Markdown from "react-markdown";
 import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
 import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
 import type { AnswerProvenance } from "@/lib/zarvis/types";
-import { useZarvis } from "./zarvis-provider";
+import { portugueseBrowser, useZarvis } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
 import { ZarvisDepthSelect } from "./zarvis-depth-select";
 import { ZarvisCompanion, ZarvisMotionToggle } from "./zarvis-companion";
@@ -25,6 +25,9 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   const follow = useRef(true);
   const [copied, setCopied] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<Record<string, "helpful" | "unhelpful" | "sending" | "error">>({});
+  // Browser language is read after hydration; the server render stays English.
+  const pt = useSyncExternalStore(() => () => {}, portugueseBrowser, () => false);
+  const waiting = chat.retryAt !== null;
   const empty = chat.messages.length === 0;
   const { checkStatus } = chat;
   useEffect(() => { checkStatus(); }, [checkStatus]);
@@ -87,7 +90,8 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
     </div>
     <div className="zarvis-compose-area">
       {chat.status && !chat.status.available ? <div className="zarvis-notice" role="status">Chat is not connected yet.<button type="button" className="zarvis-text-button" onClick={() => chat.checkStatus(true)}>Retry</button></div> : null}
-      {chat.error ? <div className="zarvis-notice" role="alert">{chat.error}{chat.messages.some((m) => m.role === "user") && !chat.busy ? <button type="button" className="zarvis-text-button" onClick={() => { follow.current = true; void chat.send(undefined, true); }}>Retry</button> : null}</div> : null}
+      {chat.degraded && chat.status?.available ? <div className="zarvis-notice" role="status">{pt ? "Zarvis está com problemas. Algumas respostas podem falhar; as fontes públicas continuam disponíveis." : "Zarvis is having trouble. Some answers may fail; the public sources remain available."}</div> : null}
+      {chat.error ? <div className="zarvis-notice" role="alert">{chat.error}{chat.messages.some((m) => m.role === "user") && !chat.busy ? <button type="button" className="zarvis-text-button" disabled={waiting} onClick={() => { follow.current = true; void chat.send(undefined, true); }}>Retry</button> : null}</div> : null}
       <form className="zarvis-composer" onSubmit={(e) => { e.preventDefault(); submit(); }}>
         <label className="sr-only" htmlFor={compact ? "zarvis-dock-question" : "zarvis-question"}>Your question</label>
         <textarea ref={input} id={compact ? "zarvis-dock-question" : "zarvis-question"} value={chat.draft} onChange={(e) => chat.setDraft(e.target.value)} maxLength={MAX_QUESTION_LENGTH} rows={2} placeholder="Ask Zarvis about Zcash, in any language…" onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!chat.busy) submit(); } }}/>
@@ -96,7 +100,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           <span className="zarvis-character-count">{chat.draft.length > 1_600 ? `${chat.draft.length} / ${MAX_QUESTION_LENGTH}` : ""}</span></div>
           {chat.busy ? <button type="button" className="zarvis-stop" onClick={chat.stop} aria-label="Stop response" title="Stop response">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="2"/></svg>
-          </button> : <button type="submit" className="zarvis-send" disabled={!chat.status?.available || !chat.draft.trim()} aria-label="Send question">↑</button>}
+          </button> : <button type="submit" className="zarvis-send" disabled={!chat.status?.available || !chat.draft.trim() || waiting} aria-label="Send question">↑</button>}
         </div>
       </form>
       <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Questions are not put in page URLs. Shared calculator links contain only scenario assumptions. Feedback sends your rating without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation.</p></details></div>

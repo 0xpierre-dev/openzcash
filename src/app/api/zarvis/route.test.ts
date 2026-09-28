@@ -1,17 +1,28 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-const mocks = vi.hoisted(() => ({ config: vi.fn(), reserve: vi.fn(), answer: vi.fn() }));
+const mocks = vi.hoisted(() => ({ config: vi.fn(), reserve: vi.fn(), answer: vi.fn(), getDb: vi.fn() }));
 vi.mock("@/lib/zarvis/config", () => ({ zarvisConfig: mocks.config }));
 vi.mock("@/lib/zarvis/usage", () => ({ reserveZarvisRequest: mocks.reserve }));
 vi.mock("@/lib/zarvis/openai", () => ({ generateAnswer: mocks.answer }));
+vi.mock("@/lib/db/client", () => ({ getDb: mocks.getDb }));
 import { GET, POST } from "./route";
+import { GenerationFailure } from "@/lib/zarvis/errors";
+import { metricsSnapshot, resetMetricsForTests } from "@/lib/zarvis/metrics";
+import { resetStoreForTests } from "@/lib/zarvis/metrics-store";
+import { resetAlertsForTests } from "@/lib/zarvis/alerts";
+import { resetObserveForTests } from "@/lib/zarvis/observe";
+const prov = (route: "local" | "model") => ({ route, model: route === "model" ? "grok-4.7" : null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "en" as const });
+const completed = (route: "local" | "model" = "local") => ({ route, provider: "xai", model: "grok-4.7", depth: "quick" as const, modelCalls: route === "model" ? 1 : 0, localLookups: 1, webSearchCalls: 0, inputTokens: route === "model" ? 1_000_000 : 0, cachedInputTokens: 0, outputTokens: 0, usageReported: route === "model" });
+const logLines = (info: { mock: { calls: unknown[][] } }) => info.mock.calls.map((call: unknown[]) => String(call[0])).filter((line: string) => line.startsWith("{")).map((line: string) => JSON.parse(line) as Record<string, unknown>).filter((entry) => entry.event === "zarvis.chat");
 function request(body: unknown = { messages: [{ role: "user", content: "Explain shielded Zcash" }] }, origin = "https://openzcash.org") {
   return new Request("https://openzcash.org/api/zarvis", { method: "POST", headers: { origin, "content-type": "application/json" }, body: JSON.stringify(body) });
 }
 beforeEach(() => {
-  vi.clearAllMocks(); mocks.config.mockReturnValue({ enabled: true, providerLabel: "OpenAI", webSearch: true });
+  vi.clearAllMocks(); vi.restoreAllMocks(); resetMetricsForTests(); resetStoreForTests(); resetAlertsForTests(); resetObserveForTests();
+  mocks.config.mockReturnValue({ enabled: true, providerLabel: "OpenAI", webSearch: true, dailyUsdCap: null });
   mocks.reserve.mockResolvedValue({ allowed: true });
-  mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [] }); });
+  mocks.getDb.mockImplementation(() => { throw new Error("no database in unit tests"); });
+  mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
 });
 describe("Zarvis API", () => {
   it("only exposes public readiness, never configuration or keys", async () => {
@@ -63,6 +74,97 @@ describe("Zarvis API", () => {
       expect(signal.aborted).toBe(true);
       expect(await body).toContain("time limit");
     } finally { vi.useRealTimers(); }
+  });
+  it("logs one structured line per request with counts, classes and money only", async () => {
+    const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    await (await POST(request())).text();
+    mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: prov("model") }); return { ...completed("model"), webSearchCalls: 1, groundingFallbacks: 1 }; });
+    await (await POST(request({ messages: [{ role: "user", content: "Compare the treasuries" }], depth: "deep" }))).text();
+    mocks.answer.mockRejectedValueOnce(new GenerationFailure("provider_http_5xx", { route: "model", depth: "quick", model: "grok-4.7", modelCalls: 1, webSearchCalls: 0, inputTokens: 500, cachedInputTokens: 100, outputTokens: 0, usageReported: true }));
+    await (await POST(request())).text();
+    mocks.answer.mockRejectedValueOnce(new Error("503 provider body with sk-secret"));
+    await (await POST(request())).text();
+    mocks.reserve.mockResolvedValueOnce({ allowed: false, retryAfter: 90 });
+    await POST(request());
+    await POST(request(undefined, "https://elsewhere.example"));
+    const lines = logLines(info);
+    expect(lines).toHaveLength(6);
+    expect(lines[0]).toMatchObject({ route: "local", outcome: "completed", depth: "quick", modelCalls: 0, estimatedUsd: 0, errorClass: null });
+    expect(lines[1]).toMatchObject({ route: "model", outcome: "completed", depth: "quick", modelCalls: 1, webSearchCalls: 1, inputTokens: 1_000_000, groundingFallbacks: 1, estimatedUsd: 2.005, errorClass: null });
+    expect(lines[2]).toMatchObject({ route: "model", outcome: "failed", modelCalls: 1, inputTokens: 500, cachedInputTokens: 100, errorClass: "provider_http_5xx" });
+    expect(lines[2].estimatedUsd).toBeCloseTo(0.00085, 10);
+    expect(lines[3]).toMatchObject({ route: "model", outcome: "failed", errorClass: "unknown", estimatedUsd: null });
+    expect(lines[4]).toMatchObject({ route: "rejected", outcome: "quota", modelCalls: 0, errorClass: null });
+    expect(lines[5]).toMatchObject({ route: "rejected", outcome: "forbidden" });
+    for (const line of lines) {
+      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "modelCalls", "ms", "outcome", "outputTokens", "route", "webSearchCalls"]);
+      expect(typeof line.ms).toBe("number"); expect(Number.isNaN(Date.parse(String(line.at)))).toBe(false);
+    }
+    expect(JSON.stringify(lines)).not.toMatch(/shielded|Compare|sk-secret|provider body|openzcash\.org/);
+    expect(metricsSnapshot()).toMatchObject({ completed: 2, failed: 2, quota: 1, forbidden: 1, local: 1, model: 1, modelCalls: 2 });
+    expect(metricsSnapshot().estimatedModelUsd).toBeCloseTo(2.00585, 10);
+    expect(mocks.answer.mock.calls.every((call) => call[5]?.localOnly === false)).toBe(true);
+  });
+  it("classifies the deadline and client disconnects separately from provider failures", async () => {
+    vi.useFakeTimers();
+    const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    try {
+      mocks.answer.mockImplementation(async (_messages, signal) => new Promise((_resolve, reject) => { signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true }); }));
+      const body = (await POST(request())).text();
+      await vi.advanceTimersByTimeAsync(55_000);
+      expect(await body).toContain("time limit");
+      expect(logLines(info).at(-1)).toMatchObject({ outcome: "failed", errorClass: "deadline" });
+      const controller = new AbortController();
+      const pending = POST(new Request("https://openzcash.org/api/zarvis", { method: "POST", headers: { origin: "https://openzcash.org", "content-type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", content: "Explain shielded Zcash" }] }), signal: controller.signal }));
+      await vi.advanceTimersByTimeAsync(10);
+      controller.abort();
+      await (await pending).text().catch(() => "");
+      await vi.advanceTimersByTimeAsync(10);
+      expect(logLines(info).at(-1)).toMatchObject({ outcome: "aborted", errorClass: "aborted" });
+      expect(metricsSnapshot()).toMatchObject({ failed: 1, aborted: 1 });
+    } finally { vi.useRealTimers(); }
+  });
+  it("forbids the provider but keeps direct answers once the estimated daily spend reaches the cap, even during a quota pause", async () => {
+    vi.useFakeTimers(); vi.setSystemTime(new Date("2026-09-28T23:00:00.000Z"));
+    const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    try {
+      mocks.config.mockReturnValue({ enabled: true, providerLabel: "xAI (Grok)", webSearch: true, dailyUsdCap: 3, quotaPause: { active: true, until: "2026-09-29T03:00:00.000Z" } });
+      const options = (index: number) => mocks.answer.mock.calls[index][5] as { localOnly: boolean };
+      mocks.answer.mockImplementation(async (_messages, _signal, emit, _session, _depth, { localOnly }) => {
+        if (localOnly) throw new GenerationFailure("model_required", { ...completed("model"), modelCalls: 0, inputTokens: 0, usageReported: false });
+        emit({ type: "done", sources: [], provenance: prov("model") }); return completed("model");
+      });
+      await (await POST(request())).text();
+      expect((await POST(request())).status).toBe(200); expect(options(1)).toEqual({ localOnly: false });
+      const declined = await POST(request());
+      expect(declined.status).toBe(200); expect(declined.headers.get("retry-after")).toBeNull();
+      const events = (await declined.text()).trim().split("\n").map((line) => JSON.parse(line));
+      expect(events.at(-1)).toEqual({ type: "error", message: "Zarvis has reached today's limit for model-assisted answers. Questions the public records answer directly still work, and the sources remain available." });
+      expect(options(2)).toEqual({ localOnly: true }); expect(mocks.reserve).toHaveBeenCalledTimes(3);
+      expect(logLines(info).at(-1)).toMatchObject({ route: "rejected", outcome: "spend_cap", modelCalls: 0, estimatedUsd: null, errorClass: null });
+      expect(metricsSnapshot()).toMatchObject({ spendCap: 1, completed: 2, failed: 0, estimatedModelUsd: 4 });
+      mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
+      const direct = await POST(request());
+      expect(options(3)).toEqual({ localOnly: true }); expect((await direct.text()).trim().split("\n").map((line) => JSON.parse(line)).at(-1).type).toBe("done");
+      expect(metricsSnapshot()).toMatchObject({ spendCap: 1, completed: 3, local: 1 });
+      vi.setSystemTime(new Date("2026-09-29T00:00:00.000Z"));
+      expect((await POST(request())).status).toBe(200); expect(options(4)).toEqual({ localOnly: false });
+    } finally { vi.useRealTimers(); }
+  });
+  it("carries the answer route in the feedback ticket and counts busy rejections", async () => {
+    const response = await POST(request());
+    const done = (await response.text()).trim().split("\n").map((line) => JSON.parse(line)).find((event) => event.type === "done");
+    expect(done.provenance.route).toBe("local");
+    expect(JSON.parse(Buffer.from(done.feedbackToken.split(".")[0], "base64url").toString())).toMatchObject({ route: "local" });
+    vi.stubEnv("ZARVIS_MAX_CONCURRENT", "1");
+    try {
+      mocks.answer.mockImplementation(async (_messages, signal, emit) => { await new Promise<void>((resolve) => { const finish = () => { emit({ type: "done", sources: [], provenance: prov("local") }); resolve(); }; signal.addEventListener("abort", finish, { once: true }); setTimeout(finish, 50); }); return completed(); });
+      const first = POST(request()); await new Promise((resolve) => setTimeout(resolve, 5));
+      const busy = await POST(request());
+      expect(busy.status).toBe(429); expect(busy.headers.get("retry-after")).toBe("5");
+      await (await first).text();
+      expect(metricsSnapshot()).toMatchObject({ busy: 1, completed: 2 });
+    } finally { vi.unstubAllEnvs(); }
   });
   it("ends an incomplete upload before reserving quota or calling the model", async () => {
     vi.useFakeTimers();

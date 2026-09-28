@@ -43,6 +43,13 @@
       "when": 1790388644890,
       "tag": "0005_zarvis_usage",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790624469985,
+      "tag": "0006_zarvis_observability",
+      "breakpoints": true
     }
   ]
 }

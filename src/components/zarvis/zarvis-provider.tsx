@@ -15,10 +15,17 @@ type ChatState = {
   depth: ResponseDepth; setDepth: (value: ResponseDepth) => void;
   motionPaused: boolean; toggleMotion: () => void;
   busy: boolean; expression: ZarvisExpression; progress: string; error: string | null; status: ZarvisStatus | null;
+  degraded: boolean; retryAt: number | null;
   send: (question?: string, retry?: boolean) => void;
   stop: () => void; clear: () => void; checkStatus: (force?: boolean) => void;
 };
 const Context = createContext<ChatState | null>(null);
+export const portugueseBrowser = () => typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("pt");
+/** Honours the server's Retry-After on a 429 so a visitor is told when to come back instead of blindly retrying. */
+export function retryHint(seconds: number, pt = portugueseBrowser()): string {
+  const minutes = Math.max(1, Math.ceil(seconds / 60));
+  return pt ? `Tente novamente em ${minutes} minuto${minutes === 1 ? "" : "s"}.` : `Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.`;
+}
 export function useZarvis() {
   const context = useContext(Context);
   if (!context) throw new Error("Zarvis provider missing");
@@ -36,6 +43,8 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<ZarvisStatus | null>(null);
+  const [degraded, setDegraded] = useState(false);
+  const [retryAt, setRetryAt] = useState<number | null>(null);
   const active = useRef<AbortController | null>(null);
   const statusChecked = useRef(false);
   const checkStatus = useCallback((force = false) => {
@@ -48,7 +57,14 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
       statusChecked.current = false;
       setError("Zarvis is temporarily unavailable. Please try again shortly.");
     });
+    // Public health only carries booleans and timestamps; a failed probe never blocks the chat.
+    fetch("/api/zarvis/health", { cache: "no-store" }).then(async (r) => { if (r.ok) setDegraded(Boolean((await r.json()).degraded)); }).catch(() => {});
   }, []);
+  useEffect(() => {
+    if (retryAt === null) return;
+    const timer = setTimeout(() => setRetryAt(null), Math.max(0, retryAt - Date.now()));
+    return () => clearTimeout(timer);
+  }, [retryAt]);
   useEffect(() => {
     const visibility = () => setPageHidden(document.hidden);
     visibility();
@@ -66,7 +82,7 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
   }
   function stop() { active.current?.abort(); }
   async function send(question?: string, retry = false) {
-    if (active.current || !status?.available) return;
+    if (active.current || !status?.available || (retryAt !== null && Date.now() < retryAt)) return;
     const questionText = (question ?? draft).trim();
     if (!retry && (!questionText || questionText.length > MAX_QUESTION_LENGTH)) return;
     let history = messages.filter((m) => m.content.trim());
@@ -93,6 +109,8 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
+        const wait = response.status === 429 ? Number(response.headers.get("retry-after")) : NaN;
+        if (Number.isFinite(wait) && wait > 0) { setRetryAt(Date.now() + wait * 1000); throw new Error(`${data.error ?? "Zarvis could not respond."} ${retryHint(wait)}`); }
         throw new Error(data.error ?? "Zarvis could not respond. Please try again.");
       }
       if (!response.body) throw new Error("The connection ended. Please retry.");
@@ -133,5 +151,5 @@ export function ZarvisProvider({ children }: { children: ReactNode }) {
   const answerPose = messages.findLast((message) => message.role === "assistant")?.pose ?? "explaining";
   const expression: ZarvisExpression = busy ? (replying ? answerPose : progressExpression(progress))
     : error ? "error" : draft.trim() ? "listening" : "idle";
-  return <Context.Provider value={{ messages, draft, setDraft, depth, setDepth, busy, expression, motionPaused: motionPaused || pageHidden, toggleMotion: () => setMotionPaused((paused) => !paused), progress, error, status, send, stop, clear, checkStatus }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ messages, draft, setDraft, depth, setDepth, busy, expression, motionPaused: motionPaused || pageHidden, toggleMotion: () => setMotionPaused((paused) => !paused), progress, error, status, degraded, retryAt, send, stop, clear, checkStatus }}>{children}</Context.Provider>;
 }

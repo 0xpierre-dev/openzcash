@@ -30,16 +30,23 @@ This mode does not read, increment or reset the quota counters, so an exhausted 
 
 Set the server-only `ZARVIS_QUOTA_PAUSE_UNTIL` to an explicit UTC expiry such as `2026-09-29T03:00:00.000Z` (midnight ending September 28 in Sao Paulo). The override is active only during the final 24 hours before that instant. Omitted, malformed, timezone-less, expired or more distant values keep normal quotas. The server rechecks the clock for every request; at expiry it automatically resumes the configured global quotas and ordinary network quotas without a restart or scheduled job. Clear the variable to end the window early.
 
-During this window, global hourly/daily and per-network question counters are bypassed without reading, incrementing or resetting them. Existing counters remain intact for normal enforcement afterward. Accepted in-flight answers can finish under their existing deadline. The feature enable switch, origin/body checks, per-process concurrency, token/tool budgets and deadlines still apply. Model-assisted answers incur normal provider costs; there is no application request-count spending cap during the window. Direct answers still make no model call.
+During this window, global hourly/daily and per-network question counters are bypassed without reading, incrementing or resetting them. Existing counters remain intact for normal enforcement afterward. Accepted in-flight answers can finish under their existing deadline. The feature enable switch, origin/body checks, per-process concurrency, token/tool budgets and deadlines still apply. Model-assisted answers incur normal provider costs; there is no request-count cap during the window, so set the estimated-spend ceiling `ZARVIS_DAILY_USD_CAP` (see Operations), which is checked before the pause exemption. Direct answers still make no model call.
 
 The authenticated `GET /api/zarvis/metrics` response includes `quota.paused`, `quota.resumesAt` (the configured UTC expiry), and the normal `dailyLimit` / `hourlyLimit`. This is current policy, not usage counters. Public readiness does not disclose these settings.
 
-## Cost reference (checked 2026-09-25)
+## Cost reference (checked 2026-09-28)
 
-GPT-5 mini: $0.25 / million input tokens, $0.025 / million cached input tokens, and $2.00 / million output tokens (including reasoning). Example: 10,000 input + 2,000 output tokens = $0.0065 before tools. Web search adds $0.01 per tool call plus search-content tokens. A model-assisted question can use up to three model requests (four for deeper analysis) when extra data and research are needed; many require only one synthesis call. History, instructions and retrieved sources all count as input; visible answer length is not total token usage.
+Built-in list rates in `src/lib/zarvis/pricing.ts` (`MODEL_RATES`), standard tier, prompts below each provider's long-context threshold, USD per million tokens plus the hosted web-search fee per call:
 
-- https://developers.openai.com/api/docs/models/gpt-5-mini
-- https://developers.openai.com/api/docs/pricing
+| Model | Input | Cached input | Output | Web search / call | Source |
+| --- | ---: | ---: | ---: | ---: | --- |
+| grok-4.7 (production default for xAI) | $2.00 | $0.50 | $6.00 | $0.005 ($5 / 1k calls) | https://docs.x.ai/developers/pricing, read 2026-09-28 |
+| grok-4.6 | $2.00 | $0.50 | $6.00 | $0.005 | same page; prompts of 200k+ tokens are billed at double these token rates |
+| gpt-5-mini | $0.25 | $0.025 | $2.00 | $0.01 ($10 / 1k calls) | https://developers.openai.com/api/docs/pricing, read 2026-09-28 |
+| gpt-5 | $1.25 | $0.125 | $10.00 | $0.01 | same page |
+| gpt-6-astra | $10.00 | $1.00 | $50.00 | $0.01 | same page; cache writes ($12.50 / M) are not modelled |
+
+`estimateUsageUsd` prices every completed model answer for a listed model without further configuration. `ZARVIS_INPUT_USD_PER_MILLION`, `ZARVIS_CACHED_INPUT_USD_PER_MILLION`, `ZARVIS_OUTPUT_USD_PER_MILLION` and `ZARVIS_SEARCH_USD_PER_CALL` override individual fields (and are the only way to price an unlisted model). Search-content tokens are billed at model rates and appear in the reported token usage. Example with grok-4.7: 10,000 input (4,000 cached) + 1,000 output tokens + one search = $0.025. A model-assisted question can use up to three model requests (four for deeper analysis); history, instructions and retrieved sources all count as input. Estimates are not invoices: a failed or aborted answer is priced from the usage reported before the failure (a lower bound that still counts toward the daily cap), provider calls may be billed beyond what was reported, and long-context tiers are not modelled. Re-check the pricing pages when changing `ZARVIS_MODEL`.
 
 ## Flagship local evaluation (2026-09-26)
 
@@ -123,11 +130,11 @@ Real-provider smoke tests require a securely configured funded provider account.
 
 `ZARVIS_MAX_CONCURRENT` defaults to eight active generations per server process (bounded to 32). Excess requests receive 429/Retry-After before a model call. This also applies during unlimited local testing and a temporary launch window. Outside those explicit exceptions, atomic global request quotas in Postgres remain the cross-replica cost/abuse safeguard; per-process concurrency is not a global dollar cap.
 
-`GET /api/zarvis/metrics` requires the existing admin session. It exposes aggregate success/error/abort/busy counts, local/model routing, tokens/cache hits, numeric fallbacks, feedback and latency buckets. Counters reset with the server and are **per process**, not durable audience analytics or unique-person counts. Set `ZARVIS_AGGREGATE_METRICS=true` to emit these cumulative counters at most once a minute when traffic arrives. No prompt, reply, credential, raw IP or visitor identifier is added to these metrics. Hosting logs are separate.
+`GET /api/zarvis/metrics` requires the existing admin session and returns `{ process, quota, alerts, daily }`. `process` holds this server process's counters since restart: completed/failed/aborted, the pre-generation rejections (`busy`, `quota`, `spendCap`, `storage`, `forbidden`, `invalid`), local/model routing, tokens/cache hits, numeric fallbacks, feedback, latency buckets and the durable-store write/read failure counts. `daily` holds the last 14 UTC days from the `zarvis_metrics_daily` table (see Observability below); `quota` adds the configured cap and today's estimated spend; `alerts` reports the rolling failure window and how many alerts were sent. Set `ZARVIS_AGGREGATE_METRICS=true` to also print the process counters at most once a minute when traffic arrives. No prompt, reply, credential, raw IP or visitor identifier is added to these metrics. Hosting logs are separate.
 
-Optional cost estimates require the operator to set rates for the active model: `ZARVIS_INPUT_USD_PER_MILLION`, `ZARVIS_CACHED_INPUT_USD_PER_MILLION`, `ZARVIS_OUTPUT_USD_PER_MILLION`, and `ZARVIS_SEARCH_USD_PER_CALL`. Missing relevant rates or usage from any model round means **unpriced**, never zero. Estimates are not provider invoices or billing caps; failed/aborted requests may incur unreported charges. Use the provider's billing controls for financial limits.
+Cost estimates use the built-in rate table above for the active model; the `ZARVIS_*_USD_PER_MILLION` / `ZARVIS_SEARCH_USD_PER_CALL` variables override single fields. An unlisted model without overrides, or usage missing from any model round, means **unpriced**, never zero; with `ZARVIS_DAILY_USD_CAP` set, an unpriced model answer sends the `unpriced_usage` alert because the cap cannot count it. Estimates are not provider invoices; failed/aborted requests are counted from the usage reported before the failure and may incur further unreported charges. `ZARVIS_DAILY_USD_CAP` is an application ceiling on the estimate, not a replacement for the provider's billing controls.
 
-Answer feedback sends only a signed one-hour ticket and a useful/needs-work vote. Tickets contain a random nonce/expiry, no question, answer, identity or scenario. Votes are deduplicated per process with bounded memory; counters are directional feedback, not an authenticated survey. The backend rejects arbitrary feedback text. Calculator links contain public numerical assumptions, not chat text.
+Answer feedback sends only a signed one-hour ticket and a useful/needs-work vote. Tickets contain a random nonce/expiry and the answer route (`local` or `model`, so votes can be attributed per route in the daily table), no question, answer, identity or scenario. Votes are deduplicated per process with bounded memory; counters are directional feedback, not an authenticated survey. The backend rejects arbitrary feedback text. Calculator links contain public numerical assumptions, not chat text.
 
 ## Repeatable evaluation
 
@@ -169,3 +176,72 @@ Provider timeouts are 50 / 90 seconds within those overall generation deadlines.
 Simple numeric treasury questions retain the deterministic calculator reply. Analytical scenarios retain that verified numeric block and then synthesize interpretation, limitations and requested sensitivity checks. The existing unsupported-amount check also runs on that analysis. This checks numeric provenance, not full semantic correctness. Final model rounds cannot request tools and must return an answer or a specific evidence gap rather than a promise to look something up later.
 
 ZIP retrieval includes scope notes for ZIP 310 and revision-specific caveats for ZIP 317. Created/Last-Updated, retrieval time, specification status and actual network activation remain distinct. See [the refinement evaluation](zarvis-refinement-evaluation.md) for real local responses, failed iterations and release limitations.
+
+
+## Observability and operations (2026-09-28)
+
+Everything in this section records counts, labels, durations and money. No question, answer, prompt, provider error body, raw IP or visitor identifier is logged or stored.
+
+### Request log line
+
+`POST /api/zarvis` prints exactly one single-line JSON record per request through `console.info` (visible in the Railway deploy logs, `event` = `zarvis.chat`):
+
+```json
+{"event":"zarvis.chat","at":"2026-09-28T19:02:11.512Z","route":"model","outcome":"completed","depth":"quick","ms":6120,"modelCalls":2,"webSearchCalls":1,"inputTokens":18320,"cachedInputTokens":9216,"outputTokens":640,"groundingFallbacks":0,"estimatedUsd":0.0301,"errorClass":null}
+```
+
+- `route`: `local` (deterministic answer, no model call), `model`, or `rejected` (the request never reached generation).
+- `outcome`: `completed`, `failed`, `aborted` (client disconnected), `quota` (Postgres request limit), `busy` (per-process concurrency), `spend_cap` (daily USD ceiling), `storage` (quota table unavailable), `forbidden` (origin), `invalid` (body), `disabled`.
+- `errorClass` is a fixed label from `src/lib/zarvis/errors.ts`: `provider_timeout`, `provider_connection`, `provider_http_429`, `provider_http_4xx`, `provider_http_5xx`, `provider_not_configured`, `incomplete_response`, `empty_response`, `tool_limit`, `public_read_timeout`, `model_required`, `deadline` (the app's own generation deadline), `aborted`, `unknown`. Failures are classified inside the answer pipeline (`GenerationFailure`), which also carries the token usage billed before the failure so it is counted.
+- `estimatedUsd` is `0` for local answers and `null` when nothing could be priced (unlisted model, or a completed answer with a missing usage report). A `failed`/`aborted` line carries the lower bound priced from the usage reported before the failure.
+
+Rejections are rate limited in the log: the first rejection per outcome in a ten-second window is printed as above, and any further ones in that window fold into one `zarvis.rejections` line (`outcome`, `count`, `windowMs`, `avgMs`), so a flood of forbidden or busy requests cannot push the answer lines past the hosting log rate limit.
+
+The canary prints one `zarvis.canary` line per run (`ok`, `ms`, `passed`, `failed`, `failedCases`, `stored`).
+
+### Durable daily counters
+
+Migration `0006_zarvis_observability` adds `zarvis_metrics_daily` (primary key `day` UTC date + `route`) and `zarvis_canary`. It is applied by the existing boot migration step (`scripts/migrate.mjs` in the Railway start command). Every request outcome, rejection and feedback vote is buffered in process and upserted a few seconds later inside a transaction with a 3-second `statement_timeout`; the write is fire-and-forget; a failed write increments `process.store.writeFailures` and drops that batch (its USD estimate stays in the process spend total), and the first write and first read failure per process also print one `zarvis.store` line with the error class only, so a migration that did not apply is visible in the deploy log. Rows in a batch are upserted in `day|route` order so concurrent flushes from several replicas cannot deadlock, and the latency histogram is added element-wise with `unnest … with ordinality`. Rows keep the same counters as the process metrics plus `estimated_usd` and a 9-bucket latency histogram (bounds 250 ms … 60 s, reported as `dailyLatencyBucketBoundsMs`; the endpoint adds `p50BucketUpperMs` / `p95BucketUpperMs` per row). Because rows are per route, model-route latency is no longer blended with sub-second local answers.
+
+### Daily spend ceiling
+
+`ZARVIS_DAILY_USD_CAP` (e.g. `25`) forbids the provider once the estimated spend for the current UTC day reaches the value: the request still goes through origin, body, concurrency and quota checks and the local pipeline (`localOnly`, the canary's zero-cost mode), so questions the public records answer directly keep working at no cost, while a question that needs the model ends with an error event explaining that today's limit for model-assisted answers was reached (log outcome `spend_cap`, counted as a rejection, no `Retry-After`; the chat stays usable). The estimate is the durable daily total (re-read from Postgres at most every 30 seconds, in the background) plus usage this process has not flushed yet, including the lower bound priced for failed answers, so it is accurate to within roughly 30 seconds across replicas. The check is evaluated before quota reservation and therefore also applies during a `ZARVIS_QUOTA_PAUSE_UNTIL` window. If the table cannot be read, or right after a restart until the first background read completes, the process falls back to what it has counted itself and keeps counting; an unpriced model answer under a cap sends the `unpriced_usage` alert. Unset or invalid means no ceiling.
+
+### Alerts
+
+`ZARVIS_ALERT_WEBHOOK_URL` (https; a Discord or Slack incoming webhook, or anything accepting `{"content": "...", "text": "..."}` JSON) receives at most one message per type per ten minutes per process for:
+
+- `provider_failures`: at least three consecutive failed answers, or at least 25% failed among the last 20 (minimum sample eight; aborted answers are ignored). The message carries counts and the latest error class.
+- `rejection_spike`: at least 20 quota/busy/spend-cap rejections in the last ten minutes (only the last 20 timestamps are kept, so `alerts.rejectionsLast10Min` reports at most 20).
+- `spend_cap`: the daily USD ceiling was reached; model answers are declined until 00:00 UTC while direct answers continue.
+- `unpriced_usage`: a cap is configured but a model answer had no price (unlisted model without rate overrides, or a missing usage report), so the cap could not count it.
+- `canary`: a canary run failed, with the failed case labels.
+
+Delivery failures are counted in `alerts.failed`. The variable is never logged or returned by any endpoint; `alerts.configured` only says whether it is set.
+
+### Canary
+
+`GET /api/zarvis/canary` is gated like `/api/cron/refresh`: `Authorization: Bearer $CRON_SECRET` (the existing service secret, minimum 16 characters). It runs the four zero-cost starter phrasings through the real `prepareLocal` / `generateAnswer` path with the provider forbidden (`localOnly`): the privacy FAQ (`STARTERS[0]`), the treasuries starter, `What is the ZEC price?` and `What is ZIP 317?`. Each must finish on the local route with zero model calls, non-empty text, at least one source, and, for the two data-backed cases, the live reader's source URL (absent when the feed fails, which is how the launch-day treasuries outage would have been caught). Results are stored in `zarvis_canary` and returned as JSON; a failed run answers HTTP 503 and sends the `canary` alert. With `ZARVIS_CANARY_MODEL=true` and the assistant enabled, one paid model question (`STARTERS[2]`) is added per run and counted in the metrics like any other model answer (about $0.01–0.05 per run with grok-4.7).
+
+Schedule: `.github/workflows/zarvis-canary.yml` runs hourly (`17 * * * *`) and on demand, calling the URL with the repository secret `ZARVIS_CRON_SECRET` (set it to the Railway `CRON_SECRET`); the job fails when the endpoint answers 503. Equivalent manual call:
+
+```sh
+curl --fail-with-body -H "Authorization: Bearer $CRON_SECRET" https://openzcash.org/api/zarvis/canary
+```
+
+### Public health and visitor messages
+
+`GET /api/zarvis/health` is public and returns only `{ ok, lastCanaryAt, lastCanaryOk, degraded }`: `degraded` is true after a failed canary less than six hours old or while the provider failure window above is tripped; `ok` additionally requires the feature to be enabled. The chat client reads it once per page and shows "Zarvis is having trouble" / "Zarvis está com problemas" (by browser language) above the composer. On any 429 the client now honours `Retry-After`: the message adds "Try again in N minutes" / "Tente novamente em N minutos" and the send and Retry buttons stay disabled until then.
+
+### Environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `ZARVIS_DAILY_USD_CAP` | Optional daily estimated-spend ceiling in USD (recommended in production, e.g. `25`). |
+| `ZARVIS_ALERT_WEBHOOK_URL` | Optional https webhook for the alerts above. |
+| `ZARVIS_CANARY_MODEL` | `true` adds one paid model question to each canary run. Default off. |
+| `CRON_SECRET` | Existing shared secret; also gates `/api/zarvis/canary`. Mirror it as the GitHub repository secret `ZARVIS_CRON_SECRET`. |
+| `ZARVIS_INPUT_USD_PER_MILLION`, `ZARVIS_CACHED_INPUT_USD_PER_MILLION`, `ZARVIS_OUTPUT_USD_PER_MILLION`, `ZARVIS_SEARCH_USD_PER_CALL` | Optional overrides of the built-in rate table (required only for a model not listed there). |
+| `ZARVIS_AGGREGATE_METRICS` | Existing; prints the process counters once a minute. |
+
+Verification: `npx vitest run`, `npx tsc --noEmit`, `npx eslint src/lib/zarvis src/app/api/zarvis src/components/zarvis`.

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 const constructor = vi.hoisted(() => vi.fn());
-vi.mock("openai", () => ({ default: class { constructor(options: unknown) { constructor(options); } } }));
+vi.mock("openai", async (original) => ({ ...await original<object>(), default: class { constructor(options: unknown) { constructor(options); } } }));
 import { zarvisConfig } from "./config";
 import { providerClient, providerOptions, providerSearchTool } from "./provider";
 afterEach(() => { vi.unstubAllEnvs(); vi.clearAllMocks(); });
