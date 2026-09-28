@@ -24,11 +24,12 @@ export function percentile(latency: number[], q: number): number | null {
   for (let i = 0; i < latency.length; i++) { seen += latency[i]; if (seen >= total * q) return Number.isFinite(LATENCY_BOUNDS_MS[i]) ? LATENCY_BOUNDS_MS[i] : null; }
   return null;
 }
-export function secondsUntilUtcMidnight(now = Date.now()): number {
-  const next = new Date(now); next.setUTCHours(24, 0, 0, 0);
-  return Math.max(1, Math.ceil((next.getTime() - now) / 1000));
-}
 const emptyRow = (): Row => ({ ...(Object.fromEntries(DAILY_COUNTERS.map((key) => [key, 0])) as Record<DailyCounter, number>), estimatedUsd: 0, latency: LATENCY_BOUNDS_MS.map(() => 0) });
+/** Counts every miss; the first of each kind per process is also logged with the error class only, so a migration that did not apply is visible without the admin endpoint. */
+function noteStoreFailure(op: "write" | "read", error: unknown) {
+  const count = op === "write" ? ++state.writeFailures : ++state.readFailures;
+  if (count === 1) console.warn(JSON.stringify({ event: "zarvis.store", op, errorClass: error instanceof Error ? error.name : "unknown" }));
+}
 const shortStatement = (tx: { execute: (query: ReturnType<typeof sql>) => Promise<unknown> }) => tx.execute(sql`set local statement_timeout = '3000ms'`);
 
 /** Buffers a delta for the UTC day and route; flushed to Postgres a few seconds later. */
@@ -43,7 +44,8 @@ export function queueDaily(route: DailyRoute, delta: DailyDelta, now = Date.now(
 }
 export async function flushDaily(): Promise<boolean> {
   if (state.timer) { clearTimeout(state.timer); state.timer = null; }
-  const batch = [...state.pending]; state.pending = new Map();
+  // Rows are upserted in key order so two overlapping flushes (a second replica, or a slow flush) never deadlock on each other's locks.
+  const batch = [...state.pending].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)); state.pending = new Map();
   if (!batch.length) return true;
   const t = zarvisMetricsDaily;
   try {
@@ -54,7 +56,7 @@ export async function flushDaily(): Promise<boolean> {
         await tx.insert(t).values({ day, route, ...row }).onConflictDoUpdate({ target: [t.day, t.route], set: {
           ...Object.fromEntries(DAILY_COUNTERS.map((counter) => [counter, sql`${t[counter]} + excluded.${sql.raw(t[counter].name)}`])),
           estimatedUsd: sql`${t.estimatedUsd} + excluded.estimated_usd`,
-          latency: sql`array(select coalesce(a, 0) + coalesce(b, 0) from unnest(${t.latency}, excluded.latency) as u(a, b))`,
+          latency: sql`array(select coalesce(a, 0) + coalesce(b, 0) from unnest(${t.latency}, excluded.latency) with ordinality as u(a, b, i) order by i)`,
           updatedAt: sql`now()`,
         } });
       }
@@ -63,9 +65,9 @@ export async function flushDaily(): Promise<boolean> {
     for (const [key, row] of batch) if (key.startsWith(spend.day)) spend.flushedUsd += row.estimatedUsd;
     state.lastFlushAt = Date.now();
     return true;
-  } catch {
+  } catch (error) {
     // Dropped rows still count toward this process's spend estimate for the rest of the day.
-    state.writeFailures++;
+    noteStoreFailure("write", error);
     const spend = spendState(Date.now());
     for (const [key, row] of batch) if (key.startsWith(spend.day)) spend.unwrittenUsd += row.estimatedUsd;
     return false;
@@ -84,7 +86,7 @@ function refreshSpend(now: number) {
     try {
       const rows = await getDb().transaction(async (tx) => { await shortStatement(tx); return tx.select({ usd: sql<number | string>`coalesce(sum(${zarvisMetricsDaily.estimatedUsd}), 0)` }).from(zarvisMetricsDaily).where(eq(zarvisMetricsDaily.day, spend.day)); });
       if (spendState(Date.now()) === spend) { spend.dbUsd = Number(rows[0]?.usd ?? 0); spend.flushedUsd = 0; }
-    } catch { state.readFailures++; }
+    } catch (error) { noteStoreFailure("read", error); }
     finally { spend.readAt = Date.now(); spend.reading = false; }
   })();
 }
@@ -104,7 +106,7 @@ export async function recordCanary(result: CanaryRecord): Promise<boolean> {
   try {
     await getDb().transaction(async (tx) => { await shortStatement(tx); await tx.insert(zarvisCanary).values({ ranAt: new Date(result.at), ok: result.ok, passed: result.passed, failed: result.failed, ms: result.ms, failedCases: result.failedCases }); });
     return true;
-  } catch { state.writeFailures++; return false; }
+  } catch (error) { noteStoreFailure("write", error); return false; }
 }
 export async function latestCanary(now = Date.now()): Promise<CanaryRecord | null> {
   if (now - state.canaryReadAt < CANARY_CACHE_MS) return state.canary;
@@ -113,7 +115,7 @@ export async function latestCanary(now = Date.now()): Promise<CanaryRecord | nul
     const rows = await getDb().transaction(async (tx) => { await shortStatement(tx); return tx.select().from(zarvisCanary).orderBy(desc(zarvisCanary.ranAt)).limit(1); });
     const row = rows[0];
     if (row && (!state.canary || row.ranAt.toISOString() >= state.canary.at)) state.canary = { at: row.ranAt.toISOString(), ok: row.ok, passed: row.passed, failed: row.failed, ms: row.ms, failedCases: row.failedCases };
-  } catch { state.readFailures++; }
+  } catch (error) { noteStoreFailure("read", error); }
   return state.canary;
 }
 export function storeState() {

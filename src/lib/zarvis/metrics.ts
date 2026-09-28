@@ -2,9 +2,9 @@ import "server-only";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import type { GenerationMetrics } from "./openai";
 import type { ErrorClass, PartialUsage } from "./errors";
-import { estimateUsageUsd } from "./pricing";
+import { dailyUsdCap, estimateUsageUsd } from "./pricing";
 import { LATENCY_BOUNDS_MS, latencyBucket, percentile, queueDaily, storeState, type DailyDelta } from "./metrics-store";
-import { noteOutcome, noteRejection } from "./alerts";
+import { noteOutcome, noteRejection, noteUnpriced } from "./alerts";
 export { estimateUsageUsd } from "./pricing";
 
 export const REJECTIONS = ["quota", "busy", "spendCap", "storage", "forbidden", "invalid"] as const;
@@ -49,7 +49,10 @@ export function acquireGeneration() {
   state.active++; let released = false;
   return () => { if (!released) { state.active--; released = true; } };
 }
-/** Records an outcome; failed/aborted answers may carry the usage billed before the failure. Returns the estimated USD when priced. */
+/**
+ * Records an outcome. A completed answer is priced exactly; a failed/aborted one is priced from the usage reported before the failure,
+ * a lower bound that still moves the spend cap (the request stays counted as unpriced). Returns the estimate, or null when nothing could be priced.
+ */
 export function recordGeneration(outcome: "completed" | "failed" | "aborted", ms: number, metrics?: GenerationMetrics | PartialUsage, errorClass?: ErrorClass | null): number | null {
   state.totals[outcome]++;
   const delta: DailyDelta = { [outcome]: 1 };
@@ -60,11 +63,12 @@ export function recordGeneration(outcome: "completed" | "failed" | "aborted", ms
     if (outcome === "completed") state.totals[metrics.route]++;
     for (const key of ["modelCalls", "webSearchCalls", "inputTokens", "cachedInputTokens", "outputTokens"] as const) { state.totals[key] += metrics[key]; delta[key] = metrics[key]; }
     state.totals.groundingFallbacks += metrics.groundingFallbacks ?? 0; delta.groundingFallbacks = metrics.groundingFallbacks ?? 0;
-    if (outcome === "completed" && "usageReported" in metrics) {
-      estimated = estimateUsageUsd(metrics);
-      if (estimated === null) { state.totals.unpricedRequests++; delta.unpricedRequests = 1; } else { state.totals.estimatedModelUsd += estimated; delta.estimatedUsd = estimated; }
-      if (metrics.modelCalls && !metrics.usageReported) state.totals.unreportedUsage++;
-    }
+    estimated = outcome === "completed" ? estimateUsageUsd(metrics) : estimateUsageUsd({ ...metrics, usageReported: true });
+    if (estimated === null) {
+      if (outcome === "completed") { state.totals.unpricedRequests++; delta.unpricedRequests = 1; }
+      if (metrics.modelCalls && dailyUsdCap() !== null) noteUnpriced(metrics.model);
+    } else { state.totals.estimatedModelUsd += estimated; delta.estimatedUsd = estimated; }
+    if (outcome === "completed" && metrics.modelCalls && !metrics.usageReported) state.totals.unreportedUsage++;
   }
   queueDaily(metrics?.route ?? "model", delta);
   noteOutcome(outcome, errorClass);
@@ -72,7 +76,7 @@ export function recordGeneration(outcome: "completed" | "failed" | "aborted", ms
   return estimated;
 }
 export function metricsSnapshot() {
-  return { ...state.totals, latency: [...state.totals.latency], active: state.active, scope: "this server process since restart", latencyBucketBoundsMs: LATENCY_BOUNDS_MS.map((b) => Number.isFinite(b) ? b : null), p50BucketUpperMs: percentile(state.totals.latency, 0.5), p95BucketUpperMs: percentile(state.totals.latency, 0.95), store: storeState(), note: "Counts only; no prompts, replies, raw IPs or visitor identifiers. Tokens include usage reported before a failure; failed/aborted provider calls may still be billed beyond what is reported. Feedback is deduplicated per process for one hour." };
+  return { ...state.totals, latency: [...state.totals.latency], active: state.active, scope: "this server process since restart", latencyBucketBoundsMs: LATENCY_BOUNDS_MS.map((b) => Number.isFinite(b) ? b : null), p50BucketUpperMs: percentile(state.totals.latency, 0.5), p95BucketUpperMs: percentile(state.totals.latency, 0.95), store: storeState(), note: "Counts only; no prompts, replies, raw IPs or visitor identifiers. Tokens and estimatedModelUsd include usage reported before a failure; failed/aborted provider calls may still be billed beyond what is reported. Feedback is deduplicated per process for one hour." };
 }
 function flushMetrics() {
   if (process.env.ZARVIS_AGGREGATE_METRICS !== "true" || Date.now() - state.lastLog < 60000) return;

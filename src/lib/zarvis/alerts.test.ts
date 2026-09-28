@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-import { ALERT_INTERVAL_MS, alertState, noteOutcome, noteRejection, providerDegraded, resetAlertsForTests, sendAlert } from "./alerts";
+import { ALERT_INTERVAL_MS, alertState, noteOutcome, noteRejection, noteUnpriced, providerDegraded, resetAlertsForTests, sendAlert } from "./alerts";
 const fetchMock = vi.fn();
 beforeEach(() => { resetAlertsForTests(); fetchMock.mockReset().mockResolvedValue({ ok: true }); vi.stubGlobal("fetch", fetchMock); vi.stubEnv("ZARVIS_ALERT_WEBHOOK_URL", "https://hooks.example/abc"); });
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
@@ -36,14 +36,25 @@ describe("Operator alerts", () => {
   });
   it("flags twenty quota, busy or spend-cap rejections within ten minutes and the spend cap itself", () => {
     for (let i = 0; i < 19; i++) noteRejection(i % 2 ? "quota" : "busy", 10_000 + i * 1000);
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled(); expect(alertState(28_000).rejectionsLast10Min).toBe(19);
     noteRejection("quota", 10_000 + 19_000);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).content).toContain("20 requests declined");
     noteRejection("quota", 10_000 + ALERT_INTERVAL_MS + 30_000);
-    expect(alertState().rejectionsLast10Min).toBe(1);
+    expect(alertState(10_000 + ALERT_INTERVAL_MS + 30_000).rejectionsLast10Min).toBe(1);
     noteRejection("spend_cap", 10_000 + ALERT_INTERVAL_MS + 31_000);
-    expect(JSON.parse(fetchMock.mock.calls[1][1].body).content).toContain("spend cap");
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body).content).toMatch(/spend cap.*direct answers continue/);
+  });
+  it("keeps a bounded rejection window: twenty spread over more than ten minutes never alert, and a flood costs constant work", () => {
+    for (let i = 0; i < 200; i++) noteRejection("busy", i * 60_000);
+    expect(fetchMock).not.toHaveBeenCalled(); expect(alertState(199 * 60_000).rejectionsLast10Min).toBe(10);
+    for (let i = 0; i < 100_000; i++) noteRejection("busy", 200 * 60_000 + i);
+    expect(fetchMock).toHaveBeenCalledTimes(1); expect(alertState(200 * 60_000 + 100_000).rejectionsLast10Min).toBe(20);
+  });
+  it("alerts once per ten minutes when a capped deployment cannot price a model answer", () => {
+    noteUnpriced("Custom-Model ", 1000); noteUnpriced("Custom-Model ", 2000);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).content).toMatch(/could not be priced \(model custom-model\)/);
   });
   it("counts a failed delivery without throwing", async () => {
     fetchMock.mockRejectedValueOnce(new Error("network down"));

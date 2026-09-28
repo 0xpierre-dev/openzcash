@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 const mocks = vi.hoisted(() => ({ client: vi.fn(), create: vi.fn(), lookup: vi.fn(), ledger: vi.fn(), zip: vi.fn() }));
-vi.mock("openai", () => ({ default: class { constructor() { mocks.client(); } responses = { create: mocks.create }; } }));
+vi.mock("openai", async (original) => ({ ...await original<object>(), default: class { constructor() { mocks.client(); } responses = { create: mocks.create }; } }));
 vi.mock("./config", () => ({ zarvisConfig: () => ({ provider: "xai", apiKey: "unit-test-not-a-key", model: "grok-4.7", webSearch: true }) }));
 vi.mock("./data", async original => ({ ...await original<object>(), lookupPublicData: mocks.lookup }));
 vi.mock("./ledger", async original => ({ ...await original<object>(), queryLedger: mocks.ledger }));
