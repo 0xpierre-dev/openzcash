@@ -48,7 +48,7 @@ export async function POST(request: Request) {
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(out) {
-      const emit = (event: ZarvisEvent) => { if (!controller.signal.aborted) out.enqueue(encoder.encode(`${JSON.stringify(event.type === "done" ? { ...event, feedbackToken: feedbackTicket(Date.now(), event.route) } : event)}\n`)); };
+      const emit = (event: ZarvisEvent) => { if (!controller.signal.aborted) out.enqueue(encoder.encode(`${JSON.stringify(event.type === "done" ? { ...event, feedbackToken: feedbackTicket(Date.now(), event.provenance.route) } : event)}\n`)); };
       try {
         emit({ type: "status", message: "Finding the right sources…" });
         const metrics = await generateAnswer(input.messages, controller.signal, emit, input.session, input.depth, { localOnly: capped });

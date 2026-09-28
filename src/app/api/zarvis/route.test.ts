@@ -11,6 +11,7 @@ import { metricsSnapshot, resetMetricsForTests } from "@/lib/zarvis/metrics";
 import { resetStoreForTests } from "@/lib/zarvis/metrics-store";
 import { resetAlertsForTests } from "@/lib/zarvis/alerts";
 import { resetObserveForTests } from "@/lib/zarvis/observe";
+const prov = (route: "local" | "model") => ({ route, model: route === "model" ? "grok-4.7" : null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "en" as const });
 const completed = (route: "local" | "model" = "local") => ({ route, provider: "xai", model: "grok-4.7", depth: "quick" as const, modelCalls: route === "model" ? 1 : 0, localLookups: 1, webSearchCalls: 0, inputTokens: route === "model" ? 1_000_000 : 0, cachedInputTokens: 0, outputTokens: 0, usageReported: route === "model" });
 const logLines = (info: { mock: { calls: unknown[][] } }) => info.mock.calls.map((call: unknown[]) => String(call[0])).filter((line: string) => line.startsWith("{")).map((line: string) => JSON.parse(line) as Record<string, unknown>).filter((entry) => entry.event === "zarvis.chat");
 function request(body: unknown = { messages: [{ role: "user", content: "Explain shielded Zcash" }] }, origin = "https://openzcash.org") {
@@ -21,7 +22,7 @@ beforeEach(() => {
   mocks.config.mockReturnValue({ enabled: true, providerLabel: "OpenAI", webSearch: true, dailyUsdCap: null });
   mocks.reserve.mockResolvedValue({ allowed: true });
   mocks.getDb.mockImplementation(() => { throw new Error("no database in unit tests"); });
-  mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [], route: "local" }); return completed(); });
+  mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
 });
 describe("Zarvis API", () => {
   it("only exposes public readiness, never configuration or keys", async () => {
@@ -77,7 +78,7 @@ describe("Zarvis API", () => {
   it("logs one structured line per request with counts, classes and money only", async () => {
     const info = vi.spyOn(console, "info").mockImplementation(() => {});
     await (await POST(request())).text();
-    mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], route: "model" }); return { ...completed("model"), webSearchCalls: 1, groundingFallbacks: 1 }; });
+    mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: prov("model") }); return { ...completed("model"), webSearchCalls: 1, groundingFallbacks: 1 }; });
     await (await POST(request({ messages: [{ role: "user", content: "Compare the treasuries" }], depth: "deep" }))).text();
     mocks.answer.mockRejectedValueOnce(new GenerationFailure("provider_http_5xx", { route: "model", depth: "quick", model: "grok-4.7", modelCalls: 1, webSearchCalls: 0, inputTokens: 500, cachedInputTokens: 100, outputTokens: 0, usageReported: true }));
     await (await POST(request())).text();
@@ -131,7 +132,7 @@ describe("Zarvis API", () => {
       const options = (index: number) => mocks.answer.mock.calls[index][5] as { localOnly: boolean };
       mocks.answer.mockImplementation(async (_messages, _signal, emit, _session, _depth, { localOnly }) => {
         if (localOnly) throw new GenerationFailure("model_required", { ...completed("model"), modelCalls: 0, inputTokens: 0, usageReported: false });
-        emit({ type: "done", sources: [], route: "model" }); return completed("model");
+        emit({ type: "done", sources: [], provenance: prov("model") }); return completed("model");
       });
       await (await POST(request())).text();
       expect((await POST(request())).status).toBe(200); expect(options(1)).toEqual({ localOnly: false });
@@ -142,7 +143,7 @@ describe("Zarvis API", () => {
       expect(options(2)).toEqual({ localOnly: true }); expect(mocks.reserve).toHaveBeenCalledTimes(3);
       expect(logLines(info).at(-1)).toMatchObject({ route: "rejected", outcome: "spend_cap", modelCalls: 0, estimatedUsd: null, errorClass: null });
       expect(metricsSnapshot()).toMatchObject({ spendCap: 1, completed: 2, failed: 0, estimatedModelUsd: 4 });
-      mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], route: "local" }); return completed(); });
+      mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
       const direct = await POST(request());
       expect(options(3)).toEqual({ localOnly: true }); expect((await direct.text()).trim().split("\n").map((line) => JSON.parse(line)).at(-1).type).toBe("done");
       expect(metricsSnapshot()).toMatchObject({ spendCap: 1, completed: 3, local: 1 });
@@ -153,11 +154,11 @@ describe("Zarvis API", () => {
   it("carries the answer route in the feedback ticket and counts busy rejections", async () => {
     const response = await POST(request());
     const done = (await response.text()).trim().split("\n").map((line) => JSON.parse(line)).find((event) => event.type === "done");
-    expect(done.route).toBe("local");
+    expect(done.provenance.route).toBe("local");
     expect(JSON.parse(Buffer.from(done.feedbackToken.split(".")[0], "base64url").toString())).toMatchObject({ route: "local" });
     vi.stubEnv("ZARVIS_MAX_CONCURRENT", "1");
     try {
-      mocks.answer.mockImplementation(async (_messages, signal, emit) => { await new Promise<void>((resolve) => { const finish = () => { emit({ type: "done", sources: [] }); resolve(); }; signal.addEventListener("abort", finish, { once: true }); setTimeout(finish, 50); }); return completed(); });
+      mocks.answer.mockImplementation(async (_messages, signal, emit) => { await new Promise<void>((resolve) => { const finish = () => { emit({ type: "done", sources: [], provenance: prov("local") }); resolve(); }; signal.addEventListener("abort", finish, { once: true }); setTimeout(finish, 50); }); return completed(); });
       const first = POST(request()); await new Promise((resolve) => setTimeout(resolve, 5));
       const busy = await POST(request());
       expect(busy.status).toBe(429); expect(busy.headers.get("retry-after")).toBe("5");
