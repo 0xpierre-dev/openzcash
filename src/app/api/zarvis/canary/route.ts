@@ -1,13 +1,10 @@
 /**
- * Scheduled Zarvis canary. Gated by the shared CRON_SECRET like /api/cron/refresh,
- * not by an admin session. Runs the zero-cost starter checks (and one paid model
- * question only with ZARVIS_CANARY_MODEL=true), stores the result and alerts on failure.
+ * On-demand Zarvis canary. Gated by the shared CRON_SECRET like /api/cron/refresh,
+ * not by an admin session. The server process also runs the same check hourly
+ * (src/lib/zarvis/canary-schedule.ts); a request during a scheduled run shares it.
  */
 import { timingSafeEqual } from "node:crypto";
-import { zarvisConfig } from "@/lib/zarvis/config";
-import { runCanary } from "@/lib/zarvis/canary";
-import { recordCanary } from "@/lib/zarvis/metrics-store";
-import { sendAlert } from "@/lib/zarvis/alerts";
+import { executeCanary } from "@/lib/zarvis/canary-schedule";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,10 +20,6 @@ export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) return Response.json({ ok: false, error: "CRON_SECRET not configured" }, { status: 503 });
   if (!authorized(request, secret)) return new Response("Unauthorized", { status: 401 });
-  const config = zarvisConfig();
-  const result = await runCanary(AbortSignal.timeout(90_000), { model: config.canaryModel && config.enabled });
-  const stored = await recordCanary(result);
-  if (!result.ok) sendAlert("canary", `Zarvis canary failed: ${result.failed} of ${result.passed + result.failed} checks (${result.failedCases.join(", ")}).`);
-  console.info(JSON.stringify({ event: "zarvis.canary", at: result.at, ok: result.ok, ms: result.ms, passed: result.passed, failed: result.failed, failedCases: result.failedCases, stored }));
-  return Response.json({ ...result, stored }, { status: result.ok ? 200 : 503, headers: { "Cache-Control": "no-store" } });
+  const result = await executeCanary();
+  return Response.json(result, { status: result.ok ? 200 : 503, headers: { "Cache-Control": "no-store" } });
 }

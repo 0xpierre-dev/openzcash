@@ -244,7 +244,7 @@ Everything in this section records counts, labels, durations and money. No quest
 
 Rejections are rate limited in the log: the first rejection per outcome in a ten-second window is printed as above, and any further ones in that window fold into one `zarvis.rejections` line (`outcome`, `count`, `windowMs`, `avgMs`), so a flood of forbidden or busy requests cannot push the answer lines past the hosting log rate limit.
 
-The canary prints one `zarvis.canary` line per run (`ok`, `ms`, `passed`, `failed`, `failedCases`, `stored`).
+The canary prints one `zarvis.canary` line per run (`ok`, `ms`, `passed`, `failed`, `skipped`, `failedCases`, `skippedCases`, `stored`).
 
 ### Durable daily counters
 
@@ -270,7 +270,9 @@ Delivery failures are counted in `alerts.failed`. The variable is never logged o
 
 `GET /api/zarvis/canary` is gated like `/api/cron/refresh`: `Authorization: Bearer $CRON_SECRET` (the existing service secret, minimum 16 characters). It runs the four zero-cost starter phrasings through the real `prepareLocal` / `generateAnswer` path with the provider forbidden (`localOnly`): the privacy FAQ (`STARTERS[0]`), the treasuries starter, `What is the ZEC price?` and `What is ZIP 317?`. Each must finish on the local route with zero model calls, non-empty text, at least one source, and, for the two data-backed cases, the live reader's source URL (absent when the feed fails, which is how the launch-day treasuries outage would have been caught). Results are stored in `zarvis_canary` and returned as JSON; a failed run answers HTTP 503 and sends the `canary` alert. With `ZARVIS_CANARY_MODEL=true` and the assistant enabled, one paid model question (`STARTERS[2]`) is added per run and counted in the metrics like any other model answer (about $0.01–0.05 per run with grok-4.7).
 
-Schedule: `.github/workflows/zarvis-canary.yml` runs hourly (`17 * * * *`) and on demand, calling the URL with the repository secret `ZARVIS_CRON_SECRET` (set it to the Railway `CRON_SECRET`); the job fails when the endpoint answers 503. Equivalent manual call:
+The ZIP case needs a fresh corpus. While the public ZIP source cannot be refreshed within its six-hour window (the build-time snapshot right after a deploy, or a GitHub rate limit), that question is still answered, by the model instead of directly, so the run reports the case as skipped (`skipped`, `skippedCases: ["zip"]`, case `skipped: "zip_corpus_stale"`) and stays `ok`. A read failure is not staleness: the case then runs and reports its error class. Three consecutive skipped runs send the `canary` alert with a "ZIP corpus stale" message, because numbered ZIP questions are then costing model calls.
+
+Schedule: the server process runs the canary itself, like the ZCG refresh in `src/instrumentation.ts` (`src/lib/zarvis/canary-schedule.ts`): a ZIP corpus warm-up 20 seconds after boot, the first run 3 minutes after boot, then every hour; `ZARVIS_CANARY_SCHEDULE=false` disables it. Each replica runs its own schedule; rows in `zarvis_canary` are per run. GitHub Actions is not used: scheduled and pull-request workflows in this private repository end in `startup_failure` before any job starts, so the earlier `zarvis-canary.yml` was removed. The endpoint stays for on-demand runs; a request that arrives during a run shares that run. Manual call:
 
 ```sh
 curl --fail-with-body -H "Authorization: Bearer $CRON_SECRET" https://openzcash.org/api/zarvis/canary
@@ -287,7 +289,8 @@ curl --fail-with-body -H "Authorization: Bearer $CRON_SECRET" https://openzcash.
 | `ZARVIS_DAILY_USD_CAP` | Optional daily estimated-spend ceiling in USD (recommended in production, e.g. `25`). |
 | `ZARVIS_ALERT_WEBHOOK_URL` | Optional https webhook for the alerts above. |
 | `ZARVIS_CANARY_MODEL` | `true` adds one paid model question to each canary run. Default off. |
-| `CRON_SECRET` | Existing shared secret; also gates `/api/zarvis/canary`. Mirror it as the GitHub repository secret `ZARVIS_CRON_SECRET`. |
+| `ZARVIS_CANARY_SCHEDULE` | `false` stops the in-process hourly canary (the endpoint still works). Default on. |
+| `CRON_SECRET` | Existing shared secret; also gates the on-demand `/api/zarvis/canary`. |
 | `ZARVIS_INPUT_USD_PER_MILLION`, `ZARVIS_CACHED_INPUT_USD_PER_MILLION`, `ZARVIS_OUTPUT_USD_PER_MILLION`, `ZARVIS_SEARCH_USD_PER_CALL` | Optional overrides of the built-in rate table (required only for a model not listed there). |
 | `ZARVIS_AGGREGATE_METRICS` | Existing; prints the process counters once a minute. |
 
