@@ -33,10 +33,17 @@ export function ShellGate({
   footer?: ReactNode;
 }) {
   const pathname = usePathname();
-  if (isBare(pathname)) return <>{children}</>;
+  // The conversation lives in the provider, above the chrome decision, so
+  // opening a bare page (Monthly) and coming back keeps the chat intact.
   return (
-    <ZarvisProvider><AppShell isAdmin={isAdmin} isPreview={isPreview} footer={footer}>
-      {children}
-    </AppShell></ZarvisProvider>
+    <ZarvisProvider>
+      {isBare(pathname) ? (
+        children
+      ) : (
+        <AppShell isAdmin={isAdmin} isPreview={isPreview} footer={footer}>
+          {children}
+        </AppShell>
+      )}
+    </ZarvisProvider>
   );
 }
