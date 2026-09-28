@@ -72,7 +72,7 @@ export function amountClaims(markdown: string): AmountClaim[] {
   }
   return claims;
 }
-/** A claim is supported when a fact, read at the claim's own precision, rounds or truncates to it; "about" also accepts rounding to three significant digits. */
+/** A claim is supported when a fact, read at the claim's own precision, rounds to it; "about" also accepts rounding to three significant digits. Only an unscaled currency or ZEC figure may be an integer truncation of a cents/fraction value. */
 function supports(fact: NumericFact, claim: AmountClaim): boolean {
   if (claim.unit === "BRL" || fact.unit !== claim.unit) return false;
   return claim.readings.some(({ value, decimals }) => {
@@ -82,25 +82,29 @@ function supports(fact: NumericFact, claim: AmountClaim): boolean {
     const magnitude = stated === 0 ? 0 : 10 ** (Math.floor(Math.log10(Math.abs(stated))) - 2);
     const slack = claim.approximate ? Math.max(step, magnitude) : step;
     const difference = Math.abs(fact.value) - Math.abs(stated);
-    // Rounding puts the fact within half a step either way; integer truncation of a cents value puts it up to one step above.
-    return difference >= -0.5 * slack * (1 + 1e-9) && difference < slack * (1 - 1e-9);
+    // Rounding puts the fact within half a step either way. Truncation (up to one step above) is only how "$1,592" states 1,592.80: a scaled or percent figure one step low ("$3.3M" for 3.39M, "37%" for 37.99%) is wrong, not truncated.
+    const truncation = claim.scale === 1 && claim.unit !== "%" && !claim.approximate && !Number.isInteger(fact.value);
+    return difference >= -0.5 * slack * (1 + 1e-9) && difference <= (truncation ? slack * (1 - 1e-9) : 0.5 * slack * (1 + 1e-9));
   });
 }
-export function unsupportedAmounts(answer: string, evidence: Evidence[], documents: GuardDocument[] = []): string[] {
-  const facts = numericFacts(evidence, documents);
+/** Figures in the answer that no fact supports, for facts computed once per answer. */
+export function unsupportedFigures(answer: string, facts: NumericFact[]): string[] {
   return amountClaims(answer).filter((claim) => !facts.some((fact) => supports(fact, claim))).map((claim) => claim.text);
 }
+export function unsupportedAmounts(answer: string, evidence: Evidence[], documents: GuardDocument[] = []): string[] {
+  return unsupportedFigures(answer, numericFacts(evidence, documents));
+}
 /** The sentences whose figures all verified, or undefined when no dated or numeric sentence survives; never a sentence with a withheld figure. */
-export function verifiedSentences(answer: string, evidence: Evidence[], documents: GuardDocument[] = []): string | undefined {
-  const lines = answer.split("\n").map((line) => line.split(/(?<=[.!?])\s+(?=[^a-z\s])/).filter((sentence) => !unsupportedAmounts(sentence, evidence, documents).length).join(" "));
+export function verifiedSentences(answer: string, facts: NumericFact[]): string | undefined {
+  const lines = answer.split("\n").map((line) => line.split(/(?<=[.!?])\s+(?=[^a-z\s])/).filter((sentence) => !unsupportedFigures(sentence, facts).length).join(" "));
   const text = lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
-  if (!text || unsupportedAmounts(text, evidence, documents).length) return;
+  if (!text || unsupportedFigures(text, facts).length) return;
   return /(?:\$|US\$)\s*\d|\d\s*(?:%|ZEC|USD)\b|\b(?:19|20)\d{2}\b/i.test(text) ? text : undefined;
 }
 /** Money, treasury, grant and price questions are guarded before any evidence arrives, so a preamble guess is never streamed. */
 export function isFinancialQuestion(query: string): boolean {
   const q = query.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
-  return /\b(?:price|preco|cotacao|cost|custa|worth|vale|treasur\w*|tesour\w*|balances?|saldos?|holdings?|lockbox|zcg|grants?|paid|pagou|pagos?|pagamentos?|spent|gastou|gastos?|disburse\w*|desembols\w*|budget|orcamento|usd|dollars?|dolar\w*|brl|reais|revenue|receita|valuation|valor\w*|supply|oferta|scenario|cenario|halving|subsidy|subsidio|dev ?fund|coverage|cobertura|runway|market ?cap|volume)\b|\$|\b\d+\s*[x×]\b/.test(q);
+  return /\b(?:how much|quanto|price|preco|cotacao|cost|custa|worth|vale|treasur\w*|tesour\w*|balances?|saldos?|holdings?|lockbox|zcg|grants?|paid|pay|pays|paying|payments?|paga\w*|pagou|pagos?|pagamentos?|spent|gastou|gastos?|disburse\w*|desembols\w*|fund(?:ed|ing|s)?|financi\w*|fees?|taxas?|rewards?|recompensas?|salar\w*|earn\w*|ganh\w*|sold|sell|selling|vend\w*|bought|buy|buying|compr\w*|budget|orcamento|usd|dollars?|dolar\w*|brl|reais|revenue|receita|valuation|valor\w*|supply|oferta|scenario|cenario|halving|subsidy|subsidio|dev ?fund|coverage|cobertura|runway|market ?cap|volume)\b|\$|\b\d+\s*[x×]\b/.test(q);
 }
 export function isFinancialEvidence(evidence: Evidence[]) {
   return evidence.some((item) => { try { const data = JSON.parse(item.content).data; return !!(data?.quote || data?.filters || data?.funds || data?.company || /\/(api\/zec-price|zcg\/disbursements|zcg\/treasury-calculator)/.test(JSON.parse(item.content).sourceUrl ?? "")); } catch { return false; } });

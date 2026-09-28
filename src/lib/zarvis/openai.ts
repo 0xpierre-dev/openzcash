@@ -9,8 +9,8 @@ import { prepareLocal, lookupLedger, type Evidence, ledgerFactsAnswer } from "./
 import { answerLanguage } from "./language";
 import { lookupScenario, scenarioTool, scenarioAnswer } from "./scenario";
 import { sessionPreferences, type ZarvisSession } from "./session";
-import { amountClaims, isFinancialEvidence, isFinancialQuestion, unsupportedAmounts, ledgerComparisonEvidence, ledgerComparisonAnswer, verifiedSentences } from "./grounding";
-import { answerPlan, roundBudget, type ResponseDepth } from "./depth";
+import { amountClaims, isFinancialEvidence, isFinancialQuestion, numericFacts, unsupportedFigures, ledgerComparisonEvidence, ledgerComparisonAnswer, verifiedSentences } from "./grounding";
+import { answerPlan, repairBudgetMs, roundBudget, type ResponseDepth } from "./depth";
 import { researchScope } from "./research-scope";
 import { providerClient, providerOptions, providerSearchTool } from "./provider";
 import { citedSources, renderResponse } from "./answer";
@@ -43,11 +43,12 @@ function finish(text: string, candidates: ZarvisSource[], provenance: AnswerProv
 /** Every failure leaves here as a GenerationFailure: a fixed class plus the usage billed so far, never a provider body. */
 export async function generateAnswer(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession = {}, depth: ResponseDepth = "auto", options: GenerateOptions = {}): Promise<GenerationMetrics> {
   const config = zarvisConfig();
+  const started = Date.now();
   const metrics: GenerationMetrics = { route: "local", provider: config.provider, model: config.model, modelCalls: 0, localLookups: 0, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, usageReported: false };
-  try { return await generate(messages, signal, emit, priorSession, depth, options, metrics); }
+  try { return await generate(messages, signal, emit, priorSession, depth, options, metrics, started); }
   catch (error) { throw error instanceof GenerationFailure ? error : new GenerationFailure(classifyError(error, signal.aborted), metrics, error); }
 }
-async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession, depth: ResponseDepth, options: GenerateOptions, metrics: GenerationMetrics): Promise<GenerationMetrics> {
+async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession, depth: ResponseDepth, options: GenerateOptions, metrics: GenerationMetrics, started: number): Promise<GenerationMetrics> {
   const config = zarvisConfig();
   const plan = answerPlan(messages, depth);
   const session = sessionPreferences(priorSession, messages);
@@ -82,19 +83,19 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
   // Money questions are buffered before any evidence arrives: a guessed preamble figure must never be streamed.
   const financialQuestion = isFinancialQuestion(`${local.query ?? ""} ${messages.findLast((message) => message.role === "user")?.content ?? ""}`);
   const rounds = () => roundBudget(plan, researchGranted);
-  /** One provider round. Deltas are forwarded while streaming; otherwise text stays buffered until the numeric check completes. */
-  async function modelRound(tools: Tool[], streaming: boolean): Promise<{ result: OpenAIResponse; streamed: boolean }> {
+  /** One provider round. Deltas are forwarded while streaming; otherwise text stays buffered until the numeric check completes. A round may run under a shorter signal than the request's. */
+  async function modelRound(tools: Tool[], streaming: boolean, roundSignal: AbortSignal = signal): Promise<{ result: OpenAIResponse; streamed: boolean }> {
     const parameters: ResponseCreateParamsStreaming & { max_tool_calls?: number; max_turns?: number } = {
       model: config.model, instructions: systemPrompt(plan.depth), input: [...input], tools,
       parallel_tool_calls: true, max_output_tokens: plan.outputTokens,
       ...providerOptions(config, plan.effort), store: false, stream: true,
     };
     metrics.modelCalls++; metrics.usageReported = false;
-    const stream = await client.responses.create(parameters, { signal });
+    const stream = await client.responses.create(parameters, { signal: roundSignal });
     let result: OpenAIResponse | undefined;
     let writingStatusSent = false, streamed = false, held = "";
     for await (const event of stream) {
-      signal.throwIfAborted();
+      roundSignal.throwIfAborted();
       if (event.type === "response.output_text.delta") {
         if (streaming) {
           const [ready, rest] = streamable(held + event.delta); held = rest;
@@ -118,24 +119,29 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
   /** Financial evidence only: verify every figure, ask once for a restatement, then keep verified sentences or fall back to computed facts. */
   async function checkFigures(draft: string, result: OpenAIResponse): Promise<string> {
     if (!isFinancialEvidence(evidence)) return draft;
+    const facts = numericFacts(evidence, documents);
     const claims = amountClaims(draft).length;
     if (claims) emit({ type: "status", message: `Checking ${claims} figure${claims === 1 ? "" : "s"} against the sources…` });
-    let unsupported = unsupportedAmounts(draft, evidence, documents);
+    let unsupported = unsupportedFigures(draft, facts);
     if (!unsupported.length) return draft;
     let candidate = draft;
-    emit({ type: "status", message: "Restating unverified figures…" });
-    for (const item of result.output) if (["message", "reasoning"].includes(item.type)) input.push(item as ResponseInputItem);
-    input.push({ role: "developer", content: repairInstruction(unsupported) });
-    metrics.repairRounds = (metrics.repairRounds ?? 0) + 1;
-    try {
-      const repaired = renderResponse((await modelRound([], false)).result);
-      candidates.push(...repaired.sources);
-      if (repaired.text.trim()) candidate = repaired.text;
-    } catch { signal.throwIfAborted(); /* a failed repair round leaves the draft to the fallback below */ }
-    unsupported = unsupportedAmounts(candidate, evidence, documents);
+    // The repair runs only with time left and under its own time box, so a slow restatement degrades to the fallback below instead of a deadline error.
+    const budget = repairBudgetMs(plan, Date.now() - started);
+    if (budget > 0) {
+      emit({ type: "status", message: "Restating unverified figures…" });
+      for (const item of result.output) if (["message", "reasoning"].includes(item.type)) input.push(item as ResponseInputItem);
+      input.push({ role: "developer", content: repairInstruction(unsupported) });
+      metrics.repairRounds = (metrics.repairRounds ?? 0) + 1;
+      try {
+        const repaired = renderResponse((await modelRound([], false, AbortSignal.any([signal, AbortSignal.timeout(budget)]))).result);
+        candidates.push(...repaired.sources);
+        if (repaired.text.trim()) candidate = repaired.text;
+      } catch { signal.throwIfAborted(); /* a failed or timed-out repair round leaves the draft to the fallback below; only the request's own abort propagates */ }
+    }
+    unsupported = unsupportedFigures(candidate, facts);
     if (!unsupported.length) return candidate;
     metrics.groundingFallbacks = 1; withheldFigures = unsupported.length;
-    const kept = verifiedSentences(candidate, evidence, documents);
+    const kept = verifiedSentences(candidate, facts);
     if (kept) return kept;
     const ledgers = evidence.flatMap((item) => {
       try { const data = JSON.parse(item.content).data; const answer = data?.filters ? ledgerFactsAnswer(data, pt) : undefined; return answer ? [answer] : []; } catch { return []; }

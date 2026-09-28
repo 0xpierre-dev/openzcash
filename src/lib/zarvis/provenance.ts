@@ -12,9 +12,12 @@ export function provenanceLabel(p: AnswerProvenance, sources: number, provider?:
   const count = pt ? `${sources} ${sources === 1 ? "fonte" : "fontes"}` : `${sources} ${sources === 1 ? "source" : "sources"}`;
   return [modelLabel(p.model, provider), ...(p.webSearch ? [pt ? "busca na web" : "web search"] : []), count, pt ? "confira" : "check them"].join(" · ");
 }
+/** Rendered under a partial answer so dropped sentences or table rows never read as complete; the count comes from provenance, never the withheld text. */
 export function fallbackNotice(p: AnswerProvenance): string | undefined {
   if (!p.groundingFallback) return;
-  return p.language === "pt" ? "Alguns valores não puderam ser verificados e foram omitidos." : "Some figures could not be verified and were left out.";
+  const n = p.withheldFigures;
+  if (p.language === "pt") return n === 1 ? "1 valor não pôde ser verificado e foi omitido." : n > 1 ? `${n} valores não puderam ser verificados e foram omitidos.` : "Alguns valores não puderam ser verificados e foram omitidos.";
+  return n === 1 ? "1 figure could not be verified and was left out." : n > 1 ? `${n} figures could not be verified and were left out.` : "Some figures could not be verified and were left out.";
 }
 /** Retrieval stamps carry their zone; the interface itself stays English. */
 export function retrievedLabel(iso: string): string | undefined {

@@ -52,13 +52,21 @@ describe("Treasury arithmetic in model answers", () => {
   });
   it.each(["$140,859,268 (rounded: $140,859,000)", "$140,859,000", "$3.5M", "about $3.5M", "roughly 40%", "$5,000,000 in total", "150,000 ZEC", "0.135 ZEC", "99%"])("rejects a wrong or invented figure even near a real one: %s", (text) => expect(unsupportedAmounts(text, evidence)).not.toEqual([]));
   it.each(["144,333 ZEC", "$1,592", "232,768 ZEC", "$370,754,124", "$229,894,856"])("accepts integer truncation of a cents or fraction value: %s", (text) => expect(unsupportedAmounts(text, evidence)).toEqual([]));
-  it.each(["about $140,859,000", "roughly $141 million", "approximately $140 million", "~$141M", "cerca de US$ 141 milhões", "aproximadamente 38%", "around 1.4%"])("accepts three-significant-digit rounding behind an approximation word: %s", (text) => expect(unsupportedAmounts(text, evidence)).toEqual([]));
+  // Three significant digits of 140,859,268 are 141 million: "approximately $140 million" is one step low, not an approximation.
+  it.each(["$8 million", "$140 million", "$140.8 million", "approximately $140 million", "about $1,600", "$229 million", "37%", "60.5%", "232.7K ZEC"])("never reads a scaled or percent figure one step low as a truncation: %s", (text) => expect(unsupportedAmounts(text, evidence)).not.toEqual([]));
+  it.each(["about $140,859,000", "roughly $141 million", "approximately $140.9 million", "~$141M", "cerca de US$ 141 milhões", "aproximadamente 38%", "around 1.4%"])("accepts three-significant-digit rounding behind an approximation word: %s", (text) => expect(unsupportedAmounts(text, evidence)).toEqual([]));
 });
 
 describe("Ledger figures in model answers", () => {
   const ledger = [{ content: JSON.stringify({ data: { filters: { year: 2024, scope: "zcg_grants", search: "" }, importedAt: "2026-09-27T00:00:00Z", budgetedUsdOfPaidEntries: "3396155.67", recordedZecPaid: "9235.26", paidEntries: 40, paidEntriesMissingUsd: 0, paidEntriesMissingZec: 0 } }) }];
   it.each(["$3,396,155", "$3,396,156", "$3,396,155.67", "$3.396M", "$3.396 million", "$3.40 million", "about $3.4M", "roughly $3,400,000", "US$ 3.396.155,67", "9,235 ZEC", "9.235,26 ZEC"])("supports a truncated, rounded or scaled reading of the ledger total: %s", (text) => expect(unsupportedAmounts(text, ledger)).toEqual([]));
-  it.each(["$3.5M", "about $3.5M", "$3,400,000", "$3,396,157", "$339,615,567", "3,396,155.67 ZEC", "$9,235.26"])("still rejects a wrong reading: %s", (text) => expect(unsupportedAmounts(text, ledger)).not.toEqual([]));
+  it.each(["$3.5M", "about $3.5M", "$3.3M", "about $3.3M", "$3.39 million", "$3,396,000", "$3,400,000", "$3,396,157", "$339,615,567", "3,396,155.67 ZEC", "$9,235.26"])("still rejects a wrong reading: %s", (text) => expect(unsupportedAmounts(text, ledger)).not.toEqual([]));
+  it("rounds a scaled claim at its own precision instead of truncating it", () => {
+    const facts = [{ content: JSON.stringify({ data: { totalUsd: 1_990_000_000 } }) }];
+    expect(unsupportedAmounts("$1 billion", facts)).toEqual(["$1 billion"]);
+    expect(unsupportedAmounts("$2 billion", facts)).toEqual([]);
+    expect(unsupportedAmounts("$1.99 billion", facts)).toEqual([]);
+  });
   it("reads M and million suffixes as millions, keeping both readings of an ambiguous token", () => {
     const [claim] = amountClaims("$3.396 million");
     expect(claim).toMatchObject({ unit: "USD", scale: 1e6, approximate: false });
@@ -82,21 +90,21 @@ describe("Reviewed knowledge in the guard", () => {
 });
 
 describe("Verified sentences after a failed repair", () => {
-  const evidence = treasuriesEvidence();
+  const facts = numericFacts(treasuriesEvidence());
   it("drops only the sentences with withheld figures and keeps dated, verified ones", () => {
-    const kept = verifiedSentences("ZCG holds 88,435 ZEC. That is worth $999 billion today. The Lockbox estimate is 144,333.79 ZEC through block 3,499,201.\n\n- Cash: $8,816,950.\n- Invented: $5,000,000.", evidence);
+    const kept = verifiedSentences("ZCG holds 88,435 ZEC. That is worth $999 billion today. The Lockbox estimate is 144,333.79 ZEC through block 3,499,201.\n\n- Cash: $8,816,950.\n- Invented: $5,000,000.", facts);
     expect(kept).toBe("ZCG holds 88,435 ZEC. The Lockbox estimate is 144,333.79 ZEC through block 3,499,201.\n\n- Cash: $8,816,950.");
     expect(kept).not.toMatch(/999|5,000,000/);
   });
   it("returns nothing when no figure or date survives", () => {
-    expect(verifiedSentences("The treasury has $999 billion ready to spend.", evidence)).toBeUndefined();
-    expect(verifiedSentences("Balances are healthy. Spending is $999 billion.", evidence)).toBeUndefined();
+    expect(verifiedSentences("The treasury has $999 billion ready to spend.", facts)).toBeUndefined();
+    expect(verifiedSentences("Balances are healthy. Spending is $999 billion.", facts)).toBeUndefined();
   });
-  it("keeps a dated sentence without figures", () => expect(verifiedSentences("The report is dated September 23, 2026. It shows $999 billion.", evidence)).toBe("The report is dated September 23, 2026."));
+  it("keeps a dated sentence without figures", () => expect(verifiedSentences("The report is dated September 23, 2026. It shows $999 billion.", facts)).toBe("The report is dated September 23, 2026."));
 });
 
 describe("Financial questions are buffered before evidence arrives", () => {
-  it.each(["What does ZCG hold?", "Analyze a treasury scenario", "Quanto o ZCG pagou em grants?", "If ZEC rises 20x, what changes?", "What is the ZEC price?"])("guards %s", (q) => expect(isFinancialQuestion(q)).toBe(true));
-  it.each(["Who is Zooko?", "What is a viewing key?", "Como funciona a privacidade do Zcash?", "What is ZIP 317?"])("streams %s", (q) => expect(isFinancialQuestion(q)).toBe(false));
+  it.each(["What does ZCG hold?", "Analyze a treasury scenario", "Quanto o ZCG pagou em grants?", "If ZEC rises 20x, what changes?", "What is the ZEC price?", "How much was the wallet team funded?", "Who funds the ECC?", "What are the transaction fees?", "What is the miner reward per block?", "How much does the ZF earn?", "Quanto a Fundação recebeu em taxas?", "Did ZCG sell any ZEC?"])("guards %s", (q) => expect(isFinancialQuestion(q)).toBe(true));
+  it.each(["Who is Zooko?", "What is a viewing key?", "Como funciona a privacidade do Zcash?", "What is ZIP 317?", "How does a shielded memo work?"])("streams %s", (q) => expect(isFinancialQuestion(q)).toBe(false));
 });
 

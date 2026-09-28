@@ -354,6 +354,43 @@ describe("Zarvis local-first orchestration", () => {
     expect(JSON.stringify(emitted)).not.toContain("999");
     expect(metrics).toMatchObject({ repairRounds: 1, groundingFallbacks: 1, modelCalls: 2, usageReported: false });
   });
+  it("skips the repair round when the deadline is near and still answers from the fallback", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      mocks.prepare.mockResolvedValue({ query: "What does ZCG hold?", documents: [], evidence: treasuries(), external: false });
+      mocks.create.mockResolvedValueOnce((async function* () { vi.setSystemTime(Date.now() + 45_000); yield* events([answer("ZCG holds 88,435 ZEC as of September 23, 2026. Its cash is $999 billion.")]); })());
+      const emitted: ZarvisEvent[] = [];
+      const metrics = await generateAnswer(question, new AbortController().signal, (e) => emitted.push(e));
+      expect(mocks.create).toHaveBeenCalledTimes(1);
+      expect(emitted.find((e) => e.type === "replace")).toEqual({ type: "replace", text: "ZCG holds 88,435 ZEC as of September 23, 2026." });
+      expect(emitted.some((e) => e.type === "status" && e.message === "Restating unverified figures…")).toBe(false);
+      expect(JSON.stringify(emitted)).not.toContain("999");
+      expect(metrics).toMatchObject({ groundingFallbacks: 1, modelCalls: 1, usageReported: true });
+      expect(metrics.repairRounds).toBeUndefined();
+    } finally { vi.useRealTimers(); }
+  });
+  it("time-boxes the repair round under the request signal and falls back when the box expires", async () => {
+    mocks.prepare.mockResolvedValue({ query: "What does ZCG hold?", documents: [], evidence: treasuries(), external: false });
+    const controller = new AbortController();
+    let repairSignal: AbortSignal | undefined;
+    mocks.create.mockResolvedValueOnce(events([answer("ZCG holds 88,435 ZEC. Its cash is $999 billion.")]))
+      .mockImplementationOnce((_params: unknown, options: { signal: AbortSignal }) => { repairSignal = options.signal; throw Object.assign(new Error("The user aborted a request."), { name: "AbortError" }); });
+    const emitted: ZarvisEvent[] = [];
+    const metrics = await generateAnswer(question, controller.signal, (e) => emitted.push(e));
+    expect(mocks.create.mock.calls[0][1].signal).toBe(controller.signal);
+    expect(repairSignal).toBeInstanceOf(AbortSignal); expect(repairSignal).not.toBe(controller.signal); expect(repairSignal?.aborted).toBe(false);
+    expect(emitted.find((e) => e.type === "replace")).toEqual({ type: "replace", text: "ZCG holds 88,435 ZEC." });
+    expect(metrics).toMatchObject({ repairRounds: 1, groundingFallbacks: 1, modelCalls: 2 });
+    controller.abort();
+    expect(repairSignal?.aborted).toBe(true);
+  });
+  it("still propagates the request's own abort during the repair round", async () => {
+    mocks.prepare.mockResolvedValue({ query: "What does ZCG hold?", documents: [], evidence: treasuries(), external: false });
+    const controller = new AbortController();
+    mocks.create.mockResolvedValueOnce(events([answer("ZCG holds 88,435 ZEC. Its cash is $999 billion.")]))
+      .mockImplementationOnce(() => { controller.abort(); throw Object.assign(new Error("The user aborted a request."), { name: "AbortError" }); });
+    await expect(generateAnswer(question, controller.signal, () => {})).rejects.toMatchObject({ errorClass: "aborted" });
+  });
   it("lets the selected reviewed notes vouch for protocol constants beside treasury evidence", async () => {
     const note = KNOWLEDGE.find((n) => n.id === "issuance")!;
     mocks.prepare.mockResolvedValue({ query: "What does ZCG hold?", documents: [{ id: note.id, title: note.title, url: note.url, text: `${note.keywords}\n${note.text}`, kind: "reference" }], evidence: treasuries(), external: false });
