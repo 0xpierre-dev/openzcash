@@ -565,3 +565,38 @@ export const zarvisUsage = pgTable("zarvis_usage", {
   count: integer("count").notNull(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 });
+
+/** Zarvis durable daily counters per UTC day and route: counts, tokens, latency buckets and estimated USD only. */
+export const zarvisMetricsDaily = pgTable("zarvis_metrics_daily", {
+  day: date("day").notNull(),
+  route: text("route").notNull(), // "local" | "model" | "rejected"
+  completed: integer("completed").notNull().default(0),
+  failed: integer("failed").notNull().default(0),
+  aborted: integer("aborted").notNull().default(0),
+  quota: integer("quota").notNull().default(0),
+  busy: integer("busy").notNull().default(0),
+  spendCap: integer("spend_cap").notNull().default(0),
+  modelCalls: integer("model_calls").notNull().default(0),
+  webSearchCalls: integer("web_search_calls").notNull().default(0),
+  inputTokens: bigint("input_tokens", { mode: "number" }).notNull().default(0),
+  cachedInputTokens: bigint("cached_input_tokens", { mode: "number" }).notNull().default(0),
+  outputTokens: bigint("output_tokens", { mode: "number" }).notNull().default(0),
+  groundingFallbacks: integer("grounding_fallbacks").notNull().default(0),
+  unpricedRequests: integer("unpriced_requests").notNull().default(0),
+  helpful: integer("helpful").notNull().default(0),
+  unhelpful: integer("unhelpful").notNull().default(0),
+  estimatedUsd: doublePrecision("estimated_usd").notNull().default(0),
+  /** Completed-answer latency histogram; bucket bounds are fixed in src/lib/zarvis/metrics-store.ts. */
+  latency: integer("latency").array().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [primaryKey({ columns: [t.day, t.route] })]);
+
+/** Zarvis canary runs: pass/fail counts and case labels only. */
+export const zarvisCanary = pgTable("zarvis_canary", {
+  ranAt: timestamp("ran_at", { withTimezone: true }).primaryKey(),
+  ok: boolean("ok").notNull(),
+  passed: integer("passed").notNull(),
+  failed: integer("failed").notNull(),
+  ms: integer("ms").notNull(),
+  failedCases: text("failed_cases").array().notNull(),
+});

@@ -14,8 +14,10 @@ import { answerPlan, type ResponseDepth } from "./depth";
 import { researchScope } from "./research-scope";
 import { providerClient, providerOptions, providerSearchTool } from "./provider";
 import { citedSources, renderResponse } from "./answer";
+import { GenerationFailure, classifyError } from "./errors";
 import type { AnswerProvenance, ChatMessage, ZarvisEvent, ZarvisSource } from "./types";
 
+export type GenerateOptions = { /** Canary/no-spend mode: throw MODEL_REQUIRED instead of calling the provider. */ localOnly?: boolean };
 export type GenerationMetrics = { route: "local" | "model"; provider: string; model: string; modelCalls: number; localLookups: number; webSearchCalls: number; inputTokens: number; cachedInputTokens: number; outputTokens: number; usageReported: boolean; groundingFallbacks?: number; depth?: "quick" | "deep"; reasoningEffort?: "low" | "medium" | "high" };
 const researchTool: Tool = {
   type: "function", name: "request_external_research", description: "Enable official-source web research when local evidence is missing or too old for the question. Do not request if available local evidence is sufficient.", strict: true,
@@ -29,7 +31,14 @@ function finish(text: string, candidates: ZarvisSource[], provenance: AnswerProv
   const consulted = [...citedSources(text, candidates), ...candidates.filter((source) => source.retrievedAt)];
   emit({ type: "done", sources: [...new Map(consulted.map((source) => [source.url, source])).values()].slice(0, 20), provenance });
 }
-export async function generateAnswer(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession = {}, depth: ResponseDepth = "auto"): Promise<GenerationMetrics> {
+/** Every failure leaves here as a GenerationFailure: a fixed class plus the usage billed so far, never a provider body. */
+export async function generateAnswer(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession = {}, depth: ResponseDepth = "auto", options: GenerateOptions = {}): Promise<GenerationMetrics> {
+  const config = zarvisConfig();
+  const metrics: GenerationMetrics = { route: "local", provider: config.provider, model: config.model, modelCalls: 0, localLookups: 0, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, usageReported: false };
+  try { return await generate(messages, signal, emit, priorSession, depth, options, metrics); }
+  catch (error) { throw error instanceof GenerationFailure ? error : new GenerationFailure(classifyError(error, signal.aborted), metrics, error); }
+}
+async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession, depth: ResponseDepth, options: GenerateOptions, metrics: GenerationMetrics): Promise<GenerationMetrics> {
   const config = zarvisConfig();
   const plan = answerPlan(messages, depth);
   const session = sessionPreferences(priorSession, messages);
@@ -41,11 +50,12 @@ export async function generateAnswer(messages: ChatMessage[], signal: AbortSigna
   const provenance = (): AnswerProvenance => ({ route: metrics.route, model: metrics.route === "model" ? config.model : null, webSearch: metrics.webSearchCalls > 0, groundingFallback: (metrics.groundingFallbacks ?? 0) > 0, withheldFigures, language: pt ? "pt" : "en" });
   const complete = (answer: string, candidates: ZarvisSource[]) => { emit({ type: "session", session }); finish(answer, candidates, provenance(), emit); };
   signal.throwIfAborted();
-  const metrics: GenerationMetrics = { depth: plan.depth, reasoningEffort: plan.effort, route: local.direct ? "local" : "model", provider: config.provider, model: config.model, modelCalls: 0, localLookups: local.evidence.length, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, usageReported: false };
+  Object.assign(metrics, { depth: plan.depth, reasoningEffort: plan.effort, route: local.direct ? "local" : "model", localLookups: local.evidence.length });
   const candidates: ZarvisSource[] = [...local.documents.map(({ title, url, retrievedAt }) => ({ title, url, ...(retrievedAt ? { retrievedAt } : {}) })), ...local.evidence.flatMap((item) => item.source ? [item.source] : [])];
   // A fully matched reviewed FAQ can explain a simple comparison. Explicit Deep still requests synthesis.
   if (local.direct && (!plan.analyze || (local.reviewedFaq && depth !== "deep"))) { complete(local.direct, candidates); return metrics; }
   metrics.route = "model";
+  if (options.localOnly) throw new GenerationFailure("model_required", metrics);
   const client = providerClient(config, plan.providerTimeoutMs);
   if (plan.depth === "deep") emit({ type: "status", message: "Thinking through the evidence…" });
   const input: ResponseInputItem[] = [

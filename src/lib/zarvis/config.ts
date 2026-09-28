@@ -1,4 +1,5 @@
 import "server-only";
+import { dailyUsdCap } from "./pricing";
 function limit(name: string, fallback: number, max: number): number {
   const raw = process.env[name];
   if (!raw) return fallback;
@@ -46,5 +47,8 @@ export function zarvisConfig() {
     // Per-network abuse counters; phones behind one carrier address share them.
     networkDailyLimit: limit("ZARVIS_NETWORK_DAILY_LIMIT", 20, 10_000),
     networkWindowLimit: limit("ZARVIS_NETWORK_WINDOW_LIMIT", 5, 1_000),
+    // Application-level estimated-spend ceiling per UTC day; applies during a quota pause too.
+    dailyUsdCap: dailyUsdCap(),
+    canaryModel: process.env.ZARVIS_CANARY_MODEL === "true",
   };
 }
