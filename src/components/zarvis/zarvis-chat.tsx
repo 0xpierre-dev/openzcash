@@ -5,8 +5,9 @@ import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
 import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
 import { answerClipboard, questionLink, sharedQuestion, withoutSharedQuestion } from "@/lib/zarvis/share";
+import { FEEDBACK_REASONS, type FeedbackReason } from "@/lib/zarvis/feedback";
 import type { AnswerProvenance } from "@/lib/zarvis/types";
-import { portugueseBrowser, useZarvis } from "./zarvis-provider";
+import { portugueseBrowser, useZarvis, type DisplayMessage } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
 import { ZarvisDepthSelect } from "./zarvis-depth-select";
 import { ZarvisCompanion, ZarvisMotionToggle } from "./zarvis-companion";
@@ -25,7 +26,15 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   const input = useRef<HTMLTextAreaElement>(null);
   const follow = useRef(true);
   const [copied, setCopied] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<Record<string, "helpful" | "unhelpful" | "sending" | "error">>({});
+  const [feedback, setFeedback] = useState<Record<string, "helpful" | "unhelpful" | "sending" | "error" | "reason">>({});
+  const sendFeedback = async (message: DisplayMessage, helpful: boolean, reason?: FeedbackReason) => {
+    setFeedback((all) => ({ ...all, [message.id]: "sending" }));
+    try {
+      const result = await fetch("/api/zarvis/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticket: message.feedbackToken, helpful, ...(reason ? { reason } : {}) }) });
+      if (!result.ok) throw new Error();
+      setFeedback((all) => ({ ...all, [message.id]: helpful ? "helpful" : "unhelpful" }));
+    } catch { setFeedback((all) => ({ ...all, [message.id]: "error" })); }
+  };
   // Browser language is read after hydration; the server render stays English.
   const pt = useSyncExternalStore(() => () => {}, portugueseBrowser, () => false);
   const waiting = chat.retryAt !== null;
@@ -83,15 +92,14 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           }}>{copied === `${message.id}:link` ? "Link copied" : "Copy question link"}</button> : null; })()}
         </span> : null}
         {message.feedbackToken && !message.incomplete ? <span className="zarvis-feedback" aria-label="Rate this answer">
-          {feedback[message.id] === "helpful" || feedback[message.id] === "unhelpful" ? <small>Thanks for your feedback</small> : <>
-            {[true, false].map((helpful) => <button key={String(helpful)} className="zarvis-text-button" type="button" disabled={feedback[message.id] === "sending"} aria-label={helpful ? "Helpful answer" : "Unhelpful answer"} onClick={async () => {
-              setFeedback((all) => ({ ...all, [message.id]: "sending" }));
-              try {
-                const result = await fetch("/api/zarvis/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticket: message.feedbackToken, helpful }) });
-                if (!result.ok) throw new Error();
-                setFeedback((all) => ({ ...all, [message.id]: helpful ? "helpful" : "unhelpful" }));
-              } catch { setFeedback((all) => ({ ...all, [message.id]: "error" })); }
-            }}>{helpful ? "Useful" : "Needs work"}</button>)}
+          {feedback[message.id] === "helpful" || feedback[message.id] === "unhelpful" ? <small>Thanks for your feedback</small>
+          : feedback[message.id] === "reason" ? <span className="zarvis-feedback-reasons" role="group" aria-label="What needs work?">
+            <small>What needs work?</small>
+            {FEEDBACK_REASONS.map((reason) => <button key={reason.id} className="zarvis-text-button" type="button" onClick={() => void sendFeedback(message, false, reason.id)}>{reason.label}</button>)}
+            <button className="zarvis-text-button" type="button" onClick={() => void sendFeedback(message, false)}>Skip</button>
+          </span> : <>
+            <button className="zarvis-text-button" type="button" disabled={feedback[message.id] === "sending"} aria-label="Helpful answer" onClick={() => void sendFeedback(message, true)}>Useful</button>
+            <button className="zarvis-text-button" type="button" disabled={feedback[message.id] === "sending"} aria-label="Unhelpful answer" onClick={() => setFeedback((all) => ({ ...all, [message.id]: "reason" }))}>Needs work</button>
             {feedback[message.id] === "error" ? <small role="status">Feedback unavailable</small> : null}
           </>}
         </span> : null}
@@ -113,7 +121,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           </button> : <button type="submit" className="zarvis-send" disabled={!chat.status?.available || !chat.draft.trim() || waiting} aria-label="Send question">↑</button>}
         </div>
       </form>
-      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Zarvis never writes your question into the page address; a link you copy with “Copy question link” carries that one question, and opening it only fills the composer. Shared calculator links contain only scenario assumptions. Feedback sends your rating without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
+      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Zarvis never writes your question into the page address; a link you copy with “Copy question link” carries that one question, and opening it only fills the composer. Shared calculator links contain only scenario assumptions. Feedback sends your rating, and for “Needs work” an optional reason from a fixed list, without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
     </div>
   </section>;
 }

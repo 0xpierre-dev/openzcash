@@ -15,4 +15,11 @@ describe("Anonymous answer feedback", () => {
     expect((await POST(request({ ticket: "x".repeat(1500), helpful: true }))).status).toBe(400);
     expect((await POST(request({ ticket: feedbackTicket(), helpful: true, message: "Private text" }))).status).toBe(400);
   });
+  it("accepts a fixed reason only with a needs-work vote and never free text", async () => {
+    expect((await POST(request({ ticket: feedbackTicket(Date.now(), "model"), helpful: false, reason: "wrong_figure" }))).status).toBe(204);
+    expect((await POST(request({ ticket: feedbackTicket(Date.now(), "model"), helpful: true, reason: "wrong_figure" }))).status).toBe(400);
+    expect((await POST(request({ ticket: feedbackTicket(Date.now(), "model"), helpful: false, reason: "the numbers looked off" }))).status).toBe(400);
+    expect((await POST(request({ ticket: feedbackTicket(Date.now(), "model"), helpful: false, reason: "other", note: "text" }))).status).toBe(400);
+    expect(metricsSnapshot().unhelpful).toBe(1);
+  });
 });

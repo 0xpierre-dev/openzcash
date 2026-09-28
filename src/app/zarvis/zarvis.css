@@ -265,6 +265,8 @@
 }
 
 .zarvis-feedback { display: inline-flex; align-items: center; gap: .75rem; margin-inline-start: .75rem; color: var(--muted); font-size: .7rem; }
+.zarvis-feedback-reasons { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .35rem .75rem; }
+.zarvis-feedback-reasons small { color: var(--dim); }
 
 /* Conversational motion: a prepared gesture, a soft settle, then quiet reading. */
 /* A compact trigger, with detail revealed only when choosing a response mode. */

@@ -3,7 +3,8 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import type { GenerationMetrics } from "./openai";
 import type { ErrorClass, PartialUsage } from "./errors";
 import { dailyUsdCap, estimateUsageUsd } from "./pricing";
-import { LATENCY_BOUNDS_MS, latencyBucket, percentile, queueDaily, storeState, type DailyDelta } from "./metrics-store";
+import { LATENCY_BOUNDS_MS, latencyBucket, percentile, queueDaily, queueFeedbackReason, storeState, type DailyDelta } from "./metrics-store";
+import type { FeedbackReason } from "./feedback";
 import { noteOutcome, noteRejection, noteUnpriced } from "./alerts";
 export { estimateUsageUsd } from "./pricing";
 
@@ -20,7 +21,7 @@ export function feedbackTicket(now = Date.now(), route?: "local" | "model") {
   const payload = Buffer.from(JSON.stringify({ nonce: randomBytes(12).toString("hex"), expires: now + 3600000, ...(route ? { route } : {}) })).toString("base64url");
   return `${payload}.${mac(payload).toString("base64url")}`;
 }
-export function recordFeedback(ticket: string, helpful: boolean, now = Date.now()) {
+export function recordFeedback(ticket: string, helpful: boolean, now = Date.now(), reason?: FeedbackReason) {
   try {
     if (ticket.length > 400) return false;
     const parts = ticket.split("."); if (parts.length !== 2) return false;
@@ -32,7 +33,10 @@ export function recordFeedback(ticket: string, helpful: boolean, now = Date.now(
     if (state.usedFeedback.has(data.nonce) || state.usedFeedback.size >= 10000) return false;
     state.usedFeedback.set(data.nonce, data.expires);
     if (helpful) state.totals.helpful++; else state.totals.unhelpful++;
-    if (data.route === "local" || data.route === "model") queueDaily(data.route, helpful ? { helpful: 1 } : { unhelpful: 1 }, now);
+    if (data.route === "local" || data.route === "model") {
+      queueDaily(data.route, helpful ? { helpful: 1 } : { unhelpful: 1 }, now);
+      if (!helpful && reason) queueFeedbackReason(data.route, reason, now);
+    }
     flushMetrics(); return true;
   } catch { return false; }
 }
