@@ -5,11 +5,13 @@ vi.mock("@/lib/zarvis/canary", () => ({ runCanary: mocks.run }));
 vi.mock("@/lib/zarvis/metrics-store", () => ({ recordCanary: mocks.record }));
 vi.mock("@/lib/zarvis/alerts", () => ({ sendAlert: mocks.alert }));
 vi.mock("@/lib/zarvis/config", () => ({ zarvisConfig: mocks.config }));
+vi.mock("@/lib/zarvis/zips", () => ({ getZipCorpus: vi.fn() }));
 import { GET } from "./route";
+import { resetCanaryScheduleForTests } from "@/lib/zarvis/canary-schedule";
 const request = (auth?: string) => new Request("https://openzcash.org/api/zarvis/canary", { headers: auth ? { authorization: auth } : {} });
-const passed = { at: "2026-09-28T12:00:00.000Z", ok: true, ms: 700, passed: 4, failed: 0, failedCases: [], cases: [] };
+const passed = { at: "2026-09-28T12:00:00.000Z", ok: true, ms: 700, passed: 4, failed: 0, skipped: 0, failedCases: [], skippedCases: [], cases: [] };
 beforeEach(() => {
-  vi.clearAllMocks(); vi.stubEnv("CRON_SECRET", "cron-secret-sentinel-value");
+  vi.clearAllMocks(); resetCanaryScheduleForTests(); vi.stubEnv("CRON_SECRET", "cron-secret-sentinel-value");
   vi.spyOn(console, "info").mockImplementation(() => {});
   mocks.config.mockReturnValue({ enabled: true, canaryModel: false }); mocks.run.mockResolvedValue(passed); mocks.record.mockResolvedValue(true);
 });

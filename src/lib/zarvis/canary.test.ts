@@ -30,9 +30,9 @@ beforeEach(() => {
 describe("Zarvis canary", () => {
   it("passes all four zero-cost starter checks through the real local pipeline without touching the provider", async () => {
     const result = await runCanary(new AbortController().signal);
-    expect(result.ok).toBe(true); expect(result.failed).toBe(0); expect(result.passed).toBe(4); expect(result.failedCases).toEqual([]);
+    expect(result.ok).toBe(true); expect(result.failed).toBe(0); expect(result.passed).toBe(4); expect(result.failedCases).toEqual([]); expect(result.skipped).toBe(0); expect(result.skippedCases).toEqual([]);
     expect(result.cases.map((c) => c.id)).toEqual(CANARY_CASES.map((c) => c.id));
-    for (const c of result.cases) expect(c).toMatchObject({ ok: true, route: "local", errorClass: null }); 
+    for (const c of result.cases) expect(c).toMatchObject({ ok: true, route: "local", errorClass: null, skipped: null });
     expect(result.cases.every((c) => c.sources > 0)).toBe(true);
     expect(mocks.client).not.toHaveBeenCalled(); expect(mocks.create).not.toHaveBeenCalled();
     expect(JSON.stringify(result)).not.toMatch(/What is|ZIP 317|Explain/);
@@ -49,6 +49,13 @@ describe("Zarvis canary", () => {
     const result = await runCanary(new AbortController().signal);
     expect(result.cases.find((c) => c.id === "zip")).toMatchObject({ ok: false, errorClass: "public_read_timeout", route: null });
     expect(JSON.stringify(result)).not.toContain("PUBLIC_READ_TIMEOUT with");
+  });
+  it("skips the ZIP case, without failing the run, while the public corpus is stale", async () => {
+    mocks.zip.mockResolvedValue({ corpus: { ...bundledZipCorpus, retrievedAt: new Date(Date.now() - 7 * 3_600_000).toISOString() }, stale: true });
+    const result = await runCanary(new AbortController().signal);
+    expect(result).toMatchObject({ ok: true, passed: 3, failed: 0, skipped: 1, failedCases: [], skippedCases: ["zip"] });
+    expect(result.cases.find((c) => c.id === "zip")).toMatchObject({ ok: false, skipped: "zip_corpus_stale", errorClass: null, route: null });
+    expect(mocks.create).not.toHaveBeenCalled();
   });
   it("only calls the provider for the optional paid case and records it in the metrics", async () => {
     mocks.create.mockImplementation(async () => events("The Dev Fund is split as documented; see the sources."));

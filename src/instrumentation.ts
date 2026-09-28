@@ -15,6 +15,10 @@ export async function register() {
   // Start collection off the request path so visitors do not each wait on providers.
   const { startMarketSnapshots } = await import("@/lib/markets/sources");
   startMarketSnapshots();
+  // Zarvis canary: the zero-cost starter checks, hourly, in this process. Scheduled
+  // GitHub Actions jobs do not start for this repository, so nothing external is relied on.
+  const { startCanarySchedule } = await import("@/lib/zarvis/canary-schedule");
+  startCanarySchedule();
 
   // DISABLE_AUTO_REFRESH freezes the accounting snapshot: no spreadsheet
   // import, no treasury mirror and no published verdicts. The diligence
