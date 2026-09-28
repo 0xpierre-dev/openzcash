@@ -167,4 +167,17 @@ describe("ZCG decision history lookup", () => {
       ).decisions,
     ).toEqual([]);
   });
+  it("names a reader that could not be read so missing links are not taken as absent records", () => {
+    const degraded = decisionsContext(proposals, [], [], "approved", {
+      ...meta,
+      unavailable: ["meetings"],
+    });
+    expect(degraded.unavailableSources).toEqual(["meetings"]);
+    expect(degraded.note).toContain(
+      "DEGRADED: meetings could not be read, so Minutes links are missing",
+    );
+    expect(
+      decisionsContext(proposals, meetings, [], "", meta).unavailableSources,
+    ).toEqual([]);
+  });
 });

@@ -60,7 +60,7 @@ function applicantRows(proposals: ProposalRecord[]): DecisionRow[] {
     ];
   });
 }
-type Meta = { publishedThrough: string };
+type Meta = { publishedThrough: string; unavailable?: string[] };
 /** Dated ZCG and coinholder verdicts with their application and minutes links, newest first, filtered by the question's outcome, year, program and words. */
 export function decisionsContext(
   proposals: ProposalRecord[],
@@ -107,9 +107,11 @@ export function decisionsContext(
     const at = p.importedAt ? new Date(p.importedAt).toISOString() : null;
     return at && (!latest || at > latest) ? at : latest;
   }, null);
+  const unavailable = meta.unavailable ?? [];
   return {
     publishedThrough: meta.publishedThrough,
     importedAt,
+    unavailableSources: unavailable,
     totalProposals: proposals.length,
     totalDecisions: rows.length,
     latestDecisionDate: rows[0]?.date ?? null,
@@ -126,6 +128,9 @@ export function decisionsContext(
       sources: r.sources,
       grantPage: r.subjectHref ? `https://openzcash.org${r.subjectHref}` : null,
     })),
-    note: "Verdicts and dates come from the official ZCG sheet under the site's D-1 publication rule (publishedThrough is the last published day); status changes after that day are not shown. Committee verdicts link the minutes of that day when one exists; coinholder rows come from FPF polls. Withdrawn and cancelled rows are the applicant's own choice, dated by the sheet's decision or submission date. A verdict is not a payment or proof of delivery. Counts cover the whole sheet; the decisions array is an excerpt.",
+    note: "Verdicts and dates come from the official ZCG sheet under the site's D-1 publication rule (publishedThrough is the last published day); status changes after that day are not shown. Committee verdicts link the minutes of that day when one exists; coinholder rows come from FPF polls. Withdrawn and cancelled rows are the applicant's own choice, dated by the sheet's decision or submission date. A verdict is not a payment or proof of delivery. Counts cover the whole sheet; the decisions array is an excerpt." +
+      (unavailable.length
+        ? ` DEGRADED: ${unavailable.join(" and ")} could not be read, so ${unavailable.includes("meetings") ? "Minutes links" : ""}${unavailable.length === 2 ? " and " : ""}${unavailable.includes("grants") ? "grant pages" : ""} are missing from these rows, not absent in the record.`
+        : ""),
   };
 }

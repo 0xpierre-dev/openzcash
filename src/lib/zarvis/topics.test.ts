@@ -36,7 +36,7 @@ describe("New public-data topics through the tool boundary", () => {
   });
   it("reads the wallet catalog and the community directory without any network or database", async () => {
     const wallets = await read("wallets", "shielded on iOS");
-    expect(wallets.data.catalogRevisedOn).toBe("2026-09-17"); expect(wallets.data.wallets.shown.length).toBeGreaterThan(5); expect(wallets.data.wallets.shown.every((w: { shielded: string }) => w.shielded === "full")).toBe(true);
+    expect(wallets.data.catalogRevisedOn).toBe("2026-07-08"); expect(wallets.data.wallets.shown.length).toBeGreaterThan(5); expect(wallets.data.wallets.shown.every((w: { shielded: string }) => w.shielded === "full")).toBe(true);
     const communities = await read("communities", "Zcash Brasil");
     expect(communities.data.verifiedOn).toBe("2026-09-20"); expect(communities.data.communities.shown[0].name).toBe("Zcash Brazil");
     expect(mocks.calls).not.toHaveBeenCalled(); expect(mocks.proposals).not.toHaveBeenCalled();
@@ -46,6 +46,13 @@ describe("New public-data topics through the tool boundary", () => {
     expect(data.publishedThrough).toMatch(/^\d{4}-\d{2}-\d{2}$/); expect(data.importedAt).toBe("2026-09-27T03:00:00.000Z");
     expect(data.decisions.shown[0]).toMatchObject({ date: "2026-08-12", outcome: "Approved", subject: "Zebra indexer", grantPage: "https://openzcash.org/zcg/grant?g=Zebra%20indexer" });
     expect(data.decisions.shown[0].sources.shown.map((s: { label: string }) => s.label)).toEqual(["Application", "Minutes"]);
+    expect(data.unavailableSources.shown).toEqual([]); expect(data.note).not.toContain("DEGRADED");
+  });
+  it("flags a failed meetings or grants reader instead of showing decisions without their links as complete", async () => {
+    mocks.meetings.mockRejectedValue(new Error("db down")); mocks.grants.mockRejectedValue(new Error("db down"));
+    const { data } = await read("decisions", "approved 2026");
+    expect(data.unavailableSources.shown).toEqual(["meetings", "grants"]); expect(data.note).toContain("DEGRADED: meetings and grants could not be read");
+    expect(data.decisions.shown[0]).toMatchObject({ subject: "Zebra indexer", grantPage: null }); expect(data.decisions.shown[0].sources.shown.map((s: { label: string }) => s.label)).toEqual(["Application"]);
   });
   it("reports chain height, halving estimate and pools with their own times, and nulls when feeds fail", async () => {
     const { data } = await read("chain");

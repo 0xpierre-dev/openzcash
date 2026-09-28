@@ -1,5 +1,6 @@
 /** The wallet catalog behind /wallets: plain data, so the server (Zarvis) and the client page read the same list. */
-export const WALLET_CATALOG_REVISED_ON = "2026-09-17";
+/** Date of the last edit to the entries below (maintainer-set, not a review pass): update it in the same commit that adds, removes or corrects a wallet. */
+export const WALLET_CATALOG_REVISED_ON = "2026-07-08";
 
 export type Shielded = "full" | "partial" | "transparent";
 

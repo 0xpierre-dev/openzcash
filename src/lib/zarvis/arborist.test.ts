@@ -74,6 +74,27 @@ describe("Arborist call lookup", () => {
     expect(
       arboristFilter("Which arborist call discussed Zaino?"),
     ).toMatchObject({ numbers: [], dates: [], tokens: ["zaino"] });
+    for (const q of [
+      "When is the next engineering call?",
+      "Quando é a próxima reunião arborist?",
+    ])
+      expect(arboristFilter(q), q).toEqual({
+        numbers: [],
+        dates: [],
+        tokens: [],
+      });
+    expect(arboristFilter("reunião arborist no 12 de março")).toMatchObject({
+      numbers: [],
+      tokens: ["marco"],
+    });
+    expect(arboristFilter("arborist call no 2026").numbers).toEqual([]);
+    expect(arboristFilter("call no. 12").numbers).toEqual([12]);
+  });
+  it("returns the latest calls, not an empty list, for a next-call question", () => {
+    expect(
+      arboristContext(calls, "When is the next engineering call?", meta)
+        .calls.length,
+    ).toBe(4);
   });
   it("selects by number, then by month, then by agenda words, otherwise the latest calls", () => {
     expect(

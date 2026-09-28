@@ -17,13 +17,27 @@ describe("Topic routing for the site's datasets", () => {
     ["Which proposals were approved this year?", "decisions"], ["Quais propostas foram rejeitadas em 2026?", "decisions"], ["What did the ZCG committee decide about Zebra?", "decisions"],
     ["Which proposals are under review?", "proposals"], ["Which ZCG proposals are under review right now and how much do they ask?", "proposals"], ["Quais candidaturas estão em análise?", "proposals"],
     ["What is the current block height?", "chain"], ["When is the next halving?", "chain"], ["Quando é o próximo halving?", "chain"], ["How much ZEC is in the shielded pools?", "chain"], ["What is the circulating supply of ZEC?", "chain"],
-    ["What was the ZEC price in January 2026?", "price_history"], ["Qual era o preço do ZEC em janeiro de 2026?", "price_history"], ["ZEC price history 2025", "price_history"],
+    ["What was the ZEC price in January 2026?", "price_history"], ["Qual era o preço do ZEC em janeiro de 2026?", "price_history"], ["ZEC price history 2025", "price_history"], ["quanto era o zec em janeiro de 2026", "price_history"], ["How much was ZEC worth in January 2026?", "price_history"],
   ])("routes %s to %s", (question, topic) => expect(relevantTopics(question)).toContain(topic));
   it("keeps the current quote, ZIPs and ledger sums on their existing paths", () => {
     expect(relevantTopics("What is the ZEC price today?")).toEqual(["price"]); expect(relevantTopics("What was the ZEC price in January 2026?")).not.toContain("price");
     expect(relevantTopics("What are Zcash Improvement Proposals?")).not.toContain("proposals"); expect(relevantTopics("Explain ZIP 317 proposals")).not.toContain("proposals");
     expect(relevantTopics("How much has ZCG paid in grants to Zingo in 2025?")).toEqual([]); expect(relevantTopics("Latest news about Zebra")).toEqual(["news", "ecosystem"]);
     expect(relevantTopics("What is the ZCG payment ledger?")).not.toContain("wallets");
+  });
+  it("keeps a current-price question on the live quote when a month-like word is not a date", () => {
+    for (const q of ["What is the ZEC price and market cap?", "How is the ZEC price on the market?", "What may affect the ZEC price?", "ZEC price on decentralized exchanges", "Compare the ZEC price with a separate august report"]) expect(relevantTopics(q), q).toEqual(["price"]);
+    expect(relevantTopics("How much ZEC is in the shielded pools?")).toEqual(["chain"]);
+  });
+  it("does not read ZCG's own name, a bare community, a mobile application or a ZIP verdict as a directory or grant lookup", () => {
+    expect(relevantTopics("How much does Zcash Community Grants fund per year?")).toEqual(["grants"]);
+    expect(relevantTopics("Who sits on the Zcash Community Grants committee?")).not.toContain("communities");
+    expect(relevantTopics("what did the community decide about the lockbox")).toEqual(["treasuries", "decisions"]);
+    expect(relevantTopics("Tell me about the Zcash community")).toEqual(["communities"]);
+    expect(relevantTopics("which mobile application supports Orchard")).not.toContain("proposals");
+    expect(relevantTopics("How many grant applications did ZCG receive?")).toContain("proposals");
+    for (const q of ["Was ZIP 1015 approved?", "Which ZIPs were rejected?"]) expect(relevantTopics(q), q).not.toContain("decisions");
+    expect(relevantTopics("Sobre o que foi a última reunião arborist?")).toEqual(["arborist"]);
   });
   it("passes the question to readers that filter by number, name, outcome or period, and nothing to the others", async () => {
     await prepareLocal([user("What happened in Arborist call #131?")], signal());

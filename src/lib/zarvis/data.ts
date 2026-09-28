@@ -35,13 +35,18 @@ export const links: Record<z.infer<typeof lookupSchema>["topic"], string> = {
 
 /** Directory and history topics return short pre-filtered rows, so they may show more than the default six. */
 const ROW_LIMITS: Partial<Record<z.infer<typeof lookupSchema>["topic"], number>> = { wallets: 24, communities: 10, arborist: 8, decisions: 10, price_history: 40 };
+/** The directories carry their whole inventory ahead of the rows, so they get room for several rows after it. */
+const CHAR_BUDGETS: Partial<Record<z.infer<typeof lookupSchema>["topic"], number>> = { wallets: 7_000, communities: 7_000 };
+export const charBudget = (topic: z.infer<typeof lookupSchema>["topic"]) => CHAR_BUDGETS[topic] ?? 5_000;
+export const rowLimit = (topic: z.infer<typeof lookupSchema>["topic"]) => ROW_LIMITS[topic] ?? 6;
 /** A hard serialized budget, with dates/units preserved ahead of long record arrays. */
 export function compactData(data: unknown, query = "", charBudget = 5_000, rowLimit = 6) {
   let remaining = Math.max(0, charBudget - 320);
   let partial = false;
   const tokens = terms(query);
   const normalize = (value: string) => value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
-  const provenance = /(?:date|time|at$|stale|height|block|note|interpretation|unit|total|checked|snapshot|source|status)/i;
+  // "unit" must not catch "communities", and an "allX" inventory key is provenance too.
+  const provenance = (key: string) => /(?:date|time|at$|stale|height|block|note|interpretation|^units?$|total|checked|snapshot|source|status|revised|verified|through)/i.test(key) || /^all[A-Z]/.test(key);
   function relevance(value: unknown) {
     const body = normalize(JSON.stringify(value, (_, x) => typeof x === "bigint" ? x.toString() : x) ?? "");
     const row = value && typeof value === "object" ? value as Record<string, unknown> : {};
@@ -77,7 +82,7 @@ export function compactData(data: unknown, query = "", charBudget = 5_000, rowLi
     if (value && typeof value === "object") {
       remaining -= 4;
       const output: Record<string, unknown> = {};
-      const entries = Object.entries(value as Record<string, unknown>).sort(([a], [b]) => Number(provenance.test(b)) - Number(provenance.test(a)));
+      const entries = Object.entries(value as Record<string, unknown>).sort(([a], [b]) => Number(provenance(b)) - Number(provenance(a)));
       for (const [key, item] of entries) {
         if (item === undefined) continue;
         if (remaining < key.length + 120) { partial = true; break; }
@@ -208,8 +213,11 @@ async function readPublicData(topic: z.infer<typeof lookupSchema>["topic"], quer
     case "decisions": {
       const [{ listProposals }, { getMeetings }, { listGrants }, { cached, LEDGER_TTL_MS }, { publicationDay }, { decisionsContext }] = await Promise.all([import("@/lib/zcg/proposals-repo"), import("@/lib/zcg/governance-repo"), import("@/lib/zcg/grants-repo"), import("@/lib/cache/memo"), import("@/lib/zcg/publication-policy"), import("./decisions")]);
       const day = publicationDay();
-      const [proposals, meetings, grants] = await Promise.all([cached(`listProposals:all:${day}`, LEDGER_TTL_MS, () => listProposals({})), getMeetings().catch(() => []), cached("grants:list", LEDGER_TTL_MS, () => listGrants()).catch(() => [])]);
-      return decisionsContext(proposals, meetings, grants.map((g) => g.grantKey), query, { publishedThrough: day });
+      // Minutes and grant pages are enrichment: a failed reader is reported, never silently shown as absent links.
+      const unavailable: string[] = [];
+      const soft = <T,>(name: string, read: Promise<T[]>) => read.catch((): T[] => { unavailable.push(name); return []; });
+      const [proposals, meetings, grants] = await Promise.all([cached(`listProposals:all:${day}`, LEDGER_TTL_MS, () => listProposals({})), soft("meetings", getMeetings()), soft("grants", cached("grants:list", LEDGER_TTL_MS, () => listGrants()))]);
+      return decisionsContext(proposals, meetings, grants.map((g) => g.grantKey), query, { publishedThrough: day, unavailable });
     }
   }
 }
@@ -228,7 +236,7 @@ export async function lookupPublicData(args: unknown, signal: AbortSignal): Prom
     if (["grants", "recipients", "disbursements"].includes(topic)) {
       try { ledgerImportedAt = (await (await import("@/lib/zcg/freshness")).latestImportAt())?.toISOString() ?? null; } catch { ledgerImportedAt = null; }
     }
-    return { content: JSON.stringify({ sourceUrl: url, retrievedAt, ledgerImportedAt, ...compactData(data, query, 5_000, ROW_LIMITS[topic] ?? 6) }), source: { title: topic === "mining" ? "ZcashInfo · mining snapshot" : `OpenZcash · ${topic.replaceAll("_", " ")}`, url, retrievedAt } };
+    return { content: JSON.stringify({ sourceUrl: url, retrievedAt, ledgerImportedAt, ...compactData(data, query, charBudget(topic), rowLimit(topic)) }), source: { title: topic === "mining" ? "ZcashInfo · mining snapshot" : `OpenZcash · ${topic.replaceAll("_", " ")}`, url, retrievedAt } };
   } catch {
     signal.throwIfAborted();
     return { content: JSON.stringify({ sourceUrl: url, error: "Public data temporarily unavailable. Do not invent current figures; direct the user to this page." }) };

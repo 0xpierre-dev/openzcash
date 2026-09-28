@@ -22,7 +22,7 @@ const PLATFORMS: Array<[RegExp, string]> = [
   [/\bhardware\b/, "Hardware"],
 ];
 const NOISE = new Set(
-  "wallet wallets carteira carteiras support supports supported suporta suportam which what quais qual list lista best melhor recommended recomendada use usar shielded blindada blindadas transparent transparente partial parcial full completa hardware software ios android desktop browser extension web".split(
+  "wallet wallets carteira carteiras support supports supported suporta suportam which what quais qual list lista best melhor recommended recomendada use usar shielded blindada blindadas transparent transparente partial parcial full completa hardware software ios android desktop browser extension web app apps mobile open source audit audited audits safe secure cold privacy private available version".split(
     " ",
   ),
 );
@@ -37,12 +37,17 @@ const shieldedLevel = (q: string) =>
         ? "full"
         : null;
 const escape = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-/** A name word must start a word of the name or maker, so "so" never selects "Brave Software" and "safe" never selects ChainSafe's wallet. */
+/** A former name in the note ("Formerly Zashi") is still how people ask for the wallet. */
+const formerName = (w: Wallet) =>
+  w.note.match(/\bformerly ([\p{L}\p{N}!]+)/iu)?.[1] ?? "";
+/** A name word must start a word of the name, maker or former name, so "so" never selects "Brave Software" and "safe" never selects ChainSafe's wallet. */
 const namesWallet = (t: string, w: Wallet) =>
   t.length >= 3 &&
-  new RegExp(`\\b${escape(t)}`).test(normalize(`${w.name} ${w.maker}`));
+  new RegExp(`\\b${escape(t)}`).test(
+    normalize(`${w.name} ${w.maker} ${formerName(w)}`),
+  );
 
-/** The wallet catalog with the question's platform, shielded level and name filters applied; the full inventory stays listed. */
+/** The wallet catalog with the question's platform, shielded level and name filters applied; the full inventory stays listed, and comes before the rows so the serialized budget cuts rows first. */
 export function walletsContext(query: string) {
   const q = normalize(query);
   const all = [
@@ -81,11 +86,11 @@ export function walletsContext(query: string) {
     totalWallets: all.length,
     fullShielded: all.filter(({ w }) => w.shielded === "full").length,
     hardwareWallets: HARDWARE.length,
+    allWallets: all.map(({ w }) => `${w.name}:${w.shielded}`).join(", "),
+    note: "Curated catalog; catalogRevisedOn is the date of the last edit to its entries, not a review of every wallet. full = shielded send and receive (Orchard/Sapling); partial = limited; transparent = t-addresses only. Absent from allWallets = not catalogued, not nonexistent. Not an audit or endorsement; confirm platforms and releases on each wallet's site.",
     filter: { platform, shielded, kind, names: named.map(({ w }) => w.name) },
     matched: matched.length,
     wallets: matched.map(row),
-    allWallets: all.map(({ w }) => `${w.name}:${w.shielded}`).join(", "),
-    note: "Curated catalog as of catalogRevisedOn. full = shielded send and receive (Orchard/Sapling); partial = limited; transparent = t-addresses only. Absent from allWallets = not catalogued, not nonexistent. Not an audit or endorsement; confirm platforms and releases on each wallet's site.",
   };
 }
 
@@ -141,6 +146,8 @@ const COMMUNITY_NOISE = new Set(
   ),
 );
 const forum = (id: number) => `https://forum.zcashcommunity.com/t/${id}`;
+const FORUM_TOPICS = 2;
+/** Short rows, so several fit the serialized budget behind the inventory: ledger fields only when funded, and the page carries every social link and older forum topic. */
 const row = (c: Community) => ({
   name: c.name,
   country: c.country,
@@ -149,26 +156,23 @@ const row = (c: Community) => ({
   ...(c.since ? { since: c.since } : {}),
   about: c.about,
   zcgFunded: c.zcg.funded,
-  zcgLedgerRecipient: c.zcg.recipient ?? null,
-  zcgBudgetedUsd: c.zcg.budgetedUsd ?? null,
-  zcgGrants: c.zcg.grants ?? null,
-  lastPaidDate: c.zcg.lastPaid ?? null,
-  zechubDaoFunded: c.zcg.zechubDao ?? false,
-  fundingNote: c.zcg.note ?? null,
+  ...(c.zcg.funded
+    ? {
+        zcgLedgerRecipient: c.zcg.recipient ?? null,
+        zcgBudgetedUsd: c.zcg.budgetedUsd ?? null,
+        zcgGrants: c.zcg.grants ?? null,
+        lastPaidDate: c.zcg.lastPaid ?? null,
+      }
+    : {}),
+  ...(c.zcg.zechubDao ? { zechubDaoFunded: true } : {}),
+  ...(c.zcg.note ? { fundingNote: c.zcg.note } : {}),
   site: c.links.site ?? null,
   forumUser: c.links.forumUser ?? null,
-  forumTopics: c.forumTopics.map((t) => ({
-    title: t.title,
-    kind: t.kind,
-    url: forum(t.id),
-  })),
-  otherLinks: Object.fromEntries(
-    Object.entries(c.links).filter(
-      ([k]) => !["site", "forumUser", "youtubeChannelId"].includes(k),
-    ),
-  ),
+  forumTopics: c.forumTopics
+    .slice(0, FORUM_TOPICS)
+    .map((t) => `${t.kind}: ${t.title} ${forum(t.id)}`),
 });
-/** The global-communities directory, filtered by name, country, region or language words; every name stays listed by region. */
+/** The global-communities directory, filtered by name, country, region or language words; every name stays listed by region, ahead of the rows, so the serialized budget cuts rows first. */
 export function communitiesContext(query: string) {
   const words = [
     ...new Set(
@@ -202,10 +206,10 @@ export function communitiesContext(query: string) {
     verifiedOn: COMMUNITIES_VERIFIED_ON,
     totalCommunities: COMMUNITIES.length,
     zcgFundedCommunities: COMMUNITIES.filter((c) => c.zcg.funded).length,
+    allCommunitiesByRegion: byRegion,
+    note: "OpenZcash's curated community directory, links verified on verifiedOn. zcgBudgetedUsd is budgeted USD in the audited ZCG ledger, not paid; zcgFunded false means no ledger rows, not that the group is unfunded elsewhere (see fundingNote). Social links, live forum and YouTube activity are on https://openzcash.org/communities, not in this excerpt. A group absent from allCommunitiesByRegion is not in the directory.",
     filter: { words, fundedOnly: funded && !words.length },
     matched: ranked.length,
     communities: ranked.map(({ c }) => row(c)),
-    allCommunitiesByRegion: byRegion,
-    note: "OpenZcash's curated community directory, links verified on verifiedOn. zcgBudgetedUsd is budgeted USD in the audited ZCG ledger, not paid; zcgFunded false means no ledger rows, not that the group is unfunded elsewhere (see fundingNote). Live forum and YouTube activity is on https://openzcash.org/communities, not in this excerpt. A group absent from allCommunitiesByRegion is not in the directory.",
   };
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 import { communitiesContext, walletsContext } from "./directory";
-import { compactData } from "./data";
+import { charBudget, compactData, rowLimit } from "./data";
 import { safeSourceUrl } from "./sources";
 import { HARDWARE, SOFTWARE } from "@/app/wallets/catalog-data";
 import { COMMUNITIES } from "@/lib/communities/data";
@@ -24,7 +24,7 @@ describe("Wallet catalog lookup", () => {
     );
     expect(ios.allWallets.split(", ")).toHaveLength(SOFTWARE.length + HARDWARE.length);
     expect(ios).toMatchObject({
-      catalogRevisedOn: "2026-09-17",
+      catalogRevisedOn: "2026-07-08",
       totalWallets: 18,
       hardwareWallets: 3,
     });
@@ -51,6 +51,20 @@ describe("Wallet catalog lookup", () => {
     expect(unknown.filter.names).toEqual([]);
     expect(unknown.matched).toBe(18);
     expect(unknown.note).toContain("not nonexistent");
+    const zashi = walletsContext("Is Zashi available on Android?");
+    expect(zashi.filter.names).toEqual(["Zodl"]);
+    expect(zashi.wallets.map((w) => w.name)).toEqual(["Zodl"]);
+    expect(walletsContext("open source wallet with audit").filter.names).toEqual([]);
+  });
+  it("keeps the inventory, revision date and note ahead of the rows when many wallets match", () => {
+    for (const q of ["", "Android"]) {
+      const out = compactData(walletsContext(q), q, charBudget("wallets"), rowLimit("wallets"));
+      const shown = out.data as { allWallets: string; catalogRevisedOn: string; note: string; wallets: { shown: unknown[] } };
+      expect(shown.allWallets.split(", "), q).toHaveLength(18);
+      expect(shown.catalogRevisedOn).toBe("2026-07-08");
+      expect(shown.note).toContain("last edit");
+      expect(shown.wallets.shown.length, q).toBeGreaterThanOrEqual(10);
+    }
   });
   it("cites only links the allowlist renders, and fits the default serialized budget with a filter", () => {
     for (const w of [...SOFTWARE, ...HARDWARE])
@@ -112,9 +126,11 @@ describe("Community directory lookup", () => {
     expect(funded.filter.fundedOnly).toBe(true);
     expect(funded.communities.every((c) => c.zcgFunded)).toBe(true);
     expect(all.note).toContain("budgeted USD");
-    expect(all.communities[0].forumTopics[0].url).toMatch(
-      /^https:\/\/forum\.zcashcommunity\.com\/t\/\d+$/,
+    expect(all.communities[0].forumTopics[0]).toMatch(
+      /^report: .+ https:\/\/forum\.zcashcommunity\.com\/t\/\d+$/,
     );
+    expect(all.communities.every((c) => c.forumTopics.length <= 2)).toBe(true);
+    expect(all.communities.find((c) => !c.zcgFunded)).not.toHaveProperty("zcgBudgetedUsd");
     expect(communitiesContext("Zcash Atlantis").matched).toBe(0);
   });
   it("keeps the region inventory and the matched row within the serialized budget", () => {
@@ -131,5 +147,15 @@ describe("Community directory lookup", () => {
     expect(shown.allCommunitiesByRegion["Latin America"]).toContain(
       "Zcash Brazil",
     );
+  });
+  it("keeps the region inventory, verification date and note ahead of the rows when several communities match", () => {
+    for (const [q, min] of [["", 5], ["Latin America", 5], ["which communities are funded by ZCG?", 5], ["comunidades na África", 5]] as const) {
+      const out = compactData(communitiesContext(q), q, charBudget("communities"), rowLimit("communities"));
+      const shown = out.data as { verifiedOn: string; note: string; allCommunitiesByRegion: Record<string, string>; communities: { shown: { name: string }[] } };
+      expect(Object.values(shown.allCommunitiesByRegion).flatMap((s) => s.split(", ")), q).toHaveLength(COMMUNITIES.length);
+      expect(shown.verifiedOn).toBe("2026-09-20");
+      expect(shown.note).toContain("zcgFunded false");
+      expect(shown.communities.shown.length, q).toBeGreaterThanOrEqual(min);
+    }
   });
 });

@@ -19,7 +19,7 @@ const MONTH_INDEX: Record<string, number> = Object.fromEntries(
     ]),
 );
 const NOISE = new Set(
-  "arborist arboretum call calls chamada reuniao reunioes meeting meetings latest last newest recent ultimo ultima recente notes recording video engineering discussed discutido discutiu about sobre happened aconteceu".split(
+  "arborist arboretum call calls chamada reuniao reunioes meeting meetings latest last newest recent ultimo ultima recente next proxima proximo upcoming quando scheduled schedule agenda notes recording video engineering discussed discutido discutiu about sobre happened aconteceu".split(
     " ",
   ),
 );
@@ -33,7 +33,8 @@ export function arboristFilter(query: string) {
     ...new Set(
       [
         ...q.matchAll(
-          /(?:#|\b(?:call|calls|chamada|reuniao)\s*#?\s*|\bno\.?\s*|\bnumero\s*)(\d{1,4})\b/g,
+          // "no 12 de março" is a date, not "no. 12"; call numbers have at most three digits.
+          /(?:#|\b(?:call|calls|chamada|reuniao)\s*#?\s*|\bn(?:o\.|[º°]|umero|umber)\s*)(\d{1,3})\b/g,
         ),
       ].map((m) => Number(m[1])),
     ),
