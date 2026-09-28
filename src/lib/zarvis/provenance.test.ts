@@ -21,8 +21,11 @@ describe("Provenance badge", () => {
   });
   it("shows the withheld-figures notice only after a grounding fallback", () => {
     expect(fallbackNotice(base)).toBeUndefined();
-    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 2 })).toBe("Some figures could not be verified and were left out.");
-    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 1, language: "pt" })).toBe("Alguns valores não puderam ser verificados e foram omitidos.");
+    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 2 })).toBe("2 figures could not be verified and were left out.");
+    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 1 })).toBe("1 figure could not be verified and was left out.");
+    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 0 })).toBe("Some figures could not be verified and were left out.");
+    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 1, language: "pt" })).toBe("1 valor não pôde ser verificado e foi omitido.");
+    expect(fallbackNotice({ ...base, groundingFallback: true, withheldFigures: 3, language: "pt" })).toBe("3 valores não puderam ser verificados e foram omitidos.");
   });
   it("stamps retrieval times with their zone", () => {
     expect(retrievedLabel("2026-09-28T11:36:00Z")).toBe("Retrieved Sep 28, 2026, 11:36 AM UTC");

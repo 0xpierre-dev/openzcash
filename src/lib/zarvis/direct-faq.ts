@@ -71,8 +71,9 @@ const exact: Array<[RegExp, FaqId]> = [
   [/^(?:where can i find zcash wallets|onde (?:encontro|encontrar) carteiras (?:de )?zcash)$/, "wallets"],
 ];
 export function matchDirectFaq(q: string): FaqId | undefined {
-  const term = q.replace(/^(?:what is|what are|what's|whats|explain|o que e|o que sao|explique) /, "");
-  return Object.hasOwn(definitions, term) ? definitions[term] : exact.find(([pattern]) => pattern.test(q))?.[1];
+  const term = q.replace(/^(?:what (?:is|are)|what's|whats|what exactly (?:is|are)|what is meant by|what do you mean by|what (?:does|do)|explain(?: to me)?|define|describe|tell me about|o que (?:e|sao|significa|seria|vem a ser)|explique|explica|defina|descreva|(?:me )?fale sobre|me conte sobre) /, "").replace(/ (?:mean|stand for|refer to|exactly|in zcash|in simple terms|simply|briefly|no zcash|em termos simples|de forma simples|resumidamente)$/, "").replace(/^(?:what|o que) (.+?) (?:is|are|e|sao)$/, "$1");
+  const key = Object.hasOwn(definitions, term) ? term : term.replace(/^(?:o|a|os|as|the) /, "");
+  return Object.hasOwn(definitions, key) ? definitions[key] : exact.find(([pattern]) => pattern.test(q))?.[1];
 }
 export function faqAnswer(id: FaqId, pt: boolean): { text: string; source: ZarvisSource } {
   const entry = faq[id];

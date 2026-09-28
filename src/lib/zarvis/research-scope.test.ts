@@ -35,6 +35,11 @@ describe("Sources match the question's subject", () => {
     expect(researchScope("Who is Zooko?")).toBe("history");
     expect(researchScope("ZcashInfo and ZecStats hashrates")).toBe("mining");
   });
+  it("routes funding, governance and news questions to their own five-domain lists", () => {
+    for (const q of ["How is the Dev Fund split after NU6.1?", "Quem vota nas propostas do ZCG?", "What did the coinholder poll decide?"]) expect(researchScope(q)).toBe("governance");
+    for (const q of ["Latest Zcash news", "Quais as notícias do Zcash esta semana?", "Zebra release announcement"]) expect(researchScope(q)).toBe("news");
+    expect(researchScope("What is a Unified Address?")).toBe("general");
+  });
   it.each(["Mining pool shares over the last 24 hours", "Hashrate in 2020"])("requests fresh research for changing mining facts: %s", query => {
     expect(needsMiningResearch(query)).toBe(true);
     expect(directIntent([user(query)])).toBeUndefined();

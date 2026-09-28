@@ -14,3 +14,8 @@ export function answerPlan(messages: ChatMessage[], requested: ResponseDepth = "
     rounds: deep ? 4 : 3, lookups: deep ? 5 : 3, outputTokens: deep ? 6_000 : 3_000 };
 }
 export type AnswerPlan = ReturnType<typeof answerPlan>;
+/** Rounds for this answer: one more once a research request was granted, because that request consumed a round, so lookup → request → search → synthesis fits in Quick (4) within the same deadline. */
+export const roundBudget = (plan: Pick<AnswerPlan, "rounds">, researchGranted: boolean) => plan.rounds + (researchGranted ? 1 : 0);
+/** Time the one figure-repair round may take, inside the same deadline: it starts only with REPAIR_MIN_MS left and always leaves REPAIR_RESERVE_MS for the fallback and the final events, so a slow restatement never turns into a deadline error. 0 skips it. */
+const REPAIR_MIN_MS = 15_000, REPAIR_RESERVE_MS = 5_000;
+export const repairBudgetMs = (plan: Pick<AnswerPlan, "timeoutMs">, elapsedMs: number) => { const remaining = plan.timeoutMs - elapsedMs; return remaining >= REPAIR_MIN_MS ? remaining - REPAIR_RESERVE_MS : 0; };

@@ -4,6 +4,7 @@ import type { Tool, ResponseCreateParamsStreaming } from "openai/resources/respo
 import type { zarvisConfig } from "./config";
 import { SEARCH_DOMAINS } from "./sources";
 import type { AnswerPlan } from "./depth";
+import type { ResearchScope } from "./research-scope";
 
 type Config = ReturnType<typeof zarvisConfig>;
 export function providerClient(config: Config, timeout = 50_000) {
@@ -11,15 +12,20 @@ export function providerClient(config: Config, timeout = 50_000) {
   // Fixed hosts: never route a credential using a user-supplied URL or SDK environment override.
   return new OpenAI({ apiKey: config.apiKey, baseURL: config.provider === "xai" ? "https://api.x.ai/v1" : "https://api.openai.com/v1", maxRetries: 0, timeout });
 }
-export function providerSearchTool(config: Config, scope: "general" | "zip" | "mining" | "history" = "general"): Tool {
+/** Grok accepts at most five allowed domains per search, so the five are chosen by topic; OpenAI receives the whole reviewed list. */
+export const GROK_SEARCH_DOMAINS: Record<Exclude<ResearchScope, "zip">, string[]> = {
+  general: ["openzcash.org", "zechub.wiki", "z.cash", "zips.z.cash", "forum.zcashcommunity.com"],
+  governance: ["openzcash.org", "forum.zcashcommunity.com", "zfnd.org", "electriccoin.co", "z.cash"],
+  news: ["electriccoin.co", "zfnd.org", "forum.zcashcommunity.com", "z.cash", "openzcash.org"],
+  mining: ["zcashinfo.com", "zecstats.com", "zips.z.cash", "z.cash", "electriccoin.co"],
+  history: ["openzcash.org", "z.cash", "electriccoin.co", "shieldedlabs.net", "zfnd.org"],
+};
+export function providerSearchTool(config: Config, scope: ResearchScope = "general"): Tool {
   if (scope === "zip") return { type: "web_search", filters: { allowed_domains: ["zips.z.cash"] }, ...(config.provider === "openai" ? { search_context_size: "low" as const } : {}) };
-  if (scope === "mining" || scope === "history") return {
-    type: "web_search", filters: { allowed_domains: scope === "mining"
-      ? ["zcashinfo.com", "zecstats.com", "zips.z.cash", "z.cash", "electriccoin.co"]
-      : ["openzcash.org", "z.cash", "electriccoin.co", "shieldedlabs.net", "zfnd.org"] },
+  if (config.provider === "xai" || scope === "mining" || scope === "history") return {
+    type: "web_search", filters: { allowed_domains: GROK_SEARCH_DOMAINS[scope] },
     ...(config.provider === "openai" ? { search_context_size: "low" as const } : {}),
   };
-  if (config.provider === "xai") return { type: "web_search", filters: { allowed_domains: ["z.cash", "zips.z.cash", "electriccoin.co", "zfnd.org", "forum.zcashcommunity.com"] } };
   return { type: "web_search", filters: { allowed_domains: SEARCH_DOMAINS }, search_context_size: "low" };
 }
 export function providerOptions(config: Config, effort: AnswerPlan["effort"] = "low"): Partial<ResponseCreateParamsStreaming> & { max_tool_calls?: number; max_turns?: number } {

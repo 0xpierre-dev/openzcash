@@ -9,7 +9,7 @@ export { estimateUsageUsd } from "./pricing";
 
 export const REJECTIONS = ["quota", "busy", "spendCap", "storage", "forbidden", "invalid"] as const;
 export type Rejection = typeof REJECTIONS[number];
-const empty = () => ({ since: new Date().toISOString(), completed: 0, failed: 0, aborted: 0, busy: 0, quota: 0, spendCap: 0, storage: 0, forbidden: 0, invalid: 0, local: 0, model: 0, modelCalls: 0, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, unreportedUsage: 0, groundingFallbacks: 0, estimatedModelUsd: 0, unpricedRequests: 0, helpful: 0, unhelpful: 0, latency: LATENCY_BOUNDS_MS.map(() => 0) });
+const empty = () => ({ since: new Date().toISOString(), completed: 0, failed: 0, aborted: 0, busy: 0, quota: 0, spendCap: 0, storage: 0, forbidden: 0, invalid: 0, local: 0, model: 0, modelCalls: 0, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, unreportedUsage: 0, groundingFallbacks: 0, repairRounds: 0, estimatedModelUsd: 0, unpricedRequests: 0, helpful: 0, unhelpful: 0, latency: LATENCY_BOUNDS_MS.map(() => 0) });
 type MetricsState = { totals: ReturnType<typeof empty>; active: number; lastLog: number; usedFeedback: Map<string, number>; localKey: Buffer };
 const globalState = globalThis as typeof globalThis & { __zarvisMetricsV1?: MetricsState };
 const state = globalState.__zarvisMetricsV1 ??= { totals: empty(), active: 0, lastLog: Date.now(), usedFeedback: new Map(), localKey: randomBytes(32) };
@@ -63,6 +63,7 @@ export function recordGeneration(outcome: "completed" | "failed" | "aborted", ms
     if (outcome === "completed") state.totals[metrics.route]++;
     for (const key of ["modelCalls", "webSearchCalls", "inputTokens", "cachedInputTokens", "outputTokens"] as const) { state.totals[key] += metrics[key]; delta[key] = metrics[key]; }
     state.totals.groundingFallbacks += metrics.groundingFallbacks ?? 0; delta.groundingFallbacks = metrics.groundingFallbacks ?? 0;
+    state.totals.repairRounds += metrics.repairRounds ?? 0;
     estimated = outcome === "completed" ? estimateUsageUsd(metrics) : estimateUsageUsd({ ...metrics, usageReported: true });
     if (estimated === null) {
       if (outcome === "completed") { state.totals.unpricedRequests++; delta.unpricedRequests = 1; }

@@ -3,7 +3,8 @@ vi.mock("server-only", () => ({}));
 const constructor = vi.hoisted(() => vi.fn());
 vi.mock("openai", async (original) => ({ ...await original<object>(), default: class { constructor(options: unknown) { constructor(options); } } }));
 import { zarvisConfig } from "./config";
-import { providerClient, providerOptions, providerSearchTool } from "./provider";
+import { GROK_SEARCH_DOMAINS, providerClient, providerOptions, providerSearchTool } from "./provider";
+import { SEARCH_DOMAINS } from "./sources";
 afterEach(() => { vi.unstubAllEnvs(); vi.clearAllMocks(); });
 describe("Explicit provider configuration", () => {
   it("uses the xAI key only with its fixed host, and limits search to five domains", () => {
@@ -31,6 +32,21 @@ describe("Explicit provider configuration", () => {
     expect(mining.filters.allowed_domains).toContain("zecstats.com");
     expect(mining.filters.allowed_domains.length).toBeLessThanOrEqual(5);
     expect(providerSearchTool(config, "history")).toMatchObject({ filters: { allowed_domains: expect.arrayContaining(["openzcash.org", "shieldedlabs.net"]) } });
+  });
+  it("chooses five Grok domains by topic and keeps OpenZcash, ZecHub and ZcashInfo reachable", () => {
+    vi.stubEnv("ZARVIS_PROVIDER", "xai");
+    const config = zarvisConfig();
+    const domains = (scope: Parameters<typeof providerSearchTool>[1]) => (providerSearchTool(config, scope) as { filters: { allowed_domains: string[] } }).filters.allowed_domains;
+    for (const scope of Object.keys(GROK_SEARCH_DOMAINS) as Array<keyof typeof GROK_SEARCH_DOMAINS>) {
+      expect(domains(scope)).toHaveLength(5); expect(new Set(domains(scope)).size).toBe(5);
+      for (const domain of domains(scope)) expect(SEARCH_DOMAINS).toContain(domain);
+    }
+    expect(domains("general")).toEqual(expect.arrayContaining(["openzcash.org", "zechub.wiki", "z.cash", "zips.z.cash", "forum.zcashcommunity.com"]));
+    expect(domains("governance")).toEqual(expect.arrayContaining(["openzcash.org", "forum.zcashcommunity.com", "zfnd.org", "electriccoin.co"]));
+    expect(domains("news")).toEqual(expect.arrayContaining(["electriccoin.co", "zfnd.org"]));
+    expect(domains("mining")).toContain("zcashinfo.com");
+    vi.stubEnv("ZARVIS_PROVIDER", "openai");
+    expect((providerSearchTool(zarvisConfig(), "governance") as { filters: { allowed_domains: string[] } }).filters.allowed_domains).toEqual(SEARCH_DOMAINS);
   });
   it("does not silently switch providers or reuse the OpenAI key when a Grok key is absent", () => {
     vi.stubEnv("ZARVIS_PROVIDER", "xai"); vi.stubEnv("XAI_API_KEY", ""); vi.stubEnv("OPENAI_API_KEY", "openai-test");

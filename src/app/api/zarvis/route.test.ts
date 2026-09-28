@@ -97,7 +97,7 @@ describe("Zarvis API", () => {
     expect(lines[4]).toMatchObject({ route: "rejected", outcome: "quota", modelCalls: 0, errorClass: null });
     expect(lines[5]).toMatchObject({ route: "rejected", outcome: "forbidden" });
     for (const line of lines) {
-      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "modelCalls", "ms", "outcome", "outputTokens", "route", "webSearchCalls"]);
+      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "modelCalls", "ms", "outcome", "outputTokens", "repairRounds", "route", "webSearchCalls"]);
       expect(typeof line.ms).toBe("number"); expect(Number.isNaN(Date.parse(String(line.at)))).toBe(false);
     }
     expect(JSON.stringify(lines)).not.toMatch(/shielded|Compare|sk-secret|provider body|openzcash\.org/);
