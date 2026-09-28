@@ -21,6 +21,8 @@ Auto and Quick use reviewed text or validated public-data formatting for the com
 
 Reviewed fact/navigation topics have English and Portuguese text. Numbered ZIP abstracts are quoted in their original language, explicitly labeled as English in Portuguese answers. They are not model translations or technical analyses.
 
+The language of a direct answer is the language of the question, decided by `src/lib/zarvis/language.ts` (function-word majority, previous-turn fallback, explicit stored preference first), not by the pattern that matched: "Quais são os saldos do ZCG?", "Uma IVK identifica o remetente?", "Onde encontro carteiras Zcash?" and "Saldo do Lockbox" answer in Portuguese, while "and the Lockbox?" after a Portuguese question answers in English. A Spanish or French question matches no direct pattern and goes to the model. Direct answers arrive with `provenance.route = "local"` and `model = null`, and the chat labels them "Direct from OpenZcash data · no AI" / "Direto dos dados OpenZcash · sem IA".
+
 ## Context
 
 Supported follow-ups retain the known subject: “e em 2025?” keeps the ledger program and project; “e o Lockbox?” switches the fund; “and how old are the data?” keeps the fund and restates its dated stamps; “when was it created?” keeps the exact ZIP number. Greetings, thanks and supported EN/PT, USD and brief-response preferences do not erase that subject. Explicit stored preferences are respected.
@@ -37,9 +39,9 @@ An unrecognized earlier user instruction keeps the conversation on model synthes
 
 ## Verification
 
-The direct orchestration suite runs the real local planner with public-reader fixtures and a provider mock that throws on any unexpected billed request. It verifies zero client creation, zero model/search calls and zero tokens, completion and citations, supported context, malformed/missing data, and intentional model fallback for unsupported or Deep requests.
+The direct orchestration suite runs the real local planner with public-reader fixtures and a provider mock that throws on any unexpected billed request. It verifies zero client creation, zero model/search calls and zero tokens, completion and citations, supported context, malformed/missing data, intentional model fallback for unsupported or Deep requests, Portuguese output for twelve Portuguese phrasings (treasury, price, ZIP, ledger and FAQ) with local provenance, cross-language follow-ups, and a Spanish question reaching the model.
 
-Run `npx vitest run src/lib/zarvis/direct-intent.test.ts src/lib/zarvis/direct-data.test.ts src/lib/zarvis/direct-orchestration.test.ts src/lib/zarvis/local.test.ts src/lib/zarvis/openai.test.ts`.
+Run `npx vitest run src/lib/zarvis/direct-intent.test.ts src/lib/zarvis/direct-data.test.ts src/lib/zarvis/direct-orchestration.test.ts src/lib/zarvis/local.test.ts src/lib/zarvis/openai.test.ts src/lib/zarvis/language.test.ts src/lib/zarvis/provenance.test.ts`.
 
 Live verification uses synthetic questions against the loopback preview with counts-only development diagnostics. Diagnostics contain no questions, answers, IPs or credentials and remain disabled in production. A fast reply alone is not proof of zero model usage.
 

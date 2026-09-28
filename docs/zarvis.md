@@ -1,6 +1,16 @@
 # Zarvis
 
-Zarvis is the OpenZcash AI guide: `/zarvis`, the navigation entry, and a floating conversation on public workspace pages. The UI follows OpenZcash's light and dark themes. Answers follow the language of the question.
+Zarvis is the OpenZcash AI guide: `/zarvis`, the navigation entry, and a floating conversation on public workspace pages. The UI follows OpenZcash's light and dark themes. Answers follow the language of the question; the interface itself stays in English.
+
+## Language selection (2026-09-28)
+
+The interface is English by design (placeholder, starters, statuses, buttons, privacy text); it says so where it matters: the composer reads "Ask Zarvis about Zcash, in any language…" and the welcome screen states that Zarvis answers in Portuguese, Spanish, English and more. No string table or locale toggle exists, and page chrome is not translated.
+
+Answers follow the question. `src/lib/zarvis/language.ts` decides the answer language for every deterministic block with one detector: an explicit stored preference ("Responda em português" / "Answer in English") wins; otherwise the latest user turn whose function words give a strict majority for one language (como, onde, quais, são, saldo, dados, que, de/do/da, um/uma, o/os/as, para, com, não, e, em, … versus what, how, the, is, and, in, price, …; Spanish and French word lists exist only so that "¿Cuál es el precio actual de ZEC?" is never read as Portuguese); wordless turns such as "2025" or "ZIP 317" inherit the previous user turn's language; the default is English. The same flag drives direct answers, reviewed FAQ text, calculator blocks and the grounding fallbacks on the model path, so an answer is never mixed-language. Deterministic templates exist only in English and Portuguese: a question in another language has no direct template and goes to the model, whose instructions still say to reply in the user's language; a stored `es`/`fr` preference disables the direct route entirely for the same reason.
+
+## Provenance badges (2026-09-28)
+
+Every `done` event carries `provenance`: `route` (`local` or `model`), `model` (the configured model id for model answers, `null` for direct answers), `webSearch` (a hosted search ran), `groundingFallback` (unsupported figures were replaced), `withheldFigures` (how many; never the text) and `language` (`en`/`pt`, the language of the deterministic parts). Under each answer the chat renders one badge in the answer's language: "Direct from OpenZcash data · no AI" / "Direto dos dados OpenZcash · sem IA" for the zero-cost route, or "Grok 4.7 · 3 sources · check them" / "Grok 4.7 · 3 fontes · confira" (plus "web search" / "busca na web" when a search ran) for model answers; the model name comes from the done event's model id, falling back to the provider label from `GET /api/zarvis`. When a grounding fallback fired, a visible notice says "Some figures could not be verified and were left out" / "Alguns valores não puderam ser verificados e foram omitidos". Retrieval stamps in the sources drawer are printed in UTC. The badge labels the route, not the correctness of the answer; "Zarvis can make mistakes" still applies to both routes.
 
 ## Enable
 

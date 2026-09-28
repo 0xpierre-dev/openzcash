@@ -58,7 +58,8 @@ describe("Zarvis local-first orchestration", () => {
     expect(mocks.create).toHaveBeenCalledTimes(1);
     expect(mocks.lookup).not.toHaveBeenCalled();
     expect(metrics).toMatchObject({ inputTokens: 100, cachedInputTokens: 40, outputTokens: 20, webSearchCalls: 0 });
-    expect(emitted.at(-1)).toEqual({ type: "done", sources: [source] });
+    expect(emitted.at(-1)).toEqual({ type: "done", sources: [source], provenance: { route: "model", model: "gpt-6-astra", webSearch: false, groundingFallback: false, withheldFigures: 0, language: "en" } });
+    expect(mocks.create.mock.calls[0][0].instructions).toContain("Reply in the user's language");
   });
   it("fetches additional public evidence, retaining provenance and citations", async () => {
     const source = { title: "Treasury", url: "https://openzcash.org/zcg/treasury-calculator", retrievedAt: "2026-09-25T12:00:00Z" };
@@ -72,7 +73,7 @@ describe("Zarvis local-first orchestration", () => {
       expect(options.signal).toBeInstanceOf(AbortSignal); expect(params).not.toHaveProperty("previous_response_id");
     }
     expect(JSON.stringify(mocks.create.mock.calls[1][0].input)).toContain("2026-09-16");
-    expect(emitted.at(-1)).toEqual({ type: "done", sources: [source] });
+    expect(emitted.at(-1)).toMatchObject({ type: "done", sources: [source], provenance: { route: "model", model: "gpt-6-astra" } });
   });
   it("retrieves a missing ZIP passage internally without adding hosted search", async () => {
     mocks.zips.mockResolvedValue({ content: '{"data":{"kind":"official_zip_catalog","stale":false}}', source: { title: "ZIP catalog", url: "https://zips.z.cash/", retrievedAt: "2026-09-28T00:00:00Z" } });
@@ -92,10 +93,12 @@ describe("Zarvis local-first orchestration", () => {
     mocks.config.mockReturnValue({ provider: "xai", apiKey: "unit-test-not-a-key", model: "grok-4.7", webSearch: true });
     mocks.prepare.mockResolvedValue({ query: "latest ZIP", documents: [], evidence: [], external: true });
     mocks.create.mockResolvedValueOnce(events([{ type: "web_search_call" }, answer("The official catalog does not establish publication order.")]));
-    const metrics = await generateAnswer(question, new AbortController().signal, () => {});
+    const emitted: ZarvisEvent[] = [];
+    const metrics = await generateAnswer(question, new AbortController().signal, (e) => emitted.push(e));
     expect(mocks.create.mock.calls[0][0].max_turns).toBe(2);
     expect(mocks.create.mock.calls[0][0].tools.find((t: { type: string }) => t.type === "web_search")).toMatchObject({ filters: { allowed_domains: ["zips.z.cash"] } });
     expect(metrics.webSearchCalls).toBe(1);
+    expect(emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", model: "grok-4.7", webSearch: true } });
   });
   it("passes mining sources to the first research round and preserves their citations", async () => {
     mocks.config.mockReturnValue({ provider: "xai", apiKey: "unit-test-not-a-key", model: "grok-4.7", webSearch: true });
@@ -186,7 +189,28 @@ describe("Zarvis local-first orchestration", () => {
     const metrics = await generateAnswer(question, new AbortController().signal, (e) => emitted.push(e));
     expect(JSON.stringify(emitted)).not.toContain("999 billion");
     expect(metrics.groundingFallbacks).toBe(1);
-    expect(emitted.at(-1)?.type).toBe("done");
+    expect(emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", groundingFallback: true, withheldFigures: 1, language: "en" } });
+  });
+  it("writes the grounding fallback in the question's language, with the withheld count and no withheld text", async () => {
+    mocks.prepare.mockResolvedValue({ documents: [], evidence: [{ content: JSON.stringify({ data: { quote: { usd: 100 } } }) }], external: false });
+    mocks.create.mockResolvedValueOnce(events([answer("O ZEC vale $999 bilhões e subiu 500%.")]));
+    const emitted: ZarvisEvent[] = [];
+    await generateAnswer([{ role: "user", content: "Como está o ZEC comparado ao ano passado?" }], new AbortController().signal, (e) => emitted.push(e));
+    expect(emitted.find((e) => e.type === "replace")).toMatchObject({ text: expect.stringContaining("Não consegui validar") });
+    expect(emitted.at(-1)).toMatchObject({ type: "done", provenance: { groundingFallback: true, withheldFigures: 2, language: "pt" } });
+    expect(JSON.stringify(emitted)).not.toMatch(/999|500%/);
+  });
+  it("keeps the deterministic scenario block in Portuguese for a Portuguese analytical question without keyword shortcuts", async () => {
+    const scenario = computeScenario({ years: 20, priceMultiple: 20 }, {}, { price: { usd: 100, stale: false, quotedAt: "2026-09-27T12:00:00Z" }, supply: { zec: 16945106, stale: false, quotedAt: "2026-09-27T12:00:00Z" }, chain: { height: 3492985 }, funds: { zcg: null, lockbox: null } });
+    mocks.scenario.mockResolvedValue({ content: JSON.stringify({ data: scenario }), scenario });
+    mocks.create.mockResolvedValueOnce(events([call("scenario-pt", '{"years":20}', "calculate_openzcash_treasury")])).mockResolvedValueOnce(events([answer("A valorização não é caixa disponível.")]));
+    const emitted: ZarvisEvent[] = [];
+    await generateAnswer([{ role: "user", content: "Analise as limitações dessa tesouraria comunitária se o ZEC subir 20 vezes. Sugira um teste de sensibilidade." }], new AbortController().signal, (e) => emitted.push(e));
+    const result = emitted.find((e) => e.type === "replace");
+    expect(result).toMatchObject({ text: expect.stringContaining("compra única") });
+    expect(result).toMatchObject({ text: expect.stringContaining("### Análise") });
+    expect(result).not.toMatchObject({ text: expect.stringContaining("one purchase") });
+    expect(emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", language: "pt" } });
   });
   it("accepts the site's derived treasury arithmetic without any fallback", async () => {
     mocks.prepare.mockResolvedValue({ documents: [], evidence: treasuries(), external: false });

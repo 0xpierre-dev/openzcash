@@ -5,7 +5,8 @@ import { systemPrompt } from "./prompt";
 import { lookupPublicData, lookupTool } from "./data";
 import { ledgerTool } from "./ledger";
 import { zipTool, lookupZips } from "./zips";
-import { prepareLocal, lookupLedger, type Evidence, portuguese, ledgerFactsAnswer } from "./local";
+import { prepareLocal, lookupLedger, type Evidence, ledgerFactsAnswer } from "./local";
+import { answerLanguage } from "./language";
 import { lookupScenario, scenarioTool, scenarioAnswer } from "./scenario";
 import { sessionPreferences, type ZarvisSession } from "./session";
 import { isFinancialEvidence, unsupportedAmounts, ledgerComparisonEvidence, ledgerComparisonAnswer } from "./grounding";
@@ -13,7 +14,7 @@ import { answerPlan, type ResponseDepth } from "./depth";
 import { researchScope } from "./research-scope";
 import { providerClient, providerOptions, providerSearchTool } from "./provider";
 import { citedSources, renderResponse } from "./answer";
-import type { ChatMessage, ZarvisEvent, ZarvisSource } from "./types";
+import type { AnswerProvenance, ChatMessage, ZarvisEvent, ZarvisSource } from "./types";
 
 export type GenerationMetrics = { route: "local" | "model"; provider: string; model: string; modelCalls: number; localLookups: number; webSearchCalls: number; inputTokens: number; cachedInputTokens: number; outputTokens: number; usageReported: boolean; groundingFallbacks?: number; depth?: "quick" | "deep"; reasoningEffort?: "low" | "medium" | "high" };
 const researchTool: Tool = {
@@ -23,10 +24,10 @@ const researchTool: Tool = {
 function researchRequest(args: string): boolean {
   try { const value = JSON.parse(args); return Object.keys(value).length === 1 && ["missing_local_evidence", "stale_evidence", "current_external_fact"].includes(value.reason); } catch { return false; }
 }
-function finish(text: string, candidates: ZarvisSource[], emit: (event: ZarvisEvent) => void) {
+function finish(text: string, candidates: ZarvisSource[], provenance: AnswerProvenance, emit: (event: ZarvisEvent) => void) {
   emit({ type: "replace", text });
   const consulted = [...citedSources(text, candidates), ...candidates.filter((source) => source.retrievedAt)];
-  emit({ type: "done", sources: [...new Map(consulted.map((source) => [source.url, source])).values()].slice(0, 20) });
+  emit({ type: "done", sources: [...new Map(consulted.map((source) => [source.url, source])).values()].slice(0, 20), provenance });
 }
 export async function generateAnswer(messages: ChatMessage[], signal: AbortSignal, emit: (event: ZarvisEvent) => void, priorSession: ZarvisSession = {}, depth: ResponseDepth = "auto"): Promise<GenerationMetrics> {
   const config = zarvisConfig();
@@ -34,8 +35,11 @@ export async function generateAnswer(messages: ChatMessage[], signal: AbortSigna
   const session = sessionPreferences(priorSession, messages);
   const local = await prepareLocal(messages, signal, session);
   const evidence = [...local.evidence];
-  const pt = session.language ? session.language === "pt" : portuguese(messages);
-  const complete = (answer: string, candidates: ZarvisSource[]) => { emit({ type: "session", session }); finish(answer, candidates, emit); };
+  const pt = answerLanguage(messages, session) === "pt";
+  let withheldFigures = 0;
+  // Provenance is read when the answer completes, after routing, searches and numeric checks are known.
+  const provenance = (): AnswerProvenance => ({ route: metrics.route, model: metrics.route === "model" ? config.model : null, webSearch: metrics.webSearchCalls > 0, groundingFallback: (metrics.groundingFallbacks ?? 0) > 0, withheldFigures, language: pt ? "pt" : "en" });
+  const complete = (answer: string, candidates: ZarvisSource[]) => { emit({ type: "session", session }); finish(answer, candidates, provenance(), emit); };
   signal.throwIfAborted();
   const metrics: GenerationMetrics = { depth: plan.depth, reasoningEffort: plan.effort, route: local.direct ? "local" : "model", provider: config.provider, model: config.model, modelCalls: 0, localLookups: local.evidence.length, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, usageReported: false };
   const candidates: ZarvisSource[] = [...local.documents.map(({ title, url, retrievedAt }) => ({ title, url, ...(retrievedAt ? { retrievedAt } : {}) })), ...local.evidence.flatMap((item) => item.source ? [item.source] : [])];
@@ -95,8 +99,9 @@ export async function generateAnswer(messages: ChatMessage[], signal: AbortSigna
     const calls = result.output.filter((item) => item.type === "function_call");
     if (!calls.length) {
       if (!text.trim()) throw new Error("EMPTY_RESPONSE");
-      if (isFinancialEvidence(evidence) && unsupportedAmounts(text, evidence).length) {
-        metrics.groundingFallbacks = 1;
+      const unsupported = isFinancialEvidence(evidence) ? unsupportedAmounts(text, evidence) : [];
+      if (unsupported.length) {
+        metrics.groundingFallbacks = 1; withheldFigures = unsupported.length;
         const ledgers = evidence.flatMap((item) => {
           try { const data = JSON.parse(item.content).data; const answer = data?.filters ? ledgerFactsAnswer(data, pt) : undefined; return answer ? [answer] : []; } catch { return []; }
         });

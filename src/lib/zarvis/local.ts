@@ -12,6 +12,7 @@ import { directIntent, normalizeQuestion } from "./direct-intent";
 import { faqAnswer } from "./direct-faq";
 import { treasuryAnswer, numberedZipAnswer } from "./direct-data";
 import { sessionPreferences, type ZarvisSession } from "./session";
+import { answerLanguage } from "./language";
 export { directIntent, normalizeQuestion } from "./direct-intent";
 
 export type Evidence = { content: string; source?: ZarvisSource };
@@ -23,18 +24,6 @@ export function retrievalQuestion(messages: ChatMessage[]): string {
     return `${messages.slice(-3, -1).map((m) => m.content.slice(0, 900)).join("\n")}\n${latest}`;
   }
   return latest;
-}
-export function portuguese(messages: ChatMessage[]): boolean {
-  const last = normalizeQuestion(messages.at(-1)?.content ?? "");
-  if (/\b(?:qual|quanto|preco|cotacao|hoje|agora|em|e|sim|explique|pagou|ola|oi|obrigado|obrigada|valeu)\b/.test(last)) return true;
-  if (/\b(?:what|how|price|today|and|yes|in|for)\b/.test(last)) return false;
-  for (const message of messages.slice(0, -1).reverse()) {
-    if (message.role !== "user") continue;
-    const previous = normalizeQuestion(message.content);
-    if (/\b(?:what|how|price|today|and|yes|in|for)\b/.test(previous)) return false;
-    if (/\b(?:qual|quanto|preco|cotacao|pagou|em|sim)\b/.test(previous)) return true;
-  }
-  return false;
 }
 const validDate = (value: string | null) => !!value && Number.isFinite(Date.parse(value)) && Date.parse(value) <= Date.now() + 60_000;
 const validAmount = (value: string) => typeof value === "string" && /^-?\d+(?:\.\d+)?$/.test(value) && Number.isFinite(Number(value)) && Math.abs(Number(value)) <= Number.MAX_SAFE_INTEGER / 100;
@@ -111,7 +100,8 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
   const session = sessionPreferences(priorSession, messages);
   const compatible = (!session.language || session.language === "en" || session.language === "pt") && (!session.currency || session.currency === "USD") && session.detail !== "detailed";
   const intent = compatible ? directIntent(messages) : undefined;
-  const pt = session.language ? session.language === "pt" : portuguese(messages);
+  // One detector for every deterministic block, so a direct answer, FAQ or calculator block is never mixed-language.
+  const pt = answerLanguage(messages, session) === "pt";
   const query = intent?.type === "zip" ? `ZIP ${intent.number}` : intent?.type === "latest_zip" ? "What is the latest ZIP?" : retrievalQuestion(messages);
   if (intent?.type === "courtesy" || intent?.type === "preference") {
     const direct = intent.type === "courtesy" ? intent.thanks ? (pt ? "De nada!" : "You're welcome!") : (pt ? "Olá! Sou o Zarvis. Posso ajudar com Zcash e os dados públicos do OpenZcash." : "Hi! I'm Zarvis. I can help with Zcash and OpenZcash's public data.")

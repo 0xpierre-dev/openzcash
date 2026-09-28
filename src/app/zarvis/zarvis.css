@@ -42,7 +42,8 @@
 .zarvis-messages:has(.zarvis-welcome) { display: flex; align-items: center; justify-content: center; }
 .zarvis-welcome { padding: 28px 18px; width: 100%; text-align: center; }
 .zarvis-hero-mark { color: var(--accent); width: 124px; height: 124px; margin: 0; box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--line-strong); }
-.zarvis-welcome h2 { font-size: clamp(25px, 2.8vw, 34px); line-height: 1.25; letter-spacing: -.04em; font-weight: 550; margin: 0 0 28px; }
+.zarvis-welcome h2 { font-size: clamp(25px, 2.8vw, 34px); line-height: 1.25; letter-spacing: -.04em; font-weight: 550; margin: 0 0 12px; }
+.zarvis-welcome-note { margin: 0 auto 24px; max-width: 420px; font-size: 12px; line-height: 1.5; color: var(--muted); }
 .zarvis-starters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .zarvis-starters button { color: var(--muted); background: transparent; border: 1px solid var(--line-strong); border-radius: 24px; padding: 10px 14px; text-align: center; font-size: 12px; cursor: pointer; transition: background .15s; }
 .zarvis-starters button:hover { color: var(--ink); background: var(--surface2); }
@@ -102,6 +103,10 @@
 .zarvis-notice { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 0 8px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .zarvis-notice button { font-weight: 600; text-decoration: underline; }
 .zarvis-incomplete { color: var(--dim); font-size: 10px; }
+.zarvis-provenance { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 10px; font-size: 11px; line-height: 1.5; }
+.zarvis-provenance-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); background: var(--surface2); }
+.zarvis-provenance-local { color: var(--accent-ink); }
+.zarvis-provenance-notice { color: var(--ink); font-weight: 500; }
 .zarvis-launcher { position: fixed; right: 24px; bottom: calc(var(--zarvis-footer-height, 90px) + 16px); z-index: 24; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 30px; background: var(--surface); color: var(--ink); box-shadow: 0 4px 18px #00000012; padding: 9px 17px 9px 11px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .zarvis-launcher svg { width: 27px; height: 27px; color: var(--accent); }
 .zarvis-launcher:hover { background: var(--surface2); }
@@ -163,7 +168,7 @@
 .zarvis-hero-figure { width: 210px; height: 200px; }
 .zarvis-companion .zarvis-motion { right: 5px; bottom: 8px; }
 .zarvis-welcome { padding-top: 18px; padding-bottom: 18px; }
-.zarvis-welcome h2 { margin-bottom: 22px; }
+.zarvis-welcome h2 { margin-bottom: 10px; }
 .zarvis-answer-figure { width: 144px; height: 137px; }
 .zarvis-chat-compact .zarvis-message-assistant { grid-template-columns: 108px minmax(0, 1fr); gap: 8px 12px; }
 .zarvis-chat-compact .zarvis-message-assistant .zarvis-message-body { display: contents; }
@@ -244,7 +249,7 @@
   .zarvis-message-assistant .zarvis-message-body > :not(.zarvis-message-heading) { grid-column: 1 / -1; }
   .zarvis-hero-figure { width: 166px; height: 158px; }
   .zarvis-companion { margin-bottom: 10px; }
-  .zarvis-welcome h2 { margin-bottom: 18px; }
+  .zarvis-welcome h2 { margin-bottom: 8px; }
   .zarvis-studio-header { flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .zarvis-iteration-grid { gap: 10px; }
   .zarvis-iteration-card > header { padding: 13px 12px 0; flex-wrap: wrap; gap: 6px; }
