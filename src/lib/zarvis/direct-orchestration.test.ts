@@ -8,6 +8,7 @@ vi.mock("./ledger", async original => ({ ...await original<object>(), queryLedge
 vi.mock("./zips", async original => ({ ...await original<object>(), getZipCorpus: mocks.zip }));
 import { generateAnswer } from "./openai";
 import { bundledZipCorpus } from "./knowledge";
+import { STARTERS } from "./sources";
 import type { ZarvisEvent, ChatMessage } from "./types";
 import type { ZarvisSession } from "./session";
 import type { ResponseDepth } from "./depth";
@@ -40,6 +41,9 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     ["Qual é o preço do ZEC?"], ["How much has ZCG paid in grants?"],
     ["How much did coinholders pay in grants to Zingo in 2024?", "e em 2025?"],
     ["What does ZCG hold?", "e o Lockbox?"], ["What are the ZCG and Lockbox balances?"],
+    ["What do the latest ZCG and Lockbox balances tell us, and how old are the data?"],
+    ["What are the ZCG and Lockbox balances?", "and how old are the data?"],
+    ["Quais são os saldos atuais do ZCG e do Lockbox, e de quando são os dados?"],
     ["What is ZIP 317?", "When was it created?"], ["What is the latest ZIP?", "and ZIP 32?"],
     ["What is a viewing key?", "Can it spend my ZEC?"], ["Olá"], ["Obrigado"],
     ["Responda em português", "What is Zcash?"], ["Use USD", "ZEC price"], ["Be brief", "What is ZCG?"],
@@ -48,6 +52,14 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     expect(result.metrics).toMatchObject({ route: "local", modelCalls: 0, inputTokens: 0, outputTokens: 0, webSearchCalls: 0 });
     expect(mocks.client).not.toHaveBeenCalled(); expect(mocks.create).not.toHaveBeenCalled();
     expect(result.text).toBeTruthy(); expect(result.text).not.toMatch(/NaN|undefined/); expect(result.emitted.at(-1)?.type).toBe("done");
+  });
+  it("answers the treasuries starter locally with dated, aged figures instead of the grounding fallback", async () => {
+    const starter = STARTERS.find((s) => s.label === "Explore the treasuries");
+    const result = await run([user(starter!.question)]);
+    expect(result.metrics).toMatchObject({ route: "local", modelCalls: 0 });
+    expect(result.text).toMatch(/Report dated .*\(\d+ days? ago\)/); expect(result.text).toContain("Estimated combined gross value");
+    expect(result.text).not.toContain("could not validate");
+    expect(result.emitted.at(-1)).toMatchObject({ type: "done", sources: expect.arrayContaining([expect.objectContaining({ url: "https://openzcash.org/lockbox" })]) });
   });
   it("respects stored Portuguese and preserves source links", async () => {
     const result = await run([user("What is Zcash?")], { language: "pt", currency: "USD", detail: "brief" });

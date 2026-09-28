@@ -23,7 +23,9 @@ function decimal(raw: string) {
   const token = raw.replace(/[\s\u00a0]/g, "");
   const lastDot = token.lastIndexOf("."), lastComma = token.lastIndexOf(",");
   let separator = "";
-  if (lastDot >= 0 && lastComma >= 0) separator = lastDot > lastComma ? "." : ",";
+  // A leading zero is never a thousands group: "0.125" and "0,125" are fractions, not 125.
+  if (/^-?0[.,]\d+$/.test(token)) separator = lastDot >= 0 ? "." : ",";
+  else if (lastDot >= 0 && lastComma >= 0) separator = lastDot > lastComma ? "." : ",";
   else if (/[.,]\d{1,2}$/.test(token) || /[.,]\d{4,}$/.test(token)) separator = lastDot >= 0 ? "." : ",";
   const normalized = separator ? token.slice(0, token.lastIndexOf(separator)).replace(/[.,]/g, "") + "." + token.slice(token.lastIndexOf(separator) + 1) : token.replace(/[.,]/g, "");
   return { value: Number(normalized), decimals: separator ? token.length - token.lastIndexOf(separator) - 1 : 0 };
@@ -38,7 +40,8 @@ function visibleText(node: Nodes): string {
 export function unsupportedAmounts(answer: string, evidence: Evidence[]): string[] {
   const facts = numericFacts(evidence);
   const clean = visibleText(fromMarkdown(answer)).replace(/\u2212/g, "-");
-  const claims = clean.matchAll(/(?:(US\$|R\$|\$|USD|BRL)\s*)?(-?\d[\d.,]*)(?:\s*(billion|bilhoes|bilhões|million|milhoes|milhões|thousand|mil|[kmb])(?![a-z]))?(?:\s*(USD|BRL|ZEC|%))?/gi);
+  // A number ends in a digit, so sentence punctuation is never read as a separator ("$1,593.38." is 1,593.38).
+  const claims = clean.matchAll(/(?:(US\$|R\$|\$|USD|BRL)\s*)?(-?\d(?:[\d.,]*\d)?)(?:\s*(billion|bilhoes|bilhões|million|milhoes|milhões|thousand|mil|[kmb])(?![a-z]))?(?:\s*(USD|BRL|ZEC|%))?/gi);
   const unsupported: string[] = [];
   for (const match of claims) {
     const unit = match[1] ? (/R\$|BRL/i.test(match[1]) ? "BRL" : "USD") : match[4]?.toUpperCase();

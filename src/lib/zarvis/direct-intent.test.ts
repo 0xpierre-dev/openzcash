@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { directIntent, normalizeQuestion } from "./direct-intent";
+import { STARTERS } from "./sources";
 import type { ChatMessage } from "./types";
 const user = (content: string): ChatMessage => ({ role: "user", content });
 const history = (...questions: string[]) => questions.flatMap((q) => [user(q), { role: "assistant" as const, content: "A sourced answer." }]).slice(0, -1);
@@ -27,7 +28,18 @@ describe("Direct answer coverage and conservative routing", () => {
     ["What does ZCG hold?", "zcg"], ["How much does Lockbox have?", "lockbox"],
     ["What are the current ZCG and Lockbox balances?", "both"], ["Qual é o saldo do ZCG?", "zcg"],
     ["Saldo do Lockbox", "lockbox"], ["ZCG + Lockbox treasury", "both"],
+    ["What do the latest ZCG and Lockbox balances tell us, and how old are the data?", "both"],
+    ["What are the latest ZCG and Lockbox balances, and how old are the data?", "both"],
+    ["How old are the ZCG and Lockbox balances?", "both"], ["How fresh is the Lockbox data?", "lockbox"],
+    ["Latest ZCG and Lockbox balances", "both"], ["What does the ZCG hold?", "zcg"],
+    ["O que os saldos mais recentes do ZCG e do Lockbox nos dizem, e de quando são os dados?", "both"],
+    ["Quais são os saldos atuais do ZCG e do Lockbox, e qual a idade dos dados?", "both"],
+    ["Qual é o saldo atual do Lockbox?", "lockbox"], ["De quando são os saldos do ZCG e do Lockbox?", "both"],
   ])("identifies treasury units and scope: %s", (q, fund) => expect(directIntent([user(q)])).toEqual({ type: "treasury", fund }));
+  it("routes the treasuries starter to the deterministic balances answer", () => {
+    const starter = STARTERS.find((s) => s.label === "Explore the treasuries");
+    expect(directIntent([user(starter!.question)])).toEqual({ type: "treasury", fund: "both" });
+  });
   it.each(["Explain ZIP 317", "What is ZIP-317?", "O que é ZIP 317?", "ZIP 317"])("uses the requested ZIP number: %s", (q) => expect(directIntent([user(q)])).toEqual({ type: "zip", number: 317, overview: true }));
   it.each([
     "ZEC price in BRL", "What is the ZEC price yesterday?", "What is ZEC and is it a good investment?",
@@ -36,6 +48,9 @@ describe("Direct answer coverage and conservative routing", () => {
     "How much did ZCG pay in grants to Zingo excluding reimbursements in 2025?", "What does ZCG hold and can it fund a society?",
     "How much did ZCG pay in grants in 2015?", "How much did ZCG pay in grants in 2101?",
     "Which ZIP is the latest published?", "Is ZIP 259 activated?", "Explain the security proof of ZIP 310", "sim", "yes",
+    "What do the ZCG and Lockbox balances tell us about runway?", "What are the latest ZCG and Lockbox balances, and should we worry?",
+    "How old are the data?", "How old is the ZCG data compared to last month?", "What do the latest ZCG and Lockbox balances tell us, and how old are the data, in EUR?",
+    "O que os saldos do ZCG e do Lockbox nos dizem sobre o futuro?",
   ])("keeps unsupported semantics for the model: %s", (q) => expect(directIntent([user(q)])).toBeUndefined());
   it("does not turn decimal targets into different integers", () => expect(normalizeQuestion("1.5% and 1,5%?")).toBe("1.5% and 1,5%"));
   it("retains ledger program and project on a year follow-up", () => {
@@ -44,6 +59,9 @@ describe("Direct answer coverage and conservative routing", () => {
   });
   it("continues balances, keys, prices and ZIP metadata without guessing a yes", () => {
     expect(directIntent(history("What does ZCG hold?", "e o Lockbox?"))).toEqual({ type: "treasury", fund: "lockbox" });
+    expect(directIntent(history("What are the ZCG and Lockbox balances?", "and how old are the data?"))).toEqual({ type: "treasury", fund: "both" });
+    expect(directIntent(history("What does ZCG hold?", "e de quando são os dados?"))).toEqual({ type: "treasury", fund: "zcg" });
+    expect(directIntent(history("What is Zcash?", "how old are the data?"))).toBeUndefined();
     expect(directIntent(history("What is a viewing key?", "Can it spend my ZEC?"))).toEqual({ type: "faq", id: "key_spend" });
     expect(directIntent(history("What is ZIP 317?", "When was it created?"))).toEqual({ type: "zip", number: 317, overview: false });
     expect(directIntent(history("What is the latest ZIP?", "and ZIP 32?"))).toEqual({ type: "zip", number: 32, overview: true });

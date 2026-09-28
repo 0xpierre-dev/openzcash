@@ -8,6 +8,14 @@ const zcgSchema = z.object({ zec: amount.nullable(), cashUsd: amount.nullable(),
 const lockboxSchema = z.object({ estimatedZec: amount, estimateThroughBlock: z.number().int().positive(), sourceAnchorBlock: z.number().int().positive(), sourceAnchorDate: dated, importedAt: dated, updatesRequired: z.boolean() });
 const quoteSchema = z.object({ cents: z.number().int().positive().max(Number.MAX_SAFE_INTEGER), quotedAt: dated, stale: z.boolean() });
 const time = (s: string, pt: boolean) => new Intl.DateTimeFormat(pt ? "pt-BR" : "en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }).format(new Date(s)) + " UTC";
+/** Age at answer time, so "how old are the data" is answered without the reader subtracting UTC stamps. */
+const age = (s: string, pt: boolean) => {
+  const ms = Date.now() - Date.parse(s);
+  if (ms < 60_000) return pt ? "há menos de um minuto" : "less than a minute ago";
+  const [unit, size] = ([["day", 86_400_000], ["hour", 3_600_000]] as const).find(([, size]) => ms >= size) ?? ["minute", 60_000];
+  return new Intl.RelativeTimeFormat(pt ? "pt-BR" : "en-US", { numeric: "always" }).format(-Math.floor(ms / size), unit);
+};
+const stamp = (s: string, pt: boolean) => `${time(s, pt)} (${age(s, pt)})`;
 const plain = (s: string) => s.replace(/[\\[\]<>*`|]/g, "").replace(/\s+/g, " ").trim();
 
 /** Render only validated fields, never missing values as zero or a report timestamp as a live quote. */
@@ -26,7 +34,7 @@ export function treasuryAnswer(content: string, fund: "zcg" | "lockbox" | "both"
     if (zcg.success) {
       const d = zcg.data;
       lines.push(pt ? `**ZCG — saldo reportado:** ${d.zec === null ? "ZEC não informado" : `${n(d.zec)} ZEC`} + ${d.cashUsd === null ? "caixa em USD não informado" : `${usd(d.cashUsd)} em caixa USD`}.` : `**ZCG — reported holdings:** ${d.zec === null ? "ZEC not reported" : `${n(d.zec)} ZEC`} + ${d.cashUsd === null ? "USD cash not reported" : `${usd(d.cashUsd)} USD cash`}.`);
-      lines.push(pt ? `Relatório de ${time(d.snapshotAt, pt)}; importado em ${time(d.importedAt, pt)}.` : `Report dated ${time(d.snapshotAt, pt)}; imported ${time(d.importedAt, pt)}.`);
+      lines.push(pt ? `Relatório de ${stamp(d.snapshotAt, pt)}; importado em ${stamp(d.importedAt, pt)}.` : `Report dated ${stamp(d.snapshotAt, pt)}; imported ${stamp(d.importedAt, pt)}.`);
       if (d.updatesRequired) lines.push(pt ? "A fonte do ZCG está marcada como precisando de atualização." : "The ZCG source is marked as needing updates.");
       if (d.zec === null || d.cashUsd === null) complete = false;
       else { pools.push(d.zec); cash += d.cashUsd; }
@@ -36,7 +44,7 @@ export function treasuryAnswer(content: string, fund: "zcg" | "lockbox" | "both"
     if (lockbox.success) {
       const d = lockbox.data;
       lines.push(pt ? `**Lockbox — estimativa:** ${n(d.estimatedZec)} ZEC até o bloco **${n(d.estimateThroughBlock)}**.` : `**Lockbox — estimate:** ${n(d.estimatedZec)} ZEC through block **${n(d.estimateThroughBlock)}**.`);
-      lines.push(pt ? `Referência: bloco ${n(d.sourceAnchorBlock)}, relatório de ${time(d.sourceAnchorDate, pt)}. O saldo adiciona acúmulos programados por bloco; não é uma leitura atual de carteira. Saídas posteriores podem exigir reconciliação.` : `Anchor: block ${n(d.sourceAnchorBlock)}, report dated ${time(d.sourceAnchorDate, pt)}. The estimate adds scheduled block accruals; it is not a fresh wallet reading. Later outflows may require reconciliation.`);
+      lines.push(pt ? `Referência: bloco ${n(d.sourceAnchorBlock)}, relatório de ${stamp(d.sourceAnchorDate, pt)}; importado em ${stamp(d.importedAt, pt)}. O saldo adiciona acúmulos programados por bloco até o bloco ${n(d.estimateThroughBlock)} no momento desta resposta; não é uma leitura atual de carteira. Saídas posteriores podem exigir reconciliação.` : `Anchor: block ${n(d.sourceAnchorBlock)}, report dated ${stamp(d.sourceAnchorDate, pt)}; imported ${stamp(d.importedAt, pt)}. The estimate adds scheduled block accruals through block ${n(d.estimateThroughBlock)} as of this answer; it is not a fresh wallet reading. Later outflows may require reconciliation.`);
       if (d.updatesRequired) lines.push(pt ? "A fonte do Lockbox está marcada como precisando de atualização." : "The Lockbox source is marked as needing updates.");
       pools.push(d.estimatedZec);
     } else { complete = false; lines.push(pt ? "A estimativa do Lockbox está indisponível; isso não significa saldo zero." : "The Lockbox estimate is unavailable; this does not mean a zero balance."); }
@@ -46,7 +54,7 @@ export function treasuryAnswer(content: string, fund: "zcg" | "lockbox" | "both"
     const value = (pools.reduce((sum, zec) => sum + Math.round(zec * (q.cents / 100) * 100), 0) + Math.round(cash * 100)) / 100;
     const stale = q.stale || Date.now() - Date.parse(q.quotedAt) >= 600_000;
     if (Number.isFinite(value) && Math.abs(value) <= Number.MAX_SAFE_INTEGER / 100) {
-      lines.push(pt ? `**Valor bruto estimado${fund === "both" ? " combinado" : ""}: ${usd(value)}**, usando ${usd(q.cents / 100)} por ZEC, cotação de ${time(q.quotedAt, pt)}${stale ? " (em cache; não confirmada como atual)" : ""}.` : `**Estimated ${fund === "both" ? "combined " : ""}gross value: ${usd(value)}**, using ${usd(q.cents / 100)} per ZEC, quoted ${time(q.quotedAt, pt)}${stale ? " (cached; not confirmed current)" : ""}.`);
+      lines.push(pt ? `**Valor bruto estimado${fund === "both" ? " combinado" : ""}: ${usd(value)}**, usando ${usd(q.cents / 100)} por ZEC, cotação de ${stamp(q.quotedAt, pt)}${stale ? " (em cache; não confirmada como atual)" : ""}.` : `**Estimated ${fund === "both" ? "combined " : ""}gross value: ${usd(value)}**, using ${usd(q.cents / 100)} per ZEC, quoted ${stamp(q.quotedAt, pt)}${stale ? " (cached; not confirmed current)" : ""}.`);
     }
   } else if (complete) lines.push(pt ? "Não foi possível validar uma cotação em USD para valorar esses saldos." : "A valid USD quote is unavailable for valuing these holdings.");
   lines.push(pt ? "A cotação de mercado não é a cotação do relatório. ZCG e Lockbox têm restrições de gasto separadas; valor bruto não equivale a um único caixa disponível." : "The market quote is not the report's price. ZCG and Lockbox have separate spending restrictions; gross value is not one pool of spendable cash.");

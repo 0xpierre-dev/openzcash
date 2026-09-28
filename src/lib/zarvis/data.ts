@@ -4,7 +4,8 @@ import { terms } from "./sources";
 import { boundedRead } from "./timeout";
 import type { ZarvisSource } from "./types";
 import type { Catalog } from "@/lib/ecosystem/types";
-import type { DevFundReportedData } from "@/lib/treasury/dev-fund";
+import { valueReportedDevFund, type DevFundReportedData } from "@/lib/treasury/dev-fund";
+import { BLOCK_SUBSIDY_ZEC, LOCKBOX_ZEC_PER_BLOCK, MINER_ZEC_PER_BLOCK, THIRD_HALVING_HEIGHT, ZCG_ZEC_PER_BLOCK } from "@/lib/zcash/lockbox";
 
 export const lookupSchema = z.object({
   topic: z.enum(["mining", "price", "treasuries", "markets", "grants", "recipients", "disbursements", "proposals", "coinholder", "zechub", "ecosystem", "news", "funding_history", "site", "meetings", "elections", "totals", "schedule", "investments", "governance", "monthly"]),
@@ -129,6 +130,32 @@ export function treasuryContext(funds: DevFundReportedData) {
   };
 }
 
+/** The footer's arithmetic on the reported figures as typed facts, so an answer quoting it is verifiable; never zero for missing data. */
+export function derivedTreasuryFacts(funds: DevFundReportedData, price: { cents: number } | null, supply: { zec: number } | null) {
+  const usd = price && Number.isInteger(price.cents) && price.cents > 0 ? price.cents / 100 : null;
+  const zcgZec = funds.zcg?.zec ?? null, cash = funds.zcg?.cashUsd ?? null, lockboxZec = funds.lockbox?.zec ?? null;
+  const value = (zec: number | null) => usd !== null && zec !== null && zec >= 0 ? Math.round(zec * usd * 100) / 100 : null;
+  const sum = (a: number | null, b: number | null) => a === null || b === null ? null : Math.round((a + b) * 100) / 100;
+  const share = (part: number | null, whole: number | null) => part === null || whole === null || !(whole > 0) ? null : Math.round(part / whole * 10_000) / 100;
+  const zcgValueUsd = value(zcgZec), lockboxValueUsd = value(lockboxZec), zcgTotalUsd = sum(zcgValueUsd, cash);
+  const combinedZec = zcgZec === null || lockboxZec === null ? null : zcgZec + lockboxZec;
+  const combinedGrossValueUsd = usd === null ? null : valueReportedDevFund(funds, usd);
+  const supplyZec = supply && Number.isFinite(supply.zec) && supply.zec > 0 ? supply.zec : null;
+  return {
+    zcgValueUsd, zcgTotalUsd, lockboxValueUsd, combinedZec, combinedZecValueUsd: sum(zcgValueUsd, lockboxValueUsd), combinedGrossValueUsd,
+    zcgShareOfCombinedPercent: share(zcgZec, combinedZec), lockboxShareOfCombinedPercent: share(lockboxZec, combinedZec),
+    zcgShareOfGrossValuePercent: share(zcgTotalUsd, combinedGrossValueUsd), lockboxShareOfGrossValuePercent: share(lockboxValueUsd, combinedGrossValueUsd),
+    zcgShareOfSupplyPercent: share(zcgZec, supplyZec), lockboxShareOfSupplyPercent: share(lockboxZec, supplyZec), combinedShareOfSupplyPercent: share(combinedZec, supplyZec),
+    note: "Site arithmetic at the market quote: each pool's ZEC × price rounded to cents, like the footer; gross value adds ZCG cash. Not spendable cash and not one pool. Shares of supply use the quoted circulating supply.",
+  };
+}
+const percent = (zec: number) => Math.round(zec / BLOCK_SUBSIDY_ZEC * 100);
+export const BLOCK_SUBSIDY_ALLOCATION = {
+  blockSubsidyZec: BLOCK_SUBSIDY_ZEC, zcgPerBlockZec: ZCG_ZEC_PER_BLOCK, lockboxPerBlockZec: LOCKBOX_ZEC_PER_BLOCK, minerPerBlockZec: MINER_ZEC_PER_BLOCK,
+  zcgPercent: percent(ZCG_ZEC_PER_BLOCK), lockboxPercent: percent(LOCKBOX_ZEC_PER_BLOCK), devFundPercent: percent(ZCG_ZEC_PER_BLOCK + LOCKBOX_ZEC_PER_BLOCK), minerPercent: percent(MINER_ZEC_PER_BLOCK),
+  untilBlock: THIRD_HALVING_HEIGHT, note: "ZIP 1015 block-subsidy split in force through the third halving: protocol rules, not balances.",
+};
+
 async function readPublicData(topic: z.infer<typeof lookupSchema>["topic"], query: string, signal: AbortSignal): Promise<unknown> {
   // Explicit handlers only: no tool-controlled imports, hostnames, SQL or paths.
   if (topic === "mining") return (await import("./mining")).readMiningSnapshot(signal);
@@ -148,7 +175,7 @@ async function readPublicData(topic: z.infer<typeof lookupSchema>["topic"], quer
         import("@/lib/treasury/dev-fund-data"), import("@/lib/pricing/live-price"), import("@/lib/pricing/circulating-supply"),
       ]);
       const [funds, price, supply] = await Promise.all([reportedDevFundData(), currentZecUsdQuote(), currentZecCirculatingSupply()]);
-      return { funds: treasuryContext(funds), price, supply, units: "funds: ZEC and USD; price.cents: USD cents per ZEC; supply.zec: ZEC", note: "The market quote is separate from the source report: do not call it the report price. Preserve reporting dates, estimate block, quote time and stale flags. ZCG and Lockbox have separate spending restrictions." };
+      return { funds: treasuryContext(funds), derived: derivedTreasuryFacts(funds, price, supply), allocation: BLOCK_SUBSIDY_ALLOCATION, price, supply, units: "funds: ZEC and USD; price.cents: USD cents per ZEC; supply.zec: ZEC", note: "The market quote is separate from the source report: do not call it the report price. Preserve reporting dates, estimate block, quote time and stale flags. ZCG and Lockbox have separate spending restrictions." };
     }
     case "markets": return (await (await import("@/app/api/markets/route")).GET()).json();
     case "grants": return (await (await import("@/app/api/zcg/data/grants/route")).GET(request)).json();

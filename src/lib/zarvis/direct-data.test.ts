@@ -38,6 +38,24 @@ describe("Deterministic treasury facts", () => {
   it.each([null, { cents: 10000, quotedAt: null, stale: false }, { cents: 10000, quotedAt: "2200-01-01", stale: false }])("does not price holdings using an invalid quote: %j", (price) => {
     expect(treasuryAnswer(JSON.stringify({ data: { ...data(), price } }), "both", false)).toContain("valid USD quote is unavailable");
   });
+  it("states how old the report, import, anchor and quote are at answer time, in both languages", () => {
+    vi.useFakeTimers({ now: new Date("2026-09-28T12:00:00Z") });
+    try {
+      const d = data();
+      d.funds.zcg.snapshotAt = "2026-09-23T20:16:00Z"; d.funds.zcg.importedAt = "2026-09-28T10:30:00Z";
+      d.funds.lockbox.sourceAnchorDate = "2026-09-23T20:16:00Z"; d.funds.lockbox.importedAt = "2026-09-27T03:00:00Z";
+      d.price.quotedAt = "2026-09-28T11:59:40Z";
+      const content = JSON.stringify({ data: d });
+      const en = treasuryAnswer(content, "both", false);
+      expect(en).toMatch(/Report dated .*\(4 days ago\); imported .*\(1 hour ago\)\./);
+      expect(en).toMatch(/Anchor: block 3,400,000, report dated .*\(4 days ago\); imported .*\(1 day ago\)\./);
+      expect(en).toContain("through block 3,493,051 as of this answer"); expect(en).toMatch(/quoted .*\(less than a minute ago\)\./);
+      expect(en).not.toContain("cached; not confirmed current");
+      const pt = treasuryAnswer(content, "both", true);
+      expect(pt).toMatch(/Relatório de .*\(há 4 dias\); importado em .*\(há 1 hora\)\./);
+      expect(pt).toMatch(/importado em .*\(há 1 dia\)\./); expect(pt).toContain("(há menos de um minuto)");
+    } finally { vi.useRealTimers(); }
+  });
   it("marks cached valuations explicitly and provides Portuguese output", () => {
     const d = data(); d.price.quotedAt = "2026-01-01T00:00:00Z";
     const content = JSON.stringify({ data: d });

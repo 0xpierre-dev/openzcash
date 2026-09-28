@@ -12,6 +12,8 @@ export async function GET() {
       resumesAt: config.quotaPause.until,
       dailyLimit: config.dailyLimit,
       hourlyLimit: config.hourlyLimit,
+      networkDailyLimit: config.networkDailyLimit,
+      networkWindowLimit: config.networkWindowLimit,
     },
   }, { headers: { "Cache-Control": "no-store" } });
 }

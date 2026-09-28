@@ -99,7 +99,7 @@ describe("Zarvis knowledge and data boundary", () => {
 describe("Zarvis shared usage budgets", () => {
   const secret = "a-test-secret-never-a-real-api-key";
   const now = Date.parse("2026-09-25T12:00:00Z");
-  const limits = { dailyLimit: 100, hourlyLimit: 30 };
+  const limits = { dailyLimit: 100, hourlyLimit: 30, networkDailyLimit: 20, networkWindowLimit: 5 };
   it("applies global and network caps without storing the address", () => {
     const buckets = usageBuckets("192.0.2.1", secret, now, limits);
     expect(JSON.stringify(buckets)).not.toContain("192.0.2.1");
@@ -107,6 +107,11 @@ describe("Zarvis shared usage budgets", () => {
     expect(blockedBucket(buckets, new Map([[buckets[0].key, 100]]))?.key).toBe(buckets[0].key);
     expect(blockedBucket(buckets, new Map([[buckets[3].key, 5]]))?.key).toBe(buckets[3].key);
     expect(blockedBucket(buckets, new Map([[buckets[0].key, 99]]))).toBeUndefined();
+  });
+  it("takes the per-network caps from the configuration", () => {
+    const buckets = usageBuckets("192.0.2.1", secret, now, { ...limits, networkDailyLimit: 600, networkWindowLimit: 60 });
+    expect(buckets.map((b) => b.limit)).toEqual([100, 30, 600, 60]);
+    expect(blockedBucket(buckets, new Map([[buckets[3].key, 5]]))).toBeUndefined();
   });
   it("rotates the keyed network digest every day and never exempts new networks from the global cap", () => {
     const a = usageBuckets("192.0.2.1", secret, now, limits);
