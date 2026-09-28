@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({ getDb: vi.fn() }));
 vi.mock("@/lib/db/client", () => ({ getDb: mocks.getDb }));
 import { PgDialect } from "drizzle-orm/pg-core";
 import type { SQL } from "drizzle-orm";
-import { dailyMetrics, flushDaily, latestCanary, percentile, queueDaily, recordCanary, resetStoreForTests, spendTodayUsd, storeState } from "./metrics-store";
+import { dailyMetrics, feedbackReasons, flushDaily, latestCanary, percentile, queueDaily, queueFeedbackReason, recordCanary, resetStoreForTests, spendTodayUsd, storeState } from "./metrics-store";
 
 type Call = { method: string; args: unknown[] };
 type Chain = Record<string, unknown>;
@@ -40,6 +40,17 @@ describe("Durable daily metrics", () => {
     expect(calls.filter((c) => c.method === "onConflictDoUpdate")).toHaveLength(3);
     expect(calls[0].method).toBe("execute");
     expect(storeState()).toMatchObject({ pendingRows: 0, writeFailures: 0 });
+  });
+  it("flushes needs-work reasons per day, route and reason in the same transaction, counts only", async () => {
+    const calls: Call[] = []; mocks.getDb.mockReturnValue(fakeDb([], calls));
+    queueFeedbackReason("model", "wrong_figure"); queueFeedbackReason("model", "wrong_figure"); queueFeedbackReason("local", "outdated");
+    expect(storeState().pendingRows).toBe(2);
+    expect(await flushDaily()).toBe(true);
+    const inserted = calls.filter((c) => c.method === "values").map((c) => c.args[0] as Record<string, unknown>);
+    expect(inserted).toEqual([{ day: "2026-09-28", route: "local", reason: "outdated", count: 1 }, { day: "2026-09-28", route: "model", reason: "wrong_figure", count: 2 }]);
+    expect(storeState().pendingRows).toBe(0);
+    mocks.getDb.mockReturnValue(fakeDb([{ day: "2026-09-28", route: "model", reason: "wrong_figure", count: 2 }]));
+    expect(await feedbackReasons(14)).toEqual([{ day: "2026-09-28", route: "model", reason: "wrong_figure", count: 2 }]);
   });
   it("renders an upsert that adds counters and latency buckets element-wise in array order", async () => {
     const calls: Call[] = []; mocks.getDb.mockReturnValue(fakeDb([], calls));

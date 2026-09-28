@@ -592,6 +592,15 @@ export const zarvisMetricsDaily = pgTable("zarvis_metrics_daily", {
 }, (t) => [primaryKey({ columns: [t.day, t.route] })]);
 
 /** Zarvis canary runs: pass/fail counts and case labels only. */
+/** Why a "Needs work" vote was cast: a fixed reason id per UTC day and route, counts only. */
+export const zarvisFeedbackReasons = pgTable("zarvis_feedback_reasons", {
+  day: date("day").notNull(),
+  route: text("route").notNull(), // "local" | "model"
+  reason: text("reason").notNull(),
+  count: integer("count").notNull().default(0),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [primaryKey({ columns: [t.day, t.route, t.reason] })]);
+
 export const zarvisCanary = pgTable("zarvis_canary", {
   ranAt: timestamp("ran_at", { withTimezone: true }).primaryKey(),
   ok: boolean("ok").notNull(),
