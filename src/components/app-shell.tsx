@@ -344,6 +344,7 @@ export function AppShell({
         </nav>
         <div className="rd-side-foot">
           <Link href="/zcg/methodology">Sources &amp; methodology</Link>
+          <Link href="/zarvis/about">About Zarvis</Link>
           {isPreview ? (
             <a href="https://openzcash.org" target="_blank" rel="noreferrer">
               Current website ↗

@@ -44,6 +44,7 @@
 .zarvis-hero-mark { color: var(--accent); width: 124px; height: 124px; margin: 0; box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--line-strong); }
 .zarvis-welcome h2 { font-size: clamp(25px, 2.8vw, 34px); line-height: 1.25; letter-spacing: -.04em; font-weight: 550; margin: 0 0 12px; }
 .zarvis-welcome-note { margin: 0 auto 24px; max-width: 420px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.zarvis-welcome-note a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
 .zarvis-starters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .zarvis-starters button { color: var(--muted); background: transparent; border: 1px solid var(--line-strong); border-radius: 24px; padding: 10px 14px; text-align: center; font-size: 12px; cursor: pointer; transition: background .15s; }
 .zarvis-starters button:hover { color: var(--ink); background: var(--surface2); }
