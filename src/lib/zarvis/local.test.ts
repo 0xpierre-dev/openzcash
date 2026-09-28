@@ -30,6 +30,49 @@ describe("Precise local answers", () => {
     expect(directIntent([user("Responda em reais e em JSON"), answer("Certo."), user("Qual o preço do ZEC?")])).toBeUndefined();
     expect(directIntent([user("Answer in French"), answer("D'accord."), user("ZCG grant payments in 2025")])).toBeUndefined();
   });
+  it.each(["¿Cuál es el precio del ZEC?", "¿Cuánto vale un ZEC?", "Precio del ZEC", "Cotización del ZEC, por favor"])("recognizes a plain Spanish quote: %s", (q) => expect(directIntent([user(q)])).toEqual({ type: "price" }));
+  it("answers a Spanish quote in Spanish with the same figure, time and link, and a Spanish outage without a number", async () => {
+    vi.useFakeTimers({ now: new Date("2026-09-27T12:05:00Z") });
+    try {
+      const local = await prepareLocal([user("¿Cuál es el precio del ZEC?")], signal());
+      expect(local.direct).toMatch(/^1 ZEC = \*\*USD\s100\.00\*\*\. Cotización del 27 sept 2026, 12:00 p\.m\. UTC\. \[Cotización de OpenZcash\]\(https:\/\/openzcash\.org\/api\/zec-price\)\.$/);
+      expect(mocks.lookup).toHaveBeenCalledTimes(1);
+    } finally { vi.useRealTimers(); }
+    mocks.lookup.mockResolvedValue({ content: JSON.stringify({ data: { quote: { usd: 100, stale: true, quotedAt: "2026-09-27T12:00:00Z" } } }) });
+    expect((await prepareLocal([user("¿Cuánto vale un ZEC?")], signal())).direct).toMatch(/^No pude confirmar la cotización actual\. Última referencia guardada: \*\*USD\s100\.00 por ZEC\*\*/);
+    mocks.lookup.mockResolvedValue({ content: JSON.stringify({ data: { quote: null } }) });
+    const outage = (await prepareLocal([user("Precio del ZEC")], signal())).direct;
+    expect(outage).toContain("La cotización en USD no está disponible"); expect(outage).not.toContain("1 ZEC =");
+  });
+  it("labels the Spanish ledger answer with the same metric, import date and scope", async () => {
+    const result = await prepareLocal([user("¿Cuánto pagó ZCG en grants en 2025?")], signal());
+    expect(result.direct).toMatch(/USD\s123,456\.78/); expect(result.direct).toContain("presupuestados"); expect(result.direct).toContain("coinholders"); expect(result.direct).toContain("Datos importados el 26 sept 2026");
+    mocks.ledger.mockResolvedValue({ ...JSON.parse(result.evidence[0].content).data, paidEntriesMissingUsd: 3 });
+    expect((await prepareLocal([user("¿Cuánto pagó ZCG en grants en 2025?")], signal())).direct).toContain("3 registros pagados no tienen valor en USD; el total es incompleto.");
+    mocks.ledger.mockRejectedValue(new Error("Database unavailable"));
+    expect((await prepareLocal([user("¿Cuánto pagó ZCG en 2025?")], signal())).direct).toContain("no está disponible en este momento. Eso no significa que el total sea cero.");
+  });
+  it("keeps the preceding Spanish for a bare year follow-up and honours a stored Spanish preference", async () => {
+    expect((await prepareLocal([user("¿Cuánto pagó ZCG en grants en 2024?"), answer("Un total."), user("2025")], signal())).direct).toContain("En **2025**, el registro de ZCG");
+    expect((await prepareLocal([user("ZCG grant payments in 2025")], signal(), { language: "es" })).direct).toContain("En **2025**, el registro de ZCG");
+    expect((await prepareLocal([user("ZCG grant payments in 2025")], signal(), { language: "fr" })).direct).toBeUndefined();
+  });
+  it("answers Spanish courtesies and preferences in Spanish", async () => {
+    expect((await prepareLocal([user("¡Hola!")], signal())).direct).toBe("¡Hola! Soy Zarvis. Puedo ayudarte con Zcash y los datos públicos de OpenZcash.");
+    expect((await prepareLocal([user("Muchas gracias")], signal())).direct).toBe("¡De nada!");
+    expect((await prepareLocal([user("Responde en español")], signal())).direct).toBe("Entendido. Responderé en español.");
+    expect((await prepareLocal([user("Responde en inglés")], signal())).direct).toBe("Understood. I'll answer in English.");
+    expect((await prepareLocal([user("Responde en portugués")], signal())).direct).toBe("Combinado. Vou responder em português.");
+    expect((await prepareLocal([user("Usa dólares")], signal())).direct).toBe("Entendido. Usaré USD para los montos monetarios.");
+    expect((await prepareLocal([user("Sé breve")], signal())).direct).toBe("Entendido. Mantendré las respuestas concisas.");
+    expect(mocks.lookup).not.toHaveBeenCalled();
+  });
+  it("acknowledges \"Use dólares\" in Portuguese, because use/usar and dólares are Portuguese too", async () => {
+    expect((await prepareLocal([user("Qual o preço do ZEC?"), answer("US$ 100"), user("Use dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Use dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Usar dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Use USD")], signal())).direct).toBe("Understood. I'll use USD for monetary amounts.");
+  });
   it("keeps source time and USD units in a local quote", async () => {
     const local = await prepareLocal([user("Qual o preço do ZEC?")], signal());
     expect(local.direct).toContain("100,00"); expect(local.direct).toContain("UTC"); expect(local.direct).toContain("/api/zec-price");

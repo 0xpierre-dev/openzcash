@@ -140,7 +140,7 @@ describe("Arborist call lookup", () => {
       sourceUrl: "https://openzcash.org/arborist",
       ...compactData(arboristContext(calls.slice(1), "", meta), "", 5000, 8),
     });
-    const en = arboristAnswer(content, false);
+    const en = arboristAnswer(content, "en");
     expect(en).toContain("**Arborist Call #131**, held on September 10, 2026");
     expect(en).toContain("Moderator: Dodger");
     expect(en).toContain("Agenda: Zaino indexer update; Wallet interop.");
@@ -151,15 +151,35 @@ describe("Arborist call lookup", () => {
       "[Recording](https://www.youtube.com/watch?v=abc123def)",
     );
     expect(en).toContain("not protocol decisions");
-    const pt = arboristAnswer(content, true);
+    const pt = arboristAnswer(content, "pt");
     expect(pt).toContain("realizada em 10 de setembro de 2026");
     expect(pt).toContain("Moderação: Dodger");
     expect(pt).toContain("[Notas](");
+    const es = arboristAnswer(content, "es");
+    expect(es).toContain("**Arborist Call #131**, realizada el 10 de septiembre de 2026.");
+    expect(es).toContain("Moderación: Dodger");
+    expect(es).toContain("Agenda: Zaino indexer update; Wallet interop.");
+    expect(es).toContain("[Notas](https://github.com/ZcashCommunityGrants/arboretum-notes/");
+    expect(es).toContain("[Grabación](https://www.youtube.com/watch?v=abc123def)");
+    expect(es).toContain("[Archivo en OpenZcash](https://openzcash.org/arborist)");
+    expect(es).toContain("no son decisiones de protocolo");
+    expect(es).not.toMatch(/held on|realizada em|Moderator:|Moderação:/);
+    const pendingEs = arboristAnswer(
+      JSON.stringify({
+        ...compactData(arboristContext(calls, "", meta), "", 5000, 8),
+      }),
+      "es",
+    );
+    expect(pendingEs).toContain("#132");
+    expect(pendingEs).toContain("el número es provisional");
+    expect(arboristAnswer("{}", "es")).toBe(
+      "No pude leer el archivo de las Arborist Calls en este momento. [Abrir las Arborist Calls en OpenZcash](https://openzcash.org/arborist).",
+    );
     const pending = arboristAnswer(
       JSON.stringify({
         ...compactData(arboristContext(calls, "", meta), "", 5000, 8),
       }),
-      false,
+      "en",
     );
     expect(pending).toContain("#132");
     expect(pending).toContain("number is provisional");
@@ -184,7 +204,7 @@ describe("Arborist call lookup", () => {
         },
       }),
     ]) {
-      const text = arboristAnswer(content, false);
+      const text = arboristAnswer(content, "en");
       expect(text).toContain("could not be read");
       expect(text).toContain("https://openzcash.org/arborist");
       expect(text).not.toContain("#5");

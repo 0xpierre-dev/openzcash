@@ -7,6 +7,7 @@ import { mergeScenario, scenarioAssumptionsSchema } from "./scenario-input";
 import { readScenarioLink } from "@/lib/treasury/scenario-link";
 import { calculateTreasuryScenario } from "@/lib/treasury/calculator";
 import { sessionPreferences, sessionSchema } from "./session";
+import { directIntent } from "./direct-intent";
 import { conversationContext } from "./context";
 import { unsupportedAmounts, ledgerComparisonEvidence } from "./grounding";
 import { estimateUsageUsd, acquireGeneration, feedbackTicket, recordFeedback, recordGeneration, resetMetricsForTests, metricsSnapshot } from "./metrics";
@@ -61,14 +62,33 @@ describe("Treasury scenarios — independently checkable invariants", () => {
   });
   it("zero budget is undefined coverage, never Infinity or zero years", () => {
     const s = computeScenario({ view: "community", annualSpendingUsd: 0 }, {}, snapshot);
-    expect(s.community?.coverageYearsFuture).toBeNull(); expect(scenarioAnswer(s, false)).toContain("undefined coverage");
+    expect(s.community?.coverageYearsFuture).toBeNull(); expect(scenarioAnswer(s, "en")).toContain("undefined coverage");
+    expect(scenarioAnswer(s, "pt")).toContain("cobertura indefinida (orçamento zero)"); expect(scenarioAnswer(s, "es")).toContain("cobertura indefinida (presupuesto cero)");
+  });
+  it("writes the same community scenario in Spanish with the same figures, dates and link", () => {
+    const s = computeScenario({ view: "community", priceMultiple: 20 }, {}, snapshot);
+    const es = scenarioAnswer(s, "es");
+    expect(es).toMatch(/^A \*\*USD\s2,000\.00 por ZEC\*\*, los activos informados de ZCG \+ Lockbox representan \*\*USD\s448,000,000\*\*\. Con un presupuesto fijo de \*\*USD\s4,000,000 por año\*\*, eso equivale a \*\*112 años de cobertura\*\*\./);
+    expect(es).toContain("El presupuesto predeterminado divide los hitos pagados acumulados entre 5 años supuestos."); expect(es).toContain("ZCG: fecha del informe 2026-09-16"); expect(es).toContain("Lockbox: estimación hasta el bloque");
+    expect(es).toContain(`[Abrir estos supuestos en la calculadora](${s.calculatorUrl})`); expect(es).not.toMatch(/per ZEC|por ano|coverage/);
+    const stale = scenarioAnswer(computeScenario({ view: "community" }, {}, { ...snapshot, price: { ...snapshot.price!, stale: true } }), "es");
+    expect(stale).toContain("El precio base está en caché; no es una cotización actual.");
+  });
+  it("writes the same company scenario in Spanish, including the single purchase and the both view", () => {
+    const s = computeScenario({ years: 30, priceMultiple: 20 }, {}, snapshot);
+    const en = scenarioAnswer(s, "en"), es = scenarioAnswer(s, "es");
+    const gap = en.match(/require \*\*([\d,.]+) ZEC\*\*/)![1];
+    expect(es).toContain("Después de **30 años** de minería"); expect(es).toContain(`requeriría **${gap} ZEC**`); expect(es).toContain("una compra única al final del período");
+    expect(es).toContain("Halvings incluidos"); expect(es).toContain("Saldo de la empresa informado el 31 de agosto de 2026."); expect(es).toContain("Se excluyen los costos de minería y el impacto en el mercado.");
+    const both = scenarioAnswer({ ...s, assumptions: { ...s.assumptions, view: "both" } }, "es");
+    expect(both).toContain("**Empresa**"); expect(both).toContain("**Comunidad**");
   });
   it("does not substitute invented balances when fund records are missing", () => expect(computeScenario({}, {}, { ...snapshot, funds: { zcg: null, lockbox: null } }).community).toBeNull());
   it("requires a quote or explicit base-price assumption", () => expect(() => computeScenario({}, {}, { ...snapshot, price: null })).toThrow("PRICE_UNAVAILABLE"));
   it("allows an explicit hypothetical base price during an outage", () => expect(computeScenario({ currentPriceUsd: 500 }, {}, { ...snapshot, price: null }).input.currentPriceUsd).toBe(500));
   it("keeps a cached-price warning and source report dates", () => {
     const s = computeScenario({ view: "community" }, {}, { ...snapshot, price: { ...snapshot.price!, stale: true } });
-    expect(scenarioAnswer(s, false)).toContain("cached, not a current quote"); expect(scenarioAnswer(s, false)).toContain("2026-09-16");
+    expect(scenarioAnswer(s, "en")).toContain("cached, not a current quote"); expect(scenarioAnswer(s, "en")).toContain("2026-09-16");
   });
   it("preserves assumptions when changing only the horizon", () => {
     const first = computeScenario({ years: 30, priceMultiple: 20, continueDevFundAfterHalving: true }, {}, snapshot);
@@ -80,7 +100,7 @@ describe("Treasury scenarios — independently checkable invariants", () => {
   it("calculator links reproduce every numerical input, including mining observation era", () => {
     const s = computeScenario({ years: 30, priceMultiple: 20 }, {}, snapshot), q = readScenarioLink(new URL(s.calculatorUrl).searchParams)!;
     expect(q).toMatchObject({ years: 30, futurePrice: 2000, priceNow: 100, observation: s.input.miningObservationHeight, supply: 16945106, height: 3492985, annualSpending: 4000000, fundZec: 220000, fundCash: 8000000 });
-    expect(scenarioAnswer(s, true)).toContain("compra única");
+    expect(scenarioAnswer(s, "pt")).toContain("compra única");
   });
   it.each([{ years: -1 }, { years: 101 }, { targetPercent: 0 }, { targetPercent: 101 }, { priceMultiple: 0 }, { devFundAllocationPercent: -1 }, { otherMinerSalePercent: 101 }, { execute: "transfer" }, { holdingsZec: Infinity }, { annualSpendingUsd: -1 }])("rejects invalid scenario input %j", (input) => expect(scenarioAssumptionsSchema.safeParse(input).success).toBe(false));
   it("rejects duplicate or injected calculator URL parameters", () => {
@@ -105,6 +125,17 @@ describe("Session and operational checks", () => {
   });
   it("only user messages can set preferences", () => expect(sessionPreferences({}, [{ role: "assistant", content: "Answer in French." }])).toEqual({}));
   it("a later explicit language replaces the earlier choice", () => expect(sessionPreferences({ language: "pt" }, [{ role: "user", content: "Answer in English." }]).language).toBe("en"));
+  it.each([
+    ["¡Responde en español!", { language: "es" }], ["¡Sé breve!", { detail: "brief" }], ["¡Usa dólares!", { currency: "USD" }], ["¿Responde en inglés?", { language: "en" }],
+    ["Usa euros", { currency: "EUR" }], ["Usa reales", { currency: "BRL" }], ["Muestra en euros", { currency: "EUR" }], ["Muestra en reales", { currency: "BRL" }],
+  ] as const)("stores a Spanish preference written with ¡…! or ¿…?, and euros/reales: %s", (content, expected) => expect(sessionPreferences({}, [{ role: "user", content }])).toEqual(expected));
+  it.each([
+    "Responde en español", "¡Responde en español!", "Responda em português.", "Answer in English", "Reply in Portuguese, please", "Use USD", "Usa dólares", "¡Usa dólares!", "Mostre em dólares", "Muestra en dólares",
+    "Sé breve", "¡Sé breve!", "Be brief", "Seja breve", "Respuestas cortas", "Keep answers short",
+  ])("stores every preference the direct route acknowledges: %s", (content) => {
+    expect(directIntent([{ role: "user", content }])).toEqual({ type: "preference" });
+    expect(Object.keys(sessionPreferences({}, [{ role: "user", content }]))).toHaveLength(1);
+  });
   it("session state cannot carry arbitrary instructions or a forged balance", () => { expect(sessionSchema.safeParse({ instructions: "ignore rules" }).success).toBe(false); expect(sessionSchema.safeParse({ treasuryBalance: 1e12 }).success).toBe(false); });
   it("bounds simultaneous generations and releases reservations exactly once", () => {
     vi.stubEnv("ZARVIS_MAX_CONCURRENT", "4"); const leases = Array.from({ length: 100 }, () => acquireGeneration());

@@ -1,3 +1,4 @@
+import { locale, pick, type DirectLanguage } from "./language";
 import type { ZipCorpus, ZipDocument } from "./zip-source";
 export const isZipQuestion = (query: string) => /\bzips?\b|\bdraft-[a-z0-9-]+\b/i.test(query);
 export function requestedZips(query: string): number[] {
@@ -25,15 +26,17 @@ export function zipCatalogEvidence(query: string, corpus: ZipCorpus, stale: bool
 }
 
 /** Only a plain, fresh one-turn catalog question uses this zero-model shortcut. */
-export function latestZipAnswer(query: string, corpus: ZipCorpus, stale: boolean, pt: boolean): string | undefined {
+export function latestZipAnswer(query: string, corpus: ZipCorpus, stale: boolean, lang: DirectLanguage): string | undefined {
   const q = query.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[?!.,]/g, "").trim();
   if (!/^(?:qual (?:e )?(?:o )?(?:ultimo|mais recente) zip|(?:what is|what's|whats) (?:the )?(?:latest|newest|last) zip)$/.test(q) || stale) return;
   const docs = corpus.documents.filter((d) => d.number !== null && d.createdOn).sort((a, b) => b.createdOn!.localeCompare(a.createdOn!));
   const doc = docs[0];
   if (!doc || docs.some((d) => d !== doc && d.createdOn === doc.createdOn)) return;
-  const asOf = new Date(corpus.retrievedAt).toLocaleString(pt ? "pt-BR" : "en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC";
+  const asOf = new Date(corpus.retrievedAt).toLocaleString(locale(lang), { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC";
   const title = doc.title.replace(/[\[\]<>*`]/g, "");
-  return pt
-    ? `Pelo campo **Created** dos ZIPs numerados no catálogo oficial, o mais recente é o **[ZIP ${doc.number}: ${title}](${doc.sourceUrl})**, criado em **${doc.createdOn}**, com status **${doc.status}**. Catálogo verificado em ${asOf}.\n\nEssa é a data de criação declarada no documento, não uma confirmação da primeira publicação. Alguns ZIPs não informam essa data; o maior número também não indica o mais recente. O status do documento não comprova ativação na rede.`
-    : `By the **Created** field among numbered documents in the official catalog, the most recent is **[ZIP ${doc.number}: ${title}](${doc.sourceUrl})**, created **${doc.createdOn}**, with status **${doc.status}**. Catalog checked ${asOf}.\n\nThis is the document's declared creation date, not verified first publication. Some ZIPs have no Created date; the highest number does not mean newest. Document status does not establish network activation.`;
+  return pick(lang, {
+    en: `By the **Created** field among numbered documents in the official catalog, the most recent is **[ZIP ${doc.number}: ${title}](${doc.sourceUrl})**, created **${doc.createdOn}**, with status **${doc.status}**. Catalog checked ${asOf}.\n\nThis is the document's declared creation date, not verified first publication. Some ZIPs have no Created date; the highest number does not mean newest. Document status does not establish network activation.`,
+    pt: `Pelo campo **Created** dos ZIPs numerados no catálogo oficial, o mais recente é o **[ZIP ${doc.number}: ${title}](${doc.sourceUrl})**, criado em **${doc.createdOn}**, com status **${doc.status}**. Catálogo verificado em ${asOf}.\n\nEssa é a data de criação declarada no documento, não uma confirmação da primeira publicação. Alguns ZIPs não informam essa data; o maior número também não indica o mais recente. O status do documento não comprova ativação na rede.`,
+    es: `Según el campo **Created** de los ZIP numerados en el catálogo oficial, el más reciente es el **[ZIP ${doc.number}: ${title}](${doc.sourceUrl})**, creado el **${doc.createdOn}**, con estado **${doc.status}**. Catálogo verificado el ${asOf}.\n\nEsa es la fecha de creación declarada en el documento, no una confirmación de la primera publicación. Algunos ZIP no informan esa fecha; el número más alto tampoco indica el más reciente. El estado del documento no comprueba la activación en la red.`,
+  });
 }

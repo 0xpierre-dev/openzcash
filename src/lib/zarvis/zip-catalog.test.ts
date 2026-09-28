@@ -30,10 +30,13 @@ describe("ZIP catalog retrieval and date semantics", () => {
     expect(data.selected).toEqual([]); expect(data.missingNumbers).toEqual([99999]);
   });
   it("answers only plain single-intent latest questions directly, with provenance", () => {
-    expect(latestZipAnswer("Qual é o último ZIP?", bundledZipCorpus, false, true)).toMatch(/Created.*259/);
-    expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, false, false)).toContain("not verified first publication");
-    expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, true, false)).toBeUndefined();
-    expect(latestZipAnswer("What is the latest ZIP? Answer in French.", bundledZipCorpus, false, false)).toBeUndefined();
-    expect(latestZipAnswer("What is the latest ZIP and is it activated?", bundledZipCorpus, false, false)).toBeUndefined();
+    expect(latestZipAnswer("Qual é o último ZIP?", bundledZipCorpus, false, "pt")).toMatch(/Created.*259/);
+    expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, false, "en")).toContain("not verified first publication");
+    const es = latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, false, "es")!;
+    expect(es).toMatch(/^Según el campo \*\*Created\*\* de los ZIP numerados en el catálogo oficial, el más reciente es el \*\*\[ZIP 259: /); expect(es).toContain("El estado del documento no comprueba la activación en la red.");
+    expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, true, "es")).toBeUndefined();
+    expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, true, "en")).toBeUndefined();
+    expect(latestZipAnswer("What is the latest ZIP? Answer in French.", bundledZipCorpus, false, "en")).toBeUndefined();
+    expect(latestZipAnswer("What is the latest ZIP and is it activated?", bundledZipCorpus, false, "en")).toBeUndefined();
   });
 });

@@ -53,6 +53,11 @@ describe("Direct answer coverage and conservative routing", () => {
     "O que os saldos do ZCG e do Lockbox nos dizem sobre o futuro?",
   ])("keeps unsupported semantics for the model: %s", (q) => expect(directIntent([user(q)])).toBeUndefined());
   it("does not turn decimal targets into different integers", () => expect(normalizeQuestion("1.5% and 1,5%?")).toBe("1.5% and 1,5%"));
+  it("drops Spanish opening marks but keeps the words", () => expect(normalizeQuestion("¿¡Cuánto vale 1,5 ZEC!?")).toBe("cuanto vale 1,5 zec"));
+  it.each([
+    "¿Cuál es el precio del ZEC en reales?", "¿Cuánto pagó ZCG en 2015?", "¿Cuánto pagó ZCG en 2101?", "¿Qué es ZIP 317 y compáralo con el ZIP 32?", "¿Qué tiene el ZCG en euros?",
+    "¿Qué nos dicen los saldos del ZCG sobre el futuro?", "¿Qué tan actuales son los datos?", "¿Es Zcash una buena inversión?", "sí", "¿Cuál es el Zcash?",
+  ])("keeps unsupported Spanish semantics for the model: %s", (q) => expect(directIntent([user(q)])).toBeUndefined());
   it("retains ledger program and project on a year follow-up", () => {
     expect(directIntent(history('How much did coinholders pay in grants to "Zcash Media" in 2024?', "e em 2025?"))).toEqual({ type: "ledger", filters: { scope: "coinholder_grants", search: "zcash media", year: 2025 } });
     expect(directIntent(history("ZCG grant payments in 2024", "What is Zcash?", "and in 2025?"))).toBeUndefined();
