@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { answerPlan } from "./depth";
+import { answerPlan, roundBudget } from "./depth";
 import { chatRequestSchema } from "./validation";
 const ask = (content: string) => [{ role: "user" as const, content }];
 describe("Bounded response depth", () => {
@@ -16,6 +16,11 @@ describe("Bounded response depth", () => {
     const history = [...ask("Analyze the assumptions"), { role: "assistant" as const, content: "I can compare the scenarios." }];
     expect(answerPlan([...history, ...ask("sim")]).depth).toBe("deep");
     expect(answerPlan([...history, ...ask("What is a zatoshi?")]).depth).toBe("quick");
+  });
+  it("adds one bounded round once a research request is granted", () => {
+    const quick = answerPlan(ask("What is the ZEC price?")), deep = answerPlan(ask("Explain ZIP 317"), "deep");
+    expect(roundBudget(quick, false)).toBe(3); expect(roundBudget(quick, true)).toBe(4);
+    expect(roundBudget(deep, false)).toBe(4); expect(roundBudget(deep, true)).toBe(5);
   });
   it("accepts only named modes, never caller-controlled resource budgets", () => {
     expect(chatRequestSchema.safeParse({ messages: ask("hello"), depth: "deep" }).success).toBe(true);

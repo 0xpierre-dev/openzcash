@@ -14,3 +14,5 @@ export function answerPlan(messages: ChatMessage[], requested: ResponseDepth = "
     rounds: deep ? 4 : 3, lookups: deep ? 5 : 3, outputTokens: deep ? 6_000 : 3_000 };
 }
 export type AnswerPlan = ReturnType<typeof answerPlan>;
+/** Rounds for this answer: one more once a research request was granted, because that request consumed a round, so lookup → request → search → synthesis fits in Quick (4) within the same deadline. */
+export const roundBudget = (plan: Pick<AnswerPlan, "rounds">, researchGranted: boolean) => plan.rounds + (researchGranted ? 1 : 0);

@@ -16,9 +16,14 @@ export function needsMiningResearch(query: string): boolean {
     || /\b(?:what is|what's|qual|quanto|how much|how many)\b.*\b(?:hashrates?|solrates?|difficulty|dificuldade)\b/.test(q)
     || /\b(?:24\s*h(?:ours?|oras?)?|last week|ultima semana|pool shares?|participacao dos pools)\b/.test(q));
 }
-export function researchScope(query: string): "general" | "zip" | "mining" | "history" {
-  if (/\bzips?\b/i.test(query)) return "zip";
-  if (isMiningQuestion(query)) return "mining";
-  if (isHistoricalQuestion(query)) return "history";
+export type ResearchScope = "general" | "zip" | "mining" | "history" | "governance" | "news";
+/** Picks the domain set for hosted search; Grok accepts at most five, so governance/funding and news questions get their own lists. */
+export function researchScope(query: string): ResearchScope {
+  const q = normalize(query);
+  if (/\bzips?\b/.test(q)) return "zip";
+  if (isMiningQuestion(q)) return "mining";
+  if (isHistoricalQuestion(q)) return "history";
+  if (/\b(?:news|noticias?|announce\w*|anuncio\w*|blog|roadmap|release\w*|lancamento\w*|launch\w*|partnership\w*|parceria\w*)\b/.test(q)) return "news";
+  if (/\b(?:zcg|grants?|treasur\w*|tesour\w*|lockbox|dev ?fund|funding|financiamento|governance|governanca|vot\w*|poll|enquete|coinholders?|nu\d(?:\.\d)?|upgrade|proposals?|propostas?|zfnd|foundation|fundacao|ecc|electric coin|bootstrap|committee|comite|elections?|eleicoes|eleicao)\b/.test(q)) return "governance";
   return "general";
 }
