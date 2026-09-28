@@ -1,0 +1,53 @@
+/** Content for the public page /zarvis/about: how Zarvis works, what it costs a visitor, what it keeps and where it failed. No secrets, no counters. */
+export type AboutQuotaConfig = { networkWindowLimit: number; networkDailyLimit: number; dailyUsdCap: number | null; quotaPause: { active: boolean; until: string | null } };
+export type AboutModelConfig = { providerLabel: string; model: string; webSearch: boolean; enabled: boolean };
+const integer = (n: number) => new Intl.NumberFormat("en-US").format(n);
+/** Plain sentences a visitor can act on; the site-wide numbers stay internal. */
+export function quotaLines(config: AboutQuotaConfig): string[] {
+  const lines = [
+    `Up to ${integer(config.networkWindowLimit)} questions per 10 minutes and ${integer(config.networkDailyLimit)} per day from one network address; phones on one carrier share an address. A refused question says when to retry, and the send button waits.`,
+    `Site-wide hourly and daily caps${config.dailyUsdCap ? " and a daily spending ceiling for model answers" : ""}: when one is reached, direct answers keep working and the chat says that model answers are paused for now.`,
+  ];
+  if (config.quotaPause.active && config.quotaPause.until) lines.push(`Per-visitor and site-wide question caps are paused until ${config.quotaPause.until.slice(0, 16).replace("T", " ")} UTC; the spending ceiling still applies.`);
+  return lines;
+}
+export function modelLine(config: AboutModelConfig): string {
+  if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
+  return `${config.model} from ${config.providerLabel}, called through its Responses API${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
+}
+/** Direct answers: no model call, no cost, sources from this site's own records. */
+export const DIRECT_ROUTES = [
+  { label: "Privacy and protocol FAQ", detail: "What makes a transaction private, halving, block subsidy, Dev Fund split, viewing keys, common wallet questions." },
+  { label: "Treasuries", detail: "ZCG and Lockbox balances with their data dates, the per-block accrual and the site's own valuation at the current quote." },
+  { label: "ZEC price", detail: "The current USD quote with its time and a stale flag; dated daily closes by day, month or year." },
+  { label: "Grant ledger sums", detail: "Totals by program, year, project or recipient, computed from the complete ledger rather than excerpts." },
+  { label: "ZIPs", detail: "Any numbered ZIP or draft from the official repository at a pinned revision: title, status, dates, abstract." },
+  { label: "Arborist calls, wallets, communities, decisions, chain", detail: "The site's own directories and on-chain reader: latest call notes and recordings, wallet and community listings with revision dates, ZCG decisions, tip height and next halving estimate." },
+] as const;
+export const LIMITATIONS = [
+  "Zarvis is a guide, not an official spokesperson for Zcash, the Electric Coin Company, the Zcash Foundation, ZCG or the Financial Privacy Foundation, and it can be wrong.",
+  "Every currency, ZEC and percentage figure in a model answer is checked against the evidence Zarvis retrieved. A figure that cannot be verified is restated in one repair round or withheld, and the badge under the answer says when that happened. Verified figures can still be read out of context.",
+  "Calendar dates for future blocks are estimates; ZIP statuses and listed activation heights are not proof that a change is live on the network.",
+  "Zarvis reads public records only. It cannot see wallets, private balances or anything you did not type, and it cannot send, sign or contact anyone.",
+  "It stays on Zcash and OpenZcash. Unrelated requests are redirected. Never share recovery phrases, private keys or viewing keys.",
+  "Answers follow the language of the question; the interface, the page chrome and this page are in English.",
+] as const;
+export const PROVIDER_RETENTION = {
+  provider: "xAI",
+  days: 30,
+  url: "https://docs.x.ai/developers/faq/security",
+  readOn: "2026-09-28",
+  summary: "stores API requests and responses encrypted at rest for 30 days for abuse auditing, does not train on them and deletes them automatically afterwards. OpenZcash sends each request with response storage disabled, which is not the same as that provider's zero-data-retention setting.",
+} as const;
+export type Incident = { date: string; window: string; title: string; what: string; fix: string };
+export const INCIDENTS: Incident[] = [
+  { date: "2026-09-28", window: "12:00–14:33 UTC", title: "Launch-day quota exhaustion",
+    what: "The hourly and per-network question caps set for a quiet start (30 model answers per hour site-wide) were reached within the first hours after the announcement. About 200 questions were refused with the quota message before anyone noticed, because rejections were not counted anywhere.",
+    fix: "A 24-hour quota pause was deployed at 13:09 UTC and the caps were raised afterwards. Rejections, provider errors and cost are now logged and stored daily, a public health endpoint exists, and an hourly canary asks the four starter questions." },
+  { date: "2026-09-28", window: "until 14:33 UTC", title: "Treasuries starter answered with a generic notice",
+    what: "The starter “Explore the treasuries” produced the fallback text instead of balances: the figure guard rejected the site's own derived numbers (the valuation at the current quote) as unsupported and replaced the whole answer.",
+    fix: "That starter is answered directly from the treasury data without a model call; the guard now knows the derived arithmetic and the protocol constants, tolerates rounding, and asks the model to restate an answer instead of discarding it." },
+  { date: "2026-09-28", window: "20:15–21:21 UTC", title: "First canary run failed on a stale ZIP corpus",
+    what: "Right after a deploy the ZIP catalog was the build-time snapshot, older than its refresh window, so the check “What is ZIP 317?” could not be answered directly and the public health endpoint reported degraded for about an hour although visitors still received model answers.",
+    fix: "The corpus is warmed after boot; a stale corpus marks that check as skipped rather than failed, and only three consecutive skipped runs raise an alert." },
+];

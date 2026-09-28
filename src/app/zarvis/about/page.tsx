@@ -1,0 +1,76 @@
+import Link from "next/link";
+import { Card, PageHeader } from "@/components/ui";
+import { zarvisConfig } from "@/lib/zarvis/config";
+import { systemPrompt } from "@/lib/zarvis/prompt";
+import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, modelLine, quotaLines } from "@/lib/zarvis/about";
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "About Zarvis · OpenZcash",
+  description: "How OpenZcash's AI guide answers: which questions never touch a model, which model is used, what a visitor may ask per day, what is kept for how long, what it cannot do, and what broke on launch day.",
+};
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mb-6" aria-labelledby={title}>
+      <h2 id={title} className="mb-2 text-sm font-semibold text-stone-800">{title}</h2>
+      <Card className="text-sm leading-relaxed text-stone-600">{children}</Card>
+    </section>
+  );
+}
+
+const shortDate = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+export default function AboutZarvisPage() {
+  const config = zarvisConfig();
+  const quotas = quotaLines(config);
+  return (
+    <>
+      <PageHeader
+        title="About Zarvis"
+        subtitle="Zarvis is OpenZcash's guide to Zcash. This page says how it answers, what it costs you, what it keeps and where it has failed, so you can decide how much to trust it."
+        actions={<Link href="/zarvis" className="rd-button rd-button-primary">Ask Zarvis</Link>}
+      />
+      <Section title="Two kinds of answer">
+        <p className="mb-2">Under every answer a badge says which kind you got.</p>
+        <p className="mb-2"><span className="font-medium text-stone-800">Direct from OpenZcash data · no AI.</span> The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
+        <ul className="space-y-1.5">
+          {DIRECT_ROUTES.map((route) => <li key={route.label}><span className="font-medium text-stone-800">{route.label}</span>: {route.detail}</li>)}
+        </ul>
+        <p className="mt-3"><span className="font-medium text-stone-800">Model answer.</span> Everything else goes to {modelLine(config)} The model receives the recent conversation, the records Zarvis retrieved from this site and the official ZIP corpus, and must cite what it used. The badge names the model and counts the sources.</p>
+      </Section>
+      <Section title="What you may ask">
+        <ul className="space-y-1.5">{quotas.map((line) => <li key={line}>{line}</li>)}</ul>
+        <p className="mt-3">A question is at most 2,000 characters and an answer is written within 55 seconds (110 seconds for Deep analysis). Zarvis is free to use; OpenZcash pays the model.</p>
+      </Section>
+      <Section title="What is kept, and for how long">
+        <ul className="space-y-1.5">
+          <li><span className="font-medium text-stone-800">In your browser:</span> the conversation stays in page memory. Reloading or New chat clears it. Questions are never put in page URLs, and shared calculator links carry only scenario assumptions.</li>
+          <li><span className="font-medium text-stone-800">At OpenZcash:</span> no question or answer is written to a database or a log. What is recorded per request is the route, the outcome, the duration, the token counts and the estimated cost; per day, those counts by route. Feedback sends your rating without the conversation text. Hosting access logs and short-lived abuse counters, keyed by a hash of the network address, are separate.</li>
+          <li><span className="font-medium text-stone-800">At the model provider:</span> for model answers, the recent turns and the retrieved records are sent to {PROVIDER_RETENTION.provider}, which {PROVIDER_RETENTION.summary} Read on {shortDate(PROVIDER_RETENTION.readOn)} at <a href={PROVIDER_RETENTION.url} target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">the provider&apos;s security FAQ ↗</a>.</li>
+        </ul>
+      </Section>
+      <Section title="What it cannot do">
+        <ul className="space-y-1.5">{LIMITATIONS.map((line) => <li key={line}>{line}</li>)}</ul>
+      </Section>
+      <Section title="The instructions the model receives">
+        <p className="mb-2">This is the complete standing instruction sent with every model answer, as deployed right now. Evidence and the current time are added separately for each question.</p>
+        <details>
+          <summary className="cursor-pointer text-amber-700">Read the instructions</summary>
+          <pre className="mt-3 whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-stone-600">{systemPrompt("quick")}</pre>
+        </details>
+      </Section>
+      <Section title="Status and incidents">
+        <p className="mb-3">An hourly canary asks the four starter questions with the model forbidden and stores the result; <a href="/api/zarvis/health" className="text-amber-700 hover:underline">/api/zarvis/health</a> is public and reports whether the last run passed. What went wrong so far, in the open:</p>
+        <ul className="space-y-3">
+          {INCIDENTS.map((incident) => (
+            <li key={`${incident.date}-${incident.title}`}>
+              <span className="font-medium text-stone-800">{shortDate(incident.date)}, {incident.window} · {incident.title}.</span> {incident.what} <span className="text-stone-800">Fix:</span> {incident.fix}
+            </li>
+          ))}
+        </ul>
+      </Section>
+      <p className="text-xs text-stone-500">Found a wrong answer? Use the rating under it: the route and model are attached to your rating, the text is not. <Link href="/zcg/methodology" className="text-amber-700 hover:underline">How OpenZcash computes its own figures →</Link></p>
+    </>
+  );
+}

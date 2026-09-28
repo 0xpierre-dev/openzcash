@@ -224,6 +224,10 @@ Simple numeric treasury questions retain the deterministic calculator reply. Ana
 ZIP retrieval includes scope notes for ZIP 310 and revision-specific caveats for ZIP 317. Created/Last-Updated, retrieval time, specification status and actual network activation remain distinct. See [the refinement evaluation](zarvis-refinement-evaluation.md) for real local responses, failed iterations and release limitations.
 
 
+## Public about page (2026-09-28)
+
+`/zarvis/about` (linked from the welcome screen, the privacy details and the sidebar footer) is the visitor-facing account of this document: the two answer kinds and which questions are answered without a model (`DIRECT_ROUTES` in `src/lib/zarvis/about.ts`), the configured model and whether hosted search is on (read from `zarvisConfig()` at request time), the per-network question limits as sentences (`quotaLines`: the site-wide caps and the spending ceiling are mentioned, never their values, and an active `ZARVIS_QUOTA_PAUSE_UNTIL` window shows its UTC expiry), what is kept where and for how long (browser memory; counts only at OpenZcash; the provider's 30-day abuse-audit retention, quoted from https://docs.x.ai/developers/faq/security with the date it was read), the limitations, the complete standing system prompt as deployed (`systemPrompt("quick")`, rendered in a collapsible block), the public health endpoint and a dated incident list (`INCIDENTS`). Add every production incident there with its window, what happened and what changed; the page test asserts that no API key or cap value is rendered.
+
 ## Observability and operations (2026-09-28)
 
 Everything in this section records counts, labels, durations and money. No question, answer, prompt, provider error body, raw IP or visitor identifier is logged or stored.
