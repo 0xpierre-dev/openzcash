@@ -124,7 +124,7 @@ export function selectKnowledge(question: string): KnowledgeNote[] {
 
 export const STARTERS = [
   { label: "Understand Zcash", question: "What makes a Zcash transaction private? Explain it simply." },
-  { label: "Explore the treasuries", question: "What do the latest ZCG and Lockbox balances tell us, and how old are the data?" },
+  { label: "Explore the treasuries", question: "What are the latest ZCG and Lockbox balances, and how old are the data?" },
   { label: "Follow the funding", question: "How is the Dev Fund split, and what changes at the next halving?" },
   { label: "Test a hypothesis", question: "If ZEC rises 20×, what changes in the company and community treasury scenarios?" },
 ];

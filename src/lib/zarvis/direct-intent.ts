@@ -20,7 +20,16 @@ const ledgerPatterns = [
   new RegExp(`^quanto (?:o |os )?(zcg|coinholders?) (?:pagou|pagaram) em (?:grants|marcos)(?: (?:ao|para) (${project}))?(?: (?:em )?(20[0-9]{2})| (no total|ao todo))?$`),
   new RegExp(`^(zcg|coinholder) (?:grant payments|paid grants)(?: (?:to|for) (${project}))?(?: (?:in|for) (20[0-9]{2})| (all time|in total))?$`),
 ];
-const funds = (q: string): "zcg" | "lockbox" | "both" | undefined => /^(?:zcg (?:and|e|\+) lockbox|lockbox (?:and|e|\+) zcg)$/.test(q) ? "both" : q === "zcg" || q === "lockbox" ? q : undefined;
+const funds = (raw: string): "zcg" | "lockbox" | "both" | undefined => {
+  const q = raw.replace(/\b(?:the|o|do) /g, "");
+  return /^(?:zcg (?:and|e|\+) lockbox|lockbox (?:and|e|\+) zcg)$/.test(q) ? "both" : q === "zcg" || q === "lockbox" ? q : undefined;
+};
+const latest = "(?:the )?(?:(?:latest|current) )?";
+/** Data-age clauses: the deterministic treasury answer already stamps report, import, estimate and quote times with their ages. */
+const freshness = "(?:how (?:old|fresh|recent|current|up to date) (?:are|is) (?:(?:the|these|those|this) )?(?:data|figures|numbers|balances|information|they|it)|de quando (?:sao|e) (?:(?:os|esses|essas|essa) )?(?:dados|saldos|numeros|informacoes)|qual (?:e )?a idade d(?:os|esses|essas|as) (?:dados|saldos|numeros|informacoes)|quao (?:antigos|recentes|atuais) (?:sao|estao) (?:(?:os|esses) )?(?:dados|saldos|numeros))";
+const treasuryPattern = new RegExp(`^(?:what (?:does|do) (.+) hold|what (?:is|are) ${latest}(.+?) (?:treasury|treasury balances?|balances?)|what do ${latest}(.+?) (?:treasury )?balances (?:tell (?:us|me)|show|say)|how much(?: zec)? (?:does|do) (.+?) (?:hold|have)|how (?:old|fresh|recent|current) (?:is|are) ${latest}(.+?) (?:balances?|balance data|treasury data|data|figures)|qua(?:l|is) (?:e |sao )?(?:o saldo|os saldos)(?: atua(?:l|is)| mais recentes?)? (?:do |de )?(.+?)|o que (?:os )?saldos(?: atuais| mais recentes)? (?:do |de )?(.+?) (?:nos |me )?(?:dizem|mostram|indicam)|de quando (?:e|sao) (?:o saldo|os saldos|os dados)(?: atua(?:l|is)| mais recentes?)? (?:do |de )?(.+?)|quanto (?:o )?(.+?) tem(?: em zec)?)(?: (?:and|e) ${freshness})?$`);
+const shortTreasuryPattern = new RegExp(`^(?:saldo (?:do|de) (.+)|${latest}(.+?) (?:balances?|holdings|treasury))$`);
+const freshnessFollowUp = new RegExp(`^(?:(?:and|e) )?${freshness}$`);
 const keyTopic = (intent?: DirectIntent) => intent?.type === "faq" && ["viewing", "incoming", "full", "outgoing", "key_spend", "key_sender"].includes(intent.id);
 
 function resolve(q: string, previous?: DirectIntent): DirectIntent | undefined {
@@ -37,8 +46,8 @@ function resolve(q: string, previous?: DirectIntent): DirectIntent | undefined {
       return { type: "ledger", filters: { scope: m[1] === "zcg" ? "zcg_grants" : "coinholder_grants", year, search: (m[2] ?? "").replaceAll('"', '') } };
     }
   }
-  const treasury = q.match(/^(?:(?:what (?:does|do) (.+) hold)|(?:what (?:is|are) (?:the )?(?:(?:latest|current) )?(.+?) (?:treasury|treasury balances?|balances?))|(?:how much(?: zec)? (?:does|do) (.+?) (?:hold|have))|(?:qual (?:e |sao )?(?:o saldo|os saldos)(?: atuais?| mais recentes?)? (?:do |de )?(.+))|(?:quanto (?:o )?(.+?) tem(?: em zec)?))$/);
-  const shortTreasury = q.match(/^(?:saldo (?:do|de) (.+)|(.+?) (?:balances?|holdings|treasury))$/);
+  const treasury = q.match(treasuryPattern);
+  const shortTreasury = q.match(shortTreasuryPattern);
   const fund = funds(treasury?.slice(1).find(Boolean) ?? shortTreasury?.slice(1).find(Boolean) ?? "");
   if (fund) return { type: "treasury", fund };
   const zip = q.match(/^(?:(?:what is|what's|whats|o que e|explique|explain) zip[ -]*([0-9]{1,6})|zip[ -]*([0-9]{1,6})|(?:what is (?:the )?(?:status|title|created date) of|qual (?:e )?(?:o status|o titulo|a data de criacao) (?:do|de)) zip[ -]*([0-9]{1,6})|when was zip[ -]*([0-9]{1,6}) created)$/);
@@ -50,6 +59,7 @@ function resolve(q: string, previous?: DirectIntent): DirectIntent | undefined {
   if (year && previous?.type === "ledger" && Number(year[1]) >= 2016 && Number(year[1]) <= 2100) return { ...previous, filters: { ...previous.filters, year: Number(year[1]) } };
   const nextFund = q.match(/^(?:and|e|what about|how about) (?:the |o )?(zcg|lockbox)$/);
   if (nextFund && previous?.type === "treasury") return { type: "treasury", fund: nextFund[1] as "zcg" | "lockbox" };
+  if (previous?.type === "treasury" && freshnessFollowUp.test(q)) return previous;
   const nextZip = q.match(/^(?:and|e|what about|how about) (?:o )?zip[ -]*([0-9]{1,6})$/);
   if (nextZip && (previous?.type === "zip" || previous?.type === "latest_zip")) return { type: "zip", number: Number(nextZip[1]), overview: previous.type === "zip" ? previous.overview : true };
   if (previous?.type === "zip" && /^(?:what is its status|and its status|when was it created|qual (?:e )?o status dele|e o status|quando foi criado)$/.test(q)) return { ...previous, overview: false };

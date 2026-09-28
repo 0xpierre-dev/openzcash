@@ -8,6 +8,7 @@ vi.mock("./local", async (original) => ({ ...await original<object>(), prepareLo
 vi.mock("./scenario", async (original) => ({ ...await original<object>(), lookupScenario: mocks.scenario }));
 vi.mock("./zips", async (original) => ({ ...await original<object>(), lookupZips: mocks.zips }));
 import { computeScenario } from "./scenario";
+import { BLOCK_SUBSIDY_ALLOCATION, compactData, derivedTreasuryFacts, treasuryContext } from "./data";
 import { generateAnswer } from "./openai";
 import type { ZarvisEvent } from "./types";
 async function* events(output: unknown[], text?: string) {
@@ -17,6 +18,12 @@ async function* events(output: unknown[], text?: string) {
 const answer = (text: string) => ({ type: "message", role: "assistant", content: [{ type: "output_text", text, annotations: [] }] });
 const call = (id: string, args = '{"topic":"treasuries","query":""}', name = "lookup_openzcash") => ({ type: "function_call", name, call_id: id, arguments: args });
 const question = [{ role: "user" as const, content: "What does ZCG hold?" }];
+// The live "treasuries" lookup shape with its derived site arithmetic; fixtures, not live values.
+const treasuries = () => {
+  const funds = { zcg: { paidMilestonesUsd: 21507071, zec: 88435, cashUsd: 8816950, snapshotAt: "2026-09-23T20:16:00Z", importedAt: "2026-09-27T03:00:00Z", updatesRequired: true, sourceUrl: "https://docs.google.com/spreadsheets/d/zcg" }, lockbox: { zec: 144333.7875, height: 3499201, baselineHeight: 3493796, snapshotAt: "2026-09-23T20:16:00Z", importedAt: "2026-09-27T03:00:00Z", updatesRequired: false, sourceUrl: "https://docs.google.com/spreadsheets/d/lockbox" } };
+  const price = { cents: 159280, quotedAt: "2026-09-28T11:30:00Z", fetchedAt: "2026-09-28T11:30:00Z", stale: false }, supply = { zec: 16945106, quotedAt: "2026-09-28T11:30:00Z", fetchedAt: "2026-09-28T11:30:00Z", stale: false };
+  return [{ content: JSON.stringify({ sourceUrl: "https://openzcash.org/zcg/treasury-calculator", retrievedAt: "2026-09-28T11:36:00Z", ...compactData({ funds: treasuryContext(funds), derived: derivedTreasuryFacts(funds, price, supply), allocation: BLOCK_SUBSIDY_ALLOCATION, price, supply }) }), source: { title: "OpenZcash · treasuries", url: "https://openzcash.org/zcg/treasury-calculator", retrievedAt: "2026-09-28T11:36:00Z" } }];
+};
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.config.mockReturnValue({ provider: "openai", apiKey: "unit-test-not-a-key", model: "gpt-6-astra", webSearch: true });
@@ -180,6 +187,15 @@ describe("Zarvis local-first orchestration", () => {
     expect(JSON.stringify(emitted)).not.toContain("999 billion");
     expect(metrics.groundingFallbacks).toBe(1);
     expect(emitted.at(-1)?.type).toBe("done");
+  });
+  it("accepts the site's derived treasury arithmetic without any fallback", async () => {
+    mocks.prepare.mockResolvedValue({ documents: [], evidence: treasuries(), external: false });
+    const text = "ZCG's 88,435 ZEC are worth about $140.9 million at $1,592.80; with $8.82 million cash that is $149.7 million. The Lockbox's 144,333.79 ZEC add $229.9 million, so the combined gross value is roughly $379.6 million, about 1.37% of circulating supply. ZCG receives 8% and the Lockbox 12% of each block subsidy.";
+    mocks.create.mockResolvedValueOnce(events([answer(text)]));
+    const emitted: ZarvisEvent[] = [];
+    const metrics = await generateAnswer([{ role: "user", content: "What do the latest ZCG and Lockbox balances tell us, and how old are the data?" }], new AbortController().signal, (e) => emitted.push(e));
+    expect(metrics.groundingFallbacks).toBeUndefined();
+    expect(emitted.find((e) => e.type === "replace")).toEqual({ type: "replace", text });
   });
   it("preserves a computed ledger change when unverified model figures trigger fallback", async () => {
     const entry = (year: number, usd: string) => ({ content: JSON.stringify({ data: {

@@ -15,7 +15,7 @@ describe("Zarvis aggregate metrics", () => {
     expect((await GET()).status).toBe(403);
     admin.mockResolvedValue(true);
     expect((await (await GET()).json()).quota).toEqual({
-      paused: true, resumesAt: "2026-09-29T03:00:00.000Z", dailyLimit: 100, hourlyLimit: 30,
+      paused: true, resumesAt: "2026-09-29T03:00:00.000Z", dailyLimit: 100, hourlyLimit: 30, networkDailyLimit: 20, networkWindowLimit: 5,
     });
     vi.setSystemTime(new Date("2026-09-29T03:00:00.000Z"));
     expect((await (await GET()).json()).quota.paused).toBe(false);

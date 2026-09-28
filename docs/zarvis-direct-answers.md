@@ -13,7 +13,7 @@ Auto and Quick use reviewed text or validated public-data formatting for the com
 | Mining definitions and source comparison | What is solrate? / Why do ZcashInfo and ZecStats show different hashrates? | Reviewed methodology, units, averaging windows and attribution limits |
 | Current network solrate | Qual é o hashrate atual da rede Zcash? | Validated ZcashInfo API snapshot, 20 blocks, heights and UTC timestamps; 60-second cache |
 | USD price | Qual é o preço do ZEC? | Shared quote with its time and stale state |
-| Community holdings | What are the ZCG and Lockbox balances? | Dated ZCG report, block-based Lockbox estimate, separate quote |
+| Community holdings | What are the latest ZCG and Lockbox balances, and how old are the data? | Dated ZCG report and import with their ages, block-based Lockbox estimate with its anchor age, separate quote with its age |
 | Grant payments | How much has ZCG paid in grants? | Full selected ledger aggregate, historical budget values |
 | Scoped grant payments | How much did coinholders pay in grants to Zingo in 2025? | Program/year and literal project/recipient/milestone fragment |
 | Numbered ZIPs | What is ZIP 317? | Exact document, revision-specific status, Created and official abstract excerpt |
@@ -23,7 +23,7 @@ Reviewed fact/navigation topics have English and Portuguese text. Numbered ZIP a
 
 ## Context
 
-Supported follow-ups retain the known subject: “e em 2025?” keeps the ledger program and project; “e o Lockbox?” switches the fund; “when was it created?” keeps the exact ZIP number. Greetings, thanks and supported EN/PT, USD and brief-response preferences do not erase that subject. Explicit stored preferences are respected.
+Supported follow-ups retain the known subject: “e em 2025?” keeps the ledger program and project; “e o Lockbox?” switches the fund; “and how old are the data?” keeps the fund and restates its dated stamps; “when was it created?” keeps the exact ZIP number. Greetings, thanks and supported EN/PT, USD and brief-response preferences do not erase that subject. Explicit stored preferences are respected.
 
 An unrecognized earlier user instruction keeps the conversation on model synthesis, because it might set formatting, language or other constraints. A bare “yes/sim” is not turned into a repeated factual answer. Deep analysis always uses the selected model. Except for a fully matched reviewed methodology FAQ, comparisons, predictions, technical reasoning, unsupported currencies/languages, detailed-response preferences and additional qualifications retain model synthesis even when the underlying facts exist internally.
 

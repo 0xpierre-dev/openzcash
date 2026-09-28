@@ -43,5 +43,8 @@ export function zarvisConfig() {
     quotaPause: quotaPause(),
     dailyLimit: limit("ZARVIS_DAILY_REQUEST_LIMIT", 100, 10_000),
     hourlyLimit: limit("ZARVIS_HOURLY_REQUEST_LIMIT", 30, 1_000),
+    // Per-network abuse counters; phones behind one carrier address share them.
+    networkDailyLimit: limit("ZARVIS_NETWORK_DAILY_LIMIT", 20, 10_000),
+    networkWindowLimit: limit("ZARVIS_NETWORK_WINDOW_LIMIT", 5, 1_000),
   };
 }
