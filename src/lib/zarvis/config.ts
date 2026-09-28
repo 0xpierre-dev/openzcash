@@ -35,6 +35,8 @@ export function zarvisConfig() {
   const apiKey = (provider === "xai" ? process.env.XAI_API_KEY : process.env.OPENAI_API_KEY)?.trim() ?? "";
   return {
     apiKey,
+    // Keys abuse counters and feedback tickets. A dedicated secret keeps the provider key out of HMAC inputs; the key remains the fallback so nothing breaks unset.
+    hmacSecret: process.env.ZARVIS_HMAC_SECRET?.trim() || apiKey,
     provider,
     providerLabel: provider === "xai" ? "xAI (Grok)" as const : "OpenAI" as const,
     enabled: process.env.ZARVIS_ENABLED === "true" && Boolean(validProvider && apiKey && process.env.DATABASE_URL),

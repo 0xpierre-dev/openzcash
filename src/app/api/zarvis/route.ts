@@ -35,9 +35,11 @@ export async function POST(request: Request) {
   const capped = typeof config.dailyUsdCap === "number" && spendTodayUsd() >= config.dailyUsdCap;
   const release = acquireGeneration();
   if (!release) return reject("busy", "Zarvis is busy. Please try again shortly.", 429, { "Retry-After": "5" });
+  let refund: (() => Promise<boolean>) | undefined;
   try {
     const allowance = await reserveZarvisRequest(request.headers);
     if (!allowance.allowed) { release(); recordRejection("quota"); return reject("quota", USAGE_LIMIT, 429, { "Retry-After": String(allowance.retryAfter) }); }
+    refund = allowance.refund;
   } catch { release(); recordRejection("storage"); return reject("storage", "Zarvis is temporarily unavailable. Please try again shortly.", 503); }
   const controller = new AbortController();
   const abort = () => controller.abort();
@@ -55,6 +57,8 @@ export async function POST(request: Request) {
         const ms = performance.now() - started;
         // Bookkeeping after the answer is delivered must never turn a finished answer into an error event.
         try {
+          // A direct answer called no model: the quota unit goes back, so only model answers count against the visitor.
+          if (metrics?.route === "local" && metrics.modelCalls === 0 && refund) void refund();
           const estimatedUsd = recordGeneration("completed", ms, metrics);
           logChatRequest({ at: new Date().toISOString(), route: metrics.route, outcome: "completed", depth: metrics.depth ?? plan.depth, ms: Math.round(ms), modelCalls: metrics.modelCalls, webSearchCalls: metrics.webSearchCalls, inputTokens: metrics.inputTokens, cachedInputTokens: metrics.cachedInputTokens, outputTokens: metrics.outputTokens, groundingFallbacks: metrics.groundingFallbacks ?? 0, repairRounds: metrics.repairRounds ?? 0, estimatedUsd, errorClass: null });
         } catch { /* counters only */ }
