@@ -5,7 +5,7 @@ const integer = (n: number) => new Intl.NumberFormat("en-US").format(n);
 /** Plain sentences a visitor can act on; the site-wide numbers stay internal. */
 export function quotaLines(config: AboutQuotaConfig): string[] {
   const lines = [
-    `Up to ${integer(config.networkWindowLimit)} questions per 10 minutes and ${integer(config.networkDailyLimit)} per day from one network address; phones on one carrier share an address. A refused question says when to retry, and the send button waits.`,
+    `Up to ${integer(config.networkWindowLimit)} questions per 10 minutes and ${integer(config.networkDailyLimit)} per day from one network address; phones on one carrier share an address. Only answers that used the model count; a direct answer from the site's data gives the unit back. A refused question says when to retry, and the send button waits.`,
     `Site-wide hourly and daily caps${config.dailyUsdCap ? " and a daily spending ceiling for model answers" : ""}: when one is reached, direct answers keep working and the chat says that model answers are paused for now.`,
   ];
   if (config.quotaPause.active && config.quotaPause.until) lines.push(`Per-visitor and site-wide question caps are paused until ${config.quotaPause.until.slice(0, 16).replace("T", " ")} UTC; the spending ceiling still applies.`);

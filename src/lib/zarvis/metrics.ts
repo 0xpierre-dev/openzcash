@@ -14,7 +14,7 @@ const empty = () => ({ since: new Date().toISOString(), completed: 0, failed: 0,
 type MetricsState = { totals: ReturnType<typeof empty>; active: number; lastLog: number; usedFeedback: Map<string, number>; localKey: Buffer };
 const globalState = globalThis as typeof globalThis & { __zarvisMetricsV1?: MetricsState };
 const state = globalState.__zarvisMetricsV1 ??= { totals: empty(), active: 0, lastLog: Date.now(), usedFeedback: new Map(), localKey: randomBytes(32) };
-const feedbackKey = () => process.env.OPENAI_API_KEY || process.env.XAI_API_KEY || state.localKey;
+const feedbackKey = () => process.env.ZARVIS_HMAC_SECRET?.trim() || process.env.OPENAI_API_KEY || process.env.XAI_API_KEY || state.localKey;
 const mac = (payload: string) => createHmac("sha256", feedbackKey()).update(`zarvis-feedback:${payload}`).digest();
 /** The ticket carries only a nonce, an expiry and the answer route (local/model) so votes can be attributed per route. */
 export function feedbackTicket(now = Date.now(), route?: "local" | "model") {

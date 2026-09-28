@@ -25,6 +25,16 @@ beforeEach(() => {
   mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
 });
 describe("Zarvis API", () => {
+  it("refunds the quota unit after a direct answer and keeps it after a model answer or a failure", async () => {
+    const refund = vi.fn(async () => true);
+    mocks.reserve.mockResolvedValue({ allowed: true, retryAfter: 0, refund });
+    const read = async () => { const response = await POST(request()); await response.text(); };
+    await read(); expect(refund).toHaveBeenCalledTimes(1);
+    mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: prov("model") }); return completed("model"); });
+    await read(); expect(refund).toHaveBeenCalledTimes(1);
+    mocks.answer.mockRejectedValueOnce(new Error("provider down"));
+    await read(); expect(refund).toHaveBeenCalledTimes(1);
+  });
   it("only exposes public readiness, never configuration or keys", async () => {
     mocks.config.mockReturnValue({ enabled: false, apiKey: "secret-sentinel", providerLabel: "OpenAI", webSearch: true });
     const response = GET();
