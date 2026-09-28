@@ -1,6 +1,7 @@
 import { fromMarkdown } from "mdast-util-from-markdown";
 import type { Nodes } from "mdast";
 import type { Evidence } from "./local";
+import { locale, pick, type DirectLanguage } from "./language";
 import { BLOCK_SUBSIDY_ZEC, LOCKBOX_START_HEIGHT, LOCKBOX_ZEC_PER_BLOCK, MINER_ZEC_PER_BLOCK, THIRD_HALVING_HEIGHT, ZCG_ZEC_PER_BLOCK } from "@/lib/zcash/lockbox";
 
 export type NumericFact = { value: number; unit: "USD" | "ZEC" | "%" };
@@ -124,15 +125,16 @@ export function ledgerComparisonEvidence(evidence: Evidence[]): Evidence | undef
 }
 
 /** Keep verified arithmetic when a model answer fails the financial-figure guard. */
-export function ledgerComparisonAnswer(evidence: Evidence[], pt: boolean): string | undefined {
+export function ledgerComparisonAnswer(evidence: Evidence[], lang: DirectLanguage): string | undefined {
   const comparison = ledgerComparisonEvidence(evidence);
   if (!comparison) return;
   const data = JSON.parse(comparison.content).data;
-  const locale = pt ? "pt-BR" : "en-US";
-  const usd = new Intl.NumberFormat(locale, { style: "currency", currency: "USD", signDisplay: "exceptZero" }).format(data.differenceUsd);
-  const percent = data.changePercent === null ? (pt ? "variação percentual indefinida" : "percent change undefined")
-    : new Intl.NumberFormat(locale, { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" }).format(data.changePercent / 100);
-  return pt
-    ? `**${data.fromYear} → ${data.toYear}**: variação de **${usd} (${percent})**, usando o mesmo escopo do registro e a mesma importação.`
-    : `**${data.fromYear} → ${data.toYear}**: change of **${usd} (${percent})**, using the same ledger scope and import.`;
+  const usd = new Intl.NumberFormat(locale(lang), { style: "currency", currency: "USD", signDisplay: "exceptZero" }).format(data.differenceUsd);
+  const percent = data.changePercent === null ? pick(lang, { en: "percent change undefined", pt: "variação percentual indefinida", es: "variación porcentual indefinida" })
+    : new Intl.NumberFormat(locale(lang), { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" }).format(data.changePercent / 100);
+  return pick(lang, {
+    en: `**${data.fromYear} → ${data.toYear}**: change of **${usd} (${percent})**, using the same ledger scope and import.`,
+    pt: `**${data.fromYear} → ${data.toYear}**: variação de **${usd} (${percent})**, usando o mesmo escopo do registro e a mesma importação.`,
+    es: `**${data.fromYear} → ${data.toYear}**: variación de **${usd} (${percent})**, usando el mismo alcance del registro y la misma importación.`,
+  });
 }

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { ArboristCall } from "@/lib/arborist/feed";
+import { locale, pick, type DirectLanguage } from "./language";
 import { safeSourceUrl, terms } from "./sources";
 
 export const ARBORIST_ROWS = 8;
@@ -142,16 +143,19 @@ const plain = (s: string) =>
     .replace(/[\\[\]<>*`|]/g, "")
     .replace(/\s+/g, " ")
     .trim();
-const longDate = (iso: string, pt: boolean) =>
-  new Intl.DateTimeFormat(pt ? "pt-BR" : "en-US", {
+const longDate = (iso: string, lang: DirectLanguage) =>
+  new Intl.DateTimeFormat(locale(lang), {
     dateStyle: "long",
     timeZone: "UTC",
   }).format(new Date(`${iso}T00:00:00Z`));
 /** The latest call from validated evidence only; unavailable or malformed evidence becomes a link, never an invented call. */
-export function arboristAnswer(content: string, pt: boolean): string {
-  const unavailable = pt
-    ? "Não consegui ler o arquivo das Arborist Calls agora. [Abrir as Arborist Calls no OpenZcash](https://openzcash.org/arborist)."
-    : "The Arborist call archive could not be read right now. [Open the Arborist calls on OpenZcash](https://openzcash.org/arborist).";
+export function arboristAnswer(content: string, lang: DirectLanguage): string {
+  const t = <T,>(texts: { en: T; pt: T; es: T }) => pick(lang, texts);
+  const unavailable = t({
+    en: "The Arborist call archive could not be read right now. [Open the Arborist calls on OpenZcash](https://openzcash.org/arborist).",
+    pt: "Não consegui ler o arquivo das Arborist Calls agora. [Abrir as Arborist Calls no OpenZcash](https://openzcash.org/arborist).",
+    es: "No pude leer el archivo de las Arborist Calls en este momento. [Abrir las Arborist Calls en OpenZcash](https://openzcash.org/arborist).",
+  });
   let parsed;
   try {
     parsed = callSchema.safeParse(JSON.parse(content).data?.calls?.shown?.[0]);
@@ -162,49 +166,44 @@ export function arboristAnswer(content: string, pt: boolean): string {
   const c = parsed.data;
   const title =
     c.number === null
-      ? pt
-        ? "Arborist Call mais recente"
-        : "Latest Arborist Call"
+      ? t({ en: "Latest Arborist Call", pt: "Arborist Call mais recente", es: "Arborist Call más reciente" })
       : `Arborist Call #${c.number}`;
   const when = c.date
-    ? pt
-      ? `realizada em ${longDate(c.date, pt)}`
-      : `held on ${longDate(c.date, pt)}`
-    : pt
-      ? "data não registrada na fonte"
-      : "date not recorded in the source";
+    ? t({ en: `held on ${longDate(c.date, lang)}`, pt: `realizada em ${longDate(c.date, lang)}`, es: `realizada el ${longDate(c.date, lang)}` })
+    : t({ en: "date not recorded in the source", pt: "data não registrada na fonte", es: "fecha no registrada en la fuente" });
   const agenda = (c.agenda?.shown ?? []).map(plain).filter(Boolean);
-  const lines = [
-    `**${title}**, ${when}.${c.moderator ? (pt ? ` Moderação: ${plain(c.moderator)}.` : ` Moderator: ${plain(c.moderator)}.`) : ""}`,
-  ];
+  const moderator = c.moderator ? t({ en: ` Moderator: ${plain(c.moderator)}.`, pt: ` Moderação: ${plain(c.moderator)}.`, es: ` Moderación: ${plain(c.moderator)}.` }) : "";
+  const lines = [`**${title}**, ${when}.${moderator}`];
   if (agenda.length)
     lines.push(
-      (pt ? "Pauta: " : "Agenda: ") +
+      t({ en: "Agenda: ", pt: "Pauta: ", es: "Agenda: " }) +
         agenda.join("; ") +
         (c.agenda && c.agenda.totalRows > agenda.length
-          ? pt
-            ? " (lista parcial)."
-            : " (partial list)."
+          ? t({ en: " (partial list).", pt: " (lista parcial).", es: " (lista parcial)." })
           : "."),
     );
   const links = [
-    ...(c.notes ? [`[${pt ? "Notas" : "Notes"}](${c.notes})`] : []),
+    ...(c.notes ? [`[${t({ en: "Notes", pt: "Notas", es: "Notas" })}](${c.notes})`] : []),
     ...(c.recording
-      ? [`[${pt ? "Gravação" : "Recording"}](${c.recording})`]
+      ? [`[${t({ en: "Recording", pt: "Gravação", es: "Grabación" })}](${c.recording})`]
       : []),
-    `[${pt ? "Arquivo no OpenZcash" : "Archive on OpenZcash"}](https://openzcash.org/arborist)`,
+    `[${t({ en: "Archive on OpenZcash", pt: "Arquivo no OpenZcash", es: "Archivo en OpenZcash" })}](https://openzcash.org/arborist)`,
   ];
   lines.push(links.join(" · "));
   if (c.source.startsWith("recording only"))
     lines.push(
-      pt
-        ? "A gravação foi publicada, mas as notas ainda não chegaram ao repositório; o número é provisório."
-        : "The recording is published, but the notes have not reached the repository yet; the number is provisional.",
+      t({
+        en: "The recording is published, but the notes have not reached the repository yet; the number is provisional.",
+        pt: "A gravação foi publicada, mas as notas ainda não chegaram ao repositório; o número é provisório.",
+        es: "La grabación fue publicada, pero las notas aún no llegaron al repositorio; el número es provisional.",
+      }),
     );
   lines.push(
-    pt
-      ? "Notas mantidas pela comunidade e gravações da Zcash Foundation; pauta não é decisão de protocolo."
-      : "Community-maintained notes and Zcash Foundation recordings; agenda items are not protocol decisions.",
+    t({
+      en: "Community-maintained notes and Zcash Foundation recordings; agenda items are not protocol decisions.",
+      pt: "Notas mantidas pela comunidade e gravações da Zcash Foundation; pauta não é decisão de protocolo.",
+      es: "Notas mantenidas por la comunidad y grabaciones de la Zcash Foundation; los puntos de la agenda no son decisiones de protocolo.",
+    }),
   );
   return lines.join("\n\n");
 }

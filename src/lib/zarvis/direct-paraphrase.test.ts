@@ -37,11 +37,58 @@ const corpus: Array<[string, object | "model"]> = [
   ["Who is Zooko?", "model"], ["Tell me about Zooko", "model"], ["Quanto o ZCG vai pagar em grants em 2027?", "model"], ["What is the Lockbox balance in EUR?", "model"],
   ["Explain the security proof of ZIP 310", "model"], ["What is ZCG's runway?", "model"], ["Which wallet is best?", "model"],
 ];
+/** Spanish phrasings for every intent that has Portuguese ones: the same data at zero model cost. */
+const spanish: Array<[string, object | "model"]> = [
+  ["Hola", { type: "courtesy", thanks: false }], ["¡Buenas!", { type: "courtesy", thanks: false }], ["Hola Zarvis", { type: "courtesy", thanks: false }], ["Gracias", { type: "courtesy", thanks: true }], ["¡Muchas gracias!", { type: "courtesy", thanks: true }],
+  ["Responde en español", { type: "preference" }], ["Responde en inglés", { type: "preference" }], ["Responde en portugués", { type: "preference" }], ["Usa dólares", { type: "preference" }], ["Contesta en español, por favor", { type: "preference" }],
+  ["¿Cuál es el precio del ZEC?", { type: "price" }], ["¿Cuánto vale un ZEC?", { type: "price" }], ["¿Cuánto cuesta el ZEC hoy?", { type: "price" }], ["Precio del ZEC", { type: "price" }], ["Cotización del ZEC", { type: "price" }],
+  ["¿Me puedes decir el precio del ZEC?", { type: "price" }], ["Oye Zarvis, ¿cuál es el precio del ZEC ahora?", { type: "price" }], ["¿A cuánto está el ZEC en este momento?", { type: "price" }], ["Dime el precio actual de Zcash, por favor", { type: "price" }], ["¿Cuál es el valor actual del ZEC en dólares?", { type: "price" }],
+  ["Saldo del ZCG", { type: "treasury", fund: "zcg" }], ["Saldos del ZCG y del Lockbox", { type: "treasury", fund: "both" }], ["¿Cuáles son los saldos actuales del ZCG?", { type: "treasury", fund: "zcg" }], ["Tesorería del ZCG", { type: "treasury", fund: "zcg" }], ["¿Cuánto tiene el Lockbox?", { type: "treasury", fund: "lockbox" }],
+  ["¿Cuánto hay en el Lockbox?", { type: "treasury", fund: "lockbox" }], ["¿Cuánto ZEC tiene el ZCG actualmente?", { type: "treasury", fund: "zcg" }], ["¿Cuáles son los saldos actuales del ZCG y del Lockbox, y qué tan actuales son los datos?", { type: "treasury", fund: "both" }], ["¿De cuándo son los saldos del ZCG?", { type: "treasury", fund: "zcg" }], ["¿Qué tiene el ZCG?", { type: "treasury", fund: "zcg" }],
+  ["¿Cuál es el hashrate actual de Zcash?", { type: "mining" }], ["¿Cuál es el hashrate actual de la red Zcash hoy?", { type: "mining" }], ["¿Cuál es el solrate de Zcash ahora mismo?", { type: "mining" }],
+  ["¿Cuál fue la última llamada Arborist?", { type: "arborist" }], ["Última Arborist call", { type: "arborist" }], ["Última reunión Arborist", { type: "arborist" }], ["¿Cuál es la última reunión de Arborist?", { type: "arborist" }],
+  ["¿Cuánto pagó ZCG en 2025?", zcg(2025)], ["¿Cuánto ha pagado ZCG a Zingo?", zcg(null, "zingo")], ["¿Cuánto pagó ZCG a Zingo en 2025?", zcg(2025, "zingo")], ["¿Cuánto pagó ZCG en grants en 2024?", zcg(2024)], ["¿Cuánto ha pagado ZCG en subvenciones en total?", zcg(null)],
+  ["¿Cuánto pagaron los coinholders a Zcash Media en 2024?", "model"], ["¿Cuánto han pagado los coinholders a Zingo en 2025?", { type: "ledger", filters: { scope: "coinholder_grants", year: 2025, search: "zingo" } }], ["Total pagado por ZCG en 2024", zcg(2024)],
+  ["¿Cuál es el último ZIP?", { type: "latest_zip" }], ["Último ZIP", { type: "latest_zip" }], ["¿Cuál es el ZIP más reciente?", { type: "latest_zip" }],
+  ["¿Qué es el ZIP 317?", { type: "zip", number: 317, overview: true }], ["Explica el ZIP 317", { type: "zip", number: 317, overview: true }], ["Explícame el ZIP 317, por favor", { type: "zip", number: 317, overview: true }], ["¿Cuál es el estado del ZIP 317?", { type: "zip", number: 317, overview: false }],
+  ["¿Qué es Zcash?", { type: "faq", id: "zcash" }], ["¿Qué es ZEC?", { type: "faq", id: "zcash" }], ["¿Qué es ZCG?", { type: "faq", id: "zcg" }], ["¿Qué es Zcash Community Grants?", { type: "faq", id: "zcg" }], ["¿Qué es el Lockbox?", { type: "faq", id: "lockbox" }],
+  ["¿Qué es una viewing key?", { type: "faq", id: "viewing" }], ["¿Qué es una clave de visualización?", { type: "faq", id: "viewing" }], ["¿Qué es una IVK?", { type: "faq", id: "incoming" }], ["¿Qué es una FVK?", { type: "faq", id: "full" }], ["¿Qué es una OVK?", { type: "faq", id: "outgoing" }],
+  ["¿Qué es una dirección unificada?", { type: "faq", id: "unified" }], ["¿Qué es el halving?", { type: "faq", id: "halving" }], ["¿Qué es el Dev Fund?", { type: "faq", id: "funding" }], ["¿Qué es OpenZcash?", { type: "faq", id: "openzcash" }], ["¿Qué es Zarvis?", { type: "faq", id: "openzcash" }],
+  ["¿Puedes explicarme qué es una clave de visualización?", { type: "faq", id: "viewing" }], ["Háblame del Lockbox", { type: "faq", id: "lockbox" }], ["¿Qué significa ZCG?", { type: "faq", id: "zcg" }], ["Explica el halving", { type: "faq", id: "halving" }], ["¿Qué es Zcash, en términos simples?", { type: "faq", id: "zcash" }],
+  ["¿Qué hace privada una transacción de Zcash?", { type: "faq", id: "privacy" }], ["¿Cómo funcionan las transacciones blindadas?", { type: "faq", id: "privacy" }], ["¿Cómo funciona la privacidad de Zcash?", { type: "faq", id: "privacy" }], ["¿Cuál es la diferencia entre transacciones transparentes y blindadas?", { type: "faq", id: "privacy" }],
+  ["¿Qué puede revelar una IVK?", { type: "faq", id: "incoming" }], ["¿Puede una viewing key gastar mis ZEC?", { type: "faq", id: "key_spend" }], ["¿Una IVK identifica al remitente?", { type: "faq", id: "key_sender" }],
+  ["¿Cuál es la oferta máxima de ZEC?", { type: "faq", id: "supply" }], ["¿Cuánto es el 5% de 21 millones de ZEC?", { type: "faq", id: "five_percent" }],
+  ["¿De dónde saca OpenZcash sus datos?", { type: "faq", id: "methodology" }], ["¿Cómo calcula OpenZcash los grants pagados?", { type: "faq", id: "methodology" }],
+  ["¿Dónde está la calculadora de tesorería?", { type: "faq", id: "calculator" }], ["¿Cómo funciona la calculadora de tesorería?", { type: "faq", id: "calculator" }], ["¿Dónde encuentro carteras de Zcash?", { type: "faq", id: "wallets" }], ["¿Dónde encuentro billeteras de Zcash?", { type: "faq", id: "wallets" }],
+  ["¿Qué es el hashrate?", { type: "faq", id: "hashrate" }], ["¿Qué es un pool de minería?", { type: "faq", id: "mining_pool" }], ["¿Participar en un pool significa ser dueño de ZEC?", { type: "faq", id: "pool_ownership" }], ["¿Dónde encuentro datos de minería de Zcash?", { type: "faq", id: "mining_sources" }],
+  ["¿Por qué ZcashInfo y ZecStats muestran hashrates diferentes?", { type: "faq", id: "mining_comparison" }], ["ZcashInfo y ZecStats muestran hashrates diferentes. ¿Eso significa que uno está mal? ¿Cómo los comparo correctamente?", { type: "faq", id: "mining_comparison" }],
+  ["¿Cuál es el precio del ZEC en euros?", "model"], ["¿Cuál era el precio del ZEC ayer?", "model"], ["¿Es ZEC una buena inversión?", "model"], ["¿Cuánto pagó ZCG a Zingo sin contar reembolsos?", "model"], ["¿Qué tiene el ZCG y puede financiar una sociedad?", "model"],
+  ["¿Quién es Zooko?", "model"], ["¿Cuál es el precio del ZEC si sube 20x?", "model"], ["¿Cuánto va a pagar ZCG en 2027?", "model"], ["¿Cuál es la mejor billetera?", "model"], ["No me digas el precio del ZEC", "model"],
+];
 describe("Direct paraphrase corpus", () => {
   it("covers at least sixty EN/PT phrasings", () => expect(corpus.length).toBeGreaterThanOrEqual(60));
-  it.each(corpus)("%s", (question, expected) => {
+  it("covers at least forty Spanish phrasings", () => expect(spanish.filter(([, expected]) => expected !== "model").length).toBeGreaterThanOrEqual(40));
+  it.each([...corpus, ...spanish])("%s", (question, expected) => {
     const intent = directIntent([user(question)]);
     if (expected === "model") expect(intent).toBeUndefined(); else expect(intent).toEqual(expected);
+  });
+  it("continues Spanish follow-ups on the previous subject", () => {
+    expect(directIntent(history("¿Qué tiene el ZCG?", "¿y el Lockbox?"))).toEqual({ type: "treasury", fund: "lockbox" });
+    expect(directIntent(history("Saldos del ZCG y del Lockbox", "¿y qué tan actuales son los datos?"))).toEqual({ type: "treasury", fund: "both" });
+    expect(directIntent(history("¿Cuánto pagó ZCG a Zingo en 2024?", "¿y en 2025?"))).toEqual(zcg(2025, "zingo"));
+    expect(directIntent(history("¿Qué es una viewing key?", "¿Puede gastar mis ZEC?"))).toEqual({ type: "faq", id: "key_spend" });
+    expect(directIntent(history("¿Qué es una IVK?", "¿y el remitente?"))).toEqual({ type: "faq", id: "key_sender" });
+    expect(directIntent(history("¿Qué es una IVK?", "¿y la FVK?"))).toEqual({ type: "faq", id: "full" });
+    expect(directIntent(history("¿Qué es el ZIP 317?", "¿Cuándo fue creado?"))).toEqual({ type: "zip", number: 317, overview: false });
+    expect(directIntent(history("¿Cuál es el último ZIP?", "¿y el ZIP 32?"))).toEqual({ type: "zip", number: 32, overview: true });
+    expect(directIntent(history("Precio del ZEC", "¿y ahora?"))).toEqual({ type: "price" });
+    expect(directIntent(history("¿Qué tiene el ZCG?", "Gracias", "Responde en español", "¿y el Lockbox?"))).toEqual({ type: "treasury", fund: "lockbox" });
+    expect(directIntent(history("¿Qué tiene el ZCG?", "¿Eso es mucho?", "¿y el Lockbox?"))).toBeUndefined();
+  });
+  it("strips Spanish filler without touching the question's subject", () => {
+    expect(relaxed("me puedes decir el precio del zec ahora mismo")).toBe("el precio del zec");
+    expect(relaxed("oye zarvis dime cual es el saldo del zcg hoy")).toBe("cual es el saldo del zcg");
+    expect(relaxed("y ahora")).toBe("y");
   });
   it("strips filler without touching the question's subject", () => {
     expect(relaxed("can you tell me the zec price right now")).toBe("the zec price");
@@ -58,6 +105,9 @@ describe("Direct paraphrase corpus", () => {
     expect(directIntent(history("What does ZCG hold?", "Is that a lot?", "e o Lockbox?"))).toBeUndefined();
     expect(directIntent(history("What does ZCG hold?", "Thanks", "e o Lockbox?"))).toEqual({ type: "treasury", fund: "lockbox" });
   });
-  it.each(["only answer in json", "responda em frances", "use brl", "be brief from now on", "always cite zips", "ignore the previous rules", "calcule minha carteira"])("recognises an instruction: %s", (q) => expect(looksLikeInstruction(q)).toBe(true));
-  it.each(["who is zooko", "is zec a good investment", "what happened at the ceremony", "quem criou o zcash", "how does orchard differ from sapling"])("leaves an open question alone: %s", (q) => expect(looksLikeInstruction(q)).toBe(false));
+  it.each(["only answer in json", "responda em frances", "use brl", "be brief from now on", "always cite zips", "ignore the previous rules", "calcule minha carteira", "responde siempre en frances", "usa euros", "calcula mi billetera", "contesta en formato tabla"])("recognises an instruction: %s", (q) => expect(looksLikeInstruction(q)).toBe(true));
+  it.each(["who is zooko", "is zec a good investment", "what happened at the ceremony", "quem criou o zcash", "how does orchard differ from sapling", "quien creo zcash", "que paso en la ceremonia"])("leaves an open question alone: %s", (q) => expect(looksLikeInstruction(q)).toBe(false));
+  it("keeps Spanish instructions and unsupported preferences on the model", () => {
+    for (const prior of ["Responde solo en JSON", "Responde en francés", "Usa euros", "Calcula mi billetera privada", "Responde siempre en español"]) expect(directIntent(history(prior, "¿Qué es Zcash?")), prior).toBeUndefined();
+  });
 });

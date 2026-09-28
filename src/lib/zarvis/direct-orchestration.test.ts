@@ -68,11 +68,56 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     expect((await run(history("What does ZCG hold?", "e o Lockbox?"))).text).toContain("Lockbox — estimativa");
     expect((await run(history("Quanto o ZCG tem em ZEC?", "and the Lockbox?"))).text).toContain("Lockbox — estimate");
   });
-  it("routes a Spanish question to the model instead of an English template", async () => {
-    mocks.create.mockResolvedValueOnce((async function* () { yield { type: "response.completed", response: { status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: "Una respuesta con fuentes.", annotations: [] }] }], usage: { input_tokens: 100, output_tokens: 20 } } }; })());
-    const result = await run([user("¿Cuál es el precio actual de ZEC?")]);
+  it.each([
+    ["¿Cuál es el precio actual de ZEC?", /1 ZEC = \*\*USD\s100\.00\*\*\. Cotización del/],
+    ["¿Cuánto vale un ZEC?", /Cotización de OpenZcash/],
+    ["¿Cuáles son los saldos actuales del ZCG y del Lockbox?", /\*\*ZCG — saldo reportado:\*\* 50 ZEC \+ USD\s1,000\.00 en efectivo USD\./],
+    ["Saldos del ZCG y del Lockbox", /Lockbox — estimación:.*hasta el bloque \*\*3,500,000\*\*/],
+    ["¿Cuánto tiene el Lockbox?", /Valor bruto estimado: USD\s8,000\.00/],
+    ["¿Qué es Zcash?", /Zcash es una red de moneda digital/],
+    ["¿Qué es una clave de visualización?", /clave de visualización\*\* comparte acceso/],
+    ["¿Una IVK identifica al remitente?", /no identifica por sí sola al remitente blindado/],
+    ["¿Dónde encuentro billeteras de Zcash?", /directorio del ecosistema OpenZcash/],
+    ["¿Cuánto pagó ZCG en 2025?", /En \*\*2025\*\*, el registro de ZCG suma \*\*USD\s12,345\.67\*\*/],
+    ["¿Cuánto ha pagado ZCG a Zingo?", /que contiene “zingo”/],
+    ["¿Qué es el ZIP 317?", /Estado en el documento/],
+    ["¿Cuál es el último ZIP?", /Según el campo \*\*Created\*\*/],
+    ["Hola", /^¡Hola! Soy Zarvis\./], ["Muchas gracias", /^¡De nada!$/],
+  ])("answers a Spanish question in Spanish on the zero-cost path: %s", async (question, expected) => {
+    const result = await run([user(question)]);
+    expect(result.metrics).toMatchObject({ route: "local", modelCalls: 0, inputTokens: 0, outputTokens: 0 });
+    expect(mocks.client).not.toHaveBeenCalled(); expect(mocks.create).not.toHaveBeenCalled();
+    expect(result.text).toMatch(expected);
+    expect(result.text).not.toMatch(/reported holdings|Quoted |A shielded|Use the |does not identify|Document status|In \*\*|saldo reportado:\*\* .* em caixa|Cotação de |é uma rede/);
+    expect(result.emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "local", model: null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "es" } });
+  });
+  it("keeps a Spanish follow-up in Spanish and honours a stored Spanish preference", async () => {
+    expect((await run(history("¿Qué tiene el ZCG?", "¿y el Lockbox?"))).text).toContain("Lockbox — estimación");
+    expect((await run(history("¿Cuánto pagó ZCG a Zingo en 2024?", "¿y en 2025?"))).text).toContain("· 2025");
+    const stored = await run([user("What is Zcash?")], { language: "es" });
+    expect(stored.text).toContain("Zcash es una red"); expect(stored.metrics).toMatchObject({ route: "local", modelCalls: 0 });
+    expect(stored.emitted.at(-1)).toMatchObject({ type: "done", provenance: { language: "es" } });
+  });
+  it("acknowledges and stores a Spanish language preference without a model", async () => {
+    const result = await run([user("Responde en español")]);
+    expect(result.text).toBe("Entendido. Responderé en español.");
+    expect(result.emitted.find(e => e.type === "session")).toMatchObject({ session: { language: "es" } });
+    const next = await run(history("Responde en español, por favor.", "What is ZCG?"));
+    expect(next.text).toContain("**ZCG** significa **Zcash Community Grants**, un programa");
+    expect((await run([user("Usa dólares")])).text).toBe("Entendido. Usaré USD para los montos monetarios.");
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+  it("routes a French question to the model and labels its badge in English", async () => {
+    mocks.create.mockResolvedValueOnce((async function* () { yield { type: "response.completed", response: { status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: "Une réponse avec des sources.", annotations: [] }] }], usage: { input_tokens: 100, output_tokens: 20 } } }; })());
+    const result = await run([user("Quel est le prix actuel du ZEC ?")]);
     expect(result.metrics).toMatchObject({ route: "model", modelCalls: 1 });
     expect(result.emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", model: "grok-4.7", language: "en" } });
+  });
+  it("labels a Spanish model answer in Spanish", async () => {
+    mocks.create.mockResolvedValueOnce((async function* () { yield { type: "response.completed", response: { status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: "Una respuesta con fuentes.", annotations: [] }] }], usage: { input_tokens: 100, output_tokens: 20 } } }; })());
+    const result = await run([user("¿Es ZEC una buena inversión?")]);
+    expect(result.metrics).toMatchObject({ route: "model", modelCalls: 1 });
+    expect(result.emitted.at(-1)).toMatchObject({ type: "done", provenance: { route: "model", language: "es" } });
   });
   it("answers the treasuries starter locally with dated, aged figures instead of the grounding fallback", async () => {
     const starter = STARTERS.find((s) => s.label === "Explore the treasuries");

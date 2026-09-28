@@ -1,3 +1,4 @@
+import { pick } from "./language";
 import type { AnswerProvenance } from "./types";
 
 /** Client-safe labels for the badge under each answer. Counts and names only; the discarded text never reaches the browser. */
@@ -7,17 +8,20 @@ export function modelLabel(model: string | null, provider?: string | null): stri
   return model || provider || "AI model";
 }
 export function provenanceLabel(p: AnswerProvenance, sources: number, provider?: string | null): string {
-  const pt = p.language === "pt";
-  if (p.route === "local") return pt ? "Direto dos dados OpenZcash · sem IA" : "Direct from OpenZcash data · no AI";
-  const count = pt ? `${sources} ${sources === 1 ? "fonte" : "fontes"}` : `${sources} ${sources === 1 ? "source" : "sources"}`;
-  return [modelLabel(p.model, provider), ...(p.webSearch ? [pt ? "busca na web" : "web search"] : []), count, pt ? "confira" : "check them"].join(" · ");
+  const lang = p.language;
+  if (p.route === "local") return pick(lang, { en: "Direct from OpenZcash data · no AI", pt: "Direto dos dados OpenZcash · sem IA", es: "Directo de los datos de OpenZcash · sin IA" });
+  const count = `${sources} ${pick(lang, { en: sources === 1 ? "source" : "sources", pt: sources === 1 ? "fonte" : "fontes", es: sources === 1 ? "fuente" : "fuentes" })}`;
+  return [modelLabel(p.model, provider), ...(p.webSearch ? [pick(lang, { en: "web search", pt: "busca na web", es: "búsqueda web" })] : []), count, pick(lang, { en: "check them", pt: "confira", es: "verifícalas" })].join(" · ");
 }
 /** Rendered under a partial answer so dropped sentences or table rows never read as complete; the count comes from provenance, never the withheld text. */
 export function fallbackNotice(p: AnswerProvenance): string | undefined {
   if (!p.groundingFallback) return;
   const n = p.withheldFigures;
-  if (p.language === "pt") return n === 1 ? "1 valor não pôde ser verificado e foi omitido." : n > 1 ? `${n} valores não puderam ser verificados e foram omitidos.` : "Alguns valores não puderam ser verificados e foram omitidos.";
-  return n === 1 ? "1 figure could not be verified and was left out." : n > 1 ? `${n} figures could not be verified and were left out.` : "Some figures could not be verified and were left out.";
+  return pick(p.language, {
+    en: n === 1 ? "1 figure could not be verified and was left out." : n > 1 ? `${n} figures could not be verified and were left out.` : "Some figures could not be verified and were left out.",
+    pt: n === 1 ? "1 valor não pôde ser verificado e foi omitido." : n > 1 ? `${n} valores não puderam ser verificados e foram omitidos.` : "Alguns valores não puderam ser verificados e foram omitidos.",
+    es: n === 1 ? "1 cifra no pudo verificarse y se omitió." : n > 1 ? `${n} cifras no pudieron verificarse y se omitieron.` : "Algunas cifras no pudieron verificarse y se omitieron.",
+  });
 }
 /** Retrieval stamps carry their zone; the interface itself stays English. */
 export function retrievedLabel(iso: string): string | undefined {

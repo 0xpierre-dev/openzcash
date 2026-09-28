@@ -30,19 +30,34 @@ describe("Dated public mining estimates", () => {
     vi.useFakeTimers(); vi.setSystemTime(now + 60 * 60_000);
     const data = miningSnapshot(fixture(), now + 60 * 60_000);
     expect(data.stale).toBe(true);
-    const text = miningAnswer(JSON.stringify({ data }), true);
+    const text = miningAnswer(JSON.stringify({ data }), "pt");
     expect(text).toContain("desatualizada"); expect(text).toContain("UTC");
     expect(text).not.toContain("Hashrate estimado da rede Zcash:");
+    const es = miningAnswer(JSON.stringify({ data }), "es");
+    expect(es).toContain("Última referencia disponible (desactualizada):"); expect(es).toContain("No pude confirmar una lectura actual."); expect(es).toContain("UTC");
+    expect(es).not.toContain("Hashrate estimado de la red Zcash:");
+  });
+  it("carries the same figures, source and caveats in Spanish", () => {
+    vi.useFakeTimers(); vi.setSystemTime(now);
+    const data = miningSnapshot(fixture(), now);
+    const en = miningAnswer(JSON.stringify({ data }), "en"), es = miningAnswer(JSON.stringify({ data }), "es");
+    const gsol = en.match(/\*\*([\d.,]+) GSol\/s\*\*/)![1];
+    expect(es).toContain(`Hashrate estimado de la red Zcash: **${gsol} GSol/s**`); expect(es).toContain("Dificultad promedio de **20 bloques**");
+    expect(es).toContain(`del ${data.fromHeight} al ${data.toHeight}`); expect(es).toContain("Consultado el"); expect(es).toContain(MINING_SOURCE); expect(es).toContain("[Metodología](https://zcashinfo.com/learn/solrate/)");
+    expect(es).toContain("dificultad promedio × 8192 ÷ 75, según la metodología de ZcashInfo. No es un conteo de máquinas ni un promedio de 24 horas.");
+    expect(es).not.toMatch(/blocks|Retrieved|Metodologia\]/);
   });
   it("includes the source, date and averaging window without conflating units", () => {
     vi.useFakeTimers(); vi.setSystemTime(now);
-    const text = miningAnswer(JSON.stringify({ data: miningSnapshot(fixture(), now) }), false);
+    const text = miningAnswer(JSON.stringify({ data: miningSnapshot(fixture(), now) }), "en");
     expect(text).toContain("GSol/s"); expect(text).toContain("20 blocks"); expect(text).toContain("UTC");
     expect(text).toContain(MINING_SOURCE); expect(text).toContain("not a machine count or a 24-hour average");
   });
   it.each(["{}", '{"data":{"solrate":0}}', "invalid"])("reports unavailable data without claiming a zero or fabricated estimate: %s", content => {
-    expect(miningAnswer(content, true)).toContain("Não consegui confirmar");
-    expect(miningAnswer(content, false)).not.toContain("**0");
+    expect(miningAnswer(content, "pt")).toContain("Não consegui confirmar");
+    expect(miningAnswer(content, "en")).not.toContain("**0");
+    expect(miningAnswer(content, "es")).toContain("No pude confirmar el hashrate actual de la red Zcash."); expect(miningAnswer(content, "es")).toContain("Esto no significa que el hashrate sea cero.");
+    expect(miningAnswer(content, "es")).not.toContain("**0");
   });
 });
 describe("Public API boundary", () => {

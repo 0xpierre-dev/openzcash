@@ -16,13 +16,13 @@ export function sessionPreferences(previous: ZarvisSession = {}, messages: ChatM
   for (const message of messages) {
     if (message.role !== "user") continue;
     const q = message.content.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[.!?,]/g, "").replace(/\s+/g, " ").trim().replace(/^(?:please |por favor )/, "").replace(/(?: please| por favor)$/, "");
-    const language = q.match(/^(?:please )?(?:answer|reply|respond|responda|responde)(?: to me)? (?:in|em) (english|ingles|portuguese|portugues|spanish|espanhol|french|frances)[.!]?$/);
-    if (language) result.language = ({ english: "en", ingles: "en", portuguese: "pt", portugues: "pt", spanish: "es", espanhol: "es", french: "fr", frances: "fr" } as const)[language[1] as "english"];
-    if (/^(?:use|usar|mostre em|show amounts in) (usd|dollars|dolares)[.!]?$/.test(q)) result.currency = "USD";
+    const language = q.match(/^(?:please )?(?:answer|reply|respond|responda|responde|respondeme|contesta|contestame)(?: to me|me)? (?:in|em|en) (english|ingles|portuguese|portugues|spanish|espanhol|espanol|french|frances)[.!]?$/);
+    if (language) result.language = ({ english: "en", ingles: "en", portuguese: "pt", portugues: "pt", spanish: "es", espanhol: "es", espanol: "es", french: "fr", frances: "fr" } as const)[language[1] as "english"];
+    if (/^(?:use|usar|usa|mostre em|muestra en|show amounts in) (usd|dollars|dolares)[.!]?$/.test(q)) result.currency = "USD";
     if (/^(?:use|usar|mostre em|show amounts in) (brl|reais)[.!]?$/.test(q)) result.currency = "BRL";
     if (/^(?:use|usar|mostre em|show amounts in) (eur|euros)[.!]?$/.test(q)) result.currency = "EUR";
-    if (/^(?:keep answers short|be brief|seja breve|respostas curtas)[.!]?$/.test(q)) result.detail = "brief";
-    if (/^(?:give detailed answers|respostas detalhadas)[.!]?$/.test(q)) result.detail = "detailed";
+    if (/^(?:keep answers short|be brief|seja breve|respostas curtas|se breve|respuestas cortas)[.!]?$/.test(q)) result.detail = "brief";
+    if (/^(?:give detailed answers|respostas detalhadas|respuestas detalladas)[.!]?$/.test(q)) result.detail = "detailed";
   }
   return result;
 }

@@ -67,7 +67,8 @@ describe("Sources match the question's subject", () => {
     ["ZcashInfo and ZecStats show different hashrates. Does that mean one is wrong? How do I compare them correctly?", "mining_comparison"],
   ] as const)("uses reviewed facts only for the complete simple question: %s", (q, id) => {
     expect(directIntent([user(q)])).toEqual({ type: "faq", id });
-    expect(faqAnswer(id, true).text).toMatch(/https:\/\/(?:zcashinfo|zecstats)\.com/);
+    expect(faqAnswer(id, "pt").text).toMatch(/https:\/\/(?:zcashinfo|zecstats)\.com/);
+    expect(faqAnswer(id, "es").text).toMatch(/https:\/\/(?:zcashinfo|zecstats)\.com/);
   });
   it.each(["What is hashrate and calculate my profit at 5 cents per kWh?", "Qual é o hashrate atual?", "Compare today's hashrates on ZecStats and ZcashInfo", "ZcashInfo and ZecStats show different hashrates; calculate today's difference", "Who is Zooko and what is his current job?"])("retains analysis and current-fact requirements: %s", q => {
     expect(directIntent([user(q)])).toBeUndefined();

@@ -6,7 +6,7 @@ import { lookupPublicData, lookupTool } from "./data";
 import { ledgerTool } from "./ledger";
 import { zipTool, lookupZips } from "./zips";
 import { prepareLocal, lookupLedger, type Evidence, ledgerFactsAnswer } from "./local";
-import { answerLanguage } from "./language";
+import { answerLanguage, directLanguage, pick } from "./language";
 import { lookupScenario, scenarioTool, scenarioAnswer } from "./scenario";
 import { sessionPreferences, type ZarvisSession } from "./session";
 import { amountClaims, isFinancialEvidence, isFinancialQuestion, numericFacts, unsupportedFigures, ledgerComparisonEvidence, ledgerComparisonAnswer, verifiedSentences } from "./grounding";
@@ -55,10 +55,10 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
   const local = await prepareLocal(messages, signal, session);
   const evidence = [...local.evidence];
   const documents = local.documents ?? [];
-  const pt = answerLanguage(messages, session) === "pt";
+  const lang = directLanguage(answerLanguage(messages, session));
   let withheldFigures = 0;
   // Provenance is read when the answer completes, after routing, searches and numeric checks are known.
-  const provenance = (): AnswerProvenance => ({ route: metrics.route, model: metrics.route === "model" ? config.model : null, webSearch: metrics.webSearchCalls > 0, groundingFallback: (metrics.groundingFallbacks ?? 0) > 0, withheldFigures, language: pt ? "pt" : "en" });
+  const provenance = (): AnswerProvenance => ({ route: metrics.route, model: metrics.route === "model" ? config.model : null, webSearch: metrics.webSearchCalls > 0, groundingFallback: (metrics.groundingFallbacks ?? 0) > 0, withheldFigures, language: lang });
   const complete = (answer: string, candidates: ZarvisSource[]) => { emit({ type: "session", session }); finish(answer, candidates, provenance(), emit); };
   signal.throwIfAborted();
   Object.assign(metrics, { depth: plan.depth, reasoningEffort: plan.effort, route: local.direct ? "local" : "model", localLookups: local.evidence.length });
@@ -144,12 +144,14 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
     const kept = verifiedSentences(candidate, facts);
     if (kept) return kept;
     const ledgers = evidence.flatMap((item) => {
-      try { const data = JSON.parse(item.content).data; const answer = data?.filters ? ledgerFactsAnswer(data, pt) : undefined; return answer ? [answer] : []; } catch { return []; }
+      try { const data = JSON.parse(item.content).data; const answer = data?.filters ? ledgerFactsAnswer(data, lang) : undefined; return answer ? [answer] : []; } catch { return []; }
     });
-    const comparison = ledgerComparisonAnswer(evidence, pt);
-    return ledgers.length ? [...(comparison ? [comparison] : []), ...ledgers].join("\n\n") : (pt
-      ? "Não consegui validar todos os valores desta resposta. Consulte os dados e as datas nas fontes abaixo; não vou apresentar um número sem confirmação."
-      : "I could not validate all figures in this answer. Please check the data and dates in the sources below; I cannot present an unverified amount.");
+    const comparison = ledgerComparisonAnswer(evidence, lang);
+    return ledgers.length ? [...(comparison ? [comparison] : []), ...ledgers].join("\n\n") : pick(lang, {
+      en: "I could not validate all figures in this answer. Please check the data and dates in the sources below; I cannot present an unverified amount.",
+      pt: "Não consegui validar todos os valores desta resposta. Consulte os dados e as datas nas fontes abaixo; não vou apresentar um número sem confirmação.",
+      es: "No pude validar todas las cifras de esta respuesta. Consulta los datos y las fechas en las fuentes de abajo; no voy a presentar un monto sin confirmación.",
+    });
   }
   // Tools stay available until the true final synthesis round; a granted research request may add one bounded round so lookup → request → search fits.
   for (let round = 0; round < rounds(); round++) {
@@ -170,7 +172,7 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
     if (!calls.length) {
       if (!text.trim()) throw new Error("EMPTY_RESPONSE");
       const checked = await checkFigures(text, result);
-      complete(scenarioAnswers.length ? `${scenarioAnswers.join("\n\n")}\n\n### ${pt ? "Análise" : "Analysis"}\n\n${checked}` : checked, candidates);
+      complete(scenarioAnswers.length ? `${scenarioAnswers.join("\n\n")}\n\n### ${pick(lang, { en: "Analysis", pt: "Análise", es: "Análisis" })}\n\n${checked}` : checked, candidates);
       return metrics;
     }
     if (final) throw new Error("TOOL_LIMIT");
@@ -198,7 +200,7 @@ async function generate(messages: ChatMessage[], signal: AbortSignal, emit: (eve
               session.scenario = result.scenario.assumptions;
               if (result.source) candidates.push(result.source);
               // Keep the shared engine's figures; analytical questions continue into synthesis.
-              const facts = scenarioAnswer(result.scenario, pt);
+              const facts = scenarioAnswer(result.scenario, lang);
               if (!plan.analyze) { complete(facts, candidates); return metrics; }
               scenarioAnswers.push(facts);
               emit({ type: "status", message: "Analyzing the scenario…" });

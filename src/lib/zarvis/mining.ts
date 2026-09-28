@@ -1,5 +1,6 @@
 import "server-only";
 import { z } from "zod";
+import { locale, pick, type DirectLanguage } from "./language";
 
 export const MINING_SOURCE = "https://api.zcashinfo.com/api/v1/mining/overview";
 const METHOD = "https://zcashinfo.com/learn/solrate/";
@@ -63,18 +64,22 @@ export async function readMiningSnapshot(signal: AbortSignal): Promise<MiningSna
   return cached;
 }
 
-export function miningAnswer(content: string, pt: boolean): string {
-  const unavailable = pt
-    ? "Não consegui confirmar o hashrate atual da rede Zcash. Confira o [ZcashInfo](https://zcashinfo.com/pools/) ou o [ZecStats](https://zecstats.com/chart/hashrate), observando a data e a janela da estimativa. Isso não significa que o hashrate seja zero."
-    : "I could not verify Zcash's current network hashrate. Check [ZcashInfo](https://zcashinfo.com/pools/) or [ZecStats](https://zecstats.com/chart/hashrate), including the estimate's time and averaging window. This does not mean the hashrate is zero.";
+export function miningAnswer(content: string, lang: DirectLanguage): string {
+  const unavailable = pick(lang, {
+    en: "I could not verify Zcash's current network hashrate. Check [ZcashInfo](https://zcashinfo.com/pools/) or [ZecStats](https://zecstats.com/chart/hashrate), including the estimate's time and averaging window. This does not mean the hashrate is zero.",
+    pt: "Não consegui confirmar o hashrate atual da rede Zcash. Confira o [ZcashInfo](https://zcashinfo.com/pools/) ou o [ZecStats](https://zecstats.com/chart/hashrate), observando a data e a janela da estimativa. Isso não significa que o hashrate seja zero.",
+    es: "No pude confirmar el hashrate actual de la red Zcash. Consulta [ZcashInfo](https://zcashinfo.com/pools/) o [ZecStats](https://zecstats.com/chart/hashrate), observando la fecha y la ventana de la estimación. Esto no significa que el hashrate sea cero.",
+  });
   let data: MiningSnapshot;
   try { data = miningSnapshotSchema.parse(JSON.parse(content).data); } catch { return unavailable; }
   if (Date.parse(data.observedTo) > Date.now() + 120_000 || data.toHeight - data.fromHeight !== 19) return unavailable;
   const stale = data.stale || Date.now() - Date.parse(data.observedTo) > MAX_AGE_MS;
-  const number = new Intl.NumberFormat(pt ? "pt-BR" : "en-US", { maximumFractionDigits: 2 }).format(data.solrate / 1e9);
-  const date = (value: string) => new Intl.DateTimeFormat(pt ? "pt-BR" : "en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(value)) + " UTC";
-  const text = pt
-    ? `${stale ? "Última referência disponível (desatualizada):" : "Hashrate estimado da rede Zcash:"} **${number} GSol/s**. Média da dificuldade de **20 blocos**, de ${data.fromHeight} a ${data.toHeight}, com horários entre ${date(data.observedFrom)} e ${date(data.observedTo)}. Consultado em ${date(data.retrievedAt)}.\n\n${stale ? "Não consegui confirmar uma leitura atual. " : ""}Estimativa: dificuldade média × 8192 ÷ 75, conforme a metodologia do ZcashInfo. Não é contagem de máquinas nem uma média das últimas 24 horas.`
-    : `${stale ? "Last available reference (outdated):" : "Estimated Zcash network hashrate:"} **${number} GSol/s**. Average difficulty over **20 blocks**, from ${data.fromHeight} to ${data.toHeight}, timestamped between ${date(data.observedFrom)} and ${date(data.observedTo)}. Retrieved ${date(data.retrievedAt)}.\n\n${stale ? "I could not verify a current reading. " : ""}Estimate: average difficulty × 8192 ÷ 75, following ZcashInfo's methodology. It is not a machine count or a 24-hour average.`;
-  return `${text}\n\n[ZcashInfo · API](${MINING_SOURCE}) · [${pt ? "Metodologia" : "Methodology"}](${METHOD})`;
+  const number = new Intl.NumberFormat(locale(lang), { maximumFractionDigits: 2 }).format(data.solrate / 1e9);
+  const date = (value: string) => new Intl.DateTimeFormat(locale(lang), { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(value)) + " UTC";
+  const text = pick(lang, {
+    en: `${stale ? "Last available reference (outdated):" : "Estimated Zcash network hashrate:"} **${number} GSol/s**. Average difficulty over **20 blocks**, from ${data.fromHeight} to ${data.toHeight}, timestamped between ${date(data.observedFrom)} and ${date(data.observedTo)}. Retrieved ${date(data.retrievedAt)}.\n\n${stale ? "I could not verify a current reading. " : ""}Estimate: average difficulty × 8192 ÷ 75, following ZcashInfo's methodology. It is not a machine count or a 24-hour average.`,
+    pt: `${stale ? "Última referência disponível (desatualizada):" : "Hashrate estimado da rede Zcash:"} **${number} GSol/s**. Média da dificuldade de **20 blocos**, de ${data.fromHeight} a ${data.toHeight}, com horários entre ${date(data.observedFrom)} e ${date(data.observedTo)}. Consultado em ${date(data.retrievedAt)}.\n\n${stale ? "Não consegui confirmar uma leitura atual. " : ""}Estimativa: dificuldade média × 8192 ÷ 75, conforme a metodologia do ZcashInfo. Não é contagem de máquinas nem uma média das últimas 24 horas.`,
+    es: `${stale ? "Última referencia disponible (desactualizada):" : "Hashrate estimado de la red Zcash:"} **${number} GSol/s**. Dificultad promedio de **20 bloques**, del ${data.fromHeight} al ${data.toHeight}, con marcas de tiempo entre ${date(data.observedFrom)} y ${date(data.observedTo)}. Consultado el ${date(data.retrievedAt)}.\n\n${stale ? "No pude confirmar una lectura actual. " : ""}Estimación: dificultad promedio × 8192 ÷ 75, según la metodología de ZcashInfo. No es un conteo de máquinas ni un promedio de 24 horas.`,
+  });
+  return `${text}\n\n[ZcashInfo · API](${MINING_SOURCE}) · [${pick(lang, { en: "Methodology", pt: "Metodologia", es: "Metodología" })}](${METHOD})`;
 }
