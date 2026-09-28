@@ -19,6 +19,13 @@ describe("Topic routing for the site's datasets", () => {
     ["What is the current block height?", "chain"], ["When is the next halving?", "chain"], ["Quando é o próximo halving?", "chain"], ["How much ZEC is in the shielded pools?", "chain"], ["What is the circulating supply of ZEC?", "chain"],
     ["What was the ZEC price in January 2026?", "price_history"], ["Qual era o preço do ZEC em janeiro de 2026?", "price_history"], ["ZEC price history 2025", "price_history"], ["quanto era o zec em janeiro de 2026", "price_history"], ["How much was ZEC worth in January 2026?", "price_history"],
   ])("routes %s to %s", (question, topic) => expect(relevantTopics(question)).toContain(topic));
+  it("routes community venues: forum threads and ZecHub DAO proposals, apart from the ZecHub treasury and the community directory", () => {
+    for (const q of ["What did the forum say about the Zashi 2.0 release?", "Summarize https://forum.zcashcommunity.com/t/they-grow-up-so-fast-zashi-2-0/51030", "What is the community saying about NU7?", "O que a comunidade disse sobre o Zebra?", "Is there a forum thread on Tachyon?", "O que o fórum discutiu sobre o halving?"]) expect(relevantTopics(q)).toContain("forum");
+    for (const q of ["What is the latest ZecHub DAO proposal?", "Which DAO proposals passed this month?", "Quais propostas da ZecHub DAO foram aprovadas?", "How did the ZecHub DAO vote on A161?"]) expect(relevantTopics(q)).toContain("zechub_dao");
+    expect(relevantTopics("What is the latest ZecHub DAO proposal?")).not.toContain("zechub");
+    expect(relevantTopics("What is in the ZecHub treasury?")).toContain("zechub");
+    expect(relevantTopics("Is there a Zcash community in Nigeria?")).not.toContain("forum");
+  });
   it("keeps the current quote, ZIPs and ledger sums on their existing paths", () => {
     expect(relevantTopics("What is the ZEC price today?")).toEqual(["price"]); expect(relevantTopics("What was the ZEC price in January 2026?")).not.toContain("price");
     expect(relevantTopics("What are Zcash Improvement Proposals?")).not.toContain("proposals"); expect(relevantTopics("Explain ZIP 317 proposals")).not.toContain("proposals");
