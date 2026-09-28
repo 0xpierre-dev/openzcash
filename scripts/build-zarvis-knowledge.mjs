@@ -24,8 +24,10 @@ const references = [
   ["src/lib/ceremony/films.ts", "/ceremony/watch"],
   ["src/data/governance/record.json", "/governance"],
   ["src/lib/monthly/reading-sets.json", "/monthly"],
+  ["src/app/wallets/catalog-data.ts", "/wallets"],
+  ["src/lib/communities/data.ts", "/communities"],
 ];
-const textFields = new Set(["title", "subtitle", "description", "what", "label", "name", "detail", "text", "note", "body", "summary", "contents", "licence", "role", "outcome", "decidedBy", "status", "date", "evidenceCutoff", "reviewedAt", "era", "who", "knownAs", "public", "year", "by", "caption", "claim", "fact", "papers", "item", "lede"]);
+const textFields = new Set(["title", "subtitle", "description", "what", "label", "name", "detail", "text", "note", "body", "summary", "contents", "licence", "role", "outcome", "decidedBy", "status", "date", "evidenceCutoff", "reviewedAt", "era", "who", "knownAs", "public", "year", "by", "caption", "claim", "fact", "papers", "item", "lede", "maker", "shielded", "tag", "country", "region", "language", "about", "recipient"]);
 const decode = (s) => s.replace(/&apos;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\s+/g, " ").trim();
 export function publicText(source, filename, reference = false) {
   const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, filename.endsWith("tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
@@ -34,10 +36,10 @@ export function publicText(source, filename, reference = false) {
     if (ts.isJsxText(node)) { const text=decode(node.text); if(text) parts.push(text); }
     if (ts.isStringLiteralLike(node)) {
       const p = node.parent;
-      const field = (ts.isPropertyAssignment(p) || ts.isJsxAttribute(p)) ? p.name.getText(ast).replace(/["']/g, "") : "";
+      const field = (ts.isPropertyAssignment(p) || ts.isJsxAttribute(p)) && p.name !== node ? p.name.getText(ast).replace(/["']/g, "") : "";
       if ((textFields.has(field) || (ts.isJsxExpression(p) && p.expression === node) || (reference && ts.isArrayLiteralExpression(p))) && !/^(?:https?:|\/|#)/.test(node.text)) {
         const text=decode(node.text);
-        const labels = { public: "Identity publicly disclosed", knownAs: "Known as", role: "Role", era: "Chapter era", date: "Date", year: "Year" };
+        const labels = { public: "Identity publicly disclosed", knownAs: "Known as", role: "Role", era: "Chapter era", date: "Date", year: "Year", maker: "Maker", shielded: "Shielded support", tag: "Status", country: "Country", region: "Region", language: "Language", recipient: "ZCG ledger recipient" };
         if(text) parts.push(reference && Object.hasOwn(labels, field) ? `${labels[field]}: ${text}` : text);
       }
     }
@@ -55,7 +57,7 @@ export function publicSections(source, filename) {
       const fields = new Map(node.properties.filter(ts.isPropertyAssignment).map((p) => [p.name.getText(ast).replace(/["']/g, ""), p.initializer]));
       const heading = fields.get("name") ?? fields.get("title") ?? fields.get("item");
       const period = fields.get("era") ?? fields.get("year") ?? fields.get("date");
-      if (heading && ts.isStringLiteralLike(heading) && ["text", "role", "note", "description", "items", "papers", "contents", "what", "detail", "body"].some((key) => fields.has(key))) {
+      if (heading && ts.isStringLiteralLike(heading) && ["text", "role", "note", "description", "items", "papers", "contents", "what", "detail", "body", "about"].some((key) => fields.has(key))) {
         const prefix = [period && ts.isStringLiteralLike(period) ? period.text : "", heading.text].filter(Boolean).join(" · ");
         sections.push({ title: prefix, text: publicText(`const record = ${node.getText(ast)};`, filename, true) });
         return;

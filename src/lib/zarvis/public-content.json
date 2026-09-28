@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceRevision": "b084f7c361f4c0e6",
-  "sourceFiles": 54,
+  "sourceRevision": "6d34a1a0ce75fc43",
+  "sourceFiles": 56,
   "documents": [
     {
       "id": "src/app/zcg/page.tsx:0",
@@ -1022,6 +1022,276 @@
       "url": "https://openzcash.org/monthly",
       "title": "monthly",
       "text": "detail: Known pending at August 31 / submitted 2026-08-31. Non-custodial ZEC and local-currency payment rails.\nname: Privacy Literacy Lab Canada\ndetail: Known pending at August 31 / submitted 2026-08-30. Interactive privacy scenarios and a dated regulatory source map.\nname: Recoverify\ndetail: Known pending at August 31 / submitted 2026-08-27. Verify wallet backups while the original wallet is still available.\nname: Taking Zcash to the Streets\ndetail: Known pending at August 31 / submitted 2026-08-25. A Turkish video series and Istanbul street interviews.\nname: Zaino security audit\ndetail: Known pending at August 31 / submitted 2026-08-31. Independent audit; the final budget depends on scoping. August budget not verified.\nname: Zcash World, Mumbai\ndetail: Known pending at August 31 / submitted 2026-08-30. Public event and merchant onboarding around Devcon 8.\nname: ZecBit: NFT infrastructure\ndetail: Known pending at August 31 / submitted 2026-08-31. Proposed ZSA metadata, indexing and shielded payment infrastructure.\nevidenceCutoff: 2026-08-31\nreviewedAt: 2026-09-11\nlabel: August 1–31\nlabel: August 1–31"
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:0",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Zodl",
+      "text": "Zodl\nMaker: Zcash Open Development Lab\niOS\nAndroid\nShielded support: full\nFormerly Zashi. Shielded by default, from the original core team."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:1",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Zingo!",
+      "text": "Zingo!\nMaker: Zingo Labs\niOS\nAndroid\nDesktop\nShielded support: full\nOpen-source, shielded by default, with view-only UFVK import."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:2",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Ywallet",
+      "text": "Ywallet\nMaker: hanh\niOS\nAndroid\nDesktop\nShielded support: full\nFast shielded send/receive with an encrypted messenger."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:3",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · zkool",
+      "text": "zkool\nMaker: hanh\niOS\nAndroid\nDesktop\nShielded support: full\nhanh's successor to Ywallet. Full shielded, with UFVK import."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:4",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Brave Wallet",
+      "text": "Brave Wallet\nMaker: Brave Software\nDesktop\niOS\nAndroid\nShielded support: full\nShielded ZEC built into the Brave browser, via zk-proofs."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:5",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Noir Wallet",
+      "text": "Noir Wallet\nMaker: RHEA Finance\nBrowser extension\nShielded support: full\nFirst browser-extension wallet with shielded ZEC and DeFi."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:6",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · MetaMask Snap",
+      "text": "MetaMask Snap\nMaker: ChainSafe\nBrowser extension\nShielded support: full\nShielded ZEC inside MetaMask. ZCG-funded, Hacken-audited."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:7",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Vizor",
+      "text": "Vizor\nMaker: Chainapsis (Keplr)\niOS\nAndroid\nDesktop\nShielded support: full\nShielded by default with Keystone support, from the Keplr team."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:8",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Cake Wallet",
+      "text": "Cake Wallet\nMaker: Cake Labs\niOS\nAndroid\nDesktop\nShielded support: full\nMulti-coin privacy wallet; auto-shields and always sends shielded."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:9",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Edge",
+      "text": "Edge\nMaker: Edge\niOS\nAndroid\nShielded support: full\nMainstream multi-asset wallet defaulting to shielded z-addresses."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:10",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Unstoppable Wallet",
+      "text": "Unstoppable Wallet\nMaker: Horizontal Systems\niOS\nAndroid\nShielded support: full\nMulti-coin wallet with full shielded ZEC and auto-shielding."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:11",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Zipher",
+      "text": "Zipher\nMaker: Atmosphere Labs\niOS\nAndroid\nDesktop\nWeb\nShielded support: full\nStatus: Beta\nShielded-by-default Orchard wallet with a CLI for AI agents."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:12",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · zSTASH",
+      "text": "zSTASH\nMaker: Independent\nDesktop\nShielded support: full\nStatus: Coming soon\nNative Rust desktop wallet with hardware support and DEX swaps."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:13",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Zapp",
+      "text": "Zapp\nMaker: JustZappIt\nAndroid\nShielded support: full\nP2P messenger with a shielded Zodl-based wallet; no-KYC offramp across 7 local rails, including UPI, PIX and QRIS."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:14",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Gem Wallet",
+      "text": "Gem Wallet\nMaker: Gem Wallet\niOS\nAndroid\nShielded support: transparent\nMulti-chain self-custodial wallet; transparent (t-address) ZEC only."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:15",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Keystone",
+      "text": "Keystone\nMaker: Keystone\nHardware\nShielded support: full\nFirst air-gapped hardware wallet with native shielded (Orchard) ZEC."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:16",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Ledger",
+      "text": "Ledger\nMaker: Ledger · Zondax\nHardware\nShielded support: partial\nTransparent by default; a Zondax app adds Sapling on some models."
+    },
+    {
+      "id": "src/app/wallets/catalog-data.ts:17",
+      "url": "https://openzcash.org/wallets",
+      "title": "wallets · Trezor",
+      "text": "Trezor\nMaker: SatoshiLabs\nHardware\nShielded support: transparent\nTransparent (t-address) only; no shielded support."
+    },
+    {
+      "id": "src/lib/communities/data.ts:0",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · ZecHub",
+      "text": "ZecHub\nCountry: Global\nRegion: Global\nLanguage: English\nZCG ledger recipient: ZecHub\nZecHub 2026\nZecHub DAO — Proposal A149: Phase 1 Progress Report\nThe community-owned education DAO: wiki, bounties, and the umbrella funding regional ambassadors from its own treasury."
+    },
+    {
+      "id": "src/lib/communities/data.ts:1",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Brazil",
+      "text": "Zcash Brazil\nCountry: Brazil\nRegion: Latin America\nLanguage: Portuguese\nZCG ledger recipient: Zcash Brazil\nZcash Brazil | 2026\nZcash Brazil | 2025\nZECA: The Shielded Voice\nThe largest regional community in the ZCG ledger: education, events, ZECA voice assistant, and monthly public reports since 2022."
+    },
+    {
+      "id": "src/lib/communities/data.ts:2",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · ZK AV Club",
+      "text": "ZK AV Club\nCountry: Global\nRegion: Global\nLanguage: English\nZCG ledger recipient: ZK AV Club\nZcash Community Media Infrastructure & Support | Zk Av Club 2026\nZero-knowledge Audiovisual Club\nCommunity media infrastructure: audiovisual production, streaming support and creator tooling for the whole ecosystem."
+    },
+    {
+      "id": "src/lib/communities/data.ts:3",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash en Español",
+      "text": "Zcash en Español\nCountry: Hispanic America & Spain\nRegion: Latin America\nLanguage: Spanish\nZCG ledger recipient: Zcash Español\nZcash for Venezuela!\nZcash Global en Español 2026\nZcash en Español X account suspended\nThe Spanish-speaking Zcash community now has its own node!\nThe Spanish-speaking hub, coordinated by yoditar: news, education, its own node, Venezuela outreach and a family of local clubs. Now on Bluesky after an X suspension."
+    },
+    {
+      "id": "src/lib/communities/data.ts:4",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Türkiye",
+      "text": "Zcash Türkiye\nCountry: Türkiye\nRegion: Europe\nLanguage: Turkish\nZCG ledger recipient: Batuhan\nZcash Türkiye 2026 Q3-4 - 2027 Q1-2-3-4\nWe Need Support with a Testnet ZEC Faucet\nFrom Street Interviews to Education: Growing Zcash Awareness in Türkiye\nStreet interviews to bootcamps: education and events across Türkiye, with the most recent ledger payment of any community."
+    },
+    {
+      "id": "src/lib/communities/data.ts:5",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Nigeria",
+      "text": "Zcash Nigeria\nCountry: Nigeria\nRegion: Africa\nLanguage: English\nZCG ledger recipient: Zcash Nigeria\nZcash Nigeria 2026\nUniversity of Ibadan Zcash Bootcamp\nSix consecutive ZCG grants of campus bootcamps and meetups across Nigeria."
+    },
+    {
+      "id": "src/lib/communities/data.ts:6",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Ghana",
+      "text": "Zcash Ghana\nCountry: Ghana\nRegion: Africa\nLanguage: English\nZCG ledger recipient: ZcashGH\nBig things ahead for Zcash Ghana\nZcash Ghana (July 2026 - September 2026)\nZcash Ghana — Our First Year Journey (June 2025 – June 2026)\nCommunity education and meetups; two ZCG grants delivered."
+    },
+    {
+      "id": "src/lib/communities/data.ts:7",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Arabia",
+      "text": "Zcash Arabia\nCountry: MENA region\nRegion: Middle East\nLanguage: Arabic\nZCG ledger recipient: ZcashArabia\nGrant Application - Zcash Arabia (August to December 2026)\nZcash Arabia (June to September 2026)\nArabic-language content and community building across the MENA region."
+    },
+    {
+      "id": "src/lib/communities/data.ts:8",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Club Zcash Caracas",
+      "text": "Club Zcash Caracas\nCountry: Venezuela\nRegion: Latin America\nLanguage: Spanish\nPart of the Zcash en Espanol ecosystem, funded through its ZCG grant (no separate ledger recipient).\nCaracas meetups under the Zcash en Espanol umbrella, where financial privacy is a daily necessity."
+    },
+    {
+      "id": "src/lib/communities/data.ts:9",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Club Zcash Barcelona",
+      "text": "Club Zcash Barcelona\nCountry: Spain\nRegion: Europe\nLanguage: Spanish/Catalan\nClub Zcash Barcelona, the journey begins!\nBarcelona meetups under the Zcash en Español umbrella (managed by yoditar)."
+    },
+    {
+      "id": "src/lib/communities/data.ts:10",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · CodeRaiz México",
+      "text": "CodeRaiz México\nCountry: Mexico\nRegion: Latin America\nLanguage: Spanish\nZcash University Outreach Initiative – Mexico 2026 (CodeRaiz Proposal)\nDeveloper-focused education in Mexico, in the Español ecosystem."
+    },
+    {
+      "id": "src/lib/communities/data.ts:11",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Pesa Ya Siri (Zcash Tanzania)",
+      "text": "Pesa Ya Siri (Zcash Tanzania)\nCountry: Tanzania\nRegion: Africa\nLanguage: Swahili/English\nWhat If Buying Zcash Was as Easy as Buying Airtime?\nPesa Ya Siri: Making Zcash a Household Name in Tanzania\nSwahili-language education in Tanzania; proposals so far unfunded by the ZecHub DAO."
+    },
+    {
+      "id": "src/lib/communities/data.ts:12",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · ruZcash",
+      "text": "ruZcash\nCountry: Russia & CIS\nRegion: Europe\nLanguage: Russian\nРусскоязычный блог pro.zcash.ru\nКошелёк Zodl больше недоступен в российских магазинах приложений\nArtkor aka ruzcash for ZCG (December 2025) — candidatura ao comitê\nRussian-language content, translations and community for the CIS region."
+    },
+    {
+      "id": "src/lib/communities/data.ts:13",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Boston Zcash",
+      "text": "Boston Zcash\nCountry: United States\nRegion: North America\nLanguage: English\nSelf-declared unfunded; runs on its own.\nBoston Zcash Meetup – July 28 – Ironwood Launch Event\nBoston Zcash Meetup – March 06\nThe Boston meetup, running since the Sapling era: protocol launch events and community gatherings."
+    },
+    {
+      "id": "src/lib/communities/data.ts:14",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash China",
+      "text": "Zcash China\nCountry: China\nRegion: Asia\nLanguage: Chinese\nOn the Operation and Promotion of Zcash Community in China (2019, 16 posts)\nZcash China 还有人吗? 想交流 (chamado por reativação)\nChinese-language content and translations for the Zcash ecosystem."
+    },
+    {
+      "id": "src/lib/communities/data.ts:15",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Club Querétaro",
+      "text": "Zcash Club Querétaro\nCountry: Mexico\nRegion: Latin America\nLanguage: Spanish\nZcash Club Querétaro-Mexico: advancing financial privacy in Mexico\nMandatory ID registration on mobile lines in Mexico: the role of Zcash in México\nLocal Mexican club in the Español ecosystem, running Querétaro meetups."
+    },
+    {
+      "id": "src/lib/communities/data.ts:16",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash East Africa",
+      "text": "Zcash East Africa\nCountry: East Africa\nRegion: Africa\nLanguage: English/Swahili\nNot ZCG-funded; ZecHub DAO proposals have covered specific events only (e.g. ETHSafari), not the community itself.\nZcash East Africa @ ETHSafari 2026\nZcash East Africa (June-July 2026)\nZcash East Africa Official Launch & Community Onboarding Meetup\nGrassroots education in Uganda and Kenya, with event appearances backed by one-off ZecHub DAO proposals."
+    },
+    {
+      "id": "src/lib/communities/data.ts:17",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash France",
+      "text": "Zcash France\nCountry: France\nRegion: Europe\nLanguage: French\nThe French Corner / Le coin des Français\nFrench-language community and content."
+    },
+    {
+      "id": "src/lib/communities/data.ts:18",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Global Germany",
+      "text": "Zcash Global Germany\nCountry: Germany\nRegion: Europe\nLanguage: German\nGerman-language community and content."
+    },
+    {
+      "id": "src/lib/communities/data.ts:19",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash India",
+      "text": "Zcash India\nCountry: India\nRegion: Asia\nLanguage: Hindi/English\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZcash India 2026\nOpen Light Nodes: Independent Zcash Light Client Infrastructure for Asia\nZcash India 2026 Grant Application\nEducation and meetups in India, funded as a ZecHub DAO ambassador program."
+    },
+    {
+      "id": "src/lib/communities/data.ts:20",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Indonesia",
+      "text": "Zcash Indonesia\nCountry: Indonesia\nRegion: Asia\nLanguage: Bahasa Indonesia\nZcash Untuk Nusantara (post único, 2021)\nBahasa Indonesia content and community, in the QRIS offramp corridor."
+    },
+    {
+      "id": "src/lib/communities/data.ts:21",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Japan",
+      "text": "Zcash Japan\nCountry: Japan\nRegion: Asia\nLanguage: Japanese\nStrategic Lobbying and Community Building for the Proliferation and Understanding of Zcash in Japan\nJapanese-language community and translations."
+    },
+    {
+      "id": "src/lib/communities/data.ts:22",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Korea",
+      "text": "Zcash Korea\nCountry: South Korea\nRegion: Asia\nLanguage: Korean\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZechub DAO - 2026 Zcash Korea Ambassador Proposal (Approved)\nZechub DAO - Zcash Korea Ambassador Proposal (Approved) — edição 2025\nKorean community, funded as a ZecHub DAO Global Ambassador program."
+    },
+    {
+      "id": "src/lib/communities/data.ts:23",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Elzz — Global Ambassador",
+      "text": "Elzz — Global Ambassador\nCountry: Global\nRegion: Global\nLanguage: English\nGlobal Ambassador program funded by the ZecHub DAO treasury (three consecutive terms through Dec 2026).\nGlobal Ambassador Elzz July 2026 Report\nZecHub DAO Global Ambassador: educational content, X Spaces and ecosystem awareness, with monthly public reports."
+    },
+    {
+      "id": "src/lib/communities/data.ts:24",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcash Ukraine",
+      "text": "Zcash Ukraine\nCountry: Ukraine\nRegion: Europe\nLanguage: Ukrainian\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZcash Ukraine – Monthly Report (December 1–31, 2025) — último da série mensal iniciada em jun/2025\nZcash Ukraine Regional Community Initiative\nUkrainian community and education under wartime conditions."
+    },
+    {
+      "id": "src/lib/communities/data.ts:25",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · ZcashSA (Zcash South Africa)",
+      "text": "ZcashSA (Zcash South Africa)\nCountry: South Africa\nRegion: Africa\nLanguage: English\nSupport ZcashSA\nZcash first community event in Pretoria, SA\nPrivacy has landed in South Africa! Join in\nSouth African community education and meetups."
+    },
+    {
+      "id": "src/lib/communities/data.ts:26",
+      "url": "https://openzcash.org/communities",
+      "title": "communities · Zcast",
+      "text": "Zcast\nCountry: Global\nRegion: Global\nLanguage: Spanish\nZcast, the Zcash podcast in Spanish - A new phase\nZcast, el podcast de Zcash en Español\nThe Spanish-language Zcash podcast, in the Español ecosystem."
     }
   ]
 }

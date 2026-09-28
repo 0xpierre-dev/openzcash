@@ -258,5 +258,29 @@
   {
     "question": "Quais relatórios mensais existem?",
     "sourceContains": "/monthly"
+  },
+  {
+    "question": "Which wallets support shielded ZEC on iOS?",
+    "sourceContains": "/wallets"
+  },
+  {
+    "question": "Quais carteiras Zcash são shielded por padrão?",
+    "sourceContains": "/wallets"
+  },
+  {
+    "question": "Is Keystone a hardware wallet with Orchard support?",
+    "sourceContains": "/wallets"
+  },
+  {
+    "question": "Tell me about the Zcash Brazil community",
+    "sourceContains": "/communities"
+  },
+  {
+    "question": "Is there a Zcash community in Nigeria?",
+    "sourceContains": "/communities"
+  },
+  {
+    "question": "Quais comunidades Zcash falam espanhol?",
+    "sourceContains": "/communities"
   }
 ]

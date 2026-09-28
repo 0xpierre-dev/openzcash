@@ -11,6 +11,7 @@ import { needsMiningResearch } from "./research-scope";
 import { directIntent, normalizeQuestion } from "./direct-intent";
 import { faqAnswer } from "./direct-faq";
 import { treasuryAnswer, numberedZipAnswer } from "./direct-data";
+import { arboristAnswer } from "./arborist";
 import { sessionPreferences, type ZarvisSession } from "./session";
 import { answerLanguage } from "./language";
 export { directIntent, normalizeQuestion } from "./direct-intent";
@@ -87,14 +88,24 @@ export function relevantTopics(query: string): Array<typeof lookupSchema._output
     [/\b(?:zec?hub)\b/, "zechub"],
     [/\b(?:coinholder)\b/, "coinholder"],
     [/\b(?:news|noticias)\b/, "news"],
-    [/\b(?:grant applications?|funding proposals?|propostas de grants)\b/, "proposals"],
-    [/\b(?:ecosystem|repositori\w*|ecossistema|zebra|zaino|zingo|wallets?|carteiras?)\b/, "ecosystem"],
+    [/\b(?:arborist|arboretum|engineering calls?|reuni(?:ao|oes) (?:de engenharia|arborist)|calls? #?\s?\d{1,4})\b|#\d{1,4}\b.*\bcalls?\b/, "arborist"],
+    [/\b(?:wallets?|carteiras?|zashi|zodl|ywallet|zkool|keystone|trezor)\b/, "wallets"],
+    [/\b(?:communit(?:y|ies)|comunidades?|ambassadors?|embaixador\w*|zcash (?:brasil|brazil|nigeria|ghana|arabia|india|indonesia|japan|korea|china|france|ukraine|turkiye|turkey|east africa|south africa|en espanol|club|global germany|caracas|barcelona|queretaro)|zechub nigeria|zcashsa|ruzcash|zcast|coderaiz|pesa ya siri|boston zcash)\b/, "communities"],
+    [/\b(?:decid\w*|decis(?:ao|oes)|verdicts?|veredito\w*|approved|rejected|declined|withdrawn|vetoed|aprovad\w*|rejeitad\w*|recusad\w*|retirad\w*|vetad\w*)\b/, "decisions"],
+    [/^(?!.*\b(?:zips?|improvement|melhoria)\b).*\b(?:proposals?|propostas?|applications?|applicants?|candidaturas?|under review|em (?:analise|revisao))\b/, "proposals"],
+    [/\b(?:ecosystem|repositori\w*|ecossistema|zebra|zaino|zingo)\b/, "ecosystem"],
     [/\b(?:funding history|historico de financiamento)\b/, "funding_history"],
+    [/\b(?:block height|chain tip|current block|latest block|altura (?:do |de )?bloco|bloco atual|halvings?|shielded (?:supply|pools?|value)|(?:circulating|total|chain) supply|oferta (?:circulante|total)|pools? blindad\w*|value pools?)\b/, "chain"],
     [/\b(?:recipients?|beneficiarios?)\b/, "recipients"],
     [/\b(?:grants?|zcg)\b/, "grants"],
   ];
-  return [...new Set(matches.filter(([pattern]) => pattern.test(q)).map(([, topic]) => topic))].slice(0, 2);
+  const topics = [...new Set(matches.filter(([pattern]) => pattern.test(q)).map(([, topic]) => topic))];
+  // A dated price question wants the daily-close history, not today's quote.
+  if (topics.includes("price") && /\b(?:20[12]\d|hist[oó]ric\w*|history|ago|atras|last (?:month|year|week)|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b|janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)\b/.test(q) && !/\b(?:current|today|now|atual|hoje|agora)\b/.test(q)) topics.splice(topics.indexOf("price"), 1, "price_history");
+  return topics.slice(0, 2);
 }
+/** Topics whose readers filter by the question itself (a call number, a month, a wallet or community name, an outcome). */
+const QUERY_TOPICS = new Set<typeof lookupSchema._output.topic>(["arborist", "wallets", "communities", "decisions", "price_history"]);
 export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal, priorSession: ZarvisSession = {}): Promise<LocalPlan> {
   signal.throwIfAborted();
   const session = sessionPreferences(priorSession, messages);
@@ -120,6 +131,10 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
     const result = await lookupPublicData({ topic: "mining", query: "" }, signal);
     return { query, documents: [], evidence: [result], direct: miningAnswer(result.content, pt), external: false };
   }
+  if (intent?.type === "arborist") {
+    const result = await lookupPublicData({ topic: "arborist", query: "" }, signal);
+    return { query, documents: [], evidence: [result], direct: arboristAnswer(result.content, pt), external: false };
+  }
   const zip = isZipQuestion(query) ? await getZipCorpus(signal) : undefined;
   const documents = searchKnowledge(query, 4, 5000, zip?.corpus);
   if (intent?.type === "ledger") {
@@ -134,7 +149,7 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
   }
   const scenarioQuestion = /(?:simul|scenario|cenario|\b[0-9]+\s*[x×]\b)/i.test(query) && /treasur|tesour|cypherpunk|cipherpunk|lockbox|zcg/i.test(query);
   const topics = scenarioQuestion ? [] : intent?.type === "price" ? ["price" as const] : relevantTopics(query);
-  const evidence = await Promise.all(topics.map((topic) => lookupPublicData({ topic, query: "" }, signal)));
+  const evidence = await Promise.all(topics.map((topic) => lookupPublicData({ topic, query: QUERY_TOPICS.has(topic) ? normalizeQuestion(query).slice(0, 120) : "" }, signal)));
   if (zip) evidence.push(zipCatalogEvidence(query, zip.corpus, zip.stale));
   signal.throwIfAborted();
   const q = normalizeQuestion(query);

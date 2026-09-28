@@ -7,13 +7,22 @@ export const SEARCH_DOMAINS = [
   "forum.zcashcommunity.com", "shieldedlabs.net", "openzcash.org", "zcashinfo.com", "zecstats.com",
 ];
 
+/** Hosts the site's own curated datasets and readers cite: recordings, explorers, vote tallies, wallet makers' sites and audits, community sites. Social profiles stay links on /communities, not citations. */
+export const CITATION_DOMAINS = [
+  ...SEARCH_DOMAINS, "youtube.com", "youtu.be", "cipherscan.app", "zcashcommunitygrants.org", "vote.heliosvoting.org", "siv.org", "valargroup.org",
+  "zodl.com", "zingolabs.org", "ywallet.app", "brave.com", "zknoir.com", "snaps.metamask.io", "vizor.cash", "cakewallet.com", "edge.app", "unstoppable.money", "zipher.to", "zstash.app", "justzappit.xyz", "gemwallet.com", "keyst.one", "ledger.com", "trezor.io", "defuse.ca", "hacken.io",
+  "zcashbrasil.com.br", "zcashesp.com", "zkav.club", "free2z.cash", "zcashjapan.com", "zcashind.com", "zcasharabia.xyz", "pro.zcash.ru", "zechub.substack.com", "zcashbrazil.substack.com", "zcashesp.substack.com", "zechubnigeria.substack.com", "zcashukraine.substack.com", "zcashidn.substack.com", "zcasheastafrica.substack.com",
+];
+/** GitHub organizations the site imports from or lists as a project's source: applications, coinholder rounds, Arborist notes, core teams and the catalogued wallets. */
+const GITHUB_ORGS = /^\/(?:zcash|zcashfoundation|zechub|zingolabs|shieldedlabs|zcashcommunitygrants|financial-privacy-foundation|electric-coin-company|zodl-inc|zecdev|zcash-hackworks|nighthawk-apps|qed-it|hhanh00|brave|chainsafe|chainapsis|cake-tech|edgeapp|horizontalsystems|atmospherelabs-dev|gemwalletcom|keystonehq|trezor)(?:\/|$)/i;
+/** Allowlist, not evidence: a URL the model or a user supplies still renders only when its host is one the site itself cites. */
 export function safeSourceUrl(raw: string): string | null {
   try {
     const u = new URL(raw);
     if (u.protocol !== "https:" || u.username || u.password || u.port) return null;
-    if (SEARCH_DOMAINS.some((d) => u.hostname === d || u.hostname.endsWith(`.${d}`)))
+    if (CITATION_DOMAINS.some((d) => u.hostname === d || u.hostname.endsWith(`.${d}`)))
       return u.href;
-    if (u.hostname === "github.com" && /^\/(zcash|zcashfoundation|zechub|zingolabs|shieldedlabs)\//i.test(u.pathname))
+    if (u.hostname === "github.com" && GITHUB_ORGS.test(u.pathname))
       return u.href;
     return null;
   } catch { return null; }

@@ -32,7 +32,7 @@ describe("Local knowledge coverage and size", () => {
   });
   it("does not inject the full navigation or a changing clock into the system prefix", () => {
     expect(systemPrompt()).not.toContain("PUBLIC SITE GUIDE");
-    expect(systemPrompt().length).toBeLessThan(6200);
+    expect(systemPrompt().length).toBeLessThan(6500);
   });
   it("bounds large, escaped and deeply nested records without losing freshness markers", () => {
     const input = { stale: true, importedAt: "2026-09-26", rows: Array.from({ length: 200 }, () => ({ name: "A", text: '\"\\'.repeat(2000), amount: 100 })) };

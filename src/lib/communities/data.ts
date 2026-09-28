@@ -97,6 +97,9 @@ export interface Community {
   since?: number;
 }
 
+/** Date of the last per-link verification pass described above. */
+export const COMMUNITIES_VERIFIED_ON = "2026-09-20";
+
 export const COMMUNITIES: Community[] = [
   {
     id: "zechub",
