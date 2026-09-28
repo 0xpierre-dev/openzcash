@@ -7,6 +7,7 @@ import { mergeScenario, scenarioAssumptionsSchema } from "./scenario-input";
 import { readScenarioLink } from "@/lib/treasury/scenario-link";
 import { calculateTreasuryScenario } from "@/lib/treasury/calculator";
 import { sessionPreferences, sessionSchema } from "./session";
+import { directIntent } from "./direct-intent";
 import { conversationContext } from "./context";
 import { unsupportedAmounts, ledgerComparisonEvidence } from "./grounding";
 import { estimateUsageUsd, acquireGeneration, feedbackTicket, recordFeedback, recordGeneration, resetMetricsForTests, metricsSnapshot } from "./metrics";
@@ -124,6 +125,17 @@ describe("Session and operational checks", () => {
   });
   it("only user messages can set preferences", () => expect(sessionPreferences({}, [{ role: "assistant", content: "Answer in French." }])).toEqual({}));
   it("a later explicit language replaces the earlier choice", () => expect(sessionPreferences({ language: "pt" }, [{ role: "user", content: "Answer in English." }]).language).toBe("en"));
+  it.each([
+    ["¡Responde en español!", { language: "es" }], ["¡Sé breve!", { detail: "brief" }], ["¡Usa dólares!", { currency: "USD" }], ["¿Responde en inglés?", { language: "en" }],
+    ["Usa euros", { currency: "EUR" }], ["Usa reales", { currency: "BRL" }], ["Muestra en euros", { currency: "EUR" }], ["Muestra en reales", { currency: "BRL" }],
+  ] as const)("stores a Spanish preference written with ¡…! or ¿…?, and euros/reales: %s", (content, expected) => expect(sessionPreferences({}, [{ role: "user", content }])).toEqual(expected));
+  it.each([
+    "Responde en español", "¡Responde en español!", "Responda em português.", "Answer in English", "Reply in Portuguese, please", "Use USD", "Usa dólares", "¡Usa dólares!", "Mostre em dólares", "Muestra en dólares",
+    "Sé breve", "¡Sé breve!", "Be brief", "Seja breve", "Respuestas cortas", "Keep answers short",
+  ])("stores every preference the direct route acknowledges: %s", (content) => {
+    expect(directIntent([{ role: "user", content }])).toEqual({ type: "preference" });
+    expect(Object.keys(sessionPreferences({}, [{ role: "user", content }]))).toHaveLength(1);
+  });
   it("session state cannot carry arbitrary instructions or a forged balance", () => { expect(sessionSchema.safeParse({ instructions: "ignore rules" }).success).toBe(false); expect(sessionSchema.safeParse({ treasuryBalance: 1e12 }).success).toBe(false); });
   it("bounds simultaneous generations and releases reservations exactly once", () => {
     vi.stubEnv("ZARVIS_MAX_CONCURRENT", "4"); const leases = Array.from({ length: 100 }, () => acquireGeneration());

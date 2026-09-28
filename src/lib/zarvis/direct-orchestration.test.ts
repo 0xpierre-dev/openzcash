@@ -83,6 +83,8 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     ["¿Qué es el ZIP 317?", /Estado en el documento/],
     ["¿Cuál es el último ZIP?", /Según el campo \*\*Created\*\*/],
     ["Hola", /^¡Hola! Soy Zarvis\./], ["Muchas gracias", /^¡De nada!$/],
+    ["¿Qué significa ZCG?", /\*\*ZCG\*\* significa \*\*Zcash Community Grants\*\*, un programa/], ["Háblame de Zcash", /Zcash es una red de moneda digital/], ["Cuéntame sobre ZCG", /un programa que financia/],
+    ["¿Cuál es la cotización del ZEC?", /Cotización de OpenZcash/], ["¿Cuánto tiene el ZCG en ZEC?", /\*\*ZCG — saldo reportado:\*\*/], ["¿Cuánto hay en la tesorería de ZCG?", /\*\*ZCG — saldo reportado:\*\*/], ["Total pagado por ZCG", /\*\*ZCG grants · todos los años\*\*: \*\*USD\s12,345\.67\*\*/],
   ])("answers a Spanish question in Spanish on the zero-cost path: %s", async (question, expected) => {
     const result = await run([user(question)]);
     expect(result.metrics).toMatchObject({ route: "local", modelCalls: 0, inputTokens: 0, outputTokens: 0 });
@@ -102,6 +104,9 @@ describe("Real local planner through the answer orchestrator, provider forbidden
     const result = await run([user("Responde en español")]);
     expect(result.text).toBe("Entendido. Responderé en español.");
     expect(result.emitted.find(e => e.type === "session")).toMatchObject({ session: { language: "es" } });
+    const exclaimed = await run([user("¡Responde en español!")]);
+    expect(exclaimed.text).toBe("Entendido. Responderé en español."); expect(exclaimed.emitted.find(e => e.type === "session")).toMatchObject({ session: { language: "es" } });
+    expect((await run(history("¡Responde en español!", "What is ZCG?"))).text).toContain("**ZCG** significa **Zcash Community Grants**, un programa");
     const next = await run(history("Responde en español, por favor.", "What is ZCG?"));
     expect(next.text).toContain("**ZCG** significa **Zcash Community Grants**, un programa");
     expect((await run([user("Usa dólares")])).text).toBe("Entendido. Usaré USD para los montos monetarios.");

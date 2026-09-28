@@ -11,7 +11,13 @@ describe("Answer language", () => {
     "Analise as limitações dessa tesouraria comunitária se o ZEC subir 20 vezes.",
   ])("reads Portuguese from function words, not a keyword shortlist: %s", (q) => expect(questionLanguage(q)).toBe("pt"));
   it.each(["Como funciona a viewing key?", "Como funciona uma viewing key", "Qual o treasury balance da ZCG?", "Quanto o ZCG pagou em grants em 2024?"])("lets Portuguese function words outweigh English domain nouns: %s", (q) => expect(questionLanguage(q)).toBe("pt"));
-  it.each(["Saldo ZCG", "Saldo Lockbox", "Como esta o ZCG"])("breaks a Portuguese/Spanish tie toward Portuguese, which has direct templates: %s", (q) => expect(questionLanguage(q)).toBe("pt"));
+  it.each(["Saldo ZCG", "Saldo Lockbox", "Como esta o ZCG", "Último ZIP", "Última Arborist call"])("breaks a Portuguese/Spanish tie toward Portuguese, which has direct templates: %s", (q) => expect(questionLanguage(q)).toBe("pt"));
+  it.each(["¿Último ZIP?", "¿Saldo ZCG?", "¡Saldo Lockbox!", "¿Última Arborist call?"])("breaks the same tie toward Spanish when the raw text carries ¿, ¡ or ñ, which Portuguese never writes: %s", (q) => expect(questionLanguage(q)).toBe("es"));
+  it.each([
+    "Vale a pena minerar Zcash?", "Vale a pena usar Zashi?", "Como se usa uma viewing key?", "Ela usa dólares?", "Pago em ZEC ou dólares?", "Use dólares", "Usar dólares",
+    "O que significa ZCG?", "Me fale sobre o Lockbox", "Por que o ZEC caiu?", "Explique sobre ZIP 317",
+  ])("keeps Portuguese whose everyday words are also Spanish (se, vale, usa, pago, use, usar, sobre, por, dólares): %s", (q) => expect(questionLanguage(q)).toBe("pt"));
+  it.each(["Use USD", "Use the calculator", "Use the latest data"])("never reads Portuguese from an English turn that starts with \"use\": %s", (q) => expect(questionLanguage(q)).not.toBe("pt"));
   it.each(["Zashi on OS", "Zcash as money", "ZEC at ATH"])("never reads Portuguese from an English turn whose words happen to spell os/as: %s", (q) => expect(questionLanguage(q)).not.toBe("pt"));
   it.each(["What are the ZCG balances?", "ZEC price", "and the Lockbox?", "hi", "thanks", "yes", "Latest ZIP", "What is a viewing key?", "What do the balances show?", "a viewing key", "Zcash on iOS"])("reads English: %s", (q) => expect(questionLanguage(q)).toBe("en"));
   it.each([
@@ -19,6 +25,7 @@ describe("Answer language", () => {
     "¿Cuáles son los saldos actuales del ZCG?", "Saldos del ZCG y del Lockbox", "Tesorería del ZCG", "¿Cuánto tiene el Lockbox?", "¿Qué tan actuales son los datos?",
     "¿Cuál es el hashrate actual de Zcash?", "¿Cuál fue la última llamada Arborist?", "Última reunión Arborist", "¿Cuánto pagó ZCG a Zingo en 2025?",
     "¿Qué es una clave de visualización?", "¿Una IVK identifica al remitente?", "¿Dónde encuentro carteras de Zcash?", "Hola", "Gracias", "Muchas gracias", "¿Y el Lockbox?", "Responde en español",
+    "¿Qué significa ZCG?", "¿Qué significa hashrate?", "¿Qué quiere decir ZCG?", "Háblame de Zcash", "Cuéntame sobre ZCG", "Total pagado por ZCG", "Usa dólares", "¿Cuánto tiene el ZCG en ZEC?", "¿Cuál es la cotización del ZEC?",
   ])("reads Spanish from function words, with or without accents and ¿?: %s", (q) => expect(questionLanguage(q)).toBe("es"));
   it.each(["Cual es el precio del ZEC", "Cuanto vale un ZEC hoy", "Que es el Lockbox", "Donde encuentro billeteras de Zcash"])("reads Spanish typed without accents or punctuation: %s", (q) => expect(questionLanguage(q)).toBe("es"));
   it.each(["Quel est le prix actuel du ZEC ?", "Combien détient la Lockbox ?"])("never mistakes French for Portuguese or Spanish: %s", (q) => expect(questionLanguage(q)).toBe("other"));

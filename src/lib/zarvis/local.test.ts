@@ -67,6 +67,12 @@ describe("Precise local answers", () => {
     expect((await prepareLocal([user("Sé breve")], signal())).direct).toBe("Entendido. Mantendré las respuestas concisas.");
     expect(mocks.lookup).not.toHaveBeenCalled();
   });
+  it("acknowledges \"Use dólares\" in Portuguese, because use/usar and dólares are Portuguese too", async () => {
+    expect((await prepareLocal([user("Qual o preço do ZEC?"), answer("US$ 100"), user("Use dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Use dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Usar dólares")], signal())).direct).toBe("Combinado. Vou usar USD para valores monetários.");
+    expect((await prepareLocal([user("Use USD")], signal())).direct).toBe("Understood. I'll use USD for monetary amounts.");
+  });
   it("keeps source time and USD units in a local quote", async () => {
     const local = await prepareLocal([user("Qual o preço do ZEC?")], signal());
     expect(local.direct).toContain("100,00"); expect(local.direct).toContain("UTC"); expect(local.direct).toContain("/api/zec-price");
