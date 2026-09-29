@@ -46,24 +46,21 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   }, [chat.messages, chat.progress]);
   const submit = (question?: string) => { follow.current = true; void chat.send(question); input.current?.focus(); };
   const provider = chat.status?.provider ?? "the AI provider";
-  return <section className={`zarvis-chat ${compact ? "zarvis-chat-compact" : ""}`} aria-label="Conversation with Zarvis">
+  // Empty state: the mascot and title sit above the composer, the starters below it, all centred as one group.
+  return <section className={`zarvis-chat ${compact ? "zarvis-chat-compact" : ""}`} data-empty={empty || undefined} aria-label="Conversation with Zarvis">
     <div className="zarvis-chat-toolbar">
       <span className="zarvis-chat-name">Zarvis</span>
       <div className="zarvis-toolbar-actions">
-      {!empty ? <ZarvisMotionToggle className="zarvis-motion zarvis-motion-toolbar"/> : null}
+      <ZarvisMotionToggle className="zarvis-motion zarvis-motion-toolbar"/>
       <button type="button" onClick={() => { chat.clear(); input.current?.focus(); }} disabled={empty && !chat.draft} className="zarvis-text-button">＋ New chat</button>
       </div>
     </div>
     <div className="zarvis-messages" ref={scroll} onScroll={() => {
       const el = scroll.current!; follow.current = el.scrollHeight - el.scrollTop - el.clientHeight < 90;
-    }} tabIndex={0} aria-label="Conversation history">
+    }} tabIndex={empty ? undefined : 0} role={empty ? undefined : "region"} aria-label={empty ? undefined : "Conversation history"}>
       {empty ? <div className="zarvis-welcome">
         <ZarvisCompanion/>
-        <h2>What would you like to know<br/>about Zcash?</h2>
-        <p className="zarvis-welcome-note">Ask in your language: Zarvis answers in Portuguese, Spanish, English and more. <a href="/zarvis/about">How Zarvis works →</a></p>
-        <div className="zarvis-starters">{STARTERS.map((starter) => <button key={starter.label} type="button" onClick={() => { chat.setDraft(starter.question); input.current?.focus(); }}>
-          <span>{starter.label}</span>
-        </button>)}</div>
+        <h2>What would you like to know about Zcash?</h2>
       </div> : <div className="zarvis-thread">{chat.messages.map((message, index) => <article key={message.id} className={`zarvis-message zarvis-message-${message.role}`} aria-label={message.role === "assistant" ? "Zarvis response" : "Your message"}>
         {message.role === "assistant" ? <ZarvisFigure className="zarvis-answer-figure"
           expression={index === chat.messages.length - 1 && chat.expression !== "idle" ? chat.expression : message.pose ?? "explaining"}
@@ -121,8 +118,14 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
           </button> : <button type="submit" className="zarvis-send" disabled={!chat.status?.available || !chat.draft.trim() || waiting} aria-label="Send question">↑</button>}
         </div>
       </form>
-      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Zarvis never writes your question into the page address; a link you copy with “Copy question link” carries that one question, and opening it only fills the composer. Shared calculator links contain only scenario assumptions. Feedback sends your rating, and for “Needs work” an optional reason from a fixed list, without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
+      {empty ? <>
+        <div className="zarvis-starters">{STARTERS.map((starter) => <button key={starter.label} type="button" title={starter.question} onClick={() => { chat.setDraft(starter.question); input.current?.focus(); }}>
+          {starter.label}
+        </button>)}</div>
+        <p className="zarvis-welcome-note">Answers in Portuguese, Spanish, English and more, with sources. <a href="/zarvis/about">How Zarvis works →</a></p>
+      </> : null}
     </div>
+      <div className="zarvis-privacy"><span>Zarvis can make mistakes.</span><details onToggle={(e) => { if (e.currentTarget.open) e.currentTarget.scrollIntoView({ block: "nearest" }); }}><summary>Privacy &amp; data</summary><p>Simple data lookups can be answered by OpenZcash. When AI is needed, recent messages and relevant public data are sent to {provider}. OpenZcash keeps this conversation in browser memory; reloading clears it. Zarvis never writes your question into the page address; a link you copy with “Copy question link” carries that one question, and opening it only fills the composer. Shared calculator links contain only scenario assumptions. Feedback sends your rating, and for “Needs work” an optional reason from a fixed list, without the conversation text.</p><p>Provider response storage is disabled for this integration. Provider retention policies may still apply. <a href={provider === "xAI (Grok)" ? "https://docs.x.ai/developers/faq/security" : "https://developers.openai.com/api/docs/guides/your-data"} target="_blank" rel="noopener noreferrer">Provider data policy ↗</a></p><p>Never share recovery phrases, private keys or viewing keys. Hosting access logs and short-lived abuse counters are separate from the conversation. <a href="/zarvis/about">About Zarvis: routes, limits, retention, incidents</a></p></details></div>
   </section>;
 }
 
