@@ -33,7 +33,7 @@ export default async function TransacoesPage() {
     : 0;
   const baselineHeight = snap?.blockHeight ? Number(snap.blockHeight) : 0;
 
-  // Live market price (CoinGecko, ~10 min cache); fall back to the sheet price.
+  // Live market price (CoinGecko, then CoinPaprika or Coinbase; ~10 min cache); fall back to the sheet price.
   const liveCents = await currentZecUsdCents();
   const zecUsd = (liveCents ?? Number(snap?.zecusdPriceCents ?? 39_200)) / 100;
 
