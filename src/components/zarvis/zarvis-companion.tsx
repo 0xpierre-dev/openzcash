@@ -29,7 +29,6 @@ export function ZarvisCompanion() {
         expression={greeting ? "greeting" : expression}
         animated paused={motionPaused}/>
     </button>
-    <ZarvisMotionToggle/>
   </div>;
 }
 
