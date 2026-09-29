@@ -44,6 +44,15 @@ describe("Zarvis canary", () => {
     expect(result.ok).toBe(false); expect(result.failedCases).toEqual(["treasuries", "price"]); expect(result.passed).toBe(2);
     expect(mocks.create).not.toHaveBeenCalled();
   });
+  it("fails the price check when every price feed is down, even though the price reader is still cited", async () => {
+    mocks.lookup.mockImplementation(async (args: { topic: keyof typeof links }) => args.topic === "price"
+      ? { content: JSON.stringify({ sourceUrl: `https://openzcash.org${links.price}`, retrievedAt: new Date().toISOString(), data: { asset: "ZEC", currency: "USD", quote: null, note: "The price feed is unavailable and no saved quote exists." } }), source: { title: "OpenZcash · price", url: `https://openzcash.org${links.price}`, retrievedAt: new Date().toISOString() } }
+      : { ...publicData(), source: { title: `OpenZcash · ${args.topic}`, url: `https://openzcash.org${links[args.topic]}`, retrievedAt: new Date().toISOString() } });
+    const result = await runCanary(new AbortController().signal);
+    expect(result.cases.find((c) => c.id === "price")).toMatchObject({ ok: false, route: "local" });
+    expect(result.failedCases).toContain("price");
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
   it("reports a class, not a message, when a check throws", async () => {
     mocks.zip.mockRejectedValue(new Error("PUBLIC_READ_TIMEOUT"));
     const result = await runCanary(new AbortController().signal);

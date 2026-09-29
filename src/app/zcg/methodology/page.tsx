@@ -39,8 +39,8 @@ const SOURCES: { name: string; what: string }[] = [
     what: "The Lockbox / ZIP-1016 ZEC balance. Market prices, grant approvals and milestone delivery are not facts supplied by this chain balance.",
   },
   {
-    name: "CoinGecko",
-    what: "The current ZEC/USD market price, cached for approximately ten minutes. If the feed is unavailable, the last cached price or the spreadsheet's recorded rate may be used. This price is not read from the Zcash chain.",
+    name: "CoinGecko, CoinPaprika, Coinbase",
+    what: "The current ZEC/USD market price from CoinGecko, or from CoinPaprika and then Coinbase when CoinGecko is unavailable, cached for approximately ten minutes; every quote names its provider and quote time. If all three are unavailable, the last cached price or the spreadsheet's recorded rate may be used. This price is not read from the Zcash chain.",
   },
 ];
 

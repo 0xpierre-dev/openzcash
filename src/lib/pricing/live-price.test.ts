@@ -38,7 +38,8 @@ describe("ZEC market quote lifecycle", () => {
     fetchMock.mockRejectedValue(new Error("feed unavailable"));
     vi.setSystemTime(new Date(start.getTime() + 22 * 60_000));
     expect(await currentZecUsdQuote()).toEqual({ ...refreshed, stale: true });
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    // Two successful refreshes, then one failed round across all three providers.
+    expect(fetchMock).toHaveBeenCalledTimes(5);
   });
 
   it("does not label an old provider quote fresh just because it was fetched now", async () => {
@@ -60,15 +61,15 @@ describe("ZEC market quote lifecycle", () => {
   });
 
   it("backs off briefly after an outage and recovers without restarting the server", async () => {
-    fetchMock.mockRejectedValueOnce(new Error("offline")).mockResolvedValue(payload());
+    fetchMock.mockRejectedValueOnce(new Error("offline")).mockRejectedValueOnce(new Error("offline")).mockRejectedValueOnce(new Error("offline")).mockResolvedValue(payload());
     const { currentZecUsdQuote } = await import("./live-price");
     expect(await currentZecUsdQuote()).toBeNull();
     vi.setSystemTime(new Date(start.getTime() + 29_999));
     expect(await currentZecUsdQuote()).toBeNull();
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
     vi.setSystemTime(new Date(start.getTime() + 30_000));
     expect(await currentZecUsdQuote()).toMatchObject({ cents: 113274, stale: false });
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(4);
   });
 
   it("uses retrieval time without inventing a provider timestamp when it is absent", async () => {
@@ -81,6 +82,33 @@ describe("ZEC market quote lifecycle", () => {
     fetchMock.mockResolvedValue(payload(price));
     const { currentZecUsdQuote } = await import("./live-price");
     expect(await currentZecUsdQuote()).toBeNull();
+  });
+
+  it("falls back to CoinPaprika when CoinGecko refuses the host, with CoinPaprika's own quote time and URL", async () => {
+    fetchMock
+      .mockResolvedValueOnce({ ok: false, status: 403, json: async () => ({}) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ last_updated: "2026-09-10T21:20:00Z", quotes: { USD: { price: 1417.4230486494778 } } }) });
+    const { currentZecUsdQuote } = await import("./live-price");
+    expect(await currentZecUsdQuote()).toMatchObject({ cents: 141742, source: "CoinPaprika", sourceUrl: "https://api.coinpaprika.com/v1/tickers/zec-zcash?quotes=USD", quotedAt: "2026-09-10T21:20:00.000Z", stale: false });
+    expect(fetchMock.mock.calls.map((call) => String(call[0]).split("?")[0])).toEqual(["https://api.coingecko.com/api/v3/simple/price", "https://api.coinpaprika.com/v1/tickers/zec-zcash"]);
+  });
+
+  it("falls back to Coinbase when both aggregates fail or return no valid price, parsing its string price and time", async () => {
+    fetchMock
+      .mockRejectedValueOnce(new Error("timeout"))
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ quotes: { USD: { price: 0 } } }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ price: "1425.02", time: "2026-09-10T21:22:43.497591223Z" }) });
+    const { currentZecUsdQuote } = await import("./live-price");
+    expect(await currentZecUsdQuote()).toMatchObject({ cents: 142502, source: "Coinbase", quotedAt: "2026-09-10T21:22:43.497Z", stale: false });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("ignores a provider time from the future rather than dating the quote by it", async () => {
+    fetchMock
+      .mockResolvedValueOnce({ ok: false, status: 429, json: async () => ({}) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ last_updated: "2027-01-01T00:00:00Z", quotes: { USD: { price: 1400 } } }) });
+    const { currentZecUsdQuote } = await import("./live-price");
+    expect(await currentZecUsdQuote()).toMatchObject({ cents: 140000, source: "CoinPaprika", quotedAt: null, fetchedAt: start.toISOString() });
   });
 
   it("returns null with no cache and an unavailable feed", async () => {

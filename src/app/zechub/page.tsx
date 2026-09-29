@@ -309,7 +309,7 @@ export default async function ZechubDaoPage() {
   const quoteTime = quote?.quotedAt ?? quote?.fetchedAt;
   const priceNote =
     quote && quoteTime
-      ? `CoinGecko${quote.stale ? " · stale quote" : ""} · ${quote.quotedAt ? "" : "retrieved "}${quoteTime.slice(0, 16).replace("T", " ")} UTC`
+      ? `${quote.source}${quote.stale ? " · stale quote" : ""} · ${quote.quotedAt ? "" : "retrieved "}${quoteTime.slice(0, 16).replace("T", " ")} UTC`
       : `spreadsheet price · ${fmtDate(snapshot?.capturedOn ?? "")}`;
   const spendableUsdCents = zatToUsdCents(
     snapshot?.fpfUnreservedZat ?? null,
