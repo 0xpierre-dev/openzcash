@@ -12,7 +12,9 @@ const render = (compact: boolean) =>
     createElement(
       ZarvisProvider,
       null,
-      compact ? createElement(ZarvisChat, { compact: true }) : createElement(ZarvisPage),
+      compact
+        ? createElement(ZarvisChat, { compact: true })
+        : createElement(ZarvisPage),
     ),
   );
 function positions(html: string, needles: string[]) {
@@ -32,8 +34,12 @@ describe("Zarvis empty state", () => {
     (_label, compact, composer) => {
       const html = render(compact);
       expect(html).toContain('data-empty="true"');
+      // The pause control sits between the toolbar's start and the history region, i.e. inside the toolbar, and the mascot precedes the title.
       const order = positions(html, [
+        'class="zarvis-chat-toolbar"',
         'aria-label="Pause mascot animation"',
+        'class="zarvis-messages"',
+        'aria-label="Say hello to Zarvis"',
         "What would you like to know about Zcash?",
         composer,
         'class="zarvis-starters"',
@@ -44,9 +50,11 @@ describe("Zarvis empty state", () => {
       // One pause control, in the toolbar; the mascot no longer carries a floating one.
       expect(html.split('aria-label="Pause mascot animation"')).toHaveLength(2);
       expect(html).not.toMatch(/What would you like to know<br\/?>/);
+      // The empty history is not a tab stop; it becomes one, labelled, once there is a conversation.
+      expect(html).not.toContain('aria-label="Conversation history"');
     },
   );
-  it("labels each starter chip with its full question and still fills the composer with it", () => {
+  it("labels each starter chip with its full question", () => {
     const html = render(false);
     for (const starter of STARTERS) {
       expect(html).toContain(`title="${starter.question}"`);
