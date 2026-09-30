@@ -48,3 +48,4 @@ next-env.d.ts
 /public/.well-known/agent-skills/
 /public/.well-known/skills/
 /skills/zcg-copilot/**/__pycache__/
+/tmp/
