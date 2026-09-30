@@ -2,13 +2,15 @@ import { currentZecCirculatingSupply } from "@/lib/pricing/circulating-supply";
 import { currentZecUsdQuote } from "@/lib/pricing/live-price";
 import { reportedDevFundData } from "@/lib/treasury/dev-fund-data";
 import { TreasuryCalculator } from "./treasury-calculator";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "ZEC treasury calculator · OpenZcash",
   description:
     "Explore how ZEC price, mining, and circulating supply change the cost of reaching a treasury target.",
-};
+  path: "/zcg/treasury-calculator",
+});
 
 // Dated fallback only. A failed live feed must never look like a fresh reading.
 const SUPPLY_FALLBACK = 16_945_106;

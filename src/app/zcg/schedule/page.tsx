@@ -5,8 +5,14 @@ import { SourceRecordLink } from "@/components/source-record-link";
 import { getPaymentSchedule } from "@/lib/zcg/schedule-repo";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { Synced } from "@/components/synced";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Scheduled payments · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Scheduled payments · OpenZcash",
+  description:
+    "Approved commitments with a future payment estimate. Plan by month and project.",
+  path: "/zcg/schedule",
+});
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** "2026-10" → "Oct 2026". */

@@ -1,11 +1,13 @@
 import { CopilotPage } from "@/components/copilot/copilot-page";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "ZecHub Copilot · OpenZcash",
   description:
     "Research ZecHub DAO votes and treasury records in your AI assistant. Start without installation, save instructions, or add an optional agent skill.",
-};
+  path: "/zechub/copilot",
+});
 
 const USE_CASES = [
   {

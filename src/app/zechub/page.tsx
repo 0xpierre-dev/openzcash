@@ -22,9 +22,15 @@ import { SourceDateNotice } from "@/components/source-date-notice";
 import { nowMs } from "@/lib/utils";
 import { currentZecUsdQuote } from "@/lib/pricing/live-price";
 import { valueTreasurySnapshot } from "@/lib/zechub/treasury-valuation";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZecHub DAO · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZecHub DAO · OpenZcash",
+  description:
+    "ZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote.",
+  path: "/zechub",
+});
 
 const SHEET_URL =
   "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/edit";

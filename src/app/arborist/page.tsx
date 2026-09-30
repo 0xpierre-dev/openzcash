@@ -9,13 +9,15 @@ import {
   ARBORIST_FORUM_URL,
 } from "@/lib/arborist/notes";
 import { ArboristView } from "./arborist-view";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Arborist Calls · OpenZcash",
   description:
     "Every Zcash Arborist Call: dates, agendas, moderators, notes and recordings, read live from the notes repository and official video feed.",
-};
+  path: "/arborist",
+});
 
 async function Archive() {
   const [calls, announcements] = await Promise.all([

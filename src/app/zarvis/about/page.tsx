@@ -3,12 +3,14 @@ import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
 import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "About Zarvis · OpenZcash",
   description: "How OpenZcash's AI guide answers: which questions never touch a model, which model is used, what a visitor may ask per day, what is kept for how long, what it cannot do, and what broke on launch day.",
-};
+  path: "/zarvis/about",
+});
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

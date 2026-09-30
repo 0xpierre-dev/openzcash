@@ -10,13 +10,15 @@ import { listProposals } from "@/lib/zcg/proposals-repo";
 import { getMeetings } from "@/lib/zcg/governance-repo";
 import { listGrants } from "@/lib/zcg/grants-repo";
 import { proposalDecisions, sortDecisions } from "@/lib/governance/decisions";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Decisions · ZCG · OpenZcash",
   description:
     "Every verdict the Zcash Community Grants committee has taken on a grant proposal, dated, with the minutes of that day and the grant it created.",
-};
+  path: "/zcg/decisions",
+});
 
 const shortDate = (iso: string | null) =>
   iso

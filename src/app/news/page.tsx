@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 /* eslint-disable @next/next/no-img-element */
 import { Badge, PageHeader } from "@/components/ui";
 import { COMMUNITIES } from "@/lib/communities/data";
@@ -12,7 +13,13 @@ import {
 import { NewsSeen } from "@/components/news-seen";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "News · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "News · OpenZcash",
+  description:
+    "The last seven days across the Zcash ecosystem: community forum, core GitHub releases, ZecHub DAO proposals, grant applications and new ledger entries. Refreshed hourly.",
+  path: "/news",
+  card: { kicker: "The last seven days across the Zcash ecosystem" },
+});
 
 const NEW_WINDOW_MS = 48 * 60 * 60 * 1000;
 

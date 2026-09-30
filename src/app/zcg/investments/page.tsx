@@ -22,9 +22,15 @@ import { spreadsheetSource } from "@/lib/zcg/source-links";
 import { ZCG_GIDS } from "@/lib/zcg/sheets";
 import { MayaEarningsChart, MayaVolumeChart } from "./charts";
 import styles from "./investments.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZCG Investments · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZCG Investments · OpenZcash",
+  description:
+    "The liquidity ZCG supports. The activity it enables. The position the treasury holds.",
+  path: "/zcg/investments",
+});
 const ANNOUNCEMENT =
   "https://forum.zcashcommunity.com/t/zcg-maya-liquidity/51608";
 const compactUsd = (n: number) =>

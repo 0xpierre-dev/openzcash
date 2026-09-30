@@ -18,9 +18,17 @@ import {
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { bountyUsd, getDiscretionaryLines } from "@/lib/zcg/discretionary";
 import { getStipendSummary } from "@/lib/zcg/stipends";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Totals ZCG · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Totals ZCG · OpenZcash",
+  shareTitle: "Totals · ZCG",
+  description:
+    "Official ZCG spreadsheet aggregates of paid amounts by recipient and classification. They cross-check the ledger, since the sheet only sums payments that settled.",
+  path: "/zcg/totals",
+  card: { title: "Totals" },
+});
 
 export default async function TotaisPage() {
   const [cats, recips, grand, ledgerGrantsPaid, discretionary, stipendTab] = await Promise.all([

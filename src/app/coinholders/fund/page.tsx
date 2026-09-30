@@ -13,13 +13,16 @@ import { ROUNDS } from "@/lib/coinholder/rounds";
 import { formatPct, formatZec, summarize } from "@/lib/coinholder/derive";
 import { Stat } from "../stat";
 import styles from "../coinholders.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: `The fund · ${PROGRAM.officialName} · OpenZcash`,
   description:
     "The Coinholder-Controlled Fund under ZIP 1016: its story, live balance, what the approved grants would take and how a grant is paid.",
-};
+  path: "/coinholders/fund",
+  card: { title: "The fund" },
+});
 
 const usd = (value: number, compact = false) =>
   value.toLocaleString("en-US", {

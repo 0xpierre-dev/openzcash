@@ -14,12 +14,14 @@ import { Pager, PartHeader, partEyebrow } from "../part-chrome";
 import { CeremonyPlayer } from "./player";
 import { Films } from "./films";
 import styles from "../ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Watch the ceremony · Zcash Ceremony · OpenZcash",
   description:
     "71 minutes of the Denver station of the 2016 Zcash parameter ceremony, as three cameras and three microphones recorded them, in seven parts. Streams from the Internet Archive.",
-};
+  path: "/ceremony/watch",
+});
 
 const PARTS_OF_RECORDING = partsOf(DURATION_S, 7);
 

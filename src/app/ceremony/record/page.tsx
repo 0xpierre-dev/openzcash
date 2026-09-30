@@ -2,12 +2,14 @@ import { AFTER, RECORDS, gigabytes } from "@/lib/ceremony/record";
 import { clock } from "@/lib/ceremony/recordings";
 import { Pager, PartHeader, partEyebrow } from "../part-chrome";
 import styles from "../ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "The record · Zcash Ceremony · OpenZcash",
   description:
     "What the 2016 Zcash ceremony left on the record, where it lives and under which licence: footage, transcript, keys, disc images, Radiolab and the short film.",
-};
+  path: "/ceremony/record",
+});
 
 export default function RecordPage() {
   return (

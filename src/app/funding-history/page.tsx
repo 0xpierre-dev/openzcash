@@ -27,13 +27,17 @@ import { addressBalance, nodeLockboxPool } from "@/lib/funding/node-check";
 import { COINHOLDER_FUND } from "@/lib/funding/destinations";
 import { DestinationsSection } from "./destinations-section";
 import styles from "./funding-history.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Zcash's Since block zero · OpenZcash",
+  shareTitle: "Since block zero · Zcash funding history",
   description:
     "Every ZEC the Zcash protocol has allocated outside mining since the genesis block, computed block by block from the consensus rules and valued at the close of the day it was paid.",
-};
+  path: "/funding-history",
+  card: { title: "Since block zero", section: "Zcash funding history" },
+});
 
 const zat = (n: number) => BigInt(Math.round(n));
 const usd = (dollars: number, compact = true) =>

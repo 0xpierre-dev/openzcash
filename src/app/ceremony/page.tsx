@@ -5,13 +5,15 @@ import { DURATION_S, VIEWS, clock } from "@/lib/ceremony/recordings";
 import { TENTH_ANNIVERSARY, daysUntil } from "@/lib/ceremony/story";
 import { PartHeader } from "./part-chrome";
 import styles from "./ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const revalidate = 3600;
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Zcash Ceremony · OpenZcash",
   description:
     "How Zcash was born: the six witnesses of the October 2016 parameter ceremony, the Denver station footage, the record they left and ten years since.",
-};
+  path: "/ceremony",
+});
 
 export default function CeremonyOverviewPage() {
   const watch = PARTS.find((p) => p.slug === "watch")!;

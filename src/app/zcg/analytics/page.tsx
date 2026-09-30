@@ -11,9 +11,17 @@ import { listGrants } from "@/lib/zcg/grants-repo";
 import { listDisbursements } from "@/lib/zcg/disbursements-repo";
 import { disbTypeLabel } from "@/lib/zcg/format";
 import { nowMs } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Insights ZCG · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Insights ZCG · OpenZcash",
+  shareTitle: "Insights · ZCG",
+  description:
+    "Trends derived entirely from the disbursement ledger and totals we already import. No new data.",
+  path: "/zcg/analytics",
+  card: { title: "Insights" },
+});
 
 const MS_PER_DAY = 86_400_000;
 

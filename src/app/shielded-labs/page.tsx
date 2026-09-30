@@ -6,9 +6,15 @@ import { IconShield } from "@/components/icons";
 import { Suspense } from "react";
 import { OrgUpdates } from "@/components/org-updates";
 import { getShieldedLabsUpdates } from "@/lib/org-updates/forum";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Shielded Labs · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Shielded Labs · OpenZcash",
+  description:
+    "Donation-funded and never paid from the Dev Fund or block rewards, Shielded Labs drives Crosslink (hybrid Proof-of-Stake) and the Network Sustainability Mechanism.",
+  path: "/shielded-labs",
+});
 
 const SITE = "https://shieldedlabs.net/";
 const CROSSLINK = "https://shieldedlabs.net/crosslink/";

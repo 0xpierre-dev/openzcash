@@ -4,12 +4,14 @@ import { CHAPTERS, type Chapter } from "@/lib/ceremony/story";
 import { YouTubeLite } from "../youtube-lite";
 import { Pager, PartHeader, partEyebrow } from "../part-chrome";
 import styles from "../ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "The road to the genesis block · Zcash Ceremony · OpenZcash",
   description:
     "A short documentary of the years from 1982 to the Zcash genesis block: Chaum's blind signatures, the cypherpunks, Hashcash and bit gold, Bitcoin, Zerocoin and Zerocash, and the 2016 ceremony.",
-};
+  path: "/ceremony/road",
+});
 
 function ChapterQuote({ quote }: { quote: NonNullable<Chapter["quote"]> }) {
   return (

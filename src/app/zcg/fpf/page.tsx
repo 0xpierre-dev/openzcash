@@ -26,16 +26,19 @@ import {
   coinholderGrantViews,
   officialProposalVerdict,
 } from "@/lib/coinholder/official-status";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 /** The coinholder tab has a few dozen rows; the list's default cap of 250 is far above it. */
 const LEDGER_ROWS = 1000;
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Financial Privacy Foundation · program administrator · OpenZcash",
   description:
     "The Financial Privacy Foundation administers the Coinholder-Directed Retroactive Grants Program: submissions, review, KYC and reporting. Coinholders decide the grants.",
-};
+  path: "/zcg/fpf",
+  card: { title: "Financial Privacy Foundation", section: null },
+});
 
 // Shared vocabularies; the coinholder programme keeps its own verdict wording.
 const PROPOSAL_VERDICT_LABEL = COINHOLDER_VERDICT_LABEL;

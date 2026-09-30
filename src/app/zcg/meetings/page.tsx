@@ -8,9 +8,15 @@ import {
   MeetingControls,
   NewMeetingButton,
 } from "../governance-admin";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Meetings · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Meetings · OpenZcash",
+  description:
+    "The latest Zcash Community Grants committee meeting minutes, straight from the community forum. New grant proposals are opened on GitHub.",
+  path: "/zcg/meetings",
+});
 
 function formatDate(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);

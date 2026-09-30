@@ -2,9 +2,15 @@
 import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { Synced } from "@/components/synced";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "How we compute this · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "How we compute this · OpenZcash",
+  description:
+    "OpenZcash is a read-only mirror: it never holds spend keys and moves no funds. Every figure comes from public sources. Here is how.",
+  path: "/zcg/methodology",
+});
 
 function Section({
   title,

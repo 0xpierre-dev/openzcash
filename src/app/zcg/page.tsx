@@ -12,10 +12,13 @@ import { listChangelog } from "@/lib/zcg/changelog";
 import { proposalStatusLabel } from "@/lib/zcg/status-labels";
 import { MEMBERS, SEATED_FROM } from "./current-committee-data";
 import { maybeAutoRefresh } from "@/lib/zcg/freshness";
+import { homeMetadata } from "@/lib/seo/page-metadata";
 import "./overview.css";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZCG · OpenZcash" };
+// The root redirects here, so a shared openzcash.org link previews as the
+// site (site title, description and card), while the tab still reads ZCG.
+export const metadata = homeMetadata({ title: "ZCG · OpenZcash", path: "/zcg" });
 
 type Tile = { href: string; label: string; sub: string; mark: string };
 

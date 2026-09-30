@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { CopilotPage } from "@/components/copilot/copilot-page";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "ZCG Copilot · OpenZcash",
   description:
     "Research Zcash grants and project ideas with public sources in your AI assistant. Start with a prompt, with no installation required.",
-};
+  path: "/zcg/copilot",
+});
 
 const USE_CASES = [
   {

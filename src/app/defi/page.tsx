@@ -2,9 +2,15 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/workspace";
 import { Badge, Card, PageHeader, Stat } from "@/components/ui";
 import { getDefiPools } from "@/lib/defi/pools";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZEC DeFi liquidity · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZEC DeFi liquidity · OpenZcash",
+  description:
+    "Native ZEC pool depth, value locked and yield from public Midgard APIs (Maya Protocol, THORChain), refreshed every few minutes.",
+  path: "/defi",
+});
 
 function usd0(n: number): string {
   return new Intl.NumberFormat("en-US", {
