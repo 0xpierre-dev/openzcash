@@ -1,6 +1,6 @@
 # Coinholder-Directed Retroactive Grants Program (`/coinholders`)
 
-The program has its own app in the sidebar, directly above ZCG, labelled **CD Retroactive Grants** with the official name, _Coinholder-Directed Retroactive Grants Program_, as its tooltip and as the Overview's title (the breadcrumb names the program on the other pages). The Financial Privacy Foundation appears only as the program's administrator (its app is "FPF · Program administrator"), as the program proposal describes it: FPF runs submissions, review summaries, KYC and reporting; coinholders decide; the key-holders pay and can veto (ZIP 1016).
+The program has its own app in the sidebar, directly above ZCG, labelled **Coinholder Grants** with the official name, _Coinholder-Directed Retroactive Grants Program_, as its tooltip and as the Overview's title (the breadcrumb names the program on the other pages). The Financial Privacy Foundation appears only as the program's administrator (its app is "FPF · Program administrator"), as the program proposal describes it: FPF runs submissions, review summaries, KYC and reporting; coinholders decide; the key-holders pay and can veto (ZIP 1016).
 
 ## Pages
 

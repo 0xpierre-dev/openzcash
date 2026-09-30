@@ -100,7 +100,7 @@
 /* ---------- Shell layout: sidebar + body ---------- */
 .rd-shell {
   display: grid;
-  grid-template-columns: 232px minmax(0, 1fr);
+  grid-template-columns: 252px minmax(0, 1fr);
   min-height: 100vh;
 }
 .rd-side {
