@@ -8,9 +8,15 @@ import { OrgHeader } from "@/components/org-header";
 import { IconNews, IconUsers } from "@/components/icons";
 import { ZcapTable } from "@/components/zcap-table";
 import { getZcapMembers, ZCAP_SHEET_URL } from "@/lib/zcap/members";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Zcash Foundation · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Zcash Foundation · OpenZcash",
+  description:
+    "Live engineering updates, Zebra releases and announcements from the Foundation forum, plus every quarterly transparency report and the Zcon conference series.",
+  path: "/zf",
+});
 
 const FORUM_CATEGORY =
   "https://forum.zcashcommunity.com/c/ecosystem-updates/foundation/21";

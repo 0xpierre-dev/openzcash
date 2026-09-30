@@ -15,12 +15,22 @@ import { DisbursementsTable, type DisbTableRow } from "./disbursements-table";
 import { NewDisbursementForm } from "./disbursement-admin";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { Synced } from "@/components/synced";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 const money = (cents: bigint | null, div: number) =>
   cents == null ? "" : String(Number(cents) / div);
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZCG Disbursements · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZCG Disbursements · OpenZcash",
+  description:
+    "ZCG off-chain ledger: each row is a milestone or payment (grant, contractor, bounty or monthly transfer) with budgeted USD, disbursed ZEC and the day's rate.",
+  path: "/zcg/disbursements",
+  card: {
+    kicker:
+      "Every milestone and payment, with budgeted USD, disbursed ZEC and the day's rate",
+  },
+});
 
 const SHEETS: { id?: string; label: string }[] = [
   { id: undefined, label: "All" },

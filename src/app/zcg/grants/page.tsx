@@ -8,12 +8,20 @@ import { Synced } from "@/components/synced";
 import { grantStatusLabel as statusLabel } from "@/lib/zcg/status-labels";
 import { listDisbursements } from "@/lib/zcg/disbursements-repo";
 import { coinholderGrantViews } from "@/lib/coinholder/official-status";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 /** The coinholder tab has a few dozen rows; the list's default cap of 250 is far above it. */
 const COINHOLDER_LEDGER_ROWS = 1000;
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Grants ZCG · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Grants ZCG · OpenZcash",
+  shareTitle: "Grants · ZCG",
+  description:
+    "Each grant is an approved project that aggregates its milestones. A single grantee can hold several grants.",
+  path: "/zcg/grants",
+  card: { title: "Grants" },
+});
 
 export default async function GrantsPage({
   searchParams,

@@ -15,9 +15,40 @@ import { formatZec } from "@/lib/zcash/units";
 import { SourceRecordLink } from "@/components/source-record-link";
 import { grantStatusLabel } from "@/lib/zcg/status-labels";
 import { coinholderGrantViews } from "@/lib/coinholder/official-status";
+import { grantMetadata, type GrantShare } from "@/lib/seo/detail-metadata";
+import { cache } from "react";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Grant detail · OpenZcash" };
+type Props = { searchParams: Promise<{ g?: string | string[] }> };
+
+// One ledger query per request, shared by the link preview and the page.
+const loadGrant = cache(grantMilestones);
+
+/** The grant the link names, as the ledger stores it; null when none matches. */
+async function grantShare(g: string | undefined): Promise<GrantShare | null> {
+  if (!g) return null;
+  try {
+    const milestones = await loadGrant(g);
+    const head = milestones[0];
+    if (!head?.project) return null;
+    return {
+      name: head.project,
+      recipient: head.recipientNameRaw,
+      coinholder: head.sourceSheet === "coinholder_grants",
+      paid: milestones.filter((m) => m.isPaid).length,
+      milestones: milestones.length,
+    };
+  } catch (error) {
+    console.error("[grant] ledger lookup for the link preview failed", error);
+    return null;
+  }
+}
+
+// The card never repeats text from the URL: only a name the ledger returned.
+export async function generateMetadata({ searchParams }: Props) {
+  const { g } = await searchParams;
+  return grantMetadata(await grantShare(typeof g === "string" ? g : undefined));
+}
 
 export default async function GrantDetailPage({
   searchParams,
@@ -26,7 +57,7 @@ export default async function GrantDetailPage({
 }) {
   const { g } = await searchParams;
   if (!g) notFound();
-  const milestones = await grantMilestones(g);
+  const milestones = await loadGrant(g);
   if (milestones.length === 0) notFound();
 
   const head = milestones[0];

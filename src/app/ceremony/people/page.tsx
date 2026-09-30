@@ -9,12 +9,14 @@ import {
 } from "@/lib/ceremony/people";
 import { Pager, PartHeader, partEyebrow } from "../part-chrome";
 import styles from "../ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "The people · Zcash Ceremony · OpenZcash",
   description:
     "The six witnesses of the 2016 Zcash ceremony and their pseudonyms, the authors of Zerocoin and Zerocash, and the cypherpunk lineage behind them.",
-};
+  path: "/ceremony/people",
+});
 
 function Sources({ links }: { links: { label: string; href: string }[] }) {
   return (

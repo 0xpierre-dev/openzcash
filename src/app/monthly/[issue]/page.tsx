@@ -1,14 +1,21 @@
 import { notFound, redirect } from "next/navigation";
 import { MonthlyBundle } from "@/components/monthly/monthly-bundle";
-import { monthlyEditions, monthlyReadingSets, monthLabel } from "@/lib/monthly/catalog";
+import { editionLabel, monthlyEditions, monthlyReadingSets, monthLabel, statusLabel } from "@/lib/monthly/catalog";
 import { publicationView } from "@/lib/monthly/reading-set";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 type Props = { params: Promise<{ issue: string }>; searchParams: Promise<{ publication?: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { issue } = await params;
   const edition = monthlyEditions.find((e) => e.id === issue);
-  return { title: edition ? `${monthLabel(edition.month)} · ${edition.label} · OpenZcash Monthly` : "Edition not found · OpenZcash" };
+  if (!edition) return { title: "Edition not found · OpenZcash" };
+  return pageMetadata({
+    title: `${monthLabel(edition.month)} · ${edition.label} · OpenZcash Monthly`,
+    description: `Read the ${editionLabel(edition)} OpenZcash Monthly and Operations: teams, wallets, funding, communities and decisions, with original sources.`,
+    path: `/monthly/${edition.id}`,
+    card: { title: monthLabel(edition.month), kicker: `${statusLabel(edition)} · ${edition.label}` },
+  });
 }
 
 export default async function IssuePage({ params, searchParams }: Props) {

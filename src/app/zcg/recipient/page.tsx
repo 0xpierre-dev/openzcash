@@ -15,9 +15,46 @@ import { canonicalRecipient } from "@/lib/zcg/recipient-aliases";
 import { recipientEntryPresentation } from "@/lib/zcg/recipient-entry";
 import { formatZec } from "@/lib/zcash/units";
 import { SourceRecordLink } from "@/components/source-record-link";
+import {
+  recipientMetadata,
+  type RecipientShare,
+} from "@/lib/seo/detail-metadata";
+import { cache } from "react";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Recipient ledger · OpenZcash" };
+type Props = { searchParams: Promise<{ r?: string | string[] }> };
+
+// One ledger query per request, shared by the link preview and the page.
+const loadRecipient = cache((r: string) => recipientMilestones(normalizeKey(r)));
+
+/** The recipient the link names, as the ledger names it; null when none matches. */
+async function recipientShare(
+  r: string | undefined,
+): Promise<RecipientShare | null> {
+  if (!r) return null;
+  try {
+    const rows = await loadRecipient(r);
+    const stored = rows.find((m) => m.recipientNameRaw)?.recipientNameRaw;
+    if (!stored) return null;
+    const paid = rows.filter((m) => m.isPaid).length;
+    return {
+      name: canonicalRecipient(stored),
+      paid,
+      unpaid: rows.length - paid,
+    };
+  } catch (error) {
+    console.error("[recipient] ledger lookup for the link preview failed", error);
+    return null;
+  }
+}
+
+// The card never repeats text from the URL: only a name the ledger returned.
+export async function generateMetadata({ searchParams }: Props) {
+  const { r } = await searchParams;
+  return recipientMetadata(
+    await recipientShare(typeof r === "string" ? r : undefined),
+  );
+}
 
 type RecipientEntry = Awaited<ReturnType<typeof recipientMilestones>>[number];
 
@@ -54,7 +91,7 @@ export default async function RecipientPage({
   const { r } = await searchParams;
   if (!r) notFound();
 
-  const rows = await recipientMilestones(normalizeKey(r));
+  const rows = await loadRecipient(r);
   if (rows.length === 0) notFound();
 
   const name = canonicalRecipient(

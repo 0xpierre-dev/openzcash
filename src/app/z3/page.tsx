@@ -1,9 +1,15 @@
 import { EditorialIntro } from "@/components/workspace";
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { IconGrid } from "@/components/icons";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Z3 stack · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Z3 stack · OpenZcash",
+  description:
+    "zcashd is deprecated. The Z3 stack (Zebra, Zaino, Zallet) is its modular Rust replacement: a validating node, an indexing/lightwallet service and a wallet, run together.",
+  path: "/z3",
+});
 
 const DEPRECATION = "https://z.cash/support/zcashd-deprecation/";
 const FORUM =

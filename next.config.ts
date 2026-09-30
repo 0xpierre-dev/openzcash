@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import monthlyReadingSets from "./src/lib/monthly/reading-sets.json";
 
 // Content Security Policy. The app loads no third-party browser assets — fonts
 // are self-hosted (next/font), the logo/favicon are same-origin, and the client
@@ -65,6 +66,20 @@ const nextConfig: NextConfig = {
       { source: "/coinholders/:round(q[1-4]-\\d{4}|ratification-\\d{4})", destination: "/coinholders/results?round=:round", permanent: true },
       { source: "/zcg/coinholder/pool", destination: "/coinholders/fund", permanent: true },
       { source: "/coinholder", destination: "/coinholders", permanent: true },
+      // Maya liquidity lives inside the DeFi app (one less front-page tile).
+      { source: "/zcg/maya", destination: "/defi", permanent: true },
+      // The former mixed August-close link resolves to the corrected August
+      // set until a September reading set takes the id. Temporary, so no
+      // browser keeps it once that edition exists.
+      ...(monthlyReadingSets.some((set) => set.id === "2026-09")
+        ? []
+        : [
+            {
+              source: "/monthly/2026-09",
+              destination: "/monthly/2026-08",
+              permanent: false,
+            },
+          ]),
     ];
   },
   async headers() {

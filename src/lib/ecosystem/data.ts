@@ -18,3 +18,23 @@ if (createHash("sha256").update(JSON.stringify(catalog.registry)).digest("hex") 
 export function loadEcosystemCatalog(): Catalog {
   return catalog;
 }
+
+/**
+ * The registry's line about an organisation, as its page shows it under the
+ * name, kept to the whole sentences that fit in `max` characters (link
+ * previews cut longer descriptions).
+ */
+export function organizationDescription(
+  id: string,
+  max = 200,
+): string | undefined {
+  const line = catalog.registry.organizations.find((o) => o.id === id)?.description;
+  if (!line || line.length <= max) return line;
+  const sentences = line.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) ?? [line];
+  let fitted = "";
+  for (const sentence of sentences) {
+    if ((fitted + sentence).trim().length > max) break;
+    fitted += sentence;
+  }
+  return fitted.trim() || `${line.slice(0, line.lastIndexOf(" ", max - 1))}…`;
+}

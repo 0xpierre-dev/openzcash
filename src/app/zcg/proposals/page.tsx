@@ -24,9 +24,15 @@ import { Synced } from "@/components/synced";
 import { publicationDay } from "@/lib/zcg/publication-policy";
 import { PROPOSAL_STATUS_LABEL } from "@/lib/zcg/status-labels";
 import { officialProposalVerdict } from "@/lib/coinholder/official-status";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZCG Proposals · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZCG Proposals · OpenZcash",
+  description:
+    "ZCG and Coinholder proposal history. Status changes are published the next day (Brasília time). Approval is not evidence of payment or delivery.",
+  path: "/zcg/proposals",
+});
 
 // Verdict wording is shared with the overview changelog and the admin form.
 const STATUS_LABEL = PROPOSAL_STATUS_LABEL;

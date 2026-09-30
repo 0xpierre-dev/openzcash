@@ -6,9 +6,17 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { RecipientsTable, type RecipientRow } from "./recipients-table";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { Synced } from "@/components/synced";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Recipients ZCG · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Recipients ZCG · OpenZcash",
+  shareTitle: "Recipients · ZCG",
+  description:
+    "Recorded payments to organizations and individuals across the ZCG and Coinholder ledgers. USD paid is the budgeted value of settled entries, not a current market valuation.",
+  path: "/zcg/recipients",
+  card: { title: "Recipients" },
+});
 
 export default async function RecebedoresPage() {
   const all = await cached("recipientTotals", LEDGER_TTL_MS, () =>

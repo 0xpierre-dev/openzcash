@@ -10,6 +10,7 @@ import "./zarvis/zarvis.css";
 import { ShellGate } from "@/components/shell-gate";
 import { TapFeedback } from "@/components/tap-feedback";
 import { TreasuryBar } from "@/components/treasury-bar";
+import { rootShareMetadata, SITE_DESCRIPTION } from "@/lib/seo/page-metadata";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,8 +31,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "OpenZcash · Dev Fund treasury and public transparency",
-  description:
-    "Public transparency for the Zcash Dev Fund: ZCG and FPF grant accounting, the live Lockbox, and governance, read-only and mirrored from the official sources.",
+  description: SITE_DESCRIPTION,
+  // metadataBase and the site-wide share fields (site name, default card).
+  // No og:title here: every page shares under its own title.
+  ...rootShareMetadata(),
   applicationName: "OpenZcash",
   ...(process.env.OPENZCASH_ENV === "redesign"
     ? { robots: { index: false, follow: false } }

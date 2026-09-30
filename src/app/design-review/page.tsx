@@ -3,8 +3,14 @@ import { EditorialIntro } from "@/components/workspace";
 import { PageHeader } from "@/components/ui";
 import { DESIGN_GROUPS } from "@/lib/design-routes";
 import { getIsAdmin } from "@/lib/auth/admin";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Explore the redesign · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Explore the redesign · OpenZcash",
+  description:
+    "Explore the new screens using the application’s real records. Follow a grant, compare payments, browse the ecosystem, or open the office.",
+  path: "/design-review",
+});
 export default async function DesignReviewPage() {
   // Management pages are only offered to a signed-in administrator, as in the
   // app directory; anonymous reviewers see the public workspace.

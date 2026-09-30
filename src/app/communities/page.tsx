@@ -4,13 +4,19 @@ import { COMMUNITIES, LEDGER_FALLBACK_AS_OF } from "@/lib/communities/data";
 import { getCommunityActivity } from "@/lib/communities/forum-activity";
 import { getCommunitiesFunding } from "@/lib/communities/funding";
 import { CommunitiesView } from "./communities-view";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Global Communities · OpenZcash",
   description:
     "The global Zcash community groups: who they are, where to find them, which ones ZCG funds (with audited numbers), and what each one has been up to on the forum.",
-};
+  path: "/communities",
+  card: {
+    kicker: "The regional groups building Zcash adoption worldwide",
+    stat: `${COMMUNITIES.length} communities`,
+  },
+});
 
 async function LiveDirectory() {
   const [activity, funding] = await Promise.all([

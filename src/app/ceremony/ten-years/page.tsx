@@ -10,13 +10,15 @@ import {
 } from "@/lib/ceremony/story";
 import { Pager, PartHeader, partEyebrow } from "../part-chrome";
 import styles from "../ceremony.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Ten years · Zcash Ceremony · OpenZcash",
   description:
     "Ten years of Zcash since the genesis block of October 28, 2016: every generation of shielded pools, the end of the trusted setup, the halvings, and the claims that keep circulating.",
-};
+  path: "/ceremony/ten-years",
+});
 
 export default async function TenYearsPage() {
   const now = new Date();

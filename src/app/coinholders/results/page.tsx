@@ -1,11 +1,20 @@
 import { ROUNDS } from "@/lib/coinholder/rounds";
 import { PROGRAM } from "@/lib/coinholder/program";
 import { ResultsView } from "../round-view";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = {
+// The latest round with published results, as its tab reads ("17 of 37 funded").
+const LATEST = ROUNDS.find((r) => r.status === "results");
+
+export const metadata = pageMetadata({
   title: `Results · ${PROGRAM.officialName} · OpenZcash`,
   description: `Every ${PROGRAM.officialName} round: each proposal's outcome, requested amount and the ZEC voted for each answer.`,
-};
+  path: "/coinholders/results",
+  card: {
+    title: "Results",
+    stat: LATEST ? `${LATEST.label} · ${LATEST.tagline}` : undefined,
+  },
+});
 
 /**
  * ?round=<id> picks a round, ?round=all lists every verdict; the newest round is the default.

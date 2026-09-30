@@ -4,8 +4,15 @@ import { LockboxLiveFeed } from "@/components/lockbox-live-feed";
 import { currentZecUsdCents } from "@/lib/pricing/live-price";
 import { getCurrentHeight } from "@/lib/zcash/real/lwd/lwd-client";
 import { latestSnapshot } from "@/lib/zcg/snapshots-repo";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata = { title: "Lockbox · live funding · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Lockbox · live funding · OpenZcash",
+  description:
+    "Real-time view of the Zcash deferred Dev Fund. Every block mined adds 0.1875 ZEC (12% of the block subsidy) to the in-protocol Lockbox.",
+  path: "/lockbox",
+  card: { title: "Lockbox" },
+});
 export const dynamic = "force-dynamic";
 
 const LWD_URL = process.env.LWD_URL ?? "zec.rocks:443";

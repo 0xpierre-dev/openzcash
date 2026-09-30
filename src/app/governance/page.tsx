@@ -21,13 +21,15 @@ import {
 } from "@/lib/governance/upgrades";
 import record from "@/data/governance/record.json";
 import styles from "@/components/governance/timeline.module.css";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Zcash governance · OpenZcash",
   description:
     "Decisions that bind the whole Zcash network: every network upgrade and how it was decided, coinholder polls on protocol and funding, and what is still open.",
-};
+  path: "/governance",
+});
 
 const POLLS = (record as unknown as { polls: RecordPoll[] }).polls;
 

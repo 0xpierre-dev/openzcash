@@ -18,9 +18,15 @@ import {
   SEATED_FROM,
   membersByCohort,
 } from "../current-committee-data";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "ZCG Committee · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "ZCG Committee · OpenZcash",
+  description:
+    "Who decides, for how long, and paid how: seats and roles, stipends, meeting minutes and the ZCAP electorate, each linked to its public source.",
+  path: "/zcg/committee",
+});
 
 const LATEST_MINUTES = 5;
 

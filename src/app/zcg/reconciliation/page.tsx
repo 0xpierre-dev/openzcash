@@ -4,9 +4,17 @@ import { IconShield } from "@/components/icons";
 import { zcgReconciliation } from "@/lib/zcg/reconcile-onchain";
 import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Reconciliation ZCG · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Reconciliation ZCG · OpenZcash",
+  shareTitle: "Reconciliation · ZCG",
+  description:
+    "Cross-check between ZCG's on-chain treasury flow and what the spreadsheet records as distributed. Individual grantee payments leave the shielded pool · only the aggregate flow is visible on-chain.",
+  path: "/zcg/reconciliation",
+  card: { title: "Reconciliation" },
+});
 
 export default async function ZcgReconciliacaoPage() {
   const r = await zcgReconciliation();

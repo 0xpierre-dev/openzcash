@@ -9,6 +9,7 @@ import { spreadsheetSource } from "@/lib/zcg/source-links";
 import { classifyLabel } from "@/lib/zcg/classification-tags";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { COHORTS, MEMBERS } from "../current-committee-data";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** "2026-01-05" → "Jan 2026". */
@@ -24,7 +25,12 @@ function seatOf(m: MemberStipend) {
 const isCurrent = (m: MemberStipend) => seatOf(m) !== undefined;
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Committee stipends · OpenZcash" };
+export const metadata = pageMetadata({
+  title: "Committee stipends · OpenZcash",
+  description:
+    "Monthly stipends paid to each ZCG committee member. This is the committee's own compensation, not a grant. Mirrored from the ZCG monthly-payments sheet.",
+  path: "/zcg/stipends",
+});
 
 export default async function StipendsPage() {
   const [{ members, totalUsd: total, totalPayments }, cats] = await Promise.all([

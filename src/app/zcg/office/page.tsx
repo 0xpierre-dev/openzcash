@@ -2,13 +2,15 @@ import { officeUnderReview } from "@/lib/zcg/proposals-repo";
 import { OfficeCanvas } from "./office-canvas";
 import { OfficeEntrance } from "./office-entrance";
 import { officeMembers } from "../current-committee-data";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
+export const metadata = pageMetadata({
   title: "ZCG Office · OpenZcash",
   description:
     "A living 3D office where every ZCG proposal under review walks the floor as a zebra, in front of the committee.",
-};
+  path: "/zcg/office",
+});
 
 // One source for the committee: the seats, avatars and captions come from the
 // same source-linked record as /zcg/committee (current-committee-data.ts).
