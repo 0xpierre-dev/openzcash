@@ -33,6 +33,8 @@ export type AppDef = {
   pages: AppPage[];
   /** Expanded in the sidebar by default (the visitor can still collapse it). */
   open?: boolean;
+  /** Share of every block reward that funds the app, shown beside its name. */
+  share?: { value: string; label: string };
   /** Data-management apps, shown to administrators only. */
   admin?: boolean;
 };
@@ -75,6 +77,7 @@ export const APPS: AppDef[] = [
     href: "/coinholders",
     sub: "Coinholder-Directed Retroactive Grants Program",
     logo: "/logos/marks/coinholders.png",
+    share: { value: "12%", label: "12% of every block reward (ZIP 1016)" },
     icon: "grant",
     pages: [
       { href: "/coinholders/results", label: "Results", mark: "/logos/glyphs/decisions.png" },
@@ -88,6 +91,7 @@ export const APPS: AppDef[] = [
     href: "/zcg",
     sub: "Dev Fund",
     logo: "/logos/zcg.png",
+    share: { value: "8%", label: "8% of every block reward (ZIP 1015)" },
     icon: "grant",
     open: true,
     pages: [

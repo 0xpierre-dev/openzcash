@@ -183,6 +183,9 @@ describe("Program navigation", () => {
     expect(app.href).toBe("/coinholders");
     expect(app.pages.map((p) => p.label)).toEqual(["Results", "The fund", "Coinholder Copilot"]);
     expect(APPS.find((a) => a.id === "fpf")).toMatchObject({ sub: "Program administrator", pages: [] });
+    // Each fund's share of every block reward, beside its name in the sidebar.
+    expect(app.share?.value).toBe("12%");
+    expect(APPS.find((a) => a.id === "zcg")?.share?.value).toBe("8%");
   });
   it("places the overview, results, fund and copilot inside the program", () => {
     expect(placeOf("/coinholders")).toMatchObject({ app: { id: "coinholders" } });

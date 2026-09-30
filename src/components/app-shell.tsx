@@ -302,6 +302,12 @@ export function AppShell({
                   >
                     <AppMark app={app} />
                     <span className="rd-side-label">{app.label}</span>
+                    {app.share ? (
+                      <small className="rd-side-share tnum" title={app.share.label}>
+                        <span aria-hidden>{app.share.value}</span>
+                        <span className="sr-only">, {app.share.label}</span>
+                      </small>
+                    ) : null}
                     {counts[app.href] ? (
                       <small className="tnum">{counts[app.href]}</small>
                     ) : null}
