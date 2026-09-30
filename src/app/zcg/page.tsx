@@ -33,7 +33,7 @@ const TILES: Tile[] = [
   { href: "/zcg/investments", label: "Investments", sub: "Maya liquidity position", mark: glyph("investments") },
   { href: "/zcg/stipends", label: "Stipends", sub: "Committee pay", mark: glyph("stipends") },
   { href: "/zcg/budget", label: "Budget", sub: "Discretionary · USD × ZEC", mark: glyph("budget") },
-  { href: "/zcg/coinholder", label: "Coinholder", sub: "FPF retroactive round", mark: glyph("coinholder") },
+  { href: "/coinholders", label: "Coinholder program", sub: "Coinholder-directed grants", mark: glyph("coinholder") },
   { href: "/zcg/reconciliation", label: "Reconciliation", sub: "On-chain ↔ ledger", mark: glyph("reconciliation") },
   { href: "/zcg/meetings", label: "Meetings", sub: "Committee minutes", mark: glyph("meetings") },
   { href: "/zcg/methodology", label: "Methodology", sub: "Sources & API", mark: glyph("methodology") },

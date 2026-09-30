@@ -14,6 +14,7 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { formatZec } from "@/lib/zcash/units";
 import { SourceRecordLink } from "@/components/source-record-link";
 import { grantStatusLabel } from "@/lib/zcg/status-labels";
+import { coinholderGrantViews } from "@/lib/coinholder/official-status";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grant detail · OpenZcash" };
@@ -38,7 +39,25 @@ export default async function GrantDetailPage({
   const paidUsd = paid.reduce((s, m) => s + (m.amountUsdCents ?? 0n), 0n);
   const openUsd = open.reduce((s, m) => s + (m.amountUsdCents ?? 0n), 0n);
   const paidZec = paid.reduce((s, m) => s + (m.zecDisbursedZat ?? 0n), 0n);
-  const status = grantStatusLabel(head.grantStatus, "Unknown");
+  // A coinholder grant approved in a closed round and not yet paid reads as
+  // such, as on the grants list, also under an earlier paid grant's name.
+  const coinholderEntries = milestones.filter(
+    (m) => m.sourceSheet === "coinholder_grants",
+  );
+  const awaiting = coinholderEntries.length
+    ? (coinholderGrantViews(
+        {
+          grantKey: g,
+          status: head.grantStatus,
+          milestoneCount: milestones.length,
+          paidCount: paid.length,
+          usdCents: totalUsd,
+        },
+        coinholderEntries,
+      ).find((v) => v.official)?.official ?? null)
+    : null;
+  const status =
+    awaiting?.label ?? grantStatusLabel(head.grantStatus, "Unknown");
   const program =
     head.sourceSheet === "coinholder_grants" ? "Coinholder" : "ZCG regular";
   const pct = milestones.length
@@ -69,13 +88,15 @@ export default async function GrantDetailPage({
       <div className="ws-record-meta">
         <span
           className={
-            head.grantStatus === "completed"
-              ? "ws-pill ws-pill-pos"
-              : head.grantStatus === "cancelled" ||
-                  head.grantStatus === "keyholder_veto" ||
-                  head.grantStatus === "funds_returned"
-                ? "ws-pill ws-pill-neg"
-                : "ws-pill ws-pill-accent"
+            awaiting
+              ? "ws-pill ws-pill-accent"
+              : head.grantStatus === "completed"
+                ? "ws-pill ws-pill-pos"
+                : head.grantStatus === "cancelled" ||
+                    head.grantStatus === "keyholder_veto" ||
+                    head.grantStatus === "funds_returned"
+                  ? "ws-pill ws-pill-neg"
+                  : "ws-pill ws-pill-accent"
           }
         >
           <i aria-hidden />

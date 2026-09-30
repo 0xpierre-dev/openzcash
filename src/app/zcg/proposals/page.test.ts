@@ -89,7 +89,7 @@ describe("complete proposal history", () => {
     state.proposals = [{
       id: "coinholder-1", title: "Shared project title", program: "coinholder",
       status: "pending", submittedDate: "2026-08-01",
-      platformLink: "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/1",
+      platformLink: "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/999",
     }];
     state.applications = [{
       number: 900, title: "Shared project title", status: "review", applicant: "example",
@@ -104,6 +104,17 @@ describe("complete proposal history", () => {
     expect(result.rows.find((r) => r.id === "gh-900")).toMatchObject({
       program: "zcg", status: "under_review",
     });
+  });
+
+  it("shows FPF's official verdict for a closed coinholder round the sheet still lists as pending", async () => {
+    state.proposals = [{
+      id: "coinholder-55", title: "Connaugh Zcash Videos", program: "coinholder",
+      status: "pending", submittedDate: "2026-08-14",
+      platformLink: "https://github.com/Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram/issues/55",
+    }];
+    const result = await page();
+    expect(result.rows[0]).toMatchObject({ status: "approved", statusLabel: "Approved", source: "sheet" });
+    expect(result.approved).toBe("1");
   });
 
   it("does not merge a resubmission into a different historical issue", async () => {

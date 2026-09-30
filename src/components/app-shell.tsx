@@ -73,7 +73,7 @@ const PAGE_ICON: Record<string, IconType> = {
   "/zcg/office": IconDashboard,
   "/zcg/methodology": IconBook,
   "/zcg/copilot": IconTerminal,
-  "/zcg/coinholder": IconCoins,
+  "/coinholders/fund": IconCoins,
   "/zcg/coinholder/copilot": IconTerminal,
   "/zechub/copilot": IconTerminal,
   "/development": IconTerminal,
@@ -298,6 +298,7 @@ export function AppShell({
                     className="rd-side-item"
                     aria-current={appActive ? "page" : undefined}
                     title={app.sub}
+                    data-long={app.label.length > 18 || undefined}
                   >
                     <AppMark app={app} />
                     <span className="rd-side-label">{app.label}</span>
@@ -494,8 +495,9 @@ export function AppShell({
           ) : null}
           {apps.map((app) => {
             const q = query.toLowerCase();
+            const landingIsPage = app.pages.some((p) => p.href === app.href);
             const entries = [
-              { href: app.href, label: app.pages.length ? "Overview" : app.label },
+              ...(landingIsPage ? [] : [{ href: app.href, label: app.pages.length ? "Overview" : app.label }]),
               ...app.pages.filter((p) => !p.hidden),
             ].filter((p) => (p.label + " " + app.label + " " + app.sub).toLowerCase().includes(q));
             return entries.length ? (

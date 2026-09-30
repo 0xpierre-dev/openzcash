@@ -58,6 +58,13 @@ const nextConfig: NextConfig = {
       { source: "/decisions", destination: "/zcg/decisions", permanent: true },
       { source: "/treasury-calculator", destination: "/zcg/treasury-calculator", permanent: true },
       { source: "/zcash10years", destination: "/ceremony/ten-years", permanent: true },
+      // The coinholder program has its own home above ZCG; old links keep working.
+      { source: "/zcg/coinholder", destination: "/coinholders", permanent: true },
+      { source: "/zcg/coinholder/votes", destination: "/coinholders/results?round=all", permanent: true },
+      { source: "/coinholders/votes", destination: "/coinholders/results?round=all", permanent: true },
+      { source: "/coinholders/:round(q[1-4]-\\d{4}|ratification-\\d{4})", destination: "/coinholders/results?round=:round", permanent: true },
+      { source: "/zcg/coinholder/pool", destination: "/coinholders/fund", permanent: true },
+      { source: "/coinholder", destination: "/coinholders", permanent: true },
     ];
   },
   async headers() {

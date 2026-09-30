@@ -163,8 +163,8 @@ export const STREAMS: StreamInfo[] = [
     ],
     addresses: [LOCKBOX_DISBURSEMENT.address],
     destinations: [
-      { label: "Coinholder grants", href: "/zcg/coinholder" },
-      { label: "Coinholder pool", href: "/zcg/coinholder/pool" },
+      { label: "Coinholder grants program", href: "/coinholders" },
+      { label: "Coinholder fund", href: "/coinholders/fund" },
     ],
   },
 ];
