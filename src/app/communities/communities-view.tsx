@@ -4,7 +4,22 @@ import { useMemo, useState } from "react";
 import { Stat } from "@/components/ui";
 import type { Community, CommunityLinks, Region } from "@/lib/communities/data";
 import type { TopicActivity } from "@/lib/communities/forum-activity";
+import type { FundingSource } from "@/lib/communities/ledger-funding";
+import {
+  daoLine,
+  daoTitle,
+  fundingBadges,
+  fundingSummary,
+  fundingTitle,
+  matchesFunding,
+  noneTitle,
+  paidLine,
+  paidLineTitle,
+  type FundingFilter,
+} from "@/lib/communities/funding-display";
+import { matchesQuery } from "@/lib/communities/search";
 import { cn } from "@/lib/utils";
+import styles from "./communities.module.css";
 
 /**
  * Client view for /communities, designed as an assessment surface for the
@@ -42,8 +57,20 @@ const REGIONS: Region[] = [
   "Global",
 ];
 
-type FundingFilter = "all" | "funded" | "unfunded";
 type SortMode = "activity" | "name" | "region";
+
+const FUNDING_OPTIONS = [
+  ["all", "All"],
+  ["zcg", "ZCG-funded"],
+  ["dao", "ZecHub DAO"],
+  ["none", "No funding"],
+] as const satisfies readonly (readonly [FundingFilter, string])[];
+
+const SORT_OPTIONS = [
+  ["activity", "Latest activity"],
+  ["name", "Name"],
+  ["region", "Region"],
+] as const satisfies readonly (readonly [SortMode, string])[];
 
 function daysSince(iso: string): number {
   return Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
@@ -57,12 +84,6 @@ function timeAgo(iso: string): string {
   const months = Math.floor(days / 30);
   if (months < 12) return `${months}mo ago`;
   return `${Math.floor(months / 12)}y ago`;
-}
-
-function usd(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
-  if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
-  return `$${n}`;
 }
 
 /**
@@ -122,31 +143,25 @@ function OgShield({ since }: { since?: number }) {
   );
 }
 
-function pill(active: boolean): string {
-  return cn(
-    "rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset transition",
-    active
-      ? "bg-stone-900 text-white ring-stone-900"
-      : "bg-white text-stone-600 ring-stone-300 hover:ring-stone-400",
-  );
-}
-
 export function CommunitiesView({
   communities,
   activity,
+  fundingSource,
+  fallbackAsOf,
 }: {
   communities: Community[];
   activity: TopicActivity[];
+  /** Whether the funding figures are live from the ledger or the dated
+   *  curated fallback (ledger unreachable). */
+  fundingSource: FundingSource;
+  /** Ledger date of the fallback figures. */
+  fallbackAsOf: string;
 }) {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState<Region | "all">("all");
   const [funding, setFunding] = useState<FundingFilter>("all");
   const [sort, setSort] = useState<SortMode>("activity");
 
-  const byId = useMemo(
-    () => new Map(communities.map((c) => [c.id, c])),
-    [communities],
-  );
   const lastByCommunity = useMemo(() => {
     const m = new Map<string, TopicActivity>();
     for (const a of activity)
@@ -157,13 +172,9 @@ export function CommunitiesView({
   const shown = useMemo(() => {
     const filtered = communities.filter(
       (c) =>
-        (!query ||
-          `${c.name} ${c.country} ${c.region}`
-            .toLowerCase()
-            .includes(query.toLowerCase())) &&
+        matchesQuery(c, query) &&
         (region === "all" || c.region === region) &&
-        (funding === "all" ||
-          (funding === "funded" ? c.zcg.funded : !c.zcg.funded)),
+        matchesFunding(c.zcg, funding),
     );
     const key = (c: Community) =>
       lastByCommunity.get(c.id)?.lastPostedAt ?? "0000";
@@ -177,6 +188,12 @@ export function CommunitiesView({
     return [...filtered].sort((a, b) => key(b).localeCompare(key(a)));
   }, [communities, region, funding, sort, lastByCommunity, query]);
 
+  const fundingCounts = Object.fromEntries(
+    FUNDING_OPTIONS.map(([key]) => [
+      key,
+      communities.filter((c) => matchesFunding(c.zcg, key)).length,
+    ]),
+  ) as Record<FundingFilter, number>;
   const funded = communities.filter((c) => c.zcg.funded);
   const totalBudgeted = funded.reduce(
     (s, c) => s + (c.zcg.budgetedUsd ?? 0),
@@ -203,82 +220,82 @@ export function CommunitiesView({
         <Stat
           label="ZCG-funded"
           value={`${funded.length} of ${communities.length}`}
-          sub={`${usd(totalBudgeted)} budgeted, per the audited ledger`}
+          sub={fundingSummary(totalBudgeted, fundingSource, fallbackAsOf)}
           tone="warn"
         />
       </section>
-      {/* ---- Filters + sort ---- */}
-      <div className="ws-filter-panel">
-        <input
-          type="search"
-          aria-label="Search communities"
-          placeholder="Find a community or country…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <span className="text-xs text-stone-500" aria-live="polite">
-          {shown.length} communities
-        </span>
-      </div>
-      <div className="ws-catalog-tabs">
-        <button
-          onClick={() => setRegion("all")}
-          className={pill(region === "all")}
-        >
-          All regions
-        </button>
-        {REGIONS.map((r) => (
-          <button
-            key={r}
-            onClick={() => setRegion(region === r ? "all" : r)}
-            className={pill(region === r)}
-          >
-            {r}
-          </button>
-        ))}
-        <span className="mx-1 h-4 w-px bg-stone-300" />
-        {(
-          [
-            ["all", "All"],
-            ["funded", "ZCG-funded"],
-            ["unfunded", "No ZCG funding"],
-          ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            onClick={() => setFunding(key)}
-            className={pill(funding === key)}
-          >
-            {label}
-          </button>
-        ))}
-        <span className="ml-auto flex items-center gap-1 text-[11px] text-stone-500">
-          sort
-          {(
-            [
-              ["activity", "Activity"],
-              ["name", "Name"],
-              ["region", "Region"],
-            ] as const
-          ).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setSort(key)}
-              className={cn(
-                "rounded px-1.5 py-0.5 font-medium transition",
-                sort === key
-                  ? "bg-stone-900 text-white"
-                  : "text-stone-500 hover:text-stone-800",
-              )}
+      {/* ---- Filters + sort: one quiet row, the count below ---- */}
+      <div className={styles.filterBar}>
+        <div className={styles.filterControls}>
+          <label className={`ws-field ${styles.filterSearch}`}>
+            <span aria-hidden>⌕</span>
+            <input
+              type="search"
+              aria-label="Search communities"
+              placeholder="Find a community or country…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+          <label className={`${styles.filterSelect} ${styles.region}`}>
+            <span>Region</span>
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value as Region | "all")}
             >
-              {label}
-            </button>
-          ))}
-        </span>
+              <option value="all">All regions</option>
+              {REGIONS.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div
+            className={styles.segmented}
+            role="group"
+            aria-label="Filter by funding"
+          >
+            {FUNDING_OPTIONS.map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                className={styles.segment}
+                aria-pressed={funding === key}
+                onClick={() => setFunding(key)}
+              >
+                {label}{" "}
+                <span className={styles.segmentCount}>
+                  {fundingCounts[key]}
+                </span>
+              </button>
+            ))}
+          </div>
+          <label className={`${styles.filterSelect} ${styles.sort}`}>
+            <span>Sort</span>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortMode)}
+            >
+              {SORT_OPTIONS.map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className={styles.filterFoot}>
+          <p className={styles.filterCount} aria-live="polite">
+            {shown.length === communities.length
+              ? `${communities.length} communities`
+              : `${shown.length} of ${communities.length} communities`}
+          </p>
+        </div>
       </div>
 
       {/* ---- The assessment list ---- */}
-      <div className="ws-community-directory">
+      <div className={`ws-community-directory ${styles.directory}`}>
         <div className="sr-only">
           {["Community", "Latest forum activity", "Funding", "Channels"].map(
             (h) => (
@@ -295,8 +312,10 @@ export function CommunitiesView({
         <ul className="ws-community-grid">
           {shown.map((c) => {
             const last = lastByCommunity.get(c.id);
+            const paid = paidLine(c.zcg, fundingSource);
+            const dao = daoLine(c.zcg);
             return (
-              <li key={c.id} className="ws-community-card">
+              <li key={c.id} className={`ws-community-card ${styles.card}`}>
                 {/* Community */}
                 <div className="flex items-center gap-3">
                   {c.logo ? (
@@ -316,7 +335,12 @@ export function CommunitiesView({
                       <OgShield since={c.since} />
                       <RecencyDot iso={last?.lastPostedAt} />
                     </p>
-                    <p className="truncate text-[11px] text-stone-500">
+                    <p
+                      className="truncate text-[11px] text-stone-500"
+                      title={
+                        c.localName ? `Also known as ${c.localName}` : undefined
+                      }
+                    >
                       {c.country} · {c.language}
                       {c.since ? (
                         <span className="text-stone-400">
@@ -370,28 +394,67 @@ export function CommunitiesView({
 
                 {/* Funding */}
                 <div>
-                  {c.zcg.funded ? (
-                    <span
-                      className="rounded-md bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-800 ring-1 ring-inset ring-amber-500/25"
-                      title={c.zcg.note ?? c.zcg.recipient}
+                  <div className="flex flex-wrap gap-1">
+                    {fundingBadges(c.zcg).map((badge) =>
+                      badge === "zcg" ? (
+                        <span
+                          key={badge}
+                          className="rounded-md bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-800 ring-1 ring-inset ring-amber-500/25"
+                          title={fundingTitle(
+                            c.zcg,
+                            fundingSource,
+                            fallbackAsOf,
+                          )}
+                        >
+                          ZCG-funded
+                        </span>
+                      ) : badge === "dao" ? (
+                        <span
+                          key={badge}
+                          className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/25"
+                          title={daoTitle(c.zcg)}
+                        >
+                          ZecHub DAO
+                        </span>
+                      ) : (
+                        <span
+                          key={badge}
+                          className="rounded-md bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-500 ring-1 ring-inset ring-stone-200"
+                          title={noneTitle(c.zcg)}
+                        >
+                          No funding
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  {paid ? (
+                    <p
+                      className="mt-1 text-[10px] leading-snug text-stone-500 tnum"
+                      title={paidLineTitle(c.zcg)}
                     >
-                      ZCG-funded
-                    </span>
-                  ) : c.zcg.zechubDao ? (
-                    <span
-                      className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/25"
-                      title={c.zcg.note}
+                      {dao ? `ZCG ${paid}` : paid}
+                    </p>
+                  ) : null}
+                  {dao ? (
+                    <p
+                      className={cn(
+                        "text-[10px] leading-snug text-stone-500 tnum",
+                        paid ? "mt-0.5" : "mt-1",
+                      )}
+                      title={daoTitle(c.zcg)}
                     >
-                      ZecHub DAO
-                    </span>
-                  ) : (
-                    <span
-                      className="rounded-md bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-500 ring-1 ring-inset ring-stone-200"
-                      title={c.zcg.note}
-                    >
-                      No ZCG funding
-                    </span>
-                  )}
+                      <a
+                        href={dao.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-medium text-stone-600 hover:text-amber-800"
+                      >
+                        DAO {dao.ref}
+                      </a>{" "}
+                      · {dao.text}
+                      {dao.asOf ? ` · ${dao.asOf}` : ""}
+                    </p>
+                  ) : null}
                   {c.zcg.note ? (
                     <p className="mt-1 hidden max-w-[150px] text-[10px] leading-snug text-stone-400 md:line-clamp-2">
                       {c.zcg.note}
@@ -402,17 +465,19 @@ export function CommunitiesView({
                 {/* Channels: every official account, links only where no
                     public feed exists (X, Instagram, TikTok, Facebook). */}
                 <div className="flex flex-wrap gap-x-2.5 gap-y-1 text-[11px] font-medium">
-                  {CHANNELS.filter(([key]) => c.links[key]).map(([key, label]) => (
-                    <a
-                      key={key}
-                      className="text-stone-600 hover:text-amber-800"
-                      href={c.links[key]}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {label}
-                    </a>
-                  ))}
+                  {CHANNELS.filter(([key]) => c.links[key]).map(
+                    ([key, label]) => (
+                      <a
+                        key={key}
+                        className="text-stone-600 hover:text-amber-800"
+                        href={c.links[key]}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {label}
+                      </a>
+                    ),
+                  )}
                   {c.links.forumUser ? (
                     <a
                       className="text-stone-600 hover:text-amber-800"

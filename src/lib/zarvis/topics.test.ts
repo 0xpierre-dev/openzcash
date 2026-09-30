@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-const mocks = vi.hoisted(() => ({ calls: vi.fn(), tip: vi.fn(), supply: vi.fn(), circulating: vi.fn(), proposals: vi.fn(), meetings: vi.fn(), grants: vi.fn() }));
+const mocks = vi.hoisted(() => ({ calls: vi.fn(), tip: vi.fn(), supply: vi.fn(), circulating: vi.fn(), proposals: vi.fn(), meetings: vi.fn(), grants: vi.fn(), ledger: vi.fn() }));
 vi.mock("@/lib/arborist/notes", () => ({ getArboristCalls: mocks.calls, arboristFetchedAt: () => "2026-09-28T10:00:00.000Z", ARBORIST_REPO_URL: "https://github.com/ZcashCommunityGrants/arboretum-notes", ARBORIST_YOUTUBE_URL: "https://www.youtube.com/@zcashfoundation/videos" }));
 vi.mock("@/lib/zcash/lockbox-live", () => ({ cachedChainTip: mocks.tip }));
 vi.mock("@/lib/markets/sources", () => ({ chainSupplyFeed: mocks.supply }));
@@ -8,6 +8,7 @@ vi.mock("@/lib/pricing/circulating-supply", () => ({ currentZecCirculatingSupply
 vi.mock("@/lib/zcg/proposals-repo", () => ({ listProposals: mocks.proposals }));
 vi.mock("@/lib/zcg/governance-repo", () => ({ getMeetings: mocks.meetings }));
 vi.mock("@/lib/zcg/grants-repo", () => ({ listGrants: mocks.grants }));
+vi.mock("@/lib/zcg/disbursements-repo", () => ({ recipientTotals: mocks.ledger }));
 vi.mock("@/lib/cache/memo", () => ({ cached: (_key: string, _ttl: number, fn: () => Promise<unknown>) => fn(), LEDGER_TTL_MS: 1 }));
 import { lookupPublicData, lookupSchema, lookupTool } from "./data";
 
@@ -23,6 +24,7 @@ beforeEach(() => {
   mocks.proposals.mockResolvedValue([{ id: "p1", program: "zcg", title: "Zebra indexer", status: "approved", decisionDate: "2026-08-12", submittedDate: "2026-07-01", applicantsRaw: "Zingo Labs", requestedUsdCents: 12_500_000n, platformLink: "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/340", importedAt: new Date("2026-09-27T03:00:00Z") }]);
   mocks.meetings.mockResolvedValue([{ meetingDate: "2026-08-12", title: "ZCG meeting", url: "https://forum.zcashcommunity.com/t/minutes/1" }]);
   mocks.grants.mockResolvedValue([{ grantKey: "Zebra indexer" }]);
+  mocks.ledger.mockResolvedValue([{ recipientName: "Zcash Brazil", externalUsdCents: 65_595_543n, externalPaidUsdCents: 55_662_043n, grantCount: 7, externalPaymentCount: 62, externalLastPaid: "2026-09-01" }]);
 });
 describe("New public-data topics through the tool boundary", () => {
   it("describes every topic the schema accepts", () => {
@@ -34,11 +36,12 @@ describe("New public-data topics through the tool boundary", () => {
     expect(data.calls.shown).toHaveLength(1); expect(data.calls.shown[0]).toMatchObject({ number: 131, date: "2026-09-10", moderator: "Dodger", notes: call.url, recording: call.video });
     expect(source?.url).toBe("https://openzcash.org/arborist");
   });
-  it("reads the wallet catalog and the community directory without any network or database", async () => {
+  it("reads the wallet catalog offline and the community directory with the ledger's funding", async () => {
     const wallets = await read("wallets", "shielded on iOS");
     expect(wallets.data.catalogRevisedOn).toBe("2026-07-08"); expect(wallets.data.wallets.shown.length).toBeGreaterThan(5); expect(wallets.data.wallets.shown.every((w: { shielded: string }) => w.shielded === "full")).toBe(true);
     const communities = await read("communities", "Zcash Brasil");
     expect(communities.data.verifiedOn).toBe("2026-09-20"); expect(communities.data.communities.shown[0].name).toBe("Zcash Brazil");
+    expect(communities.data.fundingSource).toBe("ledger"); expect(communities.data.communities.shown[0]).toMatchObject({ lastPaidDate: "2026-09-01", zcgBudgetedUsd: 655955.43 });
     expect(mocks.calls).not.toHaveBeenCalled(); expect(mocks.proposals).not.toHaveBeenCalled();
   });
   it("assembles decisions from the proposals, meetings and grants readers under the publication day", async () => {

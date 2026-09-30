@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "ed9769389a287505",
+  "sourceRevision": "21613ab0966a7edb",
   "sourceFiles": 56,
   "documents": [
     {
@@ -277,7 +277,7 @@
       "id": "src/app/communities/page.tsx:0",
       "url": "https://openzcash.org/communities",
       "title": "communities",
-      "text": "Global Communities · OpenZcash\nThe global Zcash community groups: who they are, where to find them, which ones ZCG funds (with audited numbers), and what each one has been up to on the forum.\nGlobal Communities\nThe regional groups building Zcash adoption worldwide: who is active now, who ZCG and the ZecHub DAO fund, and where to find them. Activity is live from the community forum and YouTube; X and Instagram profiles are linked.\nLoading live forum activity…\nFunding figures mirror the official ZCG spreadsheet (budgeted USD, not paid; see the methodology). Communities with no ledger rows are marked accordingly; some are funded through other channels (ZecHub DAO ambassador program, direct donations), noted per card. Links seeded from ZecHub's community directory and verified individually."
+      "text": "Global Communities · OpenZcash\nThe global Zcash community groups: who they are, where to find them, which ones ZCG funds (with audited numbers), and what each one has been up to on the forum.\nGlobal Communities\nThe regional groups building Zcash adoption worldwide: who is active now, who ZCG and the ZecHub DAO fund, and where to find them. Activity is live from the community forum and YouTube; X and Instagram profiles are linked.\nLoading live forum activity…\nZCG figures are read from the ZCG ledger mirror of the official spreadsheet, collected every 6 hours (budgeted USD, not paid; see the methodology), and match the recipients page. ZecHub DAO grants are mapped by approved DAO DAO proposal; their paid and outstanding amounts come from the ZecHub treasury sheet mirror, also collected every 6 hours, and grants older than the sheet show their period only. Umbrella grants and other channels are noted in each badge's tooltip. Links seeded from ZecHub's community directory and verified individually."
     },
     {
       "id": "src/app/ceremony/page.tsx:0",
@@ -1135,7 +1135,7 @@
       "id": "src/lib/communities/data.ts:1",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Brazil",
-      "text": "Zcash Brazil\nCountry: Brazil\nRegion: Latin America\nLanguage: Portuguese\nZCG ledger recipient: Zcash Brazil\nZcash Brazil | 2026\nZcash Brazil | 2025\nZECA: The Shielded Voice\nThe largest regional community in the ZCG ledger: education, events, ZECA voice assistant, and monthly public reports since 2022."
+      "text": "Zcash Brazil\nCountry: Brazil\nRegion: Latin America\nLanguage: Portuguese\nZCG ledger recipient: Zcash Brazil\nA45\nZcash Brazil | 2026\nZcash Brazil | 2025\nZECA: The Shielded Voice\nThe largest regional community in the ZCG ledger: education, events, ZECA voice assistant, and monthly public reports since 2022."
     },
     {
       "id": "src/lib/communities/data.ts:2",
@@ -1153,37 +1153,37 @@
       "id": "src/lib/communities/data.ts:4",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Türkiye",
-      "text": "Zcash Türkiye\nCountry: Türkiye\nRegion: Europe\nLanguage: Turkish\nZCG ledger recipient: Batuhan\nZcash Türkiye 2026 Q3-4 - 2027 Q1-2-3-4\nWe Need Support with a Testnet ZEC Faucet\nFrom Street Interviews to Education: Growing Zcash Awareness in Türkiye\nStreet interviews to bootcamps: education and events across Türkiye, with the most recent ledger payment of any community."
+      "text": "Zcash Türkiye\nCountry: Türkiye\nRegion: Europe\nLanguage: Turkish\nZCG ledger recipient: Batuhan\nA48\nA50\nZcash Türkiye 2026 Q3-4 - 2027 Q1-2-3-4\nWe Need Support with a Testnet ZEC Faucet\nFrom Street Interviews to Education: Growing Zcash Awareness in Türkiye\nStreet interviews to bootcamps: education and events across Türkiye."
     },
     {
       "id": "src/lib/communities/data.ts:5",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Nigeria",
-      "text": "Zcash Nigeria\nCountry: Nigeria\nRegion: Africa\nLanguage: English\nZCG ledger recipient: Zcash Nigeria\nZcash Nigeria 2026\nUniversity of Ibadan Zcash Bootcamp\nSix consecutive ZCG grants of campus bootcamps and meetups across Nigeria."
+      "text": "Zcash Nigeria\nCountry: Nigeria\nRegion: Africa\nLanguage: English\nZCG ledger recipient: Zcash Nigeria\nA44\nZcash Nigeria 2026\nUniversity of Ibadan Zcash Bootcamp\nConsecutive ZCG grants of campus bootcamps and meetups across Nigeria."
     },
     {
       "id": "src/lib/communities/data.ts:6",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Ghana",
-      "text": "Zcash Ghana\nCountry: Ghana\nRegion: Africa\nLanguage: English\nZCG ledger recipient: ZcashGH\nBig things ahead for Zcash Ghana\nZcash Ghana (July 2026 - September 2026)\nZcash Ghana — Our First Year Journey (June 2025 – June 2026)\nCommunity education and meetups; two ZCG grants delivered."
+      "text": "Zcash Ghana\nCountry: Ghana\nRegion: Africa\nLanguage: English\nZCG ledger recipient: ZcashGH\nA105\nBig things ahead for Zcash Ghana\nZcash Ghana (July 2026 - September 2026)\nZcash Ghana — Our First Year Journey (June 2025 – June 2026)\nCommunity education and meetups across Ghana, under ZCG grants."
     },
     {
       "id": "src/lib/communities/data.ts:7",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Arabia",
-      "text": "Zcash Arabia\nCountry: MENA region\nRegion: Middle East\nLanguage: Arabic\nZCG ledger recipient: ZcashArabia\nGrant Application - Zcash Arabia (August to December 2026)\nZcash Arabia (June to September 2026)\nArabic-language content and community building across the MENA region."
+      "text": "Zcash Arabia\nCountry: MENA region\nRegion: Middle East\nLanguage: Arabic\nZCG ledger recipient: ZcashArabia\nA72\nA94\nGrant Application - Zcash Arabia (August to December 2026)\nZcash Arabia (June to September 2026)\nArabic-language content and community building across the MENA region."
     },
     {
       "id": "src/lib/communities/data.ts:8",
       "url": "https://openzcash.org/communities",
       "title": "communities · Club Zcash Caracas",
-      "text": "Club Zcash Caracas\nCountry: Venezuela\nRegion: Latin America\nLanguage: Spanish\nPart of the Zcash en Espanol ecosystem, funded through its ZCG grant (no separate ledger recipient).\nCaracas meetups under the Zcash en Espanol umbrella, where financial privacy is a daily necessity."
+      "text": "Club Zcash Caracas\nCountry: Venezuela\nRegion: Latin America\nLanguage: Spanish\nNamed in Zcash en Español's ZCG grant #157, which covers its Zcash Clubs; no own ledger recipient.\nCaracas meetups under the Zcash en Español umbrella, where financial privacy is a daily necessity."
     },
     {
       "id": "src/lib/communities/data.ts:9",
       "url": "https://openzcash.org/communities",
       "title": "communities · Club Zcash Barcelona",
-      "text": "Club Zcash Barcelona\nCountry: Spain\nRegion: Europe\nLanguage: Spanish/Catalan\nClub Zcash Barcelona, the journey begins!\nBarcelona meetups under the Zcash en Español umbrella (managed by yoditar)."
+      "text": "Club Zcash Barcelona\nCountry: Spain\nRegion: Europe\nLanguage: Spanish/Catalan\nBudgeted in Zcash en Español's ZCG grant #157 (Zcash Route: six bimonthly Barcelona meetups, $1,800); no own ledger recipient.\nClub Zcash Barcelona, the journey begins!\nBarcelona meetups under the Zcash en Español umbrella (managed by yoditar)."
     },
     {
       "id": "src/lib/communities/data.ts:10",
@@ -1218,14 +1218,14 @@
     {
       "id": "src/lib/communities/data.ts:15",
       "url": "https://openzcash.org/communities",
-      "title": "communities · Zcash Club Querétaro",
-      "text": "Zcash Club Querétaro\nCountry: Mexico\nRegion: Latin America\nLanguage: Spanish\nZcash Club Querétaro-Mexico: advancing financial privacy in Mexico\nMandatory ID registration on mobile lines in Mexico: the role of Zcash in México\nLocal Mexican club in the Español ecosystem, running Querétaro meetups."
+      "title": "communities · Zcash México",
+      "text": "Zcash México\nCountry: Mexico\nRegion: Latin America\nLanguage: Spanish\nClub Zcash Querétaro is named in Zcash en Español's ZCG grant #157, which covers its Zcash Clubs; Zcash México has no ZCG grant of its own.\nA178\nZcash Club Querétaro-Mexico: advancing financial privacy in Mexico\nMandatory ID registration on mobile lines in Mexico: the role of Zcash in México\nClub Zcash Querétaro, the Español-ecosystem club founded in November 2024, now growing into Zcash México; its Oct–Nov 2026 plan (A178) adds monthly meetups in Puebla."
     },
     {
       "id": "src/lib/communities/data.ts:16",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash East Africa",
-      "text": "Zcash East Africa\nCountry: East Africa\nRegion: Africa\nLanguage: English/Swahili\nNot ZCG-funded; ZecHub DAO proposals have covered specific events only (e.g. ETHSafari), not the community itself.\nZcash East Africa @ ETHSafari 2026\nZcash East Africa (June-July 2026)\nZcash East Africa Official Launch & Community Onboarding Meetup\nGrassroots education in Uganda and Kenya, with event appearances backed by one-off ZecHub DAO proposals."
+      "text": "Zcash East Africa\nCountry: East Africa\nRegion: Africa\nLanguage: English/Swahili\nZCG ledger recipient: Zcash East Africa Community\nA147\nA153\nA172\nThe ZecHub DAO funds its operations: A153 (Jun–Jul 2026) and A172 (Aug–Oct 2026, merchant adoption and meetups; ETHSafari was one activity), after the KBCC 2026 event grant A147.\nZcash East Africa @ ETHSafari 2026\nZcash East Africa (June-July 2026)\nZcash East Africa Official Launch & Community Onboarding Meetup\nGrassroots education and merchant onboarding in Uganda and Kenya."
     },
     {
       "id": "src/lib/communities/data.ts:17",
@@ -1243,7 +1243,7 @@
       "id": "src/lib/communities/data.ts:19",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash India",
-      "text": "Zcash India\nCountry: India\nRegion: Asia\nLanguage: Hindi/English\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZcash India 2026\nOpen Light Nodes: Independent Zcash Light Client Infrastructure for Asia\nZcash India 2026 Grant Application\nEducation and meetups in India, funded as a ZecHub DAO ambassador program."
+      "text": "Zcash India\nCountry: India\nRegion: Asia\nLanguage: Hindi/English\nZCG ledger recipient: Zcash India\nA140\nA151\nA175\nZcash India 2026\nOpen Light Nodes: Independent Zcash Light Client Infrastructure for Asia\nZcash India 2026 Grant Application\nEducation and meetups in India."
     },
     {
       "id": "src/lib/communities/data.ts:20",
@@ -1261,19 +1261,19 @@
       "id": "src/lib/communities/data.ts:22",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Korea",
-      "text": "Zcash Korea\nCountry: South Korea\nRegion: Asia\nLanguage: Korean\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZechub DAO - 2026 Zcash Korea Ambassador Proposal (Approved)\nZechub DAO - Zcash Korea Ambassador Proposal (Approved) — edição 2025\nKorean community, funded as a ZecHub DAO Global Ambassador program."
+      "text": "Zcash Korea\nCountry: South Korea\nRegion: Asia\nLanguage: Korean\nA60\nA84\nA106\nA154\nA176\nGlobal Ambassador program: five ZecHub DAO terms since February 2025.\nZechub DAO - 2026 Zcash Korea Ambassador Proposal (Approved)\nZechub DAO - Zcash Korea Ambassador Proposal (Approved) — edição 2025\nKorean community, funded as a ZecHub DAO Global Ambassador program."
     },
     {
       "id": "src/lib/communities/data.ts:23",
       "url": "https://openzcash.org/communities",
       "title": "communities · Elzz — Global Ambassador",
-      "text": "Elzz — Global Ambassador\nCountry: Global\nRegion: Global\nLanguage: English\nGlobal Ambassador program funded by the ZecHub DAO treasury (three consecutive terms through Dec 2026).\nGlobal Ambassador Elzz July 2026 Report\nZecHub DAO Global Ambassador: educational content, X Spaces and ecosystem awareness, with monthly public reports."
+      "text": "Elzz — Global Ambassador\nCountry: Global\nRegion: Global\nLanguage: English\nA113\nA132\nA146\nGlobal Ambassador program: three consecutive ZecHub DAO terms, November 2025 to December 2026.\nGlobal Ambassador Elzz July 2026 Report\nZecHub DAO Global Ambassador: educational content, X Spaces and ecosystem awareness, with monthly public reports."
     },
     {
       "id": "src/lib/communities/data.ts:24",
       "url": "https://openzcash.org/communities",
       "title": "communities · Zcash Ukraine",
-      "text": "Zcash Ukraine\nCountry: Ukraine\nRegion: Europe\nLanguage: Ukrainian\nAmbassador program funded by the ZecHub DAO treasury, not the ZCG ledger.\nZcash Ukraine – Monthly Report (December 1–31, 2025) — último da série mensal iniciada em jun/2025\nZcash Ukraine Regional Community Initiative\nUkrainian community and education under wartime conditions."
+      "text": "Zcash Ukraine\nCountry: Ukraine\nRegion: Europe\nLanguage: Ukrainian\nA90\nA97\nA128\nFunded by the ZecHub DAO from June to November 2025 (A90, A97), plus a 1 ZEC retroactive grant for December 2025 (A128); its 2026 proposals A131 and A133 were rejected.\nZcash Ukraine – Monthly Report (December 1–31, 2025) — último da série mensal iniciada em jun/2025\nZcash Ukraine Regional Community Initiative\nUkrainian community and education under wartime conditions."
     },
     {
       "id": "src/lib/communities/data.ts:25",

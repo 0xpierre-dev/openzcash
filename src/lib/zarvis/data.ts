@@ -211,7 +211,10 @@ async function readPublicData(topic: z.infer<typeof lookupSchema>["topic"], quer
     case "forum": return (await import("./forum")).forumContext(query, signal);
     case "zechub_dao": { const { getZechubProposals, ZECHUB_DAO_URL } = await import("@/lib/dao/zechub"); return (await import("./dao")).daoContext(await getZechubProposals(50), query, { url: ZECHUB_DAO_URL, fetchedAt: new Date().toISOString() }); }
     case "wallets": return (await import("./directory")).walletsContext(query);
-    case "communities": return (await import("./directory")).communitiesContext(query);
+    case "communities": {
+      const [{ communitiesContext }, { getCommunitiesFunding }] = await Promise.all([import("./directory"), import("@/lib/communities/funding")]);
+      return communitiesContext(query, await getCommunitiesFunding());
+    }
     case "decisions": {
       const [{ listProposals }, { getMeetings }, { listGrants }, { cached, LEDGER_TTL_MS }, { publicationDay }, { decisionsContext }] = await Promise.all([import("@/lib/zcg/proposals-repo"), import("@/lib/zcg/governance-repo"), import("@/lib/zcg/grants-repo"), import("@/lib/cache/memo"), import("@/lib/zcg/publication-policy"), import("./decisions")]);
       const day = publicationDay();
