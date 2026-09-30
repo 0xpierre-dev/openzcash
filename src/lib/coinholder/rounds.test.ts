@@ -178,7 +178,7 @@ describe("Program navigation", () => {
     const ids = APPS.map((a) => a.id);
     expect(ids.indexOf("coinholders")).toBe(ids.indexOf("zcg") - 1);
     const app = APPS.find((a) => a.id === "coinholders")!;
-    expect(app.label).toBe("CD Retroactive Grants");
+    expect(app.label).toBe("Coinholder Grants");
     expect(app.sub).toBe(PROGRAM.officialName);
     expect(app.href).toBe("/coinholders");
     expect(app.pages.map((p) => p.label)).toEqual(["Results", "The fund", "Coinholder Copilot"]);

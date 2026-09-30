@@ -69,11 +69,10 @@ export const APPS: AppDef[] = [
     icon: "balance",
     pages: [],
   },
-  { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, supply & holdings", icon: "chart", pages: [] },
   {
     // Its own program, decided by coinholder vote; FPF only administers it.
     id: "coinholders",
-    label: "CD Retroactive Grants",
+    label: "Coinholder Grants",
     href: "/coinholders",
     sub: "Coinholder-Directed Retroactive Grants Program",
     logo: "/logos/marks/coinholders.png",
@@ -115,6 +114,7 @@ export const APPS: AppDef[] = [
       { href: "/zcg/budget", label: "Budget", mark: "/logos/glyphs/budget.png", hidden: true },
     ],
   },
+  { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, supply & holdings", icon: "chart", pages: [] },
   { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
   {
