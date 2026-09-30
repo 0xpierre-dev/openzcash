@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { PageHeader } from "@/components/ui";
-import { COMMUNITIES } from "@/lib/communities/data";
+import { COMMUNITIES, LEDGER_FALLBACK_AS_OF } from "@/lib/communities/data";
 import { getCommunityActivity } from "@/lib/communities/forum-activity";
+import { getCommunitiesFunding } from "@/lib/communities/funding";
 import { CommunitiesView } from "./communities-view";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +13,18 @@ export const metadata = {
 };
 
 async function LiveDirectory() {
-  const activity = await getCommunityActivity(COMMUNITIES);
-  return <CommunitiesView communities={COMMUNITIES} activity={activity} />;
+  const [activity, funding] = await Promise.all([
+    getCommunityActivity(COMMUNITIES),
+    getCommunitiesFunding(),
+  ]);
+  return (
+    <CommunitiesView
+      communities={funding.communities}
+      activity={activity}
+      fundingSource={funding.source}
+      fallbackAsOf={LEDGER_FALLBACK_AS_OF}
+    />
+  );
 }
 
 export default function CommunitiesPage() {
@@ -35,11 +46,14 @@ export default function CommunitiesPage() {
       </Suspense>
 
       <p className="mt-8 text-xs leading-relaxed text-stone-600">
-        Funding figures mirror the official ZCG spreadsheet (budgeted USD, not
-        paid; see the methodology). Communities with no ledger rows are marked
-        accordingly; some are funded through other channels (ZecHub DAO
-        ambassador program, direct donations), noted per card. Links seeded from
-        ZecHub&apos;s community directory and verified individually.
+        ZCG figures are read from the ZCG ledger mirror of the official
+        spreadsheet, collected every 6 hours (budgeted USD, not paid; see the
+        methodology), and match the recipients page. ZecHub DAO grants are
+        mapped by approved DAO DAO proposal; their paid and outstanding amounts
+        come from the ZecHub treasury sheet mirror, also collected every 6
+        hours, and grants older than the sheet show their period only. Umbrella
+        grants and other channels are noted in each badge&apos;s tooltip. Links
+        seeded from ZecHub&apos;s community directory and verified individually.
       </p>
     </>
   );
