@@ -35,7 +35,8 @@ function grantStatusTone(status: string | null) {
   if (status === "completed") return "emerald" as const;
   if (status === "cancelled" || status === "keyholder_veto")
     return "rose" as const;
-  if (status === "open") return "amber" as const;
+  if (status === "open" || status === "awaiting_payment")
+    return "amber" as const;
   return "zinc" as const;
 }
 

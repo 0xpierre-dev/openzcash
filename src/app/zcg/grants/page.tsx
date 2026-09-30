@@ -6,6 +6,11 @@ import { GrantsTable, type GrantTableRow } from "./grants-table";
 import { cached, LEDGER_TTL_MS } from "@/lib/cache/memo";
 import { Synced } from "@/components/synced";
 import { grantStatusLabel as statusLabel } from "@/lib/zcg/status-labels";
+import { listDisbursements } from "@/lib/zcg/disbursements-repo";
+import { coinholderGrantViews } from "@/lib/coinholder/official-status";
+
+/** The coinholder tab has a few dozen rows; the list's default cap of 250 is far above it. */
+const COINHOLDER_LEDGER_ROWS = 1000;
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Grants ZCG · OpenZcash" };
@@ -21,24 +26,39 @@ export default async function GrantsPage({
   }>;
 }) {
   const params = await searchParams;
-  const [grants, summary] = await Promise.all([
+  const [grants, summary, coinholderEntries] = await Promise.all([
     cached("grants:list", LEDGER_TTL_MS, () => listGrants()),
     cached("grants:summary", LEDGER_TTL_MS, () => grantsSummary()),
+    cached("listDisbursements:coinholder_grants", LEDGER_TTL_MS, () =>
+      listDisbursements({
+        sheet: "coinholder_grants",
+        limit: COINHOLDER_LEDGER_ROWS,
+      }),
+    ),
   ]);
 
-  const rows: GrantTableRow[] = grants.map((g) => ({
-    grantKey: g.grantKey,
-    grantee: g.grantee,
-    category: g.category ?? "",
-    status: g.status,
-    statusText: statusLabel(g.status),
-    program: g.program,
-    milestoneCount: g.milestoneCount,
-    paidCount: g.paidCount,
-    milestonesText: `${g.paidCount}/${g.milestoneCount}`,
-    _usd: Number(g.usdCents),
-    _zec: Number(g.zecZat),
-  }));
+  const rows: GrantTableRow[] = grants.map((g) => {
+    // A coinholder grant approved in a closed round and not yet paid, also
+    // when FPF's tab files it under the name of an earlier, paid grant.
+    const awaiting =
+      g.program === "coinholder"
+        ? (coinholderGrantViews(g, coinholderEntries).find((v) => v.official)
+            ?.official ?? null)
+        : null;
+    return {
+      grantKey: g.grantKey,
+      grantee: g.grantee,
+      category: g.category ?? "",
+      status: awaiting ? "open" : g.status,
+      statusText: awaiting?.label ?? statusLabel(g.status),
+      program: g.program,
+      milestoneCount: g.milestoneCount,
+      paidCount: g.paidCount,
+      milestonesText: `${g.paidCount}/${g.milestoneCount}`,
+      _usd: Number(g.usdCents),
+      _zec: Number(g.zecZat),
+    };
+  });
 
   return (
     <>

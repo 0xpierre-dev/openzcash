@@ -24,8 +24,8 @@ const HOMES: { id: DecisionHome; who: string; what: string; href: string }[] = [
   {
     id: "fund",
     who: "Coinholders and key-holders",
-    what: "Coinholder fund votes",
-    href: "/zcg/coinholder/votes",
+    what: "Coinholder grants votes",
+    href: "/coinholders",
   },
   {
     id: "network",

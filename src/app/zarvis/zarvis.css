@@ -117,10 +117,17 @@
 .zarvis-provenance-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); background: var(--surface2); }
 .zarvis-provenance-local { color: var(--accent-ink); }
 .zarvis-provenance-notice { color: var(--ink); font-weight: 500; }
-.zarvis-launcher { position: fixed; right: 24px; bottom: calc(var(--zarvis-footer-height, 90px) + 16px); z-index: 24; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 30px; background: var(--surface); color: var(--ink); box-shadow: 0 4px 18px #00000012; padding: 9px 17px 9px 11px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.zarvis-launcher-wrap { position: fixed; right: 24px; bottom: calc(var(--zarvis-footer-height, 90px) + 16px); z-index: 24; }
+.zarvis-launcher { position: relative; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 30px; background: var(--surface); color: var(--ink); box-shadow: 0 4px 18px #00000012; padding: 9px 17px 9px 11px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .zarvis-launcher svg { width: 27px; height: 27px; color: var(--accent); }
 .zarvis-launcher:hover { background: var(--surface2); }
-.rd-shell[data-nav="open"] .zarvis-launcher { visibility: hidden; }
+.rd-shell[data-nav="open"] .zarvis-launcher-wrap { visibility: hidden; }
+/* Hide control: shown on hover or focus where there is a pointer, always on touch screens. */
+.zarvis-launcher-close { position: absolute; top: -7px; right: -7px; display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 1px solid var(--line-strong); border-radius: 50%; background: var(--surface); color: var(--muted); font: inherit; font-size: 14px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.zarvis-launcher-wrap:hover .zarvis-launcher-close, .zarvis-launcher-wrap:focus-within .zarvis-launcher-close { opacity: 1; }
+.zarvis-launcher-close:hover { color: var(--ink); background: var(--surface2); }
+.zarvis-launcher-close:focus-visible { opacity: 1; outline: 2px solid var(--accent); outline-offset: 1px; }
+@media (hover: none) { .zarvis-launcher-close { opacity: 1; } }
 .zarvis-dock { position: fixed; inset: auto 22px 22px auto; margin: 0; width: min(450px, calc(100vw - 32px)); height: min(740px, calc(100dvh - 44px)); max-height: none; max-width: none; padding: 0; border: 1px solid var(--line-strong); border-radius: 20px; color: var(--ink); background: var(--bg); box-shadow: 0 20px 80px #0003; overflow: hidden; }
 .zarvis-dock[open] { display: flex; flex-direction: column; }
 .zarvis-dock::backdrop { background: #0003; }
@@ -143,7 +150,7 @@
 .zarvis-chat-compact > .zarvis-privacy { margin: 10px 16px 16px; }
 .zarvis-chat-compact .zarvis-thread { padding-left: 20px; padding-right: 20px; }
 .zarvis-page button:focus-visible, .zarvis-dock button:focus-visible, .zarvis-page a:focus-visible, .zarvis-dock a:focus-visible, .zarvis-launcher:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-@media (max-width: 600px) { .zarvis-chat { height: calc(100dvh - 215px); min-height: 410px; } .zarvis-chat-toolbar { padding: 0 0 8px; } .zarvis-chat-name { font-size: 17px; } .zarvis-welcome { padding: 8px 0 16px; } .zarvis-welcome h2 { font-size: 22px; } .zarvis-hero-mark { width: 88px; height: 88px; margin: 0; } .zarvis-starters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .zarvis-starters button { min-height: 44px; padding: 8px 12px; font-size: 13px; } .rd-shell .zarvis-composer textarea { font-size: 16px; } .zarvis-compose-area { padding-top: 8px; } .zarvis-thread { padding: 6px 0 12px; } .zarvis-launcher { right: 14px; padding: 9px; } .zarvis-launcher span { display: none; } .zarvis-dock { inset: auto 8px 8px; width: calc(100vw - 16px); height: calc(100dvh - 16px); border-radius: 18px; padding-bottom: env(safe-area-inset-bottom); } .zarvis-dock .zarvis-chat { min-height: 0; height: auto; } }
+@media (max-width: 600px) { .zarvis-chat { height: calc(100dvh - 215px); min-height: 410px; } .zarvis-chat-toolbar { padding: 0 0 8px; } .zarvis-chat-name { font-size: 17px; } .zarvis-welcome { padding: 8px 0 16px; } .zarvis-welcome h2 { font-size: 22px; } .zarvis-hero-mark { width: 88px; height: 88px; margin: 0; } .zarvis-starters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .zarvis-starters button { min-height: 44px; padding: 8px 12px; font-size: 13px; } .rd-shell .zarvis-composer textarea { font-size: 16px; } .zarvis-compose-area { padding-top: 8px; } .zarvis-thread { padding: 6px 0 12px; } .zarvis-launcher-wrap { right: 14px; } .zarvis-launcher { padding: 9px; } .zarvis-launcher span { display: none; } .zarvis-dock { inset: auto 8px 8px; width: calc(100vw - 16px); height: calc(100dvh - 16px); border-radius: 18px; padding-bottom: env(safe-area-inset-bottom); } .zarvis-dock .zarvis-chat { min-height: 0; height: auto; } }
 @media (prefers-reduced-motion: reduce) { .zarvis-mark, .zarvis-mark * { animation: none !important; transition: none !important; transform: none !important; } .zarvis-thinking { animation: none; } .zarvis-starters button { transition: none; } }
 
 /* One grounded body, independent head and gestures, and blended pose changes. */

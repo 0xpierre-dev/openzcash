@@ -69,6 +69,20 @@ export const APPS: AppDef[] = [
   },
   { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, supply & holdings", icon: "chart", pages: [] },
   {
+    // Its own program, decided by coinholder vote; FPF only administers it.
+    id: "coinholders",
+    label: "CD Retroactive Grants",
+    href: "/coinholders",
+    sub: "Coinholder-Directed Retroactive Grants Program",
+    logo: "/logos/marks/coinholders.png",
+    icon: "grant",
+    pages: [
+      { href: "/coinholders/results", label: "Results", mark: "/logos/glyphs/decisions.png" },
+      { href: "/coinholders/fund", label: "The fund", mark: "/logos/glyphs/coinholder.png" },
+      { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
+    ],
+  },
+  {
     id: "zcg",
     label: "ZCG",
     href: "/zcg",
@@ -103,15 +117,10 @@ export const APPS: AppDef[] = [
     id: "fpf",
     label: "FPF",
     href: "/zcg/fpf",
-    sub: "Coinholder grants",
+    sub: "Program administrator",
     logo: "/logos/fpf.png",
     icon: "wallet",
-    pages: [
-      { href: "/zcg/coinholder", label: "Coinholder Grants", mark: "/logos/glyphs/coinholder.png" },
-      { href: "/zcg/coinholder/votes", label: "Coinholder votes", mark: "/logos/glyphs/decisions.png" },
-      { href: "/zcg/coinholder/pool", label: "Coinholder pool", mark: "/logos/glyphs/coinholder.png" },
-      { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
-    ],
+    pages: [],
   },
   { id: "zf", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/ecosystem/zcash-foundation.png", icon: "balance", pages: [] },
   {
@@ -189,6 +198,7 @@ const DETAILS: Record<string, { parent: string; label: string }> = {
   "/zcg/recipient": { parent: "/zcg/recipients", label: "Recipient detail" },
 };
 
+
 const pathOf = (href: string) => href.split("?")[0];
 
 export type Place = {
@@ -207,8 +217,8 @@ export function placeOf(pathname: string): Place | undefined {
     // An app that opens a record by query (Zakura, ZODL, Tachyon) never
     // claims the plain path: /ecosystem belongs to the Ecosystem app.
     if (app.href.includes("?")) continue;
-    if (pathOf(app.href) === target && !detail) return { app };
     const page = app.pages.find((p) => pathOf(p.href) === target);
+    if (pathOf(app.href) === target && !detail) return page ? { app, page } : { app };
     if (page) {
       return detail
         ? { app, page, detail: { parent: page, label: detail.label } }
@@ -233,7 +243,7 @@ export const DESIGN_GROUPS = APPS.map((app) => ({
   description: app.sub,
   admin: app.admin ?? false,
   routes: [
-    [app.href, app.pages.length ? "Overview" : app.label] as [string, string],
+    ...(app.pages.some((p) => p.href === app.href) ? [] : [[app.href, app.pages.length ? "Overview" : app.label] as [string, string]]),
     ...app.pages.map((p) => [p.href, p.label] as [string, string]),
   ],
 }));

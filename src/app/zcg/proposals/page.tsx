@@ -23,6 +23,7 @@ import { issueNumberFromLink } from "@/lib/zcg/issue-link";
 import { Synced } from "@/components/synced";
 import { publicationDay } from "@/lib/zcg/publication-policy";
 import { PROPOSAL_STATUS_LABEL } from "@/lib/zcg/status-labels";
+import { officialProposalVerdict } from "@/lib/coinholder/official-status";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "ZCG Proposals · OpenZcash" };
@@ -31,6 +32,11 @@ export const metadata = { title: "ZCG Proposals · OpenZcash" };
 const STATUS_LABEL = PROPOSAL_STATUS_LABEL;
 
 function toTableRow(p: ProposalRow): ProposalTableRow {
+  // A closed coinholder round shows FPF's official results, which the
+  // spreadsheet (and its next-day publication) can still trail.
+  const status =
+    (p.program === "coinholder" ? officialProposalVerdict(p)?.status : null) ??
+    p.status;
   return {
     id: p.id,
     program: p.program,
@@ -38,8 +44,8 @@ function toTableRow(p: ProposalRow): ProposalTableRow {
     platformLink: p.platformLink ?? null,
     applicant: p.applicantsRaw ?? "",
     submitted: p.submittedDate ?? "",
-    status: p.status,
-    statusLabel: STATUS_LABEL[p.status] ?? p.status,
+    status,
+    statusLabel: STATUS_LABEL[status] ?? status,
     source: "sheet",
   };
 }
@@ -400,6 +406,11 @@ export default async function PropostasPage({
           the GitHub verdict until the spreadsheet catches up.
         </p>
       ) : null}
+
+      <p className="mt-1.5 text-xs text-stone-500">
+        Coinholder proposals of a closed round show FPF&apos;s official results
+        as soon as they are published.
+      </p>
 
       <Synced className="mt-4" />
 

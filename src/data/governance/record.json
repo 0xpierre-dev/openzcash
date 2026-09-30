@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-09-24",
-  "note": "Compiled from public sources on 2026-09-24; each entry keeps its source links.",
+  "checkedAt": "2026-09-30",
+  "note": "Compiled from public sources on 2026-09-24 and last checked on 2026-09-30; each entry keeps its source links.",
   "elections": [
     {
       "id": "2020-09-mgrc-inaugural",
@@ -568,18 +568,19 @@
     {
       "id": "2026-09-cdrgp-q3-round",
       "name": "Coinholder-Directed Retroactive Grants Program, Q3 2026 round (37 proposals)",
-      "status": "open",
+      "status": "closed",
       "informal": false,
       "kind": "grant_decision",
       "scope": "fund",
       "date": "2026-09-29",
-      "totalZec": null,
-      "quorum": "About 420,000 ZEC per proposal, simple majority; both 'Reject' options count as No (ZIP 1016 / FPF).",
-      "outcome": null,
-      "verifiable": "yes (after tally)",
+      "totalZec": 2181452.875,
+      "quorum": "At least 420,000 ZEC per proposal and a simple majority in favour (ZIP 1016); both 'Reject' options count as No.",
+      "outcome": "17 of 37 funded, 20 rejected. Connaugh Zcash Videos was first published as Abstain and corrected to Funded on Sep 30, 2026, with abstentions left out of the majority test.",
+      "verifiable": "yes",
       "sources": [
-        "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-voting-now-open/57650",
-        "https://forum.zcashcommunity.com/t/30-day-review-period-coinholder-directed-retroactive-grants-program-q3/57056"
+        "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-results/57909",
+        "https://zvote.zfnd.org/shielded-vote/v1/vote-summary/2cba66eb16c7581a1692cb0b033785da0131059f645a0d2fb4dc2a5131505e01",
+        "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-voting-now-open/57650"
       ]
     }
   ],

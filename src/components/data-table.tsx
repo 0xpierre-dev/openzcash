@@ -95,6 +95,15 @@ export interface DataTableProps<T> {
 
 const PAGE_SIZES = [25, 50, 100];
 
+/** First option of a filter: Category → "All categories", Status → "All statuses"; a phrase ("What it is") stays "All". */
+function allOptionLabel(header: string): string {
+  const word = header.toLowerCase();
+  if (/\s/.test(word)) return "All";
+  if (/[^aeiou]y$/.test(word)) return `All ${word.slice(0, -1)}ies`;
+  if (/(s|x|z|ch|sh)$/.test(word)) return `All ${word}es`;
+  return `All ${word}s`;
+}
+
 const ALIGN_CLASS: Record<NonNullable<Column<unknown>["align"]>, string> = {
   left: "text-left",
   right: "text-right",
@@ -372,12 +381,7 @@ export function DataTable<T>({
                   setPage(1);
                 }}
               >
-                <option value="">
-                  All{" "}
-                  {col.header === "Category"
-                    ? "categories"
-                    : col.header.toLowerCase() + "s"}
-                </option>
+                <option value="">{allOptionLabel(col.header)}</option>
                 {(distinctByCol.get(col.key) ?? []).map((value) => (
                   <option key={value}>{value}</option>
                 ))}

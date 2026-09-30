@@ -1146,6 +1146,15 @@
   flex: 1;
   min-width: 0;
 }
+/* A long app name wraps to a second line instead of losing its end. */
+.rd-side-app-row > .rd-side-item[data-long] {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  white-space: normal;
+}
+.rd-side-app-row > .rd-side-item[data-long] .rd-side-label {
+  line-height: 1.3;
+}
 /* App marks sit bare on the sidebar: no tile behind them in either theme. */
 .rd-side-logo {
   width: 20px;
