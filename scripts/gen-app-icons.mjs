@@ -41,6 +41,14 @@ for (const [id, icon] of Object.entries(PAGES)) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#b7791f" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${shape(icon)}</svg>`;
   await sharp(Buffer.from(svg)).png().toFile(`public/logos/glyphs/${id}.png`);
 }
+// Phone tab bar glyphs: ink on transparent at a light stroke, inverted in the
+// dark theme like the app marks. Zarvis, the centre tab, draws its own mark.
+const TABS = { home: "IconHome", treasury: "IconCoins", search: "IconSearch", apps: "IconGrid" };
+mkdirSync("public/logos/tabs", { recursive: true });
+for (const [id, icon] of Object.entries(TABS)) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${shape(icon)}</svg>`;
+  await sharp(Buffer.from(svg)).png().toFile(`public/logos/tabs/${id}.png`);
+}
 // Official vector marks rasterised once, so every menu image is a PNG.
 // ZF: the padlock-shield emblem alone (the wordmark is unreadable at 18px);
 // it is the first six paths of the official file.

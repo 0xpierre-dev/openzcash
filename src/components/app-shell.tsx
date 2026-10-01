@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -9,12 +9,19 @@ import { ScrollHints } from "./scroll-hints";
 import { APPS, backOf, overviewEntry, placeOf } from "@/lib/design-routes";
 import { AppMark, GLYPH, Glyph, PageMark } from "./app-marks";
 import { CommandPalette } from "./command-palette";
+import { MobileTabBar } from "./mobile-tab-bar";
+import { useMediaQuery } from "./use-media-query";
+import { TopBarTitle } from "./top-bar-title";
+import { MOBILE_NAV_QUERY } from "@/lib/mobile-tabs";
+import { wrapFocus } from "@/lib/focus-wrap";
 
 type Theme = "light" | "dark";
 const THEME_KEY = "oz-theme";
 const OPEN_KEY = "oz-nav-open";
 // The light workspace is the default everywhere; dark is a per-browser choice.
 const THEME_ORDER: Theme[] = ["light", "dark"];
+/** What Tab stops on inside the open Apps sheet. */
+const TABBABLE = "a[href], button:not([disabled])";
 const THEME_LABEL: Record<Theme, string> = {
   light: "Light theme (switch to dark)",
   dark: "Dark theme (switch to light)",
@@ -29,7 +36,10 @@ export function AppShell({
   children: ReactNode;
   isAdmin?: boolean;
   isPreview?: boolean;
-  /** Server-rendered treasury bar, pinned to the bottom of every page. */
+  /**
+   * Server-rendered treasury figures: pinned to the bottom of every page on
+   * wide screens, inside the Treasury tab's sheet where the tab bar shows.
+   */
   footer?: ReactNode;
 }) {
   const pathname = usePathname();
@@ -47,6 +57,11 @@ export function AppShell({
   const [theme, setTheme] = useState<Theme>("light");
   const [openApps, setOpenApps] = useState<Record<string, boolean>>({});
   const [counts, setCounts] = useState<Record<string, string>>({});
+  // Tab-bar width: the sidebar is a drawer and the phone shell applies.
+  const compact = useMediaQuery(MOBILE_NAV_QUERY);
+  // The drawer exists only there; a window widened while it was open is not left locked.
+  const drawerOpen = navOpen && compact;
+  const side = useRef<HTMLElement>(null);
 
   // Per-browser conveniences: the theme and which apps stay expanded.
   // Read after mount (reading storage during render breaks hydration).
@@ -82,13 +97,55 @@ export function AppShell({
     setPaletteOpen(false);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname]);
-  // The page behind an open drawer stays put.
+  // A drawer left open does not come back by itself when the window is
+  // widened past tab-bar width and narrowed again.
   useEffect(() => {
-    document.body.style.overflow = navOpen ? "hidden" : "";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!compact) setNavOpen(false);
+  }, [compact]);
+  // The page behind an open drawer stays put. Where its scrollbar takes room,
+  // that room stays reserved, so nothing behind shifts sideways (as the palette does).
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const root = document.documentElement;
+    const hasScrollbar = window.innerWidth > root.clientWidth;
+    root.style.scrollbarGutter = hasScrollbar ? "stable" : "";
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
+      root.style.scrollbarGutter = "";
     };
-  }, [navOpen]);
+  }, [drawerOpen]);
+  // An open drawer behaves like a dialog: focus moves into it and stays there
+  // (Tab wraps at both ends), Esc closes it and focus returns to the control
+  // that opened it (the Apps tab).
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const active = document.activeElement;
+    const opener =
+      active instanceof HTMLElement && active !== document.body ? active : null;
+    side.current?.querySelector<HTMLElement>(".rd-side-close")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setNavOpen(false);
+      if (e.key !== "Tab") return;
+      const stops = Array.from(
+        side.current?.querySelectorAll<HTMLElement>(TABBABLE) ?? [],
+      ).filter((el) => el.getClientRects().length > 0);
+      const target = wrapFocus(
+        stops.length,
+        stops.indexOf(document.activeElement as HTMLElement),
+        e.shiftKey,
+      );
+      if (target === null) return;
+      e.preventDefault();
+      stops[target].focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      opener?.focus();
+    };
+  }, [drawerOpen]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -129,14 +186,25 @@ export function AppShell({
     <div
       className={cn("rd-shell", isPreview && "rd-shell-preview")}
       data-theme={theme}
-      data-nav={navOpen ? "open" : undefined}
+      data-nav={drawerOpen ? "open" : undefined}
       data-section={place?.app.label ?? "Explore"}
     >
-      <a href="#main-content" className="rd-skip">
+      {/* Out of reach under the open Apps sheet, like the rest of the page. */}
+      <a href="#main-content" className="rd-skip" inert={drawerOpen}>
         Skip to content
       </a>
 
-      <aside className="rd-side" aria-label="OpenZcash">
+      <aside
+        ref={side}
+        className="rd-side"
+        aria-label="OpenZcash"
+        role={drawerOpen ? "dialog" : undefined}
+        aria-modal={drawerOpen || undefined}
+        onClick={(e) => {
+          // Following any link closes the drawer, even one to the page already open.
+          if (e.target instanceof Element && e.target.closest("a")) setNavOpen(false);
+        }}
+      >
         <div className="rd-side-banner">
           <button
             type="button"
@@ -253,7 +321,8 @@ export function AppShell({
         onClick={() => setNavOpen(false)}
       />
 
-      <div className="rd-body">
+      {/* Behind the open drawer the page is out of reach, as behind any dialog. */}
+      <div className="rd-body" inert={drawerOpen}>
         <header className="rd-topbar">
           <button
             type="button"
@@ -298,7 +367,9 @@ export function AppShell({
                   </>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <TopBarTitle />
+            )}
           </nav>
           <button
             type="button"
@@ -334,11 +405,21 @@ export function AppShell({
 
         {footer ? (
           <footer className="rd-treasury-bar" aria-label="Treasury at a glance">
-            {footer}
+            {/* One node, one place: at tab-bar width it lives in the Treasury sheet. */}
+            {compact ? null : footer}
           </footer>
         ) : null}
       </div>
 
+      <MobileTabBar
+        pathname={pathname}
+        compact={compact}
+        treasury={compact ? footer : null}
+        appsOpen={drawerOpen}
+        onApps={() => setNavOpen(true)}
+        searchOpen={paletteOpen}
+        onSearch={() => setPaletteOpen(true)}
+      />
       <ZarvisDock />
       <CommandPalette apps={apps} open={paletteOpen} onOpenChange={setPaletteOpen} />
     </div>
