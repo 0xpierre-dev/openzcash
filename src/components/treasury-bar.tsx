@@ -20,10 +20,28 @@ export async function TreasuryBar() {
           <Link
             key={p.name}
             href={p.href}
-            className="rd-treasury-pool"
+            className={
+              p.asOf ? "rd-treasury-pool is-dated" : "rd-treasury-pool"
+            }
             title={p.exact}
           >
-            <span className="rd-treasury-name">{p.name}</span>
+            {/* One name line, so the pool is always wide enough for both. */}
+            <span className="rd-treasury-head">
+              <span className="rd-treasury-name">{p.name}</span>
+              {p.asOf ? (
+                // Only when the sheet figure is stale or flagged: its date, quietly.
+                <span className="rd-treasury-asof tnum" title={p.asOf.title}>
+                  {p.asOf.date ? (
+                    <>
+                      <span className="rd-treasury-asof-lead">as of </span>
+                      {p.asOf.date}
+                    </>
+                  ) : (
+                    "undated"
+                  )}
+                </span>
+              ) : null}
+            </span>
             <span className="rd-treasury-zec tnum">
               {p.zec} <small>ZEC</small>
             </span>

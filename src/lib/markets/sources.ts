@@ -3,6 +3,13 @@ import { z } from "zod";
 import { cachedFeed, type Feed } from "./cache";
 import { PUBLIC_ADDRESS_ATTRIBUTIONS } from "./attributions";
 import {
+  GRAYSCALE_ISSUER_URL,
+  GRAYSCALE_SEC_FACTS,
+  grayscaleDisclosure,
+  parseSecZecHoldings,
+  type DisclosureEntry,
+} from "./disclosures";
+import {
   parseKaminoRegistry,
   parseKaminoMetrics,
   LEGACY_SOLANA_ZEC,
@@ -32,7 +39,6 @@ import {
   parseNearConfidential,
   parseSupply,
   type AddressBalance,
-  type Disclosure,
   type Venue,
 } from "./model";
 import {
@@ -423,24 +429,14 @@ const shares21 = cachedFeed(
   3_600_000,
 );
 const grayscale = cachedFeed(
-  async () => parseGrayscale(await html("https://www.thezcashetf.com/")),
+  async () => parseGrayscale(await html(GRAYSCALE_ISSUER_URL)),
   3_600_000,
 );
-
-// An explicitly dated issuer disclosure, not a fabricated live quote. Used
-// only when the issuer's public page is blocked or changes its HTML contract.
-const GRAYSCALE_DISCLOSURE: Disclosure = {
-  id: "grayscale",
-  name: "Grayscale · The Zcash ETF",
-  ticker: "ZCSH",
-  kind: "fund",
-  zec: 464514.8551,
-  asOf: "2026-09-08",
-  source: "https://www.thezcashetf.com/",
-  custody: "Coinbase Custody",
-  method:
-    "Issuer's dated Total ZEC in Fund disclosure, checked September 22, 2026. Successor to Zcash Trust; not an additional holding. Live retrieval is currently unavailable.",
-};
+// Quarterly filings change rarely; one read per 12 hours is ample.
+const grayscaleFiling = cachedFeed(
+  async () => parseSecZecHoldings(await json(GRAYSCALE_SEC_FACTS), Date.now()),
+  12 * 3_600_000,
+);
 
 export type SourceStatus = {
   name: string;
@@ -484,6 +480,7 @@ async function collectMarketDashboard() {
     cp,
     etp,
     gray,
+    grayFiling,
     wrapped,
     nc,
     nt,
@@ -503,6 +500,7 @@ async function collectMarketDashboard() {
     cypherpunk(),
     shares21(),
     grayscale(),
+    grayscaleFiling(),
     Promise.all(
       wrappedFeeds.map(async ({ asset, read, supply }) => {
         const [feed, balance] = await Promise.all([read(), supply()]);
@@ -536,6 +534,13 @@ async function collectMarketDashboard() {
     ![m, hy, ma, th, rh, ...wrapped.map((u) => u.feed)].some(
       (f) => f.stale || !f.data,
     ) && !wrapped.some((w) => w.feed.data?.partial);
+  // Newest dated Grayscale figure (a live issuer read, the saved issuer
+  // disclosure, or a newer SEC filing), with a Sources note that says what
+  // actually happened to the issuer read. Each keeps its own date and origin.
+  const { entry: grayscaleEntry, note: grayscaleNote } = grayscaleDisclosure(
+    gray,
+    grayFiling,
+  );
   const sourceStatuses: SourceStatus[] = [
     status(
       "renZEC · legacy Solana mint",
@@ -660,22 +665,24 @@ async function collectMarketDashboard() {
     ),
     status(
       "Grayscale",
-      "https://www.thezcashetf.com/",
+      GRAYSCALE_ISSUER_URL,
       gray,
-      "Dated September 8 disclosure available if live retrieval fails. Never added to custodian wallet balances.",
+      `${grayscaleNote} Never added to custodian wallet balances.`,
+    ),
+    status(
+      "Grayscale · SEC filings",
+      GRAYSCALE_SEC_FACTS,
+      grayFiling,
+      "ZEC held at each quarter end, from the fund’s 10-Q and 10-K filings. Used only when newer than the issuer figure.",
     ),
   ];
-  const disclosures = [
-    {
-      data: gray.data ?? GRAYSCALE_DISCLOSURE,
-      stale: gray.stale,
-      fetchedAt: gray.fetchedAt,
-    },
+  const disclosures: DisclosureEntry[] = [
+    grayscaleEntry,
     ...(cp.data
-      ? [{ data: cp.data, stale: cp.stale, fetchedAt: cp.fetchedAt }]
+      ? [{ data: cp.data, stale: cp.stale, fetchedAt: cp.fetchedAt, origin: "issuer" as const }]
       : []),
     ...(etp.data
-      ? [{ data: etp.data, stale: etp.stale, fetchedAt: etp.fetchedAt }]
+      ? [{ data: etp.data, stale: etp.stale, fetchedAt: etp.fetchedAt, origin: "issuer" as const }]
       : []),
   ];
   const transparent = s.data?.pools.find((p) => p.id === "transparent")?.zec;
@@ -723,6 +730,8 @@ async function collectMarketDashboard() {
     thorPoolZec: th.data?.zec ?? null,
   };
 }
+// Sources with a dated fallback do not make the snapshot partial.
+const DATED_FALLBACK_SOURCES = new Set(["Grayscale", "Grayscale · SEC filings"]);
 const dashboardSnapshot = cachedFeed(
   collectMarketDashboard,
   5 * 60_000,
@@ -730,9 +739,10 @@ const dashboardSnapshot = cachedFeed(
     data.sources.some(
       (source) =>
         (source.status === "unavailable" || source.status === "saved") &&
-        source.name !== "Grayscale",
+        !DATED_FALLBACK_SOURCES.has(source.name),
     ) || data.wrapped.some((w) => (w.feed.data?.failedSources ?? 0) > 0),
-  { key: "zec-observatory:dashboard:v2", staleWhileRevalidate: true },
+  // v4: the Grayscale note follows the issuer read, not only the winning origin.
+  { key: "zec-observatory:dashboard:v4", staleWhileRevalidate: true },
 );
 
 /** One atomic, dated snapshot for server rendering and the refresh endpoint. */
