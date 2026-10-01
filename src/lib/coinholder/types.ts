@@ -40,8 +40,8 @@ export type RoundProposal = {
   notes?: string[];
   /** A public objection to the published outcome, stated without judgement. */
   dispute?: { by: string; text: string; href: string };
-  /** The published outcome was changed after a public objection. */
-  correction?: { text: string; href: string };
+  /** The published outcome was changed after a public objection; `from` is the outcome first published. */
+  correction?: { text: string; href: string; from?: Outcome };
   tally: Tally | null;
   links: Link[];
 };

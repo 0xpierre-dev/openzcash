@@ -421,6 +421,18 @@ function RoundResults({ round }: { round: Round }) {
                 Tallies ↗
               </a>
             ) : null}
+            {round.proposals.some((p) => p.tally) ? (
+              <Link
+                href={
+                  round.id === ROUNDS[0].id
+                    ? "/coinholders/verify"
+                    : `/coinholders/verify?round=${round.id}`
+                }
+                title="Rebuild these results from the published tallies"
+              >
+                Verify →
+              </Link>
+            ) : null}
             {headSource ? (
               <a href={headSource.href} target="_blank" rel="noreferrer">
                 {headSource.label} ↗

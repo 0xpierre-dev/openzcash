@@ -10,7 +10,7 @@ import {
   voteValue,
 } from "./derive";
 import days from "@/data/funding/days.json";
-import { APPS, placeOf } from "@/lib/design-routes";
+import { APPS, paletteEntries, placeOf } from "@/lib/design-routes";
 import type { Round } from "./types";
 
 const round = (id: string): Round => {
@@ -181,7 +181,13 @@ describe("Program navigation", () => {
     expect(app.label).toBe("Coinholder Grants");
     expect(app.sub).toBe(PROGRAM.officialName);
     expect(app.href).toBe("/coinholders");
-    expect(app.pages.map((p) => p.label)).toEqual(["Results", "The fund", "Coinholder Copilot"]);
+    expect(app.pages.filter((p) => !p.hidden).map((p) => p.label)).toEqual(["Results", "The fund", "Coinholder Copilot"]);
+    // Verify it yourself opens from each round's results, not from the sidebar.
+    expect(app.pages.find((p) => p.href === "/coinholders/verify")).toMatchObject({ label: "Verify it yourself", hidden: true });
+    // …but ⌘K finds it; other hidden pages stay out of the palette.
+    expect(paletteEntries(app).map((p) => p.label)).toEqual(["Overview", "Results", "The fund", "Coinholder Copilot", "Verify it yourself"]);
+    const zcg = APPS.find((a) => a.id === "zcg")!;
+    expect(paletteEntries(zcg).map((p) => p.label)).not.toContain("Stipends");
     expect(APPS.find((a) => a.id === "fpf")).toMatchObject({ sub: "Program administrator", pages: [] });
     // Each fund's share of every block reward, beside its name in the sidebar.
     expect(app.share?.value).toBe("12%");
@@ -190,7 +196,7 @@ describe("Program navigation", () => {
   it("places the overview, results, fund and copilot inside the program", () => {
     expect(placeOf("/coinholders")).toMatchObject({ app: { id: "coinholders" } });
     expect(placeOf("/coinholders")?.page).toBeUndefined();
-    for (const [path, label] of [["/coinholders/results", "Results"], ["/coinholders/fund", "The fund"], ["/zcg/coinholder/copilot", "Coinholder Copilot"]]) {
+    for (const [path, label] of [["/coinholders/results", "Results"], ["/coinholders/fund", "The fund"], ["/coinholders/verify", "Verify it yourself"], ["/zcg/coinholder/copilot", "Coinholder Copilot"]]) {
       expect(placeOf(path)?.page?.label, path).toBe(label);
     }
     expect(placeOf("/zcg/fpf")?.app.id).toBe("fpf");

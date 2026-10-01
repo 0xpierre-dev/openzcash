@@ -89,6 +89,14 @@ const nextConfig: NextConfig = {
         source: `/.well-known/${directory}/:path*`,
         headers: [{ key: "Cache-Control", value: "public, max-age=300" }],
       })),
+      // The coinholder recount script: readable in the browser before anyone runs it.
+      {
+        source: "/verify/:file*.py",
+        headers: [
+          { key: "Content-Type", value: "text/plain; charset=utf-8" },
+          { key: "Cache-Control", value: "public, max-age=3600" },
+        ],
+      },
       // Monthly files are content-addressed. Corrections get a new directory.
       {
         source: "/monthly/editions/:path*",

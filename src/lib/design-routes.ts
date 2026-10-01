@@ -14,6 +14,8 @@ export type AppPage = {
   mark?: string;
   /** Kept in the model (breadcrumb, back) but not listed in the sidebar or ⌘K. */
   hidden?: boolean;
+  /** A hidden page that ⌘K still finds (it stays out of the sidebar). */
+  palette?: boolean;
 };
 
 export type AppDef = {
@@ -82,6 +84,8 @@ export const APPS: AppDef[] = [
       { href: "/coinholders/results", label: "Results", mark: "/logos/glyphs/decisions.png" },
       { href: "/coinholders/fund", label: "The fund", mark: "/logos/glyphs/coinholder.png" },
       { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
+      // Opened from each round's results ("Verify →") and ⌘K; not a sidebar item.
+      { href: "/coinholders/verify", label: "Verify it yourself", mark: "/logos/glyphs/decisions.png", hidden: true, palette: true },
     ],
   },
   {
@@ -239,6 +243,15 @@ export function backOf(pathname: string): { href: string; label: string } {
   if (place.detail) return { href: place.detail.parent.href, label: place.detail.parent.label };
   if (place.page) return { href: place.app.href, label: place.app.label };
   return { href: "/zcg", label: "ZCG" };
+}
+
+/** What ⌘K lists for an app: its overview unless that is one of its pages, then every page that is not hidden or opts in. */
+export function paletteEntries(app: AppDef): { href: string; label: string }[] {
+  const landingIsPage = app.pages.some((p) => p.href === app.href);
+  return [
+    ...(landingIsPage ? [] : [{ href: app.href, label: app.pages.length ? "Overview" : app.label }]),
+    ...app.pages.filter((p) => !p.hidden || p.palette),
+  ];
 }
 
 /** Grouped view of the same model, for directories and the design-review page. */

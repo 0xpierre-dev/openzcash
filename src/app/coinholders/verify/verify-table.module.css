@@ -1,0 +1,288 @@
+/* The checked table of the verify page, every figure of every question. It sits inside
+   the "All figures" disclosure, whose card draws the frame (data-flush). Workspace tokens
+   only, so the dark theme follows. */
+
+/* ---------- The checked table ----------
+   Wide: one row per question, figures right-aligned in tabular digits.
+   Narrower than the table (its own container: 760px, or 1,080px for a four-option
+   ballot, data-wide): each question becomes a card like the Results rows, title
+   first, then labelled figures six or three to a line. */
+.tableWrap {
+  /* Holds the visually hidden labels inside the scroll box, so they never widen the page. */
+  position: relative;
+  container: verify-table / inline-size;
+}
+.tableKey {
+  margin: 0 0 12px;
+}
+/* Outranks the workspace's table rules (theme.css: .rd-content table, th, td). */
+.tableWrap .table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.table th,
+.table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.table thead th {
+  vertical-align: bottom;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.table tbody th {
+  background: transparent;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+.table td {
+  overflow-wrap: normal;
+}
+.table .num {
+  text-align: right;
+}
+.table .ballotCell {
+  padding-right: 0;
+  color: var(--dim);
+}
+.table .proposal {
+  min-width: 190px;
+  font-weight: 400;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.title {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.mismatch {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--neg);
+}
+.published {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.markOk {
+  color: var(--pos);
+  font-weight: 500;
+}
+.markBad {
+  color: var(--neg);
+  font-weight: 500;
+}
+.note {
+  display: block;
+  margin-top: 6px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  white-space: normal;
+  color: var(--muted);
+}
+.note a {
+  color: var(--accent-ink);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.note a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.note a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.phoneOnly {
+  display: none;
+}
+.chainWord {
+  margin-left: 5px;
+}
+
+@container verify-table (max-width: 760px) {
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .table,
+  .table tbody {
+    display: block;
+  }
+  .table tr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .table tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .table th,
+  .table td {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .table .num {
+    text-align: left;
+  }
+  /* A question without a tally (discarded) shows only its outcome, not a row of dots. */
+  .table .ballotCell,
+  .table td[data-empty] {
+    display: none;
+  }
+  .table .proposal {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  .phoneOnly {
+    display: inline;
+  }
+  .table .phoneOnly {
+    color: var(--dim);
+    font-weight: 400;
+  }
+}
+/* Mid widths: every figure of a question on one line, the verdicts on the next. */
+@container verify-table (min-width: 560px) and (max-width: 760px) {
+  .table tr {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+/* A four-option ballot's table is about 1,065px wide: cards until it fits (same rules as above). */
+@container verify-table (min-width: 760.02px) and (max-width: 1080px) {
+  .tableWrap[data-wide] .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .tableWrap[data-wide] .table,
+  .tableWrap[data-wide] .table tbody {
+    display: block;
+  }
+  .tableWrap[data-wide] .table tr {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tableWrap[data-wide] .table tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .tableWrap[data-wide] .table th,
+  .tableWrap[data-wide] .table td {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+  .tableWrap[data-wide] .table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .tableWrap[data-wide] .table .num {
+    text-align: left;
+  }
+  /* A question without a tally (discarded) shows only its outcome, not a row of dots. */
+  .tableWrap[data-wide] .table .ballotCell,
+  .tableWrap[data-wide] .table td[data-empty] {
+    display: none;
+  }
+  .tableWrap[data-wide] .table .proposal {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  .tableWrap[data-wide] .phoneOnly {
+    display: inline;
+  }
+  .tableWrap[data-wide] .table .phoneOnly {
+    color: var(--dim);
+    font-weight: 400;
+  }
+}
+/* Phones: still three figures to a line, so a question takes three short rows. */
+@container verify-table (max-width: 440px) {
+  .table tr {
+    gap: 10px;
+    padding: 14px;
+  }
+}
+@container verify-table (max-width: 320px) {
+  .table tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Inside a card that draws the frame: no border of its own, a hairline above. */
+.tableKey[data-flush] {
+  margin: 0;
+  padding: 14px 24px 12px;
+}
+.tableWrap[data-flush] {
+  margin: 0;
+  border-width: 1px 0 0;
+  border-radius: 0;
+}
+@container coinholders (max-width: 720px) {
+  .tableKey[data-flush] {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
