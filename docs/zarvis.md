@@ -254,6 +254,8 @@ The conversation now survives the Monthly pages: `ShellGate` mounts `ZarvisProvi
 
 The ⌘K directory ("Find an app, record or source, or ask Zarvis…") shows an "Ask Zarvis: “…”" row above the app list whenever the box has text. Choosing it puts the text into the chat draft (the provider is mounted above the shell) and opens `/zarvis`; nothing is sent until the visitor presses send.
 
+Since 2026-10-01 the palette is a compact list (`src/components/command-palette.tsx`, rules in `src/lib/palette.ts`): the "Ask Zarvis: “…”" row is the last group, under the pages that match, and is the only row when nothing matches ("No page matches"). The hand-over is unchanged: the text becomes the chat draft and nothing is sent. Enter opens the best match: a page whose name starts with the query comes first (typing "ver" opens Verify it yourself, "grants" the ZCG grants list), every word of the query must be found ("zcg grants"), letters inside a word ("hub" in ZecHub) count only when nothing starts with the query, and a query found only in an app's description lists that app's landing row.
+
 GitHub Actions: `zarvis-quality.yml` was removed on 2026-09-28. Every run in this private repository ended in `startup_failure` before a job existed (40 on that day alone) and each one e-mailed the owner; the same gate (typecheck, tests, eslint, `knowledge:check`) runs locally before every merge and is recorded in each PR's test plan.
 
 ## Public about page (2026-09-28)

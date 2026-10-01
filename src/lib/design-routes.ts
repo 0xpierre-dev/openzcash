@@ -246,6 +246,16 @@ export function backOf(pathname: string): { href: string; label: string } {
 }
 
 /** What ⌘K lists for an app: its overview unless that is one of its pages, then every page that is not hidden or opts in. */
+/**
+ * The app's own landing page as a listed "Overview" entry: apps with inner
+ * pages get one, so the page behind the app's name is visible in the list
+ * (unless one of the pages already is the landing page).
+ */
+export function overviewEntry(app: AppDef): AppPage | null {
+  if (!app.pages.length || app.pages.some((p) => p.href === app.href)) return null;
+  return { href: app.href, label: "Overview", mark: "/logos/glyphs/overview.png" };
+}
+
 export function paletteEntries(app: AppDef): { href: string; label: string }[] {
   const landingIsPage = app.pages.some((p) => p.href === app.href);
   return [

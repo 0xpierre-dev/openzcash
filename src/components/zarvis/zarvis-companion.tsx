@@ -1,20 +1,43 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { welcomeExpression, type WelcomePhase } from "@/lib/zarvis/expression";
 import { useZarvis } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
 
+/** A requested wave, and the time the shield's one emphasis has to play before it is retired. */
+const WAVE_MS = 2400;
+const RAISE_MS = 1300;
+
+/** Welcome mascot: drops in centred, raises the shield as it lands and keeps it. Tapping it asks for a wave. */
 export function ZarvisCompanion() {
   const { expression, motionPaused } = useZarvis();
-  const [greeting, setGreeting] = useState(true);
-  const [greetingId, setGreetingId] = useState(0);
+  const hello = useRef<HTMLButtonElement>(null);
+  const [phase, setPhase] = useState<WelcomePhase>("landing");
+  const [waving, setWaving] = useState(false);
+  const [waveId, setWaveId] = useState(0);
+  // The drop is a CSS animation that starts with the first paint, before hydration; the shield goes up the moment it ends.
+  // With no drop to wait for (reduced motion, paused, hidden tab) or a cancelled one, the shield is simply there.
   useEffect(() => {
-    if (!greeting) return;
-    const timer = setTimeout(() => setGreeting(false), 2400);
+    if (phase !== "landing") return;
+    let current = true;
+    const raise = () => { if (current) setPhase("raising"); };
+    const drop = hello.current?.querySelector(".zarvis-entrance")?.getAnimations?.()[0];
+    (drop ? drop.finished : Promise.resolve()).then(raise, raise);
+    return () => { current = false; };
+  }, [phase, motionPaused]);
+  useEffect(() => {
+    if (phase !== "raising") return;
+    const timer = setTimeout(() => setPhase("settled"), RAISE_MS);
     return () => clearTimeout(timer);
-  }, [greeting, greetingId]);
+  }, [phase]);
+  useEffect(() => {
+    if (!waving) return;
+    const timer = setTimeout(() => setWaving(false), WAVE_MS);
+    return () => clearTimeout(timer);
+  }, [waving, waveId]);
   return <div className="zarvis-companion">
-    <button type="button" className="zarvis-hello" aria-label="Say hello to Zarvis" title="Say hello to Zarvis"
-      onClick={() => { setGreeting(true); setGreetingId((id) => id + 1); }}
+    <button ref={hello} type="button" className="zarvis-hello" aria-label="Say hello to Zarvis" title="Say hello to Zarvis"
+      onClick={() => { setWaving(true); setWaveId((id) => id + 1); }}
       onPointerMove={(event) => {
         if (event.pointerType === "touch") return;
         const box = event.currentTarget.getBoundingClientRect();
@@ -26,7 +49,8 @@ export function ZarvisCompanion() {
         event.currentTarget.style.setProperty("--zarvis-look-y", "0px");
       }}>
       <ZarvisFigure className="zarvis-hero-figure"
-        expression={greeting ? "greeting" : expression}
+        expression={welcomeExpression(phase, waving, expression)}
+        entrance={phase === "settled" ? undefined : phase}
         animated paused={motionPaused}/>
     </button>
   </div>;
