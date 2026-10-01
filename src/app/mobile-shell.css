@@ -5,19 +5,20 @@
  * field and the floating Zarvis launcher; the treasuries open in a bottom
  * sheet and the navigation rises as a full-height sheet. Loaded after
  * theme.css and zarvis.css. Above 960px only the "hidden by default" rules
- * below apply (the tab bar, the closed sheet, the top bar's fallback page
- * name), so the wide shell is untouched.
+ * below apply (the tab bar, the closed sheet, the top bar's phone identity
+ * block), so the wide shell is untouched.
  *
  * The width is mirrored in src/lib/mobile-tabs.ts (MOBILE_NAV_QUERY).
  */
 .rd-tabbar {
   display: none;
 }
-/* The page name for routes with no breadcrumb: the phone top bar only. */
-@media (min-width: 961px) {
-  .rd-topbar-title {
-    display: none;
-  }
+/* The mark and the names of the phone top bar (top-bar-place.tsx): the
+   breadcrumb says the same on wide screens, so only one of the two shows.
+   Hidden unless the phone rules below apply, like the tab bar, so a window
+   a fraction of a pixel over 960px does not show both. */
+.rd-place {
+  display: none;
 }
 
 /* ---------- Bottom sheet (a modal <dialog>, see bottom-sheet.tsx) ---------- */
@@ -86,10 +87,11 @@ html:has(.rd-sheet[open]) {
   padding: 0 8px 0 20px;
   border-bottom: 1px solid var(--line);
 }
+/* The same type as the name in the phone top bar. */
 .rd-sheet-head h2 {
   margin: 0;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--ink);
 }
 .rd-sheet-close {
@@ -197,36 +199,185 @@ html:has(.rd-sheet[open]) {
     --tabbar-space: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   }
 
-  /* ---------- Top bar: back, the page name, the theme ---------- */
+  /* ---------- Top bar: back, the app's mark and the names, the theme ---------- */
+  /* One surface from the status area down: the bar is the canvas, opaque,
+     over a hairline. 56px plus the notch; the sheets stop under those 56px. */
+  .rd-topbar {
+    min-height: calc(56px + env(safe-area-inset-top));
+    background: var(--bg);
+    backdrop-filter: none;
+  }
+  /* Dark: the shell's gold glow fades in under the bar, so the bar and the
+     top of the page are one surface there too. */
+  .rd-shell[data-theme="dark"] .rd-body {
+    background: linear-gradient(
+      var(--bg) calc(56px + env(safe-area-inset-top)),
+      transparent calc(200px + env(safe-area-inset-top))
+    );
+  }
   .rd-topbar .rd-menu,
-  .rd-topbar .rd-search {
-    display: none;
-  }
+  .rd-topbar .rd-search,
   .rd-topbar .rd-breadcrumb {
-    flex: 1;
-    flex-wrap: nowrap;
-    min-width: 0;
-    font-size: 15px;
-  }
-  /* Only the last part of the trail: the page the visitor is on. */
-  .rd-topbar .rd-breadcrumb > * {
     display: none;
   }
-  .rd-topbar .rd-breadcrumb > span:last-child {
-    display: block;
+  /* The identity block: the mark on the left, one or two lines beside it. It
+     ends with its text, so its links are not tappable across the whole bar.
+     The top padding sets the lines on the centre of the mark and the glyphs. */
+  .rd-place {
+    position: relative;
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     min-width: 0;
+    min-height: 44px;
+    padding-top: 2px;
+  }
+  .rd-place[data-app] {
+    padding-left: 36px;
+  }
+  /* 26px, centred on the lines whether it is a link, inside one, or neither. */
+  .rd-place-mark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-top: -13px;
+    border-radius: 6px;
+  }
+  .rd-place-mark .rd-side-logo {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+  }
+  /* Generated glyphs carry a margin of their own: drawn past the box, their
+     ink reads at the size of a logo. */
+  .rd-place-mark .rd-side-logo-glyph {
+    width: 32px;
+    max-width: none;
+    height: 32px;
+    margin: -3px;
+  }
+  /* Line icons fill the box, in ink. */
+  .rd-place-mark .rd-side-icon {
+    width: 26px;
+    height: 26px;
+    color: var(--ink);
+  }
+  /* Dark: the ZecHub ring is navy on near-black; a light disc behind it keeps
+     the mark legible where it stands for the app. */
+  .rd-shell[data-theme="dark"] .rd-place[data-app="zechub"] .rd-side-logo {
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  /* The quiet first line: one step up the trail. */
+  .rd-place-over {
+    display: block;
+    max-width: 100%;
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 14px;
+    color: var(--muted);
+  }
+  /* Touch targets, 44px tall. Inside an app the link is the whole block: the
+     mark and both lines. On a record the mark leads to the app and the lines
+     to the list, 8px apart. */
+  .rd-place-over::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+  }
+  .rd-place[data-level="detail"] .rd-place-over::before {
+    left: 36px;
+  }
+  a.rd-place-mark::after {
+    content: "";
+    position: absolute;
+    inset: -9px -1px -9px 0;
+  }
+  .rd-place-over:active {
+    color: var(--ink);
+  }
+  a.rd-place-mark:active,
+  .rd-place-over:active .rd-place-mark {
+    opacity: 0.6;
+  }
+  /* The focus ring goes round the target, clear of the mark and the names. */
+  .rd-place a:focus-visible {
+    outline-offset: 2px;
+    border-radius: 6px;
+    box-shadow: none;
+  }
+  .rd-place-over:focus-visible {
+    outline: none;
+  }
+  .rd-place-over:focus-visible::before {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  /* Long names never wrap or push the theme button: one line each. */
+  .rd-place-over-label,
+  .rd-place-name,
+  .rd-place .rd-topbar-title {
+    display: block;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: 500;
+  }
+  .rd-place-name,
+  .rd-place .rd-topbar-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
     color: var(--ink);
   }
-  /* Touch controls: 44px. */
+  .rd-place-over + .rd-place-name {
+    font-size: 15.5px;
+  }
+  /* Controls: plain glyphs in a 44px touch target, no box around them. The
+     negative margins bring each glyph to the page gutter. */
   .rd-topbar .rd-icon-button,
   .rd-topbar .rd-back {
     flex: none;
     width: 44px;
     height: 44px;
+    border: 0;
+    background: transparent;
+  }
+  /* The chevron's ink sits low in its line: the padding centres it on the
+     names. Its target runs 2px under the mark beside it and stays whole. */
+  .rd-topbar .rd-back {
+    position: relative;
+    z-index: 1;
+    margin: 0 -10px 0 -18px;
+    padding-bottom: 3px;
+    font-size: 32px;
+  }
+  .rd-topbar-actions .rd-icon-button {
+    margin-right: -14px;
+  }
+  .rd-topbar-actions .rd-icon-button svg {
+    width: 20px;
+    height: 20px;
+  }
+  /* Pressed: a faint disc under the glyph, clear of the mark beside it. */
+  .rd-topbar .rd-icon-button:active,
+  .rd-topbar .rd-back:active {
+    background: radial-gradient(circle 18px at center, var(--side-hover) 98%, transparent);
+    color: var(--ink);
+  }
+  /* Only the ring, inside the target and the size of the pressed disc: the
+     page's halo would fall off screen. */
+  .rd-topbar .rd-icon-button:focus-visible,
+  .rd-topbar .rd-back:focus-visible {
+    outline-offset: -6px;
+    box-shadow: none;
   }
 
   /* ---------- Layout: the page ends above the tab bar ---------- */
