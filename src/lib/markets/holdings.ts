@@ -1,6 +1,11 @@
 import type { Disclosure, Holder } from "./model";
+import type { DisclosureOrigin } from "./disclosures";
 
-export type HoldingDisclosure = { data: Disclosure; stale: boolean };
+export type HoldingDisclosure = {
+  data: Disclosure;
+  stale: boolean;
+  origin?: DisclosureOrigin;
+};
 export type HoldingRow = Holder & {
   addressZec: number | null;
   disclosure?: HoldingDisclosure;

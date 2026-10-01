@@ -446,6 +446,20 @@
   grid-area: usd;
   color: var(--muted);
 }
+/* The name line: the pool name and, for a stale or flagged sheet figure, its
+   capture date, quiet, at the end. One flex row, so the pool is sized to name
+   + gap + date and the two can never overlap; the bar keeps its height. */
+.rd-treasury-head {
+  grid-area: name;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.rd-treasury-asof {
+  font-size: 10.5px;
+  color: var(--dim);
+}
 .rd-treasury-meta {
   grid-column: 3;
   justify-self: end;
@@ -845,6 +859,10 @@
     min-width: 0;
     white-space: nowrap;
   }
+  /* Phones: name and date join the pool's single flex line. */
+  .rd-treasury-head {
+    display: contents;
+  }
   .rd-treasury-name {
     flex: 1;
     min-width: 0;
@@ -860,8 +878,41 @@
     text-overflow: ellipsis;
     font-size: 12px;
   }
+  /* Dated pool: the date hugs the name, the name gives way first, and a
+     slightly tighter gap keeps "ZCG operating" whole at 375px. */
+  .rd-treasury-pool.is-dated {
+    gap: 6px;
+  }
+  .rd-treasury-pool.is-dated .rd-treasury-name {
+    flex: 1000 1 0;
+    max-width: max-content;
+  }
+  .rd-treasury-asof {
+    flex: 1 0 auto;
+    font-size: 10px;
+  }
+  .rd-treasury-asof-lead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
   .rd-content section:has(> .oz-stat) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* Narrowest phones: the date would squeeze the pool name to a stub, so it
+   leaves the line; it stays for screen readers and in the pool's tooltip. */
+@media (max-width: 349px) {
+  .rd-treasury-pool.is-dated .rd-treasury-asof {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 @media print {

@@ -5,9 +5,10 @@
 # zec.rocks:443) covers the chain tip + transparent address scanning, and the
 # ppf-scanner service covers UFVK validation/derivation. No home node required.
 #
-# Cron note: vercel.json crons are ignored here. Add a Railway cron service (or
-# any scheduler) that hits GET /api/cron/refresh with `Authorization: Bearer
-# $CRON_SECRET` every 6h. The in-render stale-on-load refresh is the fallback.
+# Scheduling: no external cron. src/instrumentation.ts starts an in-process
+# timer in this always-on service: the ZCG/ZecHub refresh every 6h (first run
+# shortly after boot), the ZEC Observatory warm every 60s and the Zarvis canary
+# hourly. GET /api/cron/refresh (Bearer $CRON_SECRET) remains a manual trigger.
 
 [build]
 builder = "NIXPACKS"

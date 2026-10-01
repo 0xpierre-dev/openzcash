@@ -28,6 +28,7 @@ import {
 import styles from "./markets.module.css";
 import { marketLogo } from "@/lib/markets/logos";
 import { holdingRows, type HoldingRow } from "@/lib/markets/holdings";
+import { disclosureProvenance } from "@/lib/markets/disclosures";
 import { Pagination, usePagination } from "./pagination";
 
 const compact = (n: number, digits = 1) =>
@@ -186,9 +187,15 @@ function HoldingDisclosure({ holder }: { holder: HoldingRow }) {
   return (
     <div className={styles.holdingDisclosure}>
       <p>
-        <Out href={report.source}>Issuer disclosure</Out>
-        {" · "}{stamp(report.asOf, true)}
-        {disclosure.stale ? " · saved disclosure" : ""}
+        <Out href={report.source}>
+          {disclosure.origin === "filing" ? "SEC filing" : "Issuer disclosure"}
+        </Out>
+        {" · as of "}{stamp(report.asOf, true)}
+        {disclosure.origin === "saved"
+          ? " · saved by OpenZcash"
+          : disclosure.stale
+            ? " · saved"
+            : ""}
       </p>
       <p>{report.method}</p>
       <p>Custody: {report.custody}.</p>
@@ -1096,7 +1103,7 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
                     <strong>{h.name.replace(" · The Zcash ETF", "")}</strong>
                     <small>
                       {h.disclosure
-                        ? `Issuer reported · ${stamp(h.disclosure.data.asOf, true)}${h.disclosure.stale ? " · saved" : ""}`
+                        ? `${disclosureProvenance(h.disclosure)} · as of ${stamp(h.disclosure.data.asOf, true)}`
                         : holderFilter === "whales"
                         ? `${h.id.slice(0, 9)}…${h.id.slice(-7)}`
                         : `${h.addresses.length} ${h.addresses.length === 1 ? "address" : "addresses"}`}
@@ -1171,7 +1178,7 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
           caption="Issuer disclosures, with their original reporting dates. May overlap with exchange custody."
         />
         <div className={styles.fundGrid}>
-          {data.disclosures.map(({ data: f, stale }) => (
+          {data.disclosures.map(({ data: f, stale, origin }) => (
             <article className={styles.fundCard} key={f.id}>
               <div className={styles.entity}>
                 <Logo name={f.name} />
@@ -1187,7 +1194,10 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
               </strong>
               <div className={styles.fundMeta}>
                 <span>{pct(share(f.zec))} of supply</span>
-                <span>{stamp(f.asOf, true)}</span>
+                <span>as of {stamp(f.asOf, true)}</span>
+                {(stale || origin !== "issuer") && (
+                  <span>{disclosureProvenance({ stale, origin })}</span>
+                )}
               </div>
               <details>
                 <summary>
@@ -1208,8 +1218,9 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
                   )}
               </details>
               <footer>
-                <Out href={f.source}>Issuer source</Out>
-                {stale && <span>Saved disclosure</span>}
+                <Out href={f.source}>
+                  {origin === "filing" ? "SEC filing" : "Issuer source"}
+                </Out>
               </footer>
             </article>
           ))}

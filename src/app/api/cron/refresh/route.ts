@@ -1,7 +1,9 @@
 /**
- * Scheduled ZCG spreadsheet re-import. Hit by Vercel Cron (see vercel.json),
- * which sends `Authorization: Bearer ${CRON_SECRET}`. Not an admin route — it
- * is gated by the shared secret, not a session — so it stays out of ADMIN_APIS.
+ * Manual ZCG spreadsheet re-import. The scheduled refresh runs in-process from
+ * src/instrumentation.ts (every 6h); call this with
+ * `Authorization: Bearer ${CRON_SECRET}` to trigger one on demand. Not an admin
+ * route — it is gated by the shared secret, not a session — so it stays out of
+ * ADMIN_APIS.
  */
 import { timingSafeEqual } from "node:crypto";
 import { refreshZcg } from "@/lib/zcg/refresh";

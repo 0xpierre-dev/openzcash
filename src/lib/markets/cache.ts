@@ -21,6 +21,25 @@ const processCache = globalThis as typeof globalThis & {
 };
 const shared = (processCache.__openZcashMarketFeedsV1 ??= new Map());
 
+const FIRST_RETRY_MS = 60_000;
+const MAX_RETRY_MS = 3_600_000;
+type Outcome = "ok" | "partial" | "failed";
+
+/**
+ * When to collect again. A live source keeps its TTL. Consecutive failures
+ * (the streak, counting this one) double from one minute to one hour, so a
+ * permanently blocked source is not requested every minute; partial coverage
+ * backs off the same way but never waits past the normal TTL.
+ */
+export function nextRefreshDelay(ttl: number, outcome: Outcome, streak: number) {
+  if (outcome === "ok") return ttl;
+  const backoff = Math.min(
+    MAX_RETRY_MS,
+    FIRST_RETRY_MS * 2 ** Math.min(Math.max(0, streak - 1), 16),
+  );
+  return outcome === "partial" ? Math.min(ttl, backoff) : backoff;
+}
+
 /** Bounded retries, shared in-flight work, and truthful dates on saved data. */
 export function cachedFeed<T>(
   loader: () => Promise<T>,
@@ -35,6 +54,8 @@ export function cachedFeed<T>(
 
   let cache: Feed<T> | null = null;
   let retryAt = 0;
+  // Consecutive partial or failed collections; any complete success resets it.
+  let streak = 0;
   let pending: Promise<Feed<T>> | null = null;
   const present = (value: Feed<T>): Feed<T> =>
     options.staleWhileRevalidate
@@ -63,8 +84,9 @@ export function cachedFeed<T>(
             stale: false,
             error: null,
           };
-          retryAt =
-            Date.now() + (retryPartial?.(data) ? Math.min(ttl, 60_000) : ttl);
+          const outcome = retryPartial?.(data) ? "partial" : "ok";
+          streak = outcome === "ok" ? 0 : streak + 1;
+          retryAt = Date.now() + nextRefreshDelay(ttl, outcome, streak);
         } catch {
           cache = {
             data: cache?.data ?? null,
@@ -73,7 +95,8 @@ export function cachedFeed<T>(
             stale: true,
             error: "Source could not be refreshed",
           };
-          retryAt = Date.now() + 60_000;
+          streak += 1;
+          retryAt = Date.now() + nextRefreshDelay(ttl, "failed", streak);
         }
         return cache;
       })().finally(() => {
