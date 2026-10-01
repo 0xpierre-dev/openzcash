@@ -11,7 +11,8 @@ import { AppMark, GLYPH, Glyph, PageMark } from "./app-marks";
 import { CommandPalette } from "./command-palette";
 import { MobileTabBar } from "./mobile-tab-bar";
 import { useMediaQuery } from "./use-media-query";
-import { TopBarTitle } from "./top-bar-title";
+import { TopBarPlace } from "./top-bar-place";
+import { useThemeColor } from "./use-theme-color";
 import { MOBILE_NAV_QUERY } from "@/lib/mobile-tabs";
 import { wrapFocus } from "@/lib/focus-wrap";
 
@@ -62,6 +63,9 @@ export function AppShell({
   // The drawer exists only there; a window widened while it was open is not left locked.
   const drawerOpen = navOpen && compact;
   const side = useRef<HTMLElement>(null);
+  const shell = useRef<HTMLDivElement>(null);
+  // The browser chrome and the phone status area follow the theme's canvas.
+  useThemeColor(shell, theme);
 
   // Per-browser conveniences: the theme and which apps stay expanded.
   // Read after mount (reading storage during render breaks hydration).
@@ -184,6 +188,7 @@ export function AppShell({
 
   return (
     <div
+      ref={shell}
       className={cn("rd-shell", isPreview && "rd-shell-preview")}
       data-theme={theme}
       data-nav={drawerOpen ? "open" : undefined}
@@ -367,10 +372,10 @@ export function AppShell({
                   </>
                 ) : null}
               </>
-            ) : (
-              <TopBarTitle />
-            )}
+            ) : null}
           </nav>
+          {/* The same trail folded for a phone; only one of the two is shown. */}
+          <TopBarPlace place={place} />
           <button
             type="button"
             className="rd-search"

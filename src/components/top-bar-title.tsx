@@ -17,7 +17,8 @@ function subscribe(notify: () => void) {
  * The phone top bar's page name on routes the navigation model has no entry
  * for (About Zarvis, Sign in), where the breadcrumb would be empty. Read from
  * the page's own document title; the site name until the browser answers.
- * Hidden on wide screens (mobile-shell.css), where the search field sits there.
+ * Drawn inside the phone identity block (top-bar-place.tsx), which wide
+ * screens do not show (mobile-shell.css).
  */
 export function TopBarTitle() {
   const title = useSyncExternalStore(
