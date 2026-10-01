@@ -98,6 +98,7 @@
 .pageCaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 30px; color: #78716c; }
 .pageCaption > span { font-size: 9px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .pageCaption small { white-space: nowrap; font-size: 9px; }
+.pageCaption .captionFullScreen { display: none; }
 .filmstrip { display: flex; align-items: center; justify-content: center; gap: 15px; padding: 12px 22px; min-width: 0; }
 .thumbnails { display: flex; gap: 12px; align-items: flex-start; justify-content: center; width: min(100%, 650px); }
 .thumbnail { position: relative; width: 112px; min-width: 0; border: 2px solid transparent; padding: 3px; border-radius: 3px; transition: border .15s; }
@@ -226,6 +227,54 @@
   .coverLink { width: 100%; max-width: 150px; margin: 0 auto; }
   .edition { padding-top: 9px; padding-bottom: 9px; }
 }
+
+/* Phones can open the page in full screen by tapping it. */
+@media (max-width: 850px), (max-height: 480px) {
+  .paper { cursor: zoom-in; }
+}
+/* An upright phone has room under the page for a second, labelled way in.
+   The title keeps its place and the page keeps its size. */
+@media (max-width: 600px) and (min-height: 500px) and (max-aspect-ratio: 5/7) {
+  .embedded .readingArea { grid-template-rows: 52px minmax(0, 1fr) 68px; }
+  .embedded .pageCaption { flex-direction: column; justify-content: flex-start; gap: 0; }
+  .embedded .pageCaption > span { flex: 0 0 30px; max-width: 100%; line-height: 30px; }
+  .embedded .pageCaption .captionFullScreen { position: relative; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; border: 1px solid var(--line); border-radius: 7px; background: #f8f9f5; color: var(--ink); font-size: 12px; font-weight: 550; white-space: nowrap; }
+  .embedded .captionFullScreen::before { content: ""; position: absolute; inset: -8px; }
+  .embedded .captionFullScreen svg { width: 15px; height: 15px; }
+}
+
+/* Full screen reading: the page alone on a dark ground, above everything.
+   A portrait screen turns the surface a quarter clockwise (size and transform
+   come from fullScreenLayout) so the page runs along the long side. */
+.immersive.app { position: fixed; inset: 0; z-index: 1000; display: block; width: auto; height: 100dvh; background: #1c1917; touch-action: pinch-zoom; overscroll-behavior: contain; -webkit-user-select: none; user-select: none; }
+.immersive.app[data-zoomed] { touch-action: pan-x pan-y pinch-zoom; }
+.immersive > .header, .immersive .library, .immersive .readerHeading, .immersive .toolbar, .immersive .pageCaption, .immersive .filmstrip, .immersive .mobileProgress { display: none; }
+.immersive :is(.workspace, .reader, .readingArea) { display: block; border: 0; background: none; }
+.immersive .stagePadding { position: absolute; top: 0; left: 0; transform-origin: 0 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+/* Reading top is the right edge of the screen, so the insets turn with the page. */
+.immersive .stagePadding[data-rotated] { padding: env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) env(safe-area-inset-top); }
+.immersive .stage { position: relative; }
+.immersive .paper { box-shadow: none; cursor: default; }
+.immersive .loading button { min-height: 44px; }
+.fullScreenControls { position: absolute; inset: 0; z-index: 2; pointer-events: none; color: #f6f3ec; }
+.fullScreenControls button { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; }
+.fullScreenControls button[aria-disabled=true] { opacity: .28; cursor: default; }
+/* The ring sits inside the dark control, so it shows over the page and over the ground alike. */
+.immersive.app :is(.exitFullScreen, .fullScreenPager button):focus-visible { outline: 2px solid #e6b866; outline-offset: -4px; }
+.exitFullScreen, .fullScreenPager, .swipeTip { position: absolute; background: rgba(28, 25, 23, 0.84); box-shadow: 0 0 0 1px rgba(246, 243, 236, 0.16); transition: opacity .25s; }
+.exitFullScreen, .fullScreenPager { pointer-events: auto; }
+.exitFullScreen { top: 8px; right: 8px; }
+.fullScreenPager { left: 50%; bottom: 8px; transform: translateX(-50%); display: flex; align-items: center; border-radius: 22px; }
+.fullScreenPager > span[aria-hidden] { min-width: 58px; text-align: center; color: #d6d0c4; font-size: 12px; letter-spacing: .4px; font-variant-numeric: tabular-nums; }
+.swipeTip { left: 50%; bottom: 62px; transform: translateX(-50%); padding: 7px 13px; border-radius: 16px; background: #1c1917; color: #d6d0c4; font-size: 12px; white-space: nowrap; }
+/* Resting: the pager fades out and the close button dims. Both still take a
+   tap, so the way out is never lost, and both return in full on focus. */
+.fullScreenControls[data-resting] :is(.fullScreenPager, .swipeTip) { opacity: 0; }
+.fullScreenControls[data-resting] .exitFullScreen { opacity: .6; background: #1c1917; }
+.fullScreenControls:has(:focus-visible) :is(.exitFullScreen, .fullScreenPager) { opacity: 1; }
+/* Takes the taps that follow the way out; see useExitShield. */
+.exitShield { position: fixed; inset: 0; z-index: 1000; }
+
 @media (prefers-reduced-motion: reduce) {
   .app *, .app *::before, .app *::after { animation: none !important; transition: none !important; }
 }

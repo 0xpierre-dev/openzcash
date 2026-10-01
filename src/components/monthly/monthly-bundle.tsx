@@ -1,11 +1,12 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- Small same-origin brand mark. */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { MonthlyReader } from "./monthly-reader";
+import { MonthlyReader, type MonthlyReaderHandle } from "./monthly-reader";
 import { editionLabel, type MonthlyEdition, type MonthlyReadingSet } from "@/lib/monthly/catalog";
 import { publicationTarget, publicationView, type PublicationView } from "@/lib/monthly/reading-set";
+import { PHONE_QUERY } from "@/lib/monthly/full-screen";
 import { sourceUrl } from "@/lib/monthly/reader";
 import styles from "./monthly-bundle-preview.module.css";
 
@@ -85,15 +86,29 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
   ];
   const [view,setView]=useState<View>(initialView);
   const [fullScreen,setFullScreen]=useState(false);
+  const [nativeFullScreen,setNativeFullScreen]=useState(true);
   const root=useRef<HTMLDivElement>(null);
+  const reader=useRef<MonthlyReaderHandle>(null);
+  const expandButton=useRef<HTMLButtonElement>(null);
+  const reading=useRef(false);
+  const noteReading=useCallback((on:boolean)=>{reading.current=on;},[]);
   const positions=useRef<Record<string,string>>({monthly:"#1",operations:"#1"});
   const tabButtons=useRef<Array<HTMLButtonElement|null>>([]);
   useEffect(()=>{
     const sync=()=>setView(publicationView(new URLSearchParams(location.search).get("publication")));
-    const fullscreen=()=>setFullScreen(document.fullscreenElement===root.current);
+    // While a page is open in full screen the browser's full screen belongs to the reader, not to this button.
+    const fullscreen=()=>setFullScreen(document.fullscreenElement===root.current&&!reading.current);
+    setNativeFullScreen(typeof root.current?.requestFullscreen==="function");
     window.addEventListener("popstate",sync);document.addEventListener("fullscreenchange",fullscreen);
     return()=>{window.removeEventListener("popstate",sync);document.removeEventListener("fullscreenchange",fullscreen);};
   },[]);
+  // A report link can swap the publication under a page open in full screen: the new one opens the same way.
+  useLayoutEffect(()=>{
+    if(!reading.current)return;
+    if(view!=="sources"){reader.current?.enterFullScreen(expandButton.current);return;}
+    reading.current=false;
+    setFullScreen(document.fullscreenElement===root.current);
+  },[view]);
   function changeView(next:View,page?:number) {
     if(next===view&&page===undefined)return;
     if(view!=="sources")positions.current[view]=window.location.hash||"#1";
@@ -107,10 +122,12 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
     changeView(target.view,target.page);
     return true;
   }
-  async function expand() {
+  async function expand(event:React.MouseEvent<HTMLButtonElement>) {
+    // Phones open the page itself in the reader's full screen, which needs no Fullscreen API.
+    if(view!=="sources"&&!document.fullscreenElement&&window.matchMedia(PHONE_QUERY).matches){reader.current?.enterFullScreen(event.currentTarget);return;}
     try { if(document.fullscreenElement)await document.exitFullscreen();else await root.current?.requestFullscreen(); } catch { /* Browser may restrict fullscreen; the fitted reader remains usable. */ }
   }
-  return <div ref={root} className={styles.preview} data-publication={view}>
+  return <div ref={root} className={styles.preview} data-publication={view} data-native-full-screen={nativeFullScreen}>
     <header className={styles.header}>
       <Link href="/" prefetch={false} className={styles.brand} aria-label="Back to OpenZcash" title="Back to OpenZcash">
         <Symbol name="back"/><img src="/logos/marks/openzcash.png" alt="" width="28" height="28"/><strong>OpenZcash</strong>
@@ -126,7 +143,7 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
       </div>
       <div className={styles.actions}>
         {preview&&<span className={styles.previewBadge}>Layout preview</span>}
-        <button onClick={expand} aria-label={fullScreen?"Exit full screen":"Enter full screen"} title={fullScreen?"Exit full screen":"Full screen"}><Symbol name={fullScreen?"collapse":"expand"}/></button>
+        <button ref={expandButton} onClick={expand} aria-label={fullScreen?"Exit full screen":"Enter full screen"} title={fullScreen?"Exit full screen":"Full screen"}><Symbol name={fullScreen?"collapse":"expand"}/><span>{fullScreen?"Exit full screen":"Full screen"}</span></button>
         {view!=="sources"&&<a href={docs[view].pdf} download className={styles.download} aria-label={`Download ${view==="monthly"?"Monthly":"Operations"} PDF`}><Symbol name="download"/><span>Download PDF</span></a>}
       </div>
     </header>
@@ -134,6 +151,6 @@ export function MonthlyBundle({initialView, data, editions, preview=false, baseP
       <div role="tablist" aria-label="Choose what to read" className={styles.tabs}>{tabs.map((t,i)=><button key={t.id} ref={el=>{tabButtons.current[i]=el;}} role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`} aria-selected={view===t.id} aria-label={`${t.name}, ${t.count} ${t.unit}`} tabIndex={view===t.id?0:-1} className={styles.tab} onClick={()=>changeView(t.id)} onKeyDown={e=>{if(["ArrowLeft","ArrowRight","Home","End"].includes(e.key)){e.preventDefault();const j=e.key==="Home"?0:e.key==="End"?tabs.length-1:(i+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;changeView(tabs[j].id);tabButtons.current[j]?.focus();}}}><Symbol name={t.id}/><span>{t.name}</span><small>{t.count}<span className={styles.countUnit}> {t.unit}</span></small></button>)}</div>
       <span className={styles.tabContext}>{view==="monthly"?"Teams & products":view==="operations"?"Funding, votes & communities":"The complete record"}</span>
     </nav>
-    <div className={styles.panel} role="tabpanel" id={`panel-${view}`} aria-labelledby={`tab-${view}`}>{view==="sources"?<SourcesPanel data={data}/>:<MonthlyReader key={view} editions={[docs[view]]} edition={docs[view]} embedded publicationName={view==="monthly"?"Monthly":"Operations"} baseHref={`${basePath}?publication=${view}`} onFollowLink={followReportLink}/>}</div>
+    <div className={styles.panel} role="tabpanel" id={`panel-${view}`} aria-labelledby={`tab-${view}`}>{view==="sources"?<SourcesPanel data={data}/>:<MonthlyReader key={view} handle={reader} editions={[docs[view]]} edition={docs[view]} embedded publicationName={view==="monthly"?"Monthly":"Operations"} baseHref={`${basePath}?publication=${view}`} onFollowLink={followReportLink} fullScreenOpener={expandButton} fullScreenHost={root} onFullScreenChange={noteReading}/>}</div>
   </div>;
 }
