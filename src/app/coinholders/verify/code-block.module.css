@@ -1,0 +1,76 @@
+/* A command in a quiet block with a copy button (code-block.tsx). Workspace tokens only,
+   so the dark theme follows. */
+
+.code {
+  position: relative;
+  display: grid;
+  /* The copy button has a column of its own: text that scrolls sideways ends before it. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  min-width: 0;
+  margin: 12px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface2);
+}
+.code pre {
+  margin: 0;
+  padding: 12px 10px 12px 14px;
+  font-family: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink);
+  /* Multi-line commands keep their indentation and scroll inside the block. */
+  white-space: pre;
+  overflow-x: auto;
+}
+/* The one-line check wraps at spaces (the long round id may break anywhere), and every
+   line after the first is indented so a wrap never reads as a new command. */
+.codeWrap pre {
+  padding-left: calc(14px + 2ch);
+  text-indent: -2ch;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.code pre:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 9px;
+}
+.copy {
+  margin: 8px 8px 0 0;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11.5px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.copy:hover {
+  border-color: var(--line-strong);
+}
+.copy:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+@media (max-width: 720px) {
+  /* The copy button sits in a strip above the text, which keeps the block's full width. */
+  .code {
+    display: block;
+  }
+  .code pre {
+    padding: 40px 14px 12px;
+  }
+  .codeWrap pre {
+    padding-left: calc(14px + 2ch);
+  }
+  .copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    margin: 0;
+  }
+}

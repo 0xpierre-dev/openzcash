@@ -8,7 +8,7 @@ import { ZarvisMark } from "./zarvis/zarvis-mark";
 import { useZarvisOptional } from "./zarvis/zarvis-provider";
 import { LogoutButton } from "./logout-button";
 import { ScrollHints } from "./scroll-hints";
-import { APPS, backOf, placeOf, type AppDef } from "@/lib/design-routes";
+import { APPS, backOf, paletteEntries, placeOf, type AppDef } from "@/lib/design-routes";
 import {
   IconArrowUp,
   IconBalance,
@@ -501,11 +501,7 @@ export function AppShell({
           ) : null}
           {apps.map((app) => {
             const q = query.toLowerCase();
-            const landingIsPage = app.pages.some((p) => p.href === app.href);
-            const entries = [
-              ...(landingIsPage ? [] : [{ href: app.href, label: app.pages.length ? "Overview" : app.label }]),
-              ...app.pages.filter((p) => !p.hidden),
-            ].filter((p) => (p.label + " " + app.label + " " + app.sub).toLowerCase().includes(q));
+            const entries = paletteEntries(app).filter((p) => (p.label + " " + app.label + " " + app.sub).toLowerCase().includes(q));
             return entries.length ? (
               <section key={app.id}>
                 <h3>

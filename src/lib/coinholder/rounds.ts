@@ -370,7 +370,8 @@ const Q3_2026: RoundProposal[] = [
     ],
     "correction": {
       "text": "First published as Abstain, the option with the most ZEC. After str4d pointed out that a simple majority under ZIP 1016 leaves abstentions out (1,140,324.875 ZEC voted for or against, 66.4% in favour), FPF moved it to Funded six hours after publishing (September 30, 2026, 02:09 UTC).",
-      "href": "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-results/57909/4"
+      "href": "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-results/57909/4",
+      "from": "abstain"
     }},
   {
     "id": "31",

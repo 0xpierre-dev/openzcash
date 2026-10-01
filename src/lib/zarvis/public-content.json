@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceRevision": "dbee040711a89b30",
-  "sourceFiles": 56,
+  "sourceRevision": "94543ce5267942b5",
+  "sourceFiles": 57,
   "documents": [
     {
       "id": "src/app/zcg/page.tsx:0",
@@ -170,6 +170,12 @@
       "url": "https://openzcash.org/coinholders/fund",
       "title": "coinholders · fund",
       "text": "2-of-3 multisig\nHeld by the key-holders, bound to ZIP 1016. It may be left at rest.\nOut\nPaid in ZEC by the key-holders; FPF runs applications and reporting.\nHow money leaves the fund\nZIP 1016 ↗\nZIP 271 ↗\nBalance: the Coinholder sheet\nplus 0.1875 ZEC a block since.\nLive lockbox feed →"
+    },
+    {
+      "id": "src/app/coinholders/verify/page.tsx:0",
+      "url": "https://openzcash.org/coinholders/verify",
+      "title": "coinholders · verify",
+      "text": "Every coinholder vote's ZEC per option, ZIP 1016 applied to it and the published outcome, with the vote-chain data, CSV, JSON and a script to check it yourself.\nVerify it yourself\nWhat this checks, and what it does not yet\nChecked here\nZIP 1016's test, applied for comparison only: the poll set the program's terms. It gives the published result for\n.\nZIP 1016 applied to these tallies gives the published outcome for\nCorrections, vetoes and discarded questions are shown where they changed or ended a result.\nNot checked yet\nThe comparison with the vote chain did not run this time: neither server answered. Reload in a few minutes, or run the steps above.\nRe-deriving the finalized summary from the encrypted shares in the vote chain's blocks. This page reads the summary the chain's servers publish; the hash shows you read the same bytes.\nThat each figure here matches the post it comes from: the table is this site's copy of the published totals, not read from the post on each visit. The post is linked above.\nRecounting the ballots themselves. The published seeds let anyone do it with the tools above.\nHow many holders voted: the vote reveals ZEC, not people.\nEvery tally, the rule that decides it and the published outcome, side by side, with the data and commands to check them without trusting this site.\nAll figures\n(\n)\nresults →\nZIP 1016 ↗\n↗"
     },
     {
       "id": "src/app/zcg/treasury-calculator/page.tsx:0",
