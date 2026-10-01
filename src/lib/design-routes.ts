@@ -82,10 +82,10 @@ export const APPS: AppDef[] = [
     icon: "grant",
     pages: [
       { href: "/coinholders/results", label: "Results", mark: "/logos/glyphs/decisions.png" },
+      // Next to the results it checks, so people find it from the menu too.
+      { href: "/coinholders/verify", label: "Verify it yourself", mark: "/logos/glyphs/reconciliation.png" },
       { href: "/coinholders/fund", label: "The fund", mark: "/logos/glyphs/coinholder.png" },
       { href: "/zcg/coinholder/copilot", label: "Coinholder Copilot", mark: "/logos/glyphs/copilot.png" },
-      // Opened from each round's results ("Verify →") and ⌘K; not a sidebar item.
-      { href: "/coinholders/verify", label: "Verify it yourself", mark: "/logos/glyphs/decisions.png", hidden: true, palette: true },
     ],
   },
   {
