@@ -66,7 +66,7 @@ function SourcesPanel({data}: {data: MonthlyReadingSet}) {
       </div>
       <label className={styles.search}><Symbol name="search"/><input aria-label="Search this register" placeholder="Search this register" value={query} onChange={e=>{setQuery(e.target.value);setPage(0);}}/>{query&&<button onClick={()=>{setQuery("");setPage(0);}} aria-label="Clear search">×</button>}</label>
     </div>
-    <div className={styles.registerHeading}><strong>{labels[register]}</strong><span>{register==="requests"?"Requested funding · Unawarded at cutoff":register==="zcg"?"Request amounts · Status stated in each record":"Original sources and dated reports"}</span></div>
+    <div className={styles.registerHeading}><strong>{labels[register]}</strong><span>{register==="requests"?"Requested funding · Outcome stated in each record":register==="zcg"?"Request amounts · Status stated in each record":"Original sources and dated reports"}</span></div>
     <div ref={rowsBox} className={styles.rows} role="list" aria-label={labels[register]}>
       {visible.map(e=><a key={e.url+e.name} className={styles.row} href={sourceUrl(e.url)||undefined} target="_blank" rel="noopener noreferrer" role="listitem" title={`${e.name} — ${e.detail}`}><div><strong>{e.name}</strong><span>{e.detail}</span></div>{(e.amountLabel||e.amount!=null)&&<b>{e.amountLabel||new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(e.amount!)}</b>}<Symbol name="external"/></a>)}
       {!visible.length&&<div className={styles.empty}><Symbol name="search"/><strong>No matches in this register.</strong><button onClick={()=>setQuery("")}>Clear search</button></div>}

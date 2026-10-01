@@ -10,7 +10,7 @@ The approved reference PDFs are stored in `standards/editorial-4.0/`; their hash
 
 ## Run preparation
 
-The existing Codex routine is scheduled monthly on day 1 at 09:00 America/Sao_Paulo. Read `routine-activation.json` for whether the Editorial 4.0 prompt has actually been saved in that job. The format is approved; automatic publication under the proposed update is blocked until the native scheduler update is explicitly authorized and verified. It is a local Codex task and requires that host to be available. This repository does not run a cloud cron.
+The existing Codex routine is scheduled monthly on day 1 at 09:00 America/Sao_Paulo. Read `routine-activation.json` for whether the Editorial 4.0 prompt has actually been saved in that job. The native Editorial 4.0 update was authorized, saved and verified on October 1, 2026. Each run must still match the saved prompt to the active standard and complete fresh publication gates. It is a local Codex task and requires that host to be available. This repository does not run a cloud cron.
 
 Read the active standard from the durable project folder before consulting deployed historical instructions. Run `python reports/monthly/check_monthly_standard.py --scheduled-for YYYY-MM-01` to verify the saved format, approved reference hashes and intended calendar boundaries. Use `--automation-file /absolute/automation.toml` to also compare the actual saved job with `AUTOMATION-PROMPT.md`. This check does not fetch data, generate a report or establish a successful future run.
 
