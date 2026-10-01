@@ -10,7 +10,7 @@ The new atlas is `public/zarvis/ironwood-poses-v2.png` (1254 × 1254 RGBA, 1,690
 
 ## Behavior
 
-- Opening or tapping the welcome mascot triggers a greeting with a moving hand.
+- Welcome: the mascot drops in centred in the neutral pose (about 0.6 s, a soft squash on touch-down, no sideways travel) and raises the shield as it lands, with one pulse and gleam on the shield. It keeps the shield while the chat is idle. Tapping it asks for a wave (2.4 s), then the shield returns. There is no automatic wave.
 - Idle: breathing and blinking. Pointer movement over the mascot adds a small gaze response.
 - Draft entered: resting pose with gentle attention and breathing.
 - Request: thinking; actual source lookup events can switch to exploring or reading.
@@ -110,3 +110,32 @@ The eight existing artworks now support thirteen expression states. Comparing, u
 Actual source lookup and analysis events select work-in-progress reactions. Pose opacity blends over 580 ms. Settled answers perform one introductory head/hand gesture, then retain slower breathing and blinking; repeated speech gestures stop. Automatic celebration on every completed answer has been removed. Pause, hidden-page suspension and reduced-motion behavior remain supported.
 
 The development gallery includes the three new examples and controls. Browser verification observed an actual uncertain response when the quote reader only had a stale saved quote; it labeled the quote as cached. The figure used `uncertain`, `data-settled=true` and an attentive arrival animation. Pause produced paused body/head animations; reduced motion produced `animation-name: none`. A real Deep analysis comparison completed with one figure. At 390 px, the document's scroll width was also 390 px.
+
+## Aligned poses and the shield welcome — iteration 06, 2026-10-01
+
+User report: on opening the chat the mascot waved and seemed to walk towards the centre, and it was too small on the welcome screen.
+
+Cause: the eight poses are not drawn at the same place inside their 627 px sprite cells. The wave stands 67 px left of the resting pose and the shield pose 23 px higher, so every cross-fade between poses read as a slide.
+
+Fix: `scripts/measure-zarvis-poses.mjs` reads the alpha channel of each cell and records the bounding box, the feet centre (centre of alpha mass in the bottom 8% of the bounding box, so a raised arm or the shield does not pull the body off centre) and the offset that puts the feet on the cell centre (313.5) and on one baseline (620). The numbers live in `src/components/zarvis/zarvis-pose-metrics.json`; `zarvis-poses.ts` applies them as a translate on each pose group, so masks, eyes, arm pivots and the ground shadow move together. `node scripts/measure-zarvis-poses.mjs --check` and a unit test fail when the data and the artwork drift apart.
+
+The sheets are packed tight, so a neighbour can bleed into a cell: the ear tip of the shield pose shows up as four rows of pixels (623 to 626) under the feet of the reading pose, beyond an empty gap. The bounding box is therefore the tallest unbroken run of rows with ink (the character itself), and the body layer draws only those rows, so the stray pixels neither lift the pose off the baseline nor appear beside the feet. A unit test checks that every row of each pose's feet band has ink.
+
+| Pose | Bounding box (l t r b) | Feet centre x | dx | dy |
+| --- | --- | --- | --- | --- |
+| resting | 126 16 506 619 | 326.3 | -12.8 | 1 |
+| greeting | 56 11 479 621 | 259.2 | 54.3 | -1 |
+| thinking | 141 5 535 603 | 321.1 | -7.6 | 17 |
+| explaining | 74 4 506 604 | 270.7 | 42.8 | 16 |
+| reading | 127 8 513 618 | 330.8 | -17.3 | 2 |
+| exploring | 90 8 520 621 | 281.1 | 32.4 | -1 |
+| protecting | 137 0 530 597 | 338.4 | -24.9 | 23 |
+| celebrating | 69 0 496 597 | 274.7 | 38.8 | 23 |
+
+Welcome: see Behavior above. The drop is a CSS animation that starts with the first paint, so it does not wait for hydration; the component raises the shield when that animation ends. With reduced motion, a paused mascot or a hidden tab there is no drop and no pulse: the shield pose is simply in place from the first frame. The shield is redrawn as a top layer during its one pulse, so no gap opens underneath.
+
+Head seams: the head layer moves (nod, glance) over a still body layer. The body layer used to stop exactly at the neck line and at the outline of a held object, so a nod uncovered a sliver of the page behind (a light hairline above the shield on the light theme). The body layer now reaches 8 units under the head along those edges, so the head uncovers artwork instead.
+
+Size: the welcome figure is 189 x 180 px on desktop (168 x 160 px when the window is 740 px tall or less, where the full size would no longer fit with a notice showing), 152 x 144 px on phones and 126 x 120 px in the floating dock. The character fills about 85% of the figure height.
+
+Blink phases are staggered by 0.29 s per pose (was 0.43 s): with the old step the shield pose started its cycle in the middle of a blink, so a paused welcome would have frozen with its eyes shut.

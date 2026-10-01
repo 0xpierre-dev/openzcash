@@ -10,7 +10,7 @@ import {
   voteValue,
 } from "./derive";
 import days from "@/data/funding/days.json";
-import { APPS, paletteEntries, placeOf } from "@/lib/design-routes";
+import { APPS, overviewEntry, paletteEntries, placeOf } from "@/lib/design-routes";
 import type { Round } from "./types";
 
 const round = (id: string): Round => {
@@ -192,6 +192,15 @@ describe("Program navigation", () => {
     // Each fund's share of every block reward, beside its name in the sidebar.
     expect(app.share?.value).toBe("12%");
     expect(APPS.find((a) => a.id === "zcg")?.share?.value).toBe("8%");
+  });
+  it("lists each app's landing page as an Overview entry when the app has inner pages", () => {
+    const app = (id: string) => APPS.find((a) => a.id === id)!;
+    expect(overviewEntry(app("coinholders"))).toMatchObject({ href: "/coinholders", label: "Overview" });
+    expect(overviewEntry(app("zcg"))).toMatchObject({ href: "/zcg", label: "Overview" });
+    // An app without inner pages is its own page: nothing to list.
+    expect(overviewEntry(app("news"))).toBeNull();
+    for (const a of APPS.filter((x) => x.pages.length))
+      expect(overviewEntry(a) !== null || a.pages.some((p) => p.href === a.href), a.id).toBe(true);
   });
   it("places the overview, results, fund and copilot inside the program", () => {
     expect(placeOf("/coinholders")).toMatchObject({ app: { id: "coinholders" } });

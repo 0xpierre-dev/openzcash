@@ -19,6 +19,16 @@ export function progressExpression(progress: string): ZarvisExpression {
   return "thinking";
 }
 
+/** Welcome screen: the mascot drops in, raises the shield once, then keeps it. */
+export type WelcomePhase = "landing" | "raising" | "settled";
+
+/** On the welcome screen the shield replaces the resting pose; a requested wave and the other live expressions still show. */
+export function welcomeExpression(phase: WelcomePhase, waving: boolean, live: ZarvisExpression): ZarvisExpression {
+  if (waving) return "greeting";
+  if (live !== "idle" && live !== "listening") return live;
+  return phase === "landing" ? "idle" : "protecting";
+}
+
 /** The finished text can be limited or ask for clarification; completion is never a celebration. */
 export function completionExpression(question: string, answer: string): ZarvisExpression {
   const text = answer.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();

@@ -587,14 +587,6 @@
 .rd-shell .ws-button {
   border-radius: 999px;
 }
-.rd-shell .ws-app-dialog {
-  background: var(--surface);
-  color: var(--ink);
-  border-color: var(--line);
-}
-.rd-shell .ws-app-dialog::backdrop {
-  background: rgba(10, 10, 15, 0.55);
-}
 .rd-content .ws-amount-large,
 .rd-content .ws-exact-amount,
 .rd-content .zcg-overview-schedule-value,
@@ -1257,14 +1249,6 @@
 .rd-side-page {
   min-height: 28px;
   font-size: 13px;
-}
-.ws-app-directory h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.ws-app-directory h3 .rd-side-icon {
-  color: var(--muted);
 }
 
 /* ---------- Zero horizontal scrolling: content fits the column at every width ---------- */
@@ -2721,46 +2705,6 @@
   }
   .rd-content .ws-field > input:not([type="checkbox"]):not([type="radio"]) {
     font-size: 16px;
-  }
-  /* The record search fills the screen, one column of apps. */
-  .rd-shell .ws-app-dialog {
-    width: 100vw;
-    max-width: none;
-    height: 100dvh;
-    max-height: none;
-    margin: 0;
-    border: 0;
-    border-radius: 0;
-    padding: calc(16px + env(safe-area-inset-top)) 16px
-      calc(16px + env(safe-area-inset-bottom));
-    overflow-y: auto;
-  }
-  .rd-shell .ws-dialog-heading {
-    margin-bottom: 14px;
-  }
-  .rd-shell .ws-dialog-heading h2 {
-    margin-top: 4px;
-    font-size: 20px;
-  }
-  .rd-shell .ws-dialog-heading > button {
-    width: 40px;
-    height: 40px;
-  }
-  .rd-shell .ws-app-dialog > input {
-    height: 44px;
-    font-size: 16px;
-  }
-  .rd-shell .ws-app-directory {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-    margin-top: 18px;
-  }
-  .rd-shell .ws-app-directory h3 {
-    font-size: 10.5px;
-  }
-  .rd-shell .ws-app-directory a {
-    padding: 11px 0;
-    font-size: 14px;
   }
   /* Organisation head: mark and name on one row, the text under them, the
      actions (tabs, links) on their own row. */

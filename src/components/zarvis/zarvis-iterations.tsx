@@ -16,12 +16,12 @@ const states: { value: ZarvisExpression; label: string }[] = [
 ];
 const examples: { value: ZarvisExpression; label: string; when: string; example: string; question?: string }[] = [
   { value: "idle", label: "At rest", when: "Waiting for a question or listening while you type.", example: "Open the chat and start typing." },
-  { value: "greeting", label: "Hello", when: "When the chat opens, or when you tap the welcome mascot.", example: "Tap Zarvis to say hello again." },
+  { value: "greeting", label: "Hello", when: "When you tap the welcome mascot.", example: "Tap Zarvis to say hello." },
   { value: "thinking", label: "Thinking", when: "While processing your question. Also used when a reply is interrupted.", example: "“Finding the right sources…”" },
   { value: "explaining", label: "Explaining", when: "During general answers, and after the latest answer finishes.", example: "How is new ZEC issued?", question: "How is new ZEC issued? Explain briefly." },
   { value: "reading", label: "Reading", when: "For ZIPs and documentation, or while reading public OpenZcash records.", example: "What is ZIP 316?", question: "What is ZIP 316? Explain briefly and link the official source." },
   { value: "exploring", label: "Exploring", when: "For ecosystem questions, or while checking web sources.", example: "Which Zcash wallets can I explore?", question: "Which Zcash wallets can I explore? Give a short overview with sources." },
-  { value: "protecting", label: "Privacy", when: "For questions about privacy, security and viewing keys.", example: "What can a viewing key reveal?", question: "What can a Zcash viewing key reveal, and can it spend funds? Answer briefly." },
+  { value: "protecting", label: "Privacy", when: "On the welcome screen, and for questions about privacy, security and viewing keys.", example: "What can a viewing key reveal?", question: "What can a Zcash viewing key reveal, and can it spend funds? Answer briefly." },
   { value: "comparing", label: "Comparing", when: "While analyzing a scenario or comparing alternatives.", example: "Compare the assumptions behind two treasury scenarios." },
   { value: "uncertain", label: "Needs evidence", when: "When the answer cannot verify a claim or the data is unavailable.", example: "I could not verify that claim." },
   { value: "clarifying", label: "Clarifying", when: "When the answer asks for a missing detail.", example: "Which network do you mean?" },

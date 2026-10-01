@@ -1,0 +1,139 @@
+{
+  "cell": 627,
+  "anchor": {
+    "x": 313.5,
+    "baseline": 620
+  },
+  "alphaThreshold": 16,
+  "feetBand": 0.08,
+  "poses": {
+    "resting": {
+      "sheet": "ironwood-poses-v2.png",
+      "cell": [
+        0,
+        0
+      ],
+      "bbox": [
+        126,
+        16,
+        506,
+        619
+      ],
+      "feetX": 326.3,
+      "dx": -12.8,
+      "dy": 1
+    },
+    "greeting": {
+      "sheet": "ironwood-poses-v2.png",
+      "cell": [
+        627,
+        0
+      ],
+      "bbox": [
+        56,
+        11,
+        479,
+        621
+      ],
+      "feetX": 259.2,
+      "dx": 54.3,
+      "dy": -1
+    },
+    "thinking": {
+      "sheet": "ironwood-poses-v2.png",
+      "cell": [
+        0,
+        627
+      ],
+      "bbox": [
+        141,
+        5,
+        535,
+        603
+      ],
+      "feetX": 321.1,
+      "dx": -7.6,
+      "dy": 17
+    },
+    "explaining": {
+      "sheet": "ironwood-poses-v2.png",
+      "cell": [
+        627,
+        627
+      ],
+      "bbox": [
+        74,
+        4,
+        506,
+        604
+      ],
+      "feetX": 270.7,
+      "dx": 42.8,
+      "dy": 16
+    },
+    "reading": {
+      "sheet": "ironwood-actions-v3.png",
+      "cell": [
+        0,
+        0
+      ],
+      "bbox": [
+        127,
+        8,
+        513,
+        618
+      ],
+      "feetX": 330.8,
+      "dx": -17.3,
+      "dy": 2
+    },
+    "exploring": {
+      "sheet": "ironwood-actions-v3.png",
+      "cell": [
+        627,
+        0
+      ],
+      "bbox": [
+        90,
+        8,
+        520,
+        621
+      ],
+      "feetX": 281.1,
+      "dx": 32.4,
+      "dy": -1
+    },
+    "protecting": {
+      "sheet": "ironwood-actions-v3.png",
+      "cell": [
+        0,
+        627
+      ],
+      "bbox": [
+        137,
+        0,
+        530,
+        597
+      ],
+      "feetX": 338.4,
+      "dx": -24.9,
+      "dy": 23
+    },
+    "celebrating": {
+      "sheet": "ironwood-actions-v3.png",
+      "cell": [
+        627,
+        627
+      ],
+      "bbox": [
+        69,
+        0,
+        496,
+        597
+      ],
+      "feetX": 274.7,
+      "dx": 38.8,
+      "dy": 23
+    }
+  }
+}
