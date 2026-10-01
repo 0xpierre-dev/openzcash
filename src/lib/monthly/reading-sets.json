@@ -1,5 +1,2079 @@
 [
   {
+    "sources": [
+      {
+        "name": "api-coinholder",
+        "detail": "Public source captured 2026-10-01T15:58:11.784095+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/api/zcg/coinholder/round"
+      },
+      {
+        "name": "api-disbursements",
+        "detail": "Public source captured 2026-10-01T15:58:11.768358+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "api-ecosystem",
+        "detail": "Public source captured 2026-10-01T15:58:12.128979+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/api/ecosystem"
+      },
+      {
+        "name": "api-zechub",
+        "detail": "Public source captured 2026-10-01T15:58:12.636207+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/api/zechub/treasury"
+      },
+      {
+        "name": "arborist-130",
+        "detail": "Public source captured 2026-10-01T16:11:34.546603+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/AllArboristCallNotes/Arborist%20call%20130%20-%20notes.md"
+      },
+      {
+        "name": "arborist-131",
+        "detail": "Public source captured 2026-10-01T16:11:35.031588+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/AllArboristCallNotes/Arborist%20call%20131%20-%20notes.md"
+      },
+      {
+        "name": "arborist-132",
+        "detail": "Public source captured 2026-10-01T16:11:35.254076+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/AllArboristCallNotes/Arborist%20call%20132%20-%20notes.md"
+      },
+      {
+        "name": "arborist-directory",
+        "detail": "Public source captured 2026-10-01T16:04:45.468001+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/ZcashCommunityGrants/arboretum-notes/contents/AllArboristCallNotes"
+      },
+      {
+        "name": "coinholder-tally",
+        "detail": "Public source captured 2026-10-01T16:15:45.283945+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zvote.zfnd.org/shielded-vote/v1/vote-summary/2cba66eb16c7581a1692cb0b033785da0131059f645a0d2fb4dc2a5131505e01"
+      },
+      {
+        "name": "communities-page",
+        "detail": "Public source captured 2026-10-01T15:58:12.971225+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/communities"
+      },
+      {
+        "name": "disbursements",
+        "detail": "Public source captured 2026-10-01T12:09:06.935709+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "forum-september-page-2",
+        "detail": "Public source captured 2026-10-01T16:11:36.823936+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=2"
+      },
+      {
+        "name": "forum-september-page-3",
+        "detail": "Public source captured 2026-10-01T16:11:37.179926+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=3"
+      },
+      {
+        "name": "forum-september-page-4",
+        "detail": "Public source captured 2026-10-01T16:11:37.823136+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=4"
+      },
+      {
+        "name": "forum-september-page-5",
+        "detail": "Public source captured 2026-10-01T16:11:38.268774+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=5"
+      },
+      {
+        "name": "forum-september-page-6",
+        "detail": "Public source captured 2026-10-01T16:13:38.388637+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=6"
+      },
+      {
+        "name": "forum-september-page-7",
+        "detail": "Public source captured 2026-10-01T16:13:38.512107+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest&page=7"
+      },
+      {
+        "name": "forum-september",
+        "detail": "Public source captured 2026-10-01T15:58:19.126975+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/search.json?q=after%3A2026-09-01%20before%3A2026-10-01%20order%3Alatest"
+      },
+      {
+        "name": "github-zcg-issues-all",
+        "detail": "Public source captured 2026-10-01T16:19:28.802853+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues?state=all&since=2026-09-01T00:00:00Z&per_page=100"
+      },
+      {
+        "name": "news-page",
+        "detail": "Public source captured 2026-10-01T15:58:13.416802+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/news"
+      },
+      {
+        "name": "reader",
+        "detail": "Public source captured 2026-10-01T12:09:06.531059+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/monthly"
+      },
+      {
+        "name": "Official releases / common",
+        "detail": "Public source captured 2026-10-01T15:58:14.011723+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zakura-core/common/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / librustzcash",
+        "detail": "Public source captured 2026-10-01T15:58:17.844856+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zcash/librustzcash/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / vizor",
+        "detail": "Public source captured 2026-10-01T15:58:15.554347+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/chainapsis/vizor-wallet/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zaino",
+        "detail": "Public source captured 2026-10-01T15:58:16.200249+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zingolabs/zaino/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zakura",
+        "detail": "Public source captured 2026-10-01T15:58:13.814763+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zakura-core/zakura/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zallet",
+        "detail": "Public source captured 2026-10-01T15:58:17.410544+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zcash/wallet/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zebra",
+        "detail": "Public source captured 2026-10-01T15:58:13.605001+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/ZcashFoundation/zebra/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zingo",
+        "detail": "Public source captured 2026-10-01T15:58:15.518058+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zingolabs/zingo-pc/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zkool",
+        "detail": "Public source captured 2026-10-01T15:58:16.042032+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/hhanh00/zkool2/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zodl-android",
+        "detail": "Public source captured 2026-10-01T15:58:14.115274+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zodl-inc/zodl-android/releases?per_page=100"
+      },
+      {
+        "name": "Official releases / zodl-ios",
+        "detail": "Public source captured 2026-10-01T15:58:15.006524+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/zodl-inc/zodl-ios/releases?per_page=100"
+      },
+      {
+        "name": "Original ledger / coinholder-paid",
+        "detail": "Public source captured 2026-10-01T15:58:09.409241+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=722519692"
+      },
+      {
+        "name": "Original ledger / coinholder-proposals",
+        "detail": "Public source captured 2026-10-01T15:58:11.661946+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1847584751"
+      },
+      {
+        "name": "Original ledger / coinholder-totals",
+        "detail": "Public source captured 2026-10-01T15:58:10.569852+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1885743444"
+      },
+      {
+        "name": "Original ledger / discretionary",
+        "detail": "Public source captured 2026-10-01T15:58:09.607438+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=2043949055"
+      },
+      {
+        "name": "Original ledger / grants",
+        "detail": "Public source captured 2026-10-01T15:58:08.028841+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=803214474"
+      },
+      {
+        "name": "Original ledger / ic",
+        "detail": "Public source captured 2026-10-01T15:58:09.394130+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1267338970"
+      },
+      {
+        "name": "Original ledger / lockbox-balance",
+        "detail": "Public source captured 2026-10-01T15:58:08.028685+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=808560406"
+      },
+      {
+        "name": "Original ledger / maya",
+        "detail": "Public source captured 2026-10-01T15:58:09.469011+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1024670602"
+      },
+      {
+        "name": "Original ledger / overview",
+        "detail": "Public source captured 2026-10-01T15:58:08.027726+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=892150625"
+      },
+      {
+        "name": "Original ledger / proposals",
+        "detail": "Public source captured 2026-10-01T15:58:10.771939+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=1164534734"
+      },
+      {
+        "name": "Original ledger / recipient-totals",
+        "detail": "Public source captured 2026-10-01T15:58:10.524480+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=164877840"
+      },
+      {
+        "name": "Original ledger / stipends",
+        "detail": "Public source captured 2026-10-01T15:58:10.504940+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=598263567"
+      },
+      {
+        "name": "Original ledger / zcg-balance",
+        "detail": "Public source captured 2026-10-01T15:58:08.028522+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/export?format=csv&gid=135980745"
+      },
+      {
+        "name": "Original ledger / zechub-current",
+        "detail": "Public source captured 2026-10-01T16:27:20.083980+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/export?format=csv&gid=228848690"
+      },
+      {
+        "name": "Original ledger / zechub",
+        "detail": "Public source captured 2026-10-01T16:25:10.695028+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://docs.google.com/spreadsheets/d/19Zy5hp3dMix8pyP8_PxMF32vkl-OyNWU07jrlCTFfso/export?format=csv&gid=0"
+      },
+      {
+        "name": "shielded-blog",
+        "detail": "Public source captured 2026-10-01T15:58:18.996133+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://shieldedlabs.net/blog/"
+      },
+      {
+        "name": "shielded-roadmap",
+        "detail": "Public source captured 2026-10-01T16:04:16.507818+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://shieldedlabs.net/roadmap/"
+      },
+      {
+        "name": "tachyon-proof-tree",
+        "detail": "Public source captured 2026-10-01T16:15:44.597671+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://tachyon.z.cash/blog/building-tachyons-proof-tree-with-shared-evidence/"
+      },
+      {
+        "name": "tachyon-site",
+        "detail": "Public source captured 2026-10-01T16:04:16.035243+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://tachyon.z.cash/"
+      },
+      {
+        "name": "tachyon-udon",
+        "detail": "Public source captured 2026-10-01T16:15:44.596595+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://tachyon.z.cash/blog/integrating-tachyon-with-zakura-common/"
+      },
+      {
+        "name": "On the Operation and Promotion of Zcash Community in China",
+        "detail": "Public source captured 2026-10-01T16:04:17.157985+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/33064.json"
+      },
+      {
+        "name": "Forum posts / topic 38485",
+        "detail": "Public source captured 2026-10-01T16:11:33.716155+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/38485/posts.json?post_ids%5B%5D=241082&post_ids%5B%5D=241083&post_ids%5B%5D=249438&post_ids%5B%5D=251503&post_ids%5B%5D=251767"
+      },
+      {
+        "name": "Русскоязычный блог pro.zcash.ru",
+        "detail": "Public source captured 2026-10-01T16:04:17.169607+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/38485.json"
+      },
+      {
+        "name": "Zcash Untuk Nusantara",
+        "detail": "Public source captured 2026-10-01T16:04:18.121628+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/38678.json"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:29.785514+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=195714&post_ids%5B%5D=195715&post_ids%5B%5D=196649&post_ids%5B%5D=196652&post_ids%5B%5D=197191&post_ids%5B%5D=197195&post_ids%5B%5D=197250&post_ids%5B%5D=197308&post_ids%5B%5D=197804&post_ids%5B%5D=197819&post_ids%5B%5D=197823&post_ids%5B%5D=197843&post_ids%5B%5D=197850&post_ids%5B%5D=197932&post_ids%5B%5D=198421&post_ids%5B%5D=198574&post_ids%5B%5D=198837&post_ids%5B%5D=198898&post_ids%5B%5D=198902&post_ids%5B%5D=198921&post_ids%5B%5D=199413&post_ids%5B%5D=199531&post_ids%5B%5D=199533&post_ids%5B%5D=199706&post_ids%5B%5D=200304&post_ids%5B%5D=201160&post_ids%5B%5D=201720&post_ids%5B%5D=201721&post_ids%5B%5D=201760&post_ids%5B%5D=201765&post_ids%5B%5D=202943&post_ids%5B%5D=203247&post_ids%5B%5D=203375&post_ids%5B%5D=203385&post_ids%5B%5D=203459&post_ids%5B%5D=203616&post_ids%5B%5D=203678&post_ids%5B%5D=203707&post_ids%5B%5D=203823&post_ids%5B%5D=204724&post_ids%5B%5D=208252&post_ids%5B%5D=208256&post_ids%5B%5D=208257&post_ids%5B%5D=209139&post_ids%5B%5D=209168&post_ids%5B%5D=209187&post_ids%5B%5D=209214&post_ids%5B%5D=209312&post_ids%5B%5D=209433&post_ids%5B%5D=209519"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:30.373080+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=209545&post_ids%5B%5D=209583&post_ids%5B%5D=209647&post_ids%5B%5D=209686&post_ids%5B%5D=209688&post_ids%5B%5D=209701&post_ids%5B%5D=209710&post_ids%5B%5D=209824&post_ids%5B%5D=209825&post_ids%5B%5D=210355&post_ids%5B%5D=210357&post_ids%5B%5D=210745&post_ids%5B%5D=211137&post_ids%5B%5D=211889&post_ids%5B%5D=211940&post_ids%5B%5D=212010&post_ids%5B%5D=212138&post_ids%5B%5D=212152&post_ids%5B%5D=212227&post_ids%5B%5D=212361&post_ids%5B%5D=212401&post_ids%5B%5D=212454&post_ids%5B%5D=212465&post_ids%5B%5D=212486&post_ids%5B%5D=212504&post_ids%5B%5D=212509&post_ids%5B%5D=212567&post_ids%5B%5D=212568&post_ids%5B%5D=212619&post_ids%5B%5D=212622&post_ids%5B%5D=212661&post_ids%5B%5D=212734&post_ids%5B%5D=212743&post_ids%5B%5D=212761&post_ids%5B%5D=212774&post_ids%5B%5D=212776&post_ids%5B%5D=212777&post_ids%5B%5D=212778&post_ids%5B%5D=212859&post_ids%5B%5D=212875&post_ids%5B%5D=212907&post_ids%5B%5D=212922&post_ids%5B%5D=212970&post_ids%5B%5D=213088&post_ids%5B%5D=213170&post_ids%5B%5D=213191&post_ids%5B%5D=213925&post_ids%5B%5D=213932&post_ids%5B%5D=213939&post_ids%5B%5D=213951"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:31.531454+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=213963&post_ids%5B%5D=214055&post_ids%5B%5D=214057&post_ids%5B%5D=214084&post_ids%5B%5D=214103&post_ids%5B%5D=214241&post_ids%5B%5D=214309&post_ids%5B%5D=214404&post_ids%5B%5D=214615&post_ids%5B%5D=214660&post_ids%5B%5D=214698&post_ids%5B%5D=215311&post_ids%5B%5D=215375&post_ids%5B%5D=215817&post_ids%5B%5D=215854&post_ids%5B%5D=215856&post_ids%5B%5D=215920&post_ids%5B%5D=215921&post_ids%5B%5D=215972&post_ids%5B%5D=215975&post_ids%5B%5D=216079&post_ids%5B%5D=216096&post_ids%5B%5D=216109&post_ids%5B%5D=216116&post_ids%5B%5D=216125&post_ids%5B%5D=216134&post_ids%5B%5D=216137&post_ids%5B%5D=216191&post_ids%5B%5D=216205&post_ids%5B%5D=216228&post_ids%5B%5D=216727&post_ids%5B%5D=216752&post_ids%5B%5D=217199&post_ids%5B%5D=217293&post_ids%5B%5D=217412&post_ids%5B%5D=217464&post_ids%5B%5D=217473&post_ids%5B%5D=217476&post_ids%5B%5D=217657&post_ids%5B%5D=218000&post_ids%5B%5D=218003&post_ids%5B%5D=218027&post_ids%5B%5D=218226&post_ids%5B%5D=218381&post_ids%5B%5D=218558&post_ids%5B%5D=218614&post_ids%5B%5D=218625&post_ids%5B%5D=218778&post_ids%5B%5D=218890&post_ids%5B%5D=218907"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:31.550629+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=218909&post_ids%5B%5D=219178&post_ids%5B%5D=219233&post_ids%5B%5D=219312&post_ids%5B%5D=219351&post_ids%5B%5D=219580&post_ids%5B%5D=219712&post_ids%5B%5D=219761&post_ids%5B%5D=219792&post_ids%5B%5D=219805&post_ids%5B%5D=219815&post_ids%5B%5D=219825&post_ids%5B%5D=219844&post_ids%5B%5D=219896&post_ids%5B%5D=219906&post_ids%5B%5D=219908&post_ids%5B%5D=219934&post_ids%5B%5D=219968&post_ids%5B%5D=220146&post_ids%5B%5D=220161&post_ids%5B%5D=220543&post_ids%5B%5D=220571&post_ids%5B%5D=220636&post_ids%5B%5D=220797&post_ids%5B%5D=220812&post_ids%5B%5D=220827&post_ids%5B%5D=220894&post_ids%5B%5D=220906&post_ids%5B%5D=220925&post_ids%5B%5D=220943&post_ids%5B%5D=220975&post_ids%5B%5D=220987&post_ids%5B%5D=221036&post_ids%5B%5D=221050&post_ids%5B%5D=221078&post_ids%5B%5D=221227&post_ids%5B%5D=221509&post_ids%5B%5D=221514&post_ids%5B%5D=221538&post_ids%5B%5D=221540&post_ids%5B%5D=221586&post_ids%5B%5D=221696&post_ids%5B%5D=221779&post_ids%5B%5D=221871&post_ids%5B%5D=221967&post_ids%5B%5D=222089&post_ids%5B%5D=222189&post_ids%5B%5D=222255&post_ids%5B%5D=222355&post_ids%5B%5D=222394"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:31.825197+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=222529&post_ids%5B%5D=222655&post_ids%5B%5D=222816&post_ids%5B%5D=222821&post_ids%5B%5D=222849&post_ids%5B%5D=223108&post_ids%5B%5D=224074&post_ids%5B%5D=224174&post_ids%5B%5D=224803&post_ids%5B%5D=225009&post_ids%5B%5D=225139&post_ids%5B%5D=225588&post_ids%5B%5D=226296&post_ids%5B%5D=226565&post_ids%5B%5D=226683&post_ids%5B%5D=226723&post_ids%5B%5D=226740&post_ids%5B%5D=226790&post_ids%5B%5D=226956&post_ids%5B%5D=227219&post_ids%5B%5D=227260&post_ids%5B%5D=227555&post_ids%5B%5D=227557&post_ids%5B%5D=227620&post_ids%5B%5D=227742&post_ids%5B%5D=227841&post_ids%5B%5D=227879&post_ids%5B%5D=228337&post_ids%5B%5D=228356&post_ids%5B%5D=228366&post_ids%5B%5D=228374&post_ids%5B%5D=228574&post_ids%5B%5D=228586&post_ids%5B%5D=228603&post_ids%5B%5D=230258&post_ids%5B%5D=230512&post_ids%5B%5D=230513&post_ids%5B%5D=230553&post_ids%5B%5D=230678&post_ids%5B%5D=230679&post_ids%5B%5D=230953&post_ids%5B%5D=231537&post_ids%5B%5D=231714&post_ids%5B%5D=231754&post_ids%5B%5D=231780&post_ids%5B%5D=232779&post_ids%5B%5D=232790&post_ids%5B%5D=232990&post_ids%5B%5D=233049&post_ids%5B%5D=233667"
+      },
+      {
+        "name": "Forum posts / topic 43733",
+        "detail": "Public source captured 2026-10-01T16:11:32.190068+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733/posts.json?post_ids%5B%5D=233851&post_ids%5B%5D=233868&post_ids%5B%5D=233878&post_ids%5B%5D=233879&post_ids%5B%5D=234015&post_ids%5B%5D=234049&post_ids%5B%5D=234062&post_ids%5B%5D=235621&post_ids%5B%5D=235901&post_ids%5B%5D=240785&post_ids%5B%5D=241521&post_ids%5B%5D=244829&post_ids%5B%5D=244833&post_ids%5B%5D=244880&post_ids%5B%5D=244881&post_ids%5B%5D=246204"
+      },
+      {
+        "name": "Zero-knowledge Audiovisual Club (Zk Av Club)",
+        "detail": "Public source captured 2026-10-01T16:04:18.199930+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/43733.json"
+      },
+      {
+        "name": "Forum posts / topic 44447",
+        "detail": "Public source captured 2026-10-01T16:11:26.146799+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/44447/posts.json?post_ids%5B%5D=201488&post_ids%5B%5D=201495&post_ids%5B%5D=201526&post_ids%5B%5D=201572&post_ids%5B%5D=201573&post_ids%5B%5D=201718&post_ids%5B%5D=201972&post_ids%5B%5D=201976&post_ids%5B%5D=202000&post_ids%5B%5D=202332&post_ids%5B%5D=202333&post_ids%5B%5D=202335&post_ids%5B%5D=202424&post_ids%5B%5D=202440&post_ids%5B%5D=202918&post_ids%5B%5D=202974&post_ids%5B%5D=203344&post_ids%5B%5D=203913&post_ids%5B%5D=203931&post_ids%5B%5D=203932&post_ids%5B%5D=206844&post_ids%5B%5D=206845&post_ids%5B%5D=206905&post_ids%5B%5D=208189&post_ids%5B%5D=209476&post_ids%5B%5D=210925&post_ids%5B%5D=212677&post_ids%5B%5D=212760&post_ids%5B%5D=212864&post_ids%5B%5D=214675&post_ids%5B%5D=214678&post_ids%5B%5D=219498&post_ids%5B%5D=219630&post_ids%5B%5D=219838&post_ids%5B%5D=219870&post_ids%5B%5D=220269&post_ids%5B%5D=220314&post_ids%5B%5D=220502&post_ids%5B%5D=220729&post_ids%5B%5D=220898&post_ids%5B%5D=220899&post_ids%5B%5D=220965&post_ids%5B%5D=221371&post_ids%5B%5D=221372&post_ids%5B%5D=221473&post_ids%5B%5D=223136&post_ids%5B%5D=223137&post_ids%5B%5D=223173&post_ids%5B%5D=223393&post_ids%5B%5D=223967"
+      },
+      {
+        "name": "Forum posts / topic 44447",
+        "detail": "Public source captured 2026-10-01T16:11:26.256336+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/44447/posts.json?post_ids%5B%5D=224668&post_ids%5B%5D=224840&post_ids%5B%5D=225180&post_ids%5B%5D=225443&post_ids%5B%5D=226278&post_ids%5B%5D=226329&post_ids%5B%5D=226921&post_ids%5B%5D=226929&post_ids%5B%5D=227039&post_ids%5B%5D=227085&post_ids%5B%5D=227152&post_ids%5B%5D=227499&post_ids%5B%5D=227640&post_ids%5B%5D=228224&post_ids%5B%5D=230058&post_ids%5B%5D=230164&post_ids%5B%5D=230586&post_ids%5B%5D=230672&post_ids%5B%5D=230945&post_ids%5B%5D=231218&post_ids%5B%5D=231219&post_ids%5B%5D=231324&post_ids%5B%5D=231504&post_ids%5B%5D=231627&post_ids%5B%5D=231727&post_ids%5B%5D=231925&post_ids%5B%5D=231954&post_ids%5B%5D=232383&post_ids%5B%5D=232390&post_ids%5B%5D=233350&post_ids%5B%5D=233688&post_ids%5B%5D=233689&post_ids%5B%5D=233690&post_ids%5B%5D=233691&post_ids%5B%5D=234060&post_ids%5B%5D=234269&post_ids%5B%5D=234598&post_ids%5B%5D=235504&post_ids%5B%5D=235910&post_ids%5B%5D=236238&post_ids%5B%5D=236362&post_ids%5B%5D=237494&post_ids%5B%5D=238452&post_ids%5B%5D=239473&post_ids%5B%5D=239957&post_ids%5B%5D=240201&post_ids%5B%5D=240570&post_ids%5B%5D=241047&post_ids%5B%5D=241670"
+      },
+      {
+        "name": "Zcast, el podcast de Zcash en Español",
+        "detail": "Public source captured 2026-10-01T16:04:18.587021+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/44447.json"
+      },
+      {
+        "name": "Forum posts / topic 46688",
+        "detail": "Public source captured 2026-10-01T16:28:47.492807+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/46688/posts.json?post_ids%5B%5D=216004&post_ids%5B%5D=216877&post_ids%5B%5D=216878&post_ids%5B%5D=216909&post_ids%5B%5D=217115&post_ids%5B%5D=217710&post_ids%5B%5D=217711&post_ids%5B%5D=217712&post_ids%5B%5D=218128&post_ids%5B%5D=218618&post_ids%5B%5D=220233&post_ids%5B%5D=220234&post_ids%5B%5D=220552&post_ids%5B%5D=220687&post_ids%5B%5D=220702&post_ids%5B%5D=220985&post_ids%5B%5D=221110&post_ids%5B%5D=221451&post_ids%5B%5D=221452&post_ids%5B%5D=221539&post_ids%5B%5D=221747&post_ids%5B%5D=223335&post_ids%5B%5D=223362&post_ids%5B%5D=223374&post_ids%5B%5D=225955&post_ids%5B%5D=227644&post_ids%5B%5D=227719&post_ids%5B%5D=227907&post_ids%5B%5D=228051&post_ids%5B%5D=229229&post_ids%5B%5D=229564&post_ids%5B%5D=253054&post_ids%5B%5D=255896&post_ids%5B%5D=255897"
+      },
+      {
+        "name": "Revised Nym for ZCash Network-level Privacy",
+        "detail": "Public source captured 2026-10-01T16:13:36.771353+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/46688.json"
+      },
+      {
+        "name": "Forum posts / topic 49458",
+        "detail": "Public source captured 2026-10-01T16:11:24.237887+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/49458/posts.json?post_ids%5B%5D=224132&post_ids%5B%5D=224143&post_ids%5B%5D=224214&post_ids%5B%5D=224281&post_ids%5B%5D=225171&post_ids%5B%5D=226793&post_ids%5B%5D=226797&post_ids%5B%5D=226804&post_ids%5B%5D=226897&post_ids%5B%5D=228127&post_ids%5B%5D=228136&post_ids%5B%5D=228139&post_ids%5B%5D=228512&post_ids%5B%5D=228978&post_ids%5B%5D=228981&post_ids%5B%5D=228982&post_ids%5B%5D=229045&post_ids%5B%5D=229046&post_ids%5B%5D=229167&post_ids%5B%5D=229888&post_ids%5B%5D=230807&post_ids%5B%5D=230825&post_ids%5B%5D=230828&post_ids%5B%5D=231155&post_ids%5B%5D=231209&post_ids%5B%5D=231490&post_ids%5B%5D=231594&post_ids%5B%5D=232404&post_ids%5B%5D=233246&post_ids%5B%5D=233254&post_ids%5B%5D=233255&post_ids%5B%5D=233261&post_ids%5B%5D=233264&post_ids%5B%5D=234144&post_ids%5B%5D=235871&post_ids%5B%5D=238912&post_ids%5B%5D=238913&post_ids%5B%5D=240852"
+      },
+      {
+        "name": "Zcash Brazil | 2025",
+        "detail": "Public source captured 2026-10-01T16:04:18.720633+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/49458.json"
+      },
+      {
+        "name": "Zcash Global Germany",
+        "detail": "Public source captured 2026-10-01T16:04:19.401935+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50169.json"
+      },
+      {
+        "name": "🍣 Boston Zcash Meetup – March 06",
+        "detail": "Public source captured 2026-10-01T16:04:19.831240+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50373.json"
+      },
+      {
+        "name": "Forum posts / topic 50450",
+        "detail": "Public source captured 2026-10-01T16:11:22.448861+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50450/posts.json?post_ids%5B%5D=231578&post_ids%5B%5D=231891&post_ids%5B%5D=232256&post_ids%5B%5D=232268&post_ids%5B%5D=232630&post_ids%5B%5D=233018&post_ids%5B%5D=233366&post_ids%5B%5D=233416&post_ids%5B%5D=233907&post_ids%5B%5D=234384&post_ids%5B%5D=235170&post_ids%5B%5D=235833&post_ids%5B%5D=235872&post_ids%5B%5D=236007&post_ids%5B%5D=237093&post_ids%5B%5D=240086&post_ids%5B%5D=240118&post_ids%5B%5D=240119&post_ids%5B%5D=241469&post_ids%5B%5D=242277&post_ids%5B%5D=243058&post_ids%5B%5D=243107&post_ids%5B%5D=243722&post_ids%5B%5D=244475&post_ids%5B%5D=244907&post_ids%5B%5D=245616&post_ids%5B%5D=246298&post_ids%5B%5D=246904&post_ids%5B%5D=246905&post_ids%5B%5D=248167&post_ids%5B%5D=248766&post_ids%5B%5D=249267&post_ids%5B%5D=250153&post_ids%5B%5D=251798&post_ids%5B%5D=253269&post_ids%5B%5D=253270&post_ids%5B%5D=254652&post_ids%5B%5D=254653&post_ids%5B%5D=255445"
+      },
+      {
+        "name": "ZCG RFP: Community Note Taker 2025",
+        "detail": "Public source captured 2026-10-01T16:04:20.248499+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50450.json"
+      },
+      {
+        "name": "Zechub DAO- Zcash Korea Ambassador Proposal (Approved)",
+        "detail": "Public source captured 2026-10-01T16:04:20.549918+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50498.json"
+      },
+      {
+        "name": "Forum posts / topic 50951",
+        "detail": "Public source captured 2026-10-01T16:11:27.954608+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50951/posts.json?post_ids%5B%5D=229961&post_ids%5B%5D=229962&post_ids%5B%5D=229967&post_ids%5B%5D=230113&post_ids%5B%5D=230114&post_ids%5B%5D=230117&post_ids%5B%5D=230210&post_ids%5B%5D=230213&post_ids%5B%5D=230215&post_ids%5B%5D=230216&post_ids%5B%5D=231376&post_ids%5B%5D=231378&post_ids%5B%5D=231383&post_ids%5B%5D=231384&post_ids%5B%5D=231385&post_ids%5B%5D=231435&post_ids%5B%5D=231485&post_ids%5B%5D=231511&post_ids%5B%5D=231520&post_ids%5B%5D=231525&post_ids%5B%5D=231526&post_ids%5B%5D=231527&post_ids%5B%5D=231528&post_ids%5B%5D=231529&post_ids%5B%5D=231530&post_ids%5B%5D=231531&post_ids%5B%5D=231535&post_ids%5B%5D=231541&post_ids%5B%5D=231545&post_ids%5B%5D=231547&post_ids%5B%5D=231548&post_ids%5B%5D=231550&post_ids%5B%5D=231554&post_ids%5B%5D=231569&post_ids%5B%5D=231570&post_ids%5B%5D=231904&post_ids%5B%5D=231906&post_ids%5B%5D=231908&post_ids%5B%5D=231983&post_ids%5B%5D=231984&post_ids%5B%5D=231986&post_ids%5B%5D=231990&post_ids%5B%5D=231995&post_ids%5B%5D=232005&post_ids%5B%5D=232321&post_ids%5B%5D=232327&post_ids%5B%5D=232330&post_ids%5B%5D=232335&post_ids%5B%5D=232342&post_ids%5B%5D=232343"
+      },
+      {
+        "name": "Forum posts / topic 50951",
+        "detail": "Public source captured 2026-10-01T16:11:28.080605+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50951/posts.json?post_ids%5B%5D=232347&post_ids%5B%5D=232348&post_ids%5B%5D=232351&post_ids%5B%5D=232353&post_ids%5B%5D=232354&post_ids%5B%5D=232355&post_ids%5B%5D=232356&post_ids%5B%5D=232357&post_ids%5B%5D=232358&post_ids%5B%5D=232359&post_ids%5B%5D=232360&post_ids%5B%5D=232361&post_ids%5B%5D=232362&post_ids%5B%5D=232366&post_ids%5B%5D=232368&post_ids%5B%5D=232369&post_ids%5B%5D=232370&post_ids%5B%5D=232372&post_ids%5B%5D=232436&post_ids%5B%5D=232665&post_ids%5B%5D=232667&post_ids%5B%5D=232742&post_ids%5B%5D=232768&post_ids%5B%5D=232846&post_ids%5B%5D=232860&post_ids%5B%5D=232863&post_ids%5B%5D=232865&post_ids%5B%5D=232876&post_ids%5B%5D=232877&post_ids%5B%5D=232901&post_ids%5B%5D=232914&post_ids%5B%5D=232916&post_ids%5B%5D=232923&post_ids%5B%5D=232925&post_ids%5B%5D=232928&post_ids%5B%5D=232959&post_ids%5B%5D=232960&post_ids%5B%5D=232963&post_ids%5B%5D=232994&post_ids%5B%5D=233009&post_ids%5B%5D=233010&post_ids%5B%5D=233015&post_ids%5B%5D=233016&post_ids%5B%5D=233019&post_ids%5B%5D=233020&post_ids%5B%5D=233021&post_ids%5B%5D=233030&post_ids%5B%5D=233054&post_ids%5B%5D=233929&post_ids%5B%5D=233930"
+      },
+      {
+        "name": "Forum posts / topic 50951",
+        "detail": "Public source captured 2026-10-01T16:11:29.084771+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50951/posts.json?post_ids%5B%5D=234230&post_ids%5B%5D=234258&post_ids%5B%5D=234270&post_ids%5B%5D=234282&post_ids%5B%5D=234283&post_ids%5B%5D=236186&post_ids%5B%5D=239342&post_ids%5B%5D=239373&post_ids%5B%5D=239378&post_ids%5B%5D=239379&post_ids%5B%5D=239696&post_ids%5B%5D=241534&post_ids%5B%5D=241541&post_ids%5B%5D=243168&post_ids%5B%5D=244364&post_ids%5B%5D=244450&post_ids%5B%5D=244451&post_ids%5B%5D=244452&post_ids%5B%5D=244456&post_ids%5B%5D=244674&post_ids%5B%5D=246024&post_ids%5B%5D=246028&post_ids%5B%5D=246041&post_ids%5B%5D=246042&post_ids%5B%5D=246083&post_ids%5B%5D=246141&post_ids%5B%5D=246569&post_ids%5B%5D=246756&post_ids%5B%5D=246760&post_ids%5B%5D=247030&post_ids%5B%5D=247034&post_ids%5B%5D=247043&post_ids%5B%5D=247045&post_ids%5B%5D=247101&post_ids%5B%5D=249201&post_ids%5B%5D=249458&post_ids%5B%5D=249475&post_ids%5B%5D=249493&post_ids%5B%5D=249519&post_ids%5B%5D=251806&post_ids%5B%5D=251913&post_ids%5B%5D=252575&post_ids%5B%5D=252797&post_ids%5B%5D=252798&post_ids%5B%5D=255022&post_ids%5B%5D=255126&post_ids%5B%5D=255141&post_ids%5B%5D=255159&post_ids%5B%5D=255685&post_ids%5B%5D=255687"
+      },
+      {
+        "name": "Forum posts / topic 50951",
+        "detail": "Public source captured 2026-10-01T16:11:29.258604+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50951/posts.json?post_ids%5B%5D=255771"
+      },
+      {
+        "name": "A Path Forward for Ledger and Zcash",
+        "detail": "Public source captured 2026-10-01T16:04:20.646450+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/50951.json"
+      },
+      {
+        "name": "Forum posts / topic 51247",
+        "detail": "Public source captured 2026-10-01T16:11:29.679956+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/51247/posts.json?post_ids%5B%5D=232938&post_ids%5B%5D=233267&post_ids%5B%5D=233295&post_ids%5B%5D=233303&post_ids%5B%5D=233317&post_ids%5B%5D=233394&post_ids%5B%5D=233446&post_ids%5B%5D=234016&post_ids%5B%5D=234275&post_ids%5B%5D=234330&post_ids%5B%5D=234382&post_ids%5B%5D=235421&post_ids%5B%5D=235873&post_ids%5B%5D=236058&post_ids%5B%5D=239037&post_ids%5B%5D=244677&post_ids%5B%5D=244767&post_ids%5B%5D=244779&post_ids%5B%5D=244780&post_ids%5B%5D=244839&post_ids%5B%5D=244856&post_ids%5B%5D=244863&post_ids%5B%5D=244997&post_ids%5B%5D=246110&post_ids%5B%5D=246111&post_ids%5B%5D=246119&post_ids%5B%5D=246223&post_ids%5B%5D=246990&post_ids%5B%5D=247533&post_ids%5B%5D=249356&post_ids%5B%5D=249920&post_ids%5B%5D=250211&post_ids%5B%5D=250482&post_ids%5B%5D=250587&post_ids%5B%5D=251478&post_ids%5B%5D=252580&post_ids%5B%5D=252598&post_ids%5B%5D=253049&post_ids%5B%5D=253050&post_ids%5B%5D=253098&post_ids%5B%5D=253127&post_ids%5B%5D=253171&post_ids%5B%5D=253251&post_ids%5B%5D=254372&post_ids%5B%5D=254383&post_ids%5B%5D=254389&post_ids%5B%5D=254402&post_ids%5B%5D=254469&post_ids%5B%5D=255317&post_ids%5B%5D=255542"
+      },
+      {
+        "name": "Club Zcash Barcelona, the journey begins!",
+        "detail": "Public source captured 2026-10-01T16:04:20.982567+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/51247.json"
+      },
+      {
+        "name": "Zcash Ukraine Regional Community Initiative",
+        "detail": "Public source captured 2026-10-01T16:04:21.764500+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/52330.json"
+      },
+      {
+        "name": "Artkor aka ruzcash for ZCG (December 2025)",
+        "detail": "Public source captured 2026-10-01T16:04:22.206528+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53449.json"
+      },
+      {
+        "name": "Zcash Nigeria 2026",
+        "detail": "Public source captured 2026-10-01T16:04:22.264144+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53654.json"
+      },
+      {
+        "name": "Forum posts / topic 53686",
+        "detail": "Public source captured 2026-10-01T16:11:26.830330+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53686/posts.json?post_ids%5B%5D=244089&post_ids%5B%5D=244135&post_ids%5B%5D=244139&post_ids%5B%5D=245427&post_ids%5B%5D=245433&post_ids%5B%5D=246871&post_ids%5B%5D=246876&post_ids%5B%5D=246879&post_ids%5B%5D=246881&post_ids%5B%5D=246890&post_ids%5B%5D=246896&post_ids%5B%5D=246901&post_ids%5B%5D=246991&post_ids%5B%5D=247846&post_ids%5B%5D=248211&post_ids%5B%5D=248213&post_ids%5B%5D=248236&post_ids%5B%5D=248237&post_ids%5B%5D=248240&post_ids%5B%5D=248256&post_ids%5B%5D=248259&post_ids%5B%5D=248260&post_ids%5B%5D=250422&post_ids%5B%5D=250425&post_ids%5B%5D=250427&post_ids%5B%5D=250432&post_ids%5B%5D=250460&post_ids%5B%5D=250467&post_ids%5B%5D=250520&post_ids%5B%5D=250543&post_ids%5B%5D=251136&post_ids%5B%5D=252113&post_ids%5B%5D=252121&post_ids%5B%5D=252122&post_ids%5B%5D=252157&post_ids%5B%5D=252240&post_ids%5B%5D=254017&post_ids%5B%5D=254022&post_ids%5B%5D=254023&post_ids%5B%5D=254024&post_ids%5B%5D=255688&post_ids%5B%5D=255690"
+      },
+      {
+        "name": "ZecHub 2026",
+        "detail": "Public source captured 2026-10-01T16:04:22.951717+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53686.json"
+      },
+      {
+        "name": "Forum posts / topic 53702",
+        "detail": "Public source captured 2026-10-01T16:11:26.046978+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53702/posts.json?post_ids%5B%5D=250369&post_ids%5B%5D=252050&post_ids%5B%5D=252068&post_ids%5B%5D=252070&post_ids%5B%5D=253894&post_ids%5B%5D=253926&post_ids%5B%5D=256368&post_ids%5B%5D=256369"
+      },
+      {
+        "name": "Zcash Brazil | 2026",
+        "detail": "Public source captured 2026-10-01T16:04:23.603500+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53702.json"
+      },
+      {
+        "name": "Forum posts / topic 53815",
+        "detail": "Public source captured 2026-10-01T16:11:33.631045+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53815/posts.json?post_ids%5B%5D=241187&post_ids%5B%5D=241206&post_ids%5B%5D=241408&post_ids%5B%5D=241503&post_ids%5B%5D=242937&post_ids%5B%5D=244292&post_ids%5B%5D=245626&post_ids%5B%5D=246732&post_ids%5B%5D=247055&post_ids%5B%5D=248638&post_ids%5B%5D=250660&post_ids%5B%5D=252309&post_ids%5B%5D=254050"
+      },
+      {
+        "name": "Zcash Global en Español 2026",
+        "detail": "Public source captured 2026-10-01T16:04:23.615361+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53815.json"
+      },
+      {
+        "name": "Forum posts / topic 53913",
+        "detail": "Public source captured 2026-10-01T16:11:33.383837+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53913/posts.json?post_ids%5B%5D=243581&post_ids%5B%5D=243583&post_ids%5B%5D=243612&post_ids%5B%5D=244206&post_ids%5B%5D=244247&post_ids%5B%5D=244509&post_ids%5B%5D=244527&post_ids%5B%5D=245067&post_ids%5B%5D=245174&post_ids%5B%5D=246455&post_ids%5B%5D=246488&post_ids%5B%5D=246489&post_ids%5B%5D=246715&post_ids%5B%5D=246813&post_ids%5B%5D=246830&post_ids%5B%5D=248029&post_ids%5B%5D=248923&post_ids%5B%5D=249875&post_ids%5B%5D=250224&post_ids%5B%5D=250226&post_ids%5B%5D=250247&post_ids%5B%5D=250438&post_ids%5B%5D=250798&post_ids%5B%5D=251312&post_ids%5B%5D=251313&post_ids%5B%5D=251464&post_ids%5B%5D=251878&post_ids%5B%5D=252064&post_ids%5B%5D=252182&post_ids%5B%5D=252220&post_ids%5B%5D=253161&post_ids%5B%5D=253172&post_ids%5B%5D=253182&post_ids%5B%5D=253376&post_ids%5B%5D=253631&post_ids%5B%5D=253632&post_ids%5B%5D=256032&post_ids%5B%5D=256091&post_ids%5B%5D=256162"
+      },
+      {
+        "name": "Zcash Community Media Infrastructure & Support | Zk Av Club 2026",
+        "detail": "Public source captured 2026-10-01T16:04:24.878488+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/53913.json"
+      },
+      {
+        "name": "Zcash Ukraine – Monthly Report (December 1–31, 2025)",
+        "detail": "Public source captured 2026-10-01T16:04:25.040363+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54059.json"
+      },
+      {
+        "name": "Forum posts / topic 54291",
+        "detail": "Public source captured 2026-10-01T16:11:24.572653+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54291/posts.json?post_ids%5B%5D=248129&post_ids%5B%5D=248157&post_ids%5B%5D=248159&post_ids%5B%5D=248935&post_ids%5B%5D=249015&post_ids%5B%5D=249085&post_ids%5B%5D=249568&post_ids%5B%5D=250997&post_ids%5B%5D=251917&post_ids%5B%5D=252048&post_ids%5B%5D=252516&post_ids%5B%5D=252711&post_ids%5B%5D=253380&post_ids%5B%5D=253383&post_ids%5B%5D=253419&post_ids%5B%5D=253607&post_ids%5B%5D=253979&post_ids%5B%5D=255648&post_ids%5B%5D=255649&post_ids%5B%5D=255650&post_ids%5B%5D=255745&post_ids%5B%5D=255746"
+      },
+      {
+        "name": "Zcast, the Zcash podcast in Spanish - A new phase",
+        "detail": "Public source captured 2026-10-01T16:04:25.489769+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54291.json"
+      },
+      {
+        "name": "Zcash India 2026 Grant Application",
+        "detail": "Public source captured 2026-10-01T16:04:25.679795+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54544.json"
+      },
+      {
+        "name": "ZECA: The Shielded Voice",
+        "detail": "Public source captured 2026-10-01T16:04:26.246589+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54628.json"
+      },
+      {
+        "name": "Zcash India 2026",
+        "detail": "Public source captured 2026-10-01T16:04:26.402831+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54762.json"
+      },
+      {
+        "name": "[Grant Application] Strategic Lobbying and Community Building for the Proliferation and Understanding of Zcash in Japan",
+        "detail": "Public source captured 2026-10-01T16:04:26.820923+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/54827.json"
+      },
+      {
+        "name": "Forum posts / topic 55210",
+        "detail": "Public source captured 2026-10-01T16:28:45.802570+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55210/posts.json?post_ids%5B%5D=246247&post_ids%5B%5D=246255&post_ids%5B%5D=246276&post_ids%5B%5D=246321&post_ids%5B%5D=246324&post_ids%5B%5D=246330&post_ids%5B%5D=246332&post_ids%5B%5D=246338&post_ids%5B%5D=246558&post_ids%5B%5D=246575&post_ids%5B%5D=246752&post_ids%5B%5D=246788&post_ids%5B%5D=246791&post_ids%5B%5D=246799&post_ids%5B%5D=247083&post_ids%5B%5D=247276&post_ids%5B%5D=248109&post_ids%5B%5D=248111&post_ids%5B%5D=248133&post_ids%5B%5D=248450&post_ids%5B%5D=248479&post_ids%5B%5D=249063&post_ids%5B%5D=249222&post_ids%5B%5D=249234&post_ids%5B%5D=249507&post_ids%5B%5D=250120&post_ids%5B%5D=250125&post_ids%5B%5D=250132&post_ids%5B%5D=250139&post_ids%5B%5D=250140&post_ids%5B%5D=250202&post_ids%5B%5D=250206&post_ids%5B%5D=250214&post_ids%5B%5D=250223&post_ids%5B%5D=250232&post_ids%5B%5D=250278&post_ids%5B%5D=250316&post_ids%5B%5D=250364&post_ids%5B%5D=250373&post_ids%5B%5D=250378&post_ids%5B%5D=250390&post_ids%5B%5D=250405&post_ids%5B%5D=250407&post_ids%5B%5D=250431&post_ids%5B%5D=250453&post_ids%5B%5D=250466&post_ids%5B%5D=250469&post_ids%5B%5D=250472&post_ids%5B%5D=250573&post_ids%5B%5D=250757"
+      },
+      {
+        "name": "Forum posts / topic 55210",
+        "detail": "Public source captured 2026-10-01T16:28:45.802720+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55210/posts.json?post_ids%5B%5D=250789&post_ids%5B%5D=250877&post_ids%5B%5D=250922&post_ids%5B%5D=250963&post_ids%5B%5D=250977&post_ids%5B%5D=250978&post_ids%5B%5D=251506&post_ids%5B%5D=252726&post_ids%5B%5D=252903&post_ids%5B%5D=253129&post_ids%5B%5D=253633&post_ids%5B%5D=253663&post_ids%5B%5D=254096&post_ids%5B%5D=254327&post_ids%5B%5D=254328&post_ids%5B%5D=254400&post_ids%5B%5D=254403&post_ids%5B%5D=255223&post_ids%5B%5D=255242&post_ids%5B%5D=255777&post_ids%5B%5D=255849&post_ids%5B%5D=255922&post_ids%5B%5D=255985&post_ids%5B%5D=255988&post_ids%5B%5D=256109&post_ids%5B%5D=256151&post_ids%5B%5D=256153&post_ids%5B%5D=256155&post_ids%5B%5D=256156"
+      },
+      {
+        "name": "Crosslink: Incentivized Feature Net",
+        "detail": "Public source captured 2026-10-01T16:13:25.373916+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55210.json"
+      },
+      {
+        "name": "Forum posts / topic 55269",
+        "detail": "Public source captured 2026-10-01T16:28:47.679358+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55269/posts.json?post_ids%5B%5D=255349&post_ids%5B%5D=255384&post_ids%5B%5D=255462&post_ids%5B%5D=256060"
+      },
+      {
+        "name": "Zcash Network School",
+        "detail": "Public source captured 2026-10-01T16:13:35.866094+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55269.json"
+      },
+      {
+        "name": "Кошелёк Zodl больше недоступен в российских магазинах приложений",
+        "detail": "Public source captured 2026-10-01T16:04:27.020465+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55305.json"
+      },
+      {
+        "name": "Zcash Engage Server",
+        "detail": "Public source captured 2026-10-01T16:04:27.664533+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55358.json"
+      },
+      {
+        "name": "Forum posts / topic 5544",
+        "detail": "Public source captured 2026-10-01T16:11:22.448011+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/5544/posts.json?post_ids%5B%5D=22303&post_ids%5B%5D=22315&post_ids%5B%5D=22320&post_ids%5B%5D=22325&post_ids%5B%5D=22326&post_ids%5B%5D=22329&post_ids%5B%5D=22332&post_ids%5B%5D=22350&post_ids%5B%5D=22357&post_ids%5B%5D=22363&post_ids%5B%5D=22368&post_ids%5B%5D=22371&post_ids%5B%5D=22384&post_ids%5B%5D=22389&post_ids%5B%5D=22396&post_ids%5B%5D=22402&post_ids%5B%5D=22404&post_ids%5B%5D=22405&post_ids%5B%5D=22407&post_ids%5B%5D=22409&post_ids%5B%5D=22412&post_ids%5B%5D=22415&post_ids%5B%5D=22419&post_ids%5B%5D=22442&post_ids%5B%5D=22443&post_ids%5B%5D=22454&post_ids%5B%5D=22458&post_ids%5B%5D=22475&post_ids%5B%5D=22490&post_ids%5B%5D=22528&post_ids%5B%5D=22590&post_ids%5B%5D=22596&post_ids%5B%5D=22672&post_ids%5B%5D=22674&post_ids%5B%5D=22676&post_ids%5B%5D=22680&post_ids%5B%5D=22797&post_ids%5B%5D=22961&post_ids%5B%5D=22998&post_ids%5B%5D=23008&post_ids%5B%5D=23011&post_ids%5B%5D=23012&post_ids%5B%5D=23019&post_ids%5B%5D=23023&post_ids%5B%5D=23030&post_ids%5B%5D=23031&post_ids%5B%5D=23033&post_ids%5B%5D=23038&post_ids%5B%5D=23054&post_ids%5B%5D=23058"
+      },
+      {
+        "name": "Forum posts / topic 5544",
+        "detail": "Public source captured 2026-10-01T16:11:22.448571+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/5544/posts.json?post_ids%5B%5D=23059&post_ids%5B%5D=23060&post_ids%5B%5D=24443&post_ids%5B%5D=25317&post_ids%5B%5D=26553&post_ids%5B%5D=26557&post_ids%5B%5D=26567&post_ids%5B%5D=26571&post_ids%5B%5D=26572&post_ids%5B%5D=26575&post_ids%5B%5D=26600&post_ids%5B%5D=26662&post_ids%5B%5D=26664&post_ids%5B%5D=26709&post_ids%5B%5D=26711&post_ids%5B%5D=26712&post_ids%5B%5D=26715&post_ids%5B%5D=26768&post_ids%5B%5D=27425&post_ids%5B%5D=27658&post_ids%5B%5D=41572&post_ids%5B%5D=41633&post_ids%5B%5D=41862&post_ids%5B%5D=41936&post_ids%5B%5D=41957&post_ids%5B%5D=41981&post_ids%5B%5D=43334&post_ids%5B%5D=52564&post_ids%5B%5D=52993&post_ids%5B%5D=52995&post_ids%5B%5D=53062&post_ids%5B%5D=53064&post_ids%5B%5D=53066&post_ids%5B%5D=53077&post_ids%5B%5D=53086&post_ids%5B%5D=57313&post_ids%5B%5D=57740&post_ids%5B%5D=63405&post_ids%5B%5D=63900&post_ids%5B%5D=63904&post_ids%5B%5D=71169&post_ids%5B%5D=77074&post_ids%5B%5D=106318&post_ids%5B%5D=151428&post_ids%5B%5D=153450&post_ids%5B%5D=154952&post_ids%5B%5D=154971"
+      },
+      {
+        "name": "The French Corner / Le coin des Français",
+        "detail": "Public source captured 2026-10-01T16:04:16.582550+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/5544.json"
+      },
+      {
+        "name": "Zcash University Outreach Initiative – Mexico 2026 (CodeRaiz Proposal)",
+        "detail": "Public source captured 2026-10-01T16:04:27.996908+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55506.json"
+      },
+      {
+        "name": "The Spanish-speaking Zcash community now has its own node!",
+        "detail": "Public source captured 2026-10-01T16:04:28.503997+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55530.json"
+      },
+      {
+        "name": "Pesa Ya Siri: Making Zcash a Household Name in Tanzania",
+        "detail": "Public source captured 2026-10-01T16:04:28.631338+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55558.json"
+      },
+      {
+        "name": "Forum posts / topic 55685",
+        "detail": "Public source captured 2026-10-01T16:11:33.422182+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55685/posts.json?post_ids%5B%5D=253401"
+      },
+      {
+        "name": "Zcash en Español X account suspended",
+        "detail": "Public source captured 2026-10-01T16:04:29.311576+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55685.json"
+      },
+      {
+        "name": "Privacy has landed in South Africa! Join in",
+        "detail": "Public source captured 2026-10-01T16:04:29.361318+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55706.json"
+      },
+      {
+        "name": "Zcash Club Querétaro-Mexico: advancing financial privacy in Mexico",
+        "detail": "Public source captured 2026-10-01T16:04:29.929845+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55764.json"
+      },
+      {
+        "name": "Forum posts / topic 55845",
+        "detail": "Public source captured 2026-10-01T16:11:22.448736+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55845/posts.json?post_ids%5B%5D=253080&post_ids%5B%5D=253108&post_ids%5B%5D=253249&post_ids%5B%5D=253647&post_ids%5B%5D=253651&post_ids%5B%5D=253655&post_ids%5B%5D=254745&post_ids%5B%5D=256180"
+      },
+      {
+        "name": "Zainod release announcements",
+        "detail": "Public source captured 2026-10-01T16:04:30.055293+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55845.json"
+      },
+      {
+        "name": "🚀 Zcash East Africa Official Launch & Community Onboarding Meetup",
+        "detail": "Public source captured 2026-10-01T16:04:30.504799+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/55860.json"
+      },
+      {
+        "name": "ZecHub DAO — Proposal A149: Phase 1 Progress Report",
+        "detail": "Public source captured 2026-10-01T16:04:30.764861+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56030.json"
+      },
+      {
+        "name": "Zcash Ghana (July 2026 - September 2026)",
+        "detail": "Public source captured 2026-10-01T16:04:31.562930+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56214.json"
+      },
+      {
+        "name": "Zcash Türkiye 2026 Q3-4 - 2027 Q1-2-3-4",
+        "detail": "Public source captured 2026-10-01T16:04:31.668884+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56274.json"
+      },
+      {
+        "name": "University of Ibadan Zcash Bootcamp: Privacy, Shielded Finance, and Real Adoption in Ibadan, Nigeria",
+        "detail": "Public source captured 2026-10-01T16:04:31.711121+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56291.json"
+      },
+      {
+        "name": "Mandatory ID registration on mobile lines in Mexico before June 30: The role of Zcash in México",
+        "detail": "Public source captured 2026-10-01T16:04:32.454126+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56305.json"
+      },
+      {
+        "name": "PGPZ Community Weekly Policy Memos",
+        "detail": "Public source captured 2026-10-01T16:04:33.186465+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56324.json"
+      },
+      {
+        "name": "Zcash East Africa (June-July 2026)",
+        "detail": "Public source captured 2026-10-01T16:04:33.482361+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56405.json"
+      },
+      {
+        "name": "Zcash China 还有人吗? 想交流",
+        "detail": "Public source captured 2026-10-01T16:04:33.624021+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56438.json"
+      },
+      {
+        "name": "Forum posts / topic 56445",
+        "detail": "Public source captured 2026-10-01T16:11:24.386099+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56445/posts.json?post_ids%5B%5D=250752&post_ids%5B%5D=250803&post_ids%5B%5D=250804&post_ids%5B%5D=250864&post_ids%5B%5D=251473&post_ids%5B%5D=251474&post_ids%5B%5D=251475&post_ids%5B%5D=251578&post_ids%5B%5D=252009&post_ids%5B%5D=252275&post_ids%5B%5D=252498&post_ids%5B%5D=252512&post_ids%5B%5D=252517&post_ids%5B%5D=252705&post_ids%5B%5D=253245&post_ids%5B%5D=253336&post_ids%5B%5D=253490&post_ids%5B%5D=253521&post_ids%5B%5D=254122&post_ids%5B%5D=254176&post_ids%5B%5D=254609&post_ids%5B%5D=254639&post_ids%5B%5D=254944&post_ids%5B%5D=256080&post_ids%5B%5D=256275&post_ids%5B%5D=256298"
+      },
+      {
+        "name": "Zcash for Venezuela! 🇻🇪💛",
+        "detail": "Public source captured 2026-10-01T16:04:33.853197+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56445.json"
+      },
+      {
+        "name": "Zechub DAO- 2026 Zcash Korea Ambassador Proposal (Approved)",
+        "detail": "Public source captured 2026-10-01T16:04:34.752488+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56458.json"
+      },
+      {
+        "name": "Grant Application - ZECsy Team Marketing at Cypherpunk Week in Amsterdam",
+        "detail": "Public source captured 2026-10-01T16:04:35.021458+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56509.json"
+      },
+      {
+        "name": "Zcash first community event in Pretoria, SA",
+        "detail": "Public source captured 2026-10-01T16:04:35.266180+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56576.json"
+      },
+      {
+        "name": "Zcash Arabia (June to September 2026)",
+        "detail": "Public source captured 2026-10-01T16:04:35.379170+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56580.json"
+      },
+      {
+        "name": "What If Buying Zcash Was as Easy as Buying Airtime?",
+        "detail": "Public source captured 2026-10-01T16:04:36.199080+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56593.json"
+      },
+      {
+        "name": "🌆 Boston Zcash Meetup – July 28 – Ironwood Launch Event, ft. Zooko 🍾",
+        "detail": "Public source captured 2026-10-01T16:04:36.446326+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56748.json"
+      },
+      {
+        "name": "🦓 Zcash Ghana — Our First Year Journey (June 2025 – June 2026)",
+        "detail": "Public source captured 2026-10-01T16:04:36.530336+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56792.json"
+      },
+      {
+        "name": "Grant Application - Open Light Nodes: Independent Zcash Light Client Infrastructure for Asia",
+        "detail": "Public source captured 2026-10-01T16:04:36.779234+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56847.json"
+      },
+      {
+        "name": "Global Ambassador Elzz July 2026 Report",
+        "detail": "Public source captured 2026-10-01T16:04:37.584353+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56859.json"
+      },
+      {
+        "name": "ZSA Testnet",
+        "detail": "Public source captured 2026-10-01T16:04:37.865913+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56884.json"
+      },
+      {
+        "name": "Forum posts / topic 56890",
+        "detail": "Public source captured 2026-10-01T16:28:45.802844+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56890/posts.json?post_ids%5B%5D=253934&post_ids%5B%5D=256344&post_ids%5B%5D=256347"
+      },
+      {
+        "name": "Grant Application - ZECsy Community Building: 12 Months of Zcash on the Ground",
+        "detail": "Public source captured 2026-10-01T16:11:36.772757+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56890.json"
+      },
+      {
+        "name": "Zcash Belgium Chapter",
+        "detail": "Public source captured 2026-10-01T16:04:37.875489+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56893.json"
+      },
+      {
+        "name": "From Street Interviews to Education: Growing Zcash Awareness in Türkiye",
+        "detail": "Public source captured 2026-10-01T16:04:38.115050+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56903.json"
+      },
+      {
+        "name": "Forum posts / topic 56912",
+        "detail": "Public source captured 2026-10-01T16:11:24.314878+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56912/posts.json?post_ids%5B%5D=252627&post_ids%5B%5D=252680&post_ids%5B%5D=252681&post_ids%5B%5D=252693&post_ids%5B%5D=252727&post_ids%5B%5D=252729&post_ids%5B%5D=252934&post_ids%5B%5D=252935&post_ids%5B%5D=252965&post_ids%5B%5D=252968&post_ids%5B%5D=252986&post_ids%5B%5D=252995&post_ids%5B%5D=253005&post_ids%5B%5D=253225&post_ids%5B%5D=253247&post_ids%5B%5D=253259&post_ids%5B%5D=253471&post_ids%5B%5D=253509&post_ids%5B%5D=253516&post_ids%5B%5D=253525&post_ids%5B%5D=254970&post_ids%5B%5D=254976&post_ids%5B%5D=254977&post_ids%5B%5D=254978&post_ids%5B%5D=254979&post_ids%5B%5D=254980&post_ids%5B%5D=255000&post_ids%5B%5D=255004&post_ids%5B%5D=255013&post_ids%5B%5D=255015&post_ids%5B%5D=255016&post_ids%5B%5D=255017&post_ids%5B%5D=255068&post_ids%5B%5D=255087"
+      },
+      {
+        "name": "NU7 Coinholder Vote",
+        "detail": "Public source captured 2026-10-01T16:04:39.003354+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/56912.json"
+      },
+      {
+        "name": "Retroactive Grant Application - Ironwood zk-SNARK Formal Verification (Project Tachyon)",
+        "detail": "Public source captured 2026-10-01T16:13:37.132907+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57007.json"
+      },
+      {
+        "name": "Project Tachyon - Bonus Grant for Ironwood zk-SNARK Formal Verification",
+        "detail": "Public source captured 2026-10-01T16:13:37.615344+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57021.json"
+      },
+      {
+        "name": "Big things ahead for Zcash Ghana 🇬🇭",
+        "detail": "Public source captured 2026-10-01T16:04:39.245780+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57023.json"
+      },
+      {
+        "name": "We Need Support with a Testnet ZEC Faucet",
+        "detail": "Public source captured 2026-10-01T16:04:39.274792+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57087.json"
+      },
+      {
+        "name": "Support ZcashSA 🛡️❤️",
+        "detail": "Public source captured 2026-10-01T16:04:39.387146+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57133.json"
+      },
+      {
+        "name": "Zcash East Africa @ ETHSafari 2026",
+        "detail": "Public source captured 2026-10-01T16:04:40.387849+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57144.json"
+      },
+      {
+        "name": "Grant Application - Zcash Arabia (August to December 2026)",
+        "detail": "Public source captured 2026-10-01T16:04:40.598227+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57170.json"
+      },
+      {
+        "name": "Astrea: Extending ZEC into the Agentic Economy",
+        "detail": "Public source captured 2026-10-01T16:13:32.711767+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57210.json"
+      },
+      {
+        "name": "Introducing 0xramp: non-custodial ZEC ↔ local fiat (Pix and more) for emerging markets",
+        "detail": "Public source captured 2026-10-01T16:13:29.896649+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57215.json"
+      },
+      {
+        "name": "Konclave: A group vault on Zcash | FROST",
+        "detail": "Public source captured 2026-10-01T16:04:40.607715+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57218.json"
+      },
+      {
+        "name": "Forum posts / topic 57219",
+        "detail": "Public source captured 2026-10-01T16:11:27.727006+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57219/posts.json?post_ids%5B%5D=255589&post_ids%5B%5D=255668&post_ids%5B%5D=255683&post_ids%5B%5D=255755&post_ids%5B%5D=255856&post_ids%5B%5D=256049&post_ids%5B%5D=256186&post_ids%5B%5D=256365&post_ids%5B%5D=256393"
+      },
+      {
+        "name": "The Zcash Daily",
+        "detail": "Public source captured 2026-10-01T16:04:40.768637+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57219.json"
+      },
+      {
+        "name": "Recoverify — Backup Recovery Verification for Zcash Wallets",
+        "detail": "Public source captured 2026-10-01T16:13:29.883930+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57220.json"
+      },
+      {
+        "name": "Zcash East Africa(August - October 2026)",
+        "detail": "Public source captured 2026-10-01T16:11:36.102112+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57226.json"
+      },
+      {
+        "name": "Zcash 10th Birthday Short Film Festival! Prize Pool: 5–15 ZEC",
+        "detail": "Public source captured 2026-10-01T16:13:33.980713+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57228.json"
+      },
+      {
+        "name": "Zakura Common",
+        "detail": "Public source captured 2026-10-01T16:13:32.563664+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57247.json"
+      },
+      {
+        "name": "Grant Application — Zcash World, Mumbai (Devcon 8 week)",
+        "detail": "Public source captured 2026-10-01T16:13:34.100678+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57253.json"
+      },
+      {
+        "name": "Global Ambassador Elzz August 2026 Report",
+        "detail": "Public source captured 2026-10-01T16:04:42.263539+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57390.json"
+      },
+      {
+        "name": "[Grant Proposal] Colosseum Hackathon | Zcash Track",
+        "detail": "Public source captured 2026-10-01T16:13:25.372904+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57405.json"
+      },
+      {
+        "name": "Introducing ZecGuard",
+        "detail": "Public source captured 2026-10-01T16:13:31.503108+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57418.json"
+      },
+      {
+        "name": "Zcash Flutter Wallet SDK",
+        "detail": "Public source captured 2026-10-01T16:13:29.736026+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57485.json"
+      },
+      {
+        "name": "Grant Application - 24 Videos @zkMarketer",
+        "detail": "Public source captured 2026-10-01T16:13:34.335248+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57494.json"
+      },
+      {
+        "name": "Native offramp Zpay.cash",
+        "detail": "Public source captured 2026-10-01T16:13:31.371759+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57527.json"
+      },
+      {
+        "name": "Small milestone for Gleyo",
+        "detail": "Public source captured 2026-10-01T16:13:30.223676+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57541.json"
+      },
+      {
+        "name": "Ballast Desktop App: Seeking community feedback before open beta",
+        "detail": "Public source captured 2026-10-01T16:13:28.535066+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57543.json"
+      },
+      {
+        "name": "ZIP-321 tells a wallet what to pay. ZecAuth adds authenticated, privacy-aware interaction",
+        "detail": "Public source captured 2026-10-01T16:13:31.067636+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57553.json"
+      },
+      {
+        "name": "LEONINE DAO: Our Zebrad and Lightwalletd in production",
+        "detail": "Public source captured 2026-10-01T16:13:31.597403+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57571.json"
+      },
+      {
+        "name": "Grant Application - GraphSense Zcash Shielded Accounting Repair",
+        "detail": "Public source captured 2026-10-01T16:13:35.368971+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57585.json"
+      },
+      {
+        "name": "NU7 Sentiment Polls Results",
+        "detail": "Public source captured 2026-10-01T16:13:28.648610+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57590.json"
+      },
+      {
+        "name": "Zcash Community Grants Meeting Minutes 9/14/2026",
+        "detail": "Public source captured 2026-10-01T16:04:42.333953+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57615.json"
+      },
+      {
+        "name": "ZEC will become the private money of AI agents. We’re making it happen on AxiomAI",
+        "detail": "Public source captured 2026-10-01T16:13:27.096544+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57621.json"
+      },
+      {
+        "name": "Zcash Ghana (October 2026 - December 2026)",
+        "detail": "Public source captured 2026-10-01T16:13:35.539358+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57632.json"
+      },
+      {
+        "name": "Potential Shielded Zcash support for another hardware wallet (Passport Prime)",
+        "detail": "Public source captured 2026-10-01T16:13:28.583679+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57633.json"
+      },
+      {
+        "name": "Q3 Coinholder-Directed Retroactive Grants Program Voting Now Open!",
+        "detail": "Public source captured 2026-10-01T16:04:42.485015+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57650.json"
+      },
+      {
+        "name": "Starting a Zcash Community in Warsaw — Looking for Advice",
+        "detail": "Public source captured 2026-10-01T16:13:34.050118+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57652.json"
+      },
+      {
+        "name": "NU7 Timeline",
+        "detail": "Public source captured 2026-10-01T16:13:25.373776+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57655.json"
+      },
+      {
+        "name": "Zcash Governance Is a Superpower",
+        "detail": "Public source captured 2026-10-01T16:04:43.621576+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57673.json"
+      },
+      {
+        "name": "Open sourcing a FROST threshold-custody library for shielded ZEC",
+        "detail": "Public source captured 2026-10-01T16:13:28.389877+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57722.json"
+      },
+      {
+        "name": "[Grant application] - Human readable version of Ironwood formal verification, first steps - bulletproofs in the AGM",
+        "detail": "Public source captured 2026-10-01T16:13:35.948642+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57726.json"
+      },
+      {
+        "name": "Grant Application - Zebra-Native Non-Custodial Mining Stack (RobotBase)",
+        "detail": "Public source captured 2026-10-01T16:13:25.373619+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57749.json"
+      },
+      {
+        "name": "ZF Engineering Update: 7 - 20 September 2026",
+        "detail": "Public source captured 2026-10-01T16:11:35.398202+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57756.json"
+      },
+      {
+        "name": "Zecd v0.8.0: Faster sync, and now a library",
+        "detail": "Public source captured 2026-10-01T16:13:27.178741+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57757.json"
+      },
+      {
+        "name": "Zk Av Club at Zcon7",
+        "detail": "Public source captured 2026-10-01T16:13:32.922593+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57807.json"
+      },
+      {
+        "name": "Forum posts / topic 57827",
+        "detail": "Public source captured 2026-10-01T16:28:45.801627+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57827/posts.json?post_ids%5B%5D=255963&post_ids%5B%5D=255964&post_ids%5B%5D=256135&post_ids%5B%5D=256138&post_ids%5B%5D=256139&post_ids%5B%5D=256140&post_ids%5B%5D=256146&post_ids%5B%5D=256147&post_ids%5B%5D=256148"
+      },
+      {
+        "name": "We just did a fully trustless shielded ZEC to EVM atomic swap with no new signing primitives! And yes, it is programmable",
+        "detail": "Public source captured 2026-10-01T16:13:26.966353+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57827.json"
+      },
+      {
+        "name": "Zucchini Wallet 0.5.2 released: redesigned extension, website payments and developer SDKs",
+        "detail": "Public source captured 2026-10-01T16:13:27.029823+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57859.json"
+      },
+      {
+        "name": "Zebra 6.4.2: Emergency Fix for a Remotely Triggerable Crash",
+        "detail": "Public source captured 2026-10-01T16:11:35.668185+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57872.json"
+      },
+      {
+        "name": "[Grant Application] OpenWeights — A decentralized open compute platform powered by shielded ZEC",
+        "detail": "Public source captured 2026-10-01T16:11:35.853970+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57875.json"
+      },
+      {
+        "name": "Introducing Noir Protocol : A multi-token economy and DeFi for ZEC holders, while Zcash stays ZEC-only",
+        "detail": "Public source captured 2026-10-01T16:04:43.715392+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57889.json"
+      },
+      {
+        "name": "Q3 Coinholder-Directed Retroactive Grants Program RESULTS",
+        "detail": "Public source captured 2026-10-01T16:04:43.822837+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57909.json"
+      },
+      {
+        "name": "The Hand of God: What Q3's Coinholder Retroactive Grants Vote Tells Us",
+        "detail": "Public source captured 2026-10-01T16:13:36.910126+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57910.json"
+      },
+      {
+        "name": "Documentary: Zcash, from Zidelined to Zillions",
+        "detail": "Public source captured 2026-10-01T16:13:32.808779+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57926.json"
+      },
+      {
+        "name": "The Forge Report #003: From Learning to Creating",
+        "detail": "Public source captured 2026-10-01T16:04:44.071075+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57927.json"
+      },
+      {
+        "name": "Zcash Community Grants (ZCG) Meeting Minutes 9/28/2026",
+        "detail": "Public source captured 2026-10-01T16:04:45.024388+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57928.json"
+      },
+      {
+        "name": "It's here: a beta, fully-automated sepETH->TAZ atomic shielded swap bridge",
+        "detail": "Public source captured 2026-10-01T16:04:45.035043+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/t/57931.json"
+      },
+      {
+        "name": "zakura-140",
+        "detail": "Public source captured 2026-10-01T16:15:44.598273+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zakura.com/announcements/zakura-1-4-0/"
+      },
+      {
+        "name": "zakura-150",
+        "detail": "Public source captured 2026-10-01T16:15:44.598085+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zakura.com/announcements/zakura-1-5-0/"
+      },
+      {
+        "name": "zakura-announcements",
+        "detail": "Public source captured 2026-10-01T16:04:16.487061+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zakura.com/announcements/"
+      },
+      {
+        "name": "zakura-changelog-160",
+        "detail": "Public source captured 2026-10-01T16:25:10.695682+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://raw.githubusercontent.com/zakura-core/zakura/v1.6.0/CHANGELOG.md"
+      },
+      {
+        "name": "zakura-site",
+        "detail": "Public source captured 2026-10-01T15:58:17.963339+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zakura.com/"
+      },
+      {
+        "name": "zakura-zk",
+        "detail": "Public source captured 2026-10-01T16:15:45.265956+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zakura.com/engineering/ironwood-zero-knowledge/"
+      },
+      {
+        "name": "zcap-results",
+        "detail": "Public source captured 2026-10-01T16:04:16.033938+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zfnd.org/zcap-polling-results-nu7-scope/"
+      },
+      {
+        "name": "zcg-414-comments",
+        "detail": "Public source captured 2026-10-01T16:11:29.127696+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues/414/comments"
+      },
+      {
+        "name": "zcg-439-comments",
+        "detail": "Public source captured 2026-10-01T16:11:30.292216+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues/439/comments"
+      },
+      {
+        "name": "zcg-meetings",
+        "detail": "Public source captured 2026-10-01T15:58:12.833825+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/zcg/meetings"
+      },
+      {
+        "name": "zcg-proposals",
+        "detail": "Public source captured 2026-10-01T15:58:12.907525+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://openzcash.org/zcg/proposals"
+      },
+      {
+        "name": "zcon7-program",
+        "detail": "Public source captured 2026-10-01T16:04:16.034956+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zfnd.org/the-zcon7-program-building-what-comes-next/"
+      },
+      {
+        "name": "zebra-advisory",
+        "detail": "Public source captured 2026-10-01T16:04:16.035111+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zfnd.org/zebra-6-4-2-release/"
+      },
+      {
+        "name": "zf-blog",
+        "detail": "Public source captured 2026-10-01T15:58:19.122338+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://zfnd.org/blog/"
+      },
+      {
+        "name": "zf-category",
+        "detail": "Public source captured 2026-10-01T16:04:16.507632+00:00. Activity scope is recorded with each item; publication dates are not activity dates.",
+        "url": "https://forum.zcashcommunity.com/c/ecosystem-updates/foundation/21.json"
+      },
+      {
+        "name": "Paid grant · Zcash Nigeria · row 650",
+        "detail": "Zcash Nigeria 2026 | Milestone 8 | Paid 2026-09-01 | Budgeted USD $5,300 | 6.41 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A650"
+      },
+      {
+        "name": "Paid grant · Zcash Brazil · row 665",
+        "detail": "Zcash Brazil 2026 | Milestone Event Reimbursement | Paid 2026-09-01 | Budgeted USD $2,999 | 3.63 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A665"
+      },
+      {
+        "name": "Paid grant · Zcash Brazil · row 678",
+        "detail": "Zcash Brazil 2026 | Milestone 8 | Paid 2026-09-01 | Budgeted USD $21,833 | 26.39 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A678"
+      },
+      {
+        "name": "Paid grant · readymouse · row 855",
+        "detail": "ZECsy Community Building: 12 Months of Zcash on the Ground [Revised] | Milestone Startup Funding | Paid 2026-09-01 | Budgeted USD $45,833 | 55.4 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A855"
+      },
+      {
+        "name": "Paid grant · Hito Inc · row 764",
+        "detail": "Hito | Milestone 3 | Paid 2026-09-02 | Budgeted USD $15,000 | 18.43 ZEC | Wallets. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A764"
+      },
+      {
+        "name": "Paid grant · Noir Wallet · row 833",
+        "detail": "Zcash WalletConnect Integration | Milestone Startup Funding | Paid 2026-09-02 | Budgeted USD $5,000 | 6.14 ZEC | Infrastructure. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A833"
+      },
+      {
+        "name": "Paid grant · Hanh · row 595",
+        "detail": "Maintenance and Improvements to Coin Voting | Milestone 8 | Paid 2026-09-03 | Budgeted USD $26,000 | 27.48 ZEC | Non-Wallet Applications. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A595"
+      },
+      {
+        "name": "Paid grant · ZecHub · row 626",
+        "detail": "ZecHub 2026 | Milestone 8 | Paid 2026-09-03 | Budgeted USD $31,360 | 33.15 ZEC | Education. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A626"
+      },
+      {
+        "name": "Paid grant · Zcash Español · row 690",
+        "detail": "Zcash Global en Español 2026 | Milestone 8 | Paid 2026-09-03 | Budgeted USD $8,625 | 9.12 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A690"
+      },
+      {
+        "name": "Paid grant · ZcashArabia · row 850",
+        "detail": "Zcash Arabia (August to December 2026) | Milestone 1 | Paid 2026-09-03 | Budgeted USD $4,000 | 4.23 ZEC | Education. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A850"
+      },
+      {
+        "name": "Paid grant · Proof Street · row 819",
+        "detail": "Zcash in the privacy stack | Milestone 2 | Paid 2026-09-07 | Budgeted USD $2,500 | 2.17 ZEC | Education. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A819"
+      },
+      {
+        "name": "Paid grant · Zingo Labs · row 793",
+        "detail": "Zaino Release Stabilization | Milestone 3 | Paid 2026-09-10 | Budgeted USD $50,000 | 44.03 ZEC | Infrastructure. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A793"
+      },
+      {
+        "name": "Paid grant · ZcashGH · row 789",
+        "detail": "Zcash Ghana (July 2026 - September 2026) | Milestone 3 | Paid 2026-09-15 | Budgeted USD $4,200 | 3.8 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A789"
+      },
+      {
+        "name": "Paid grant · Pretty Good Policy for Zcash · row 843",
+        "detail": "Pretty Good Policy for Zcash | Milestone Startup Funding | Paid 2026-09-17 | Budgeted USD $248,750 | 169.65 ZEC | Dedicated Resource. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A843"
+      },
+      {
+        "name": "Paid grant · ELLIPAL · row 827",
+        "detail": "ELLIPAL Zcash Ironwood Shielded Transaction Support | Milestone 1 | Paid 2026-09-18 | Budgeted USD $55,000 | 37.12 ZEC | Wallets. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A827"
+      },
+      {
+        "name": "Paid grant · Batuhan · row 797",
+        "detail": "Zcash Türkiye 2026 Q3-4 - 2027 Q1-2-3-4 | Milestone 3 | Paid 2026-09-22 | Budgeted USD $4,400 | 2.729 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A797"
+      },
+      {
+        "name": "Paid grant · robustfengbin · row 736",
+        "detail": "Zebra Coverage-Guided Fuzzing Infrastructure | Milestone 3 | Paid 2026-09-23 | Budgeted USD $9,000 | 5.92 ZEC | Research & Development. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A736"
+      },
+      {
+        "name": "Paid grant · robustfengbin · row 816",
+        "detail": "Batch-vs-Single Verification Equivalence: Continuous Soundness Fuzzing for Zcash Shielded Verification (incl. Ironwood) | Milestone 3 | Paid 2026-09-24 | Budgeted USD $12,000 | 7.76 ZEC | Research & Development. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A816"
+      },
+      {
+        "name": "Paid grant · TechSlayers · row 824",
+        "detail": "Offensive Security | Milestone 2 | Paid 2026-09-27 | Budgeted USD $30,000 | 18.97 ZEC | Infrastructure. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A824"
+      },
+      {
+        "name": "Paid grant · Hanh · row 596",
+        "detail": "Maintenance and Improvements to Coin Voting | Milestone 9 | Paid 2026-09-28 | Budgeted USD $26,000 | 17.0143 ZEC | Non-Wallet Applications. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A596"
+      },
+      {
+        "name": "Paid grant · Zcash East Africa Community · row 872",
+        "detail": "Zcash East Africa @ Africa Blockchain Festival 2026 | Milestone Startup Funding | Paid 2026-09-28 | Budgeted USD $9,800 | 6.662 ZEC | Event Sponsorship. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A872"
+      },
+      {
+        "name": "Paid grant · ZcashMe, Inc. · row 877",
+        "detail": "Zcash Network School Kazakhstan | Milestone Startup Funding | Paid 2026-09-28 | Budgeted USD $8,570 | 5.826 ZEC | Security. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A877"
+      },
+      {
+        "name": "Paid grant · Ariel Gabizon · row 881",
+        "detail": "Human readable version of Ironwood formal verification, first steps - bulletproofs in the AGM | Milestone Startup Funding | Paid 2026-09-28 | Budgeted USD $7,000 | 4.7584 ZEC | Security. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A881"
+      },
+      {
+        "name": "Paid grant · ZK AV Club · row 704",
+        "detail": "Zcash Community Media Infrastructure & Support | Zk Av Club 2026 | Milestone 9 | Paid 2026-09-30 | Budgeted USD $14,016.66 | 9.83 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A704"
+      },
+      {
+        "name": "Paid grant · ZcashArabia · row 851",
+        "detail": "Zcash Arabia (August to December 2026) | Milestone 2 | Paid 2026-09-30 | Budgeted USD $4,000 | 2.833 ZEC | Education. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A851"
+      },
+      {
+        "name": "Paid grant · readymouse · row 856",
+        "detail": "ZECsy Community Building: 12 Months of Zcash on the Ground [Revised] | Milestone 1 | Paid 2026-09-30 | Budgeted USD $45,833 | 32.357 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A856"
+      },
+      {
+        "name": "Paid grant · Zcash India · row 865",
+        "detail": "Zcash World, Mumbai (Devcon 8 week) | Milestone Startup Funding | Paid 2026-09-30 | Budgeted USD $8,000 | 5.665 ZEC | Community. Payment is not proof of delivery.",
+        "url": "https://docs.google.com/spreadsheets/d/1FQ28rDCyRW0TiNxrm3rgD8ai2KGUsXAjPieQmI1kKKg/edit#gid=803214474&range=A865"
+      },
+      {
+        "name": "September grant category / Dedicated Resource",
+        "detail": "$248,750 in settled milestone budget value; 35.28% of $705,019.66; 169.65 ZEC; 1 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Community",
+        "detail": "$161,039.66 in settled milestone budget value; 22.84% of $705,019.66; 155.331 ZEC; 10 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Infrastructure",
+        "detail": "$85,000 in settled milestone budget value; 12.06% of $705,019.66; 69.14 ZEC; 3 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Wallets",
+        "detail": "$70,000 in settled milestone budget value; 9.93% of $705,019.66; 55.55 ZEC; 2 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Non-Wallet Applications",
+        "detail": "$52,000 in settled milestone budget value; 7.38% of $705,019.66; 44.4943 ZEC; 2 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Education",
+        "detail": "$41,860 in settled milestone budget value; 5.94% of $705,019.66; 42.383 ZEC; 4 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Research & Development",
+        "detail": "$21,000 in settled milestone budget value; 2.98% of $705,019.66; 13.68 ZEC; 2 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Security",
+        "detail": "$15,570 in settled milestone budget value; 2.21% of $705,019.66; 10.5844 ZEC; 2 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      },
+      {
+        "name": "September grant category / Event Sponsorship",
+        "detail": "$9,800 in settled milestone budget value; 1.39% of $705,019.66; 6.662 ZEC; 1 installments. USD budget and native token movement are separate measures.",
+        "url": "https://openzcash.org/api/zcg/data/disbursements?limit=2000"
+      }
+    ],
+    "communities": [
+      {
+        "name": "ZecHub",
+        "detail": "The September monthly KPI report was not present in the checked report thread. August reports posted September 1–2 are excluded from September activity totals. Treasury snapshot is dated September 21.",
+        "url": "https://forum.zcashcommunity.com/t/53686"
+      },
+      {
+        "name": "Zcash Brazil",
+        "detail": "September report, posted September 30: Papo de Baleia partnership, Superteam Brasil bootcamp sponsorship, WEEX Brasil AMA and Ipê City assembly participation. Organizer report; activity and reach are not independently audited.",
+        "url": "https://forum.zcashcommunity.com/t/53702/28"
+      },
+      {
+        "name": "ZK AV Club",
+        "detail": "September milestone report, posted September 29: six Recording Station conversations published, WatchZ.cash collection and historical Zcon video archiving; Zcon7 preparation continues. Team-reported output.",
+        "url": "https://forum.zcashcommunity.com/t/53913/59"
+      },
+      {
+        "name": "Zcash en Español",
+        "detail": "The checked reporting thread contains an August recap posted September 2. No September monthly KPI report verified at cutoff; do not carry August metrics forward.",
+        "url": "https://forum.zcashcommunity.com/t/53815/33"
+      },
+      {
+        "name": "Zcash Türkiye",
+        "detail": "September 19 update describes university-club outreach and a proposed university tour. The tour is planned and its grant request remained open at the September close.",
+        "url": "https://forum.zcashcommunity.com/t/56274/9"
+      },
+      {
+        "name": "Zcash Nigeria",
+        "detail": "September report published October 1: team reports six merchants onboarded and more than 50 participants at a Jigawa meetup, plus localization, quizzes and education. Report period is September 1–30.",
+        "url": "https://forum.zcashcommunity.com/t/53654/20"
+      },
+      {
+        "name": "Zcash Ghana",
+        "detail": "September meetup report, updated September 15: Techiman event held September 12; organizer reports 55 attendees and 44 registrations. Separate October–December grant approved September 28.",
+        "url": "https://forum.zcashcommunity.com/t/56214/15"
+      },
+      {
+        "name": "Zcash Arabia",
+        "detail": "September 30 report: first Syria meetup, Discord knowledge quiz and Free2z publishing. Organizer-reported activities; no aggregate reach inferred.",
+        "url": "https://forum.zcashcommunity.com/t/57170/11"
+      },
+      {
+        "name": "Club Zcash Caracas",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://free2z.cash/Yoditar/zpage/club-zcash-caracas-1o-meetup"
+      },
+      {
+        "name": "Club Zcash Barcelona",
+        "detail": "September updates cover a joint Zcash/Solana meetup and ETHSpain participation. Organizer reports and linked recordings; no audited attendance figure.",
+        "url": "https://forum.zcashcommunity.com/t/51247/72"
+      },
+      {
+        "name": "CodeRaiz México",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/55506"
+      },
+      {
+        "name": "Pesa Ya Siri (Zcash Tanzania)",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/56593"
+      },
+      {
+        "name": "ruZcash",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/38485"
+      },
+      {
+        "name": "Boston Zcash",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/56748"
+      },
+      {
+        "name": "Zcash China",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/33064"
+      },
+      {
+        "name": "Zcash México",
+        "detail": "September discussions on financial privacy and a new Mexico Tech Week proposal. The Querétaro meetup reported September 3 took place August 30 and is excluded from September event counts.",
+        "url": "https://forum.zcashcommunity.com/t/55764/14"
+      },
+      {
+        "name": "Zcash East Africa",
+        "detail": "September recap posted September 26: regional education, social growth and preparation for Africa Blockchain Festival. X 274 to 351 and Telegram 176 to 229 are team snapshots, not verified September 30 totals.",
+        "url": "https://forum.zcashcommunity.com/t/57226/4"
+      },
+      {
+        "name": "Zcash France",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/5544"
+      },
+      {
+        "name": "Zcash Global Germany",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/50169"
+      },
+      {
+        "name": "Zcash India",
+        "detail": "September report published October 1: team reports 192 attendees and 120+ new ZODL wallets at Nagpur, plus new YouTube and Instagram channels. Zcash World is scheduled for November 1, not a September event.",
+        "url": "https://forum.zcashcommunity.com/t/54762/17"
+      },
+      {
+        "name": "Zcash Indonesia",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/38678"
+      },
+      {
+        "name": "Zcash Japan",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/54827"
+      },
+      {
+        "name": "Zcash Korea",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/56458"
+      },
+      {
+        "name": "Elzz — Global Ambassador",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/56859"
+      },
+      {
+        "name": "Zcash Ukraine",
+        "detail": "No September monthly delivery report verified in the checked OpenZcash-linked reporting sources at the October 1 review. This is a coverage gap, not evidence of inactivity.",
+        "url": "https://forum.zcashcommunity.com/t/54059"
+      },
+      {
+        "name": "ZcashSA (Zcash South Africa)",
+        "detail": "September 4 update closed the donation campaign. No September monthly delivery or merchant count verified in the checked reporting sources.",
+        "url": "https://forum.zcashcommunity.com/t/57133/7"
+      },
+      {
+        "name": "Zcast",
+        "detail": "September 24 announcements link the ETHSpain discussion and ecosystem recap. Media output; no audience total inferred.",
+        "url": "https://forum.zcashcommunity.com/t/54291/43"
+      },
+      {
+        "name": "ZECsy",
+        "detail": "Community-building proposal remains part of the reviewed universe. A September delivery recap was not verified; proposed twelve-month activity is not completed work.",
+        "url": "https://forum.zcashcommunity.com/t/56890"
+      },
+      {
+        "name": "ZecForge",
+        "detail": "The Forge Report #003 was posted September 30 but explicitly describes August. Its workshop and member counts are excluded from September totals.",
+        "url": "https://forum.zcashcommunity.com/t/57927"
+      },
+      {
+        "name": "Zcash Warsaw",
+        "detail": "New community-organizing discussion opened in September. Outreach and plans are not counted as completed meetups.",
+        "url": "https://forum.zcashcommunity.com/t/57652"
+      },
+      {
+        "name": "Pretty Good Policy for Zcash",
+        "detail": "September ledger records $248,750 in budgeted grant value. Policy Q&A is separate from proof of grant delivery; no legal conclusions inferred.",
+        "url": "https://forum.zcashcommunity.com/t/57606"
+      },
+      {
+        "name": "The Zcash Daily",
+        "detail": "September editions verified in the publication thread. Market and protocol claims are checked against original sources before reuse.",
+        "url": "https://forum.zcashcommunity.com/t/57219"
+      },
+      {
+        "name": "Zcash Engage",
+        "detail": "Included in the coverage register. No September delivery report verified in the checked source.",
+        "url": "https://forum.zcashcommunity.com/t/55358"
+      },
+      {
+        "name": "Zcash Belgium",
+        "detail": "Included in the coverage register. No September delivery report verified in the checked source.",
+        "url": "https://forum.zcashcommunity.com/t/56893"
+      },
+      {
+        "name": "LEONINE DAO",
+        "detail": "September announcement describes production Zebra and lightwalletd infrastructure. Announcement is self-reported; uptime is not independently established.",
+        "url": "https://forum.zcashcommunity.com/t/57571"
+      }
+    ],
+    "requests": [
+      {
+        "name": "Zcash Grants Hub",
+        "detail": "Daniel Goh | Rejected in FPF's September 29 results | Requested $3,050. Unified platform aggregating ZCG, Coinholder, and ZecHub DAO proposals into one interface | Voting ZEC: approve 79,508.000, reject 1,391,627.875, rejectLower 32.625, abstain 710,283.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zcash-grants-hub-coinholder-program/55372",
+        "amount": 3050
+      },
+      {
+        "name": "ShieldedScan",
+        "detail": "ShieldedScan | Rejected in FPF's September 29 results | Requested $4,060. Free, no-tracker Zcash block explorer with shielded-pool analytics and a keyless API | Voting ZEC: approve 524,770.250, reject 1,650,918.125, rejectLower 439.875, abstain 5,324.625. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-shieldedscan/57051",
+        "amount": 4060
+      },
+      {
+        "name": "ZecKit Post-M3 Stabilization and Developer Adoption",
+        "detail": "Dapps over Apps | Rejected in FPF's September 29 results | Requested $5,000. Developer toolkit for local Zebra regtest environments and reusable CI workflows | Voting ZEC: approve 396,819.875, reject 1,671,151.750, rejectLower 0.000, abstain 113,478.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zeckit-post-m3-stabilization-and-developer-adoption-work/56992",
+        "amount": 5000
+      },
+      {
+        "name": "zcashtocash via ZcashLabs",
+        "detail": "ZcashLabs | Funded in FPF's September 29 results | Requested $6,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Non-custodial ZEC-to-fiat service across 100+ geographies and six fiat apps | Voting ZEC: approve 1,566,863.750, reject 1,845.500, rejectLower 289.750, abstain 610,683.250. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zcash-labs-for-zcashto-cash/57047",
+        "amount": 6000
+      },
+      {
+        "name": "zec-ironwood-reconcile",
+        "detail": "Steven Hert | Rejected in FPF's September 29 results | Requested $8,250. Rust CLI reconciling Orchard and Ironwood value-pool changes against Zebra’s balances | Voting ZEC: approve 408,984.000, reject 1,649,423.125, rejectLower 11,429.500, abstain 109,338.000. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zec-ironwood-reconcile-reproducible-orchard-ironwood-value-pool-reconciliation/56998",
+        "amount": 8250
+      },
+      {
+        "name": "Gleyo",
+        "detail": "Gleyo | Rejected in FPF's September 29 results | Requested $9,081.20. Quest platform paying shielded ZEC rewards without upfront wallet setup | Voting ZEC: approve 63,859.750, reject 2,004,999.750, rejectLower 1,187.875, abstain 109,139.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-gleyo/56977",
+        "amount": 9081.2
+      },
+      {
+        "name": "Self-Sovereign Zcash Testnet Faucet",
+        "detail": "Jino Labs | Rejected in FPF's September 29 results | Requested $9,280. Self-hosted testnet faucet running its own node, wallet, indexer, and miner | Voting ZEC: approve 106,078.375, reject 1,952,787.500, rejectLower 12,896.500, abstain 107,460.500. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-self-sovereign-zcash-testnet-faucet/57002",
+        "amount": 9280
+      },
+      {
+        "name": "CyphZec.com",
+        "detail": "Thomas Zarebczan | Rejected in FPF's September 29 results | Requested $10,000. Free dashboard for ZEC and CYPH prices, shielding, treasury, and network stats | Voting ZEC: approve 60,769.125, reject 2,012,174.625, rejectLower 1,833.750, abstain 104,432.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-cyphzec-com/57035",
+        "amount": 10000
+      },
+      {
+        "name": "ZecLedger",
+        "detail": "ZecLedger | Rejected in FPF's September 29 results | Requested $10,000. Read-only viewing-key accounting CLI producing cost-basis and gain-loss reports | Voting ZEC: approve 404,349.125, reject 1,663,779.500, rejectLower 846.125, abstain 110,234.000. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-zecledger/56969",
+        "amount": 10000
+      },
+      {
+        "name": "lightwalletd-rs",
+        "detail": "jpgonzalezra | Rejected in FPF's September 29 results | Requested $10,720. Independent Rust implementation of the Zcash light-client server | Voting ZEC: approve 104,752.875, reject 1,777,439.625, rejectLower 15,713.250, abstain 281,303.875. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-lightwalletd-rs/56955",
+        "amount": 10720
+      },
+      {
+        "name": "Blindvault",
+        "detail": "TIDJANI Walid | Rejected in FPF's September 29 results | Requested $17,000. Anonymous credential issuance middleware using BLS12-381 blind signatures | Voting ZEC: approve 88,976.625, reject 1,806,783.250, rejectLower 176,932.625, abstain 106,545.125. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-blindvault/56932",
+        "amount": 17000
+      },
+      {
+        "name": "Zallet RPC Parity Harness",
+        "detail": "Creativesonchain | Rejected in FPF's September 29 results | Requested $20,000. CLI comparing zcashd and Zallet JSON-RPC responses for parity | Voting ZEC: approve 86,930.750, reject 1,807,452.000, rejectLower 3,496.500, abstain 281,366.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zallet-rpc-parity-harness/56993",
+        "amount": 20000
+      },
+      {
+        "name": "Zecmap",
+        "detail": "Batuhan | Rejected in FPF's September 29 results | Requested $21,300. Interactive map of Zcash-accepting businesses, on web, Android, and iOS | Voting ZEC: approve 178,398.625, reject 1,383,932.000, rejectLower 11,254.500, abstain 605,677.125. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zecmap/56999",
+        "amount": 21300
+      },
+      {
+        "name": "Connaugh Zcash Videos",
+        "detail": "Connaugh | Funded in FPF's September 29 results | Requested $22,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Five short-form films cut from existing Zcash footage, published July–August 2026 | Voting ZEC: approve 757,044.250, reject 187,236.625, rejectLower 196,044.000, abstain 1,038,923.250. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zkmarketer-videos/57031",
+        "amount": 22000
+      },
+      {
+        "name": "ZAP1 Attestation Protocol and Verification Tooling",
+        "detail": "Frontier Compute | Rejected in FPF's September 29 results | Requested $28,000. Attestation protocol anchoring Merkle commitments to mainnet via Orchard memos | Voting ZEC: approve 87,143.875, reject 1,792,545.750, rejectLower 13,823.000, abstain 285,716.000. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zap1-attestation-protocol-and-verification-tooling/55664",
+        "amount": 28000
+      },
+      {
+        "name": "ZecBooks",
+        "detail": "SaneApps | Rejected in FPF's September 29 results | Requested $32,000. Mac-native, local-first bookkeeping for shielded Zcash via viewing key | Voting ZEC: approve 101,026.000, reject 1,779,666.125, rejectLower 190,131.750, abstain 108,415.625. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zecbooks/56914",
+        "amount": 32000
+      },
+      {
+        "name": "CipherPay",
+        "detail": "Atmosphere Labs (Kenbak) | Funded in FPF's September 29 results | Requested $35,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Non-custodial commerce platform: payments, subscriptions, plugins, ticketing, POS | Voting ZEC: approve 1,988,112.000, reject 83,142.125, rejectLower 1,752.625, abstain 106,221.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-cipherpay/55612",
+        "amount": 35000
+      },
+      {
+        "name": "Zafu Browser Extension",
+        "detail": "Rotko Networks OU | Rejected in FPF's September 29 results | Requested $38,000. Chrome MV3 wallet with client-side Halo2 proving and FROST multisig | Voting ZEC: approve 92,628.750, reject 1,788,095.500, rejectLower 12,738.750, abstain 285,739.625. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/zafu-wallet-retroactive-grant-application/55551",
+        "amount": 38000
+      },
+      {
+        "name": "Zapp",
+        "detail": "Renee Chiu | Rejected in FPF's September 29 results | Requested $40,000. Encrypted P2P messenger with in-thread shielded payments and fiat offramps | Voting ZEC: approve 92,218.375, reject 1,976,691.625, rejectLower 2,823.625, abstain 107,505.875. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zapp/56937",
+        "amount": 40000
+      },
+      {
+        "name": "Open-Source Zcash Hardware-Wallet SDK",
+        "detail": "wh00hw | Rejected in FPF's September 29 results | Requested $40,000. Vendor-neutral plain-C Orchard hardware wallet stack across four repositories | Voting ZEC: approve 123,819.750, reject 1,767,283.750, rejectLower 179,654.625, abstain 108,480.750. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/application-for-coinholder-directed-retroactive-grants-program-q2-2026-open-source-zcash-hardware-wallet-sdk/55550",
+        "amount": 40000
+      },
+      {
+        "name": "Nozy Wallet",
+        "detail": "Leonine DAO | Rejected in FPF's September 29 results | Requested $60,000. Self-hosted shielded-first wallet: CLI, desktop, and companion API | Voting ZEC: approve 521,243.625, reject 1,648,338.625, rejectLower 3,818.125, abstain 5,802.250. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/nozy-wallet-retroactive-grant/52417/26",
+        "amount": 60000
+      },
+      {
+        "name": "THORSwap / Metro",
+        "detail": "THORSwap Labs | Funded in FPF's September 29 results | Requested $60,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Native ZEC cross-chain swaps across THORSwap and Metro wallet | Voting ZEC: approve 1,467,036.750, reject 8,473.250, rejectLower 640.375, abstain 703,090.750. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-thorswap-metro/55675",
+        "amount": 60000
+      },
+      {
+        "name": "Expanding Zcash In Unstoppable Wallet",
+        "detail": "Horizontal Systems | Funded in FPF's September 29 results | Requested $80,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Swap aggregation, wallet reliability, and full Ironwood migration support | Voting ZEC: approve 1,436,595.000, reject 139,620.750, rejectLower 1,383.750, abstain 601,603.875. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/expanding-zcash-in-unstoppable-wallet-liquidity-swaps-distribution-retroactive-grant/55529/3",
+        "amount": 80000
+      },
+      {
+        "name": "ZcashNames",
+        "detail": "ZcashMe, Inc. | Rejected in FPF's September 29 results | Requested $122,400. On-chain naming system mapping readable names to shielded addresses | Voting ZEC: approve 44,642.375, reject 1,419,201.375, rejectLower 7,309.750, abstain 707,876.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/coinholder-directed-retroactive-grants-program-q2-2026-now-accepting-proposals/55328/9",
+        "amount": 122400
+      },
+      {
+        "name": "Frontier Compute Zcash Security Research and Remediation Pack",
+        "detail": "Frontier Compute LLC | Rejected in FPF's September 29 results | Requested $136,250. Disclosed infrastructure and wallet vulnerabilities, then verified the shipped remediations | Voting ZEC: approve 171,960.000, reject 1,884,711.125, rejectLower 13,472.625, abstain 109,033.500. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/call-for-proposals-coinholder-directed-retroactive-grants-program-q3/56885/29",
+        "amount": 136250
+      },
+      {
+        "name": "Zebra Critical Vulnerability Bug Bounty (CVE-2026-34202)",
+        "detail": "robustfengbin | Funded in FPF's September 29 results | Requested $150,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Bounty for disclosure of a critical Zebra remote denial-of-service vulnerability | Voting ZEC: approve 1,392,929.250, reject 4,122.000, rejectLower 622,261.375, abstain 159,926.875. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-cve-2026-34202-zebra-remote-denial-of-service-critical/57024",
+        "amount": 150000
+      },
+      {
+        "name": "Bonus Grant — Ironwood zk-SNARK Formal Verification",
+        "detail": "Jason McGee | Funded in FPF's September 29 results | Requested $261,058. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Nomination topping up application #50 to a $1,000,000 total | Voting ZEC: approve 2,170,803.125, reject 3,736.750, rejectLower 1,358.250, abstain 3,305.875. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/project-tachyon-bonus-grant-for-ironwood-zk-snark-formal-verification/57021",
+        "amount": 261058
+      },
+      {
+        "name": "CipherScan",
+        "detail": "Kenbak | Funded in FPF's September 29 results | Requested $375,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Block explorer and privacy-intelligence platform with a custom Rust indexer | Voting ZEC: approve 2,169,040.625, reject 18.875, rejectLower 5,960.625, abstain 4,124.125. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-cipherscan/56997",
+        "amount": 375000
+      },
+      {
+        "name": "Temporary Detectable Unlimited Mint and Sell Exploit",
+        "detail": "Alex Sol | Funded in FPF's September 29 results | Requested $400,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Bounty for chained zcashd and Zebra vulnerabilities enabling temporary counterfeiting | Voting ZEC: approve 2,145,016.875, reject 3,138.125, rejectLower 25,940.000, abstain 5,096.500. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-temporary-detectable-unlimited-mint-and-sell-bug-bount/57033",
+        "amount": 400000
+      },
+      {
+        "name": "Five Critical Zebra Consensus Divergence Vulnerabilities",
+        "detail": "sangsoo-osec | Funded in FPF's September 29 results | Requested $425,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Net award for five critical Zebra consensus-divergence disclosures, less $100,000 already paid | Voting ZEC: approve 2,095,860.875, reject 4,228.625, rejectLower 75,624.125, abstain 3,464.625. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-five-critical-zebra-consensus-divergence-vulnerabilities/57034",
+        "amount": 425000
+      },
+      {
+        "name": "Zec.rocks (16 months of uptime)",
+        "detail": "Zec.rocks | Funded in FPF's September 29 results | Requested $584,992. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Infrastructure powering 16 months of uptime for every major Zcash wallet | Voting ZEC: approve 1,970,715.000, reject 29.500, rejectLower 103,761.250, abstain 104,709.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-16-months-of-uptime-for-zcash-wallets-zec-rocks/57048",
+        "amount": 584992
+      },
+      {
+        "name": "Ironwood external audit reimbursement",
+        "detail": "ValarGroup | Funded in FPF's September 29 results | Requested $599,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Reimbursement for external cryptography audits during the Ironwood incident response | Voting ZEC: approve 2,175,934.375, reject 60.875, rejectLower 316.375, abstain 2,951.250. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-ironwood-external-audits/57032",
+        "amount": 599000
+      },
+      {
+        "name": "Ironwood zk-SNARK Formal Verification (Project Tachyon)",
+        "detail": "Tachyon Foundation | Funded in FPF's September 29 results | Requested $738,942. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Formal verification of the Ironwood zk-SNARK circuit, machine-checked in Lean | Voting ZEC: approve 2,177,498.250, reject 0.250, rejectLower 7.250, abstain 1,724.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-ironwood-zk-snark-formal-verification-project-tachyon/57007",
+        "amount": 738942
+      },
+      {
+        "name": "Orchard Counterfeiting Vulnerability Bug Bounty",
+        "detail": "Taylor Hornby | Funded in FPF's September 29 results | Requested $750,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Bounty for disclosure of the Orchard counterfeiting vulnerability | Voting ZEC: approve 2,179,062.500, reject 19.000, rejectLower 98.250, abstain 0.375. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-orchard-counterfeiting-vulnerability-bug-bounty/57008",
+        "amount": 750000
+      },
+      {
+        "name": "Bonus Grant — Orchard Counterfeiting Bug Bounty",
+        "detail": "Jason McGee | Funded in FPF's September 29 results | Requested $750,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Nomination topping up application #51 to a $1,500,000 total | Voting ZEC: approve 2,174,540.625, reject 2,823.875, rejectLower 96.500, abstain 1,763.000. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/taylor-hornby-bonus-grant-for-orchard-counterfeiting-vulnerability-bug-bounty/57025",
+        "amount": 750000
+      },
+      {
+        "name": "ValarGroup Ironwood Work",
+        "detail": "ValarGroup | Funded in FPF's September 29 results | Requested $1,203,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Emergency development, integration, testing, and activation work for Ironwood (NU6.3) | Voting ZEC: approve 2,174,891.500, reject 47.375, rejectLower 3,121.875, abstain 1,214.500. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-valargroup-ironwood-work/57053",
+        "amount": 1203000
+      },
+      {
+        "name": "ZODL Q1 & Q2 2026 Core Protocol Development",
+        "detail": "ZODL | Funded in FPF's September 29 results | Requested $1,950,000. Funding outcome; KYC and disbursement scheduling follow. Not recorded as a paid September grant. Amended: vulnerability remediation, Zallet alpha.4, and ZIP 2005/256 progress | Voting ZEC: approve 1,755,093.000, reject 286,654.625, rejectLower 137,082.000, abstain 474.250. Each question is separate; these are not unique people. ",
+        "url": "https://forum.zcashcommunity.com/t/retroactive-grant-application-zodl-q1-q2-2026-core-protocol-development/57027",
+        "amount": 1950000
+      }
+    ],
+    "zcg": [
+      {
+        "name": "#401 · Taking Zcash to the Streets: Education & Real-World Feedback in Türkiye",
+        "detail": "Submitted 2026-08-25. Rejected on 2026-09-14. Requested: $6,955. Forum: https://forum.zcashcommunity.com/t/zcash-in-the-real-world-education-and-street-interviews-in-turkiye/57187 | Sheet row 658. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/401",
+        "amount": 6955.0,
+        "amountLabel": "Requested · $6,955"
+      },
+      {
+        "name": "#403 · Recoverify: Pre-Loss Backup Recovery Verification for Zcash Wallets",
+        "detail": "Submitted 2026-08-26. Rejected on 2026-09-14. Requested: $2,990. Forum: https://forum.zcashcommunity.com/t/recoverify-backup-recovery-verification-for-zcash-wallets/57220 | Sheet row 660. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/403",
+        "amount": 2990.0,
+        "amountLabel": "Requested · $2,990"
+      },
+      {
+        "name": "#405 · Zcash World, Mumbai (Devcon 8 week)",
+        "detail": "Submitted 2026-08-30. Approved on 2026-09-14. Requested: $20,300. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-world-mumbai-devcon-8-week/57253 | Sheet row 661. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+        "amount": 20300.0,
+        "amountLabel": "Requested · $20,300"
+      },
+      {
+        "name": "#404 · Zcash Privacy Literacy Lab Canada",
+        "detail": "Submitted 2026-08-29. Rejected on 2026-09-14. Requested: $15,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-privacy-literacy-lab-canada/57256 | Sheet row 662. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/404#issuecomment-5469884118",
+        "amount": 15000.0,
+        "amountLabel": "Requested · $15,000"
+      },
+      {
+        "name": "#407 · Security Audit of Zaino",
+        "detail": "Submitted 2026-08-31. Rejected on 2026-09-14. Requested: $60,000–$120,000 range. Forum: https://forum.zcashcommunity.com/t/grant-application-security-audit-of-zaino/57265 | Sheet row 663. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/407",
+        "amount": null,
+        "amountLabel": "Requested · $60,000–$120,000 range"
+      },
+      {
+        "name": "#408 · 0xramp: Non-custodial ZEC ⇿ local-fiat ramp for emerging markets",
+        "detail": "Submitted 2026-08-31. Rejected on 2026-09-14. Requested: $206,000. Forum: https://forum.zcashcommunity.com/t/grant-application-0xramp-non-custodial-zec-local-fiat-ramp-for-emerging-markets/57271 | Sheet row 664. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/408",
+        "amount": 206000.0,
+        "amountLabel": "Requested · $206,000"
+      },
+      {
+        "name": "#409 · ZecBit: NFT infrastructure for Zcash Shielded Assets",
+        "detail": "Submitted 2026-08-31. Rejected on 2026-09-04. Requested: $48,000. Forum: https://forum.zcashcommunity.com/t/grant-proposal-zecbit-nft-infrastructure-for-zcash-shielded-assets/57280 | Sheet row 665. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/409",
+        "amount": 48000.0,
+        "amountLabel": "Requested · $48,000"
+      },
+      {
+        "name": "#410 · ZEC Invoice Preflight: ZIP-321 Validation for Zcash Merchants",
+        "detail": "Submitted 2026-09-01. Rejected on 2026-09-04. Requested: $3,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zec-invoice-preflight-zip-321-validation-for-zcash-merchants/57378 | Sheet row 666. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/410",
+        "amount": 3000.0,
+        "amountLabel": "Requested · $3,000"
+      },
+      {
+        "name": "#411 · Zcash SeedSigner: DIY open source air gapped signer for shielded ZEC",
+        "detail": "Submitted 2026-09-01. Rejected on 2026-09-14. Requested: $65,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-seedsigner-a-diy-open-source-air-gapped-signer-for-shielded-zec/57381 | Sheet row 667. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/411",
+        "amount": 65000.0,
+        "amountLabel": "Requested · $65,000"
+      },
+      {
+        "name": "#412 · Zcash Integration in Coin Wallet (WebZjs + lightwalletd)",
+        "detail": "Submitted 2026-09-03. Rejected on 2026-09-14. Requested: $100,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-integration-in-coin-wallet-webzjs-lightwalletd/57469 | Sheet row 668. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/412",
+        "amount": 100000.0,
+        "amountLabel": "Requested · $100,000"
+      },
+      {
+        "name": "#413 · `zcashlib`: A Pure-JavaScript Zcash Library",
+        "detail": "Submitted 2026-09-03. Rejected on 2026-09-14. Requested: $150,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcashlib-a-pure-javascript-zcash-library/57470 | Sheet row 669. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/413",
+        "amount": 150000.0,
+        "amountLabel": "Requested · $150,000"
+      },
+      {
+        "name": "#414 · Colosseum | Crypto World's Fair | Zcash Track",
+        "detail": "Submitted 2026-09-03. Approved on 2026-09-14. Requested: $150,000. Approved application; no payment or completion is implied. Revised from $250,000 to $150,000 before approval; includes $100,000 in prizes. Forum: https://forum.zcashcommunity.com/t/grant-proposal-colosseum-hackathon-zcash-track/57405 | Sheet row 670. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/414",
+        "amount": 150000.0,
+        "amountLabel": "Requested · $150,000"
+      },
+      {
+        "name": "#415 · Zcash East Africa @ Africa Blockchain Festival 2026",
+        "detail": "Submitted 2026-09-04. Approved on 2026-09-28. Requested: $11,040. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/zcash-east-africa-africa-blockchain-festival-2026/57437 | Sheet row 671. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/415",
+        "amount": 11040.0,
+        "amountLabel": "Requested · $11,040"
+      },
+      {
+        "name": "#416 · Sybil Wedge: Zero-Knowledge Proof-of-Personhood and Sybil Defense Without Central Registries",
+        "detail": "Submitted 2026-09-04. Filtered by FPF / Outside of Scope / Guidelines Not Met. Requested: $32,000. Forum:  | Sheet row 672. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/416#issuecomment-5539633146",
+        "amount": 32000.0,
+        "amountLabel": "Requested · $32,000"
+      },
+      {
+        "name": "#417 · Zcash Awareness, Education & Community Growth Campaign",
+        "detail": "Submitted 2026-09-04. Rejected on 2026-09-14. Requested: $5,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-marketing-education-campaign-on-x-and-binance-square/57460 | Sheet row 673. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/417",
+        "amount": 5000.0,
+        "amountLabel": "Requested · $5,000"
+      },
+      {
+        "name": "#419 · Zcash Flutter Wallet SDK",
+        "detail": "Submitted 2026-09-08. Rejected on 2026-09-14. Requested: $10,000. Forum: https://forum.zcashcommunity.com/t/zcash-flutter-wallet-sdk/57485 | Sheet row 674. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/419",
+        "amount": 10000.0,
+        "amountLabel": "Requested · $10,000"
+      },
+      {
+        "name": "#418 · ZecScope (Zcash network upgrade / ZIP tracker)",
+        "detail": "Submitted 2026-09-08. Rejected on 2026-09-28. Requested: $36,300. Forum: https://forum.zcashcommunity.com/t/grant-application-zecscope-zcash-network-upgrade-zip-tracker/57479 | Sheet row 675. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/418",
+        "amount": 36300.0,
+        "amountLabel": "Requested · $36,300"
+      },
+      {
+        "name": "#420 · 24 Videos @zkMarketer",
+        "detail": "Submitted 2026-09-08. Approved on 2026-09-14. Requested: $60,000. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/grant-application-24-videos-zkmarketer/57494 | Sheet row 676. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/420",
+        "amount": 60000.0,
+        "amountLabel": "Requested · $60,000"
+      },
+      {
+        "name": "#421 · Kestrel + ZecAuth: Open Zcash Wallet Connectivity with African Fiat On/Off-Ramps.",
+        "detail": "Submitted 2026-09-08. Rejected on 2026-09-28. Requested: $12,000. Forum: https://forum.zcashcommunity.com/t/kestrel-zecauth-open-zcash-wallet-connectivity-with-african-fiat-on-off-ramps/57503 | Sheet row 677. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/421",
+        "amount": 12000.0,
+        "amountLabel": "Requested · $12,000"
+      },
+      {
+        "name": "#422 · Zcash Wallet State Integrity: Self-Healing Transaction History",
+        "detail": "Submitted 2026-09-10. Rejected on 2026-09-28. Requested: Not verified in captured application. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-wallet-state-integrity-self-healing-transaction-history/57545 | Sheet row 678. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/422",
+        "amount": null,
+        "amountLabel": "Requested · Not verified in captured application"
+      },
+      {
+        "name": "#423 · Research on a fully CT proving pipeline for open-source hardware wallet architectures, reusable for standard computers",
+        "detail": "Submitted 2026-09-12. Rejected on 2026-09-28. Requested: $96,000. Forum: https://forum.zcashcommunity.com/t/grant-application-research-on-a-fully-constant-time-proving-pipeline-for-open-source-hardware-wallet-architectures-reusable-for-standard-computers/57555 | Sheet row 679. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/423",
+        "amount": 96000.0,
+        "amountLabel": "Requested · $96,000"
+      },
+      {
+        "name": "#424 · GraphSense Zcash Shielded Accounting Repair",
+        "detail": "Submitted 2026-09-14. Approved on 2026-09-28. Requested: $8,000. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/grant-application-graphsense-zcash-shielded-accounting-repair/57585 | Sheet row 680. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/424",
+        "amount": 8000.0,
+        "amountLabel": "Requested · $8,000"
+      },
+      {
+        "name": "#425 · Rill shielded ZIP-321 Accept",
+        "detail": "Submitted 2026-09-14. Rejected on 2026-09-28. Requested: $95,000. Forum: https://forum.zcashcommunity.com/t/grant-application-rill-shielded-zip-321-accept/57595 | Sheet row 681. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/425",
+        "amount": 95000.0,
+        "amountLabel": "Requested · $95,000"
+      },
+      {
+        "name": "#426 · 1CAD Protocol - ZK-TLS Proof-of-Solvency Infrastructure",
+        "detail": "Submitted 2026-09-14. Rejected on 2026-09-28. Requested: $20,000. Forum: https://forum.zcashcommunity.com/t/grant-application-1cad-protocol-zk-tls-proof-of-solvency-infrastructure/57597 | Sheet row 682. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/426",
+        "amount": 20000.0,
+        "amountLabel": "Requested · $20,000"
+      },
+      {
+        "name": "#427 · Argos: zcashd Emergency Recovery Phrase Support",
+        "detail": "Submitted 2026-09-16. Rejected on 2026-09-28. Requested: $10,000. Forum: https://forum.zcashcommunity.com/t/grant-application-argos-zcashd-emergency-recovery-phrase-support/57628 | Sheet row 683. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/427#event-31246441635",
+        "amount": 10000.0,
+        "amountLabel": "Requested · $10,000"
+      },
+      {
+        "name": "#428 · Zcash Ghana (October 2026 - December 2026)",
+        "detail": "Submitted 2026-09-16. Approved on 2026-09-28. Requested: $12,600. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/zcash-ghana-october-2026-december-2026/57632 | Sheet row 684. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/428",
+        "amount": 12600.0,
+        "amountLabel": "Requested · $12,600"
+      },
+      {
+        "name": "#429 · Zcash SeedSigner: DIY open source air gapped signer for shielded ZEC",
+        "detail": "Submitted 2026-09-18. Rejected on 2026-09-28. Requested: $30,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-seedsigner-a-diy-open-source-air-gapped-signer-for-shielded-zec-resubmission/57656 | Sheet row 685. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/429",
+        "amount": 30000.0,
+        "amountLabel": "Requested · $30,000"
+      },
+      {
+        "name": "#430 · Zebra: auditing and closing the peer-supplied-count allocation class",
+        "detail": "Submitted 2026-09-18. Rejected on 2026-09-28. Requested: $28,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zebra-auditing-and-closing-the-peer-supplied-count-allocation-class/57724 | Sheet row 686. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/430",
+        "amount": 28000.0,
+        "amountLabel": "Requested · $28,000"
+      },
+      {
+        "name": "#431 · Zcash Network School Kazakhstan",
+        "detail": "Submitted 2026-09-18. Approved on 2026-09-28. Requested: $21,425. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/zcash-network-school/55269/22 | Sheet row 687. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/431",
+        "amount": 21425.0,
+        "amountLabel": "Requested · $21,425"
+      },
+      {
+        "name": "#435 · P2P Cash-to-ZEC Onboarding via Bank CDMs",
+        "detail": "Submitted 2026-09-19. ZCG to discuss. Requested: $40,500. Forum: https://forum.zcashcommunity.com/t/grant-application-p2p-cash-to-zec-onboarding-via-bank-cdms/57741 | Sheet row 688. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/435",
+        "amount": 40500.0,
+        "amountLabel": "Requested · $40,500"
+      },
+      {
+        "name": "#434 · ZIPs For Nerds",
+        "detail": "Submitted 2026-09-19. Rejected on 2026-09-28. Requested: $7,500. Forum: https://forum.zcashcommunity.com/t/grant-application-zips-for-nerds-one-explainer-per-zip/57705 | Sheet row 689. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/434",
+        "amount": 7500.0,
+        "amountLabel": "Requested · $7,500"
+      },
+      {
+        "name": "#436 · Verified Pasta Curve Operations, Poseidon R1CS Constraints, and Folding-Based Recursive Proof Architecture",
+        "detail": "Submitted 2026-09-19. Rejected on 2026-09-28. Requested: $150,000. Forum: https://forum.zcashcommunity.com/t/grant-application-verified-pasta-curve-operations-poseidon-r1cs-constraints-and-folding-based-recursive-proof-architecture/57712 | Sheet row 690. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/436",
+        "amount": 150000.0,
+        "amountLabel": "Requested · $150,000"
+      },
+      {
+        "name": "#437 · Zcash Selected-Payment Receipts SDK",
+        "detail": "Submitted 2026-09-20. Rejected on 2026-09-28. Requested: $42,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-selected-payment-receipts-sdk/57729 | Sheet row 691. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/437",
+        "amount": 42000.0,
+        "amountLabel": "Requested · $42,000"
+      },
+      {
+        "name": "#386 · ZKP-cryptography course",
+        "detail": "Submitted 2026-09-20. ZCG to discuss. Requested: $5,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zkp-cryptography-course-4th-edition/57698 | Sheet row 692. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/386#issuecomment-5750121540",
+        "amount": 5000.0,
+        "amountLabel": "Requested · $5,000"
+      },
+      {
+        "name": "#438 · Human readable version of Ironwood formal verification, first steps - bulletproofs in the AGM",
+        "detail": "Submitted 2026-09-20. Approved on 2026-09-28. Requested: $8,000. Approved application; no payment or completion is implied. Forum: https://forum.zcashcommunity.com/t/grant-application-human-readable-version-of-ironwood-formal-verification-first-steps-bulletproofs-in-the-agm/57726 | Sheet row 693. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/438",
+        "amount": 8000.0,
+        "amountLabel": "Requested · $8,000"
+      },
+      {
+        "name": "#439 · Zebra-Native Non-Custodial Mining Stack — Zebra pool engine, test harness, lightwalletd & shielded-pool telemetry",
+        "detail": "September 28 minutes say remains open; the grant ledger labels this rejected on the same date. GitHub remains ready for review. Excluded from confirmed approval/rejection counts pending reconciliation. Requested: $19,500. Forum: https://forum.zcashcommunity.com/t/grant-application-zebra-native-non-custodial-mining-stack-robotbase/57749 | Sheet row 694. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/439",
+        "amount": 19500.0,
+        "amountLabel": "Requested · $19,500"
+      },
+      {
+        "name": "#441 · Bitcointalk Signature Campaign & ZEC Community Engagement — 3 Months",
+        "detail": "Submitted 2026-09-22. ZCG to discuss. Requested: $90,000. Forum: https://forum.zcashcommunity.com/t/grant-application-bitcointalk-signature-campaign-zec-community-engagement-3-months/57752 | Sheet row 695. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/441",
+        "amount": 90000.0,
+        "amountLabel": "Requested · $90,000"
+      },
+      {
+        "name": "#442 · ZCASH AFRICA PRIVACY ENGINEERING RESIDENCY",
+        "detail": "Submitted 2026-09-23. ZCG to discuss. Requested: $49,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-africa-privacy-engineering-residency-pilot-web3bridge/57796 | Sheet row 696. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/442",
+        "amount": 49000.0,
+        "amountLabel": "Requested · $49,000"
+      },
+      {
+        "name": "#443 · zswap by stallion labs",
+        "detail": "Submitted 2026-09-24. Filtered by FPF / Outside of Scope / Guidelines Not Met. Requested: $50,000. Forum:  | Sheet row 697. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/443",
+        "amount": 50000.0,
+        "amountLabel": "Requested · $50,000"
+      },
+      {
+        "name": "#444 · Independent Recomputation of the Zcash Supply Ledger, including the NU7 NSM Reserve",
+        "detail": "Submitted 2026-09-25. ZCG to discuss. Requested: $50,000. Forum: https://forum.zcashcommunity.com/t/grant-application-independent-recomputation-of-the-zcash-supply-ledger-including-the-nu7-nsm-reserve/57799 | Sheet row 698. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/444",
+        "amount": 50000.0,
+        "amountLabel": "Requested · $50,000"
+      },
+      {
+        "name": "#445 · Shielded x402: private machine payments for Zcash",
+        "detail": "Submitted 2026-09-25. Rejected on 2026-09-28. Requested: Not verified in captured application. Forum: https://forum.zcashcommunity.com/t/grant-application-shielded-x402-private-machine-payments-for-zcash/57826/3 | Sheet row 699. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/445",
+        "amount": null,
+        "amountLabel": "Requested · Not verified in captured application"
+      },
+      {
+        "name": "#447 · Mexico Tech Week October 2026 - Zcash México",
+        "detail": "Submitted 2026-09-26. ZCG to discuss. Requested: $7,980. Forum: https://forum.zcashcommunity.com/t/grant-application-mexico-tech-week-october-2026-zcash-mexico/57829 | Sheet row 700. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/447",
+        "amount": 7980.0,
+        "amountLabel": "Requested · $7,980"
+      },
+      {
+        "name": "#448 · Zcash Privacy Ecosystem Mapping & Adoption Data",
+        "detail": "Submitted 2026-09-26. ZCG to discuss. Requested: $5,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-privacy-ecosystem-mapping-adoption-data/57843 | Sheet row 701. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/448",
+        "amount": 5000.0,
+        "amountLabel": "Requested · $5,000"
+      },
+      {
+        "name": "#449 · Zcash Türkiye University Tour 2026 — ZCG",
+        "detail": "Submitted 2026-09-27. ZCG to discuss. Requested: $27,000. Forum: https://forum.zcashcommunity.com/t/zcash-turkiye-university-tour-2026/57848 | Sheet row 702. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/449",
+        "amount": 27000.0,
+        "amountLabel": "Requested · $27,000"
+      },
+      {
+        "name": "#450 · Zcash Global Community & Marketing Operations",
+        "detail": "Submitted 2026-09-28. ZCG to discuss. Requested: $12,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-global-community-marketing-operations/57860 | Sheet row 703. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/450",
+        "amount": 12000.0,
+        "amountLabel": "Requested · $12,000"
+      },
+      {
+        "name": "#451 · OW Terminal — decentralized open-weight inference, uncensored choice, shielded ZEC metering",
+        "detail": "Submitted 2026-09-28. Waiting on applicant to post to forum. Requested: $45,000. Forum:  | Sheet row 704. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/451",
+        "amount": 45000.0,
+        "amountLabel": "Requested · $45,000"
+      },
+      {
+        "name": "#452 · zealz.fun: Bringing Real, Redeemable Zcash to the Masses",
+        "detail": "Submitted 2026-09-28. Waiting on applicant to post to forum. Requested: $170,000. Forum:  | Sheet row 705. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/452",
+        "amount": 170000.0,
+        "amountLabel": "Requested · $170,000"
+      },
+      {
+        "name": "#453 · zswap by stalllion labs",
+        "detail": "Submitted 2026-09-29. ZCG to discuss. Requested: $50,000. Forum: https://forum.zcashcommunity.com/t/zswap-a-shielded-atomic-swap-specification-for-zcash-grant-application-request-for-review/57884 | Sheet row 706. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/453",
+        "amount": 50000.0,
+        "amountLabel": "Requested · $50,000"
+      },
+      {
+        "name": "#455 · Nozy Sync Engine public ($45k)",
+        "detail": "Submitted 2026-09-29. ZCG to discuss. Requested: $45,000. Forum: https://forum.zcashcommunity.com/t/grant-application-nozy-sync-engine-public-compacttxstreamer-in-front-of-zebrad/57896 | Sheet row 707. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/455",
+        "amount": 45000.0,
+        "amountLabel": "Requested · $45,000"
+      },
+      {
+        "name": "#454 · 0xramp: ZEC payments and wallet integrations (revision of #408)",
+        "detail": "Submitted 2026-09-29. ZCG to discuss. Requested: $45,000. Separate revised application following rejection of #408. Forum: https://forum.zcashcommunity.com/t/grant-application-0xramp-zec-payments-and-wallet-integrations-revision-of-408/57892 | Sheet row 708. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/454",
+        "amount": 45000.0,
+        "amountLabel": "Requested · $45,000"
+      },
+      {
+        "name": "#456 · Zcash Privacy Payment Rail & NFC Programmable Cards",
+        "detail": "Submitted 2026-09-30. ZCG to discuss. Requested: $150,000. Forum: https://forum.zcashcommunity.com/t/grant-application-zcash-privacy-payment-rail-nfc-programmable-cards/57930 | Sheet row 709. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/456#event-32186972141",
+        "amount": 150000.0,
+        "amountLabel": "Requested · $150,000"
+      },
+      {
+        "name": "#457 · Build Buddies x Zcash: Privacy Education and Community Adoption in Latin America and Asia",
+        "detail": "Submitted 2026-09-30. Waiting on applicant to post to forum. Requested: $10,000. Forum:  | Sheet row 710. Reviewed October 1 for September close.",
+        "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/457",
+        "amount": 10000.0,
+        "amountLabel": "Requested · $10,000"
+      }
+    ],
+    "id": "2026-09",
+    "evidenceCutoff": "2026-09-30",
+    "reviewedAt": "2026-10-01",
+    "documents": {
+      "monthly": {
+        "id": "2026-09",
+        "month": "2026-09",
+        "label": "September 1–30",
+        "kind": "monthly",
+        "periodStart": "2026-09-01",
+        "periodEnd": "2026-09-30",
+        "financialMonth": "2026-09",
+        "designVersion": "Editorial 4.0 / Covers 2",
+        "pdf": "/monthly/editions/2026-09/24055acad14a/OpenZcash-Monthly-September-2026.pdf",
+        "manifest": "/monthly/editions/2026-09/24055acad14a/pages.json",
+        "pageCount": 10,
+        "cover": "/monthly/editions/2026-09/24055acad14a/cover.jpg",
+        "assetBase": "/monthly/editions/2026-09/24055acad14a",
+        "sha256": "24055acad14a306a060cf2a14f8050723ed4d7df3632c83ec369b4487936ef83",
+        "bytes": 1260589,
+        "pageWidth": 1200,
+        "pageHeight": 675
+      },
+      "operations": {
+        "id": "2026-09",
+        "month": "2026-09",
+        "label": "September 1–30",
+        "kind": "monthly",
+        "periodStart": "2026-09-01",
+        "periodEnd": "2026-09-30",
+        "financialMonth": "2026-09",
+        "designVersion": "Editorial 4.0 / Covers 2",
+        "pdf": "/monthly/editions/2026-09/534df31a888c/OpenZcash-Operations-September-2026.pdf",
+        "manifest": "/monthly/editions/2026-09/534df31a888c/pages.json",
+        "pageCount": 35,
+        "cover": "/monthly/editions/2026-09/534df31a888c/cover.jpg",
+        "assetBase": "/monthly/editions/2026-09/534df31a888c",
+        "sha256": "534df31a888c705521f063ebe62d874371181240479bd2adf4b725ec5cbd5d95",
+        "bytes": 1446222,
+        "pageWidth": 1200,
+        "pageHeight": 675
+      }
+    }
+  },
+  {
     "documents": {
       "monthly": {
         "id": "2026-09-01-to-10",

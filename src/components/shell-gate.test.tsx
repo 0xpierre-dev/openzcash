@@ -7,7 +7,7 @@ vi.mock("./app-shell", () => ({ AppShell: ({ children }: { children: ReactNode }
 import { ShellGate } from "./shell-gate";
 import { useZarvis } from "./zarvis/zarvis-provider";
 function Probe() { const chat = useZarvis(); return createElement("span", { "data-probe": "" }, chat.messages.length); }
-const render = (pathname: string) => { state.pathname = pathname; return renderToStaticMarkup(createElement(ShellGate, { isAdmin: false, children: createElement(Probe) })); };
+const render = (pathname: string) => { state.pathname = pathname; return renderToStaticMarkup(<ShellGate isAdmin={false}><Probe /></ShellGate>); };
 describe("ShellGate", () => {
   it("keeps the Zarvis conversation state mounted on bare pages such as Monthly, without the shell", () => {
     const html = render("/monthly");

@@ -4,7 +4,7 @@ The active workflow produces **Monthly** and **Operations**, plus **Sources & Da
 
 ## Authority, dates and active standard
 
-First read `routine-activation.json`. Editorial 4.0 automatic publication remains disabled while its status is `pending-user-authorization`. The proposed scheduler update requires explicit confirmation after automatic approval review rejected it. Do not use the older job or these files to bypass that decision. A direct user instruction to publish an approved current edition authorizes that one release; it does not enable recurring publication or change the scheduler. Once the native update is authorized and verified, its recorded publication policy governs subsequent runs. The active saved instructions are in `/Users/maiconguimaraes/openzcash/reports/monthly`. Read `OPENZCASH-MONTHLY-PROMPT.md`, `reading-set-contract.json`, `DESIGN-SYSTEM.md`, `reference.json`, `README.md` and this guide from that durable path. The older instructions found in a production checkout must not override the approved two-PDF format.
+First read `routine-activation.json` and verify the saved native automation prompt against `AUTOMATION-PROMPT.md`. The October 1, 2026 native update was authorized, saved and read back successfully; the active policy permits recurring publication after fresh controls. A later pending, mismatched or disabled activation record still blocks automatic publication. The active saved instructions are in `/Users/maiconguimaraes/openzcash/reports/monthly`. Read `OPENZCASH-MONTHLY-PROMPT.md`, `reading-set-contract.json`, `DESIGN-SYSTEM.md`, `reference.json`, `README.md` and this guide from that durable path. The older instructions found in a production checkout must not override the approved two-PDF format.
 
 For October 1 publish reporting issue 2026-09, covering September 1–30 with August as comparison. Record October 1 as the publication/review date, never as the activity month. Recompute calendar boundaries for every later run and preserve the intended close if execution is delayed. The two PDFs and sources share an issue identity and cutoff. Research all data again; reference PDFs establish design only.
 
@@ -12,7 +12,7 @@ A failed data check, missing critical source, unresolved export/import compatibi
 
 ## Production baseline
 
-Production is deployed through Railway CLI uploads. The default Git branch is not sufficient evidence of what is live.
+Production may be deployed from GitHub or through Railway CLI uploads. The default Git branch alone is not evidence of what is live.
 
 - Git remote: `https://github.com/Michae2xl/openzcash.git`
 - Railway project: `5476eada-862a-47bd-9166-49be9933d33c`
@@ -20,7 +20,7 @@ Production is deployed through Railway CLI uploads. The default Git branch is no
 - Service: `ad10d745-f505-49ed-8f7e-5054ec572ab4` (`zbo`)
 - Public reader: `https://openzcash.org/monthly`
 
-Read the active successful production deployment and extract the full Git SHA from `meta.cliMessage` (`openzcash git:<SHA> ...`). Fetch the remote, verify that commit is available, and create a clean worktree from it. Preserve changes already in production, including other apps and financial fixes. Do not deploy a stale development checkout. If another deployment is in progress, wait for its outcome and resolve the baseline before proceeding.
+Read the active successful production deployment. For CLI uploads, extract the full Git SHA from `meta.cliMessage` (`openzcash git:<SHA> ...`). For GitHub deployments, require Railway’s full `meta.commitHash`, repository `Michae2xl/openzcash` and branch `main`. If both SHA fields exist they must agree; missing, abbreviated or conflicting provenance blocks publication. Record the deployment ID and provenance privately. Fetch the remote, verify that exact commit is available, and create a clean worktree from it. Preserve changes already in production, including other apps and financial fixes. Do not deploy a stale development checkout. If another deployment is in progress, wait for its outcome and resolve the baseline before proceeding.
 
 ## Prepare and publish the complete set
 
