@@ -50,11 +50,6 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Don't advertise the framework/version in responses.
   poweredByHeader: false,
-  // Development only: the Next.js badge floats over a corner of the screen,
-  // and on phones every corner holds a shell control (the bottom tab bar, the
-  // back and theme buttons). Errors still raise the red issues pill and the
-  // overlay; with the badge off, closing the pill leaves the corner clear.
-  devIndicators: false,
   // The home is the ZCG overview. A server redirect answers before any
   // rendering (the page-level redirect would stream behind loading.tsx).
   async redirects() {
