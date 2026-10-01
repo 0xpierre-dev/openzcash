@@ -9,6 +9,7 @@ import { FEEDBACK_REASONS, type FeedbackReason } from "@/lib/zarvis/feedback";
 import type { AnswerProvenance } from "@/lib/zarvis/types";
 import { portugueseBrowser, useZarvis, type DisplayMessage } from "./zarvis-provider";
 import { ZarvisFigure } from "./zarvis-figure";
+import { ZarvisWordmark } from "./zarvis-wordmark";
 import { ZarvisDepthSelect } from "./zarvis-depth-select";
 import { ZarvisCompanion, ZarvisMotionToggle } from "./zarvis-companion";
 
@@ -49,7 +50,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   // Empty state: the mascot and title sit above the composer, the starters below it, all centred as one group.
   return <section className={`zarvis-chat ${compact ? "zarvis-chat-compact" : ""}`} data-empty={empty || undefined} aria-label="Conversation with Zarvis">
     <div className="zarvis-chat-toolbar">
-      <span className="zarvis-chat-name">Zarvis</span>
+      <ZarvisWordmark className="zarvis-chat-name"/>
       <div className="zarvis-toolbar-actions">
       <ZarvisMotionToggle className="zarvis-motion zarvis-motion-toolbar"/>
       <button type="button" onClick={() => { chat.clear(); input.current?.focus(); }} disabled={empty && !chat.draft} className="zarvis-text-button">＋ New chat</button>

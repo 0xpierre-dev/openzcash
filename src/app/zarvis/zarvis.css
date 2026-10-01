@@ -35,6 +35,9 @@
 .zarvis-chat { display: flex; flex-direction: column; min-width: 0; height: calc(100dvh - 210px); min-height: 450px; color: var(--ink); }
 .zarvis-chat-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 8px 12px; }
 .zarvis-chat-name { font-size: 18px; font-weight: 600; letter-spacing: -.025em; }
+/* The Zcash Z: cap height of the name, its two strokes reaching just above and below. */
+.zarvis-wordmark { white-space: nowrap; }
+.zarvis-wordmark svg.zarvis-wordmark-z { display: inline-block; width: .61em; height: .986em; margin-right: .02em; vertical-align: -.138em; fill: currentColor; color: inherit; }
 .zarvis-text-button { background: none; border: none; color: var(--muted); padding: 5px 0; font-size: 12px; cursor: pointer; }
 .zarvis-text-button:hover { color: var(--ink); }
 .zarvis-text-button:disabled { opacity: .4; cursor: default; }
