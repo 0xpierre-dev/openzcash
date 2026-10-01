@@ -181,11 +181,11 @@ describe("Program navigation", () => {
     expect(app.label).toBe("Coinholder Grants");
     expect(app.sub).toBe(PROGRAM.officialName);
     expect(app.href).toBe("/coinholders");
-    expect(app.pages.filter((p) => !p.hidden).map((p) => p.label)).toEqual(["Results", "The fund", "Coinholder Copilot"]);
-    // Verify it yourself opens from each round's results, not from the sidebar.
-    expect(app.pages.find((p) => p.href === "/coinholders/verify")).toMatchObject({ label: "Verify it yourself", hidden: true });
+    expect(app.pages.filter((p) => !p.hidden).map((p) => p.label)).toEqual(["Results", "Verify it yourself", "The fund", "Coinholder Copilot"]);
+    // Verify it yourself sits in the sidebar right after the results it checks.
+    expect(app.pages.find((p) => p.href === "/coinholders/verify")?.hidden).toBeFalsy();
     // …but ⌘K finds it; other hidden pages stay out of the palette.
-    expect(paletteEntries(app).map((p) => p.label)).toEqual(["Overview", "Results", "The fund", "Coinholder Copilot", "Verify it yourself"]);
+    expect(paletteEntries(app).map((p) => p.label)).toEqual(["Overview", "Results", "Verify it yourself", "The fund", "Coinholder Copilot"]);
     const zcg = APPS.find((a) => a.id === "zcg")!;
     expect(paletteEntries(zcg).map((p) => p.label)).not.toContain("Stipends");
     expect(APPS.find((a) => a.id === "fpf")).toMatchObject({ sub: "Program administrator", pages: [] });

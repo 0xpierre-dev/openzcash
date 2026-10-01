@@ -210,6 +210,7 @@ export default async function VerifyPage({
         chain={chain}
         program={PROGRAM_LABEL}
       />
+      <Rebuild round={round} check={check} chain={chain} />
       <DecisionChart
         rows={decisions}
         orders={{
@@ -218,7 +219,6 @@ export default async function VerifyPage({
         }}
         text={chartText(round, check)}
       />
-      <Rebuild round={round} check={check} chain={chain} />
       <details className={own.allFigures}>
         <summary>
           <h2 id="every" className={own.allTitle}>
