@@ -53,6 +53,7 @@ Include, when applicable:
 - ZCG approvals, conditional decisions, declines, withdrawals and open applications. Show original proposal links, request amounts, decision dates and sources. Include carried-forward open applications with their original submission dates. Distinguish new proposals from those already under review.
 - Coinholder rounds and proposals, ZCAP, ZCG elections, network-upgrade consultations and other active processes. Include the actual proposals or ballot questions, eligibility, material implications, verified results and next deadlines. ZCG committee review is separate from a Coinholder ballot. An advisory poll is not network activation.
 - Community reports, approved community grants, field work, developer initiatives, education, events and local operations. Attribute self-reported results and keep report publication dates separate from the activity period.
+- Classify grant delivery separately from community chapters. ZECsy belongs in grant/grantee delivery, not the community register. Receiving a grant alone does not make a project a regional community. Reported milestone completion, expenditure, committee acceptance and ledger payment are separate states.
 - New-project status, funding stage, demonstrated milestones, unresolved questions and supported insights. Avoid presenting an announcement as a shipped product or an application as funding received.
 - Dated treasury holdings, available flows and separately dated valuations.
 - Events and deadlines, including Zcon while relevant; distinguish occurred, upcoming, postponed and cancelled.
@@ -68,7 +69,7 @@ The two PDFs retain clickable original-source links and essential units, dates a
 ## Research and data integrity
 
 1. Refresh the OpenZcash API, connected Google Sheet and current ecosystem/community catalogs. Verify successful reads, pagination, time bounds, row identity, currency, units and completeness. Preserve raw responses, capture times, source URLs, hashes and reproducible transformations.
-2. Trace claims to primary evidence: original grant applications and amendments, ZCG minutes, FPF records, official releases, ZF and other team reports, community-authored reports and event organizers. Read relevant later posts and corrections in continuing threads.
+2. Trace claims to primary evidence: original grant applications and amendments, ZCG minutes, FPF records, official releases, ZF and other team reports, community-authored reports and event organizers. Read relevant later posts and corrections in continuing threads. Verify pagination and post-stream IDs: a first-page response is not a complete thread. Read the target month and the latest relevant posts before claiming that a monthly report is absent.
 3. Build and reconcile the coverage universe before choosing highlights. Start from the current OpenZcash records and `coverage-seed.json`, add newly discovered projects and communities, and record explicit gaps. No fixed roster or historical count establishes exhaustive coverage.
 4. Keep the source status at cutoff. When a capture occurs after cutoff, reconstruct state from dated history. Later approvals, comments, withdrawals or applications must not silently enter an earlier issue. If status cannot be reconstructed, mark it unresolved.
 5. Preserve requested, approved, committed and paid as separate measurements. Payment does not establish approval of the whole request. Record approval conditions and the explicit approved amount; otherwise label the available number as requested. Never sum partially approved requests as approved budgets.
@@ -85,6 +86,10 @@ Each headline states a supported observation. A subline supplies only additional
 Reuse the approved typography, alignment, logo handling and page geometry. Use authentic transparent logos at adequate resolution. Preserve intrinsic shields, badges and wordmarks; remove decorative backing panels. Interior charts, metrics, wallets and features stay on paper with color in text and marks. Official event art and documentary photos retain appropriate backgrounds. Never synthesize an official logo or present generated art as evidence.
 
 Export charts from the reviewed data at adequate resolution or as vectors. Preserve full labels, units and axes. Use searchable PDF text and embedded fonts. The website renders the actual PDFs at `max(2, devicePixelRatio)`, with thumbnail images only for navigation.
+
+## Team recap cross-check
+
+Before final review, locate each team's official monthly recap, including X articles and linked primary evidence. Maintain an item-by-item coverage record mapping material updates to Monthly, Operations or Sources & Data; explain exclusions by period, duplication or lack of verification. If a named recap cannot be read, record the gap rather than claiming it was checked. A recap is the team's account: verify release and pull-request states, distinguish tests from production adoption, attribute benchmarks and state their scope. Do not turn open optimizations into shipped features, or a formal proof of a model into verification of an entire implementation. Keep the ten-page Monthly concise and put supporting project detail in Operations and the source register.
 
 ## Review and publication gates
 
@@ -104,4 +109,4 @@ Export charts from the reviewed data at adequate resolution or as vectors. Prese
 
 Use `PUBLISHING.md` for the authorized recurring publication. A new run does not create another automation. Keep one standard reading set per activity month; partial editions retain their own identity. Revisions preserve existing dates unless refreshed research is explicitly within scope. Never silently return to the legacy one-PDF workflow.
 
-The public archive uses one reader and one complete reading-set catalog. A completed monthly issue is the default; partial tests remain dated alternatives in the same selector. Never link a legacy single PDF as a separate edition UI.
+The public archive uses one reader and one complete reading-set catalog. A completed monthly issue replaces its partial tests in the selector. Retain their immutable assets and redirect retired issue links to the complete month, preserving the selected publication and resetting to its first page. Never link a legacy single PDF as a separate edition UI.
