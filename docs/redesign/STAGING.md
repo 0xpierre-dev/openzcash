@@ -135,11 +135,9 @@ hamburger and the search field described above:
 - Both sheets lock the page behind them. Where the page shows a scrollbar
   (a narrow desktop window, a tablet with a mouse) its gutter stays reserved,
   as the palette does, so nothing shifts sideways.
-- The top bar shows the back control, the page name (the last part of the
-  breadcrumb) and the theme toggle, with 44px controls. Routes with no
-  breadcrumb entry (About Zarvis, Sign in, the Copilot guides) show the page
-  name from the document title (`top-bar-title.tsx`, `pageNameOf`), or
-  "OpenZcash" when there is none.
+- The top bar shows the back control, the app's mark beside the names of the
+  app and the page, and the theme toggle, with 44px controls: see "Phone
+  shell: the top bar" below.
 - Only the tab of the place the visitor is on is marked; an open sheet or the
   open palette marks no tab.
 - The page body is padded by the bar height plus the safe-area inset, so the
@@ -149,6 +147,64 @@ hamburger and the search field described above:
   Next.js badge, which sat over the Home tab. The red issues pill still
   appears when an error is logged (the CSP blocks React's dev-only `eval`, so
   it shows on every full load); closing it leaves the bar clear.
+
+### Phone shell: the top bar (preview, 1 Oct 2026)
+
+Branch `michae2xl/mobile-header`, not in production. At the same widths (960px
+and below) the top bar reads as an app's navigation bar. Above 960px the top
+bar, the breadcrumb, the search field and the buttons are unchanged.
+
+- Identity block (`top-bar-place.tsx`; the rules are `phoneHeaderOf` in
+  `src/lib/phone-header.ts`, unit-tested): right after the back control comes
+  the current app's mark, the sidebar's `AppMark` in a 26px box with the same
+  treatment in each theme (ink glyphs are inverted in dark; apps with no logo
+  show their line icon, Zarvis its own mark). Every logo is a PNG of 128px or
+  more, so the mark stays sharp at 3x; a test guards that.
+- The marks read at one size: a logo fills the box, a line icon fills it too,
+  and a generated glyph, which carries a margin of its own, is drawn at 32px
+  so its ink matches. One exception to the bare mark: in dark the ZecHub ring
+  (navy on near-black) sits on a light disc, in this block only.
+- Beside the mark, one or two lines. An app's landing page (`/zcg`) shows the
+  app name alone, 16px, weight 600. A page inside an app (`/zcg/grants`) shows
+  the app name as a quiet first line (11.5px, weight 500, muted) over the page
+  name (15.5px, weight 600); the mark and that line are one link to the app.
+  A detail page (a single grant) shows its list over the detail label: the
+  first line leads to the list and the mark alone leads to the app.
+- Touch targets are 44px tall. Inside an app the link's target is the whole
+  block, the mark and both lines. On a detail page the mark's target and the
+  target of the two lines are 8px apart. The block ends with its text, so
+  nothing is tappable across the empty part of the bar.
+- Routes the navigation model does not know (About Zarvis, Sign in, the
+  Copilot guides) show no mark and the page name from the document title
+  (`top-bar-title.tsx`, `pageNameOf`), or "OpenZcash" when there is none.
+- Each line stays on one line and ends in an ellipsis, so a long name never
+  wraps or pushes the theme toggle.
+- The block is the breadcrumb folded for a phone, with the same links and the
+  same `Breadcrumb` label. The wide breadcrumb is `display: none` at these
+  widths and the block is `display: none` unless the phone rules apply (a
+  window a fraction of a pixel over 960px included), so exactly one of the two
+  is exposed and the wide screen gains no tab stop.
+- The back control and the theme toggle are plain glyphs with no box and no
+  border, in 44px touch targets. Pressed, a faint 36px disc shows under the
+  glyph; focused, the gold ring is drawn inside the target at the same size,
+  with no halo (it would fall off screen). Negative margins bring each glyph
+  to the 16px page gutter: the chevron's ink starts on it. The back chevron is
+  the same text glyph as on wide screens. The mark, the names, the chevron
+  and the theme glyph share one centre line.
+- The focus ring of the identity links goes round their target: the whole
+  block inside an app, the mark or the two lines on a detail page.
+- The bar is the canvas colour (`--bg`, opaque) over its hairline, so the
+  status area and the bar read as one surface. Its height is 56px plus
+  `env(safe-area-inset-top)`, the same 56px the two sheets stop under. In dark
+  the shell's gold glow fades in over the first 144px under the bar, so the
+  bar is not a flat band over a glowing page.
+- The Treasury sheet's title uses the type of the bar's name (16px, weight
+  600). The Apps sheet keeps the OpenZcash wordmark as it is.
+- At every width the browser's `theme-color` follows the theme
+  (`use-theme-color.ts`): the shell's own `--bg` token, cream in light and
+  near-black in dark, so `theme.css` stays the only place that defines the
+  colours. The server still sends cream, the light default; leaving the shell
+  for the bare Monthly reader hands that value back.
 
 ## Deployment and migration boundary
 
