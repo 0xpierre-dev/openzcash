@@ -208,3 +208,17 @@ export const IconNews = svg(
     <path d="M8 9h6M8 13h6M8 17h3" />
   </>,
 );
+
+export const IconHome = svg(
+  <>
+    <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+    <path d="M9.5 20v-5.5h5V20" />
+  </>,
+);
+
+export const IconSearch = svg(
+  <>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="M20 20l-4.3-4.3" />
+  </>,
+);

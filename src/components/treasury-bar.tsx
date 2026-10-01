@@ -1,9 +1,10 @@
-import Link from "next/link";
 import { getTreasurySummary } from "@/lib/zcash/treasury-summary";
+import { TreasuryPool } from "./treasury-pool";
 
 /**
  * The two treasuries, pinned to the bottom of every shell page; each pool
- * links to its own page. Server component streamed into the client shell
+ * links to its own page on wide screens and is plain figures in the phone's
+ * Treasury sheet (see TreasuryPool). Server component streamed into the client shell
  * through a Suspense boundary, so a slow price or chain source never delays
  * the page itself.
  */
@@ -17,7 +18,7 @@ export async function TreasuryBar() {
     <div className="rd-treasury-inner">
       <div className="rd-treasury-pools">
         {pools.map((p) => (
-          <Link
+          <TreasuryPool
             key={p.name}
             href={p.href}
             className={
@@ -49,7 +50,7 @@ export async function TreasuryBar() {
               ≈ {p.usd}
               {p.sub ? ` · ${p.sub}` : ""}
             </span>
-          </Link>
+          </TreasuryPool>
         ))}
       </div>
       <span className="rd-treasury-meta tnum">

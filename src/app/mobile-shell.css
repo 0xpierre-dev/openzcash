@@ -1,0 +1,482 @@
+/*
+ * The phone shell. Where the sidebar is a drawer (960px and below) the
+ * workspace behaves like an app: a bottom tab bar (Home, Treasury, Zarvis,
+ * Search, Apps) replaces the pinned treasury strip, the hamburger, the search
+ * field and the floating Zarvis launcher; the treasuries open in a bottom
+ * sheet and the navigation rises as a full-height sheet. Loaded after
+ * theme.css and zarvis.css. Above 960px only the "hidden by default" rules
+ * below apply (the tab bar, the closed sheet, the top bar's fallback page
+ * name), so the wide shell is untouched.
+ *
+ * The width is mirrored in src/lib/mobile-tabs.ts (MOBILE_NAV_QUERY).
+ */
+.rd-tabbar {
+  display: none;
+}
+/* The page name for routes with no breadcrumb: the phone top bar only. */
+@media (min-width: 961px) {
+  .rd-topbar-title {
+    display: none;
+  }
+}
+
+/* ---------- Bottom sheet (a modal <dialog>, see bottom-sheet.tsx) ---------- */
+.rd-sheet {
+  position: fixed;
+  inset: auto 0 0 0;
+  width: min(100%, 520px);
+  max-width: none;
+  /* The top bar stays whole above an open sheet, and is the place to tap out. */
+  max-height: calc(100dvh - env(safe-area-inset-top) - 56px);
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 12px 12px 0 0;
+  background: var(--surface);
+  color: var(--ink);
+  overflow: hidden;
+}
+/* Floating in the middle of a wider screen, the sheet is edged on its sides too. */
+@media (min-width: 521px) {
+  .rd-sheet {
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+}
+@media (min-width: 521px) and (max-width: 960px) {
+  .rd-side {
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+}
+.rd-sheet[open] {
+  display: flex;
+  animation: rd-sheet-in 0.2s ease-out;
+}
+.rd-sheet::backdrop {
+  background: rgba(10, 10, 15, 0.5);
+}
+/* The page behind an open sheet stays put. The component sets --sheet-gutter
+   to "stable" when the page shows a scrollbar, so the room it takes stays
+   reserved and nothing behind shifts sideways. */
+html:has(.rd-sheet[open]) {
+  overflow: hidden;
+  scrollbar-gutter: var(--sheet-gutter, auto);
+}
+@keyframes rd-sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+.rd-sheet-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.rd-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 8px 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.rd-sheet-head h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.rd-sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.rd-sheet-close:hover {
+  color: var(--ink);
+  background: var(--surface2);
+}
+.rd-sheet-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+.rd-sheet-body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The treasuries inside the sheet: one pool per row, the figures legible. */
+.rd-treasury-sheet:empty::before {
+  content: "The treasury figures are unavailable right now.";
+  display: block;
+  padding: 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rd-sheet .rd-treasury-inner {
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rd-sheet .rd-treasury-inner[aria-busy="true"] {
+  padding: 20px;
+}
+.rd-sheet .rd-treasury-pools {
+  display: block;
+}
+.rd-sheet .rd-treasury-pool {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "name"
+    "zec"
+    "usd";
+  row-gap: 5px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  white-space: normal;
+}
+.rd-sheet .rd-treasury-head {
+  justify-content: flex-start;
+  gap: 10px;
+}
+.rd-sheet .rd-treasury-name,
+.rd-sheet .rd-treasury-asof {
+  font-size: 11px;
+}
+.rd-sheet .rd-treasury-asof {
+  letter-spacing: 0;
+}
+/* Dark: the dim token is too faint for small text on the sheet surface. */
+.rd-shell[data-theme="dark"] .rd-sheet .rd-treasury-name,
+.rd-shell[data-theme="dark"] .rd-sheet .rd-treasury-asof,
+.rd-shell[data-theme="dark"] .rd-sheet .rd-treasury-meta {
+  color: var(--muted);
+}
+.rd-sheet .rd-treasury-zec {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.rd-sheet .rd-treasury-zec small {
+  font-size: 13px;
+}
+.rd-sheet .rd-treasury-usd {
+  font-size: 13px;
+  line-height: 1.4;
+}
+.rd-sheet .rd-treasury-meta {
+  display: block;
+  justify-self: stretch;
+  padding: 14px 20px 16px;
+  font-size: 12px;
+  white-space: normal;
+}
+
+@media (max-width: 960px) {
+  .rd-shell {
+    --tabbar-h: 56px;
+    /* The room the bar takes at the bottom of the screen, home indicator included. */
+    --tabbar-space: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Top bar: back, the page name, the theme ---------- */
+  .rd-topbar .rd-menu,
+  .rd-topbar .rd-search {
+    display: none;
+  }
+  .rd-topbar .rd-breadcrumb {
+    flex: 1;
+    flex-wrap: nowrap;
+    min-width: 0;
+    font-size: 15px;
+  }
+  /* Only the last part of the trail: the page the visitor is on. */
+  .rd-topbar .rd-breadcrumb > * {
+    display: none;
+  }
+  .rd-topbar .rd-breadcrumb > span:last-child {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  /* Touch controls: 44px. */
+  .rd-topbar .rd-icon-button,
+  .rd-topbar .rd-back {
+    flex: none;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ---------- Layout: the page ends above the tab bar ---------- */
+  .rd-body {
+    padding-bottom: var(--tabbar-space);
+  }
+  /* The treasuries moved into the Treasury tab's sheet, the launcher into the centre tab. */
+  .rd-treasury-bar,
+  .zarvis-launcher-wrap {
+    display: none;
+  }
+
+  /* ---------- Bottom tab bar ---------- */
+  .rd-tabbar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 35;
+    display: grid;
+    /* Five equal tabs; on a tablet they stay together in the middle of the bar. */
+    grid-template-columns: repeat(5, minmax(0, 104px));
+    justify-content: center;
+    height: var(--tabbar-space);
+    padding: 0 max(6px, env(safe-area-inset-right)) env(safe-area-inset-bottom)
+      max(6px, env(safe-area-inset-left));
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .rd-tab {
+    display: grid;
+    grid-template-rows: 28px 14px;
+    row-gap: 3px;
+    align-content: center;
+    justify-items: center;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 14px;
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .rd-tab:hover {
+      color: var(--ink);
+    }
+    .rd-tab:hover .rd-tab-glyph img {
+      opacity: 1;
+    }
+  }
+  .rd-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -4px;
+  }
+  .rd-tab-label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rd-tab-glyph {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+  }
+  /* Generated glyphs are drawn in ink: quiet at rest, flipped to light in dark. */
+  .rd-tab-glyph img {
+    width: 22px;
+    height: 22px;
+    opacity: 0.62;
+  }
+  .rd-shell[data-theme="dark"] .rd-tab-glyph img {
+    filter: invert(1);
+  }
+  /* Only the place the visitor is on is marked; an open sheet marks no tab. */
+  .rd-tab[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .rd-tab[aria-current="page"] .rd-tab-glyph img {
+    opacity: 1;
+  }
+  /* The centre tab: the Zarvis mark in a round badge that rises above the bar. */
+  .rd-tab-badge {
+    align-self: end;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--surface);
+  }
+  .rd-tab-badge .zarvis-mark {
+    width: 36px;
+    height: 36px;
+  }
+  .rd-tab-centre[aria-current="page"] .rd-tab-badge {
+    border-color: var(--accent);
+  }
+
+  /* ---------- Apps: the sidebar as a full-height sheet ---------- */
+  .rd-side {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: min(100%, 520px);
+    /* The top bar stays whole above the sheet, and is the place to tap out. */
+    height: calc(100dvh - env(safe-area-inset-top) - 56px);
+    margin: 0 auto;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--line);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    font-size: 15px;
+    /* Closed: off screen and out of the tab order. */
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform 0.22s ease,
+      visibility 0s linear 0.22s;
+  }
+  .rd-shell[data-nav="open"] .rd-side {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.22s ease;
+  }
+  .rd-shell[data-nav="open"] .rd-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(10, 10, 15, 0.5);
+  }
+  /* The banner becomes a sheet header like the Treasury sheet's: flat, a
+     hairline under it, brand on the left, close on the right. */
+  .rd-side-banner {
+    flex-direction: row;
+    justify-content: flex-start;
+    min-height: 56px;
+    padding: 0 60px 0 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .rd-side-banner::after {
+    display: none;
+  }
+  .rd-side-banner .rd-brand {
+    flex-direction: row;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--ink);
+    text-align: left;
+  }
+  .rd-side-banner .rd-brand img {
+    width: 30px;
+    height: 30px;
+    filter: none;
+  }
+  .rd-brand-text strong {
+    font-size: 16px;
+  }
+  .rd-side-banner .rd-side-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    top: 6px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .rd-side-banner .rd-side-close:hover {
+      color: var(--ink);
+      background: var(--surface2);
+    }
+  }
+  .rd-side-close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -4px;
+  }
+  /* Touch rows: 44px. */
+  .rd-side-nav {
+    padding: 8px 12px 16px;
+    overscroll-behavior: contain;
+  }
+  .rd-side-item {
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+  }
+  .rd-side-page {
+    min-height: 44px;
+    font-size: 14px;
+  }
+  /* Line icons take the logo's box, so every app name starts on one edge. */
+  .rd-side-app-row .rd-side-icon,
+  .rd-side-app-row .rd-side-logo {
+    width: 20px;
+    height: 20px;
+  }
+  /* The generated marks carry their own margin; the drawn icons get the same. */
+  .rd-side-app-row .rd-side-icon:not(.zarvis-mark) {
+    padding: 2px;
+  }
+  .rd-side-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+  .rd-side-foot {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 6px;
+    padding: 8px 12px 10px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .rd-side-foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 960px) and (prefers-reduced-motion: reduce) {
+  .rd-side,
+  .rd-shell[data-nav="open"] .rd-side {
+    transition: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rd-sheet[open] {
+    animation: none;
+  }
+}
+@media print {
+  .rd-tabbar,
+  .rd-sheet {
+    display: none !important;
+  }
+  .rd-body {
+    padding-bottom: 0;
+  }
+}

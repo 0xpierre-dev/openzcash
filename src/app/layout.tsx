@@ -7,6 +7,7 @@ import "./redesign.css";
 import "./workspace.css";
 import "./theme.css";
 import "./zarvis/zarvis.css";
+import "./mobile-shell.css";
 import { ShellGate } from "@/components/shell-gate";
 import { TapFeedback } from "@/components/tap-feedback";
 import { TreasuryBar } from "@/components/treasury-bar";
@@ -56,7 +57,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   // The installed app paints under the notch and the home indicator; the
-  // shell pads its bars with env(safe-area-inset-*) (theme.css, "Phones").
+  // shell pads its bars with env(safe-area-inset-*) (theme.css and
+  // mobile-shell.css).
   viewportFit: "cover",
 };
 
