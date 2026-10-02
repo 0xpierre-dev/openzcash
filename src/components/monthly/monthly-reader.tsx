@@ -257,11 +257,25 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
                   const position = { left: `${link.x * 100}%`, top: `${link.y * 100}%`, width: `${link.w * 100}%`, height: `${link.h * 100}%` };
                   return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" onClick={(event)=>{if(onFollowLink?.(link.url))event.preventDefault();}} aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
                 })}
+                {ready && (["previous", "next"] as const).map(direction => <button
+                  key={direction} type="button" className={styles.pageTurn} data-direction={direction}
+                  aria-label={direction === "previous" ? "Previous slide" : "Next slide"}
+                  title={direction === "previous" ? "Previous slide" : "Next slide"}
+                  aria-disabled={direction === "previous" ? pageNumber === 1 : pageNumber === edition.pageCount}
+                  onClick={event => {
+                    // These edges own pointer clicks, including at the first/last page.
+                    // Never let an underlying PDF source or the phone opener take the tap.
+                    event.preventDefault(); event.stopPropagation();
+                    if (event.detail > 0 && (window.visualViewport?.scale ?? 1) > 1.01) return;
+                    if (reading.active) reading.turn(direction);
+                    else goTo(pageNumber + (direction === "next" ? 1 : -1));
+                  }}
+                ><span aria-hidden="true"><Icon name={direction === "previous" ? "left" : "right"} /></span></button>)}
                 {!ready && <div className={styles.loading} role="status">{error ? <><Icon name="book" /><strong>This edition couldn’t load.</strong><span>{reading.active ? "Try again, or leave full screen to download the PDF." : "Try again, or open the PDF using the download button."}</span><button onClick={retryLoad}>Try again</button></> : <><span className={styles.loader} /><span>Opening your report…</span></>}</div>}
               </div>
             </div>
           </div>
-          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><button className={styles.captionFullScreen} onClick={(event) => reading.enter(event.currentTarget)}><Icon name="expand" />Read in full screen</button><small>Use ← → to turn pages</small></div>
+          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><button className={styles.captionFullScreen} onClick={(event) => reading.enter(event.currentTarget)}><Icon name="expand" />Read in full screen</button><small>Click the edges or use ← →</small></div>
         </div>
         <nav className={styles.filmstrip} aria-label="Page previews">
           <button className={styles.iconButton} disabled={pageNumber === 1} onClick={() => goTo(pageNumber - 1)} aria-label="Previous page" title="Previous page"><Icon name="left" /></button>
