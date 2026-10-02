@@ -15,6 +15,8 @@ export function modelLine(config: AboutModelConfig): string {
   if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
   return `${config.model} from ${config.providerLabel}, called through its Responses API${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
 }
+/** One place that says how old "live" is: sheet/GitHub import cadence, D-1 verdict publication, price cache. Numbers mirror docs/zcg-publication.md and the freshness pipeline. */
+export const FRESHNESS_NOTE = "Site records import from the official spreadsheet and GitHub every 6 hours, and pages refresh themselves when a visit arrives after a stale period. Grant verdict changes publish the next day at midnight, Brasilia time. Price quotes are cached for about 10 minutes. When sources disagree, the ZCG Grant Dashboard spreadsheet wins.";
 /** Same-name tokens appeared on other chains after launch and keep polluting search; this must be said near the top of /zarvis/about. */
 export const TOKEN_DISCLAIMER = {
   title: "No official token",

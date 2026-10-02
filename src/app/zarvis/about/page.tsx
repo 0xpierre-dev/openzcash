@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
-import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { DIRECT_ROUTES, FRESHNESS_NOTE, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
 import { modelLabel } from "@/lib/zarvis/provenance";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
@@ -60,6 +60,9 @@ export default function AboutZarvisPage() {
       <Section title="What you may ask">
         <ul className="space-y-1.5">{quotas.map((line) => <li key={line}>{line}</li>)}</ul>
         <p className="mt-3">A question is at most 2,000 characters and an answer is written within 55 seconds (110 seconds for Deep analysis). Zarvis is free to use; OpenZcash pays the model.</p>
+      </Section>
+      <Section title="How fresh is the data?">
+        <p>{FRESHNESS_NOTE}</p>
       </Section>
       <Section title="What is kept, and for how long">
         <ul className="space-y-1.5">

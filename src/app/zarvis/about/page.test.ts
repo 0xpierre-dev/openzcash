@@ -22,6 +22,7 @@ describe("About Zarvis page", () => {
     expect(html).toContain("You are Zarvis Ironwood");
     expect(html).toContain("/api/zarvis/health");
     expect(html).toContain("forum.zcashcommunity.com/t/openzcash-org-public-transparency/56404");
+    expect(html).toContain("every 6 hours");
     expect(html).not.toContain("xai-secret-sentinel-value");
     expect(html).not.toMatch(/\b1000\b|\b1,000\b|\$100\b/);
   });
