@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 const repo = vi.hoisted(() => ({ grantMilestones: vi.fn() }));
 vi.mock("@/lib/zcg/grants-repo", () => repo);
+vi.mock("@/lib/project-history/data", () => ({ projectHistoryDirectory: () => [] }));
 
 import { generateMetadata } from "./page";
 

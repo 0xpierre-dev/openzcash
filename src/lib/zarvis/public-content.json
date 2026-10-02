@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "f301a411eb4ace42",
+  "sourceRevision": "bd2d7a0d764b2deb",
   "sourceFiles": 57,
   "documents": [
     {
@@ -31,7 +31,7 @@
       "id": "src/app/zcg/grants/page.tsx:0",
       "url": "https://openzcash.org/zcg/grants",
       "title": "zcg · grants",
-      "text": "Grants ZCG · OpenZcash\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants.\nGrants\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments.\nCommitted\nPaid\nOpen\nOne project per row. Paid values use the ledger’s budgeted USD amounts; open commitments exclude cancelled grants. Payment records do not independently establish delivery."
+      "text": "Grants ZCG · OpenZcash\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants.\nGrants\nExplore project histories →\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments.\nCommitted\nPaid\nOpen\nOne project per row. Paid values use the ledger’s budgeted USD amounts; open commitments exclude cancelled grants. Payment records do not independently establish delivery."
     },
     {
       "id": "src/app/zcg/disbursements/page.tsx:0",
