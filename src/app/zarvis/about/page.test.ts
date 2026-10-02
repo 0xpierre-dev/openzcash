@@ -10,6 +10,8 @@ import Page from "./page";
 describe("About Zarvis page", () => {
   it("explains both routes, the visitor limits, retention and the incidents without leaking configuration", () => {
     const html = renderToStaticMarkup(Page());
+    expect(html).toContain("No official token");
+    expect(html).toContain("not created, endorsed or issued by OpenZcash");
     expect(html).toContain("Direct from OpenZcash data · no AI");
     expect(html).toContain("grok-4.7 from xAI (Grok)");
     expect(html).toContain("60 questions per 10 minutes and 600 per day");

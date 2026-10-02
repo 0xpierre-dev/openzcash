@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
-import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +33,10 @@ export default function AboutZarvisPage() {
         subtitle="Zarvis is OpenZcash's guide to Zcash. This page says how it answers, what it costs you, what it keeps and where it has failed, so you can decide how much to trust it."
         actions={<Link href="/zarvis" className="rd-button rd-button-primary">Ask Zarvis</Link>}
       />
+      <Card className="mb-6 text-sm leading-relaxed text-stone-600">
+        <p className="font-semibold text-amber-700">{TOKEN_DISCLAIMER.title}</p>
+        <p className="mt-1">{TOKEN_DISCLAIMER.body}</p>
+      </Card>
       <Section title="Two kinds of answer">
         <p className="mb-2">Under every answer a badge says which kind you got.</p>
         <p className="mb-2"><span className="font-medium text-stone-800">Direct from OpenZcash data · no AI.</span> The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>

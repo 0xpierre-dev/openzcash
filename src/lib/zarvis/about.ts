@@ -15,6 +15,11 @@ export function modelLine(config: AboutModelConfig): string {
   if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
   return `${config.model} from ${config.providerLabel}, called through its Responses API${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
 }
+/** Same-name tokens appeared on other chains after launch and keep polluting search; this must be said near the top of /zarvis/about. */
+export const TOKEN_DISCLAIMER = {
+  title: "No official token",
+  body: "There is no official Zarvis token and no official OpenZcash token, coin or memecoin. Tokens named $ZARVIS or $OPENZCASH appeared on other chains after Zarvis launched on September 28, 2026; they were not created, endorsed or issued by OpenZcash, and this site is not connected to them in any way. Zarvis is free to use; OpenZcash pays the model.",
+} as const;
 /** Direct answers: no model call, no cost, sources from this site's own records. */
 export const DIRECT_ROUTES = [
   { label: "Privacy and protocol FAQ", detail: "What makes a transaction private, halving, block subsidy, Dev Fund split, viewing keys, common wallet questions." },
