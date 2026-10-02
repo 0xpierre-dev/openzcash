@@ -6,7 +6,7 @@ const params = { params: Promise.resolve({ id: "alpha" }) };
 beforeEach(() => vi.resetAllMocks());
 describe("public project history API", () => {
   it("keeps full grant records while explicitly filtering only timeline event dates", async () => {
-    mocks.read.mockResolvedValue({ grants: [{ id: "all-time-grant" }], timeline: [{ id: "a", date: "2026-09-01" }, { id: "b", date: "2026-08-31" }, { id: "c", date: null }] });
+    mocks.read.mockResolvedValue({ grants: [{ id: "all-time-grant", milestones: [] }], coverage: { paymentsAvailable: true, proposalsAvailable: true }, timeline: [{ id: "a", date: "2026-09-01" }, { id: "b", date: "2026-08-31" }, { id: "c", date: null }] });
     const response = await GET(new Request("https://openzcash.org/api/project-history/alpha?month=2026-09"), params);
     expect(response.headers.get("Cache-Control")).toBe("no-store");
     expect(await response.json()).toMatchObject({ grants: [{ id: "all-time-grant" }], timeline: [{ id: "a" }], timelineFilter: { grantsAreAllTime: true, undatedEventsExcluded: 1, basis: "event-date-UTC" } });

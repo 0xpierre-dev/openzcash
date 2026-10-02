@@ -1,4 +1,31 @@
 {
   "schemaVersion": 1,
-  "entries": []
+  "entries": [
+    {
+      "id": "zaino-release-0-10-0",
+      "projectId": "zaino",
+      "kind": "published_artifact",
+      "title": "Zaino 0.10.0 published",
+      "summary": "The release includes removal of the zcashd backend and changes to chain storage and the release pipeline. Publication does not establish milestone acceptance or production adoption.",
+      "date": "2026-09-12",
+      "sourceUrl": "https://github.com/zingolabs/zaino/releases/tag/0.10.0",
+      "reviewedAt": "2026-10-02",
+      "reviewNote": "Read the maintainer release page, publication date and listed changes. No grant acceptance statement or scoped adoption measurement is established by this source.",
+      "milestoneIds": [],
+      "supersedes": null
+    },
+    {
+      "id": "zaino-release-0-10-1",
+      "projectId": "zaino",
+      "kind": "published_artifact",
+      "title": "Zaino 0.10.1 adds indexed-tip subscriptions",
+      "summary": "The release adds a stream for indexed-block updates, operational metrics and fixes to RPC responses. These are published changes; deployment and grant acceptance require separate evidence.",
+      "date": "2026-09-29",
+      "sourceUrl": "https://github.com/zingolabs/zaino/releases/tag/0.10.1",
+      "reviewedAt": "2026-10-02",
+      "reviewNote": "Read the official September 29 release and its zainod, zaino-serve and zaino-state changes. Recorded publication only, without inferring use or completion of a funded milestone.",
+      "milestoneIds": [],
+      "supersedes": null
+    }
+  ]
 }

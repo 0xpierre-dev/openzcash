@@ -3,6 +3,7 @@ import { z } from "zod";
 import { projectHistoryDirectory, readProjectHistory } from "@/lib/project-history/data";
 import { searchHistoryIdentities } from "@/lib/project-history/identities";
 import { eventsInMonth } from "@/lib/project-history/build";
+import { projectInsights } from "@/lib/project-history/insights";
 import { boundedRead } from "./timeout";
 import { pick, type DirectLanguage } from "./language";
 import type { Evidence } from "./local";
@@ -34,6 +35,8 @@ export async function lookupProjectHistory(raw: unknown, signal: AbortSignal): P
     const events = parsed.data.month ? eventsInMonth(history.timeline, parsed.data.month) : history.timeline;
     const data = {
       kind: "project_history", ...history,
+      insights: projectInsights(history),
+      reviews: history.reviews.filter(review => review.linked && !review.supersededBy).slice(0, 8),
       counts: { grants: history.grants.length, events: events.length,
         publishedReleases: history.timeline.filter(event => event.kind === "release").length,
         paidEntries: history.coverage.paymentsAvailable ? new Set(history.grants.flatMap(grant => grant.milestones.filter(item => item.paymentRecorded).map(item => item.id))).size : null,
@@ -61,9 +64,24 @@ export function projectHistoryAnswer(result: Evidence, lang: DirectLanguage): st
   }) + (data.choices.length ? `\n\n${data.choices.map((item: { name: string; url: string }) => `- [${item.name}](${item.url})`).join("\n")}` : "");
   const url = result.source!.url, count = data.counts;
   const snapshot = data.repositorySnapshotAt.slice(0, 10);
+  const workDescription = data.project.communityId ? pick(lang, {
+    en: `${data.insights.reportSources} linked community report sources. Their individual claims still need review`,
+    pt: `${data.insights.reportSources} fontes de reports comunitários vinculadas. As alegações individuais ainda precisam de revisão`,
+    es: `${data.insights.reportSources} fuentes de informes comunitarios vinculadas. Sus afirmaciones individuales todavía requieren revisión`,
+  }) : pick(lang, {
+    en: `${count.publishedReleases} linked releases (base snapshot ${snapshot}, plus individually reviewed additions)`,
+    pt: `${count.publishedReleases} releases vinculados (base de ${snapshot}, com adições revisadas individualmente)`,
+    es: `${count.publishedReleases} releases vinculados (base del ${snapshot}, con adiciones revisadas individualmente)`,
+  });
+  const latest = data.insights?.latestWork;
+  const latestLine = latest ? pick(lang, {
+    en: `\n\nLatest linked work (${latest.date.slice(0, 10)}): [${latest.title}](${latest.source.url}). ${latest.detail}`,
+    pt: `\n\nTrabalho mais recente vinculado (${latest.date.slice(0, 10)}): [${latest.title}](${latest.source.url}). A publicação não comprova o aceite de um marco financiado.`,
+    es: `\n\nTrabajo más reciente vinculado (${latest.date.slice(0, 10)}): [${latest.title}](${latest.source.url}). La publicación no prueba la aceptación de un hito financiado.`,
+  }) : "";
   return pick(lang, {
-    en: `**[${data.project.name} — project history](${url})**\n\n${count.grants} associated grant records; ${count.paidEntries ?? "unavailable"} paid ledger entries; ${count.publishedReleases} releases in the repository snapshot dated ${snapshot}.\n\nThe history separates requested funding, published decisions, ledger payments and evidence of work. ${count.reviewedDeliveries ? `${count.reviewedDeliveries} reviewed delivery records are linked.` : "No milestone acceptance evidence is linked yet; that is a coverage gap, not proof of non-delivery."} A payment or release does not establish grant completion.\n\nOpen the history for the timeline, amounts, source dates and evidence gaps.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " A financial source is unavailable; dated catalog references are retained." : ""}`,
-    pt: `**[${data.project.name} — ficha histórica](${url})**\n\n${count.grants} registros de grants associados; ${count.paidEntries ?? "indisponível"} registros de pagamento; ${count.publishedReleases} releases no retrato dos repositórios de ${snapshot}.\n\nA ficha separa pedidos, decisões publicadas, pagamentos e evidências de trabalho. ${count.reviewedDeliveries ? `Há ${count.reviewedDeliveries} registros de entrega revisados.` : "Ainda não há evidência vinculada de aceite dos marcos; isso é uma lacuna de cobertura, não prova de falta de entrega."} Pagamento ou release não comprova conclusão do grant.\n\nAbra a ficha para ver a linha do tempo, os valores, as datas das fontes e as lacunas.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " Uma fonte financeira está indisponível; mantivemos as referências datadas do catálogo." : ""}`,
-    es: `**[${data.project.name} — historial](${url})**\n\n${count.grants} registros de grants asociados; ${count.paidEntries ?? "no disponible"} registros de pago; ${count.publishedReleases} releases en la captura de repositorios del ${snapshot}.\n\nEl historial separa solicitudes, decisiones, pagos y evidencia de trabajo. ${count.reviewedDeliveries ? `Hay ${count.reviewedDeliveries} registros de entrega revisados.` : "No hay evidencia vinculada de aceptación de hitos; es una brecha de cobertura, no prueba de falta de entrega."} Un pago o release no establece la finalización del grant.\n\nAbre el historial para ver fechas, importes, fuentes y brechas.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " Una fuente financiera no está disponible; se conservan las referencias fechadas del catálogo." : ""}`,
+    en: `**[${data.project.name} — project history](${url})**\n\n${count.grants} associated grant records; ${count.paidEntries ?? "unavailable"} paid ledger entries; ${workDescription}.${latestLine}\n\nThe history separates requested funding, published decisions, ledger payments and evidence of work. ${count.reviewedDeliveries ? `${count.reviewedDeliveries} reviewed delivery records are linked.` : "No milestone acceptance evidence is linked yet; that is a coverage gap, not proof of non-delivery."} A payment or release does not establish grant completion.\n\nOpen the history for the timeline, amounts, source dates and evidence gaps.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " A financial source is unavailable; dated catalog references are retained." : ""}`,
+    pt: `**[${data.project.name} — ficha histórica](${url})**\n\n${count.grants} registros de grants associados; ${count.paidEntries ?? "indisponível"} registros de pagamento; ${workDescription}.${latestLine}\n\nA ficha separa pedidos, decisões publicadas, pagamentos e evidências de trabalho. ${count.reviewedDeliveries ? `Há ${count.reviewedDeliveries} registros de entrega revisados.` : "Ainda não há evidência vinculada de aceite dos marcos; isso é uma lacuna de cobertura, não prova de falta de entrega."} Pagamento ou release não comprova conclusão do grant.\n\nAbra a ficha para ver a linha do tempo, os valores, as datas das fontes e as lacunas.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " Uma fonte financeira está indisponível; mantivemos as referências datadas do catálogo." : ""}`,
+    es: `**[${data.project.name} — historial](${url})**\n\n${count.grants} registros de grants asociados; ${count.paidEntries ?? "no disponible"} registros de pago; ${workDescription}.${latestLine}\n\nEl historial separa solicitudes, decisiones, pagos y evidencia de trabajo. ${count.reviewedDeliveries ? `Hay ${count.reviewedDeliveries} registros de entrega revisados.` : "No hay evidencia vinculada de aceptación de hitos; es una brecha de cobertura, no prueba de falta de entrega."} Un pago o release no establece la finalización del grant.\n\nAbre el historial para ver fechas, importes, fuentes y brechas.${!data.coverage.proposalsAvailable || !data.coverage.paymentsAvailable ? " Una fuente financiera no está disponible; se conservan las referencias fechadas del catálogo." : ""}`,
   });
 }

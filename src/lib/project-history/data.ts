@@ -11,7 +11,8 @@ import { boundedRead } from "@/lib/zarvis/timeout";
 import evidenceData from "@/data/project-history/evidence.json";
 import { evidenceSchema } from "./evidence";
 import { historyIdentities } from "./identities";
-import { buildProjectHistory } from "./build";
+import { buildProjectHistory, prepareHistoryBindings } from "./build";
+import { projectInsights, type HistoryIndexItem } from "./insights";
 import type { FinanceRecords, PaymentRecord, ProposalRecord } from "./types";
 
 const catalog = loadEcosystemCatalog();
@@ -70,4 +71,17 @@ export async function readProjectHistory(id: string) {
   if (!identity) return null;
   const finance = await readHistoryFinance();
   return buildProjectHistory(identity, identities, finance, catalog.snapshot.collectedAt, reviewed);
+}
+
+export async function readHistoryIndex() {
+  const finance = await readHistoryFinance();
+  const index = prepareHistoryBindings(identities, finance), now = new Date();
+  const items: HistoryIndexItem[] = identities.map(identity => {
+    const history = buildProjectHistory(identity, identities, finance, catalog.snapshot.collectedAt, reviewed, now, index);
+    const { grants, paidEntries, acceptedEntries, acceptanceGaps, publishedArtifacts, integrations, usageObservations, reportSources, publicWorkSources, latestEvent } = projectInsights(history);
+    return { ...history.project, insights: { grants, paidEntries, acceptedEntries, acceptanceGaps, publishedArtifacts, integrations, usageObservations, reportSources, publicWorkSources },
+      latestEvent: latestEvent ? { title: latestEvent.title, date: latestEvent.date, kind: latestEvent.kind } : null };
+  });
+  return { items, coverage: { proposalsAvailable: finance.proposalsAvailable, paymentsAvailable: finance.paymentsAvailable },
+    repositorySnapshotAt: catalog.snapshot.collectedAt, ledgerImportedAt: finance.importedAt };
 }

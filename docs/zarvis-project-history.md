@@ -8,9 +8,15 @@ project record, not a performance rating or an allegation engine.
 ## First release
 
 - `/ecosystem/history` searches every identity in the existing project and
-  community catalogs. It is not a claim to cover every Zcash initiative.
-- `/ecosystem/history/{id}` has a timeline, associated grants and milestones,
-  source dates and explicit evidence gaps. Community report links remain visible.
+  community catalogs. Evidence views, category, search and order persist in the
+  URL. Cards show linked records, not portfolio funding totals or ratings.
+- `/ecosystem/history/{id}` opens with a computed four-part overview: funding,
+  public work, milestone acceptance, and integration/use. Latest dated work,
+  payment and decision link to their sources. A research checklist names
+  coverage gaps without inferring lateness or failure. Funding, Timeline and
+  Evidence tabs use shareable URLs; browser back preserves the previous view.
+- Grant-list rows and grant-detail pages link into reviewed project identities.
+  Shared awards list every mapped component. No fuzzy financial join is used.
 - `GET /api/project-history?q=...` resolves identities. Search may return several
   candidates; no candidate is silently chosen or merged.
 - `GET /api/project-history/{id}` returns the complete assembled public record.
@@ -21,6 +27,8 @@ project record, not a performance rating or an allegation engine.
   `Show project history for Zaino.` (also supported in Portuguese and Spanish)
   returns a computed overview without requiring a model. Broader analysis can
   call the tool; bounded excerpts disclose their counts and must not be summed.
+  The API and tool expose the same derived insights as the profile; these always
+  describe all linked history even when a timeline month is selected.
 
 Financial reads use the existing database mirror without mutations and preserve
 the published proposal-status policy. No private scanner, viewing key or admin
@@ -60,6 +68,8 @@ the importer or the repository collector.
 | Published artifact | A repository release was published | Acceptance of a funded milestone, adoption or impact |
 | Team reported | A mapped team progress reference or reviewed report claim | Independent acceptance of the work |
 | Reviewed delivery | A source documents delivery/acceptance of the specifically linked milestone | Overall project success or causal impact on the network |
+| Documented integration | A reviewed source documents a specific integration | A user count, traffic volume or causal impact |
+| Usage observation | A scoped metric with unit, period, population and methodology | Use outside that scope, unique people from requests, or total network adoption |
 
 The repository snapshot is bounded and dated; do not call it the complete or
 live release history. Maintainer progress links without extracted dates remain
@@ -70,20 +80,32 @@ lateness, misconduct or zero funding. No unsupported impact scores are emitted.
 ## Persisting new learning
 
 `src/data/project-history/evidence.json` is the versioned admission point for
-reviewed, public reports and milestone evidence. It starts empty deliberately:
-old approvals, payments and reviews cannot manufacture delivery sign-off.
+reviewed public reports, releases, integrations, usage and milestone evidence.
+It includes two directly inspected Zaino releases as publication evidence only.
+The dated base repository snapshot is unchanged. Approvals, payments and
+release reviews cannot manufacture delivery sign-off; no acceptance or usage
+claim has been admitted merely to fill the interface.
 
 For each new record, a reviewer must inspect the original source, record its
 event date, canonical project ID, source URL, review date and a concrete review
 note. `reviewed_delivery` additionally requires the exact linked milestone IDs.
 A team statement stays `team_reported` unless the stronger claim is actually
-supported. Do not auto-promote model summaries into reviewed facts. Never store
+supported. `published_artifact` records add reviewed releases beyond the bounded
+snapshot and deduplicate the same release URL. `usage_observation` requires a
+nonnegative decimal metric, unit, period, population and methodology; the period
+cannot extend past publication. No other type can carry a measurement.
+Only acceptance reviews may bind milestone IDs. All those IDs must still resolve
+under the exact project/award mapping; otherwise the review is retained visibly
+but withheld from current acceptance insights.
+Do not auto-promote model summaries into reviewed facts. Never store
 private discussions or credentials in this public evidence file.
 
 Corrections append a new ID with `supersedes` pointing to the earlier entry;
 they do not erase the original. The validator rejects duplicates, forward/cyclic
 references, cross-project corrections and reviews dated before their event.
-Paid-entry counts count distinct ledger rows, not necessarily distinct accepted
+The Evidence tab retains superseded records and their review notes. Neither
+superseded nor not-yet-eligible reviews affect current insights. Paid-entry counts
+count distinct ledger rows, not necessarily distinct accepted
 milestones. Milestone IDs are ledger content IDs; corrections to their source may require
 a reviewed re-link, never a fuzzy reassignment.
 
@@ -99,7 +121,7 @@ Tests cover program/identity isolation, repeated-title ambiguity, shared awards,
    partial/failed sources, refunds, exact amounts, release deduplication,
 non-inference of completion, evidence admission and correction handling,
 UTC filters, and Zarvis's no-model route/tool dispatch. Verify the rendered
-directory/profile on desktop and compact viewports, the three sections, source
+directory/profile on desktop and compact viewports, the four sections, source
 links, month filters, empty/failure states and the Ask Zarvis handoff.
 
 This is an assembled current record, not a complete bitemporal warehouse.
@@ -108,3 +130,39 @@ evidence file supplies persistent curation; collecting full release archives,
 extracting all community reports, admitting milestone acceptance evidence and
 longitudinal source snapshots remain further coverage work. The interface must
 keep those boundaries visible.
+
+## Governance comparison
+
+The existing `/governance` page now contains a question-by-question comparison,
+starting with the five September 2026 NU7 scope questions. The checked input is
+`src/data/governance/comparisons.json`. Original ZCAP and coinholder results were
+inspected directly; numbers and judgments from third-party generated artifacts
+are not an ingestion source.
+
+Store original integer weights plus their explicit decimal scale and voting unit.
+Each question and body has its own denominator. The default includes abstentions;
+an explicit control excludes them without changing the exact-tally disclosure.
+Question, round and percentage basis persist in the URL. The ZCAP Sprout question
+has 134 answers, not the 135 ballots submitted overall. Do not replace its
+denominator with turnout. Fractional ZEC is preserved, missing data stays missing,
+ties stay ties, and rounding cannot erase a small nonzero minority or imply unanimity.
+
+The panel does not combine weights across questions, equate ZEC with people,
+infer voter identities or coordination, or label a leading option a community
+consensus. Historical rounds can be added only after mapping their actual options,
+rules and original tallies; it currently covers one round, not the full archive.
+
+## Before production
+
+Test the directory filters and browser back, grant-to-profile navigation,
+overview-to-detail actions, timeline month/type filters, community reports,
+review notes/corrections and the Ask Zarvis handoff. On Governance, switch all
+five questions, change the abstention basis, reload the shared URL and inspect
+the raw tallies. Check compact screens and keyboard navigation. Source outages
+must show unavailable data, never a zero financial amount or a failure rating.
+
+The preview reads the existing public mirror with automatic imports disabled.
+Model calls remain disabled in the preview; the direct history answer and model
+tool dispatch have automated coverage. A production-provider smoke check remains
+necessary before enabling the branch for users. This work does not deploy the
+separate chain-analytics branch or change the Monthly publication pipeline.

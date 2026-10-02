@@ -45,18 +45,30 @@ function bindings(identity: HistoryIdentity, finance: FinanceRecords) {
   return result;
 }
 
-export function buildProjectHistory(identity: HistoryIdentity, identities: HistoryIdentity[], finance: FinanceRecords,
-  repositorySnapshotAt: string, reviewed: ReviewedEvidence[] = [], now = new Date()): ProjectHistory {
-  const linked = bindings(identity, finance);
-  const timeline: HistoryEvent[] = [], grants: GrantHistory[] = [], gaps: string[] = [];
-  const add = (event: HistoryEvent) => { if (!timeline.some(item => item.id === event.id)) timeline.push(event); };
+/** Reuse the association index across the directory, instead of N repeated joins. */
+export function prepareHistoryBindings(identities: HistoryIdentity[], finance: FinanceRecords) {
+  const byIdentity = new Map(identities.map(identity => [identity.id, bindings(identity, finance)]));
   const ownership = new Map<string, { id: string; name: string }[]>();
-  for (const other of identities) for (const id of bindings(other, finance).keys()) {
+  for (const other of identities) for (const id of byIdentity.get(other.id)!.keys()) {
     ownership.set(id, [...(ownership.get(id) ?? []), { id: other.id, name: other.name }]);
   }
+  return { byIdentity, ownership };
+}
+
+export function buildProjectHistory(identity: HistoryIdentity, identities: HistoryIdentity[], finance: FinanceRecords,
+  repositorySnapshotAt: string, reviewed: ReviewedEvidence[] = [], now = new Date(),
+  index = prepareHistoryBindings(identities, finance)): ProjectHistory {
+  const linked = index.byIdentity.get(identity.id) ?? bindings(identity, finance);
+  const { ownership } = index;
+  const timeline: HistoryEvent[] = [], grants: GrantHistory[] = [], gaps: string[] = [];
+  const add = (event: HistoryEvent) => { if (!timeline.some(item => item.id === event.id)) timeline.push(event); };
   const eligibleReviews = reviewed.filter(entry => entry.reviewedAt <= now.toISOString().slice(0, 10));
   const superseded = new Set(eligibleReviews.map(entry => entry.supersedes).filter(Boolean));
   const activeReviews = eligibleReviews.filter(entry => entry.projectId === identity.id && !superseded.has(entry.id));
+  const linkedMilestoneIds = activeReviews.some(entry => entry.kind === "reviewed_delivery")
+    ? new Set(finance.payments.filter(row => linked.has(key(row.program, row.project)) && finance.proposals.filter(proposal => key(proposal.program, proposal.title) === key(row.program, row.project)).length <= 1).map(row => row.id))
+    : new Set<string>();
+  const acceptanceReviews = activeReviews.filter(entry => entry.kind === "reviewed_delivery" && entry.milestoneIds.every(id => linkedMilestoneIds.has(id)));
 
   for (const [bindingKey, binding] of linked) {
     const id = `grant-${stableId(bindingKey)}`;
@@ -70,7 +82,7 @@ export function buildProjectHistory(identity: HistoryIdentity, identities: Histo
     const milestones = payments.map(row => ({
       id: row.id, title: row.milestone || "Ledger milestone", deliverable: row.deliverable,
       paymentRecorded: row.isPaid, paidDate: validDate(row.paidDate), source: row.source,
-      deliveryEvidence: activeReviews.filter(entry => entry.kind === "reviewed_delivery" && entry.milestoneIds.includes(row.id)).map(entry => ({
+      deliveryEvidence: acceptanceReviews.filter(entry => entry.milestoneIds.includes(row.id)).map(entry => ({
         id: `review-${entry.id}`, kind: "delivery" as const, title: entry.title, detail: entry.summary,
         date: entry.date, evidence: "reviewed_delivery" as const, grantId: id,
         source: source("Reviewed delivery evidence", entry.sourceUrl, entry.reviewedAt),
@@ -122,9 +134,28 @@ export function buildProjectHistory(identity: HistoryIdentity, identities: Histo
       date: null, evidence: "team_reported", grantId: null, source: source("Maintainer progress reference", event.repositoryEvidenceUrl, identity.checkedAt),
     });
   }
-  for (const entry of activeReviews.filter(item => item.kind === "team_reported")) add({ id: `review-${entry.id}`, kind: "report",
-    title: entry.title, detail: entry.summary, date: entry.date, evidence: "team_reported", grantId: null,
-    source: source("Team report", entry.sourceUrl, entry.reviewedAt) });
+  for (const topic of identity.reportTopics) {
+    const url = `https://forum.zcashcommunity.com/t/${topic.id}`;
+    if (!timeline.some(event => event.source.url === url)) add({ id: `community-report-${topic.id}`, kind: "report",
+      title: topic.title, detail: "Linked community report source. Individual claims and publication dates have not yet been extracted or accepted in this history.",
+      date: null, evidence: "team_reported", grantId: null, source: source("Community report", url, identity.checkedAt) });
+  }
+  const reviewKinds = { team_reported: "report", published_artifact: "release", documented_integration: "integration", usage_observation: "usage" } as const;
+  for (const entry of activeReviews.filter(item => item.kind !== "reviewed_delivery")) {
+    // A reviewed release supersedes a snapshot entry for the same artifact.
+    if (entry.kind === "published_artifact") {
+      const duplicate = timeline.findIndex(event => event.kind === "release" && event.source.url === entry.sourceUrl);
+      if (duplicate >= 0) timeline.splice(duplicate, 1);
+    }
+    add({ id: `review-${entry.id}`, kind: reviewKinds[entry.kind as keyof typeof reviewKinds],
+      title: entry.title, detail: entry.summary, date: entry.date, evidence: entry.kind, grantId: null,
+      source: source(entry.kind === "team_reported" ? "Team report" : "Reviewed public source", entry.sourceUrl, entry.reviewedAt) });
+  }
+  const reviews = eligibleReviews.filter(entry => entry.projectId === identity.id).map(entry => ({ ...entry,
+    supersededBy: eligibleReviews.find(item => item.supersedes === entry.id)?.id ?? null,
+    linked: timeline.some(event => event.id === `review-${entry.id}`),
+  }));
+  if (reviews.some(entry => !entry.supersededBy && !entry.linked)) gaps.push("A reviewed record cannot be linked to the current ledger. Its acceptance claim is withheld pending an exact re-link.");
   if (!finance.proposalsAvailable) gaps.push("The proposal source is unavailable. Dated catalog references are retained; current decisions and requested amounts cannot be confirmed.");
   if (!finance.paymentsAvailable) gaps.push("The payment source is unavailable. Missing totals must not be interpreted as zero.");
   if (!grants.length) gaps.push("No project-specific grant identity is linked. This does not establish that the project is unfunded.");
@@ -137,7 +168,7 @@ export function buildProjectHistory(identity: HistoryIdentity, identities: Histo
     schemaVersion: 1, project: { id: identity.id, name: identity.name, description: identity.description, category: identity.category, website: identity.website, communityId: identity.communityId },
     assembledAt: now.toISOString(), registryCheckedAt: identity.checkedAt, repositorySnapshotAt, ledgerImportedAt: finance.importedAt,
     coverage: { proposalsAvailable: finance.proposalsAvailable, paymentsAvailable: finance.paymentsAvailable, releasesComplete: false },
-    grants, timeline, gaps, reportLinks: identity.reportTopics.map(topic => ({ title: topic.title, url: `https://forum.zcashcommunity.com/t/${topic.id}` })),
+    grants, timeline, gaps, reviews, reportLinks: identity.reportTopics.map(topic => ({ title: topic.title, url: `https://forum.zcashcommunity.com/t/${topic.id}` })),
     notes: [
       "Requested USD, approved status, ledger budgets and recorded ZEC payments are distinct. The current ledger has no separate authoritative approved-amount field.",
       "Amounts belong to associated grants, not an allocation to this component. Shared grants must not be added across project histories; programs remain separate.",

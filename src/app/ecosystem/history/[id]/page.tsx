@@ -17,7 +17,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const history = await readProjectHistory(id);
   if (!history) notFound();
   const identity = projectHistoryDirectory().find(item => item.id === id)!;
-  return <main className={styles.page}>
+  return <div className={styles.page}>
     <Link className={styles.back} href="/ecosystem/history">← All project histories</Link>
     <header className={styles.hero}>
       <div><div className={styles.eyebrow}>Project history / {identity.category}</div><div className={styles.identity}>
@@ -25,5 +25,5 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       </div><p>{history.project.description}</p></div>
       <div className={styles.actions}><Link className={styles.primary} href={`/zarvis?q=${encodeURIComponent(`Show project history for ${identity.id}.`)}`}>Ask Zarvis ↗</Link><a className={styles.action} href={`/api/project-history/${id}`}>Data ↗</a></div>
     </header><ProjectHistoryView history={history} />
-  </main>;
+  </div>;
 }

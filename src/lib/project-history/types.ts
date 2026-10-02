@@ -1,4 +1,5 @@
 import type { Project, Repository } from "@/lib/ecosystem/types";
+import type { ReviewedEvidence } from "./evidence";
 
 export type Program = "zcg" | "coinholder";
 export type HistoryIdentity = {
@@ -26,9 +27,9 @@ export type FinanceRecords = {
   proposalsAvailable: boolean; paymentsAvailable: boolean; importedAt: string | null;
 };
 export type HistoryEvent = {
-  id: string; kind: "proposal" | "decision" | "payment" | "release" | "report" | "context" | "delivery";
+  id: string; kind: "proposal" | "decision" | "payment" | "release" | "report" | "context" | "delivery" | "integration" | "usage";
   title: string; detail: string; date: string | null;
-  evidence: "source_record" | "published_artifact" | "team_reported" | "reviewed_delivery";
+  evidence: "source_record" | "published_artifact" | "team_reported" | "reviewed_delivery" | "documented_integration" | "usage_observation";
   source: Source; grantId: string | null;
   budgetUsdCents?: string | null; recordedZecZat?: string | null;
 };
@@ -50,6 +51,7 @@ export type ProjectHistory = {
   ledgerImportedAt: string | null;
   coverage: { proposalsAvailable: boolean; paymentsAvailable: boolean; releasesComplete: false };
   grants: GrantHistory[]; timeline: HistoryEvent[]; gaps: string[];
+  reviews: (ReviewedEvidence & { supersededBy: string | null; linked: boolean })[];
   reportLinks: { title: string; url: string }[];
   notes: string[];
 };
