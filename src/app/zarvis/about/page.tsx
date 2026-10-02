@@ -88,7 +88,14 @@ export default function AboutZarvisPage() {
           ))}
         </ul>
       </Section>
-      <p className="text-xs text-stone-500">Found a wrong answer? Use the rating under it and pick what went wrong: the reason, the route and the day are recorded, the text is not. <Link href="/zcg/methodology" className="text-amber-700 hover:underline">How OpenZcash computes its own figures →</Link></p>
+      <Section title="Found something wrong?">
+        <p className="mb-2">Zarvis can make mistakes, and so can the data pages. Two ways to reach a fix:</p>
+        <ul className="space-y-1.5">
+          <li><span className="font-medium text-stone-800">A Zarvis answer:</span> use the rating under it and pick what went wrong. The reason, the route and the day are recorded; the text is not.</li>
+          <li><span className="font-medium text-stone-800">Site data</span> (a grant row, a wallet listing, a community entry): post in the <a href="https://forum.zcashcommunity.com/t/openzcash-org-public-transparency/56404" target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">OpenZcash forum thread ↗</a>, the public channel where corrections are read and applied.</li>
+        </ul>
+        <p className="mt-3"><Link href="/zcg/methodology" className="text-amber-700 hover:underline">How OpenZcash computes its own figures →</Link></p>
+      </Section>
     </>
   );
 }
