@@ -13,6 +13,7 @@ import { evidenceSchema } from "./evidence";
 import { historyIdentities } from "./identities";
 import { buildProjectHistory, prepareHistoryBindings } from "./build";
 import { projectInsights, type HistoryIndexItem } from "./insights";
+import { monthlyProjectActivity } from "./activity";
 import type { FinanceRecords, PaymentRecord, ProposalRecord } from "./types";
 
 const catalog = loadEcosystemCatalog();
@@ -71,6 +72,13 @@ export async function readProjectHistory(id: string) {
   if (!identity) return null;
   const finance = await readHistoryFinance();
   return buildProjectHistory(identity, identities, finance, catalog.snapshot.collectedAt, reviewed);
+}
+
+export async function readMonthlyProjectActivity(month: string) {
+  const finance = await readHistoryFinance(), now = new Date();
+  const index = prepareHistoryBindings(identities, finance);
+  const histories = identities.map(identity => buildProjectHistory(identity, identities, finance, catalog.snapshot.collectedAt, reviewed, now, index));
+  return monthlyProjectActivity(histories, finance, month, now);
 }
 
 export async function readHistoryIndex() {
