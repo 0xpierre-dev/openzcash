@@ -7,13 +7,19 @@ import monthlyReadingSets from "./src/lib/monthly/reading-sets.json";
 // scanner, Google Sheets) are all server-side. So 'self' is sufficient;
 // 'unsafe-inline' covers Next's hydration/bootstrap inline scripts and
 // Tailwind's inline styles. No 'unsafe-eval'.
+// One development-only exception: React's development runtime calls eval() for
+// debugging features, and without 'unsafe-eval' the dev overlay reports a CSP
+// violation on every page. Production never takes that branch below.
 // 'blob:' is required by the 3D office (/zcg/office): three.js loads GLB-embedded
 // textures via URL.createObjectURL (blob: URLs) and, when createImageBitmap is
 // available, FETCHES that blob URL — so blob: must be allowed on both img-src
 // (the <img> fallback) and connect-src (the fetch/ImageBitmap path).
+const scriptSrc = process.env.NODE_ENV === "production"
+  ? "script-src 'self' 'unsafe-inline'"
+  : "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  scriptSrc,
   "style-src 'self' 'unsafe-inline'",
   // i.ytimg.com: recording thumbnails on /arborist (YouTube's public CDN).
   "img-src 'self' data: blob: https://i.ytimg.com",
