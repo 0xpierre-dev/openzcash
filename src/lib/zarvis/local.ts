@@ -7,6 +7,8 @@ import { isZipQuestion, zipCatalogEvidence, latestZipAnswer, requestedZips } fro
 import { boundedRead } from "./timeout";
 import type { ChatMessage, ZarvisSource } from "./types";
 import { miningAnswer } from "./mining";
+import { lookupChainAnalytics } from "./chain-analytics";
+import { analyticsAnswer, directAnalyticsQuery } from "./analytics-answer";
 import { needsMiningResearch } from "./research-scope";
 import { directIntent, normalizeQuestion } from "./direct-intent";
 import { faqAnswer } from "./direct-faq";
@@ -16,8 +18,8 @@ import { sessionPreferences, type ZarvisSession } from "./session";
 import { answerLanguage, directLanguage, locale, pick, type DirectLanguage } from "./language";
 export { directIntent, normalizeQuestion } from "./direct-intent";
 
-export type Evidence = { content: string; source?: ZarvisSource };
-export type LocalPlan = { query: string; documents: ReturnType<typeof searchKnowledge>; evidence: Evidence[]; direct?: string; reviewedFaq?: boolean; external: boolean };
+export type Evidence = { content: string; source?: ZarvisSource; sources?: ZarvisSource[] };
+export type LocalPlan = { query: string; documents: ReturnType<typeof searchKnowledge>; evidence: Evidence[]; direct?: string; reviewedFaq?: boolean; computedAnswer?: boolean; external: boolean };
 /** Retrieve for the latest topic; short replies can refer to the preceding answer/offer. */
 export function retrievalQuestion(messages: ChatMessage[]): string {
   const latest = messages.at(-1)?.content ?? "";
@@ -152,6 +154,11 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
   if (intent?.type === "arborist") {
     const result = await lookupPublicData({ topic: "arborist", query: "" }, signal);
     return { query, documents: [], evidence: [result], direct: arboristAnswer(result.content, lang), external: false };
+  }
+  const analyticsQuery = directAnalyticsQuery(messages.at(-1)?.content ?? "");
+  if (analyticsQuery) {
+    const result = await lookupChainAnalytics(analyticsQuery, signal);
+    return { query, documents: [], evidence: [result], direct: compatible ? analyticsAnswer(result, lang) : undefined, computedAnswer: true, external: false };
   }
   const zip = isZipQuestion(query) ? await getZipCorpus(signal) : undefined;
   const documents = searchKnowledge(query, 4, 5000, zip?.corpus);

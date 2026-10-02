@@ -21,6 +21,7 @@ export const DIRECT_ROUTES = [
   { label: "Treasuries", detail: "ZCG and Lockbox balances with their data dates, the per-block accrual and the site's own valuation at the current quote." },
   { label: "ZEC price", detail: "The current USD quote with its time and a stale flag; dated daily closes by day, month or year." },
   { label: "Grant ledger sums", detail: "Totals by program, year, project or recipient, computed from the complete ledger rather than excerpts." },
+  { label: "Network activity and comparisons", detail: "Supply and pool balances checked across public explorers; monthly activity and calculated changes between closed UTC months. Sources, dates, partial periods and unavailable confirmations stay visible." },
   { label: "ZIPs", detail: "Any numbered ZIP or draft from the official repository at a pinned revision: title, status, dates, abstract." },
   { label: "Arborist calls, wallets, communities, decisions, chain", detail: "The site's own directories and on-chain reader: latest call notes and recordings, wallet and community listings with revision dates, ZCG decisions, tip height and next halving estimate." },
 ] as const;
