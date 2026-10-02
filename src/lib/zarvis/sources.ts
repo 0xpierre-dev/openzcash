@@ -136,4 +136,5 @@ export const STARTERS = [
   { label: "Explore the treasuries", question: "What are the latest ZCG and Lockbox balances, and how old are the data?" },
   { label: "Follow the funding", question: "How is the Dev Fund split, and what changes at the next halving?" },
   { label: "Test a hypothesis", question: "If ZEC rises 20×, what changes in the company and community treasury scenarios?" },
+  { label: "Follow a project", question: "Show project history for Zaino." },
 ];

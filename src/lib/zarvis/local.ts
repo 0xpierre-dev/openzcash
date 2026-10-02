@@ -1,4 +1,5 @@
 import "server-only";
+import { directProjectHistoryQuery, lookupProjectHistory, projectHistoryAnswer } from "./project-history";
 import { lookupPublicData, lookupSchema } from "./data";
 import { queryLedger, ledgerQuerySchema, type LedgerSummary } from "./ledger";
 import { searchKnowledge } from "./knowledge";
@@ -152,6 +153,11 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
   if (intent?.type === "arborist") {
     const result = await lookupPublicData({ topic: "arborist", query: "" }, signal);
     return { query, documents: [], evidence: [result], direct: arboristAnswer(result.content, lang), external: false };
+  }
+  const historyQuery = directProjectHistoryQuery(messages.at(-1)?.content ?? "");
+  if (historyQuery) {
+    const result = await lookupProjectHistory({ query: historyQuery, month: null }, signal);
+    return { query, documents: [], evidence: [result], direct: compatible ? projectHistoryAnswer(result, lang) : undefined, external: false };
   }
   const zip = isZipQuestion(query) ? await getZipCorpus(signal) : undefined;
   const documents = searchKnowledge(query, 4, 5000, zip?.corpus);

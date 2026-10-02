@@ -156,7 +156,7 @@ describe("Zarvis local-first orchestration", () => {
       .mockResolvedValueOnce(events([answer("Searched, read, then answered.")]));
     const metrics = await generateAnswer(question, new AbortController().signal, () => {});
     expect(mocks.create).toHaveBeenCalledTimes(4);
-    expect(mocks.create.mock.calls[2][0].tools.map((t: { name?: string; type: string }) => t.name ?? t.type)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips"]);
+    expect(mocks.create.mock.calls[2][0].tools.map((t: { name?: string; type: string }) => t.name ?? t.type)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history"]);
     expect(mocks.create.mock.calls[3][0].tools).toEqual([]);
     expect(metrics).toMatchObject({ modelCalls: 4, webSearchCalls: 1, localLookups: 2 });
   });
