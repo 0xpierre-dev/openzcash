@@ -46,6 +46,15 @@ export const PROVIDER_RETENTION = {
   readOn: "2026-09-28",
   summary: "stores API requests and responses encrypted at rest for 30 days for abuse auditing, does not train on them and deletes them automatically afterwards. OpenZcash sends each request with response storage disabled, which is not the same as that provider's zero-data-retention setting.",
 } as const;
+/** The six questions visitors actually bring, answered without drifting numbers: quotas and dates live in the sections above, not here. */
+export const FAQ: Array<{ q: string; a: string }> = [
+  { q: "Is there a Zarvis or OpenZcash token?", a: "No. See the notice at the top of this page: tokens named $ZARVIS or $OPENZCASH on other chains were not created or endorsed by OpenZcash." },
+  { q: "Can Zarvis spend my ZEC or see my wallet?", a: "No. Zarvis reads public records only. It cannot see wallets, private balances or anything you did not type, and it cannot send, sign or contact anyone. Never share recovery phrases, private keys or viewing keys." },
+  { q: "How fresh is the data in answers?", a: "Direct answers carry the date of the record they used. The site imports every 6 hours and price quotes are cached for about 10 minutes; see “How fresh is the data?” above." },
+  { q: "Why did I get a message about question limits?", a: "Zarvis is free but capacity-limited. The per-network and site-wide caps are listed under “What you may ask” above. Direct answers from site data do not use the model, so they give the unit back." },
+  { q: "What languages does Zarvis answer in?", a: "It answers in the language of your question. Direct answers, badges and notices exist in full in English, Portuguese and Spanish; model answers follow the language you wrote in." },
+  { q: "How do I report a wrong answer or wrong data?", a: "For a Zarvis answer, use the rating under it and pick what went wrong. For site data, post in the public forum thread linked under “Found something wrong?” below." },
+];
 export type Incident = { date: string; window: string; title: string; what: string; fix: string };
 export const INCIDENTS: Incident[] = [
   { date: "2026-09-28", window: "12:00–14:33 UTC", title: "Launch-day quota exhaustion",

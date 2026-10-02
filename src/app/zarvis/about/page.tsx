@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
-import { DIRECT_ROUTES, FRESHNESS_NOTE, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { DIRECT_ROUTES, FAQ, FRESHNESS_NOTE, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
 import { modelLabel } from "@/lib/zarvis/provenance";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
@@ -73,6 +73,16 @@ export default function AboutZarvisPage() {
       </Section>
       <Section title="What it cannot do">
         <ul className="space-y-1.5">{LIMITATIONS.map((line) => <li key={line}>{line}</li>)}</ul>
+      </Section>
+      <Section title="Frequently asked questions">
+        <dl className="space-y-3">
+          {FAQ.map((item) => (
+            <div key={item.q}>
+              <dt className="font-medium text-stone-800">{item.q}</dt>
+              <dd className="mt-0.5">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
       </Section>
       <Section title="The instructions the model receives">
         <p className="mb-2">This is the complete standing instruction sent with every model answer, as deployed right now. Evidence and the current time are added separately for each question.</p>
