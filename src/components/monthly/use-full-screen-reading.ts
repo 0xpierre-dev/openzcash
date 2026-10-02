@@ -11,24 +11,34 @@ import {
   type RefObject,
 } from "react";
 import {
+  DOUBLE_TAP_MS,
   PHONE_QUERY,
   fullScreenLayout,
   fullScreenMessage,
+  middleTap,
+  movementWakes,
+  pageClick,
   readingFraction,
+  settling,
   swipeTurn,
   tabStop,
-  tapZone,
+  turnTip,
   turnedPage,
   type PageTurn,
 } from "@/lib/monthly/full-screen";
 import { pageFromHash } from "@/lib/monthly/reader";
 
 const CONTROLS_REST_MS = 3000;
-// Long enough to take the second tap of a double tap on the close button.
-const EXIT_SHIELD_MS = 400;
 const FOCUSABLE = "a[href], button:not(:disabled)";
 // A pinched page pans under the finger instead of turning.
 const zoomed = () => (window.visualViewport?.scale ?? 1) > 1.01;
+// A phone or a tablet can be turned in the hand; a monitor cannot, and
+// neither can a laptop whose screen also takes touch (its pointer is fine).
+const heldInHand = () => window.matchMedia("(pointer: coarse)").matches;
+// When a click was made, not when it was delivered: a busy page hands it over
+// late. A stamp taken on another clock reads later than now and is passed over.
+const madeAt = (event: MouseEvent) =>
+  Math.min(event.timeStamp, performance.now());
 
 // The reader never scrolls behind the open page. The previous inline values
 // and position come back exactly as they were.
@@ -69,7 +79,9 @@ function setAsideTheRest(element: HTMLElement) {
 }
 
 // Browsers with the Fullscreen API also hide their own bars. A refused or
-// missing request keeps the overlay, which already fills the screen.
+// missing request keeps the overlay, which already fills the screen. Chromium
+// holds the page at its natural scale while it is in full screen, so a pinch
+// zooms the open page only where this request is missing or refused.
 function requestBrowserFullScreen(
   element: HTMLElement,
   stillOpen: () => boolean,
@@ -243,7 +255,7 @@ function useExitShield() {
   const shield = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
     setShielded(true);
-    timer.current = setTimeout(() => setShielded(false), EXIT_SHIELD_MS);
+    timer.current = setTimeout(() => setShielded(false), DOUBLE_TAP_MS);
   }, []);
   useEffect(
     () => () => {
@@ -258,25 +270,39 @@ type Gestures = {
   active: boolean;
   page: RefObject<HTMLElement | null>;
   rotated: boolean;
+  // When the page opened, on the clock of performance.now().
+  openedAt: RefObject<number>;
+  asleep: RefObject<boolean>;
   onTurn: (turn: PageTurn) => void;
-  onMiddle: () => void;
+  onMiddle: (pointerType: string) => void;
+  onWake: () => void;
 };
 
-// Swipes are read on release so a link under the finger still opens on a tap;
-// links and controls win over the three tap zones of the page.
-function usePageGestures({
-  active,
-  page,
-  rotated,
-  onTurn,
-  onMiddle,
-}: Gestures) {
+// The press of the primary pointer and the swipe it may end in. Swipes are
+// read on release so a link under the finger still opens on a tap.
+function usePresses(rotated: boolean, onTurn: (turn: PageTurn) => void) {
   const press = useRef<{ id: number; x: number; y: number } | null>(null);
   const swiped = useRef(false);
-  if (!active) return {};
+  // Set as the primary pointer lands and spent by the click that follows.
+  const landed = useRef(false);
+  // A finger or a mouse: the middle of the page answers each differently.
+  const pointer = useRef("");
   return {
+    // The click that follows a press spends it: what it was is read once.
+    spend() {
+      const was = {
+        swiped: swiped.current,
+        landed: landed.current,
+        pointer: pointer.current,
+      };
+      swiped.current = false;
+      landed.current = false;
+      return was;
+    },
     onPointerDown(event: PointerEvent) {
       swiped.current = false;
+      landed.current = event.isPrimary;
+      pointer.current = event.pointerType;
       press.current = event.isPrimary
         ? { id: event.pointerId, x: event.clientX, y: event.clientY }
         : null;
@@ -292,26 +318,64 @@ function usePageGestures({
       );
       if (!turn) return;
       swiped.current = true;
+      landed.current = false;
       onTurn(turn);
     },
     onPointerCancel() {
       press.current = null;
+      landed.current = false;
     },
-    // The click that ends a mouse swipe is not a tap.
+  };
+}
+
+// Links and controls win over the three tap zones of the page.
+function usePageGestures({
+  active,
+  page,
+  rotated,
+  openedAt,
+  asleep,
+  onTurn,
+  onMiddle,
+  onWake,
+}: Gestures) {
+  const { spend, ...presses } = usePresses(rotated, onTurn);
+  // Whether the click being handled followed a press, and of which pointer.
+  const tap = useRef({ pressed: false, pointer: "" });
+  if (!active) return {};
+  return {
+    ...presses,
+    onPointerMove(event: PointerEvent) {
+      if (movementWakes(event.pointerType, asleep.current)) onWake();
+    },
+    // The press of a tap that will be held back moves no focus either.
+    onMouseDownCapture(event: MouseEvent) {
+      if (settling(madeAt(event), openedAt.current)) event.preventDefault();
+    },
+    // The click that ends a mouse swipe is not a tap, and neither is the
+    // second one of the double tap that opened the page: both stop here,
+    // before a hot spot or a control takes them. A click made by a key or by
+    // assistive technology (detail 0) follows no press and passes.
     onClickCapture(event: MouseEvent) {
-      if (!swiped.current) return;
-      swiped.current = false;
+      const pointed = event.detail > 0;
+      const { swiped, landed, pointer } = spend();
+      tap.current = { pressed: landed && pointed, pointer };
+      if (!pointed) return;
+      if (!swiped && !settling(madeAt(event), openedAt.current)) return;
       event.preventDefault();
       event.stopPropagation();
     },
     onClick(event: MouseEvent) {
       const box = page.current?.getBoundingClientRect();
       if (!box || (event.target as Element).closest("a, button, nav")) return;
-      const zone = tapZone(
+      const action = pageClick(
+        tap.current.pressed,
         readingFraction({ x: event.clientX, y: event.clientY }, box, rotated),
+        zoomed(),
       );
-      if (zone === "controls") onMiddle();
-      else onTurn(zone);
+      if (action === "wake") onWake();
+      else if (action === "controls") onMiddle(tap.current.pointer);
+      else onTurn(action);
     },
   };
 }
@@ -347,6 +411,7 @@ export function useFullScreenReading({
 }: Options) {
   const [active, setActive] = useState(false);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
+  const [handHeld, setHandHeld] = useState(false);
   const [pinched, setPinched] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const { resting, greeting, asleep, wake, rest, greet, hush } =
@@ -354,7 +419,8 @@ export function useFullScreenReading({
   const { shielded, shield } = useExitShield();
   const opener = useRef<HTMLElement | null>(null);
   const live = useRef(false);
-  const layout = fullScreenLayout(viewport.width, viewport.height);
+  const openedAt = useRef(Number.NEGATIVE_INFINITY);
+  const layout = fullScreenLayout(viewport.width, viewport.height, handHeld);
 
   const exit = useCallback(() => {
     if (!live.current) return;
@@ -374,7 +440,9 @@ export function useFullScreenReading({
         ? focused
         : (fallbackOpener?.current ?? null));
     live.current = true;
+    openedAt.current = performance.now();
     setViewport({ width: window.innerWidth, height: window.innerHeight });
+    setHandHeld(heldInHand());
     setPinched(zoomed());
     setActive(true);
     // The address names the page even before a publication that was just
@@ -434,6 +502,19 @@ export function useFullScreenReading({
     };
   }, [active, root, closeButton, browserHost, exit, wake]);
 
+  // A turn unmounts the hot spots of the page it leaves, and a second try
+  // unmounts its own button. Focus that was on one falls to the body, behind
+  // the open page: it comes back to the way out. Only a render unmounts, so
+  // this looks after every one.
+  useEffect(() => {
+    const element = root.current;
+    const focused = document.activeElement;
+    if (!active || !element) return;
+    if (focused && focused !== document.body && element.contains(focused))
+      return;
+    closeButton.current?.focus({ preventScroll: true });
+  });
+
   // Every turn brings the counter back for a moment; at either cover it
   // answers instead of the page.
   function turn(direction: PageTurn) {
@@ -451,11 +532,14 @@ export function useFullScreenReading({
     active,
     page,
     rotated: layout.rotated,
+    openedAt,
+    asleep,
     onTurn: turn,
-    onMiddle() {
-      if (resting) wake();
+    onMiddle(pointerType) {
+      if (middleTap(pointerType, resting) === "wake") wake();
       else rest();
     },
+    onWake: wake,
   });
 
   // On phones a tap on the page itself opens it in full screen.
@@ -483,7 +567,7 @@ export function useFullScreenReading({
     active,
     rotated: layout.rotated,
     resting,
-    greeting,
+    tip: greeting ? turnTip(handHeld) : null,
     shielded,
     pinched,
     announcement,

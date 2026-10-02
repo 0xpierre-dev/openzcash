@@ -1,14 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { fitPage } from "./reader";
 import {
+  DOUBLE_TAP_MS,
   PHONE_QUERY,
   fullScreenLayout,
   fullScreenMessage,
+  middleTap,
+  movementWakes,
+  pageClick,
   pageCounter,
   readingFraction,
+  settling,
   swipeTurn,
   tabStop,
   tapZone,
+  turnTip,
   turnedPage,
 } from "./full-screen";
 
@@ -23,13 +29,27 @@ describe("monthly full screen reading", () => {
     [320, 568],
     [800, 1000],
   ])(
-    "turns the reading surface along the long side of a %i × %i portrait screen",
+    "turns the reading surface along the long side of a %i × %i portrait screen held in the hand",
     (width, height) => {
-      const layout = fullScreenLayout(width, height);
+      const layout = fullScreenLayout(width, height, true);
       expect(layout).toEqual({ rotated: true, width: height, height: width });
       const page = fitPage(layout.width, layout.height);
       expect(page.width).toBeGreaterThan(fitPage(width, height).width);
       expect(page.height).toBeLessThanOrEqual(width);
+    },
+  );
+
+  it.each([
+    [800, 900],
+    [800, 1000],
+    [375, 812],
+    [1080, 1920],
+  ])(
+    "keeps the page upright in a %i × %i portrait window on a monitor nobody can turn",
+    (width, height) => {
+      const layout = fullScreenLayout(width, height, false);
+      expect(layout).toEqual({ rotated: false, width, height });
+      expect(fitPage(layout.width, layout.height).width).toBe(width);
     },
   );
 
@@ -39,15 +59,13 @@ describe("monthly full screen reading", () => {
     [1280, 800],
     [500, 500],
   ])("keeps a %i × %i landscape screen upright", (width, height) => {
-    expect(fullScreenLayout(width, height)).toEqual({
-      rotated: false,
-      width,
-      height,
-    });
+    const upright = { rotated: false, width, height };
+    expect(fullScreenLayout(width, height, true)).toEqual(upright);
+    expect(fullScreenLayout(width, height, false)).toEqual(upright);
   });
 
   it("gives a 375 × 812 phone a page of about 667 × 375", () => {
-    const layout = fullScreenLayout(375, 812);
+    const layout = fullScreenLayout(375, 812, true);
     expect(fitPage(layout.width, layout.height)).toEqual({
       width: 666,
       height: 375,
@@ -55,22 +73,41 @@ describe("monthly full screen reading", () => {
     expect(fitPage(375, 812)).toEqual({ width: 375, height: 210 });
   });
 
+  it("fits an 800 × 900 window with a mouse to an upright page of 800 × 450", () => {
+    const layout = fullScreenLayout(800, 900, false);
+    expect(fitPage(layout.width, layout.height)).toEqual({
+      width: 800,
+      height: 450,
+    });
+  });
+
   it("never returns a negative, fractional or unusable surface", () => {
-    expect(fullScreenLayout(374.6, 811.4)).toEqual({
+    expect(fullScreenLayout(374.6, 811.4, true)).toEqual({
       rotated: true,
       width: 811,
       height: 374,
     });
-    expect(fullScreenLayout(0, 0)).toEqual({
+    expect(fullScreenLayout(374.6, 811.4, false)).toEqual({
+      rotated: false,
+      width: 374,
+      height: 811,
+    });
+    expect(fullScreenLayout(0, 0, true)).toEqual({
       rotated: false,
       width: 0,
       height: 0,
     });
-    expect(fullScreenLayout(-20, Number.NaN)).toEqual({
+    expect(fullScreenLayout(-20, Number.NaN, true)).toEqual({
       rotated: false,
       width: 0,
       height: 0,
     });
+  });
+
+  it("greets a hand with the swipe and a mouse with the arrow keys", () => {
+    expect(turnTip(true)).toBe("Swipe to turn pages");
+    expect(turnTip(false)).toBe("Use ← → to turn pages");
+    expect(turnTip(false)).not.toMatch(/swipe/i);
   });
 
   it("turns pages on a horizontal swipe in an upright layout", () => {
@@ -130,6 +167,67 @@ describe("monthly full screen reading", () => {
     expect(tapZone(0.66)).toBe("controls");
     expect(tapZone(0.67)).toBe("next");
     expect(tapZone(1)).toBe("next");
+  });
+
+  it("reads a click as a tap on the page only after a press of the pointer", () => {
+    expect(pageClick(true, 0)).toBe("previous");
+    expect(pageClick(true, 0.5)).toBe("controls");
+    expect(pageClick(true, 1)).toBe("next");
+  });
+
+  it("only wakes the controls on a click that followed no press, wherever it claims to be", () => {
+    // Assistive technology clicks the page image at 0, 0: the previous third.
+    expect(pageClick(false, 0)).toBe("wake");
+    expect(pageClick(false, 0.5)).toBe("wake");
+    expect(pageClick(false, 1)).toBe("wake");
+  });
+
+  it("turns no page on a tap while the page is pinched in", () => {
+    // Zoomed in, the reader cannot see which third is under the finger.
+    expect(pageClick(true, 0, true)).toBe("controls");
+    expect(pageClick(true, 0.5, true)).toBe("controls");
+    expect(pageClick(true, 1, true)).toBe("controls");
+    expect(pageClick(false, 1, true)).toBe("wake");
+    expect(pageClick(true, 1, false)).toBe("next");
+  });
+
+  it("takes no taps while the page that just opened settles", () => {
+    // The double click of a mouse can take half a second.
+    expect(DOUBLE_TAP_MS).toBe(500);
+    expect(settling(1000, 1000)).toBe(true);
+    expect(settling(1100, 1000)).toBe(true);
+    expect(settling(1499, 1000)).toBe(true);
+    expect(settling(1500, 1000)).toBe(false);
+    expect(settling(9000, 1000)).toBe(false);
+  });
+
+  it("still holds back a tap made before the page opened and delivered after", () => {
+    expect(settling(940, 1000)).toBe(true);
+  });
+
+  it("holds back nothing on a page that never opened or at a time it cannot read", () => {
+    expect(settling(100, Number.NEGATIVE_INFINITY)).toBe(false);
+    expect(settling(Number.NaN, 1000)).toBe(false);
+    expect(settling(1100, Number.NaN)).toBe(false);
+  });
+
+  it("brings resting controls back when a mouse moves, never for a finger", () => {
+    expect(movementWakes("mouse", true)).toBe(true);
+    expect(movementWakes("mouse", false)).toBe(false);
+    expect(movementWakes("touch", true)).toBe(false);
+    expect(movementWakes("pen", true)).toBe(false);
+    expect(movementWakes("", true)).toBe(false);
+  });
+
+  it("shows and hides the controls on a finger tap in the middle of the page", () => {
+    expect(middleTap("touch", true)).toBe("wake");
+    expect(middleTap("touch", false)).toBe("rest");
+    expect(middleTap("pen", false)).toBe("rest");
+  });
+
+  it("never hides the controls on a mouse click, since the next movement would bring them back", () => {
+    expect(middleTap("mouse", true)).toBe("wake");
+    expect(middleTap("mouse", false)).toBe("wake");
   });
 
   it("turns one page at a time and stops at both covers", () => {

@@ -207,7 +207,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
   const thumbStart = Math.floor((pageNumber - 1) / 5) * 5;
   const visiblePages = pages.slice(thumbStart, thumbStart + 5);
 
-  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""} ${reading.active ? styles.immersive : ""}`} data-edition={edition.id} role={reading.active ? "dialog" : undefined} aria-modal={reading.active || undefined} aria-label={reading.active ? `${publicationName} in full screen` : undefined} data-zoomed={reading.active && reading.pinched || undefined} {...reading.surface}>
+  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""} ${reading.active ? styles.immersive : ""}`} data-edition={edition.id} role={reading.active ? "dialog" : undefined} aria-modal={reading.active || undefined} aria-label={reading.active ? `${publicationName} in full screen` : undefined} tabIndex={reading.active ? -1 : undefined} data-zoomed={reading.active && reading.pinched || undefined} {...reading.surface}>
     <header className={styles.header}>
       <div className={styles.identity}>
         <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/logos/marks/openzcash.png" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
@@ -243,7 +243,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
             <div ref={stage} className={styles.stage}>
               {reading.active && <div className={styles.fullScreenControls} data-resting={reading.resting || undefined} onFocus={reading.wake}>
                 <button ref={closeButton} className={styles.exitFullScreen} onClick={reading.exit} aria-label="Exit full screen" title="Exit full screen"><Icon name="close" /></button>
-                {reading.greeting && <p className={styles.swipeTip} aria-hidden="true">Swipe to turn pages</p>}
+                {reading.tip && <p className={styles.swipeTip} aria-hidden="true">{reading.tip}</p>}
                 {/* aria-disabled keeps keyboard focus on a button that reaches the first or last page. */}
                 <nav className={styles.fullScreenPager} aria-label="Page navigation" {...reading.pager}>
                   <button aria-disabled={pageNumber === 1} onClick={() => reading.turn("previous")} aria-label="Previous page"><Icon name="left" /></button>

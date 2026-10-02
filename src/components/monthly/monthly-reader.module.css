@@ -244,10 +244,13 @@
 }
 
 /* Full screen reading: the page alone on a dark ground, above everything.
-   A portrait screen turns the surface a quarter clockwise (size and transform
-   come from fullScreenLayout) so the page runs along the long side. */
+   A portrait screen held in the hand turns the surface a quarter clockwise
+   (size and transform come from fullScreenLayout) so the page runs along the
+   long side; a tall window on a monitor keeps it upright. */
 .immersive.app { position: fixed; inset: 0; z-index: 1000; display: block; width: auto; height: 100dvh; background: #1c1917; touch-action: pinch-zoom; overscroll-behavior: contain; -webkit-user-select: none; user-select: none; }
 .immersive.app[data-zoomed] { touch-action: pan-x pan-y pinch-zoom; }
+/* A press on the page puts focus on the dialog itself, which shows no ring of its own. */
+.immersive.app:focus { outline: none; }
 .immersive > .header, .immersive .library, .immersive .readerHeading, .immersive .toolbar, .immersive .pageCaption, .immersive .filmstrip, .immersive .mobileProgress { display: none; }
 .immersive :is(.workspace, .reader, .readingArea) { display: block; border: 0; background: none; }
 .immersive .stagePadding { position: absolute; top: 0; left: 0; transform-origin: 0 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }

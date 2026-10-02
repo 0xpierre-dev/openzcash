@@ -10,16 +10,24 @@ const whole = (value: number) =>
 // A portrait screen shows the landscape page along its long side: the surface
 // takes the swapped dimensions and is turned a quarter clockwise in CSS, so
 // the page is fitted and drawn for the turned box instead of being scaled.
+// Only a device held in the hand can be turned to read it that way; a tall
+// window on a monitor keeps the page upright.
 export function fullScreenLayout(
   viewportWidth: number,
   viewportHeight: number,
+  handHeld: boolean,
 ) {
   const width = whole(viewportWidth);
   const height = whole(viewportHeight);
-  const rotated = height > width;
+  const rotated = handHeld && height > width;
   return rotated
     ? { rotated, width: height, height: width }
     : { rotated, width, height };
+}
+
+// The line that greets the reader. A mouse has the arrow keys beside it.
+export function turnTip(handHeld: boolean) {
+  return handHeld ? "Swipe to turn pages" : "Use ← → to turn pages";
 }
 
 export type PageTurn = "previous" | "next";
@@ -61,6 +69,39 @@ export function tapZone(fraction: number): PageTurn | "controls" {
   if (fraction < 1 / 3) return "previous";
   if (fraction > 2 / 3) return "next";
   return "controls";
+}
+
+// A click is a tap only when the pointer pressed the page first. One made by
+// assistive technology names no place on the page, so it wakes the controls.
+// Pinched in, the reader cannot see which third is under the finger: the
+// whole page answers as its middle and no page turns.
+export function pageClick(pressed: boolean, fraction: number, zoomed = false) {
+  if (!pressed) return "wake";
+  return zoomed ? "controls" : tapZone(fraction);
+}
+
+// Long enough to take the second tap of a double tap or of a double click.
+export const DOUBLE_TAP_MS = 500;
+
+// The second tap of a double tap on the way in lands on the page that just
+// opened, wherever the first one was aimed. Until the page has settled it
+// takes no taps, and one made before it opened but delivered after is held
+// back as well.
+export function settling(now: number, openedAt: number) {
+  return now - openedAt < DOUBLE_TAP_MS;
+}
+
+// A mouse moves without pressing, so its movement alone brings resting
+// controls back. A finger only moves while it swipes.
+export function movementWakes(pointerType: string, resting: boolean) {
+  return resting && pointerType === "mouse";
+}
+
+// What a tap in the middle of the page does to the controls. A finger shows
+// and hides them. A mouse only brings them back: hidden on a click, they
+// would return with the very next movement of the hand.
+export function middleTap(pointerType: string, resting: boolean) {
+  return resting || pointerType === "mouse" ? "wake" : "rest";
 }
 
 export function turnedPage(page: number, total: number, turn: PageTurn) {
