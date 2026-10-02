@@ -40,10 +40,12 @@ Every answer carries a badge saying which kind it is.
    the official ZIP corpus, and must cite what it used. The badge names the
    model and counts the sources; "N sources consulted" opens the list.
 
-Every currency, ZEC and percentage figure in a model answer is checked against
-the evidence retrieved with it. A figure that cannot be verified is restated in
-one repair round or withheld, and a notice under the answer says so. Verified
-figures can still be read out of context, so open the sources.
+For model answers backed by recognized financial evidence, a numeric guard
+checks USD, ZEC and percentage figures against the retrieved records and
+protocol constants. Unsupported figures may be restated once, when time permits;
+those still unsupported are withheld with a notice. Other answers and currencies
+are not fully covered, and a matching figure can still be out of context. Open
+the sources.
 
 ## Sharing an answer
 
@@ -60,11 +62,13 @@ Shared treasury-calculator links carry only scenario assumptions.
 
 ## Limits and quotas
 
-- Per network address: a rolling 10-minute cap and a daily cap count model
-  answers only. A direct answer returns the unit. A refused question says when
-  to retry, and the send button waits with you.
-- Site-wide hourly and daily caps exist; when one is reached, direct answers
-  keep working and the chat says model answers are paused.
+- Per network address: a fixed 10-minute cap and a daily cap reserve a quota
+  unit before routing. A completed direct answer returns the unit. A refused
+  question says when to retry, and the send button waits with you.
+- Site-wide hourly and daily request caps also apply before routing. When any
+  request-count cap is full, direct answers are blocked too.
+- A separate daily spending ceiling, when configured, pauses model answers;
+  direct answers remain available while request-count quota is available.
 - The exact numbers in effect are shown at <https://openzcash.org/zarvis/about>
   under "What you may ask", because they change with capacity.
 
@@ -97,5 +101,5 @@ Shared treasury-calculator links carry only scenario assumptions.
   anything you did not type, and it cannot send, sign or contact anyone.
 - Calendar dates for future blocks are estimates; ZIP statuses and listed
   activation heights are not proof that a change is live.
-- There is no official Zarvis or OpenZcash token. Tokens named `$ZARVIS` or
-  `$OPENZCASH` on other chains were not created or endorsed by OpenZcash.
+- There is no official Zarvis or OpenZcash token. Any token using either name
+  is not created, endorsed or issued by OpenZcash.

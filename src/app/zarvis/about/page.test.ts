@@ -26,6 +26,12 @@ describe("About Zarvis page", () => {
     expect(html).toContain("Is there a Zarvis or OpenZcash token?");
     expect(html).toContain("What languages does Zarvis answer in?");
     expect(html).toContain("Copy question link");
+    expect(html).toContain("recognized financial evidence");
+    expect(html).toContain("Other answers and currencies are not fully covered");
+    expect(html).toContain("A full request-count cap also blocks direct answers");
+    expect(html).toContain("A separate daily spending ceiling pauses model answers");
+    expect(html).not.toContain("appeared on other chains");
+    expect(html).not.toContain("Every currency, ZEC and percentage figure");
     expect(html).not.toContain("xai-secret-sentinel-value");
     expect(html).not.toMatch(/\b1000\b|\b1,000\b|\$100\b/);
   });

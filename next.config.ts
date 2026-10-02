@@ -9,14 +9,15 @@ import monthlyReadingSets from "./src/lib/monthly/reading-sets.json";
 // Tailwind's inline styles. No 'unsafe-eval'.
 // One development-only exception: React's development runtime calls eval() for
 // debugging features, and without 'unsafe-eval' the dev overlay reports a CSP
-// violation on every page. Production never takes that branch below.
+// violation on every page. Only explicit development enables it; every other
+// environment keeps the strict default.
 // 'blob:' is required by the 3D office (/zcg/office): three.js loads GLB-embedded
 // textures via URL.createObjectURL (blob: URLs) and, when createImageBitmap is
 // available, FETCHES that blob URL — so blob: must be allowed on both img-src
 // (the <img> fallback) and connect-src (the fetch/ImageBitmap path).
-const scriptSrc = process.env.NODE_ENV === "production"
-  ? "script-src 'self' 'unsafe-inline'"
-  : "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
+const scriptSrc = process.env.NODE_ENV === "development"
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+  : "script-src 'self' 'unsafe-inline'";
 const csp = [
   "default-src 'self'",
   scriptSrc,
