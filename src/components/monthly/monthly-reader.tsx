@@ -2,10 +2,14 @@
 
 /* eslint-disable @next/next/no-img-element -- Edition thumbnails are small, immutable PDF exports. */
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref, type RefObject } from "react";
 import { type MonthlyEdition, monthLabel, statusLabel } from "@/lib/monthly/catalog";
+import { PHONE_QUERY, pageCounter } from "@/lib/monthly/full-screen";
 import { fitPage, loadPdfModule, pageFromHash, pageManifestSchema, pdfOptions, sourceUrl, type LoadingTask, type PdfDocument, type RenderTask, type ReportPage } from "@/lib/monthly/reader";
+import { useFullScreenReading } from "./use-full-screen-reading";
 import styles from "./monthly-reader.module.css";
+
+export type MonthlyReaderHandle = { enterFullScreen: (opener?: HTMLElement | null) => void };
 
 type IconName = "left" | "right" | "download" | "expand" | "collapse" | "library" | "link" | "close" | "book";
 function Icon({ name }: { name: IconName }) {
@@ -48,7 +52,7 @@ function EditionLibrary({ editions, edition }: { editions: MonthlyEdition[]; edi
   </div>;
 }
 
-export function MonthlyReader({ editions, edition, embedded = false, baseHref, publicationName = "Monthly", onFollowLink }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string; publicationName?: string; onFollowLink?: (url: string) => boolean }) {
+export function MonthlyReader({ editions, edition, embedded = false, baseHref, publicationName = "Monthly", onFollowLink, handle, fullScreenOpener, fullScreenHost, onFullScreenChange }: { editions: MonthlyEdition[]; edition: MonthlyEdition; embedded?: boolean; baseHref?: string; publicationName?: string; onFollowLink?: (url: string) => boolean; handle?: Ref<MonthlyReaderHandle>; fullScreenOpener?: RefObject<HTMLElement | null>; fullScreenHost?: RefObject<HTMLElement | null>; onFullScreenChange?: (on: boolean) => void }) {
   const pageHref = baseHref || `/monthly/${edition.id}`;
   const [pageNumber, setPageNumber] = useState(1);
   const [pages, setPages] = useState<ReportPage[]>([]);
@@ -62,6 +66,8 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
   const [message, setMessage] = useState("");
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const paper = useRef<HTMLDivElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
   const canvasHost = useRef<HTMLDivElement>(null);
   const libraryDialog = useRef<HTMLDialogElement>(null);
   const noticeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -74,6 +80,10 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
     // Keep the edition in shared URLs even when entered through /monthly.
     window.history.replaceState(null, "", `${pageHref}#${next}`);
   }, [pageHref, edition.pageCount]);
+
+  // Phones read in a full screen overlay; the header button of the bundle opens it from outside.
+  const reading = useFullScreenReading({ root, page: paper, closeButton, fallbackOpener: fullScreenOpener, browserHost: fullScreenHost, pageNumber, pageCount: edition.pageCount, goTo, onChange: onFullScreenChange });
+  useImperativeHandle(handle, () => ({ enterFullScreen: reading.enter }), [reading.enter]);
 
   useEffect(() => {
     const sync = () => setPageNumber(pageFromHash(window.location.hash, edition.pageCount));
@@ -168,13 +178,14 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
     setMessage(text);
     noticeTimer.current = setTimeout(() => setMessage(""), 5000);
   }
-  async function toggleFullScreen() {
+  async function toggleFullScreen(event: React.MouseEvent<HTMLElement>) {
+    if (!document.fullscreenElement && window.matchMedia(PHONE_QUERY).matches) { reading.enter(event.currentTarget); return; }
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
       else {
         setFocused(true);
         if (root.current?.requestFullscreen) await root.current.requestFullscreen();
-        else notify("Focus mode enabled. Rotate your device for a larger page.");
+        else notify("Focus mode enabled. Full screen is unavailable in this browser.");
       }
     } catch { setFocused(true); notify("Focus mode enabled. Full screen is unavailable in this browser."); }
   }
@@ -196,7 +207,7 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
   const thumbStart = Math.floor((pageNumber - 1) / 5) * 5;
   const visiblePages = pages.slice(thumbStart, thumbStart + 5);
 
-  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""}`} data-edition={edition.id}>
+  return <div ref={root} className={`${styles.app} ${focused ? styles.focused : ""} ${embedded ? styles.embedded : ""} ${reading.active ? styles.immersive : ""}`} data-edition={edition.id} role={reading.active ? "dialog" : undefined} aria-modal={reading.active || undefined} aria-label={reading.active ? `${publicationName} in full screen` : undefined} tabIndex={reading.active ? -1 : undefined} data-zoomed={reading.active && reading.pinched || undefined} {...reading.surface}>
     <header className={styles.header}>
       <div className={styles.identity}>
         <Link href="/" className={styles.homeLink} aria-label="OpenZcash apps"><img src="/logos/marks/openzcash.png" width="29" height="29" alt="" /><span>OpenZcash</span></Link>
@@ -228,19 +239,29 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
               <button className={styles.iconButton} disabled={pageNumber === edition.pageCount} onClick={() => goTo(pageNumber + 1)} aria-label="Next page"><Icon name="right" /></button>
             </nav>
           </div>
-          <div className={styles.stagePadding}>
+          <div className={styles.stagePadding} style={reading.surfaceStyle} data-rotated={reading.active && reading.rotated || undefined}>
             <div ref={stage} className={styles.stage}>
-              <div className={styles.paper} style={{ width: size.width || undefined, height: size.height || undefined }} aria-busy={!ready && !error} data-rendered-page={ready ? rendered : undefined}>
+              {reading.active && <div className={styles.fullScreenControls} data-resting={reading.resting || undefined} onFocus={reading.wake}>
+                <button ref={closeButton} className={styles.exitFullScreen} onClick={reading.exit} aria-label="Exit full screen" title="Exit full screen"><Icon name="close" /></button>
+                {reading.tip && <p className={styles.swipeTip} aria-hidden="true">{reading.tip}</p>}
+                {/* aria-disabled keeps keyboard focus on a button that reaches the first or last page. */}
+                <nav className={styles.fullScreenPager} aria-label="Page navigation" {...reading.pager}>
+                  <button aria-disabled={pageNumber === 1} onClick={() => reading.turn("previous")} aria-label="Previous page"><Icon name="left" /></button>
+                  <span aria-hidden="true">{pageCounter(pageNumber, edition.pageCount)}</span><span className={styles.screenReaderOnly}>Page {pageNumber} of {edition.pageCount}</span>
+                  <button aria-disabled={pageNumber === edition.pageCount} onClick={() => reading.turn("next")} aria-label="Next page"><Icon name="right" /></button>
+                </nav>
+              </div>}
+              <div ref={paper} onClick={reading.onPageClick} className={styles.paper} style={{ width: size.width || undefined, height: size.height || undefined }} aria-busy={!ready && !error} data-rendered-page={ready ? rendered : undefined}>
                 <div ref={canvasHost} className={styles.canvasHost} style={{ visibility: ready ? "visible" : "hidden" }} />
                 {ready && currentPage?.links.map((link, i) => {
                   const position = { left: `${link.x * 100}%`, top: `${link.y * 100}%`, width: `${link.w * 100}%`, height: `${link.h * 100}%` };
                   return "url" in link ? <a key={i} className={styles.pdfLink} style={position} href={sourceUrl(link.url) || undefined} target="_blank" rel="noopener noreferrer" onClick={(event)=>{if(onFollowLink?.(link.url))event.preventDefault();}} aria-label={link.label} title={link.label} /> : <a key={i} className={styles.pdfLink} style={position} href={`#${link.page}`} onClick={(event) => { event.preventDefault(); goTo(link.page); }} aria-label={link.label} title={link.label} />;
                 })}
-                {!ready && <div className={styles.loading} role="status">{error ? <><Icon name="book" /><strong>This edition couldn’t load.</strong><span>Try again, or open the PDF using the download button.</span><button onClick={retryLoad}>Try again</button></> : <><span className={styles.loader} /><span>Opening your report…</span></>}</div>}
+                {!ready && <div className={styles.loading} role="status">{error ? <><Icon name="book" /><strong>This edition couldn’t load.</strong><span>{reading.active ? "Try again, or leave full screen to download the PDF." : "Try again, or open the PDF using the download button."}</span><button onClick={retryLoad}>Try again</button></> : <><span className={styles.loader} /><span>Opening your report…</span></>}</div>}
               </div>
             </div>
           </div>
-          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><small>Use ← → to turn pages</small></div>
+          <div className={styles.pageCaption}><span>{currentPage?.title || `OpenZcash ${publicationName}`}</span><button className={styles.captionFullScreen} onClick={(event) => reading.enter(event.currentTarget)}><Icon name="expand" />Read in full screen</button><small>Use ← → to turn pages</small></div>
         </div>
         <nav className={styles.filmstrip} aria-label="Page previews">
           <button className={styles.iconButton} disabled={pageNumber === 1} onClick={() => goTo(pageNumber - 1)} aria-label="Previous page" title="Previous page"><Icon name="left" /></button>
@@ -255,7 +276,9 @@ export function MonthlyReader({ editions, edition, embedded = false, baseHref, p
       <EditionLibrary editions={editions} edition={edition} />
     </dialog>
     <div className={styles.screenReaderOnly} aria-live="polite">Page {pageNumber} of {edition.pageCount}. {currentPage?.title}</div>
+    <div className={styles.screenReaderOnly} aria-live="polite">{reading.announcement}</div>
     {ready && <div className={styles.screenReaderOnly} aria-label="Page text">{currentPage?.text}</div>}
+    {reading.shielded && <div className={styles.exitShield} aria-hidden="true" onMouseDown={(event) => event.preventDefault()} />}
     {message && <div className={styles.toast} role="status">{message}</div>}
   </div>;
 }
