@@ -38,12 +38,18 @@ export default function AboutZarvisPage() {
         <p className="mt-1">{TOKEN_DISCLAIMER.body}</p>
       </Card>
       <Section title="Two kinds of answer">
-        <p className="mb-2">Under every answer a badge says which kind you got.</p>
-        <p className="mb-2"><span className="font-medium text-stone-800">Direct from OpenZcash data · no AI.</span> The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
-        <ul className="space-y-1.5">
-          {DIRECT_ROUTES.map((route) => <li key={route.label}><span className="font-medium text-stone-800">{route.label}</span>: {route.detail}</li>)}
-        </ul>
-        <p className="mt-3"><span className="font-medium text-stone-800">Model answer.</span> Everything else goes to {modelLine(config)} The model receives the recent conversation, the records Zarvis retrieved from this site and the official ZIP corpus, and must cite what it used. The badge names the model and counts the sources.</p>
+        <p className="mb-3">Under every answer a badge says which kind you got. The two kinds are treated the same way on this page, numbered, so neither reads as a footnote of the other.</p>
+        <div className="mb-3 rounded-xl border border-stone-200 bg-stone-50 p-4">
+          <p className="mb-1.5 font-semibold text-stone-800">1 · Direct from OpenZcash data · no AI</p>
+          <p className="mb-2">The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
+          <ul className="space-y-1.5">
+            {DIRECT_ROUTES.map((route) => <li key={route.label}><span className="font-medium text-stone-800">{route.label}</span>: {route.detail}</li>)}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+          <p className="mb-1.5 font-semibold text-stone-800">2 · Model answer</p>
+          <p>Everything else goes to {modelLine(config)} The model receives the recent conversation, the records Zarvis retrieved from this site and the official ZIP corpus, and must cite what it used. The badge names the model and counts the sources.</p>
+        </div>
       </Section>
       <Section title="What you may ask">
         <ul className="space-y-1.5">{quotas.map((line) => <li key={line}>{line}</li>)}</ul>
