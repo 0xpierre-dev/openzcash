@@ -13,6 +13,7 @@ describe("About Zarvis page", () => {
     expect(html).toContain("No official token");
     expect(html).toContain("not created, endorsed or issued by OpenZcash");
     expect(html).toContain("Direct from OpenZcash data · no AI");
+    expect(html).toContain("3 sources · check them");
     expect(html).toContain("grok-4.7 from xAI (Grok)");
     expect(html).toContain("60 questions per 10 minutes and 600 per day");
     expect(html).toContain("30 days");

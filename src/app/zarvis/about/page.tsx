@@ -3,6 +3,7 @@ import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
 import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { modelLabel } from "@/lib/zarvis/provenance";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +39,12 @@ export default function AboutZarvisPage() {
         <p className="mt-1">{TOKEN_DISCLAIMER.body}</p>
       </Card>
       <Section title="Two kinds of answer">
-        <p className="mb-3">Under every answer a badge says which kind you got. The two kinds are treated the same way on this page, numbered, so neither reads as a footnote of the other.</p>
+        <p className="mb-3">Under every answer a badge says which kind you got:</p>
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="zarvis-provenance-badge zarvis-provenance-local">Direct from OpenZcash data · no AI</span>
+          <span className="zarvis-provenance-badge">{modelLabel(config.model, config.providerLabel)} · 3 sources · check them</span>
+        </div>
+        <p className="mb-3 text-xs text-stone-500">The first badge marks answers written by this site&apos;s own code from its own records. The second marks answers written by an AI model — open the source list under those and check them.</p>
         <div className="mb-3 rounded-xl border border-stone-200 bg-stone-50 p-4">
           <p className="mb-1.5 font-semibold text-stone-800">1 · Direct from OpenZcash data · no AI</p>
           <p className="mb-2">The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
