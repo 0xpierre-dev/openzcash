@@ -200,9 +200,9 @@ export function VerdictsTable({
               <tr key={r.key}>
                 <th scope="row" className={styles.wrapCell}>
                   {r.href ? (
-                    <a href={r.href} target="_blank" rel="noreferrer">
+                    <Link href={r.href}>
                       {r.title}
-                    </a>
+                    </Link>
                   ) : (
                     r.title
                   )}

@@ -148,13 +148,14 @@ describe("verifyJson", () => {
       quorumMet: true,
       quorumMetWithoutAbstain: true,
     });
-    expect(JSON.stringify(json)).not.toMatch(/ballot_count|voters/);
+    expect(JSON.stringify(json)).not.toMatch(/"(?:ballot_count|voters)"\s*:/);
   });
 
   it("explains how a Coin Voting round is recounted instead of a chain check", () => {
     const q1 = round("q1-2026");
     const json = verifyJson(q1, verifyRound(q1), null);
     expect(json.chain).toBeNull();
+    expect(json.script).toBeNull();
     expect(json.recount?.links.map((l) => l.href)).toContain(
       "https://github.com/hhanh00/zcv",
     );
