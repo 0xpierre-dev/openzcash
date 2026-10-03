@@ -1450,8 +1450,8 @@ export const ROUNDS: Round[] = [
       { key: "rejectLower", label: "Reject · would reconsider at a lower amount" },
       { key: "abstain", label: "Abstain" },
     ],
-    votingSystem: "Shielded, coin-weighted voting on the Valar Group vote chain through the ZODL, Zkool and Vizor wallets, with the snapshot at block 3,485,940. Ballots are encrypted and tallied by ten validators with a seven-of-ten threshold; every question defaults to Abstain.",
-    turnout: "About 2.18 million ZEC on every question (2,179,030 to 2,181,453 ZEC). Because each question defaults to Abstain, nearly every participating coin counts on every question; the totals do not show how many holders voted.",
+    votingSystem: "Shielded, coin-weighted voting on the Valar Group vote chain through the ZODL, Zkool and Vizor wallets, with the snapshot at block 3,485,940. Ballots are encrypted and tallied by ten validators with a seven-of-ten threshold. FPF confirmed on October 2 that Q3 required voters to explicitly select Abstain; it was not a default.",
+    turnout: "About 2.18 million ZEC on every question (2,179,030 to 2,181,453 ZEC). These totals measure voting power, not the number of holders, and do not establish how much attention each proposal received.",
     closePrice: { usd: 1399.9, date: "2026-09-29" },
     talliesSource: { label: "the finalized round on the Valar vote chain, served identically by the Zcash Foundation's vote server", href: VOTE_CHAIN },
     proposals: Q3_2026,
@@ -1464,6 +1464,7 @@ export const ROUNDS: Round[] = [
     ],
     sources: [
       { label: "Official results (FPF)", href: FORUM + "q3-coinholder-directed-retroactive-grants-program-results/57909" },
+      { label: "FPF counting and ballot clarification · Oct 2", href: FORUM + "q3-coinholder-directed-retroactive-grants-program-results/57909/19" },
       { label: "Tallies (vote chain)", href: VOTE_CHAIN },
       { label: "Vizor transcription and analysis", href: FORUM + "the-hand-of-god-what-q3s-coinholder-retroactive-grants-vote-tells-us/57910" },
       { label: "Zakura vote results", href: "https://zakura.com/voting/" },

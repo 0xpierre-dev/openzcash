@@ -148,7 +148,7 @@ describe("verifyJson", () => {
       quorumMet: true,
       quorumMetWithoutAbstain: true,
     });
-    expect(JSON.stringify(json)).not.toMatch(/ballot_count|voters/);
+    expect(JSON.stringify(json)).not.toMatch(/"(?:ballot_count|voters)"\s*:/);
   });
 
   it("explains how a Coin Voting round is recounted instead of a chain check", () => {

@@ -268,8 +268,8 @@ function sourceLine(
 }
 
 /**
- * ZIP 1016 does not say whether Abstain counts toward the minimum. Where the
- * two readings differ, say which questions and whether any outcome turns on it.
+ * FPF includes Abstain in participation. Retain the without-Abstain comparison
+ * for older rounds without presenting it as the current counting rule.
  */
 function abstainMinimumLine(check: RoundCheck) {
   const c = check.counts;
@@ -285,7 +285,7 @@ function abstainMinimumLine(check: RoundCheck) {
   const either = turned.length
     ? `Leaving Abstain out would change the outcome of ${listOf(turned.map((r) => shortTitle(r.title)))}.`
     : `${short.length === 1 ? "It was" : short.length === 2 ? "Both were" : `All ${short.length} were`} ${RULE_LABEL[check.kind === "poll" ? "not_passed" : "rejected"].toLowerCase()} either way.`;
-  return `ZIP 1016 does not say whether Abstain counts toward the ${MINIMUM} minimum: counting it, ${met}; without it, ${listOf(short.map((r) => shortTitle(r.title)))} did not. ${either}`;
+  return `Under FPF’s current counting rule, Abstain counts toward the ${MINIMUM} minimum: ${met}. For comparison, without Abstain, ${listOf(short.map((r) => shortTitle(r.title)))} did not. ${either}`;
 }
 
 /** What the figures below show, from the counts themselves. */

@@ -140,6 +140,7 @@ export function verifyJson(
       quorumCountsAbstain: ZIP_1016_RULE.quorumCountsAbstain,
       href: ZIP_1016_RULE.href,
       confirmedBy: ZIP_1016_RULE.confirmedBy,
+      participationConfirmedBy: ZIP_1016_RULE.participationConfirmedBy,
     },
     units:
       "ZEC. The vote chain's total_value counts units of 0.125 ZEC and is divided by 8; an option with no ZEC omits it. approveShare is Accept over Accept plus both Reject options. quorumMet counts every option toward the 420,000 ZEC minimum, Abstain included; quorumMetWithoutAbstain counts only the ZEC for or against.",

@@ -62,9 +62,10 @@ describe("ZIP 1016 as FPF applies it", () => {
     expect(ZIP_1016_RULE.confirmedBy.label).not.toMatch(/correction/i);
     expect(ZIP_1016_RULE.quorumCountsAbstain).toBe(true);
     expect(ZIP_1016_RULE.text).toMatch(
-      /does not say whether Abstain counts toward the 420,000 ZEC minimum/,
+      /FPF’s current counting rule/,
     );
-    expect(ZIP_1016_RULE.text).not.toMatch(/count toward the minimum, not the majority/);
+    expect(ZIP_1016_RULE.participationConfirmedBy.href).toContain("/57909/19");
+    expect(ZIP_1016_RULE.participationConfirmedBy.covers).toMatch(/Explicit Abstain counts toward the minimum/);
   });
 
   it("passes on more ZEC for Accept than both Reject options together; abstentions are left out", () => {

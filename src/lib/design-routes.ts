@@ -222,6 +222,8 @@ export type Place = {
 export function placeOf(pathname: string): Place | undefined {
   const detail = DETAILS[pathname] ?? (/^\/ecosystem\/history\/[a-z0-9-]+$/.test(pathname)
     ? { parent: "/ecosystem/history", label: "Project history" }
+    : /^\/coinholders\/verify\/[a-z0-9-]+\/[^/]+$/.test(pathname)
+    ? { parent: "/coinholders/verify", label: "Proposal detail" }
     : undefined);
   const target = detail ? detail.parent : pathname;
   for (const app of APPS) {

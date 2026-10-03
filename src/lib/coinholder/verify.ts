@@ -14,20 +14,25 @@ import type { Outcome, Round, Tally } from "./types";
 /**
  * ZIP 1016 as this page applies it. FPF confirmed the majority test on
  * September 30, 2026 (abstentions are left out of it); ZIP 1016 does not say
- * whether Abstain counts toward the 420,000 ZEC minimum, and no published
- * source settles it, so the page counts it and keeps the other reading beside.
+ * whether Abstain counts toward the 420,000 ZEC minimum. FPF clarified on
+ * October 2 that it counts, and that Q3 required an explicit Abstain choice.
  */
 export const ZIP_1016_RULE = {
   quorumZec: QUORUM_ZEC,
   /** The reading applied to the minimum: every option, Abstain included. */
   quorumCountsAbstain: true,
-  text: "A question passes when at least 420,000 ZEC voted on it and more ZEC chose Accept than both Reject options together; Abstain is left out of that majority, as FPF confirmed on September 30, 2026. ZIP 1016 does not say whether Abstain counts toward the 420,000 ZEC minimum: this page counts it, and says where leaving it out would matter.",
+  text: "FPF’s current counting rule: all options, including explicit Abstain, count toward the 420,000 ZEC minimum. Accept must exceed both Reject options combined; Abstain is excluded from the majority. ZIP 1016 does not explicitly define Abstain’s treatment. FPF clarified the Q3 rule on October 2, 2026 and will state it in the Q4 voting announcement.",
   href: "https://zips.z.cash/zip-1016",
   /** FPF's reply covers the majority test only. */
   confirmedBy: {
     label: "FPF on abstentions, September 30, 2026",
     covers: "Abstentions are left out of the majority.",
     href: "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-results/57909/4",
+  },
+  participationConfirmedBy: {
+    label: "FPF counting and ballot clarification, October 2, 2026",
+    covers: "Explicit Abstain counts toward the minimum; Q3 did not default to Abstain. Q4 counting rules will be stated in its voting announcement.",
+    href: "https://forum.zcashcommunity.com/t/q3-coinholder-directed-retroactive-grants-program-results/57909/19",
   },
 } as const;
 

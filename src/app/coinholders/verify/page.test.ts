@@ -74,8 +74,8 @@ describe("Verify it yourself", () => {
     // No Q3 outcome turns on whether Abstain counts toward the minimum.
     expect(html).toContain("420,000 ZEC or more, with or without Abstain");
     expect(html).toContain("fetched live and hashed");
-    // FPF's reply is cited for what it says: abstentions and the majority.
-    expect(html).toContain("FPF on abstentions, September 30, 2026 ↗");
+    // The later FPF reply clarifies participation and the explicit Abstain choice.
+    expect(html).toContain("FPF counting and ballot clarification, October 2, 2026 ↗");
     expect(html).not.toContain("FPF&#x27;s correction");
   });
 
@@ -169,7 +169,7 @@ describe("Verify it yourself", () => {
     const html = await render("q1-2026");
     expect(html).toContain("with Abstain · 4 of 6 without");
     expect(html).toContain(
-      "ZIP 1016 does not say whether Abstain counts toward the 420,000 ZEC minimum: counting it, all 6 met it; without it, ZChat and zcash.me did not. Both were rejected either way.",
+      "Under FPF’s current counting rule, Abstain counts toward the 420,000 ZEC minimum: all 6 met it. For comparison, without Abstain, ZChat and zcash.me did not. Both were rejected either way.",
     );
   });
 

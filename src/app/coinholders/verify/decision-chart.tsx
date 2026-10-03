@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { proposalVerifyHref } from "@/lib/coinholder/proposal-decision";
 import type {
   DecisionRow,
   DecisionSort,
@@ -22,11 +24,11 @@ const OUTCOME: Record<DecisionRow["tone"], string> = {
   none: shared.o_discarded,
 };
 
-function Row({ row }: { row: DecisionRow }) {
+function Row({ row, roundId }: { row: DecisionRow; roundId: string }) {
   return (
     <li className={styles.dRow} data-flag={row.flag?.tone}>
       <span className="sr-only">{row.description}</span>
-      <span className={styles.dLabel} aria-hidden title={row.title}>
+      <Link className={styles.dLabel} href={proposalVerifyHref(roundId, row.id)} title={`Tally & decision: ${row.title}`}>
         {row.ballot !== null ? (
           <span className={styles.dNum}>#{row.ballot}</span>
         ) : null}
@@ -38,7 +40,7 @@ function Row({ row }: { row: DecisionRow }) {
             </span>
           ) : null}
         </span>
-      </span>
+      </Link>
       <span className={styles.dBar} aria-hidden title={row.tooltip}>
         <span
           className={styles.dTrack}
@@ -86,8 +88,10 @@ export function DecisionChart({
   rows,
   orders,
   text,
+  roundId,
 }: {
   rows: DecisionRow[];
+  roundId: string;
   /** Row ids in each order, sorted on the server. */
   orders: Record<DecisionSort, string[]>;
   text: ReturnType<typeof chartText>;
@@ -126,7 +130,7 @@ export function DecisionChart({
       </div>
       <ol className={styles.decisions}>
         {sorted.map((r) => (
-          <Row key={r.id} row={r} />
+          <Row key={r.id} row={r} roundId={roundId} />
         ))}
       </ol>
       <ul className={styles.chartLegend} aria-label="Legend">

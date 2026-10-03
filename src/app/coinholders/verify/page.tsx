@@ -212,6 +212,7 @@ export default async function VerifyPage({
       />
       <Rebuild round={round} check={check} chain={chain} />
       <DecisionChart
+        roundId={round.id}
         rows={decisions}
         orders={{
           share: sortDecisions(decisions, "share").map((r) => r.id),
@@ -243,11 +244,11 @@ export default async function VerifyPage({
           ZIP 1016 ↗
         </a>
         <a
-          href={ZIP_1016_RULE.confirmedBy.href}
+          href={ZIP_1016_RULE.participationConfirmedBy.href}
           target="_blank"
           rel="noreferrer"
         >
-          {ZIP_1016_RULE.confirmedBy.label} ↗
+          {ZIP_1016_RULE.participationConfirmedBy.label} ↗
         </a>
         {round.sources
           .filter((s) => s.href !== round.talliesSource?.href)

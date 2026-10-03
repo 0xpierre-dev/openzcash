@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PROGRAM } from "@/lib/coinholder/program";
 import { ROUNDS } from "@/lib/coinholder/rounds";
+import { proposalVerifyHref } from "@/lib/coinholder/proposal-decision";
 import {
   QUORUM_ZEC,
   SUPPLY_ZEC,
@@ -464,6 +465,7 @@ function RoundResults({ round }: { round: Round }) {
       {round.proposals.length ? (
         <ResultsBoard
           key={round.id}
+          roundId={round.id}
           proposals={round.proposals}
           ballot={round.ballot}
         />
@@ -509,7 +511,7 @@ function AllRounds() {
       approvalShare: p.tally ? approvalShare(p.tally) : null,
       decidedZec: p.tally ? decidedZec(p.tally) : null,
       abstainZec: p.tally ? p.tally.abstain : null,
-      href: p.links[0]?.href ?? null,
+      href: proposalVerifyHref(r.id, p.id),
       corrected: Boolean(p.correction),
     })),
   );

@@ -1,4 +1,6 @@
 import { OUTCOME_LABEL, formatZec } from "@/lib/coinholder/derive";
+import Link from "next/link";
+import { proposalVerifyHref } from "@/lib/coinholder/proposal-decision";
 import {
   RULE_LABEL,
   type RoundCheck,
@@ -176,12 +178,12 @@ export function VerifyTable({
                   {r.ballot ?? "·"}
                 </td>
                 <th scope="row" className={own.proposal}>
-                  <span className={own.title}>
+                  <Link className={own.title} href={proposalVerifyHref(check.roundId, r.id)}>
                     {r.ballot !== null ? (
                       <span className={own.phoneOnly}>#{r.ballot} · </span>
                     ) : null}
                     {r.title}
-                  </span>
+                  </Link>
                   {r.applicant ? (
                     <span className={own.sub}>{r.applicant}</span>
                   ) : null}
