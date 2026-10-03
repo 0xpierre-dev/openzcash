@@ -32,7 +32,6 @@ export default function AboutZarvisPage() {
       <PageHeader
         title="About Zarvis"
         subtitle="Zarvis is OpenZcash's guide to Zcash. This page says how it answers, what it costs you, what it keeps and where it has failed, so you can decide how much to trust it."
-        actions={<Link href="/zarvis" className="rd-button rd-button-primary">Ask Zarvis</Link>}
       />
       <Card className="mb-6 text-sm leading-relaxed text-stone-600">
         <p className="font-semibold text-amber-700">{TOKEN_DISCLAIMER.title}</p>
