@@ -9,6 +9,10 @@ import { grantStatusLabel as statusLabel } from "@/lib/zcg/status-labels";
 import { listDisbursements } from "@/lib/zcg/disbursements-repo";
 import { coinholderGrantViews } from "@/lib/coinholder/official-status";
 import { pageMetadata } from "@/lib/seo/page-metadata";
+import Link from "next/link";
+import { projectHistoryDirectory } from "@/lib/project-history/data";
+import { historyLinksForGrant } from "@/lib/project-history/insights";
+import { normalizeKey } from "@/lib/zcg/normalize";
 
 /** The coinholder tab has a few dozen rows; the list's default cap of 250 is far above it. */
 const COINHOLDER_LEDGER_ROWS = 1000;
@@ -65,6 +69,7 @@ export default async function GrantsPage({
       milestonesText: `${g.paidCount}/${g.milestoneCount}`,
       _usd: Number(g.usdCents),
       _zec: Number(g.zecZat),
+      histories: historyLinksForGrant(projectHistoryDirectory(), { title: g.grantKey, program: g.program === "coinholder" ? "coinholder" : "zcg", recipientKey: normalizeKey(g.grantee) }),
     };
   });
 
@@ -72,6 +77,7 @@ export default async function GrantsPage({
     <>
       <PageHeader
         title="Grants"
+        actions={<Link href="/ecosystem/history?view=funding" className="ws-pill">Explore project histories →</Link>}
         subtitle="Each grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments."
       />
 

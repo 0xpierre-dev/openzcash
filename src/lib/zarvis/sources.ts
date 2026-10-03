@@ -9,7 +9,7 @@ export const SEARCH_DOMAINS = [
 
 /** Hosts the site's own curated datasets and readers cite: recordings, explorers, vote tallies, wallet makers' sites and audits, community sites. Social profiles stay links on /communities, not citations. */
 export const CITATION_DOMAINS = [
-  ...SEARCH_DOMAINS, "daodao.zone", "youtube.com", "youtu.be", "cipherscan.app", "zcashcommunitygrants.org", "vote.heliosvoting.org", "siv.org", "valargroup.org",
+  ...SEARCH_DOMAINS, "shieldedscan.xyz", "zecblock.com", "daodao.zone", "youtube.com", "youtu.be", "cipherscan.app", "zcashcommunitygrants.org", "vote.heliosvoting.org", "siv.org", "valargroup.org",
   "zodl.com", "zingolabs.org", "ywallet.app", "brave.com", "zknoir.com", "snaps.metamask.io", "vizor.cash", "cakewallet.com", "edge.app", "unstoppable.money", "zipher.to", "zstash.app", "justzappit.xyz", "gemwallet.com", "keyst.one", "ledger.com", "trezor.io", "defuse.ca", "hacken.io",
   "zcashbrasil.com.br", "zcashesp.com", "zkav.club", "free2z.cash", "zcashjapan.com", "zcashind.com", "zcasharabia.xyz", "pro.zcash.ru", "zechub.substack.com", "zcashbrazil.substack.com", "zcashesp.substack.com", "zechubnigeria.substack.com", "zcashukraine.substack.com", "zcashidn.substack.com", "zcasheastafrica.substack.com",
 ];
@@ -136,6 +136,7 @@ export const STARTERS = [
   { label: "Explore the treasuries", question: "What are the latest ZCG and Lockbox balances, and how old are the data?" },
   { label: "Follow the funding", question: "How is the Dev Fund split, and what changes at the next halving?" },
   { label: "Test a hypothesis", question: "If ZEC rises 20×, what changes in the company and community treasury scenarios?" },
+  { label: "Follow a project", question: "Show project history for Zaino." },
   { label: "What changed on-chain?", question: "Compare monthly activity for last month." },
   { label: "Check the shielded pools", question: "How much ZEC is in shielded pools?" },
 ];

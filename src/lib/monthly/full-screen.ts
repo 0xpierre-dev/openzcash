@@ -27,7 +27,7 @@ export function fullScreenLayout(
 
 // The line that greets the reader. A mouse has the arrow keys beside it.
 export function turnTip(handHeld: boolean) {
-  return handHeld ? "Swipe to turn pages" : "Use ← → to turn pages";
+  return handHeld ? "Swipe or tap the edges to turn pages" : "Click the edges or use ← →";
 }
 
 export type PageTurn = "previous" | "next";
@@ -66,14 +66,14 @@ export function readingFraction(point: Point, box: Box, rotated: boolean) {
 }
 
 export function tapZone(fraction: number): PageTurn | "controls" {
-  if (fraction < 1 / 3) return "previous";
-  if (fraction > 2 / 3) return "next";
+  if (fraction < 1 / 8) return "previous";
+  if (fraction > 7 / 8) return "next";
   return "controls";
 }
 
 // A click is a tap only when the pointer pressed the page first. One made by
 // assistive technology names no place on the page, so it wakes the controls.
-// Pinched in, the reader cannot see which third is under the finger: the
+// Pinched in, the reader cannot see which edge is under the finger: the
 // whole page answers as its middle and no page turns.
 export function pageClick(pressed: boolean, fraction: number, zoomed = false) {
   if (!pressed) return "wake";

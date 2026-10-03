@@ -365,6 +365,7 @@ export function DetailDialog({
                   </div>
                 </>
               )}
+              <div className={styles.dialogLinks}><Link href={`/ecosystem/history/${project.id}`}>Full project history →</Link></div>
               <h3>Project funding history</h3>
               <ProjectFunding project={project} />
               {sharedFunding.length > 0 && (
@@ -1326,6 +1327,7 @@ export function EcosystemExplorer({
           </details>
         )}
         <p>
+          <Link href="/ecosystem/history">Project histories →</Link> ·{" "}
           <Link href="/zcg/proposals">Proposal history →</Link> ·{" "}
           <Link href="/zcg/grants">Grant ledger →</Link> ·{" "}
           <a href="/api/ecosystem" target="_blank" rel="noopener noreferrer">

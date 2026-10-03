@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "f301a411eb4ace42",
+  "sourceRevision": "f229018fe1b499fd",
   "sourceFiles": 57,
   "documents": [
     {
@@ -31,7 +31,7 @@
       "id": "src/app/zcg/grants/page.tsx:0",
       "url": "https://openzcash.org/zcg/grants",
       "title": "zcg · grants",
-      "text": "Grants ZCG · OpenZcash\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants.\nGrants\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments.\nCommitted\nPaid\nOpen\nOne project per row. Paid values use the ledger’s budgeted USD amounts; open commitments exclude cancelled grants. Payment records do not independently establish delivery."
+      "text": "Grants ZCG · OpenZcash\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants.\nGrants\nExplore project histories →\nEach grant is an approved project that aggregates its milestones. A single grantee can hold several grants (for example, Zcash Brazil has 7). Click a grant to view its payments.\nCommitted\nPaid\nOpen\nOne project per row. Paid values use the ledger’s budgeted USD amounts; open commitments exclude cancelled grants. Payment records do not independently establish delivery."
     },
     {
       "id": "src/app/zcg/disbursements/page.tsx:0",
@@ -103,7 +103,7 @@
       "id": "src/app/zcg/reconciliation/page.tsx:0",
       "url": "https://openzcash.org/zcg/reconciliation",
       "title": "zcg · reconciliation",
-      "text": "Reconciliation ZCG · OpenZcash\nCross-check between ZCG's on-chain treasury flow and what the spreadsheet records as distributed. Individual grantee payments leave the shielded pool · only the aggregate flow is visible on-chain.\nReconciliation\n01 · Protocol\nLockbox\nTransparent treasury inflow\n→\n02 · Operating treasury\nZCG\nBalance and aggregate outflow\n03 · Shielded payments\nPublic ledger\nIndividual entries from the spreadsheet\nTreasury flow ·\n(on-chain)\nIn · from Lockbox\nOut · to shielded pool\nCurrent balance\nBalance check:\n−\n=\nin − out = balance\nresidual\nTransparent outputs detected\nsent to the shielded pool\nDistribution per the spreadsheet (historical cumulative)\nZEC paid to grantees\nUSD paid\nPayments\nWhy there is no 1:1 match per payment\nThe ZCG transparent treasury only reveals the aggregate flow: it receives from the Lockbox and moves blocks of ZEC into the shielded pool. The\nindividual grantee payments leave the Orchard (shielded) pool or historical addresses · private by design. Auditing each per-grantee payment would require the\nZCG shielded UFVK\n. The reconciliation possible today is the\ntreasury flow\n(above) plus the spreadsheet\nintegrity-check\n."
+      "text": "Reconciliation ZCG · OpenZcash\nCross-check between ZCG's on-chain treasury flow and what the spreadsheet records as distributed. Individual grantee payments leave the shielded pool · only the aggregate flow is visible on-chain.\nReconciliation\n01 · Protocol\nLockbox\nTransparent treasury inflow\n→\n02 · Operating treasury\nZCG\nBalance and aggregate outflow\n03 · Shielded payments\nPublic ledger\nIndividual entries from the spreadsheet\nTreasury flow ·\n(stored scan)\nThis on-chain snapshot is historical. OpenZcash no longer runs viewing-key or treasury scans, so it does not show a live balance.\nIn · from Lockbox\nOut · to shielded pool\nBalance at last scan\nBalance check:\n−\n=\nin − out = balance\nresidual\nTransparent outputs detected\nsent to the shielded pool\nDistribution per the spreadsheet (historical cumulative)\nZEC paid to grantees\nUSD paid\nPayments\nWhy there is no 1:1 match per payment\nThe ZCG transparent treasury only reveals the aggregate flow: it receives from the Lockbox and moves blocks of ZEC into the shielded pool. The\nindividual grantee payments leave the Orchard (shielded) pool or historical addresses · private by design. Auditing each per-grantee payment would require the\nZCG shielded UFVK\n. The reconciliation shown here is the\nstored treasury flow\n(when available) plus the spreadsheet\nintegrity-check\n."
     },
     {
       "id": "src/app/zcg/budget/page.tsx:0",

@@ -17,6 +17,8 @@ import { grantStatusLabel } from "@/lib/zcg/status-labels";
 import { coinholderGrantViews } from "@/lib/coinholder/official-status";
 import { grantMetadata, type GrantShare } from "@/lib/seo/detail-metadata";
 import { cache } from "react";
+import { projectHistoryDirectory } from "@/lib/project-history/data";
+import { historyLinksForGrant } from "@/lib/project-history/insights";
 
 export const dynamic = "force-dynamic";
 type Props = { searchParams: Promise<{ g?: string | string[] }> };
@@ -61,6 +63,9 @@ export default async function GrantDetailPage({
   if (milestones.length === 0) notFound();
 
   const head = milestones[0];
+  const histories = [...new Map(milestones.flatMap(row => historyLinksForGrant(projectHistoryDirectory(), {
+    title: row.project ?? g, program: row.sourceSheet === "coinholder_grants" ? "coinholder" : "zcg", recipientKey: row.recipientKey,
+  })).map(item => [item.id, item])).values()];
   const totalUsd = milestones.reduce(
     (s, m) => s + (m.amountUsdCents ?? 0n),
     0n,
@@ -187,6 +192,7 @@ export default async function GrantDetailPage({
       <RecordLayout
         aside={
           <>
+            {histories.length > 0 && <section className="mb-6 rounded-xl border border-stone-200 bg-white p-4"><h2 className="mb-2 text-sm font-semibold">Follow the project</h2><p className="mb-3 text-xs leading-relaxed text-stone-500">See public work, related grants and the evidence still to link. Shared awards remain separate from project allocations.</p><div className="flex flex-col gap-3">{histories.map(history => <Link key={history.id} className="text-sm font-medium text-amber-800" href={history.href}>{history.name} history →</Link>)}</div></section>}
             <Facts
               title="Grant at a glance"
               rows={[

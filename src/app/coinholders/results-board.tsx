@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { proposalVerifyHref } from "@/lib/coinholder/proposal-decision";
 import type {
   BallotOption,
   Outcome,
@@ -92,10 +94,12 @@ function Row({
   p,
   ballot,
   showAmount,
+  roundId,
 }: {
   p: RoundProposal;
   ballot: BallotOption[];
   showAmount: boolean;
+  roundId: string;
 }) {
   return (
     <li className={styles.row} data-amount={showAmount || undefined}>
@@ -109,7 +113,7 @@ function Row({
             {p.question ? (
               <span className={styles.qnum} title="Ballot number">#{p.question} · </span>
             ) : null}
-            {p.title}
+            <Link href={proposalVerifyHref(roundId, p.id)} className={styles.proposalLink}>{p.title}</Link>
           </p>
           <p className={styles.applicant}>
             <span className="sr-only">
@@ -152,17 +156,14 @@ function Row({
           No tally published.
         </p>
       )}
-      {p.links.length ? (
         <p className={styles.rowLinks}>
+          <Link href={proposalVerifyHref(roundId, p.id)}>Tally & decision →</Link>
           {p.links.map((l) => (
             <a key={l.href} href={l.href} target="_blank" rel="noreferrer">
               {l.label} ↗
             </a>
           ))}
         </p>
-      ) : (
-        <span />
-      )}
     </li>
   );
 }
@@ -171,9 +172,11 @@ function Row({
 export function ResultsBoard({
   proposals,
   ballot,
+  roundId,
 }: {
   proposals: RoundProposal[];
   ballot: BallotOption[];
+  roundId: string;
 }) {
   const [filter, setFilter] = useState<Outcome | "all">("all");
   const [sort, setSort] = useState<Sort>("amount");
@@ -317,7 +320,7 @@ export function ResultsBoard({
           </h3>
           <ul className={styles.list}>
             {g.rows.map((p) => (
-              <Row key={p.id} p={p} ballot={ballot} showAmount={showAmount} />
+              <Row key={p.id} p={p} ballot={ballot} showAmount={showAmount} roundId={roundId} />
             ))}
           </ul>
         </section>

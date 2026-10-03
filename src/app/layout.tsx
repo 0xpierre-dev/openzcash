@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { headers } from "next/headers";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import "./redesign.css";
@@ -67,9 +66,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The bare-vs-shell decision is made client-side in ShellGate (reacts to
-  // navigation); here we only need the admin flag for the shell's controls.
-  const isAdmin = (await headers()).get("x-admin") === "1";
+  // Management controls stay off even for clients holding an old session.
+  const isAdmin = false;
 
   return (
     <html

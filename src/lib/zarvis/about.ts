@@ -5,8 +5,8 @@ const integer = (n: number) => new Intl.NumberFormat("en-US").format(n);
 /** Plain sentences a visitor can act on; the site-wide numbers stay internal. */
 export function quotaLines(config: AboutQuotaConfig): string[] {
   const lines = [
-    `Up to ${integer(config.networkWindowLimit)} questions per 10 minutes and ${integer(config.networkDailyLimit)} per day from one network address; phones on one carrier share an address. Only answers that used the model count; a direct answer from the site's data gives the unit back. A refused question says when to retry, and the send button waits.`,
-    `Site-wide hourly and daily caps${config.dailyUsdCap ? " and a daily spending ceiling for model answers" : ""}: when one is reached, direct answers keep working and the chat says that model answers are paused for now.`,
+    `Up to ${integer(config.networkWindowLimit)} questions per 10 minutes and ${integer(config.networkDailyLimit)} per day from one network address; phones on one carrier share an address. Each question needs a quota slot before routing; a completed direct answer gives the unit back. A full request-count cap also blocks direct answers. A refused question says when to retry, and the send button waits.`,
+    `Site-wide hourly and daily request caps also apply before routing and can block direct answers.${config.dailyUsdCap ? " A separate daily spending ceiling pauses model answers; direct answers remain available while request-count quota is available." : ""}`,
   ];
   if (config.quotaPause.active && config.quotaPause.until) lines.push(`Per-visitor and site-wide question caps are paused until ${config.quotaPause.until.slice(0, 16).replace("T", " ")} UTC; the spending ceiling still applies.`);
   return lines;
@@ -15,6 +15,13 @@ export function modelLine(config: AboutModelConfig): string {
   if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
   return `${config.model} from ${config.providerLabel}, called through its Responses API${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
 }
+/** One place that says how old "live" is: sheet/GitHub import cadence, D-1 verdict publication, price cache. Numbers mirror docs/zcg-publication.md and the freshness pipeline. */
+export const FRESHNESS_NOTE = "Site records import from the official spreadsheet and GitHub every 6 hours, and pages refresh themselves when a visit arrives after a stale period. Grant verdict changes publish the next day at midnight, Brasilia time. Price quotes are cached for about 10 minutes. When sources disagree, the ZCG Grant Dashboard spreadsheet wins.";
+/** Non-affiliation warning without claims about when or where third-party tokens appeared. */
+export const TOKEN_DISCLAIMER = {
+  title: "No official token",
+  body: "There is no official Zarvis token and no official OpenZcash token, coin or memecoin. Any token using the Zarvis or OpenZcash name is not created, endorsed or issued by OpenZcash, and this site is not connected to it. Zarvis is free to use; OpenZcash pays the model.",
+} as const;
 /** Direct answers: no model call, no cost, sources from this site's own records. */
 export const DIRECT_ROUTES = [
   { label: "Privacy and protocol FAQ", detail: "What makes a transaction private, halving, block subsidy, Dev Fund split, viewing keys, common wallet questions." },
@@ -27,7 +34,7 @@ export const DIRECT_ROUTES = [
 ] as const;
 export const LIMITATIONS = [
   "Zarvis is a guide, not an official spokesperson for Zcash, the Electric Coin Company, the Zcash Foundation, ZCG or the Financial Privacy Foundation, and it can be wrong.",
-  "Every currency, ZEC and percentage figure in a model answer is checked against the evidence Zarvis retrieved. A figure that cannot be verified is restated in one repair round or withheld, and the badge under the answer says when that happened. Verified figures can still be read out of context.",
+  "For model answers backed by recognized financial evidence, a numeric guard checks USD, ZEC and percentage figures against the retrieved records and protocol constants. Unsupported figures may be restated once, when time permits; those still unsupported are withheld with a notice. Other answers and currencies are not fully covered, and a matching figure can still be out of context. Check the sources.",
   "Calendar dates for future blocks are estimates; ZIP statuses and listed activation heights are not proof that a change is live on the network.",
   "Zarvis reads public records only. It cannot see wallets, private balances or anything you did not type, and it cannot send, sign or contact anyone.",
   "It stays on Zcash and OpenZcash. Unrelated requests are redirected. Never share recovery phrases, private keys or viewing keys.",
@@ -40,6 +47,15 @@ export const PROVIDER_RETENTION = {
   readOn: "2026-09-28",
   summary: "stores API requests and responses encrypted at rest for 30 days for abuse auditing, does not train on them and deletes them automatically afterwards. OpenZcash sends each request with response storage disabled, which is not the same as that provider's zero-data-retention setting.",
 } as const;
+/** The six questions visitors actually bring, answered without drifting numbers: quotas and dates live in the sections above, not here. */
+export const FAQ: Array<{ q: string; a: string }> = [
+  { q: "Is there a Zarvis or OpenZcash token?", a: "No. See the notice at the top of this page: a token using the Zarvis or OpenZcash name is not created, endorsed or issued by OpenZcash." },
+  { q: "Can Zarvis spend my ZEC or see my wallet?", a: "No. Zarvis reads public records only. It cannot see wallets, private balances or anything you did not type, and it cannot send, sign or contact anyone. Never share recovery phrases, private keys or viewing keys." },
+  { q: "How fresh is the data in answers?", a: "Direct answers carry the date of the record they used. The site imports every 6 hours and price quotes are cached for about 10 minutes; see “How fresh is the data?” above." },
+  { q: "Why did I get a message about question limits?", a: "Zarvis is free but capacity-limited. The per-network and site-wide caps are listed under “What you may ask” above. Completed direct answers from site data give the quota unit back, but still need an available request-count quota slot before routing." },
+  { q: "What languages does Zarvis answer in?", a: "It answers in the language of your question. Direct answers, badges and notices exist in full in English, Portuguese and Spanish; model answers follow the language you wrote in." },
+  { q: "How do I report a wrong answer or wrong data?", a: "For a Zarvis answer, use the rating under it and pick what went wrong. For site data, post in the public forum thread linked under “Found something wrong?” below." },
+];
 export type Incident = { date: string; window: string; title: string; what: string; fix: string };
 export const INCIDENTS: Incident[] = [
   { date: "2026-09-28", window: "12:00–14:33 UTC", title: "Launch-day quota exhaustion",

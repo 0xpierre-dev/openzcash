@@ -1,5 +1,9 @@
 # Integração com o node real (Zebra + zallet)
 
+> Registro histórico. O diagnóstico `/api/health` e o scan de viewing keys
+> foram desativados; não use as instruções abaixo para configurar a aplicação
+> atual. O healthcheck do deploy usa `/api`.
+
 > Estado: a stack do app está pronta para o node real; o RPC do `NODE_HOST` **não está acessível pela LAN** ainda. Enquanto isso, o app roda com `ZCASH_GATEWAY=mock` + Postgres.
 
 ## Como ligar o gateway real

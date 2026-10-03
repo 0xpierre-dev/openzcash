@@ -49,8 +49,12 @@ export default async function ZcgReconciliacaoPage() {
         {r.onchain ? (
           <section className="mb-8">
             <h2 className="mb-3 text-sm font-semibold text-stone-700">
-              Treasury flow · {r.onchain.treasuryLabel} (on-chain)
+              Treasury flow · {r.onchain.treasuryLabel} (stored scan)
             </h2>
+            <p className="mb-3 text-sm text-stone-600">
+              This on-chain snapshot is historical. OpenZcash no longer runs
+              viewing-key or treasury scans, so it does not show a live balance.
+            </p>
             <div className="mb-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
               <Stat
                 label="In · from Lockbox"
@@ -65,9 +69,9 @@ export default async function ZcgReconciliacaoPage() {
                 tone="out"
               />
               <Stat
-                label="Current balance"
+                label="Balance at last scan"
                 value={formatZec(r.onchain.balanceZat, { symbol: false })}
-                sub="held in treasury"
+                sub="stored scan snapshot"
               />
             </div>
 
@@ -155,7 +159,8 @@ export default async function ZcgReconciliacaoPage() {
               payments leave the Orchard (shielded) pool or historical addresses
               · private by design. Auditing each per-grantee payment would
               require the <strong>ZCG shielded UFVK</strong>. The reconciliation
-              possible today is the <strong>treasury flow</strong> (above) plus
+              shown here is the <strong>stored treasury flow</strong> (when
+              available) plus
               the spreadsheet <strong>integrity-check</strong>.
             </p>
           </div>

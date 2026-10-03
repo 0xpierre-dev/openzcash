@@ -178,24 +178,10 @@ export const APPS: AppDef[] = [
     logo: "/logos/marks/ecosystem.png",
     icon: "globe",
     pages: [{ href: "/development", label: "Development", mark: "/logos/glyphs/development.png" },
+      { href: "/ecosystem/history", label: "Project histories", mark: "/logos/glyphs/grants.png" },
       { href: "/defi", label: "DeFi", mark: "/logos/glyphs/defi.png" },
       { href: "/z3", label: "Z3", mark: "/logos/glyphs/z3.png" },
       { href: "/wallets", label: "Wallets", mark: "/logos/glyphs/wallets.png" },
-    ],
-  },
-  {
-    id: "manage",
-    label: "Manage",
-    href: "/projects",
-    sub: "Data management",
-    logo: "/logos/marks/manage.png",
-    icon: "grid",
-    admin: true,
-    pages: [
-      { href: "/viewing-keys", label: "Viewing keys", mark: "/logos/glyphs/viewing-keys.png" },
-      { href: "/invites", label: "Invites", mark: "/logos/glyphs/invites.png" },
-      { href: "/onboarding", label: "Register treasury", mark: "/logos/glyphs/onboarding.png" },
-      { href: "/login", label: "Sign in", mark: "/logos/glyphs/login.png" },
     ],
   },
 ];
@@ -219,7 +205,11 @@ export type Place = {
 
 /** Where a route sits in the hierarchy. Undefined for Home and unknown routes. */
 export function placeOf(pathname: string): Place | undefined {
-  const detail = DETAILS[pathname];
+  const detail = DETAILS[pathname] ?? (/^\/ecosystem\/history\/[a-z0-9-]+$/.test(pathname)
+    ? { parent: "/ecosystem/history", label: "Project history" }
+    : /^\/coinholders\/verify\/[a-z0-9-]+\/[^/]+$/.test(pathname)
+    ? { parent: "/coinholders/verify", label: "Proposal detail" }
+    : undefined);
   const target = detail ? detail.parent : pathname;
   for (const app of APPS) {
     // An app that opens a record by query (Zakura, ZODL, Tachyon) never

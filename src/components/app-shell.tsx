@@ -193,6 +193,7 @@ export function AppShell({
       data-theme={theme}
       data-nav={drawerOpen ? "open" : undefined}
       data-section={place?.app.label ?? "Explore"}
+      data-layout={/^\/coinholders\/verify\/[^/]+\/[^/]+\/?$/.test(pathname) ? "proposal" : undefined}
     >
       {/* Out of reach under the open Apps sheet, like the rest of the page. */}
       <a href="#main-content" className="rd-skip" inert={drawerOpen}>

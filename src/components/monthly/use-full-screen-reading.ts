@@ -328,7 +328,8 @@ function usePresses(rotated: boolean, onTurn: (turn: PageTurn) => void) {
   };
 }
 
-// Links and controls win over the three tap zones of the page.
+// Explicit controls win over page gestures. The page-edge buttons sit above
+// PDF links; central links remain directly usable.
 function usePageGestures({
   active,
   page,

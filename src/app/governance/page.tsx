@@ -5,6 +5,7 @@ import {
   DecisionHomes,
 } from "@/components/governance/decision-homes";
 import { DecisionsTable } from "@/components/governance/decisions-table";
+import { PollComparison } from "@/components/governance/poll-comparison";
 import { getArboristCalls, type ArboristCall } from "@/lib/arborist/notes";
 import { dateOfHeight } from "@/lib/funding/history";
 import {
@@ -138,6 +139,8 @@ export default async function GovernancePage() {
           sub={largest?.name ?? "·"}
         />
       </section>
+
+      <PollComparison />
 
       <SectionHeading
         title="Network upgrades"

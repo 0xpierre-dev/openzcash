@@ -46,22 +46,27 @@ export function analyticsAnswer(evidence: Evidence, lang: DirectLanguage): strin
     const rate = (value: number | null) => value === null ? "—" : delta(value) + "%";
     const pp = (value: number | null) => value === null ? "—" : delta(value) + " pp";
     const labels = pick(lang, {
-      en: ["Metric", "Change", "Transactions", "Fully shielded share", "Pool-touching share", "Shielded closing balance"],
-      pt: ["Métrica", "Variação", "Transações", "Participação totalmente blindada", "Participação com pools blindados", "Saldo blindado no fechamento"],
-      es: ["Métrica", "Variación", "Transacciones", "Participación totalmente blindada", "Participación con pools blindados", "Saldo blindado al cierre"],
+      en: ["Chain activity", "Transactions", "Fully shielded share", "Pool-touching share", "Shielded closing balance"],
+      pt: ["Atividade da rede", "Transações", "Participação totalmente blindada", "Participação com pools blindados", "Saldo blindado no fechamento"],
+      es: ["Actividad de la red", "Transacciones", "Participación totalmente blindada", "Participación con pools blindados", "Saldo blindado al cierre"],
     });
-    const table = "| " + labels[0] + " | " + c.previous.month + " | " + c.current.month + " | " + labels[1] + " |\n| --- | ---: | ---: | ---: |\n"
-      + "| " + labels[2] + " | " + n(changes.transactions.previous) + " | " + n(changes.transactions.current) + " | " + rate(changes.transactions.changePercent) + " |\n"
-      + "| " + labels[3] + " | " + (changes.fullyShielded.previousPercent === null ? "—" : n(changes.fullyShielded.previousPercent) + "%") + " | " + (changes.fullyShielded.currentPercent === null ? "—" : n(changes.fullyShielded.currentPercent) + "%") + " | " + pp(changes.fullyShielded.changePercentagePoints) + " |\n"
-      + "| " + labels[4] + " | " + (changes.poolTouching.previousPercent === null ? "—" : n(changes.poolTouching.previousPercent) + "%") + " | " + (changes.poolTouching.currentPercent === null ? "—" : n(changes.poolTouching.currentPercent) + "%") + " | " + pp(changes.poolTouching.changePercentagePoints) + " |\n"
-      + "| " + labels[5] + " | " + zec(changes.closingShielded.previousZat, lang) + " | " + zec(changes.closingShielded.currentZat, lang) + " | " + rate(changes.closingShielded.changePercent) + " |";
+    const monthLabel = (value: string) => new Intl.DateTimeFormat(locale(lang), { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(value + "-01T00:00:00Z"));
+    const heading = "**" + labels[0] + " · " + monthLabel(c.previous.month) + " → " + monthLabel(c.current.month) + " · UTC**";
+    const share = (value: number | null) => value === null ? "—" : n(value) + "%";
+    // Core Markdown lists also render in the compact/mobile chat; GFM tables are not supported.
+    const comparison = [
+      [labels[1], n(changes.transactions.previous), n(changes.transactions.current), rate(changes.transactions.changePercent)],
+      [labels[2], share(changes.fullyShielded.previousPercent), share(changes.fullyShielded.currentPercent), pp(changes.fullyShielded.changePercentagePoints)],
+      [labels[3], share(changes.poolTouching.previousPercent), share(changes.poolTouching.currentPercent), pp(changes.poolTouching.changePercentagePoints)],
+      [labels[4], zec(changes.closingShielded.previousZat, lang), zec(changes.closingShielded.currentZat, lang), rate(changes.closingShielded.changePercent)],
+    ].map(([label, previous, current, change]) => "- **" + label + ":** " + previous + " → " + current + " (**" + change + "**)").join("\n");
     const note = pick(lang, {
       en: "Closed UTC months; coinbase excluded. pp means percentage points. A zero baseline has no growth rate. Transactions are not unique users, and these changes do not establish that a grant or project caused adoption. Monthly counts have one source.",
       pt: "Meses fechados em UTC; coinbase excluída. pp significa pontos percentuais. Uma base zero não permite calcular crescimento percentual. Transações não são usuários únicos, e essas mudanças não demonstram que um grant ou projeto causou adoção. As contagens mensais têm uma única fonte.",
       es: "Meses cerrados en UTC; coinbase excluida. pp significa puntos porcentuales. Una base cero no permite calcular crecimiento porcentual. Las transacciones no son usuarios únicos, y estos cambios no demuestran que un grant o proyecto causó adopción. Los recuentos mensuales tienen una sola fuente.",
     });
     const age = c.previous.stale || c.current.stale ? pick(lang, { en: " Source response is outdated.", pt: " A resposta da fonte está desatualizada.", es: " La respuesta de la fuente está desactualizada." }) : "";
-    return table + "\n\n" + note + age + "\n\n" + links;
+    return heading + "\n\n" + comparison + "\n\n" + note + age + "\n\n" + links;
   }
   if (payload.metric === "supply") {
     if (payload.status === "mismatch") return pick(lang, {
@@ -72,13 +77,13 @@ export function analyticsAnswer(evidence: Evidence, lang: DirectLanguage): strin
     const reading = payload.selected as SupplyReading | null;
     if (!reading) return unavailable;
     const labels = pick(lang, {
-      en: ["Issued", "Circulating (issued minus Lockbox)", "Shielded", "Pool", "Balance"],
-      pt: ["Emitido", "Circulante (emitido menos Lockbox)", "Blindado", "Pool", "Saldo"],
-      es: ["Emitido", "Circulante (emitido menos Lockbox)", "Blindado", "Pool", "Saldo"],
+      en: ["Issued", "Circulating (issued minus Lockbox)", "Shielded"],
+      pt: ["Emitido", "Circulante (emitido menos Lockbox)", "Blindado"],
+      es: ["Emitido", "Circulante (emitido menos Lockbox)", "Blindado"],
     });
     const title = pick(lang, { en: "Supply at block ", pt: "Oferta no bloco ", es: "Oferta en el bloque " }) + reading.height + " · " + reading.provider;
     const facts = labels.slice(0, 3).map((label, i) => label + ": **" + zec([reading.totalZat, reading.circulatingZat, reading.shieldedZat][i], lang) + "**.").join("\n\n");
-    const table = "| " + labels[3] + " | " + labels[4] + " |\n| --- | ---: |\n" + reading.pools.map(p => "| " + p.pool + " | " + zec(p.balanceZat, lang) + " |").join("\n");
+    const pools = reading.pools.map(p => "- **" + p.pool + ":** " + zec(p.balanceZat, lang)).join("\n");
     const comparison = payload.status === "matched" ? pick(lang, {
       en: "Both explorers agree at the same height and hash.",
       pt: "Os dois exploradores concordam na mesma altura e hash.",
@@ -98,7 +103,7 @@ export function analyticsAnswer(evidence: Evidence, lang: DirectLanguage): strin
       es: " La actualidad de la lectura " + (reading.freshness === "stale" ? "está vencida" : "no está confirmada") + "; no es un saldo en vivo confirmado.",
     });
     const dateLabel = pick(lang, { en: "Source response: ", pt: "Resposta da fonte: ", es: "Respuesta de la fuente: " });
-    return "**" + title + "**\n\n" + facts + "\n\n" + table + "\n\n" + comparison + freshness + " " + dateLabel + when(reading.reportedAt, lang) + ".\n\n" + links;
+    return "**" + title + "**\n\n" + facts + "\n\n" + pools + "\n\n" + comparison + freshness + " " + dateLabel + when(reading.reportedAt, lang) + ".\n\n" + links;
   }
   const m = payload.monthly as MonthlyReading;
   const number = (value: number) => new Intl.NumberFormat(locale(lang)).format(value);

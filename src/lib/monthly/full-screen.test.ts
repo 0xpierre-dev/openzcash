@@ -105,8 +105,8 @@ describe("monthly full screen reading", () => {
   });
 
   it("greets a hand with the swipe and a mouse with the arrow keys", () => {
-    expect(turnTip(true)).toBe("Swipe to turn pages");
-    expect(turnTip(false)).toBe("Use ← → to turn pages");
+    expect(turnTip(true)).toBe("Swipe or tap the edges to turn pages");
+    expect(turnTip(false)).toBe("Click the edges or use ← →");
     expect(turnTip(false)).not.toMatch(/swipe/i);
   });
 
@@ -159,13 +159,13 @@ describe("monthly full screen reading", () => {
     ).toBe(0.5);
   });
 
-  it("splits the page into previous, controls and next thirds", () => {
+  it("reserves the outer eighths for navigation and keeps the center for content", () => {
     expect(tapZone(0)).toBe("previous");
-    expect(tapZone(0.33)).toBe("previous");
-    expect(tapZone(0.34)).toBe("controls");
+    expect(tapZone(0.124)).toBe("previous");
+    expect(tapZone(0.125)).toBe("controls");
     expect(tapZone(0.5)).toBe("controls");
-    expect(tapZone(0.66)).toBe("controls");
-    expect(tapZone(0.67)).toBe("next");
+    expect(tapZone(0.875)).toBe("controls");
+    expect(tapZone(0.876)).toBe("next");
     expect(tapZone(1)).toBe("next");
   });
 
@@ -176,14 +176,14 @@ describe("monthly full screen reading", () => {
   });
 
   it("only wakes the controls on a click that followed no press, wherever it claims to be", () => {
-    // Assistive technology clicks the page image at 0, 0: the previous third.
+    // Assistive technology clicks the page image at 0, 0: the previous edge.
     expect(pageClick(false, 0)).toBe("wake");
     expect(pageClick(false, 0.5)).toBe("wake");
     expect(pageClick(false, 1)).toBe("wake");
   });
 
   it("turns no page on a tap while the page is pinched in", () => {
-    // Zoomed in, the reader cannot see which third is under the finger.
+    // Zoomed in, the reader cannot see which edge is under the finger.
     expect(pageClick(true, 0, true)).toBe("controls");
     expect(pageClick(true, 0.5, true)).toBe("controls");
     expect(pageClick(true, 1, true)).toBe("controls");

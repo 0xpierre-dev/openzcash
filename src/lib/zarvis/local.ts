@@ -1,4 +1,6 @@
 import "server-only";
+import { directProjectHistoryQuery, lookupProjectHistory, projectHistoryAnswer } from "./project-history";
+import { projectActivityMonth, lookupProjectActivity, projectActivityAnswer } from "./project-activity";
 import { lookupPublicData, lookupSchema } from "./data";
 import { queryLedger, ledgerQuerySchema, type LedgerSummary } from "./ledger";
 import { searchKnowledge } from "./knowledge";
@@ -154,6 +156,16 @@ export async function prepareLocal(messages: ChatMessage[], signal: AbortSignal,
   if (intent?.type === "arborist") {
     const result = await lookupPublicData({ topic: "arborist", query: "" }, signal);
     return { query, documents: [], evidence: [result], direct: arboristAnswer(result.content, lang), external: false };
+  }
+  const activityMonth = projectActivityMonth(query);
+  if (activityMonth) {
+    const result = await lookupProjectActivity({ month: activityMonth }, signal);
+    return { query, documents: [], evidence: [result], direct: compatible ? projectActivityAnswer(result, lang) : undefined, external: false };
+  }
+  const historyQuery = directProjectHistoryQuery(messages.at(-1)?.content ?? "");
+  if (historyQuery) {
+    const result = await lookupProjectHistory({ query: historyQuery, month: null }, signal);
+    return { query, documents: [], evidence: [result], direct: compatible ? projectHistoryAnswer(result, lang) : undefined, external: false };
   }
   const analyticsQuery = directAnalyticsQuery(messages.at(-1)?.content ?? "");
   if (analyticsQuery) {

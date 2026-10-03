@@ -28,6 +28,7 @@ export type GrantTableRow = {
   milestonesText: string;
   _usd: number;
   _zec: number;
+  histories?: { id: string; name: string; href: string }[];
 };
 
 interface GrantsTableProps {
@@ -61,6 +62,7 @@ export function GrantsTable({
               coinholder
             </span>
           ) : null}
+          {!!r.histories?.length && <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">{r.histories.map(history => <Link key={history.id} href={history.href} className="text-xs text-stone-500 underline decoration-stone-300 underline-offset-4 hover:text-amber-800">{history.name} history →</Link>)}</div>}
         </div>
       ),
     },

@@ -1,5 +1,9 @@
 # OpenZcash redesign environment
 
+This is a historical staging record. The admin, onboarding and viewing-key
+routes described below were retired after this review; see the repository
+`README.md` for the active security model.
+
 This is an independent test deployment of the production application, with real
 routes, server rendering, database queries and existing administrator actions.
 

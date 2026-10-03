@@ -116,7 +116,7 @@ const auditRecount = (
 ): Recount => ({
   source,
   system:
-    "Coin Voting 2.0 on zecvote.zone, one election per question. The organisers published each election's seed phrase and URL, so anyone can recount it with the audit tool.",
+    "Coin Voting 2.0 on zecvote.zone, one election per question. The published seed and URL let anyone recount the shielded ballots. The results post also records transparent votes, which must be included to reproduce the combined tally.",
   steps: [
     {
       title: "Get the audit tool",
@@ -127,7 +127,13 @@ const auditRecount = (
     {
       title: "Enter each question's seed and URL",
       gist: "one election per question",
-      text: `${questions} The tool reads every ballot of that election and prints its totals.`,
+      text: `${questions} The tool reads the shielded ballots of that election and prints their totals.`,
+      links: [post],
+    },
+    {
+      title: "Include transparent votes and reconcile units",
+      gist: "shielded + transparent, for each option",
+      text: "Convert the audit tool’s displayed units to ZEC, then add the transparent votes listed separately in the results post for each option. The published summary rounds to whole ZEC; separately rounded totals can differ slightly from the sum of its rounded options. Keep unrounded inputs when independently checking the threshold and majority.",
       links: [post],
       result: "tallies",
     },

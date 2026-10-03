@@ -32,21 +32,27 @@ export function ZarvisDepthSelect({ value, onChange, disabled = false }: {
   const open = focused !== null && !disabled;
 
   useEffect(() => {
-    if (open && focused !== null) items.current[focused]?.focus();
+    if (open && focused !== null) items.current[focused]?.focus({ preventScroll: true });
   }, [open, focused]);
 
   useEffect(() => {
     if (!open) return;
-    const dismiss = (event: PointerEvent) => {
+    const dismiss = (event: Event) => {
       if (event.target instanceof Node && !root.current?.contains(event.target)) setFocused(null);
     };
     document.addEventListener("pointerdown", dismiss);
-    return () => document.removeEventListener("pointerdown", dismiss);
+    // Safari can blur an option with no relatedTarget during a tap. Wait for
+    // focus to actually move outside so the option's click can finish first.
+    document.addEventListener("focusin", dismiss);
+    return () => {
+      document.removeEventListener("pointerdown", dismiss);
+      document.removeEventListener("focusin", dismiss);
+    };
   }, [open]);
 
   function close() {
     setFocused(null);
-    trigger.current?.focus();
+    trigger.current?.focus({ preventScroll: true });
   }
 
   function navigate(event: KeyboardEvent<HTMLDivElement>) {
@@ -67,9 +73,7 @@ export function ZarvisDepthSelect({ value, onChange, disabled = false }: {
     }
   }
 
-  return <div className="zarvis-depth" ref={root} onBlur={(event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) setFocused(null);
-  }}>
+  return <div className="zarvis-depth" ref={root}>
     <button ref={trigger} type="button" className="zarvis-depth-trigger" disabled={disabled}
       aria-label={`Response depth: ${option.label}`} aria-haspopup="menu" aria-expanded={open}
       aria-controls={open ? `${id}-menu` : undefined}

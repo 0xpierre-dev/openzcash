@@ -25,7 +25,7 @@ describe("Analytics through the real Zarvis orchestrator", () => {
     ["Qual é a oferta circulante de ZEC?", "Oferta no bloco", 3],
     ["¿Cuál es la oferta total de Zcash?", "Oferta en el bloque", 3],
     ["Mostre atividade mensal de setembro 2026.", "Atividade da rede", 1],
-    ["Compare monthly activity for last month.", "Metric", 2],
+    ["Compare monthly activity for last month.", "August 2026 → September 2026", 2],
   ])("answers without AI calls and preserves source metadata: %s", async (question, label, sourceCount) => {
     const events: ZarvisEvent[] = [];
     const metrics = await generateAnswer([{ role: "user", content: question }], new AbortController().signal, event => events.push(event), {}, "auto", { localOnly: true });

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
-import { DIRECT_ROUTES, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { DIRECT_ROUTES, FAQ, FRESHNESS_NOTE, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { modelLabel } from "@/lib/zarvis/provenance";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
 export const dynamic = "force-dynamic";
@@ -33,17 +34,35 @@ export default function AboutZarvisPage() {
         subtitle="Zarvis is OpenZcash's guide to Zcash. This page says how it answers, what it costs you, what it keeps and where it has failed, so you can decide how much to trust it."
         actions={<Link href="/zarvis" className="rd-button rd-button-primary">Ask Zarvis</Link>}
       />
+      <Card className="mb-6 text-sm leading-relaxed text-stone-600">
+        <p className="font-semibold text-amber-700">{TOKEN_DISCLAIMER.title}</p>
+        <p className="mt-1">{TOKEN_DISCLAIMER.body}</p>
+      </Card>
       <Section title="Two kinds of answer">
-        <p className="mb-2">Under every answer a badge says which kind you got.</p>
-        <p className="mb-2"><span className="font-medium text-stone-800">Direct from OpenZcash data · no AI.</span> The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
-        <ul className="space-y-1.5">
-          {DIRECT_ROUTES.map((route) => <li key={route.label}><span className="font-medium text-stone-800">{route.label}</span>: {route.detail}</li>)}
-        </ul>
-        <p className="mt-3"><span className="font-medium text-stone-800">Model answer.</span> Everything else goes to {modelLine(config)} The model receives the recent conversation, the records Zarvis retrieved from this site and the official ZIP corpus, and must cite what it used. The badge names the model and counts the sources.</p>
+        <p className="mb-3">Under every answer a badge says which kind you got:</p>
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="zarvis-provenance-badge zarvis-provenance-local">Direct from OpenZcash data · no AI</span>
+          <span className="zarvis-provenance-badge">{modelLabel(config.model, config.providerLabel)} · 3 sources · check them</span>
+        </div>
+        <p className="mb-3 text-xs text-stone-500">The first badge marks answers written by this site&apos;s own code from its own records. The second marks answers written by an AI model — open the source list under those and check them.</p>
+        <div className="mb-3 rounded-xl border border-stone-200 bg-stone-50 p-4">
+          <p className="mb-1.5 font-semibold text-stone-800">1 · Direct from OpenZcash data · no AI</p>
+          <p className="mb-2">The question matched one of the site&apos;s own records and was answered by code, with no model call, no cost and the record&apos;s date. These questions are answered that way:</p>
+          <ul className="space-y-1.5">
+            {DIRECT_ROUTES.map((route) => <li key={route.label}><span className="font-medium text-stone-800">{route.label}</span>: {route.detail}</li>)}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+          <p className="mb-1.5 font-semibold text-stone-800">2 · Model answer</p>
+          <p>Everything else goes to {modelLine(config)} The model receives the recent conversation, the records Zarvis retrieved from this site and the official ZIP corpus, and must cite what it used. The badge names the model and counts the sources.</p>
+        </div>
       </Section>
       <Section title="What you may ask">
         <ul className="space-y-1.5">{quotas.map((line) => <li key={line}>{line}</li>)}</ul>
         <p className="mt-3">A question is at most 2,000 characters and an answer is written within 55 seconds (110 seconds for Deep analysis). Zarvis is free to use; OpenZcash pays the model.</p>
+      </Section>
+      <Section title="How fresh is the data?">
+        <p>{FRESHNESS_NOTE}</p>
       </Section>
       <Section title="What is kept, and for how long">
         <ul className="space-y-1.5">
@@ -54,6 +73,24 @@ export default function AboutZarvisPage() {
       </Section>
       <Section title="What it cannot do">
         <ul className="space-y-1.5">{LIMITATIONS.map((line) => <li key={line}>{line}</li>)}</ul>
+      </Section>
+      <Section title="Frequently asked questions">
+        <dl className="space-y-3">
+          {FAQ.map((item) => (
+            <div key={item.q}>
+              <dt className="font-medium text-stone-800">{item.q}</dt>
+              <dd className="mt-0.5">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </Section>
+      <Section title="Using Zarvis">
+        <ul className="space-y-1.5">
+          <li><span className="font-medium text-stone-800">Asking.</span> Write in any language; a question is at most 2,000 characters. The pills under the composer are one-tap starting points, and the direct routes listed above show what is answered without AI. The selector next to the composer switches between Quick and Deep analysis.</li>
+          <li><span className="font-medium text-stone-800">Reading an answer.</span> The badge under it says where it came from, and “N sources consulted” opens the records or pages that were used. For guarded model answers, a notice identifies figures the check withheld; its coverage and limits are described under “What it cannot do”.</li>
+          <li><span className="font-medium text-stone-800">Sharing.</span> Copy answer, Copy with sources and Copy question link sit under every complete answer. A question link carries only that question and fills the composer when opened; it never sends anything by itself.</li>
+          <li><span className="font-medium text-stone-800">Continuing.</span> The conversation stays in page memory while you move around the site, including the Monthly pages; “＋ New chat” clears it. Limits, languages and privacy are described in the sections above.</li>
+        </ul>
       </Section>
       <Section title="The instructions the model receives">
         <p className="mb-2">This is the complete standing instruction sent with every model answer, as deployed right now. Evidence and the current time are added separately for each question.</p>
@@ -72,7 +109,14 @@ export default function AboutZarvisPage() {
           ))}
         </ul>
       </Section>
-      <p className="text-xs text-stone-500">Found a wrong answer? Use the rating under it and pick what went wrong: the reason, the route and the day are recorded, the text is not. <Link href="/zcg/methodology" className="text-amber-700 hover:underline">How OpenZcash computes its own figures →</Link></p>
+      <Section title="Found something wrong?">
+        <p className="mb-2">Zarvis can make mistakes, and so can the data pages. Two ways to reach a fix:</p>
+        <ul className="space-y-1.5">
+          <li><span className="font-medium text-stone-800">A Zarvis answer:</span> use the rating under it and pick what went wrong. The reason, the route and the day are recorded; the text is not.</li>
+          <li><span className="font-medium text-stone-800">Site data</span> (a grant row, a wallet listing, a community entry): post in the <a href="https://forum.zcashcommunity.com/t/openzcash-org-public-transparency/56404" target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">OpenZcash forum thread ↗</a>, the public channel where corrections are read and applied.</li>
+        </ul>
+        <p className="mt-3"><Link href="/zcg/methodology" className="text-amber-700 hover:underline">How OpenZcash computes its own figures →</Link></p>
+      </Section>
     </>
   );
 }
