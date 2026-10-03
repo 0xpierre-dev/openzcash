@@ -51,6 +51,10 @@ describe("proposal detail route", () => {
         if (proposal.outcome === "discarded") { expect(html).toContain("No published tally"); expect(html).not.toContain("<svg"); }
         if (proposal.outcome === "vetoed") { expect(html).toContain("Passed, then vetoed"); expect(html).not.toContain("Proposal funded</h2>"); }
         if (check.kind === "poll") expect(html).toContain("For comparison only");
+        if (round.id !== "q3-2026") {
+          expect(html).not.toContain('href="/verify/coinholder_verify.py"');
+          expect(html).toContain(`/coinholders/verify?round=${round.id}#recount`);
+        }
       }
     }
   });

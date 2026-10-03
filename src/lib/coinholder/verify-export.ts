@@ -148,7 +148,7 @@ export function verifyJson(
     chain,
     recount: recount ? { system: recount.system, links: recount.links } : null,
     sources: round.sources,
-    script: `${SITE_URL}${SCRIPT_PATH}`,
+    script: VOTE_CHAIN_ROUNDS[round.id] ? `${SITE_URL}${SCRIPT_PATH}` : null,
     rows: check.rows.map(jsonRow),
   };
 }

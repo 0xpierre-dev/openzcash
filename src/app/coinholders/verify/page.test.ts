@@ -220,6 +220,9 @@ describe("Verify it yourself", () => {
 
   it("says on the Q4 2025 recount that the vetoed grant passed the rule", async () => {
     const html = await render("q4-2025");
+    expect(html).toContain("Include transparent votes and reconcile units");
+    expect(html).toContain("shielded + transparent, for each option");
+    expect(html).toContain("separately rounded totals");
     expect(html).toContain("5 Funded · 4 Rejected");
     expect(html).toContain(
       "the same rule gives every published outcome. The vetoed grant passed the rule, so the rule counts it Funded; the veto came afterwards.",

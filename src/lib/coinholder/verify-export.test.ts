@@ -155,6 +155,7 @@ describe("verifyJson", () => {
     const q1 = round("q1-2026");
     const json = verifyJson(q1, verifyRound(q1), null);
     expect(json.chain).toBeNull();
+    expect(json.script).toBeNull();
     expect(json.recount?.links.map((l) => l.href)).toContain(
       "https://github.com/hhanh00/zcv",
     );
