@@ -373,6 +373,24 @@
 .rd-shell .rd-content .rd-breadcrumb {
   display: none;
 }
+/* A proposal's chart and arithmetic share a wide reading canvas. The app
+   header and phone navigation remain available; other workspace views keep
+   their sidebar and treasury strip. */
+.rd-shell[data-layout="proposal"] .rd-main {
+  max-width: 1840px;
+}
+.rd-shell[data-layout="proposal"] .zarvis-launcher-wrap {
+  display: none;
+}
+@media (min-width: 961px) {
+  .rd-shell[data-layout="proposal"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rd-shell[data-layout="proposal"] > .rd-side,
+  .rd-shell[data-layout="proposal"] .rd-treasury-bar {
+    display: none;
+  }
+}
 .rd-shell .rd-footer {
   max-width: none;
   margin: 40px 0 0;

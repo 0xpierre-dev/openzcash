@@ -24,6 +24,14 @@ describe("proposal detail route", () => {
     expect(html).toContain("<title>Accept: 757,044.250 ZEC</title>");
     expect(html).toContain("570,162.4375");
     expect(html).toContain("66.4%");
+    expect(html).toContain("34.7%");
+    expect(html).toContain("Key numbers");
+    expect(html).toContain("Vote totals, all options");
+    expect(html).toContain("Majority cutoff (50%)");
+    expect(html).toContain("Directional vote, without Abstain");
+    expect(html).toContain("Reject, do not support");
+    expect(html).toContain("Reject, lower amount");
+    expect(html).toContain("with or without Abstain");
     expect(html).toContain("Corrected after publication");
     expect(html).toContain("FPF’s current counting rule");
     expect(html).toContain("/57909/19");
@@ -41,7 +49,7 @@ describe("proposal detail route", () => {
         const row = check.rows.find(r => r.id === proposal.id)!;
         const html = renderToStaticMarkup(<ProposalDetail round={round} proposal={proposal} row={row} chain={null} digits={zecDigits(check)} poll={check.kind === "poll"} />);
         if (proposal.outcome === "discarded") { expect(html).toContain("No published tally"); expect(html).not.toContain("<svg"); }
-        if (proposal.outcome === "vetoed") expect(html).toContain("Passed, then vetoed");
+        if (proposal.outcome === "vetoed") { expect(html).toContain("Passed, then vetoed"); expect(html).not.toContain("Proposal funded</h2>"); }
         if (check.kind === "poll") expect(html).toContain("For comparison only");
       }
     }
