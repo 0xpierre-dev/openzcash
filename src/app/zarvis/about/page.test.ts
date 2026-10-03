@@ -10,7 +10,10 @@ import Page from "./page";
 describe("About Zarvis page", () => {
   it("explains both routes, the visitor limits, retention and the incidents without leaking configuration", () => {
     const html = renderToStaticMarkup(Page());
+    expect(html).toContain("No official token");
+    expect(html).toContain("not created, endorsed or issued by OpenZcash");
     expect(html).toContain("Direct from OpenZcash data · no AI");
+    expect(html).toContain("3 sources · check them");
     expect(html).toContain("grok-4.7 from xAI (Grok)");
     expect(html).toContain("60 questions per 10 minutes and 600 per day");
     expect(html).toContain("30 days");
@@ -18,6 +21,17 @@ describe("About Zarvis page", () => {
     expect(html).toContain("Launch-day quota exhaustion");
     expect(html).toContain("You are Zarvis Ironwood");
     expect(html).toContain("/api/zarvis/health");
+    expect(html).toContain("forum.zcashcommunity.com/t/openzcash-org-public-transparency/56404");
+    expect(html).toContain("every 6 hours");
+    expect(html).toContain("Is there a Zarvis or OpenZcash token?");
+    expect(html).toContain("What languages does Zarvis answer in?");
+    expect(html).toContain("Copy question link");
+    expect(html).toContain("recognized financial evidence");
+    expect(html).toContain("Other answers and currencies are not fully covered");
+    expect(html).toContain("A full request-count cap also blocks direct answers");
+    expect(html).toContain("A separate daily spending ceiling pauses model answers");
+    expect(html).not.toContain("appeared on other chains");
+    expect(html).not.toContain("Every currency, ZEC and percentage figure");
     expect(html).not.toContain("xai-secret-sentinel-value");
     expect(html).not.toMatch(/\b1000\b|\b1,000\b|\$100\b/);
   });
