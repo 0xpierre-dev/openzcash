@@ -1,5 +1,9 @@
 # Redesign do OpenZcash — escopo, regras e estado
 
+Registro histórico: as rotas administrativas listadas neste plano e em
+`route-coverage.json` foram desativadas depois da revisão. Consulte o
+`README.md` da raiz para o modelo de segurança atual.
+
 Este documento substitui o plano de 8 de setembro de 2026 (branch
 `michae2xl/redesign-grant-org-structure`), que congelava a primeira tela de cada
 app e limitava o redesign às telas internas. A decisão tomada no ambiente de

@@ -1,9 +1,7 @@
 # Railway deploy config for the Zcash Back Office (ZBO).
 #
 # Pure Next.js app (Nixpacks builds it: npm install -> npm run build -> npm run
-# start). Network access is NODE-LESS: a public lightwalletd (LWD_URL, e.g.
-# zec.rocks:443) covers the chain tip + transparent address scanning, and the
-# ppf-scanner service covers UFVK validation/derivation. No home node required.
+# start). Public data comes from external sources and the database.
 #
 # Scheduling: no external cron. src/instrumentation.ts starts an in-process
 # timer in this always-on service: the ZCG/ZecHub refresh every 6h (first run
@@ -19,7 +17,7 @@ builder = "NIXPACKS"
 # Postgres host is only reachable on the private network. Healthcheck hits a
 # DB-free page so app-boot is what's measured, not data readiness.
 startCommand = "node scripts/assert-redesign.mjs && node scripts/migrate.mjs && node scripts/seed-governance.mjs && npm run start"
-healthcheckPath = "/login"
+healthcheckPath = "/api"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

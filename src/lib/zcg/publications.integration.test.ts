@@ -2,6 +2,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import postgres from "postgres";
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
+import { eq } from "drizzle-orm";
 import * as schema from "@/lib/db/schema";
 
 const state = vi.hoisted(() => ({
@@ -165,14 +166,23 @@ describe.skipIf(!testUrl)("D-1 publication with Postgres", () => {
     expect(await listChangelog(30, 50, "zcg")).toHaveLength(1);
   });
 
-  it("defers an admin edit and preserves its locked verdict during reimports", async () => {
-    const { PATCH } = await import("@/app/api/zcg/proposals/route");
+  it("preserves a previously locked verdict during reimports", async () => {
+    const { recordPublications } = await import("./publications-repo");
+    const { proposalPublicationKey, proposalVerdict } = await import("./publication-policy");
     const { listProposals } = await import("./proposals-repo");
     const { importProposals } = await import("./import-proposals");
-    const response = await PATCH(new Request("http://localhost/api/zcg/proposals", {
-      method: "PATCH", body: JSON.stringify({ id: "legacy-row", status: "rejected" }),
-    }));
-    expect(response.status).toBe(200);
+    await state.db.transaction(async (tx) => {
+      const [old] = await tx.select().from(schema.zcgProposals)
+        .where(eq(schema.zcgProposals.id, "legacy-row"));
+      const [updated] = await tx.update(schema.zcgProposals)
+        .set({ status: "rejected", statusRaw: "Rejected", locked: true })
+        .where(eq(schema.zcgProposals.id, "legacy-row")).returning();
+      await recordPublications(tx, "proposal-status", [{
+        key: proposalPublicationKey(updated),
+        value: proposalVerdict(updated),
+        initial: proposalVerdict(old),
+      }]);
+    });
     expect((await listProposals())[0].status).toBe("under_review");
     state.verdict = "Approved";
     await importProposals();

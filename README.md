@@ -8,8 +8,8 @@ answer.
 
 Live: **[openzcash.org](https://openzcash.org)**
 
-> Read-only by design. The system never holds spend keys. On-chain reads use a
-> public lightwalletd and viewing keys only.
+> The system never holds spend keys. Current public chain reads use a public
+> lightwalletd; historical reconciliation still displays previously scanned data.
 
 ## What's inside
 
@@ -66,9 +66,9 @@ npm run import-zcg           # mirror the ZCG spreadsheet into the DB
 npm run dev                  # http://localhost:3000
 ```
 
-The public read side needs only `DATABASE_URL` and a seeded ledger. Admin
-features, treasury onboarding, and self-hosted node reads are all optional and
-degrade gracefully when their env vars are unset (see `.env.example`).
+The public read side needs `DATABASE_URL` and a seeded ledger. The legacy admin,
+treasury onboarding, viewing-key and scan HTTP routes are retired. Public-data
+imports still use the separate `CRON_SECRET` when triggered manually.
 
 ```bash
 npm run typecheck && npm test && npm run build
@@ -81,10 +81,13 @@ Tailwind · React Three Fiber (the 3D office) · deployed on Railway.
 
 ## Security model
 
-- **Read-only.** No spend keys anywhere. Shielded reads use viewing keys; on-chain
-  reads use a public lightwalletd.
-- **Public by default, admin-gated writes.** Middleware stamps an unforgeable
-  `x-admin` header; only management routes require a signed-in admin.
+- **No spend keys.** Public on-chain reads use a public lightwalletd. Existing
+  reconciliation records remain in the database, but no new viewing-key scans
+  can be started through the site.
+- **Legacy admin retired.** Login, onboarding, management and administrative
+  write routes return 404. Old sessions and invite links grant no access.
+- **Public data stays available.** The spreadsheet/GitHub importers and public
+  APIs are separate from the retired admin routes.
 - **Secrets live only in `.env.local`** (gitignored). `.env.example` is names and
   placeholders only.
 

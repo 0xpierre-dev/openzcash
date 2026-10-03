@@ -184,21 +184,6 @@ export const APPS: AppDef[] = [
       { href: "/wallets", label: "Wallets", mark: "/logos/glyphs/wallets.png" },
     ],
   },
-  {
-    id: "manage",
-    label: "Manage",
-    href: "/projects",
-    sub: "Data management",
-    logo: "/logos/marks/manage.png",
-    icon: "grid",
-    admin: true,
-    pages: [
-      { href: "/viewing-keys", label: "Viewing keys", mark: "/logos/glyphs/viewing-keys.png" },
-      { href: "/invites", label: "Invites", mark: "/logos/glyphs/invites.png" },
-      { href: "/onboarding", label: "Register treasury", mark: "/logos/glyphs/onboarding.png" },
-      { href: "/login", label: "Sign in", mark: "/logos/glyphs/login.png" },
-    ],
-  },
 ];
 
 /** Detail routes and the list page they belong to. */
