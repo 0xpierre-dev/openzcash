@@ -338,7 +338,7 @@
 .rd-shell .zarvis-depth-option:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; box-shadow: none; }
 .rd-shell .zarvis-depth-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: none; }
 @keyframes zarvis-depth-appear { from { opacity: 0; transform: translateY(4px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@media (pointer: coarse) { .zarvis-depth-trigger { min-height: 40px; } }
+@media (pointer: coarse) { .zarvis-depth-trigger { min-height: 44px; } }
 @media (prefers-reduced-motion: reduce) { .zarvis-depth-menu { animation: none; } .zarvis-depth-trigger, .zarvis-depth-chevron { transition: none; } }
 .zarvis-figure .zarvis-pose { transition-duration: .58s, 0s; }
 .zarvis-figure .zarvis-rig-head { animation-timing-function: cubic-bezier(.37,0,.23,1); }

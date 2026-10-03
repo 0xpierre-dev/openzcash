@@ -1083,9 +1083,14 @@
 }
 .ws-filter-panel label {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
   font-size: 10px;
   color: var(--ws-muted);
+}
+.ws-filter-panel label > :is(input, select) {
+  min-width: 0;
+  max-width: 100%;
 }
 .ws-filter-panel > select {
   max-width: 240px;
