@@ -2631,13 +2631,17 @@ a.rd-treasury-pool:hover .rd-treasury-name {
   .rd-content .ws-org-actions {
     flex-basis: 100%;
   }
-  /* Filter panels: two fields per row, each filling its half. */
+  /* Compact filters can share a row; native date fields need room for the
+     localized iOS value and picker affordance. */
   .rd-content .ws-filter-panel > label {
     flex: 1 1 140px;
     min-width: 0;
   }
   .rd-content .ws-filter-panel > label > :is(input, select) {
     width: 100%;
+  }
+  .rd-content .ws-filter-panel > label:has(> input[type="date"]) {
+    flex-basis: 100%;
   }
   /* A wide table fades at the edge that hides more (scroll-hints.tsx). */
   .rd-content [data-scroll-x="start"] {
