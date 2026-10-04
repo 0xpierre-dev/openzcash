@@ -20,7 +20,7 @@ The comparison also checks increasing closing heights and reconciles reported ne
 
 Supply reads ShieldedScan's six-pool partition and chain tip, plus ZecBlock's mainnet node supply. Integers are validated and normalized to decimal-string zatoshis. Every pool must occur exactly once, and the partition must sum to issued supply. Circulating is defined as issued minus Lockbox; this is distinct from market-provider estimates.
 
-Two readings are reconciled only at identical heights and block hashes. At different heights, the newer indexed reading is selected and the discrepancy is disclosed. A missing hash is unverified. A same-height/hash amount disagreement (or competing hash) selects no canonical value. A failed provider leaves an explicitly unconfirmed single-source reading. Matching explorers do not prove independent upstream infrastructure.
+Two readings are reconciled only at identical heights and block hashes. At different heights, the newer indexed reading is selected and the discrepancy is disclosed. A missing hash is unverified only when the same-height amounts agree. A same-height amount disagreement (even with a missing hash) or competing hash selects no canonical value. A failed provider leaves an explicitly unconfirmed single-source reading. Matching explorers do not prove independent upstream infrastructure.
 
 Source response time, retrieval time and block observation time remain separate. Unknown observation time is not evidence of freshness. Responses/block observations more than ten minutes old are marked stale. Future timestamps, malformed partitions and mainnet/index mismatches fail validation.
 
@@ -32,7 +32,7 @@ Net pool flow is neither gross shielding volume nor migration volume. Closing ba
 
 Fixed allowlisted hosts and paths; redirects rejected; public headers only; 128 KiB body cap; five-second fetch deadline; abortable caller wait; at most sixty seconds of bounded public-data caching with coalesced reads. A 429 pauses uncached reads for that provider according to Retry-After. No automatic retry storm, stale-on-error fallback, stored conversations or forwarding of user credentials.
 
-Sources accompany both deterministic and model-assisted answers. All monetary and percentage fields enter Zarvis's existing numeric evidence guard.
+Sources accompany both deterministic and model-assisted answers. Supply amounts enter Zarvis's numeric evidence guard only from the selected reading. Diagnostic readings remain in the tool response, but cannot support numeric claims after a mismatch or override the selected snapshot at a different height. Other monetary and percentage evidence continues to enter the existing guard.
 
 ## Verification
 

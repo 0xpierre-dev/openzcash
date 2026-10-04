@@ -77,12 +77,13 @@ export function compareSupply(readings: SupplyReading[]) {
   const [a, b] = readings;
   const newer = a.height >= b.height ? a : b;
   if (a.height !== b.height) return { status: "different_heights", selected: newer, differences: [] as string[] };
-  if (!a.blockHash || !b.blockHash) return { status: "unverified_hash", selected: a, differences: [] as string[] };
   const differences = [
-    ...(a.blockHash !== b.blockHash ? ["blockHash"] : []),
+    ...(a.blockHash && b.blockHash && a.blockHash !== b.blockHash ? ["blockHash"] : []),
     ...POOLS.filter(pool => a.pools.find(p => p.pool === pool)!.balanceZat !== b.pools.find(p => p.pool === pool)!.balanceZat),
   ];
-  return { status: differences.length ? "mismatch" : "matched", selected: differences.length ? null : a, differences };
+  // A missing hash cannot turn a known same-height amount disagreement into a usable balance.
+  if (differences.length) return { status: "mismatch", selected: null, differences };
+  return { status: !a.blockHash || !b.blockHash ? "unverified_hash" : "matched", selected: a, differences };
 }
 
 export const analyticsQuerySchema = z.object({
