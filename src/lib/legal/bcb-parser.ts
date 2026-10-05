@@ -126,6 +126,7 @@ export function parseBcbNotes(xml: string, asOf: string): LegalItem[] {
     items.push({
       id: `bcb:${parsed.pathname.split("/")[2]}`, title, summary, url, sourceId: "bcb", publishedAt,
       dateBasis: published ? "published" : "updated",
+      ...(dateFromAtom(updated) && updated!.slice(0, 10) <= asOf ? { sourceUpdatedAt: updated } : {}),
       regions: ["latam"], jurisdictions: ["Brazil"], topics: ["Regulation"],
       kind: "Official update", status: "Official update",
       statusDetail: "Excerpt from Banco Central do Brasil's recent press-note feed. The source date is labeled as published or updated; this feed entry alone does not establish the current legal effect of a rule.",

@@ -1,0 +1,128 @@
+{
+  "verifiedOn": "2026-10-05",
+  "method": "Official public pages, directly served HTML/JavaScript and asset metadata, plus live Chrome inspection of the signup form and public homepage. No form fields filled, no account created, no emails requested.",
+  "organization": {
+    "name": "Pretty Good Policy for Zcash",
+    "shortName": "PGPZ",
+    "homepage": "https://pgpz.org/",
+    "communityHomepage": "https://community.pgpz.org/",
+    "relationshipNote": "Independent policy organization. Its official site states that it is not an official Zcash or Zcash Foundation product and is not endorsed by Zcash Foundation."
+  },
+  "signup": {
+    "canonicalDestination": "https://community.pgpz.org/signin?callbackUrl=%2F&reason=signup",
+    "alsoLinkedByHomepage": "https://community.pgpz.org/signin?reason=signup",
+    "observedLabel": "Join with email",
+    "submitLabel": "Send secure link",
+    "accountRequired": true,
+    "existingAccountRequired": false,
+    "authenticationMethod": "Passwordless email magic link",
+    "requiredFields": [
+      "First name",
+      "Last name",
+      "Email"
+    ],
+    "optionalFields": [
+      "X handle",
+      "ZcashMe username",
+      "LinkedIn URL"
+    ],
+    "requiredAcceptance": "Terms of Service, Privacy Policy, and Community Guidelines",
+    "newsletterOnlySignupVerified": false,
+    "separateNewsletterOptInVisible": false,
+    "emailSubscriptionControlsObserved": "The public signup form creates a community account through an email link. Its only visible checkbox is agreement to legal documents; no standalone newsletter or email-frequency checkbox is shown.",
+    "subscriptionCaveat": "The privacy policy permits newsletters and promotional email, with opt-in where required and unsubscribe links, but public signup alone does not prove which newsletter lists a new account receives. Preferences behind authentication were not inspected.",
+    "membershipCaveat": "The public Weekly Policy Memo card is marked Members only. Full archive access and any membership verification after account creation were not tested.",
+    "suggestedCta": "Join PGP by email",
+    "suggestedHelper": "Create a PGP community account with a secure email link.",
+    "avoidCta": "Subscribe to the newsletter instantly",
+    "avoidReason": "A newsletter-only enrollment flow was not verified."
+  },
+  "evidence": [
+    {
+      "url": "https://pgpz.org/",
+      "verification": "Public main site directs readers to community.pgpz.org for updates and participation."
+    },
+    {
+      "url": "https://community.pgpz.org/",
+      "verification": "Live public homepage links Join the Community to /signin?reason=signup and labels the Weekly Policy Memo as members-only."
+    },
+    {
+      "url": "https://community.pgpz.org/signin?callbackUrl=%2F&reason=signup",
+      "verification": "Live browser confirmed required profile/email fields, optional social fields, legal acceptance checkbox, and disabled Send secure link button before input."
+    },
+    {
+      "url": "https://community.pgpz.org/privacy",
+      "verification": "Sections 3 and 8 describe account profile information, newsletters and promotional emails, lawful consent where required, and opting out through message links or contact."
+    }
+  ],
+  "assets": [
+    {
+      "role": "General PGPZ organization logo for a dark feature panel",
+      "url": "https://pgpz.org/assets/brand/pgpz-primary-on-dark-2048w.png",
+      "foundOn": "https://pgpz.org/",
+      "httpStatus": 200,
+      "contentType": "image/png",
+      "width": 2048,
+      "height": 927,
+      "bytes": 138389,
+      "hasAlphaChannel": true,
+      "usageSuggestion": "Use at intrinsic ratio with object-fit contain. White lettering and gold emblem were visually verified on the official dark header. Keep the complete wordmark, including its subline."
+    },
+    {
+      "role": "PGPZ Community logo for a light panel",
+      "url": "https://community.pgpz.org/brand/pgpz-community-on-light.svg",
+      "foundOn": "https://community.pgpz.org/",
+      "httpStatus": 200,
+      "contentType": "image/svg+xml",
+      "viewBox": "0 0 1578.188 750.000",
+      "bytes": 12913,
+      "colors": [
+        "#0D1F20",
+        "#475569",
+        "#f4b728"
+      ],
+      "usageSuggestion": "Use when the panel specifically promotes Community membership; vector remains sharp on mobile. Avoid cropping the community sublabel."
+    },
+    {
+      "role": "PGPZ Community logo for a dark panel",
+      "url": "https://community.pgpz.org/brand/pgpz-community-on-dark.svg",
+      "foundOn": "https://community.pgpz.org/",
+      "httpStatus": 200,
+      "contentType": "image/svg+xml",
+      "viewBox": "0 0 1578.188 750.000",
+      "bytes": 12912,
+      "colors": [
+        "#FFFFFF",
+        "#f4b728"
+      ],
+      "usageSuggestion": "White and gold Community lockup on the official evergreen background."
+    },
+    {
+      "role": "Subtle decorative circle motif for a dark panel",
+      "url": "https://pgpz.org/assets/brand/pgpz-circle-motif-on-dark-2400w.png",
+      "foundOn": "https://pgpz.org/",
+      "httpStatus": 200,
+      "contentType": "image/png",
+      "width": 2400,
+      "height": 1350,
+      "bytes": 36426,
+      "hasAlphaChannel": true,
+      "usageSuggestion": "Official hero decoration. Use as optional low-contrast background at the side of a wide panel; hide or reduce on narrow screens so it never interferes with headlines or actions."
+    }
+  ],
+  "designRecommendation": {
+    "panel": "One restrained feature panel with the official organization wordmark on evergreen, then title/brief policy context, latest public memo preview, and one Join PGP by email CTA. Secondary external link can open the organization site.",
+    "brandColorsVerifiedInOfficialCss": [
+      "#0d1f20",
+      "#2f6f68",
+      "#f4b728",
+      "#f5a800",
+      "#f6faf2",
+      "#475569"
+    ],
+    "responsive": "Keep the logo contained, never stretched; place actions below copy on mobile. Do not combine both full organization and Community logos in the same panel.",
+    "licensingNote": "Assets are publicly served by the official sites; no separate redistribution licence was verified. They can identify the linked source, without implying partnership or endorsement."
+  },
+  "dailyScrapeScope": "Public homepage previews and public resources only. The memo archive and full memo content are members-only; daily collection must not imply that protected content was read or bypass authentication.",
+  "implementationBoundary": "Research artifact only; no repository edits, subscriptions, account creation or authenticated access."
+}

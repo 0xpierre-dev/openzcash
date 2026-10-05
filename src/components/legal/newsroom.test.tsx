@@ -17,10 +17,19 @@ describe("Legal newsroom", () => {
     expect(html).toContain("Argentina regulates");
     expect(html).not.toContain("SEC proposes");
   });
-  it("limits the PGP page to PGP records", () => {
-    const html = renderToStaticMarkup(<LegalNewsroom feed={feed} pgpOnly/>);
+  it("filters PGP records within the unified Updates page", () => {
+    location.query = "source=pgp";
+    const html = renderToStaticMarkup(<LegalNewsroom feed={feed}/>);
     expect(html).toContain("Weekly Policy Memo");
     expect(html).not.toContain("Brazil adds reporting");
+  });
+  it("features PGP before the shared feed and links signup to its official site", () => {
+    const html = renderToStaticMarkup(<LegalPage feed={feed}/>);
+    expect(html.indexOf('id="pgp"')).toBeLessThan(html.indexOf('id="updates"'));
+    expect(html).toContain('https://community.pgpz.org/signin?callbackUrl=%2F&amp;reason=signup');
+    expect(html).toContain('Join PGP by email');
+    expect(html).toContain('may require membership');
+    expect(html).not.toContain('href="/legal/pgp"');
   });
   it("labels updated timestamps distinctly from publication", () => {
     const html = renderToStaticMarkup(<LegalNewsroom feed={{ ...feed, items: [{ ...LEGAL_ITEMS[0], dateBasis: "updated" }] }}/>);

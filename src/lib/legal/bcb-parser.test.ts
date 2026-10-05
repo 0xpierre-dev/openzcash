@@ -19,7 +19,7 @@ describe("Banco Central do Brasil official Atom notes", () => {
   });
   it("uses explicit publication timestamps when supplied, separately from feed freshness", () => {
     const [item] = parseBcbNotes(wrap(entry({ date: "<published>2026-09-22T10:00:00Z</published><updated>2026-09-23T18:30:57-03:00</updated>" })), day);
-    expect(item).toMatchObject({ publishedAt: "2026-09-22", dateBasis: "published" });
+    expect(item).toMatchObject({ publishedAt: "2026-09-22", dateBasis: "published", sourceUpdatedAt: "2026-09-23T18:30:57-03:00" });
   });
   it("ignores monetary/macroeconomic updates without a specific crypto relevance term", () => {
     expect(parseBcbNotes(wrap(entry({ title: "Estatísticas Monetárias e de Crédito", content: "Política monetária, câmbio e proteção de dados." })), day)).toEqual([]);

@@ -18,6 +18,10 @@ export type LegalItem = {
   publishedAt: string;
   /** Some official feeds expose only their last update date. */
   dateBasis?: "published" | "updated";
+  /** Publisher timestamp, separately preserved when a first-publication date exists. */
+  sourceUpdatedAt?: string;
+  /** A later observed source revision does not renew the earlier editorial review. */
+  sourceChangedAt?: string;
   regions: LegalRegion[];
   jurisdictions: string[];
   topics: LegalTopic[];
@@ -43,6 +47,14 @@ export type LegalFeed = {
   fetchedAt: string | null;
   pgpStatus: "live" | "unavailable" | "cached";
   pgpLastSuccessAt: string | null;
+  archive?: {
+    status: "available" | "unavailable";
+    lastReadAt: string | null;
+    lastCollectedAt: string | null;
+    itemCount: number;
+    cadence: "daily";
+    timeZone: "America/Sao_Paulo";
+  };
   sourceHealth?: Array<{
     sourceId: string;
     status: "live" | "cached" | "unavailable";

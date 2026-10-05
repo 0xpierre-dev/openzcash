@@ -3,6 +3,7 @@ import { LEGAL_ITEMS, LEGAL_SOURCES } from "./curated";
 import { BCB_NOTES_URL, parseBcbNotes } from "./bcb-parser";
 import { legalSourceUrl, mergeLegalItems, parsePgpHomepage, PGP_PUBLIC_URL } from "./pgp-parser";
 import type { LegalFeed, LegalItem, LegalSource } from "./types";
+import { LEGAL_SOURCE_IDS, type LegalArchiveSource, type LegalSourceId } from "./archive";
 
 export const LEGAL_REFRESH_MS = 60 * 60_000;
 export const LEGAL_FETCH_TIMEOUT_MS = 7_000;
@@ -45,6 +46,17 @@ async function boundedText(response: Response, mediaType: RegExp): Promise<strin
   }
 }
 
+export async function fetchLegalSource(sourceId: LegalSourceId, asOf: string, fetcher = fetch): Promise<LegalItem[]> {
+  const feed = FEEDS.find(candidate => candidate.source.id === sourceId);
+  if (!feed) throw new Error("LEGAL_SOURCE_NOT_ALLOWED");
+  const response = await fetcher(feed.url, {
+    headers: { accept: "text/html, application/atom+xml, application/xml", "user-agent": "OpenZcash legal public-source reader" },
+    signal: AbortSignal.timeout(LEGAL_FETCH_TIMEOUT_MS),
+    cache: "no-store", redirect: "error", credentials: "omit",
+  });
+  return feed.parse(await boundedText(response, feed.mediaType), asOf);
+}
+
 type Dependencies = {
   fetcher?: typeof fetch;
   now?: () => number;
@@ -69,12 +81,7 @@ export function createLegalFeedLoader({ fetcher = fetch, now = Date.now, items, 
       try {
         // Fixed allowlist: no visitor URLs, credentials, archive probing,
         // redirects or member-only article requests are accepted here.
-        const response = await fetcher(feed.url, {
-          headers: { accept: "text/html, application/atom+xml, application/xml", "user-agent": "OpenZcash legal public-source reader" },
-          signal: AbortSignal.timeout(LEGAL_FETCH_TIMEOUT_MS),
-          cache: "no-store", redirect: "error", credentials: "omit",
-        });
-        const parsed = feed.parse(await boundedText(response, feed.mediaType), asOf);
+        const parsed = await fetchLegalSource(feed.source.id as LegalSourceId, asOf, fetcher);
         lastSuccess.set(feed.source.id, { items: parsed, at: new Date(now()).toISOString() });
         status = "live";
       } catch {
@@ -103,4 +110,45 @@ export function createLegalFeedLoader({ fetcher = fetch, now = Date.now, items, 
   };
 }
 
-export const getLegalFeed = createLegalFeedLoader({ items: LEGAL_ITEMS, sources: LEGAL_SOURCES });
+type ArchiveReader = () => Promise<{ available: boolean; rows: LegalArchiveSource[] }>;
+
+/** Reads do not scrape. A daily collector retains items beyond the publisher's rolling feed. */
+export function createArchivedLegalFeedLoader({ read, items, sources, now = Date.now }: {
+  read: ArchiveReader; items: readonly LegalItem[]; sources: readonly LegalSource[]; now?: () => number;
+}) {
+  let lastRead: { at: string; rows: LegalArchiveSource[] } | null = null;
+  return async (): Promise<LegalFeed> => {
+    const at = new Date(now()).toISOString();
+    let result: Awaited<ReturnType<ArchiveReader>>;
+    try { result = await read(); } catch { result = { available: false, rows: [] }; }
+    if (result.available) lastRead = { at, rows: result.rows };
+    const rows = result.available ? result.rows : lastRead?.rows ?? [];
+    const entries = rows.flatMap(row => row.entries);
+    const byUrl = new Map(entries.map(entry => [entry.item.url, entry]));
+    const reviewed = items.map(item => {
+      const entry = byUrl.get(legalSourceUrl(item.url) ?? "");
+      return entry?.changedAt && item.reviewedAt && entry.changedAt.slice(0, 10) >= item.reviewedAt
+        ? { ...item, sourceChangedAt: entry.changedAt } : item;
+    });
+    const sourceHealth = LEGAL_SOURCE_IDS.map(sourceId => {
+      const row = rows.find(source => source.sourceId === sourceId);
+      const fresh = row?.lastSuccessAt && now() - Date.parse(row.lastSuccessAt) < 26 * 60 * 60_000;
+      return { sourceId, status: (result.available && fresh && !row?.errorClass ? "live" : row?.lastSuccessAt ? "cached" : "unavailable") as LegalFeed["pgpStatus"],
+        fetchedAt: row?.lastAttemptAt ?? null, lastSuccessAt: row?.lastSuccessAt ?? null };
+    });
+    const pgp = sourceHealth.find(source => source.sourceId === "pgp")!;
+    const latest = (values: Array<string | null>) => values.filter((value): value is string => !!value).sort().at(-1) ?? null;
+    return {
+      items: mergeLegalItems(reviewed, entries.map(entry => entry.item), at.slice(0, 10)),
+      sources: [...new Map([...sources, ...FEEDS.map(feed => feed.source)].map(source => [source.id, source])).values()],
+      fetchedAt: latest(sourceHealth.map(source => source.fetchedAt)), pgpStatus: pgp.status,
+      pgpLastSuccessAt: pgp.lastSuccessAt, sourceHealth,
+      archive: { status: result.available ? "available" : "unavailable", lastReadAt: lastRead?.at ?? null,
+        lastCollectedAt: latest(sourceHealth.map(source => source.lastSuccessAt)), itemCount: entries.length, cadence: "daily", timeZone: "America/Sao_Paulo" },
+    };
+  };
+}
+
+export const getLegalFeed = createArchivedLegalFeedLoader({ items: LEGAL_ITEMS, sources: LEGAL_SOURCES,
+  read: async () => (await import("./archive-store")).readLegalArchiveSources(),
+});

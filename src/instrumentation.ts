@@ -11,6 +11,9 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   if (process.env.NODE_ENV !== "production") return;
+  // Public policy collection has its own durable daily checkpoint.
+  const { startLegalSchedule } = await import("@/lib/legal/schedule");
+  startLegalSchedule();
   // Public read-only market snapshots are shared with both page and API bundles.
   // Start collection off the request path so visitors do not each wait on providers.
   const { startMarketSnapshots } = await import("@/lib/markets/sources");
