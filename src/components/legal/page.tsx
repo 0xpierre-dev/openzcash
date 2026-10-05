@@ -11,10 +11,10 @@ export function LegalPage({ feed, pgpOnly = false }: { feed: LegalFeed; pgpOnly?
   const health = (feed.sourceHealth ?? [{ sourceId: "pgp", status: feed.pgpStatus, lastSuccessAt: feed.pgpLastSuccessAt }]).filter(source => !pgpOnly || source.sourceId === "pgp");
   return <div className={styles.page}>
     <header className={styles.hero}>
-      <div><div className={styles.kicker}><IconBalance/>PRIVACY · POLICY · RIGHTS</div><h1>{pgpOnly ? "PGP for Zcash" : "Zcash Legal"}</h1><p>{pgpOnly ? "Pretty Good Policy for Zcash. Independent policy education, analysis and advocacy for financial privacy." : "The rules and debates shaping financial privacy. Follow Zcash, countries and public policy."}</p></div>
+      <div><div className={styles.kicker}><IconBalance/>PRIVACY · POLICY · RIGHTS</div><h1>{pgpOnly ? "PGP for Zcash" : "Privacy & Policy"}</h1><p>{pgpOnly ? "Pretty Good Policy for Zcash. Independent policy education, analysis and advocacy for financial privacy." : "The rules and debates shaping financial privacy. Follow Zcash, countries and public policy."}</p></div>
       {pgpOnly && <a className={styles.heroLink} href="https://pgpz.org" target="_blank" rel="noopener noreferrer">Official website ↗</a>}
     </header>
-    <nav className={styles.tabs} aria-label="Zcash Legal"><Link href="/legal" aria-current={!pgpOnly ? "page" : undefined}>Legal news</Link><Link href="/legal/pgp" aria-current={pgpOnly ? "page" : undefined}>PGP</Link></nav>
+    <nav className={styles.tabs} aria-label="Privacy & Policy"><Link href="/legal" aria-current={!pgpOnly ? "page" : undefined}>Updates</Link><Link href="/legal/pgp" aria-current={pgpOnly ? "page" : undefined}>PGP</Link></nav>
     {pgpOnly && <div className={styles.pgpIntro}><p><strong>Public highlights.</strong> Full memos and the wider archive may require PGPZ sign-in.</p><a href="https://community.pgpz.org" target="_blank" rel="noopener noreferrer">PGPZ community ↗</a></div>}
     <Suspense fallback={<p>Loading filters…</p>}><LegalNewsroom feed={feed} pgpOnly={pgpOnly}/></Suspense>
     <details className={styles.sources}><summary>Sources & coverage <span aria-hidden="true">+</span></summary>

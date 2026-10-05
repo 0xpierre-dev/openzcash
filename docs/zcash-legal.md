@@ -1,6 +1,6 @@
-# Zcash Legal
+# Privacy & Policy
 
-`/legal` is the news and policy desk. `/legal/pgp` shows Pretty Good Policy for Zcash (PGPZ) public highlights. The shared application registry places Legal after News and provides desktop, mobile and command-palette links.
+`/legal` is the news and policy desk. `/legal/pgp` shows Pretty Good Policy for Zcash (PGPZ) public highlights. The shared application registry places Privacy & Policy after ZEC Observatory and provides desktop, mobile and command-palette links.
 
 ## Coverage
 

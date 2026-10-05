@@ -50,7 +50,6 @@ export type AppDef = {
 export const APPS: AppDef[] = [
   { id: "zarvis", label: "Zarvis", href: "/zarvis", sub: "Your Zcash AI guide", icon: "zarvis", pages: [] },
   { id: "news", label: "News", href: "/news", sub: "What's new", logo: "/logos/marks/news.png", icon: "news", pages: [] },
-  { id: "legal", label: "Zcash Legal", href: "/legal", sub: "Privacy, policy & regulation", icon: "balance", pages: [{ href: "/legal", label: "Legal news" }, { href: "/legal/pgp", label: "PGP" }] },
   {
     id: "ceremony",
     label: "Zcash Ceremony",
@@ -143,6 +142,7 @@ export const APPS: AppDef[] = [
     ],
   },
   { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, DeFi liquidity & holdings", icon: "chart", pages: [] },
+  { id: "legal", label: "Privacy & Policy", href: "/legal", sub: "Rights, regulation & public debate", icon: "balance", pages: [{ href: "/legal", label: "Updates" }, { href: "/legal/pgp", label: "PGP" }] },
   { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
   { id: "arborist", parentId: "ecosystem", parentGroup: "pages", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
