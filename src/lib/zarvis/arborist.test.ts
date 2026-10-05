@@ -20,7 +20,7 @@ const call = (over: Partial<ArboristCall>): ArboristCall => ({
 });
 const calls: ArboristCall[] = [
   call({
-    number: 132,
+    number: null,
     date: "2026-09-24",
     source: "youtube",
     url: null,
@@ -104,22 +104,22 @@ describe("Arborist call lookup", () => {
       arboristContext(calls, "arborist September 2026", meta).calls.map(
         (c) => c.number,
       ),
-    ).toEqual([132, 131]);
+    ).toEqual([null, 131]);
     expect(
       arboristContext(calls, "which call discussed tachyon", meta).calls.map(
         (c) => c.number,
       ),
     ).toEqual([130]);
     const latest = arboristContext(calls, "", meta);
-    expect(latest.calls.map((c) => c.number)).toEqual([132, 131, 130, 12]);
+    expect(latest.calls.map((c) => c.number)).toEqual([null, 131, 130, 12]);
     expect(latest).toMatchObject({
       archiveFetchedAt: meta.fetchedAt,
       totalCalls: 4,
-      latestCall: { number: 132, date: "2026-09-24", source: "youtube" },
+      latestCall: { number: null, date: "2026-09-24", source: "youtube" },
       matched: 4,
       notesRepository: meta.repository,
     });
-    expect(latest.calls[0].source).toContain("provisional");
+    expect(latest.calls[0].source).toContain("call number unconfirmed");
     expect(latest.calls[3].source).toContain("agenda only");
     expect(latest.calls[1]).toMatchObject({
       moderator: "Dodger",
@@ -170,8 +170,9 @@ describe("Arborist call lookup", () => {
       }),
       "es",
     );
-    expect(pendingEs).toContain("#132");
-    expect(pendingEs).toContain("el número es provisional");
+    expect(pendingEs).toContain("Arborist Call más reciente");
+    expect(pendingEs).not.toContain("#132");
+    expect(pendingEs).toContain("el número de la llamada todavía no está confirmado");
     expect(arboristAnswer("{}", "es")).toBe(
       "No pude leer el archivo de las Arborist Calls en este momento. [Abrir las Arborist Calls en OpenZcash](https://openzcash.org/arborist).",
     );
@@ -181,8 +182,9 @@ describe("Arborist call lookup", () => {
       }),
       "en",
     );
-    expect(pending).toContain("#132");
-    expect(pending).toContain("number is provisional");
+    expect(pending).toContain("Latest Arborist Call");
+    expect(pending).not.toContain("#132");
+    expect(pending).toContain("call number is not yet confirmed");
     expect(pending).not.toContain("[Notes]");
     for (const content of [
       "{}",

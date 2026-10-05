@@ -3,6 +3,8 @@ import {
   mergeArboristCalls,
   parseArboristAgenda,
   parseArboristYoutubeFeed,
+  parseArboristYoutubePage,
+  ARBORIST_CHANNEL_ID,
   type ArboristCall,
 } from "./feed";
 
@@ -126,7 +128,7 @@ describe("parseArboristYoutubeFeed", () => {
 });
 
 describe("mergeArboristCalls", () => {
-  it("numbers newer pending recordings in chronological call sequence", () => {
+  it("retains unmatched recordings without inventing their call numbers", () => {
     const calls = mergeArboristCalls(
       [note(129, "2026-08-06", "existing129")],
       [
@@ -151,9 +153,10 @@ describe("mergeArboristCalls", () => {
 
     expect(calls.map(({ number, date, source }) => ({ number, date, source })))
       .toEqual([
-        { number: 131, date: "2026-09-03", source: "youtube" },
-        { number: 130, date: "2026-08-20", source: "youtube" },
+        { number: null, date: "2026-09-03", source: "youtube" },
+        { number: null, date: "2026-08-20", source: "youtube" },
         { number: 129, date: "2026-08-06", source: "notes" },
+        { number: null, date: "2026-07-23", source: "youtube" },
       ]);
   });
 
@@ -183,5 +186,33 @@ describe("mergeArboristCalls", () => {
         videoId: "doDbR0i9zZA",
       }),
     );
+  });
+});
+
+describe("official YouTube channel HTML fallback", () => {
+  const video = (title = "Arborist Call 10-1-2026", contentId = "gJA1brRxnf4", extra = {}) => ({ lockupViewModel: {
+    contentId, contentType: "LOCKUP_CONTENT_TYPE_VIDEO", metadata: { lockupMetadataViewModel: { title: { content: title } } }, ...extra,
+  } });
+  const page = (content: unknown, id = ARBORIST_CHANNEL_ID) => `<script>var ytInitialData = ${JSON.stringify({ metadata: { channelMetadataRenderer: { externalId: id } }, contents: { twoColumnBrowseResultsRenderer: { tabs: [{ tabRenderer: { selected: true, content } }] } } })};</script>`;
+  it("reads the actual lockup metadata shape and derives only a validated video URL/date", () => {
+    expect(parseArboristYoutubePage(page([video(), video(), video("Foundation update", "other123456")]))).toEqual([
+      expect.objectContaining({ number: null, date: "2026-10-01", videoId: "gJA1brRxnf4", video: "https://www.youtube.com/watch?v=gJA1brRxnf4", url: null, source: "youtube" }),
+    ]);
+  });
+  it("supports older videoRenderer uploads without taking dates from upload text", () => {
+    const result = parseArboristYoutubePage(page({ videoRenderer: { videoId: "gJA1brRxnf4", title: { runs: [{ text: "Arborist Call 10-1-2026" }] }, publishedTimeText: { simpleText: "today" } } }));
+    expect(result[0].date).toBe("2026-10-01");
+  });
+  it("rejects another channel, login shells and executable JavaScript instead of JSON", () => {
+    expect(() => parseArboristYoutubePage(page(video(), "another-channel"))).toThrow("ARBORIST_VIDEO_CHANNEL_UNVERIFIED");
+    expect(() => parseArboristYoutubePage("<h1>Sign in</h1>")).toThrow();
+    expect(() => parseArboristYoutubePage('<script>var ytInitialData = {"x":(()=>1)()};</script>')).toThrow();
+  });
+  it("excludes upcoming/live uploads and rejects ambiguous translated or malformed dates", () => {
+    expect(parseArboristYoutubePage(page([video("Llamada Arborist 01/10/2026"), video("Arborist Call 02-30-2026"), video(undefined, undefined, { upcomingEventData: {} }), video(undefined, undefined, { badges: [{ metadataBadgeRenderer: { style: "BADGE_STYLE_TYPE_LIVE_NOW" } }] })]))).toEqual([]);
+  });
+  it("bounds the parser and excludes unsafe content ids", () => {
+    expect(() => parseArboristYoutubePage("x".repeat(3 * 1024 * 1024 + 1))).toThrow("ARBORIST_VIDEO_PAGE_TOO_LARGE");
+    expect(() => parseArboristYoutubePage(page(video(undefined, "https://evil")))).toThrow("ARBORIST_VIDEO_PAGE_NO_RECORDS");
   });
 });
