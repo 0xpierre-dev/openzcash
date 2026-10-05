@@ -108,7 +108,7 @@ export function AppNavigation({ apps, place, counts, openApps, onToggle, onOpen 
                 key={page.href}
                 href={page.href}
                 className="rd-side-item rd-side-page"
-                aria-current={place?.page?.href === page.href || place?.detail?.parent.href === page.href ? "page" : undefined}
+                aria-current={place?.page?.href === page.href || place?.detail?.parent.href === page.href || (appActive && page.href === app.href) ? "page" : undefined}
               >
                 <PageMark mark={page.mark} href={page.href} />
                 <span className="rd-side-label">{page.label}</span>

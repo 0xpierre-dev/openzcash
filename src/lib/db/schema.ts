@@ -6,6 +6,8 @@
  * na leitura. Camadas separadas: chave de visualização, raw on-chain, e estado de scan.
  */
 
+import type { LegalArchiveSource } from "../legal/archive";
+
 import {
   bigint,
   boolean,
@@ -608,4 +610,11 @@ export const zarvisCanary = pgTable("zarvis_canary", {
   failed: integer("failed").notNull(),
   ms: integer("ms").notNull(),
   failedCases: text("failed_cases").array().notNull(),
+});
+
+/** Public policy source archive. Kept separate from all accounting records. */
+export const legalPublicArchive = pgTable("legal_public_archive", {
+  sourceId: text("source_id").primaryKey(),
+  payload: jsonb("payload").$type<LegalArchiveSource>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

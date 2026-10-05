@@ -64,6 +64,7 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
+          aria-label="Search Arborist calls"
           placeholder="Search calls, topics, moderators…"
           className="w-full max-w-xs rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-sm text-stone-800 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500/40 sm:w-72"
         />
@@ -76,6 +77,7 @@ export function ArboristView({ calls }: { calls: ArboristCall[] }) {
         ).map(([key, label]) => (
           <button
             key={key}
+            aria-pressed={video === key}
             onClick={() => setVideo(key)}
             className={cn(
               "rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset transition",

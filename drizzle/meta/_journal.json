@@ -57,6 +57,13 @@
       "when": 1790631727551,
       "tag": "0007_zarvis_feedback_reasons",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791177249380,
+      "tag": "0008_legal_public_archive",
+      "breakpoints": true
     }
   ]
 }

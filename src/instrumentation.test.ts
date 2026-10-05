@@ -3,6 +3,7 @@ import { register } from "./instrumentation";
 
 const jobs = vi.hoisted(() => ({
   startMarketSnapshots: vi.fn(),
+  startLegalSchedule: vi.fn(),
   refreshZcg: vi.fn(async () => ({
     ok: true,
     ms: 1,
@@ -17,6 +18,7 @@ const jobs = vi.hoisted(() => ({
   warmDiligence: vi.fn(async () => ({ ok: true, proposals: 0 })),
   startCanarySchedule: vi.fn(() => true),
 }));
+vi.mock("@/lib/legal/schedule", () => ({ startLegalSchedule: jobs.startLegalSchedule }));
 vi.mock("@/lib/markets/sources", () => ({ startMarketSnapshots: jobs.startMarketSnapshots }));
 vi.mock("@/lib/zcg/refresh", () => ({ refreshZcg: jobs.refreshZcg }));
 vi.mock("@/lib/zechub/import-treasury", () => ({
@@ -53,6 +55,7 @@ describe("server data collection scheduling", () => {
     await register();
     // The cycle still runs, but nothing that writes to the database does.
     expect(jobs.startMarketSnapshots).toHaveBeenCalledTimes(1);
+    expect(jobs.startLegalSchedule).toHaveBeenCalledTimes(1);
     // The canary reads public data only; a frozen snapshot still gets probed.
     expect(jobs.startCanarySchedule).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(2);
@@ -69,6 +72,7 @@ describe("server data collection scheduling", () => {
     vi.stubEnv("DISABLE_AUTO_REFRESH", undefined);
     await register();
     expect(jobs.startMarketSnapshots).toHaveBeenCalledTimes(1);
+    expect(jobs.startLegalSchedule).toHaveBeenCalledTimes(1);
     expect(jobs.startCanarySchedule).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(2);
     await vi.advanceTimersByTimeAsync(30_000);
@@ -82,6 +86,7 @@ describe("server data collection scheduling", () => {
     vi.stubEnv("NODE_ENV", "test");
     await register();
     expect(jobs.startMarketSnapshots).not.toHaveBeenCalled();
+    expect(jobs.startLegalSchedule).not.toHaveBeenCalled();
     expect(jobs.startCanarySchedule).not.toHaveBeenCalled();
     expect(vi.getTimerCount()).toBe(0);
   });

@@ -1,0 +1,163 @@
+.page {
+  width: 100%;
+  max-width: 1280px;
+  min-width: 0;
+  margin-inline: auto;
+  color: var(--ink);
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 20px;
+}
+
+.heading > div {
+  min-width: 0;
+}
+
+.heading h1 {
+  margin: 0;
+  font-family: var(--font-geist), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(25px, 2.4vw, 32px);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -.035em;
+  color: var(--ink);
+}
+
+.heading > div > p {
+  margin: 7px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.decision {
+  flex: 0 1 310px;
+}
+
+.heading .decision > p {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 3px 7px;
+  margin: 0;
+  padding: 2px 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.decision strong {
+  color: var(--ink);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 22px;
+  padding: 15px 0;
+  border-top: 1px solid var(--line-strong, var(--line));
+  border-bottom: 1px solid var(--line-strong, var(--line));
+}
+
+.metrics > div {
+  min-width: 0;
+  padding-inline: 20px;
+  border-left: 1px solid var(--line);
+}
+
+.metrics > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.metrics > div:last-child {
+  padding-right: 0;
+}
+
+.metrics dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.4;
+}
+
+.metrics dd {
+  display: grid;
+  gap: 3px;
+  margin: 5px 0 0;
+}
+
+.metrics strong {
+  font-size: 24px;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.metrics dd > span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+  .heading {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .decision {
+    flex-basis: 100%;
+  }
+
+  .heading .decision > p {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .metrics > div {
+    padding-inline: 12px;
+  }
+
+  .metrics strong {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: 0;
+    margin-bottom: 18px;
+  }
+
+  .metrics > div {
+    padding: 12px;
+  }
+
+  .metrics > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .metrics > div:nth-child(even) {
+    padding-right: 0;
+  }
+
+  .metrics > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}

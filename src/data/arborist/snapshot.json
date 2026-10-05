@@ -1,0 +1,3187 @@
+{
+  "schemaVersion": 1,
+  "collectedAt": "2026-10-05T05:44:33.525Z",
+  "notes": [
+    {
+      "path": "AllArboristCallNotes/Arborist Call 31-Notes.md",
+      "sha": "89ec579222c72c97a75ad6399fbdad70122fa839",
+      "checkedAt": "2026-10-05T05:41:29.611Z",
+      "call": {
+        "number": 31,
+        "date": "2022-06-30",
+        "rawDate": "June 30, 2022, 22:30 UTC",
+        "duration": "38 minutes",
+        "video": "https://youtu.be/Lqo65dXDC3g",
+        "videoId": "Lqo65dXDC3g",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2031-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 35-Notes.md",
+      "sha": "49b1054cfa93d47bdee160a8d537ddef33b07212",
+      "checkedAt": "2026-10-05T05:41:29.613Z",
+      "call": {
+        "number": 35,
+        "date": "2022-09-08",
+        "rawDate": "September 8th 2022, 15:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=Cpw__dtZLpA",
+        "videoId": "Cpw__dtZLpA",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2035-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 33-Notes.md",
+      "sha": "ffd93643cb25f228e109bba62923a35b5716ef91",
+      "checkedAt": "2026-10-05T05:41:29.625Z",
+      "call": {
+        "number": 33,
+        "date": "2022-07-28",
+        "rawDate": "July 28, 2022, 21:30 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=kzoFcZd4Wo8",
+        "videoId": "kzoFcZd4Wo8",
+        "moderator": "Nick Takacs",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2033-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 30-Notes.md",
+      "sha": "761b438f775142d1c05c6ff8cb16bd47a2fb8c53",
+      "checkedAt": "2026-10-05T05:41:29.726Z",
+      "call": {
+        "number": 30,
+        "date": "2022-06-16",
+        "rawDate": "June 16, 2022, 13:30 UTC",
+        "duration": "18 minutes",
+        "video": "https://www.youtube.com/watch?v=afdVdGDgB9k",
+        "videoId": "afdVdGDgB9k",
+        "moderator": "Steven Smith",
+        "notetaker": null,
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2030-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 32-Notes.md",
+      "sha": "4e854eb07719283e01fff297220fba11bd2f57bb",
+      "checkedAt": "2026-10-05T05:41:29.728Z",
+      "call": {
+        "number": 32,
+        "date": "2022-07-14",
+        "rawDate": "July 14, 2022, 16:00 UTC**",
+        "duration": "**: 50 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "**: Steven Smith",
+        "notetaker": null,
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2032-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 37-Notes.md",
+      "sha": "082c4e93bd9452acb2989c5d4f6fb6aa4824e231",
+      "checkedAt": "2026-10-05T05:41:30.230Z",
+      "call": {
+        "number": 37,
+        "date": "2022-10-06",
+        "rawDate": "October 6th 2022, 15:00 UTC",
+        "duration": "30 minutes",
+        "video": "https://youtu.be/UbHvwoJS178",
+        "videoId": "UbHvwoJS178",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2037-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 36-Notes.md",
+      "sha": "0dae3cf473158d1b39ef70a17678a10031849896",
+      "checkedAt": "2026-10-05T05:41:30.235Z",
+      "call": {
+        "number": 36,
+        "date": "2022-09-22",
+        "rawDate": "September 22nd 2022, 21:30 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=RIskJby8Qm4",
+        "videoId": "RIskJby8Qm4",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2036-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 34-Notes.md",
+      "sha": "64a3372968e056beb3741917c58e9d88d4bc0d46",
+      "checkedAt": "2026-10-05T05:41:30.241Z",
+      "call": {
+        "number": 34,
+        "date": "2022-08-25",
+        "rawDate": "August 25th 2022, 21:30 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=br245bMjf0o",
+        "videoId": "br245bMjf0o",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2034-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 38-Notes.md",
+      "sha": "81d10d5e052eef514e98ea01389b2f36b32a7614",
+      "checkedAt": "2026-10-05T05:41:30.252Z",
+      "call": {
+        "number": 38,
+        "date": "2022-10-20",
+        "rawDate": "October 20th 2022, 21:30 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=dhtjVWjnmsU",
+        "videoId": "dhtjVWjnmsU",
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2038-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 39-Notes.md",
+      "sha": "07c613c6ee67db82745f8622589ffbfdeb37c8b4",
+      "checkedAt": "2026-10-05T05:41:30.255Z",
+      "call": {
+        "number": 39,
+        "date": "2022-11-03",
+        "rawDate": "November 3rd 2022, 15:00 UTC",
+        "duration": "30 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Steven Smith",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2039-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 40-Notes.md",
+      "sha": "9dc6ebb21eb81574cb262db23b29fc1968a996a5",
+      "checkedAt": "2026-10-05T05:41:30.633Z",
+      "call": {
+        "number": 40,
+        "date": "2022-11-17",
+        "rawDate": "November 17th 2022, 22:30 UTC",
+        "duration": "30 minutes",
+        "video": "https://www.youtube.com/watch?v=Ot9-qtYiEQQ",
+        "videoId": "Ot9-qtYiEQQ",
+        "moderator": "Ian Sagstetter",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2040-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 41-Notes.md",
+      "sha": "e80a4eeb8c28f353d48fb2d713bc5b0503337836",
+      "checkedAt": "2026-10-05T05:41:30.737Z",
+      "call": {
+        "number": 41,
+        "date": "2022-12-01",
+        "rawDate": "December 1st 2022, 16:00 UTC",
+        "duration": "45 minutes",
+        "video": "https://www.youtube.com/watch?v=wnNKbWuY4wE",
+        "videoId": "wnNKbWuY4wE",
+        "moderator": "Sean Bowe",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2041-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 50-Notes.md",
+      "sha": "fc7b8d24ef863817da840501ec77a646cddde6d4",
+      "checkedAt": "2026-10-05T05:41:30.986Z",
+      "call": {
+        "number": 50,
+        "date": "2023-04-20",
+        "rawDate": "April 20th 2023, 22:30 UTC",
+        "duration": "1hr 30mins",
+        "video": null,
+        "videoId": null,
+        "moderator": "Dodger",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2050-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 48-Notes.md",
+      "sha": "b003eab9bda385277a6d80d5c56e7515d30e40cc",
+      "checkedAt": "2026-10-05T05:41:31.022Z",
+      "call": {
+        "number": 48,
+        "date": "2023-03-23",
+        "rawDate": "March 23rd 2023, 22:30 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=k9bd3KCUoNs",
+        "videoId": "k9bd3KCUoNs",
+        "moderator": "Dodger",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2048-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 49-Notes.md",
+      "sha": "a88f26b9149732950556c5570720f58282b678d5",
+      "checkedAt": "2026-10-05T05:41:31.036Z",
+      "call": {
+        "number": 49,
+        "date": "2023-04-06",
+        "rawDate": "April 6th 2023, 15:00 UTC",
+        "duration": "1 hour",
+        "video": null,
+        "videoId": null,
+        "moderator": "Dodger",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2049-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 43-Notes.md",
+      "sha": "51183443c91f2ebe4e4325a35df4460e2d2d214e",
+      "checkedAt": "2026-10-05T05:41:31.050Z",
+      "call": {
+        "number": 43,
+        "date": "2022-01-12",
+        "rawDate": "January 12th 2022, 15:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=p5u9EdQSftE",
+        "videoId": "p5u9EdQSftE",
+        "moderator": "Ian Sagstetter",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2043-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 42-Notes.md",
+      "sha": "7f889caf43047c575a9ee016fdca020643c9aa97",
+      "checkedAt": "2026-10-05T05:41:31.066Z",
+      "call": {
+        "number": 42,
+        "date": "2022-12-15",
+        "rawDate": "December 15th 2022, 22:30 UTC",
+        "duration": "1hr20m",
+        "video": "https://www.youtube.com/watch?v=ioIi-fxgBgI",
+        "videoId": "ioIi-fxgBgI",
+        "moderator": "Ian Sagstetter",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2042-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 53-Notes.md",
+      "sha": "b368923061711b858e8c1ec0630d41621398ff3e",
+      "checkedAt": "2026-10-05T05:41:31.079Z",
+      "call": {
+        "number": 53,
+        "date": "2023-06-01",
+        "rawDate": "June 1st 2023, 15:00 UTC",
+        "duration": "1 hour",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2053-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 46-Notes.md",
+      "sha": "e845a473c3082915dd1cb714cc03b4b173519f47",
+      "checkedAt": "2026-10-05T05:41:31.090Z",
+      "call": {
+        "number": 46,
+        "date": "2023-02-23",
+        "rawDate": "February 23rd 2023, 22:30 UTC",
+        "duration": "1hr 20mins",
+        "video": "https://www.youtube.com/watch?v=iw5bAyLFpf4",
+        "videoId": "iw5bAyLFpf4",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2046-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 51-Notes.md",
+      "sha": "ab6dde5ae722b0ec2d1b0603f6243b759a53bebe",
+      "checkedAt": "2026-10-05T05:41:31.099Z",
+      "call": {
+        "number": 51,
+        "date": "2023-05-04",
+        "rawDate": "May 4th 2023, 15:00 UTC",
+        "duration": "50 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2051-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 52-Notes.md",
+      "sha": "f186f3e7448abcf9be725afeac5bc8603444d1e2",
+      "checkedAt": "2026-10-05T05:41:31.103Z",
+      "call": {
+        "number": 52,
+        "date": "2023-05-18",
+        "rawDate": "May 18th 2023, 22:30 UTC",
+        "duration": "45 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2052-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 45-Notes.md",
+      "sha": "328ddd033587b89673b21c64512f58e19fd2f3ba",
+      "checkedAt": "2026-10-05T05:41:31.108Z",
+      "call": {
+        "number": 45,
+        "date": "2022-02-09",
+        "rawDate": "February 9th 2022, 15:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=xcqGXgXoyXo",
+        "videoId": "xcqGXgXoyXo",
+        "moderator": "Aditya Bharadwaj",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2045-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 47-Notes.md",
+      "sha": "b004f2f277d78be861b14af095c0053071d0f576",
+      "checkedAt": "2026-10-05T05:41:31.113Z",
+      "call": {
+        "number": 47,
+        "date": "2023-03-09",
+        "rawDate": "March 9th 2023, 15:00 UTC",
+        "duration": "1 hour 25 minutes",
+        "video": "https://www.youtube.com/watch?v=_FQlSvlukmU",
+        "videoId": "_FQlSvlukmU",
+        "moderator": "Ian Sagstetter",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2047-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 44-Notes.md",
+      "sha": "8689738786e571f6caccf9a37d9015ce501ad755",
+      "checkedAt": "2026-10-05T05:41:31.300Z",
+      "call": {
+        "number": 44,
+        "date": "2023-01-26",
+        "rawDate": "January 26th 2023, 22:30 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=KO_TET2oAzc",
+        "videoId": "KO_TET2oAzc",
+        "moderator": "Ian Sagstetter",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2044-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 58-Notes.md",
+      "sha": "6cf94113c158ecdd84832e87727b0902baa29383",
+      "checkedAt": "2026-10-05T05:41:31.554Z",
+      "call": {
+        "number": 58,
+        "date": "2023-08-10",
+        "rawDate": "August 10th 2023, 21:00 UTC",
+        "duration": "15 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2058-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 56-Notes.md",
+      "sha": "fde04a1105c678a70367050fae0ac380f543fd69",
+      "checkedAt": "2026-10-05T05:41:31.556Z",
+      "call": {
+        "number": 56,
+        "date": "2023-06-29",
+        "rawDate": "June 29th 2023, 22:30 UTC",
+        "duration": "1 hour",
+        "video": null,
+        "videoId": null,
+        "moderator": "Dodger",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2056-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 55-Notes.md",
+      "sha": "0b9d859caba3c4f442d306966334bf86f501dc3c",
+      "checkedAt": "2026-10-05T05:41:31.593Z",
+      "call": {
+        "number": 55,
+        "date": "2023-06-29",
+        "rawDate": "June 29th 2023, 15:00 UTC",
+        "duration": "1 hour",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2055-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 59-Notes.md",
+      "sha": "a1c65f2f9c0b560571b22411a0bdc179fc2c0ed7",
+      "checkedAt": "2026-10-05T05:41:31.637Z",
+      "call": {
+        "number": 59,
+        "date": "2023-08-24",
+        "rawDate": "August 24th 2023, 15:00 UTC",
+        "duration": "1 hour 15 minutes",
+        "video": "https://www.youtube.com/watch?v=xvzESdDtczo",
+        "videoId": "xvzESdDtczo",
+        "moderator": "Decentralistdan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2059-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 63-Notes.md",
+      "sha": "32db166802d6516fe31ab7796561da3d9e919398",
+      "checkedAt": "2026-10-05T05:41:31.646Z",
+      "call": {
+        "number": 63,
+        "date": "2023-10-19",
+        "rawDate": "October 19th 2023, 15:00 UTC",
+        "duration": "30 minutes",
+        "video": "https://www.youtube.com/watch?v=YNlqL41kEJ4",
+        "videoId": "YNlqL41kEJ4",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2063-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 57-Notes.md",
+      "sha": "98dbfb29871f699ff3efd46659e92ab3f19b3878",
+      "checkedAt": "2026-10-05T05:41:31.655Z",
+      "call": {
+        "number": 57,
+        "date": "2023-07-27",
+        "rawDate": "July 27th 2023, 15:00 UTC",
+        "duration": "20 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2057-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 65-Notes.md",
+      "sha": "f2690ac380d7c2fc064acfd31dd8cff41ff6c394",
+      "checkedAt": "2026-10-05T05:41:31.656Z",
+      "call": {
+        "number": 65,
+        "date": "2023-11-16",
+        "rawDate": "November 16th 2023, 15:00 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=rxr4Gvna680",
+        "videoId": "rxr4Gvna680",
+        "moderator": "Maria Pilar Guerra-Arias",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2065-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 64-Notes.md",
+      "sha": "764538d73f300ad6e6da3276baa610fed58e7d24",
+      "checkedAt": "2026-10-05T05:41:31.656Z",
+      "call": {
+        "number": 64,
+        "date": "2023-11-02",
+        "rawDate": "November 2nd 2023, 21:00 UTC",
+        "duration": "1 hour 15 minutes",
+        "video": "https://www.youtube.com/watch?v=IhLj4vKGuUI",
+        "videoId": "IhLj4vKGuUI",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2064-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 60-Notes.md",
+      "sha": "c1fa9bfd2beb53d4b711dfabaae8034837820473",
+      "checkedAt": "2026-10-05T05:41:31.657Z",
+      "call": {
+        "number": 60,
+        "date": "2023-09-07",
+        "rawDate": "September 7th 2023, 21:00 UTC",
+        "duration": "1 hour 10 minutes",
+        "video": "https://www.youtube.com/watch?v=lM07BI3k54g",
+        "videoId": "lM07BI3k54g",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2060-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 62-Notes.md",
+      "sha": "9fc1dca18f1e949c391a222332b6b3c77795eea7",
+      "checkedAt": "2026-10-05T05:41:31.658Z",
+      "call": {
+        "number": 62,
+        "date": "2023-10-05",
+        "rawDate": "October 5th 2023, 21:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=jmeQayEd3zw",
+        "videoId": "jmeQayEd3zw",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2062-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 54-Notes.md",
+      "sha": "9b20cd3eb068d842b01c7519349b29a0712503c6",
+      "checkedAt": "2026-10-05T05:41:31.660Z",
+      "call": {
+        "number": 54,
+        "date": "2023-06-15",
+        "rawDate": "June 15th 2023, 22:30 UTC",
+        "duration": "45 mins",
+        "video": null,
+        "videoId": null,
+        "moderator": "Dodger",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2054-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 61-Notes.md",
+      "sha": "48fdd3415db759b8a9f1c6b11dffae721a2d4458",
+      "checkedAt": "2026-10-05T05:41:31.682Z",
+      "call": {
+        "number": 61,
+        "date": "2023-09-21",
+        "rawDate": "September 21st 2023, 15:00 UTC",
+        "duration": "1 hour 15 minutes",
+        "video": "https://www.youtube.com/watch?v=mQHLH6jlZeM",
+        "videoId": "mQHLH6jlZeM",
+        "moderator": "Aditya Bharadwaj",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2061-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 70-Notes.md",
+      "sha": "2543005d00b1956849f572e9c8dd5515cc72ba01",
+      "checkedAt": "2026-10-05T05:41:31.925Z",
+      "call": {
+        "number": 70,
+        "date": "2024-02-08",
+        "rawDate": "February 8th 2024, 15:00 UTC",
+        "duration": "30 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2070-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 66-Notes.md",
+      "sha": "780d9b2800287aac76a3059720c0723c98edd096",
+      "checkedAt": "2026-10-05T05:41:31.975Z",
+      "call": {
+        "number": 66,
+        "date": "2023-11-30",
+        "rawDate": "November 30th 2023, 21:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=y8dPEevzHyc",
+        "videoId": "y8dPEevzHyc",
+        "moderator": "Teor",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2066-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 72-Notes.md",
+      "sha": "ada02ebbe02d9302102e2c8b820879fe3f20bfe9",
+      "checkedAt": "2026-10-05T05:41:32.023Z",
+      "call": {
+        "number": 72,
+        "date": "2024-03-07",
+        "rawDate": "March 7th 2024, 15:00 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=bRdNvepJVXM",
+        "videoId": "bRdNvepJVXM",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2072-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 73-Notes.md",
+      "sha": "330c49266b32ebf7fc12139612ea804f0f8834d3",
+      "checkedAt": "2026-10-05T05:41:32.026Z",
+      "call": {
+        "number": 73,
+        "date": "2024-03-21",
+        "rawDate": "March 21st 2024, 21:00 UTC",
+        "duration": "9 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2073-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 75-Notes.md",
+      "sha": "89dc1391881c0e14adcebd4cf49600a10e2b695d",
+      "checkedAt": "2026-10-05T05:41:32.032Z",
+      "call": {
+        "number": 75,
+        "date": "2024-04-18",
+        "rawDate": "April 18th 2024, 21:00 UTC",
+        "duration": "1 hour 45 minutes",
+        "video": "https://www.youtube.com/watch?v=c9LY1Rptt5c",
+        "videoId": "c9LY1Rptt5c",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2075-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 68-Notes.md",
+      "sha": "16b3c99a9a94ec7b3262d417a93906c9737e101e",
+      "checkedAt": "2026-10-05T05:41:32.033Z",
+      "call": {
+        "number": 68,
+        "date": "2024-01-11",
+        "rawDate": "January 11th 2024, 15:00 UTC",
+        "duration": "1 hour 20 minutes",
+        "video": "https://www.youtube.com/watch?v=JozYhvCv6bQ",
+        "videoId": "JozYhvCv6bQ",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2068-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 71-Notes.md",
+      "sha": "9089cfe7671933cda2dc668803d818b0feada159",
+      "checkedAt": "2026-10-05T05:41:32.035Z",
+      "call": {
+        "number": 71,
+        "date": "2024-02-22",
+        "rawDate": "February 22nd 2024, 21:00 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=Sf5_40G00GA",
+        "videoId": "Sf5_40G00GA",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2071-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 69-Notes.md",
+      "sha": "b6f2ff827bc69a317740ccd0e2e5fb70bc35327a",
+      "checkedAt": "2026-10-05T05:41:32.039Z",
+      "call": {
+        "number": 69,
+        "date": "2024-01-25",
+        "rawDate": "January 25th 2024, 21:00 UTC",
+        "duration": "1 hour 20 minutes",
+        "video": "https://www.youtube.com/watch?v=wREfP2QAFCc",
+        "videoId": "wREfP2QAFCc",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2069-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 76-Notes.md",
+      "sha": "47a82ce3974eb46fc108abb7d3c653f496abb12a",
+      "checkedAt": "2026-10-05T05:41:32.040Z",
+      "call": {
+        "number": 76,
+        "date": "2024-05-02",
+        "rawDate": "May 2nd 2024, 15:00 UTC",
+        "duration": "1 hour 25 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2076-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 74-Notes.md",
+      "sha": "61a2714960f8487018ca2b8c6a0e6f7c62221ad3",
+      "checkedAt": "2026-10-05T05:41:32.042Z",
+      "call": {
+        "number": 74,
+        "date": "2024-04-04",
+        "rawDate": "April 4th 2024, 15:00 UTC",
+        "duration": "15 minutes",
+        "video": "https://www.youtube.com/watch?v=fkqcekg2BWs",
+        "videoId": "fkqcekg2BWs",
+        "moderator": "Daniel",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2074-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 67-Notes.md",
+      "sha": "327b5c539d2acef970b22d3abe53caa66bd89f58",
+      "checkedAt": "2026-10-05T05:41:32.045Z",
+      "call": {
+        "number": 67,
+        "date": "2023-12-14",
+        "rawDate": "December 14th 2023, 15:00 UTC",
+        "duration": "1 hour 50 minutes",
+        "video": "https://www.youtube.com/watch?v=vbG7-E32nj4",
+        "videoId": "vbG7-E32nj4",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2067-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 77-Notes.md",
+      "sha": "5d7c7813183f31381b62614db405d9cd74f9ad46",
+      "checkedAt": "2026-10-05T05:41:32.068Z",
+      "call": {
+        "number": 77,
+        "date": "2024-05-17",
+        "rawDate": "May 17th 2024, 21:00 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=LYisNtBul18",
+        "videoId": "LYisNtBul18",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2077-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 79-Notes.md",
+      "sha": "ec4cb18b4110db7f8e9e005bc1f160da18b1afe6",
+      "checkedAt": "2026-10-05T05:41:32.303Z",
+      "call": {
+        "number": 79,
+        "date": "2024-06-13",
+        "rawDate": "June 13th 2024, 21:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=laDMlsgO-Z0",
+        "videoId": "laDMlsgO-Z0",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2079-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 89-Notes.md",
+      "sha": "33934795ff78f4fc57f88d60394a70791e597cdb",
+      "checkedAt": "2026-10-05T05:41:32.316Z",
+      "call": {
+        "number": 89,
+        "date": "2024-10-31",
+        "rawDate": "October 31st 2024, 21:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=aNXZ9ctjW-w",
+        "videoId": "aNXZ9ctjW-w",
+        "moderator": "Decentralistdan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2089-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 81-Notes.md",
+      "sha": "0aec52f0f7366a941220d0a2c973e947fae8ef45",
+      "checkedAt": "2026-10-05T05:41:32.348Z",
+      "call": {
+        "number": 81,
+        "date": "2024-07-11",
+        "rawDate": "July 11th 2024, 21:00 UTC",
+        "duration": "35 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2081-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 78-Notes.md",
+      "sha": "8482e5a647e5f22800cf0f4fccc3eca53087bb40",
+      "checkedAt": "2026-10-05T05:41:32.424Z",
+      "call": {
+        "number": 78,
+        "date": "2024-05-30",
+        "rawDate": "May 30th 2024, 15:00 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=LYisNtBul18",
+        "videoId": "LYisNtBul18",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2078-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 82-Notes.md",
+      "sha": "8d7112a1740d92e2970cb24dc1af4f30c1010110",
+      "checkedAt": "2026-10-05T05:41:32.425Z",
+      "call": {
+        "number": 82,
+        "date": "2024-07-25",
+        "rawDate": "July 25th 2024, 15:00 UTC",
+        "duration": "1 hour 40 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2082-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 84-Notes.md",
+      "sha": "46bcf8afc45c761674ab6efd3986112e6f2bd70c",
+      "checkedAt": "2026-10-05T05:41:32.426Z",
+      "call": {
+        "number": 84,
+        "date": "2024-08-22",
+        "rawDate": "August 22nd 2024, 15:00 UTC",
+        "duration": "1 hour 37 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2084-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 80-Notes.md",
+      "sha": "14b83b0a01fb5008c06558f3d329b6e5c4b18bcd",
+      "checkedAt": "2026-10-05T05:41:32.426Z",
+      "call": {
+        "number": 80,
+        "date": "2024-06-27",
+        "rawDate": "June 27th 2024, 15:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=KtVvt3lis6o",
+        "videoId": "KtVvt3lis6o",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2080-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 85-Notes.md",
+      "sha": "cac84e52c1219c5f27680f46368940b4583ff60c",
+      "checkedAt": "2026-10-05T05:41:32.426Z",
+      "call": {
+        "number": 85,
+        "date": "2024-09-05",
+        "rawDate": "September 5th 2024, 21:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=PAayYqN9mLw",
+        "videoId": "PAayYqN9mLw",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2085-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 88-Notes.md",
+      "sha": "ced3a3196265b2d8138ecac9aa12252cbfaef0da",
+      "checkedAt": "2026-10-05T05:41:32.426Z",
+      "call": {
+        "number": 88,
+        "date": "2024-10-17",
+        "rawDate": "October 17th 2024, 15:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=7A5ttZqad5g",
+        "videoId": "7A5ttZqad5g",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2088-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 87-Notes.md",
+      "sha": "bda711ea0d8c20042619658976912073d9d46093",
+      "checkedAt": "2026-10-05T05:41:32.470Z",
+      "call": {
+        "number": 87,
+        "date": "2024-10-03",
+        "rawDate": "October 3rd 2024, 21:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=0lRFmXxuRq4",
+        "videoId": "0lRFmXxuRq4",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2087-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 83-Notes.md",
+      "sha": "e3a23df274ffba468581b983c17a36ae0ca7e807",
+      "checkedAt": "2026-10-05T05:41:32.491Z",
+      "call": {
+        "number": 83,
+        "date": "2024-08-08",
+        "rawDate": "August 8th 2024, 21:00 UTC",
+        "duration": "1 hour",
+        "video": null,
+        "videoId": null,
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2083-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 86-Notes.md",
+      "sha": "732a37d7c5d4569f14086b256c3d19d2ece51519",
+      "checkedAt": "2026-10-05T05:41:32.515Z",
+      "call": {
+        "number": 86,
+        "date": "2024-09-19",
+        "rawDate": "September 19th 2024, 15:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=I8jHbDYb-_Q",
+        "videoId": "I8jHbDYb-_Q",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2086-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 94-Notes.md",
+      "sha": "039eadf807e80d0c466f5e54ac7708ee47b75311",
+      "checkedAt": "2026-10-05T05:41:32.748Z",
+      "call": {
+        "number": 94,
+        "date": "2024-01-23",
+        "rawDate": "January 23rd 2024, 21:00 UTC",
+        "duration": "1 hour 40 minutes",
+        "video": "https://www.youtube.com/watch?v=hKRk9O2Rki0",
+        "videoId": "hKRk9O2Rki0",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2094-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 100-Notes.md",
+      "sha": "f2aaedb487812a6eb133f631deba95af2a8ed158",
+      "checkedAt": "2026-10-05T05:41:32.784Z",
+      "call": {
+        "number": 100,
+        "date": "2025-05-01",
+        "rawDate": "1st may 2025 16:00 UTC",
+        "duration": "32 mins.",
+        "video": "https://www.youtube.com/watch?v=VgFpg-U_CbI",
+        "videoId": "VgFpg-U_CbI",
+        "moderator": "Alfredo",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro -",
+          "Zebra Update - Zebrad docker",
+          "ECC Core Update - zallet , crate releases, Ecc",
+          "Research & Implementation Updates - Qedit / crosslink /Nsm / zcashd deprecation",
+          "Open Discussion - zcashers wishlist",
+          "Decisions and Action Items",
+          "checklist",
+          "ii) zcasher wishlist for things the community wishes to be built check it out"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20100-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 91-Notes.md",
+      "sha": "290c7a7f6b1b43488b38f6ea83dcbb12d988671c",
+      "checkedAt": "2026-10-05T05:41:32.880Z",
+      "call": {
+        "number": 91,
+        "date": "2024-11-28",
+        "rawDate": "November 28th 2024, 21:00 UTC",
+        "duration": "30 minutes",
+        "video": "https://www.youtube.com/watch?v=PV-yBPV7VOY",
+        "videoId": "PV-yBPV7VOY",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2091-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 101-Notes.md",
+      "sha": "781bcd9eb3da0405aee2ac29ebeeb59724d0fedf",
+      "checkedAt": "2026-10-05T05:41:32.880Z",
+      "call": {
+        "number": 101,
+        "date": "2025-05-15",
+        "rawDate": "May 15 2025, 21:00 UTC",
+        "duration": "45 minutes",
+        "video": "https://www.youtube.com/watch?v=2HSAF2o7aK4",
+        "videoId": "2HSAF2o7aK4",
+        "moderator": "Dan",
+        "notetaker": "chidi olisa",
+        "agenda": [
+          "Welcome and Meeting Intro -",
+          "Zebra Update zaino",
+          "ECC Core Update zcashD / zallet",
+          "Research & Implementation Updates - shielded labs,NSM / shielded labs,Ecc, Crosslink",
+          "Open Discussion - Zcg, NU7"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20101-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 97-Notes.md",
+      "sha": "6f0076f21788860d897aec3642e862376f6533d2",
+      "checkedAt": "2026-10-05T05:41:32.881Z",
+      "call": {
+        "number": 97,
+        "date": "2025-03-20",
+        "rawDate": "20th March 2025 21:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=ksBEOo2Zja8",
+        "videoId": "ksBEOo2Zja8",
+        "moderator": "Dan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2097-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 98 - notes.md",
+      "sha": "09259ce09bad8600ee119299efa37a8a1b4985e5",
+      "checkedAt": "2026-10-05T05:41:32.881Z",
+      "call": {
+        "number": 98,
+        "date": "2025-04-03",
+        "rawDate": "3rd April 2025 15:00 UTC",
+        "duration": "45 minutes",
+        "video": "https://www.youtube.com/watch?v=XxQx6vt7OmE",
+        "videoId": "XxQx6vt7OmE",
+        "moderator": "Arya",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2098%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 102-notes.md",
+      "sha": "db459da51539b6d957b877d67131aecb38e69255",
+      "checkedAt": "2026-10-05T05:41:32.881Z",
+      "call": {
+        "number": 102,
+        "date": "2025-05-29",
+        "rawDate": "may 29 2025,15:00 UTC",
+        "duration": "47 minutes",
+        "video": "https://www.youtube.com/watch?v=AIpl7mfZYK0",
+        "videoId": "AIpl7mfZYK0",
+        "moderator": "Pili guerra",
+        "notetaker": "chidi olisa",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra update z3 stack, zcashd",
+          "ECC Core Update zallet",
+          "Research & Implementation Updates - Qedit,zsa/ shielded labs, Nsm"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20102-notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 90-Notes.md",
+      "sha": "e783414e70d7931bdec91da64cc0f90a4890805b",
+      "checkedAt": "2026-10-05T05:41:32.882Z",
+      "call": {
+        "number": 90,
+        "date": "2024-11-14",
+        "rawDate": "November 14th 2024, 15:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=JldVJO79Qlk",
+        "videoId": "JldVJO79Qlk",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2090-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 93-Notes.md",
+      "sha": "3338f7928652d8c004363779960491c2688f0978",
+      "checkedAt": "2026-10-05T05:41:32.882Z",
+      "call": {
+        "number": 93,
+        "date": "2025-01-09",
+        "rawDate": "January 9th 2025, 15:00 UTC",
+        "duration": "1 hour",
+        "video": "https://www.youtube.com/watch?v=BG8C1Rf4jXg",
+        "videoId": "BG8C1Rf4jXg",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2093-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 92-Notes.md",
+      "sha": "feda0d55294d3cfdd5f6fddba85a6962ad59b447",
+      "checkedAt": "2026-10-05T05:41:32.882Z",
+      "call": {
+        "number": 92,
+        "date": "2024-12-12",
+        "rawDate": "December 12th 2024, 15:00 UTC",
+        "duration": "2 hours",
+        "video": "https://www.youtube.com/watch?v=9x9KSYvmvGc",
+        "videoId": "9x9KSYvmvGc",
+        "moderator": "Pili GUerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2092-Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 96-Notes.md",
+      "sha": "603b6db2e5c342300ddc34267ee039644b4de3ea",
+      "checkedAt": "2026-10-05T05:41:32.882Z",
+      "call": {
+        "number": 96,
+        "date": "2025-02-20",
+        "rawDate": "February 20th, 21:00 UTC",
+        "duration": "1 hour 30 minutes",
+        "video": "https://www.youtube.com/watch?v=TmHv3_qhzQo",
+        "videoId": "TmHv3_qhzQo",
+        "moderator": "Jack Gavigan",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2096-Notes.md",
+        "source": "notes",
+        "dateSource": "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/README.md"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist Call 95-Notes.md",
+      "sha": "d68f7c7a16925919d5a1ea854db783f3f183197b",
+      "checkedAt": "2026-10-05T05:41:32.924Z",
+      "call": {
+        "number": 95,
+        "date": "2025-02-06",
+        "rawDate": "February 6th, 15:00 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=zgoArHP-1ps",
+        "videoId": "zgoArHP-1ps",
+        "moderator": "Pili Guerra",
+        "notetaker": "Jason Rogers",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20Call%2095-Notes.md",
+        "source": "notes",
+        "dateSource": "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/README.md"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 105- notes.md",
+      "sha": "1f9f44783f97b2c481b1cb4ff0a1ff1aff029132",
+      "checkedAt": "2026-10-05T05:41:33.158Z",
+      "call": {
+        "number": 105,
+        "date": "2025-07-10",
+        "rawDate": "july 10 2025,21:00 UTC",
+        "duration": "19 minutes",
+        "video": "https://www.youtube.com/watch?v=82h8qI66Vqg",
+        "videoId": "82h8qI66Vqg",
+        "moderator": "ALEX",
+        "notetaker": "CHIDI",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra 2.4",
+          "core stack updates zingo labs zaino",
+          "Research & Implementation Updates shielded labsNetwork sustainability mechanism / crosslink , trailing finality layer",
+          "Open Announcements zingo wallet release"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20105-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 106 - notes.md",
+      "sha": "99ad8537e79ef7cada688c19853a57f3795fb580",
+      "checkedAt": "2026-10-05T05:41:33.166Z",
+      "call": {
+        "number": 106,
+        "date": "2025-07-24",
+        "rawDate": "24 th july 2025, 15:00 UTC",
+        "duration": "1 hr 30 minutes",
+        "video": "https://www.youtube.com/watch?v=uFz_5pzgRlQ",
+        "videoId": "uFz_5pzgRlQ",
+        "moderator": "NATALIE",
+        "notetaker": "CHIDI OLISA",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra 2.4.0 zebra 2.4.1",
+          "ECC Core Update Ecc, zcashd,core libraries",
+          "Research & Implementation Updates -zcashd zingo labs Qedit, ZSA NSM, shielded labs",
+          "Open Discussion zebra, fork"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20106%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 112 - notes.md",
+      "sha": "19eb0a705eb2acff24c65d51accc499cc956cdfe",
+      "checkedAt": "2026-10-05T05:41:33.167Z",
+      "call": {
+        "number": 112,
+        "date": "2025-10-16",
+        "rawDate": "Octobe 16, 2025 15:00UTC",
+        "duration": "42 minutes",
+        "video": "https://www.youtube.com/watch?v=G6P-k2I-7kU",
+        "videoId": "G6P-k2I-7kU",
+        "moderator": "Pili",
+        "notetaker": "chidi [",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra,Z3, Nu 6.1",
+          "ECC Core Update Nu6.1, zcashD",
+          "Research & Implementation Updates - Zsa,orchard,librustzcash / crosslink, trailing finality layer",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20112%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 110 - notes.md",
+      "sha": "0a195851014272fe6849287a774265aeb589422a",
+      "checkedAt": "2026-10-05T05:41:33.202Z",
+      "call": {
+        "number": 110,
+        "date": "2025-09-18",
+        "rawDate": "18 september 2025, 15:00 UTC",
+        "duration": "1 hr 21 minutes",
+        "video": "https://www.youtube.com/watch?v=2tENS3Sb_jM",
+        "videoId": "2tENS3Sb_jM",
+        "moderator": "Alfredo",
+        "notetaker": "chidi [",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra",
+          "ECC Core Update",
+          "Research & Implementation Updates ZSA/ NSM/ Crosslink Trailing finality layer",
+          "Open Announcements",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20110%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 107- notes.md",
+      "sha": "bb5c4aad4938b4b406b849edf2dd774763b39b26",
+      "checkedAt": "2026-10-05T05:41:33.264Z",
+      "call": {
+        "number": 107,
+        "date": "2025-08-07",
+        "rawDate": "August 7, 2025  21:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=79pNSvju05g",
+        "videoId": "79pNSvju05g",
+        "moderator": "DAN",
+        "notetaker": "chidi olisa",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra release 2.4.1",
+          "ECC Core Update ZcashD, P2Sh",
+          "Research & Implementation Updates - Z3/ Nsm/ crosslink milestone 3"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20107-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 114 - notes.md",
+      "sha": "c64c068c864a971f54d6de94e5e7b917e61aa0a5",
+      "checkedAt": "2026-10-05T05:41:33.266Z",
+      "call": {
+        "number": 114,
+        "date": "2025-11-13",
+        "rawDate": "November 13th 2025, 15:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=ksuYg_kmalE",
+        "videoId": "ksuYg_kmalE",
+        "moderator": "Pili",
+        "notetaker": "[Chidi]",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update Nu 6.1 activation, Prs",
+          "ECC Core Update zallet, Refactoring",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20114%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 111 - notes.md",
+      "sha": "68cb45ada6985c3bfa61e65fe6287b2a86bd095c",
+      "checkedAt": "2026-10-05T05:41:33.888Z",
+      "call": {
+        "number": 111,
+        "date": "2025-10-02",
+        "rawDate": "october 2nd 2025, 21:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=hq8Vigg3RxQ",
+        "videoId": "hq8Vigg3RxQ",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "ECC Core Update",
+          "Research & Implementation Updates zaino zcashd deprecation Zsa"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20111%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 108 - notes.md",
+      "sha": "404af084722d3bb1d8f19a36f86c9e6676a55397",
+      "checkedAt": "2026-10-05T05:41:33.890Z",
+      "call": {
+        "number": 108,
+        "date": "2025-08-21",
+        "rawDate": "21 August 2025 15:00 UTC",
+        "duration": "1 hour 33 minutes",
+        "video": "https://www.youtube.com/watch?v=cwp6y9gHBVk",
+        "videoId": "cwp6y9gHBVk",
+        "moderator": "Alex",
+        "notetaker": "chidi olisa",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra 2.5.0, Nu 6.1",
+          "ECC Core Updatezallet, P2sh,librustzcash",
+          "Research & Implementation Updates - Dag/ Qedit,Zsa,Pczt Nsm,PRs",
+          "Open Discussion NU 7"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20108%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 104- notes.md",
+      "sha": "646da7ec97e6ebdde94647ee4a0268655d9b06e5",
+      "checkedAt": "2026-10-05T05:41:33.891Z",
+      "call": {
+        "number": 104,
+        "date": "2025-06-26",
+        "rawDate": "june 26,2025 15:00 UTC",
+        "duration": "32 minutes",
+        "video": "https://www.youtube.com/watch?v=4q6KEFQDvvw",
+        "videoId": "4q6KEFQDvvw",
+        "moderator": "NATALIE",
+        "notetaker": "CHIDI OLISA",
+        "agenda": [
+          "Welcome and Meeting Intro intro,Agenda",
+          "Zebra Update PRs,RPc,Ipv6",
+          "ECC Core Update zcash Deprecation",
+          "Research & Implementation Updates Zsa, ZIps / NSM, Librustzcash",
+          "Open Announcemet Plonk wg, zashi wallet survey"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20104-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 109 - notes.md",
+      "sha": "705585e106a4d07967acb49797d3bb91077a5a2b",
+      "checkedAt": "2026-10-05T05:41:33.980Z",
+      "call": {
+        "number": 109,
+        "date": "2025-09-04",
+        "rawDate": "September 4th 2025, 21:00 UTC",
+        "duration": "1 hr 25 minutes",
+        "video": "https://www.youtube.com/watch?v=1T5zIlLNCz8",
+        "videoId": "1T5zIlLNCz8",
+        "moderator": "DAN",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20109%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 103- notes.md",
+      "sha": "4026775ff4fb10b7ca48af140314641ff0e8c6c2",
+      "checkedAt": "2026-10-05T05:41:33.996Z",
+      "call": {
+        "number": 103,
+        "date": "2025-06-12",
+        "rawDate": "june 12 2025,21:00 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=Yev7T34rMlM",
+        "videoId": "Yev7T34rMlM",
+        "moderator": "DAN",
+        "notetaker": "chidi olisa",
+        "agenda": [
+          "Welcome and Meeting Intro agenda,intro",
+          "Zebra Update - NU6.1 varriant,bug fixes,Prs",
+          "ECC Core Update - librustzcash,zallet,zcashd",
+          "Research & Implementation Updates - Nsm,Zip's/ crosslink,shadowing mode,milestone 3",
+          "Open Discussion - frost,lockbox,feedbacks"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20103-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 113 - notes.md",
+      "sha": "eda371f19e48e191b5064ecb9b21fbba0c2a5c6f",
+      "checkedAt": "2026-10-05T05:41:34.236Z",
+      "call": {
+        "number": 113,
+        "date": "2025-10-30",
+        "rawDate": "Oct 30 th 2025. 21:00  UTC",
+        "duration": "60 minutes",
+        "video": "https://www.youtube.com/watch?v=8c_6UiciAuU",
+        "videoId": "8c_6UiciAuU",
+        "moderator": "DAN",
+        "notetaker": "CHIDI",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update Prs, Zebra state service",
+          "ECC Core Update ZcashD",
+          "Research & Implementation Updates - Zsa, Qedit/ Nsm, Zip 233 / Crosslink, trailing finality layer",
+          "Open Discussion quantum recoverability draft"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20113%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 115 - notes.md",
+      "sha": "25331ba4e1c3a87bae9f2afff7272d9f1c439cc7",
+      "checkedAt": "2026-10-05T05:41:34.490Z",
+      "call": {
+        "number": 115,
+        "date": "2025-12-11",
+        "rawDate": "Dec 11th, 2025 15:00 UTC",
+        "duration": "1 hr, 30 minutes",
+        "video": "https://www.youtube.com/watch?v=tT9H-XQuvfM",
+        "videoId": "tT9H-XQuvfM",
+        "moderator": "Natalie",
+        "notetaker": "chidi,",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "ECC Core Update",
+          "Research & Implementation Updates -zaino / zcashD Deprecation / ZSA / NSM",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20115%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 118 - notes.md",
+      "sha": "275c852297b06cb937bcddc1611e019d78e67f87",
+      "checkedAt": "2026-10-05T05:41:34.492Z",
+      "call": {
+        "number": 118,
+        "date": "2026-02-05",
+        "rawDate": "5th Feb, 2026. 15:00 UTC",
+        "duration": "55 minutes",
+        "video": "https://www.youtube.com/watch?v=22YcmN1PPsc",
+        "videoId": "22YcmN1PPsc",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Updatezebra 4.1",
+          "Former ECC Core Update zallet",
+          "Research & Implementation Updates - zaino/Zcashd, librustzcash/ Zsa/Nsm, crosslink",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20118%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 126 - notes.md",
+      "sha": "5b5f6aec5d510989924eab76271a7c4738e3eef9",
+      "checkedAt": "2026-10-05T05:41:34.511Z",
+      "call": {
+        "number": 126,
+        "date": "2026-06-11",
+        "rawDate": "11th June 2026, 21:00 UTC",
+        "duration": "39 Minutes",
+        "video": "https://www.youtube.com/watch?v=SKNivdDz9qI",
+        "videoId": "SKNivdDz9qI",
+        "moderator": "Alex",
+        "notetaker": "chidi :",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update latest zebra",
+          "Zodl UpdateNu 6.2",
+          "Research & Implementation Updates - zcash D / Nsm / crosslink / Dynamic fee",
+          "Open Announcements zodl, Merkle tree",
+          "Open Discussionsprout deprecation"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20126%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 123 - notes.md",
+      "sha": "b1f4384363abcaba23166b60ceec1b8f6cd9b23f",
+      "checkedAt": "2026-10-05T05:41:34.586Z",
+      "call": {
+        "number": 123,
+        "date": "2026-04-16",
+        "rawDate": "16th April 2026, 21:00 UTC",
+        "duration": "45 minutes",
+        "video": "https://www.youtube.com/watch?v=cmPQexrzn_o",
+        "videoId": "cmPQexrzn_o",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update RocksDb, dynamic linking",
+          "Zodl Update zcashD. vulnerability disclosure",
+          "Research & Implementation Updates: zaino Nsm crosslink",
+          "Grant Discussion formal verification of halo 2 in lean"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20123%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 125 - notes.md",
+      "sha": "ea9bd7f1dffb8ba21980e94b05ec0be51656909b",
+      "checkedAt": "2026-10-05T05:41:34.601Z",
+      "call": {
+        "number": 125,
+        "date": "2026-05-28",
+        "rawDate": "May 28th, 2026. 15:00 UTC",
+        "duration": "1 hr 12 minutes",
+        "video": "https://www.youtube.com/watch?v=h76Ngomx8kk",
+        "videoId": "h76Ngomx8kk",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "Zodl Updatezallet",
+          "Research & Implementation Updates zaino zcashd Zsa Nsm Tfl/ D.fee",
+          "Open Announcementsoffice hour"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20125%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 119 - notes.md",
+      "sha": "94a2a99852f3417892e1d458777e0a328f1b920b",
+      "checkedAt": "2026-10-05T05:41:34.601Z",
+      "call": {
+        "number": 119,
+        "date": "2026-02-19",
+        "rawDate": "19th Febuary 2026, 21:00 UTC",
+        "duration": "33 mins",
+        "video": "https://www.youtube.com/watch?v=63K9NUXicfI",
+        "videoId": "63K9NUXicfI",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update zebra 4.1.0,open Rpc",
+          "ZODL Update zallet, orchard",
+          "Research & Implementation Updates - zaino/ zcashD Deprecation / Nsm / Trailing finality",
+          "Open Announcements",
+          "Open Discussion script release"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20119%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 117 - notes.md",
+      "sha": "713fe0d07613cdec6e5549aa72080fc624312b86",
+      "checkedAt": "2026-10-05T05:41:34.601Z",
+      "call": {
+        "number": 117,
+        "date": "2026-01-22",
+        "rawDate": "22nd Jan.2026, 21:00 UTC",
+        "duration": "43 minutes",
+        "video": "https://www.youtube.com/watch?v=zVu2yxxUMCs",
+        "videoId": "zVu2yxxUMCs",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra UpdateZebra 4.0.0,Dns seeders",
+          "Former ECC Core Update ZcashD, Nu 7, lockbox",
+          "Research & Implementation Updates - Nsm / zaino / crosslink / Dynamic fee",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20117%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 120 - notes.md",
+      "sha": "c13dd0fe011f611fb073242b6761ff99319fca46",
+      "checkedAt": "2026-10-05T05:41:34.601Z",
+      "call": {
+        "number": 120,
+        "date": "2026-03-05",
+        "rawDate": "5th March 2026, 15:00 UTC",
+        "duration": "47 minutes",
+        "video": "https://www.youtube.com/watch?v=uBsaOLUepB0",
+        "videoId": "uBsaOLUepB0",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "General discussion, Nu7 poll result",
+          "Zebra Update",
+          "Zodl Updatezallet, shielded coinbase",
+          "Research & Implementation Updates zaino/zcashD/Zsa/Nsm/crosslink",
+          "Open Announcements kusama"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20120%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 116 - notes.md",
+      "sha": "04ebdec98c0f9360d2ab5d8b5e9c876ade61fef8",
+      "checkedAt": "2026-10-05T05:41:34.601Z",
+      "call": {
+        "number": 116,
+        "date": "2026-01-08",
+        "rawDate": "8th January 2026,15:00 UTC",
+        "duration": "26 minutes",
+        "video": "https://www.youtube.com/watch?v=8eye-YoqtDk",
+        "videoId": "8eye-YoqtDk",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "Research & Implementation Updates - zaino zcash d Deprecation/Zsa /NSM/ Crosslink",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20116%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 122 - notes.md",
+      "sha": "efb08a245e782907f35e918b3c29073e75c97340",
+      "checkedAt": "2026-10-05T05:41:34.602Z",
+      "call": {
+        "number": 122,
+        "date": "2026-04-02",
+        "rawDate": "April 2nd 2026, 15:00 UTC",
+        "duration": "50 minutes",
+        "video": "https://www.youtube.com/watch?v=-4GDsezfilc",
+        "videoId": "-4GDsezfilc",
+        "moderator": "Arya",
+        "notetaker": "Notes:chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update Cve",
+          "Zodl Update ZcashD",
+          "Research & Implementation Updates - Zsa / Nsm / crosslink / Dynamic fee / zaino",
+          "Open Discussion DAG, Bft"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20122%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 121 - notes.md",
+      "sha": "1ad6db098dfdc44403f1e7a5e6c6bd74109a2b7b",
+      "checkedAt": "2026-10-05T05:41:34.623Z",
+      "call": {
+        "number": 121,
+        "date": "2026-03-19",
+        "rawDate": "19th March 2026, 21:00UTC",
+        "duration": "25 minutes",
+        "video": null,
+        "videoId": null,
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update 4.2.0",
+          "ZODL Update zallet",
+          "Research & Implementation Updates -zaino/ zcash d deprecation/ Nsm/Crosslink/dynamic fee",
+          "Open Announcements",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20121%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 124 - notes.md",
+      "sha": "9486e9b82b95107224b7abe37170de2938e4fde9",
+      "checkedAt": "2026-10-05T05:41:34.858Z",
+      "call": {
+        "number": 124,
+        "date": "2026-04-30",
+        "rawDate": "April 30th, 2026. 15:00 UTC",
+        "duration": "65 minutes",
+        "video": "https://www.youtube.com/watch?v=qfIS6wORZIA",
+        "videoId": "qfIS6wORZIA",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "Zodl Update zallet, Ai agents",
+          "Research & Implementation Updates zaino / zcashd deprecation / Zsa / Nsm / crosslink",
+          "Open Discussion formal verification of rust"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20124%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 11 Agenda.md",
+      "sha": "365241bc209b80da25c35f1492388b899162fc79",
+      "checkedAt": "2026-10-05T05:41:35.101Z",
+      "call": {
+        "number": 11,
+        "date": "2021-05-20",
+        "rawDate": "May 20th, 2021",
+        "duration": "1 hour",
+        "video": "https://youtu.be/mMvusN8lL64",
+        "videoId": "mMvusN8lL64",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad",
+          "Discussions",
+          "FROST Update",
+          "Test Vector Progress",
+          "Testnet Activation Height",
+          "Ziggurat Testing Results"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2011%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 12 Agenda.md",
+      "sha": "03403d73d67c3c91c32a1c5a48c0391df1cb34d1",
+      "checkedAt": "2026-10-05T05:41:35.102Z",
+      "call": {
+        "number": 12,
+        "date": "2021-06-03",
+        "rawDate": "June 3rd, 2021",
+        "duration": "1 hour",
+        "video": "https://youtu.be/SNcrWeDBjRo",
+        "videoId": "SNcrWeDBjRo",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "ZIP 239 Relay of Version 5 Transactions",
+          "Remaining Audit Schedule",
+          "NU5 Timeline",
+          "Wrap up / Read Out / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2012%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 127 - notes.md",
+      "sha": "1765b736b87c48fe4c2bb845e9d607816ad02712",
+      "checkedAt": "2026-10-05T05:41:35.104Z",
+      "call": {
+        "number": 127,
+        "date": "2026-06-25",
+        "rawDate": "25th june 2026. 15:00 UTC",
+        "duration": "1 hr 30 min",
+        "video": "https://www.youtube.com/watch?v=Ni-Bp0p8W4s",
+        "videoId": "Ni-Bp0p8W4s",
+        "moderator": "Pili",
+        "notetaker": "lisa :",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra UpdateNu 6.3",
+          "Zodl Update Ironwood / zallet,zcashd",
+          "Research & Implementation Updates - zaino/ zcashd deprecation /zsa /crosslink/dynamic fee",
+          "Open Discussion formal verification of zebra chain/ Discussions"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20127%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 130 - notes.md",
+      "sha": "68956dae14116e21ce8400c8226c2fbd1af03dd5",
+      "checkedAt": "2026-10-05T05:41:35.136Z",
+      "call": {
+        "number": 130,
+        "date": "2026-08-20",
+        "rawDate": "20th August 2026, 15:00 UTC",
+        "duration": "1 hr 20 minutes",
+        "video": "https://www.youtube.com/watch?v=doDbR0i9zZA",
+        "videoId": "doDbR0i9zZA",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20130%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 10 Agenda.md",
+      "sha": "501ec619c9f308c0c98a589765bc67b2290c9a45",
+      "checkedAt": "2026-10-05T05:41:35.200Z",
+      "call": {
+        "number": 10,
+        "date": "2021-05-06",
+        "rawDate": "May 6th, 2021",
+        "duration": "1 hour 10 minutes",
+        "video": "https://youtu.be/i2b-AJJ4c0U",
+        "videoId": "i2b-AJJ4c0U",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Discussions",
+          "General NU5 Update",
+          "Arborist Working Sessions",
+          "Pool Deprecation Planning",
+          "Wrap up / Read Out / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2010%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 14 Agenda.md",
+      "sha": "5c4096e99707867d5cf7c31dfbab3fad1752b288",
+      "checkedAt": "2026-10-05T05:41:35.200Z",
+      "call": {
+        "number": 14,
+        "date": "2021-07-01",
+        "rawDate": "July 1st, 2021",
+        "duration": "1 hour 10 minutes",
+        "video": "https://youtu.be/QrI6J6Fdin4",
+        "videoId": "QrI6J6Fdin4",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2014%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 1 Agenda.md",
+      "sha": "03c298a189c745eeb55aa7c2f112320c73ffd963",
+      "checkedAt": "2026-10-05T05:41:35.200Z",
+      "call": {
+        "number": 1,
+        "date": "2020-10-30",
+        "rawDate": "October 30th, 2020",
+        "duration": "1 hour 15 minutes",
+        "video": "https://youtu.be/czK65XWtlAM",
+        "videoId": "czK65XWtlAM",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Presentations",
+          "Potential Network Upgrade Pipeline (NUP) Improvements",
+          "Wrap up / Read Out"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%201%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 132 - notes.md",
+      "sha": "91a5cbe8dda6f24fa82e813c3e1d951e88c3d149",
+      "checkedAt": "2026-10-05T05:41:35.207Z",
+      "call": {
+        "number": 132,
+        "date": "2026-09-17",
+        "rawDate": "17th Sept 2026, 15:00 UTC",
+        "duration": "35 minutes",
+        "video": "https://www.youtube.com/watch?v=5Vgq0sXJ_Co",
+        "videoId": "5Vgq0sXJ_Co",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20132%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 13 Agenda.md",
+      "sha": "5119c6762c4d9c36436c529227c47f0ef0d8a66c",
+      "checkedAt": "2026-10-05T05:41:35.241Z",
+      "call": {
+        "number": 13,
+        "date": "2021-06-17",
+        "rawDate": "June 17th, 2021",
+        "duration": "1 hour 10 minutes",
+        "video": "https://youtu.be/csiLevZat6w",
+        "videoId": "csiLevZat6w",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2013%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 128 - notes.md",
+      "sha": "848ccccf7bdb1dae5d973c1020e59c89102e10d2",
+      "checkedAt": "2026-10-05T05:41:35.242Z",
+      "call": {
+        "number": 128,
+        "date": "2026-07-23",
+        "rawDate": "23rd July 2026. 15:00 UTC",
+        "duration": "33 minutes",
+        "video": "https://www.youtube.com/watch?v=mHpMkEk6GGI",
+        "videoId": "mHpMkEk6GGI",
+        "moderator": "Alex",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "Zodl Update ironwood",
+          "Research & Implementation Updates - zcashd, zallet / Nsm / crosslink / dynamic fee"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20128%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 131 - notes.md",
+      "sha": "87a0e7e910f07ffd517cc1ace13e6f92e27703c9",
+      "checkedAt": "2026-10-05T05:41:35.242Z",
+      "call": {
+        "number": 131,
+        "date": "2026-09-03",
+        "rawDate": "3rd Sept, 2026 15:00 UTC",
+        "duration": "40 minutes",
+        "video": "https://www.youtube.com/watch?v=POkZ42EgXNQ",
+        "videoId": "POkZ42EgXNQ",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20131%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes/Arborist call 129 - notes.md",
+      "sha": "7b2a60bc9c2a1c0ae2a9d964142c19c588c37c4d",
+      "checkedAt": "2026-10-05T05:41:35.242Z",
+      "call": {
+        "number": 129,
+        "date": "2026-08-06",
+        "rawDate": "6th Aug, 2026. 15:00 UTC",
+        "duration": "15 minutes",
+        "video": "https://www.youtube.com/watch?v=T93KAOy7GJs",
+        "videoId": "T93KAOy7GJs",
+        "moderator": "Pili",
+        "notetaker": "chidi",
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Zebra Update",
+          "Zodl Update ironwood",
+          "Research & Implementation Updates - Nsm/ crosslink / Dynamic fee",
+          "Open Announcements",
+          "Open Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes/Arborist%20call%20129%20-%20notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 18 Agenda.md",
+      "sha": "2cb97c1820c5db68788c519190c225c645724178",
+      "checkedAt": "2026-10-05T05:41:35.474Z",
+      "call": {
+        "number": 18,
+        "date": "2021-09-09",
+        "rawDate": "September 9th, 2021",
+        "duration": "1 hour",
+        "video": "https://youtu.be/sOQkTXFOBO0",
+        "videoId": "sOQkTXFOBO0",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2018%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 17 Agenda.md",
+      "sha": "2cf7dcaebf02307f9fa721be790b6c5f706e419a",
+      "checkedAt": "2026-10-05T05:41:35.475Z",
+      "call": {
+        "number": 17,
+        "date": "2021-08-26",
+        "rawDate": "August 26th, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/pnOoZDp3V6o",
+        "videoId": "pnOoZDp3V6o",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2017%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 21 Agenda.md",
+      "sha": "3358ec66cc26480843c52c789c5970b0fd894319",
+      "checkedAt": "2026-10-05T05:41:35.509Z",
+      "call": {
+        "number": 21,
+        "date": "2021-11-04",
+        "rawDate": "November 4th, 2021",
+        "duration": "38 minutes",
+        "video": "https://youtu.be/h-TiMdc4rgo",
+        "videoId": "h-TiMdc4rgo",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2021%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 24 Agenda.md",
+      "sha": "4754ace4db95a5a6a98aeee0e6c4aad04ffe0cdf",
+      "checkedAt": "2026-10-05T05:41:35.589Z",
+      "call": {
+        "number": 24,
+        "date": "2021-12-16",
+        "rawDate": "December 16th, 2021",
+        "duration": "1 hour 35 minutes",
+        "video": "https://youtu.be/lgGcMNgQ_d8",
+        "videoId": "lgGcMNgQ_d8",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2024%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 20 Agenda.md",
+      "sha": "e2a8b326f716d8e5a1212bacbc97cc5cc94b5a80",
+      "checkedAt": "2026-10-05T05:41:35.589Z",
+      "call": {
+        "number": 20,
+        "date": "2021-10-21",
+        "rawDate": "October 21st, 2021",
+        "duration": "22 minutes",
+        "video": "https://youtu.be/8HCpVAeVmdA",
+        "videoId": "8HCpVAeVmdA",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2020%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 16 Agenda.md",
+      "sha": "61e3fc5449c3db73719a4abde3843587d678bee9",
+      "checkedAt": "2026-10-05T05:41:35.591Z",
+      "call": {
+        "number": 16,
+        "date": "2021-08-12",
+        "rawDate": "August 12th, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/QkCbo7Bk8wo",
+        "videoId": "QkCbo7Bk8wo",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2016%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 19 Agenda.md",
+      "sha": "aac0bcece46fd0e58e55201cd2fd14effc70ba5e",
+      "checkedAt": "2026-10-05T05:41:35.591Z",
+      "call": {
+        "number": 19,
+        "date": "2021-10-07",
+        "rawDate": "October 7th, 2021",
+        "duration": "1 hour",
+        "video": "https://youtu.be/7bcMxaQKhFQ",
+        "videoId": "7bcMxaQKhFQ",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2019%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 2 Agenda.md",
+      "sha": "230e1fe18a2027faa493c16430cc335d76f6e5a7",
+      "checkedAt": "2026-10-05T05:41:35.591Z",
+      "call": {
+        "number": 2,
+        "date": "2020-11-05",
+        "rawDate": "November 5th, 2020",
+        "duration": "1 hour",
+        "video": "https://youtu.be/DypdbyO9eAU",
+        "videoId": "DypdbyO9eAU",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Presentations",
+          "Canopy Network Activation Preperations",
+          "ZIP 313 Application Implementations",
+          "Open Announcements / Audience Comments",
+          "Wrap up / Read Out"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%202%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 25 Agenda.md",
+      "sha": "fc500b8ef1ce4f89efc828cc093a56664bd205df",
+      "checkedAt": "2026-10-05T05:41:35.602Z",
+      "call": {
+        "number": 25,
+        "date": "2022-01-27",
+        "rawDate": "January 27th, 2022",
+        "duration": "30 minutes",
+        "video": "https://youtu.be/CSBFcVy0lDQ",
+        "videoId": "CSBFcVy0lDQ",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2025%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 23 Agenda.md",
+      "sha": "139db12e508332b04c2a9f445bcf978c4a537cd1",
+      "checkedAt": "2026-10-05T05:41:35.602Z",
+      "call": {
+        "number": 23,
+        "date": "2021-12-02",
+        "rawDate": "December 2nd, 2021",
+        "duration": "1 hour 30 minutes",
+        "video": "https://youtu.be/nvq1sZ6urYY",
+        "videoId": "nvq1sZ6urYY",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Discussions",
+          "Proposal for ZSA(UDA)",
+          "Zebrad",
+          "Wrap up / Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2023%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 22 Agenda.md",
+      "sha": "f12da652b7fbc48b6f737df36855656077e2e429",
+      "checkedAt": "2026-10-05T05:41:35.638Z",
+      "call": {
+        "number": 22,
+        "date": "2021-11-18",
+        "rawDate": "November 18th, 2021",
+        "duration": "38 minutes",
+        "video": "https://youtu.be/5VIN_OEnsyo",
+        "videoId": "5VIN_OEnsyo",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Remaining work to do prior to Zcash release 5.0.0",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2022%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 15 Agenda.md",
+      "sha": "e64cefc53d92c3a4031fb5a9e18e456f06bc0c1f",
+      "checkedAt": "2026-10-05T05:41:35.638Z",
+      "call": {
+        "number": 15,
+        "date": "2021-07-15",
+        "rawDate": "July 15th, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/udOTBdjL7gU",
+        "videoId": "udOTBdjL7gU",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Audit Update",
+          "Timeline"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2015%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 28 Agenda.md",
+      "sha": "9ee06ce3a5f46c5f2e52e5ee664aa61632971d9d",
+      "checkedAt": "2026-10-05T05:41:35.876Z",
+      "call": {
+        "number": 28,
+        "date": "2022-03-24",
+        "rawDate": "March 24th, 2022",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/-r06Dm41DS0",
+        "videoId": "-r06Dm41DS0",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Development Status",
+          "Timeline Update",
+          "Tesnet Activation Timing"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2028%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 27 Agenda.md",
+      "sha": "5b90b9fd92beba9757bd22b88697ea353c5de54c",
+      "checkedAt": "2026-10-05T05:41:35.876Z",
+      "call": {
+        "number": 27,
+        "date": "2022-02-24",
+        "rawDate": "February 24th, 2022",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/jXY01qGyd_I",
+        "videoId": "jXY01qGyd_I",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "ZSA Update from QEDIT"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2027%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 26 Agenda.md",
+      "sha": "0f76f2e8273d57caded0fb6abae81144fc4f8806",
+      "checkedAt": "2026-10-05T05:41:35.916Z",
+      "call": {
+        "number": 26,
+        "date": "2022-02-10",
+        "rawDate": "February 10th, 2022",
+        "duration": "1 hour",
+        "video": "https://youtu.be/x5nvbSTL9lU",
+        "videoId": "x5nvbSTL9lU",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Status",
+          "Timeline",
+          "Zebrad & Zcashd Outbound Network Connections"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2026%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 4 Agenda.md",
+      "sha": "24fd4c1100006e1ad63f37289d1ac2fd6e330aa1",
+      "checkedAt": "2026-10-05T05:41:35.916Z",
+      "call": {
+        "number": 4,
+        "date": "2021-02-11",
+        "rawDate": "February 11th, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/lcFp94JTUME",
+        "videoId": "lcFp94JTUME",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Presentations",
+          "Community Engagement, NU5 and Orchard (Halo on Zcash)",
+          "Open Announcements / Audience Comments",
+          "Wrap up / Read Out"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%204%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AllArboristCallNotes Arborist call 99 Notes.md",
+      "sha": "1c1c107df0c35389d97b51d5c4557a8b8e9ba796",
+      "checkedAt": "2026-10-05T05:41:35.965Z",
+      "call": {
+        "number": 99,
+        "date": "2025-04-17",
+        "rawDate": "April 17 2025 21:00 UTC",
+        "duration": "01.07.00",
+        "video": "https://www.youtube.com/watch?v=MBU-wfZM2a4",
+        "videoId": "MBU-wfZM2a4",
+        "moderator": "Decentralistdan",
+        "notetaker": "chidi",
+        "agenda": [],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AllArboristCallNotes%20Arborist%20call%2099%20Notes.md",
+        "source": "notes"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 3 Agenda.md",
+      "sha": "0c86073aedcd475c5f45406eba2270202a932601",
+      "checkedAt": "2026-10-05T05:41:35.987Z",
+      "call": {
+        "number": 3,
+        "date": "2020-12-10",
+        "rawDate": "December 10th, 2020",
+        "duration": "1 hour 30 minutes",
+        "video": "https://youtu.be/c4zl5ttPUsM",
+        "videoId": "c4zl5ttPUsM",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Presentations",
+          "Improving upgrades, Pollard Primer, Open Discussion",
+          "Open Announcements / Audience Comments",
+          "Wrap up / Read Out"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%203%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 29 Agenda.md",
+      "sha": "4ab5a45e8125843bae66eca610a493f8889c3e65",
+      "checkedAt": "2026-10-05T05:41:35.988Z",
+      "call": {
+        "number": 29,
+        "date": "2022-04-21",
+        "rawDate": "April 21st, 2022",
+        "duration": "1 hour 15 minutes",
+        "video": "https://youtu.be/WAMZ_FPu2S8",
+        "videoId": "WAMZ_FPu2S8",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research and Implementation Status Updates",
+          "Zebrad/Zcashd",
+          "Discussions",
+          "NU5",
+          "Development Status",
+          "Current Timeline",
+          "NU5 Mainnet Activation Timing Discussion"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%2029%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 5 Agenda.md",
+      "sha": "c7ff94d40fee81754d54256d3120faa055c193bc",
+      "checkedAt": "2026-10-05T05:41:35.996Z",
+      "call": {
+        "number": 5,
+        "date": "2021-02-25",
+        "rawDate": "February 25th, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/b_xaz1t49dk",
+        "videoId": "b_xaz1t49dk",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Discussions",
+          "NU5 and Orchard",
+          "Working group options (HSM Support, Pool Lifecycle etc)",
+          "Inter-Node Testing (Zebrad<>Zcashd)",
+          "Call Structure going forward (Structure/Frequency)",
+          "Wrap up / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%205%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 8 Agenda.md",
+      "sha": "fb217dd36ff57a1cef98e762cd859286be153081",
+      "checkedAt": "2026-10-05T05:41:35.996Z",
+      "call": {
+        "number": 8,
+        "date": "2021-04-08",
+        "rawDate": "April 8th, 2021",
+        "duration": "1 hour 35 minutes",
+        "video": "https://youtu.be/d-vIIaOUH2s",
+        "videoId": "d-vIIaOUH2s",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Teor, Zebrad",
+          "Discussions",
+          "NU5 Update",
+          "ZIP 316 Unified Addresses Update",
+          "Signals adoption of Mobilecoin",
+          "Wrap up / Read Out / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%208%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 9 Agenda.md",
+      "sha": "65ecd87aae55f08622c65bbf15c54eebf5f4a28f",
+      "checkedAt": "2026-10-05T05:41:36.008Z",
+      "call": {
+        "number": 9,
+        "date": "2021-04-22",
+        "rawDate": "April 22nd, 2021",
+        "duration": "1 hour 20 minutes",
+        "video": "https://youtu.be/J3v4pbACOa4",
+        "videoId": "J3v4pbACOa4",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Discussions",
+          "General NU5 Update",
+          "Wrap up / Read Out / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%209%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 6 Agenda.md",
+      "sha": "de43a36eb63792dea2072b3a1a9e6821b74ddf44",
+      "checkedAt": "2026-10-05T05:41:36.008Z",
+      "call": {
+        "number": 6,
+        "date": "2021-03-11",
+        "rawDate": "March 11th, 2021",
+        "duration": "1 hour 30 minutes",
+        "video": "https://youtu.be/DBjghuzjDZc",
+        "videoId": "DBjghuzjDZc",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Discussions",
+          "NU5 Proposed Features",
+          "ZIP 225 V5 Transaction Format & Sprout Fields",
+          "Pool Lifecycles",
+          "Sapling to Canopy Migration Utility Considerations",
+          "Open Announcements / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%206%20Agenda.md",
+        "source": "agenda"
+      }
+    },
+    {
+      "path": "AgendaArchive/Arborist Call 7 Agenda.md",
+      "sha": "83c3532e62bb251e8d183e8fbbf593adb723714d",
+      "checkedAt": "2026-10-05T05:41:36.052Z",
+      "call": {
+        "number": 7,
+        "date": "2021-03-25",
+        "rawDate": "March 25th, 2021",
+        "duration": "1 hour 35 minutes",
+        "video": "https://youtu.be/AaOPQ5gD5EU",
+        "videoId": "AaOPQ5gD5EU",
+        "moderator": null,
+        "notetaker": null,
+        "agenda": [
+          "Welcome and Meeting Intro",
+          "Research & Implementation Status Updates",
+          "Discussions",
+          "ZIP 316 Unified Addresses",
+          "Wrap up / Read Out / Audience Comments"
+        ],
+        "url": "https://github.com/ZcashCommunityGrants/arboretum-notes/blob/main/AgendaArchive/Arborist%20Call%207%20Agenda.md",
+        "source": "agenda"
+      }
+    }
+  ],
+  "recordings": [
+    {
+      "number": null,
+      "date": "2026-10-01",
+      "rawDate": "10-1-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=gJA1brRxnf4",
+      "videoId": "gJA1brRxnf4",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-09-17",
+      "rawDate": "09-17-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=5Vgq0sXJ_Co",
+      "videoId": "5Vgq0sXJ_Co",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-09-03",
+      "rawDate": "09-3-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=POkZ42EgXNQ",
+      "videoId": "POkZ42EgXNQ",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-08-20",
+      "rawDate": "08-20-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=doDbR0i9zZA",
+      "videoId": "doDbR0i9zZA",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-08-06",
+      "rawDate": "08-06-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=T93KAOy7GJs",
+      "videoId": "T93KAOy7GJs",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-07-23",
+      "rawDate": "07-23-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=mHpMkEk6GGI",
+      "videoId": "mHpMkEk6GGI",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-06-25",
+      "rawDate": "06-25-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=Ni-Bp0p8W4s",
+      "videoId": "Ni-Bp0p8W4s",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-06-11",
+      "rawDate": "06-11-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=SKNivdDz9qI",
+      "videoId": "SKNivdDz9qI",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-05-28",
+      "rawDate": "05-28-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=h76Ngomx8kk",
+      "videoId": "h76Ngomx8kk",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-04-30",
+      "rawDate": "04-30-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=qfIS6wORZIA",
+      "videoId": "qfIS6wORZIA",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-04-16",
+      "rawDate": "04-16-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=cmPQexrzn_o",
+      "videoId": "cmPQexrzn_o",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-04-02",
+      "rawDate": "04-02-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=-4GDsezfilc",
+      "videoId": "-4GDsezfilc",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-03-19",
+      "rawDate": "03-19-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=LtdKAhi6l7s",
+      "videoId": "LtdKAhi6l7s",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-03-05",
+      "rawDate": "03-05-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=uBsaOLUepB0",
+      "videoId": "uBsaOLUepB0",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-02-19",
+      "rawDate": "02-19-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=63K9NUXicfI",
+      "videoId": "63K9NUXicfI",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-02-05",
+      "rawDate": "02-05-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=22YcmN1PPsc",
+      "videoId": "22YcmN1PPsc",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-01-22",
+      "rawDate": "01-22-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=zVu2yxxUMCs",
+      "videoId": "zVu2yxxUMCs",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2026-01-08",
+      "rawDate": "01-08-2026",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=8eye-YoqtDk",
+      "videoId": "8eye-YoqtDk",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-12-11",
+      "rawDate": "12-11-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=tT9H-XQuvfM",
+      "videoId": "tT9H-XQuvfM",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-11-13",
+      "rawDate": "11-13-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=ksuYg_kmalE",
+      "videoId": "ksuYg_kmalE",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-10-30",
+      "rawDate": "10-30-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=8c_6UiciAuU",
+      "videoId": "8c_6UiciAuU",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-10-16",
+      "rawDate": "10-16-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=G6P-k2I-7kU",
+      "videoId": "G6P-k2I-7kU",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-10-02",
+      "rawDate": "10-02-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=hq8Vigg3RxQ",
+      "videoId": "hq8Vigg3RxQ",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-09-18",
+      "rawDate": "09-18-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=2tENS3Sb_jM",
+      "videoId": "2tENS3Sb_jM",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-09-04",
+      "rawDate": "09-04-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=1T5zIlLNCz8",
+      "videoId": "1T5zIlLNCz8",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-08-21",
+      "rawDate": "08-21-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=cwp6y9gHBVk",
+      "videoId": "cwp6y9gHBVk",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-08-07",
+      "rawDate": "08-07-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=79pNSvju05g",
+      "videoId": "79pNSvju05g",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-07-24",
+      "rawDate": "07-24-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=uFz_5pzgRlQ",
+      "videoId": "uFz_5pzgRlQ",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    },
+    {
+      "number": null,
+      "date": "2025-07-10",
+      "rawDate": "07-10-2025",
+      "duration": null,
+      "video": "https://www.youtube.com/watch?v=82h8qI66Vqg",
+      "videoId": "82h8qI66Vqg",
+      "moderator": null,
+      "notetaker": null,
+      "agenda": [],
+      "url": null,
+      "source": "youtube"
+    }
+  ],
+  "sourceUrls": [
+    "https://raw.githubusercontent.com/ZcashCommunityGrants/arboretum-notes/main/README.md",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCi01v05DNTUEC_eB0c9rpgQ",
+    "https://www.youtube.com/@zcashfoundation/videos?hl=en&gl=US"
+  ]
+}

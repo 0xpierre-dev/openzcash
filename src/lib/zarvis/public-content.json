@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "28b8c19d6a6de857",
+  "sourceRevision": "7e17dd717555ff74",
   "sourceFiles": 55,
   "documents": [
     {
@@ -199,7 +199,7 @@
       "id": "src/app/governance/page.tsx:0",
       "url": "https://openzcash.org/governance",
       "title": "governance",
-      "text": "Zcash governance · OpenZcash\nDecisions that bind the whole Zcash network: every network upgrade and how it was decided, coinholder polls on protocol and funding, and what is still open.\nnumeric\nAgendas unavailable\nNo agenda mention\n·\n↗\n+\nmore\nZcash governance\nDecisions that bind the whole network: every upgrade and how it was decided, coinholder polls on protocol and funding, and what is still open. Grant decisions live with the bodies that take them.\nZIP process and coinholders\nNetwork upgrades\nCoinholder polls\nStill being decided\nLargest poll\nEvery activated upgrade with its block, the process that decided it, its ZIP and the Arborist calls whose agenda named it.\nBlock\nProtocol work that Arborist call agendas keep returning to, not yet activated on mainnet.\n.\nCoin-weighted polls on the protocol and the funding model. Polls about the coinholder fund's grants live with the fund.\nUpgrade heights from a Zebra node; the process behind each upgrade from its ZIPs and the community forum. Polls from their published results; tests of the voting tools are left out. Arborist links use the call agendas only, so a call that discussed a topic without naming it on the agenda is not linked."
+      "text": "Zcash governance · OpenZcash\nDecisions that bind the whole Zcash network: every network upgrade and how it was decided, coinholder polls on protocol and funding, and what is still open.\nnumeric\nAgendas unavailable\nNo agenda mention\n·\n↗\n+\nmore\nNetwork upgrades\nCoinholder polls\nStill being decided\nNU7, Crosslink and NSM\nLargest poll\nZcash governance\nNetwork upgrades, coinholder polls and open protocol decisions.\nZIP process and coinholders\nEvery activated upgrade with its block, the process that decided it, its ZIP and the Arborist calls whose agenda named it.\nBlock\nProtocol work that Arborist call agendas keep returning to, not yet activated on mainnet.\n.\nCoin-weighted polls on the protocol and the funding model. Polls about the coinholder fund's grants live with the fund.\nUpgrade heights from a Zebra node; the process behind each upgrade from its ZIPs and the community forum. Polls from their published results; tests of the voting tools are left out. Arborist links use the call agendas only, so a call that discussed a topic without naming it on the agenda is not linked."
     },
     {
       "id": "src/app/zec-observatory/page.tsx:0",
@@ -229,7 +229,7 @@
       "id": "src/app/news/page.tsx:0",
       "url": "https://openzcash.org/news",
       "title": "news",
-      "text": "News · OpenZcash\nThe last seven days across the Zcash ecosystem: community forum, core GitHub releases, ZecHub DAO proposals, grant applications and new ledger entries. Refreshed hourly.\nForum\nGitHub\nSpreadsheet\nProposal\nZecHub DAO\nApplication\nNews\nnew\nAll sources\nsearch\nq\nsource\nSearch\nClear\n·\nnew in 48 hours · last 7 days\n. Older entries stay on their own pages."
+      "text": "News · OpenZcash\nThe last seven days across the Zcash ecosystem: community forum, core GitHub releases, ZecHub DAO proposals, grant applications and new ledger entries. Refreshed hourly.\nForum\nGitHub\nSpreadsheet\nProposal\nZecHub DAO\nApplication\nNews\nnew\nAll sources\nsearch\nq\nsource\nSearch\nClear\n·\nnew in 48 hours · last 7 days\n. Older entries stay on their own pages.\nstatus\nGitHub updates are incomplete:\nof\nrepositories could not be refreshed. Previously verified releases are kept within the seven-day window.\nBrowse development activity ↗"
     },
     {
       "id": "src/app/monthly/page.tsx:0",
@@ -289,7 +289,7 @@
       "id": "src/app/arborist/page.tsx:0",
       "url": "https://openzcash.org/arborist",
       "title": "arborist",
-      "text": "Arborist Calls · OpenZcash\nEvery Zcash Arborist Call: dates, agendas, moderators, notes and recordings, read live from the notes repository and official video feed.\nThe notes repository did not respond. Try again shortly, or browse it directly on\nGitHub ↗\n.\nCalls listed\nWith recording\nRunning since\nLatest meeting\nScheduling news\nlast six weeks\nZcash Foundation forum\nArborist Calls\nThe Zcash protocol's standing engineering call: agendas, moderators, notes and recordings, reconciled from the community notes and official video feed.\nLoading the call archive…\nSource:\nZcashCommunityGrants/arboretum-notes ↗\n, the community-maintained record of every call, and the\nofficial Zcash Foundation YouTube feed ↗\n. New recordings appear with notes pending; once the matching GitHub note is published, it replaces the provisional entry automatically. Calls 1–29 are preserved from the repository's historical agenda archive; later calls use the full notes. Dates, durations and participants are parsed from those source records."
+      "text": "Arborist Calls · OpenZcash\nZcash Arborist Calls: dates, agendas, moderators, notes and recordings from the community notes repository and the official Zcash Foundation channel.\nThe notes repository did not respond. Try again shortly, or browse it directly on\nGitHub ↗\n.\nCalls listed\nWith recording\nRunning since\nLatest meeting\n·\nverified\nnumeric\nUTC\nstatus\nSome sources could not be refreshed. Previously verified calls remain available; the latest meeting may not be listed yet.\nScheduling news\nlast six weeks\nZcash Foundation forum\nArborist Calls\nThe Zcash protocol's standing engineering call: agendas, moderators, notes and recordings, reconciled from the community notes and official Zcash Foundation channel.\nLoading the call archive…\nSource:\nZcashCommunityGrants/arboretum-notes ↗\n, the community-maintained record of every call, and the\nofficial Zcash Foundation YouTube channel ↗\n. Sources are checked hourly; previously verified records remain available during an outage. New recordings appear with notes pending; when the matching GitHub note is collected, it replaces the recording-only entry. Agenda-only entries are labeled separately from full notes. Dates, durations and participants are parsed from those source records."
     },
     {
       "id": "src/app/communities/page.tsx:0",
