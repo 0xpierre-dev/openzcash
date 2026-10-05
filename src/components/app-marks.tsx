@@ -58,6 +58,8 @@ const ICON_BY_KEY: Record<string, IconType> = {
   key: IconKey,
 };
 const PAGE_ICON: Record<string, IconType> = {
+  "/legal": IconNews,
+  "/legal/pgp": IconBook,
   "/zcg/grants": IconGrant,
   "/zcg/proposals": IconVote,
   "/zcg/disbursements": IconReceipt,

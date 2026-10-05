@@ -1,0 +1,37 @@
+import { renderToStaticMarkup } from "react-dom/server";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { LEGAL_ITEMS, LEGAL_SOURCES } from "@/lib/legal/curated";
+import type { LegalFeed } from "@/lib/legal/types";
+const location = vi.hoisted(() => ({ query: "" }));
+vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(location.query) }));
+import { LegalNewsroom } from "./newsroom";
+import { LegalPage } from "./page";
+const feed: LegalFeed = { items: LEGAL_ITEMS, sources: LEGAL_SOURCES, fetchedAt: null, pgpStatus: "unavailable", pgpLastSuccessAt: null };
+beforeEach(() => { location.query = ""; });
+describe("Legal newsroom", () => {
+  it("restores the regional filter from a shared URL and excludes other jurisdictions", () => {
+    location.query = "region=latam";
+    const html = renderToStaticMarkup(<LegalNewsroom feed={feed}/>);
+    expect(html).toContain('aria-pressed="true">LATAM');
+    expect(html).toContain("Brazil adds reporting");
+    expect(html).toContain("Argentina regulates");
+    expect(html).not.toContain("SEC proposes");
+  });
+  it("limits the PGP page to PGP records", () => {
+    const html = renderToStaticMarkup(<LegalNewsroom feed={feed} pgpOnly/>);
+    expect(html).toContain("Weekly Policy Memo");
+    expect(html).not.toContain("Brazil adds reporting");
+  });
+  it("labels updated timestamps distinctly from publication", () => {
+    const html = renderToStaticMarkup(<LegalNewsroom feed={{ ...feed, items: [{ ...LEGAL_ITEMS[0], dateBasis: "updated" }] }}/>);
+    expect(html).toContain("Updated ");
+    expect(html).toContain("24 Jul 2026");
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+  it("reports an individual upstream failure without declaring every feed down", () => {
+    const html = renderToStaticMarkup(<LegalPage feed={{ ...feed, sourceHealth: [{ sourceId: "bcb", status: "cached", fetchedAt: "2026-10-05", lastSuccessAt: "2026-10-04" }] }}/>);
+    expect(html).toContain("Temporarily unavailable. Showing the last successful retrieval.");
+    expect(html).toContain("04 Oct 2026");
+    expect(html).toContain("Sources &amp; coverage");
+  });
+});

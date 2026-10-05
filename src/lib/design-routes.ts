@@ -50,6 +50,7 @@ export type AppDef = {
 export const APPS: AppDef[] = [
   { id: "zarvis", label: "Zarvis", href: "/zarvis", sub: "Your Zcash AI guide", icon: "zarvis", pages: [] },
   { id: "news", label: "News", href: "/news", sub: "What's new", logo: "/logos/marks/news.png", icon: "news", pages: [] },
+  { id: "legal", label: "Zcash Legal", href: "/legal", sub: "Privacy, policy & regulation", icon: "balance", pages: [{ href: "/legal", label: "Legal news" }, { href: "/legal/pgp", label: "PGP" }] },
   {
     id: "ceremony",
     label: "Zcash Ceremony",
@@ -248,7 +249,7 @@ export function placeOf(pathname: string): Place | undefined {
     // claims the plain path: /ecosystem belongs to the Ecosystem app.
     if (app.href.includes("?")) continue;
     const page = app.pages.find((p) => pathOf(p.href) === target);
-    if (pathOf(app.href) === target && !detail) return page ? { app, page } : { app };
+    if (pathOf(app.href) === target && !detail) return { app };
     if (page) {
       return detail
         ? { app, page, detail: { parent: page, label: detail.label } }
