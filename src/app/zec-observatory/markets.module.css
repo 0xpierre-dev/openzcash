@@ -172,7 +172,7 @@
   top: 68px;
   z-index: 20;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 5px;
   padding: 5px;
   border: 1px solid var(--line);
@@ -1295,6 +1295,12 @@
   }
 }
 @media (max-width: 1050px) {
+  .jumpNav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .page [id] {
+    scroll-margin-top: 198px;
+  }
   .missionGrid {
     grid-template-columns: minmax(0, 1fr) 240px;
   }
@@ -1375,9 +1381,6 @@
     padding: 9px 7px;
     gap: 6px;
     font-size: 13px;
-  }
-  .jumpNav a:nth-last-child(-n + 2) {
-    grid-column: span 3;
   }
   .page [id] {
     scroll-margin-top: 198px;

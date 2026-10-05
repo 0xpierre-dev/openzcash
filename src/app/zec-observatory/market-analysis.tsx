@@ -720,11 +720,14 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
 
       <section className={styles.panel} aria-labelledby="trading">
         <div className={styles.panelHeader}>
-          <Title
-            id="trading"
-            title="Where ZEC trades"
-            caption="Chains combine their tracked DEX pools. Share uses the CEX + DEX total."
-          />
+          {/* Align legacy liquidity links with the Markets navigation target. */}
+          <div id="liquidity">
+            <Title
+              id="trading"
+              title="Where ZEC trades"
+              caption="Chains combine their tracked DEX pools. Share uses the CEX + DEX total."
+            />
+          </div>
           <div className={styles.filters} aria-label="Venue type">
             {(["dex", "cex", "all"] as const).map((f) => (
               <button
@@ -1224,7 +1227,7 @@ export function MarketAnalysis({ initial }: { initial: MarketDashboard }) {
         {holderFilter === "dex" && data.mayaPoolZec !== null && (
           <p className={styles.scopeNote}>
             Maya pool depth: <strong>{number(data.mayaPoolZec)} ZEC</strong>.{" "}
-            <Link href="/defi">Explore liquidity →</Link>
+            <Link href="/zcg/investments">Maya pool &amp; ZCG position →</Link>
           </p>
         )}
       </section>

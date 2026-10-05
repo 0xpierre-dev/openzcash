@@ -22,6 +22,10 @@ export type AppDef = {
   /** Kept in the model (breadcrumb, back) but not listed in the sidebar or ⌘K. */
   hidden?: boolean;
   id: string;
+  /** App that groups this app in the navigation, without changing its routes. */
+  parentId?: string;
+  /** Direct destination under the parent, rather than its organization group. */
+  parentGroup?: "pages";
   label: string;
   /** Landing route of the app. */
   href: string;
@@ -33,6 +37,8 @@ export type AppDef = {
   icon: string;
   /** Inner pages, in reading order. */
   pages: AppPage[];
+  /** Reading order for inner pages and grouped child apps. */
+  navigationOrder?: string[];
   /** Expanded in the sidebar by default (the visitor can still collapse it). */
   open?: boolean;
   /** Share of every block reward that funds the app, shown beside its name. */
@@ -122,22 +128,27 @@ export const APPS: AppDef[] = [
     id: "ecosystem",
     label: "Ecosystem",
     href: "/ecosystem",
-    sub: "Projects & maintainers",
-    logo: "/logos/marks/ecosystem.png",
-    icon: "globe",
+    sub: "Projects, teams & organizations",
+    icon: "ecosystem",
+    navigationOrder: [
+      "/wallets", "/ecosystem/history", "/communities", "/development", "/arborist",
+      "/zcg/fpf", "/shielded-labs", "/tachyon", "/zf", "/zakura", "/zechub", "/zodl",
+    ],
     pages: [
       { href: "/wallets", label: "Wallets", mark: "/logos/glyphs/wallets.png" },
-      { href: "/development", label: "Development", mark: "/logos/glyphs/development.png" },
       { href: "/ecosystem/history", label: "Project histories", mark: "/logos/glyphs/grants.png" },
-      { href: "/defi", label: "DeFi", mark: "/logos/glyphs/defi.png" },
-      { href: "/z3", label: "Z3", mark: "/logos/glyphs/z3.png" },
+      { href: "/development", label: "Development", mark: "/logos/glyphs/development.png" },
+      { href: "/ecosystem/history/z3", label: "Z3 stack", mark: "/logos/glyphs/z3.png", hidden: true, palette: true },
     ],
   },
-  { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, supply & holdings", icon: "chart", pages: [] },
+  { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, DeFi liquidity & holdings", icon: "chart", pages: [] },
   { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
+  { id: "arborist", parentId: "ecosystem", parentGroup: "pages", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
+  { id: "communities", parentId: "ecosystem", parentGroup: "pages", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
   {
     id: "fpf",
+    parentId: "ecosystem",
     label: "FPF",
     href: "/zcg/fpf",
     sub: "Program administrator",
@@ -145,9 +156,10 @@ export const APPS: AppDef[] = [
     icon: "wallet",
     pages: [],
   },
-  { id: "zf", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/ecosystem/zcash-foundation.png", icon: "balance", pages: [] },
+  { id: "zf", parentId: "ecosystem", label: "Zcash Foundation", href: "/zf", sub: "Reports & Zcon", logo: "/logos/ecosystem/zcash-foundation.png", icon: "balance", pages: [] },
   {
     id: "zodl",
+    parentId: "ecosystem",
     label: "ZODL",
     href: "/zodl",
     sub: "Zcash Open Development Lab",
@@ -155,9 +167,10 @@ export const APPS: AppDef[] = [
     icon: "terminal",
     pages: [],
   },
-  { id: "shielded-labs", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
+  { id: "shielded-labs", parentId: "ecosystem", label: "Shielded Labs", href: "/shielded-labs", sub: "Crosslink · NSM", logo: "/logos/shielded-labs.png", icon: "shield", pages: [] },
   {
     id: "zakura",
+    parentId: "ecosystem",
     label: "Zakura",
     href: "/zakura",
     sub: "Full node · Valar & Tachyon",
@@ -167,6 +180,7 @@ export const APPS: AppDef[] = [
   },
   {
     id: "tachyon",
+    parentId: "ecosystem",
     label: "Tachyon",
     href: "/tachyon",
     sub: "Protocol research",
@@ -176,6 +190,7 @@ export const APPS: AppDef[] = [
   },
   {
     id: "zechub",
+    parentId: "ecosystem",
     label: "ZecHub DAO",
     href: "/zechub",
     sub: "Latest proposals",
@@ -183,9 +198,25 @@ export const APPS: AppDef[] = [
     icon: "globe",
     pages: [{ href: "/zechub/copilot", label: "ZecHub Copilot", mark: "/logos/glyphs/copilot.png" }],
   },
-  { id: "arborist", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
-  { id: "communities", label: "Communities", href: "/communities", sub: "Global groups · live", logo: "/logos/communities.png", icon: "users", pages: [] },
 ];
+
+/** The app one level above this app in the navigation. */
+export function parentAppOf(app: AppDef): AppDef | undefined {
+  return app.parentId ? APPS.find((candidate) => candidate.id === app.parentId) : undefined;
+}
+
+/** Apps grouped beneath this app, in navigation order. */
+export function childAppsOf(app: AppDef, apps: AppDef[] = APPS): AppDef[] {
+  const children = apps.filter((candidate) => candidate.parentId === app.id);
+  if (app.id !== "ecosystem") return children;
+  const order = new Map(app.navigationOrder?.map((href, index) => [href, index]));
+  return children.sort((a, b) => {
+    const aDirect = a.parentGroup === "pages", bDirect = b.parentGroup === "pages";
+    if (aDirect !== bDirect) return aDirect ? -1 : 1;
+    return (order.get(a.href) ?? Infinity) - (order.get(b.href) ?? Infinity)
+      || a.label.localeCompare(b.label, "en", { sensitivity: "base" });
+  });
+}
 
 /** Detail routes and the list page they belong to. */
 const DETAILS: Record<string, { parent: string; label: string }> = {
@@ -227,12 +258,14 @@ export function placeOf(pathname: string): Place | undefined {
   return undefined;
 }
 
-/** Back control: a detail returns to its list, a page to its app, an app to ZCG, the home. */
+/** Back control: a detail returns to its list, a page to its app, an app to its parent or ZCG. */
 export function backOf(pathname: string): { href: string; label: string } {
   const place = placeOf(pathname);
   if (!place) return { href: "/zcg", label: "ZCG" };
   if (place.detail) return { href: place.detail.parent.href, label: place.detail.parent.label };
   if (place.page) return { href: place.app.href, label: place.app.label };
+  const parent = parentAppOf(place.app);
+  if (parent) return { href: parent.href, label: parent.label };
   return { href: "/zcg", label: "ZCG" };
 }
 

@@ -7,7 +7,7 @@ export const metadata = {
   ...pageMetadata({
     title: "ZEC Observatory · OpenZcash",
     description:
-      "Zcash markets, supply and public holdings. Compare CEX and DEX spot volume, track intent activity separately, and inspect on-chain balances and institutional disclosures.",
+      "Zcash markets, liquidity, supply and public holdings. Compare CEX and DEX spot volume, inspect market sources, and explore on-chain balances and institutional disclosures.",
     path: "/zec-observatory",
   }),
   alternates: { canonical: "https://openzcash.org/zec-observatory" },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { APPS, type AppDef } from "./design-routes";
+import { APPS, childAppsOf, type AppDef } from "./design-routes";
 import { buildPalette, foldText, paletteRows, stepActive } from "./palette";
 
 const single = (id: string, label: string, sub: string): AppDef => ({
@@ -317,10 +317,28 @@ describe("the real navigation model", () => {
     expect(first("coinholder results").href).toBe("/coinholders/results");
   });
 
+  it("keeps consolidated destinations discoverable by their former names", () => {
+    expect(first("Z3").href).toBe("/ecosystem/history/z3");
+    expect(first("DeFi").href).toBe("/zec-observatory");
+    expect(first("liquidity").href).toBe("/zec-observatory");
+  });
+
   it("gives every row a unique address within the list", () => {
     const hrefs = paletteRows(buildPalette(apps, "", false).groups).map(
       (r) => r.href,
     );
     expect(new Set(hrefs).size).toBe(hrefs.length);
+  });
+
+  it("lists and finds each nested organization exactly once", () => {
+    const ecosystem = apps.find((app) => app.id === "ecosystem")!;
+    const allRows = paletteRows(buildPalette(apps, "", false).groups);
+    for (const app of childAppsOf(ecosystem)) {
+      expect(allRows.filter((row) => row.href === app.href), app.id).toHaveLength(1);
+      const matches = paletteRows(buildPalette(apps, app.label, false).groups);
+      expect(matches.filter((row) => row.href === app.href), app.label).toHaveLength(1);
+      expect(matches[0].href).toBe(app.href);
+    }
+    expect(first("ZecHub Copilot").href).toBe("/zechub/copilot");
   });
 });

@@ -595,13 +595,23 @@ html:has(.rd-sheet[open]) {
     height: 44px;
     border-radius: 10px;
   }
+  .rd-side-org-heading {
+    min-height: 44px;
+    font-size: 14px;
+    padding-inline: 12px;
+  }
+  .rd-side-app[data-nested] > .rd-side-app-row > .rd-side-item {
+    min-height: 44px;
+    font-size: 14px;
+  }
+  .rd-side-org-list .rd-side-app .rd-side-logo { width: 24px; height: 24px; }
   .rd-side-foot {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 2px 6px;
     padding: 8px 12px 10px;
     border-top: 1px solid var(--line);
-    font-size: 13px;
+    font-size: 14px;
   }
   .rd-side-foot a {
     display: inline-flex;

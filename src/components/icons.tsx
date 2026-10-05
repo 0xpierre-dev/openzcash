@@ -30,6 +30,18 @@ export const IconBook = svg(
   </>,
 );
 
+/** Connected participants: projects, teams and organizations in one ecosystem. */
+export const IconEcosystem = svg(
+  <>
+    <path d="M10 10 6 6m8 4 4-4m-8 8-4 4m8-4 4 4" />
+    <circle cx="12" cy="12" r="3" />
+    <circle cx="4.5" cy="4.5" r="2.2" />
+    <circle cx="19.5" cy="4.5" r="2.2" />
+    <circle cx="4.5" cy="19.5" r="2.2" />
+    <circle cx="19.5" cy="19.5" r="2.2" />
+  </>,
+);
+
 export const IconDashboard = svg(
   <>
     <rect x="3" y="3" width="7" height="9" rx="1.5" />
@@ -120,6 +132,13 @@ export const IconGrant = svg(
 
 export const IconReceipt = svg(
   <path d="M5 3v18l2-1.2L9 21l2-1.2L13 21l2-1.2L17 21l2-1.2V3l-2 1.2L15 3l-2 1.2L11 3 9 4.2 7 3 5 4.2zM9 8h6M9 12h6" />,
+);
+
+export const IconOrganizations = svg(
+  <>
+    <rect x="5" y="3" width="14" height="18" rx="2" />
+    <path d="M9 7h1m4 0h1M9 11h1m4 0h1M10 21v-5h4v5" />
+  </>,
 );
 
 export const IconUsers = svg(
