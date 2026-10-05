@@ -27,7 +27,7 @@ function releases(value: unknown, repository: string): NewsItem[] {
     const url = new URL(row.html_url);
     if (url.protocol !== "https:" || url.hostname !== "github.com" || url.port || url.username || url.password ||
         !url.pathname.toLowerCase().startsWith(`/${repository.toLowerCase()}/releases/`)) throw new Error("GITHUB_RELEASES_UNAVAILABLE");
-    return [{ source: "github" as const, kind: name,
+    return [{ id: `github:${url.href}`, source: "github" as const, kind: name,
       title: `${name} ${typeof row.name === "string" && row.name.trim() ? row.name : row.tag_name}`,
       url: url.href, ts: new Date(row.published_at).toISOString() }];
   });

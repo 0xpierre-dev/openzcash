@@ -21,6 +21,8 @@ export type NewsSource =
   "forum" | "github" | "sheet" | "proposal" | "dao" | "application";
 
 export type NewsItem = {
+  /** Source-native record identity; multiple events can share a destination URL. */
+  id: string;
   source: NewsSource;
   kind: string;
   title: string;
@@ -76,6 +78,7 @@ async function fetchForum(): Promise<NewsItem[]> {
     return (j.topic_list?.topics ?? [])
       .filter((t) => t.created_at && Date.parse(t.created_at) > cutoff)
       .map((t) => ({
+        id: `forum:${t.id}`,
         source: "forum" as const,
         kind: "Forum",
         title: t.title,
@@ -92,6 +95,7 @@ async function fetchSheet(): Promise<NewsItem[]> {
   try {
     const rows = await getDb()
       .select({
+        id: zcgDisbursements.id,
         recipient: zcgDisbursements.recipientNameRaw,
         usd: zcgDisbursements.amountUsdCents,
         paid: zcgDisbursements.paidOutDate,
@@ -104,6 +108,7 @@ async function fetchSheet(): Promise<NewsItem[]> {
     return rows
       .filter((r) => r.paid)
       .map((r) => ({
+        id: `sheet:${r.id}`,
         source: "sheet" as const,
         kind: "ZCG ledger",
         title: `${r.recipient ?? "Grant"} — ${formatUsdCents(r.usd ?? 0n)}`,
@@ -121,6 +126,7 @@ async function fetchProposals(): Promise<NewsItem[]> {
   try {
     const rows = await getDb()
       .select({
+        id: zcgProposals.id,
         title: zcgProposals.title,
         program: zcgProposals.program,
         submitted: zcgProposals.submittedDate,
@@ -133,6 +139,7 @@ async function fetchProposals(): Promise<NewsItem[]> {
     return rows
       .filter((r) => r.submitted)
       .map((r) => ({
+        id: `proposal:${r.id}`,
         source: "proposal" as const,
         kind: r.program === "coinholder" ? "FPF proposal" : "ZCG proposal",
         title: r.title,
@@ -151,6 +158,7 @@ async function fetchDao(): Promise<NewsItem[]> {
     return proposals
       .filter((p) => p.createdAt)
       .map((p) => ({
+        id: `dao:${p.url}`,
         source: "dao" as const,
         kind: "ZecHub DAO",
         title: `${p.ref} · ${p.title}`,
@@ -167,6 +175,7 @@ async function fetchApplications(): Promise<NewsItem[]> {
   try {
     const apps = await getGrantApplications(15);
     return apps.map((a) => ({
+      id: `application:${a.url}`,
       source: "application" as const,
       kind:
         a.status === "review"
