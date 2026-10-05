@@ -35,7 +35,7 @@ export function LegalPage({ feed }: { feed: LegalFeed }) {
   const health = feed.sourceHealth ?? [{ sourceId: "pgp", status: feed.pgpStatus, lastSuccessAt: feed.pgpLastSuccessAt }];
   return <div className={styles.page}>
     <header className={styles.hero}>
-      <div><div className={styles.kicker}><IconBalance/>PRIVACY · POLICY · RIGHTS</div><h1>Privacy &amp; Policy</h1><p>The rules and debates shaping financial privacy. Zcash, countries and public policy, with original sources.</p></div>
+      <div><h1 className={styles.kicker}><IconBalance/>PRIVACY · POLICY · RIGHTS</h1><p>The rules and debates shaping financial privacy. Zcash, countries and public policy, with original sources.</p></div>
       <a className={styles.heroLink} href="#updates">Browse updates <span aria-hidden="true">↓</span></a>
     </header>
     <PgpSpotlight feed={feed}/>
