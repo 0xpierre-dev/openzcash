@@ -2,11 +2,21 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 import { normalizeSupply, compareSupply, normalizeMonthly, monthRange, analyticsQuerySchema, compareMonths, previousMonth } from "./chain-analytics";
 import { analyticsAnswer, directAnalyticsQuery } from "./analytics-answer";
-import { isFinancialEvidence, numericFacts, unsupportedFigures } from "./grounding";
+import { isFinancialEvidence, numericFacts, PROTOCOL_FACTS, unsupportedFigures } from "./grounding";
 import { NOW, supplyFixture, chainFixture, zecblockFixture, monthlyFixture, responseFixture } from "./fixtures/analytics";
 afterEach(() => vi.useRealTimers());
 const primary = () => normalizeSupply("ShieldedScan", responseFixture(supplyFixture()), chainFixture(), NOW);
 const secondary = () => normalizeSupply("ZecBlock", responseFixture(zecblockFixture(), "https://api.zecblock.com/v1/network/blockchain-info"), undefined, NOW);
+// Individually valid accounting at the same height, but 460 rather than 450 ZEC shielded.
+const conflictingSecondary = () => {
+  const data = zecblockFixture();
+  data.data.valuePools.find(p => p.id === "transparent")!.chainValueZat = "49000000000";
+  data.data.valuePools.find(p => p.id === "orchard")!.chainValueZat = "11000000000";
+  return normalizeSupply("ZecBlock", responseFixture(data), undefined, NOW);
+};
+const supplyEvidence = (readings: ReturnType<typeof primary>[]) => ({
+  content: JSON.stringify({ data: { metric: "supply", ...compareSupply(readings), readings } }),
+});
 
 describe("Supply accounting and reconciliation", () => {
   it("keeps exact six-pool totals, dates and the Lockbox distinction", () => {
@@ -56,10 +66,54 @@ describe("Supply accounting and reconciliation", () => {
     const data = normalizeSupply("ShieldedScan", responseFixture(supplyFixture()), tip, NOW);
     expect(data).toMatchObject({ blockHash: null, blockObservedAt: null, freshness: "unknown" });
   });
+  it.each(["primary", "secondary", "both"])("withholds conflicting same-height amounts when the %s hash is missing", missing => {
+    const a = primary(), b = conflictingSecondary();
+    if (missing !== "secondary") a.blockHash = null;
+    if (missing !== "primary") b.blockHash = null;
+    expect(compareSupply([a, b])).toMatchObject({ status: "mismatch", selected: null, differences: ["transparent", "orchard"] });
+    expect(analyticsAnswer(supplyEvidence([a, b]), "en")).toContain("could not establish one verified balance");
+  });
+  it.each(["primary", "secondary", "both"])("preserves the unverified fallback for agreeing amounts when the %s hash is missing", missing => {
+    const a = primary(), b = secondary();
+    if (missing !== "secondary") a.blockHash = null;
+    if (missing !== "primary") b.blockHash = null;
+    expect(compareSupply([a, b])).toMatchObject({ status: "unverified_hash", selected: a, differences: [] });
+  });
   it("a new retrieval cannot hide an old block or source response", () => {
     const tip = chainFixture(); tip.lastBlockTimestamp -= 3600;
     expect(normalizeSupply("ShieldedScan", responseFixture(supplyFixture()), tip, NOW).freshness).toBe("stale");
     expect(normalizeSupply("ZecBlock", responseFixture(zecblockFixture()), undefined, NOW + 3600000).freshness).toBe("stale");
+  });
+});
+describe("Supply reconciliation in the financial guard", () => {
+  it.each(["same", "missing", "competing"])("does not promote rejected readings with %s hashes into numeric facts", hashes => {
+    const a = primary(), b = conflictingSecondary();
+    if (hashes === "missing") a.blockHash = null;
+    if (hashes === "competing") b.blockHash = "b".repeat(64);
+    const evidence = supplyEvidence([a, b]);
+    expect(isFinancialEvidence([evidence])).toBe(true);
+    const facts = numericFacts([evidence]);
+    expect(facts).toEqual(PROTOCOL_FACTS);
+    expect(unsupportedFigures("Shielded: 450 ZEC or 460 ZEC.", facts)).toEqual(["450 ZEC", "460 ZEC"]);
+  });
+  it.each(["matched", "single_source", "unverified_hash", "different_heights"])("retains only the selected reading for %s supply", status => {
+    const a = primary(), b = status === "different_heights" ? conflictingSecondary() : secondary();
+    if (status === "unverified_hash") a.blockHash = null;
+    if (status === "different_heights") a.height++;
+    const evidence = supplyEvidence(status === "single_source" ? [a] : [a, b]);
+    expect(JSON.parse(evidence.content).data.status).toBe(status);
+    const facts = numericFacts([evidence]);
+    expect(unsupportedFigures("Shielded: 450 ZEC. Circulating: 950 ZEC. Lockbox: 50 ZEC.", facts)).toEqual([]);
+    expect(unsupportedFigures("Shielded: 460 ZEC.", facts)).toEqual(["460 ZEC"]);
+  });
+  it("keeps other evidence and reviewed documents usable when supply is rejected", () => {
+    const evidence = [supplyEvidence([primary(), conflictingSecondary()]), { content: JSON.stringify({ data: { quote: { cents: 12345 }, treasuryZec: 321, changePercent: 7.3 } }) }];
+    const facts = numericFacts(evidence, [{ text: "A reviewed example uses 678 ZEC." }]);
+    expect(unsupportedFigures("$123.45, 321 ZEC, 7.3%, 678 ZEC and 21 million ZEC.", facts)).toEqual([]);
+    expect(unsupportedFigures("450 ZEC and 460 ZEC", facts)).toEqual(["450 ZEC", "460 ZEC"]);
+  });
+  it("does not collect supply figures when no reading was selected", () => {
+    expect(numericFacts([supplyEvidence([])])).toEqual(PROTOCOL_FACTS);
   });
 });
 describe("Calendar-month metrics", () => {

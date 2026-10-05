@@ -26,7 +26,15 @@ export function numericFacts(evidence: Evidence[], documents: GuardDocument[] = 
     else if (/zec/i.test(key)) facts.push({ unit: "ZEC", value: n });
     else if (/percent/i.test(key)) facts.push({ unit: "%", value: n });
   }
-  for (const item of evidence) { try { read(JSON.parse(item.content).data); } catch { /* no numeric evidence */ } }
+  for (const item of evidence) {
+    try {
+      const data = JSON.parse(item.content).data;
+      // Supply readings are diagnostic evidence; only reconciliation's selection can support a figure.
+      if (data?.metric === "supply") {
+        if (data.status !== "mismatch") read(data.selected);
+      } else read(data);
+    } catch { /* no numeric evidence */ }
+  }
   for (const document of documents) for (const claim of amountClaims(document.text)) {
     if (claim.unit !== "BRL") for (const reading of claim.readings) facts.push({ unit: claim.unit, value: reading.value * claim.scale });
   }
