@@ -1,4 +1,3 @@
-import { PageHeader, Stat } from "@/components/ui";
 import { SectionHeading, SourceNote } from "@/components/workspace";
 import {
   DecidedBy,
@@ -23,6 +22,7 @@ import {
 import record from "@/data/governance/record.json";
 import styles from "@/components/governance/timeline.module.css";
 import { pageMetadata } from "@/lib/seo/page-metadata";
+import pageStyles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = pageMetadata({
@@ -104,41 +104,55 @@ export default async function GovernancePage() {
     .sort((a, b) => (b.totalZec ?? 0) - (a.totalZec ?? 0))
     .at(0);
 
+  const metrics = [
+    {
+      label: "Network upgrades",
+      value: String(upgrades.length),
+      detail: latest ? `latest ${shortDate(latest.date)}` : "·",
+    },
+    {
+      label: "Coinholder polls",
+      value: String(polls.length),
+      detail: `${decided} decided · ${advisory} advisory or informal`,
+    },
+    {
+      label: "Still being decided",
+      value: String(PENDING_TOPICS.length),
+      detail: "NU7, Crosslink and NSM",
+    },
+    {
+      label: "Largest poll",
+      value: largest?.totalZec ? compactZec(largest.totalZec) : "·",
+      detail: largest?.name ?? "·",
+    },
+  ];
+
   return (
-    <>
-      <PageHeader
-        title="Zcash governance"
-        subtitle="Decisions that bind the whole network: every upgrade and how it was decided, coinholder polls on protocol and funding, and what is still open. Grant decisions live with the bodies that take them."
-        actions={
+    <div className={pageStyles.page}>
+      <header className={pageStyles.heading}>
+        <div>
+          <h1>Zcash governance</h1>
+          <p>Network upgrades, coinholder polls and open protocol decisions.</p>
+        </div>
+        <div className={pageStyles.decision}>
           <DecidedBy
             who="ZIP process and coinholders"
             how="each row names its process"
           />
-        }
-      />
+        </div>
+      </header>
 
-      <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
-          label="Network upgrades"
-          value={String(upgrades.length)}
-          sub={latest ? `latest ${shortDate(latest.date)}` : "·"}
-        />
-        <Stat
-          label="Coinholder polls"
-          value={String(polls.length)}
-          sub={`${decided} decided · ${advisory} advisory or informal`}
-        />
-        <Stat
-          label="Still being decided"
-          value={String(PENDING_TOPICS.length)}
-          sub="NU7, Crosslink and NSM"
-        />
-        <Stat
-          label="Largest poll"
-          value={largest?.totalZec ? compactZec(largest.totalZec) : "·"}
-          sub={largest?.name ?? "·"}
-        />
-      </section>
+      <dl className={pageStyles.metrics} aria-label="Governance summary">
+        {metrics.map((metric) => (
+          <div key={metric.label}>
+            <dt>{metric.label}</dt>
+            <dd>
+              <strong>{metric.value}</strong>
+              <span>{metric.detail}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
 
       <PollComparison />
 
@@ -236,6 +250,6 @@ export default async function GovernancePage() {
         agendas only, so a call that discussed a topic without naming it on the
         agenda is not linked.
       </SourceNote>
-    </>
+    </div>
   );
 }
