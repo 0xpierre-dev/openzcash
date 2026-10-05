@@ -29,4 +29,4 @@ O zallet **ainda não importa viewing key / UFVK via RPC** (sem `z_importviewing
 
 ## Fontes
 
-Zallet Book `zcash.github.io/wallet` · Zebra Book `zebra.zfnd.org` · `docs.rs/zebra-rpc` · repo `github.com/zcash/wallet`.
+Zallet Book `zcash.github.io/wallet` · Zebra Book `zebra.zfnd.org` · `docs.rs/zebra-rpc` · repo `github.com/zcash/zallet`.
