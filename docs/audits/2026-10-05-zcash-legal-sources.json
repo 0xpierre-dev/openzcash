@@ -1,0 +1,340 @@
+{
+  "asOf": "2026-10-05",
+  "scope": "Primary-source research for legal/privacy/crypto policy context. No repository edits or claims of exhaustive jurisdiction coverage.",
+  "items": [
+    {
+      "id": "br-bcb-588-self-custody-reporting",
+      "title": "Brazil adds reporting for larger self-custody transfers",
+      "jurisdiction": "Brazil",
+      "publisher": "Banco Central do Brasil",
+      "kind": "regulation",
+      "status": "in_force",
+      "publicationDate": "2026-09-25",
+      "instrumentDate": "2026-09-23",
+      "effectiveDate": "2026-10-01",
+      "applicationDate": "2026-10-01",
+      "summary": "BCB-regulated institutions must report virtual-asset transfers of at least US$10,000 equivalent to or from self-custodied wallets to Coaf. The amendment took effect on 1 October 2026.",
+      "scopeNote": "Applies to institutions authorized to operate by BCB under Circular 3978/2020. Do not turn this reporting obligation into a general ban on self-custody, or a duty imposed directly on every private wallet owner.",
+      "dateNote": "Instrument dated 23 September; official publication 25 September, DOU section 1, page 84. BCB press note appeared 23 September; Coaf operational notice appeared 30 September.",
+      "sourceUrl": "https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?numero=588&tipo=Resolu%C3%A7%C3%A3o+BCB",
+      "supportingSources": [
+        {
+          "url": "https://www.gov.br/coaf/pt-br/sistemas/siscoaf/comunicados-siscoaf/copy4_of_inclusao_de_novas_ocorrencias_no_segmento_sfn_especie_do_siscoaf",
+          "publicationDate": "2026-09-30",
+          "supports": "Operational Siscoaf implementation from 1 October; occurrence 1676 for self-custody transfers at or above US$10,000 equivalent."
+        },
+        {
+          "url": "https://www.bcb.gov.br/detalhenoticia/21267/nota",
+          "publicationDate": "2026-09-23",
+          "supports": "Official explanatory release; date also present as Atom updated 2026-09-23T18:30:57-03:00."
+        }
+      ],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 26
+    },
+    {
+      "id": "br-decripto-july-2026",
+      "title": "DeCripto reporting covers transactions from July 2026",
+      "jurisdiction": "Brazil",
+      "publisher": "Receita Federal",
+      "kind": "reporting_regulation",
+      "status": "in_force",
+      "publicationDate": "2026-07-23",
+      "instrumentDate": "2025-11-14",
+      "effectiveDate": null,
+      "applicationDate": "2026-07-01",
+      "summary": "Receita Federal confirms that transactions from July 2026 move to DeCripto reporting, including covered overseas providers serving Brazil. The reporting duty is separate from whether tax is owed.",
+      "scopeNote": "The source explains IN RFB 2291/2025 and foreign providers directing activities at Brazil under Article 5. Do not infer every holder has identical reporting obligations or state unverified tax thresholds.",
+      "dateNote": "Publication date is the official explanatory article, not the original normative instrument. Application date refers to the transaction period, not an all-user filing deadline.",
+      "sourceUrl": "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2026/julho/stablecoins-ja-respondem-por-cerca-de-80-do-volume-declarado-de-criptoativos-no-brasil",
+      "supportingSources": [
+        {
+          "url": "https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/declaracoes-e-demonstrativos/criptoativos/decripto",
+          "supports": "Official DeCripto hub linking normative instrument and manuals."
+        },
+        {
+          "url": "https://normasinternet2.receita.fazenda.gov.br/#/consulta/externa/147709",
+          "supports": "Exact normative link found on the official DeCripto hub; JavaScript app not fully extractable in this research."
+        },
+        {
+          "url": "https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/dirpf/p-r-irpf-2026-v1-00-2026-04-23.pdf",
+          "supports": "Official FAQ confirms DeCripto treatment from 1 July 2026."
+        }
+      ],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 28
+    },
+    {
+      "id": "ar-cnv-1058-psav",
+      "title": "Argentina regulates crypto-service providers",
+      "jurisdiction": "Argentina",
+      "publisher": "Comisión Nacional de Valores",
+      "kind": "regulation",
+      "status": "in_force",
+      "publicationDate": "2025-03-14",
+      "instrumentDate": "2025-03-12",
+      "effectiveDate": "2025-05-26",
+      "applicationDate": "2025-12-31",
+      "summary": "CNV’s PSAV framework sets registration, custody, cybersecurity and disclosure requirements for covered crypto-service providers. Most requirements for providers already registered became enforceable on 31 December 2025.",
+      "scopeNote": "Service-provider rules, not a finding about Zcash legal status or investment quality. Transitional dates vary by requirement; 31 December concerns Article 7(3) for already registered providers.",
+      "dateNote": "Resolution dated 12 March, Gazette publication 14 March. Current official PSAV registry confirms 26 May 2025 general entry into force. Different transitional deadlines must not be collapsed into one.",
+      "sourceUrl": "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-1058-2025-410635/texto",
+      "supportingSources": [
+        {
+          "url": "https://www.argentina.gob.ar/cnv/registro-de-proveedores-de-servicios-de-activos-virtuales",
+          "supports": "Official registry states the 26 May 2025 entry-into-force date."
+        },
+        {
+          "url": "https://www.argentina.gob.ar/node/459348",
+          "publicationDate": "2025-03-13",
+          "supports": "Official CNV explanatory announcement."
+        }
+      ],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 26
+    },
+    {
+      "id": "eu-amlr-article-79",
+      "title": "EU anonymous-account restriction applies from July 2027",
+      "jurisdiction": "European Union",
+      "publisher": "European Parliament and Council / EUR-Lex",
+      "kind": "regulation",
+      "status": "enacted_future_application",
+      "publicationDate": "2024-06-19",
+      "instrumentDate": "2024-05-31",
+      "effectiveDate": "2024-07-09",
+      "applicationDate": "2027-07-10",
+      "summary": "From 10 July 2027, Article 79 restricts covered institutions’ anonymous or transaction-obfuscating accounts, including through anonymity-enhancing coins. The regulation does not name Zcash.",
+      "scopeNote": "Article 79 concerns credit institutions, financial institutions and crypto-asset service providers. This is not a general prohibition on holding Zcash or using self-custody. Do not equate a protocol property with a definitive listing determination.",
+      "dateNote": "Article 90 separates entry into force, the twentieth day following publication, from general application on 10 July 2027. In force does not mean Article 79 is already applicable.",
+      "sourceUrl": "https://eur-lex.europa.eu/eli/reg/2024/1624/oj/eng",
+      "supportingSources": [],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 23
+    },
+    {
+      "id": "us-sec-crypto-custody-proposal-2026",
+      "title": "SEC proposes a crypto-custody framework",
+      "jurisdiction": "United States",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "kind": "proposal",
+      "status": "proposed",
+      "publicationDate": "2026-10-01",
+      "instrumentDate": null,
+      "effectiveDate": null,
+      "applicationDate": null,
+      "summary": "The SEC proposed a crypto-custody framework for registered advisers and regulated funds, including self-custody in specified circumstances. It remains a proposal; comments run 60 days from Federal Register publication.",
+      "scopeNote": "Concerns registered investment advisers and regulated funds; the proposal is not a general self-custody authorization or a rule already in force.",
+      "dateNote": "Do not calculate the comment deadline from 1 October. The release specifies 60 days following Federal Register publication, whose date was not verified.",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2026-100-sec-proposal-would-address-how-investment-advisers-funds-can-custody-crypto-assets-under-federal",
+      "supportingSources": [],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 29
+    },
+    {
+      "id": "global-fatf-va-update-2026",
+      "title": "FATF reviews virtual-asset implementation gaps",
+      "jurisdiction": "Global",
+      "publisher": "Financial Action Task Force",
+      "kind": "standards_report",
+      "status": "published_report",
+      "publicationDate": "2026-07-16",
+      "instrumentDate": null,
+      "effectiveDate": null,
+      "applicationDate": null,
+      "summary": "FATF’s seventh update calls for stronger virtual-asset standards implementation, including Travel Rule supervision and risks involving unhosted wallets and DeFi. The report is guidance, not directly applicable national law.",
+      "scopeNote": "Intergovernmental standard-setter report. Domestic obligations depend on relevant enacted national rules; FATF recommendations alone do not establish whether an individual wallet or token is prohibited.",
+      "dateNote": "Report publication date only; there is no new directly applicable worldwide effective date.",
+      "sourceUrl": "https://www.fatf-gafi.org/en/news/targeted-updated-va-vasps-2026.html",
+      "supportingSources": [],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 29
+    },
+    {
+      "id": "us-tornado-cash-delisting-2025",
+      "title": "Treasury removed Tornado Cash sanctions",
+      "jurisdiction": "United States",
+      "publisher": "U.S. Department of the Treasury",
+      "kind": "administrative_action",
+      "status": "historical_action",
+      "publicationDate": "2025-03-21",
+      "instrumentDate": null,
+      "effectiveDate": "2025-03-21",
+      "applicationDate": null,
+      "summary": "Treasury removed economic sanctions against Tornado Cash on 21 March 2025. The delisting is a specific administrative action, not a general exemption from sanctions or other financial-crime laws.",
+      "scopeNote": "Historical action concerning Tornado Cash. Do not imply all litigation ended, all privacy software is exempt, or that this establishes the treatment of Zcash.",
+      "dateNote": "Retain the 2025 date visibly; this is background context, not a new October 2026 event.",
+      "sourceUrl": "https://home.treasury.gov/news/press-releases/sb0057",
+      "supportingSources": [],
+      "verifiedOn": "2026-10-05",
+      "summaryWordCount": 28
+    }
+  ],
+  "feeds": [
+    {
+      "id": "bcb-press-notes",
+      "url": "https://www.bcb.gov.br/api/feed/sitebcb/sitefeeds/notasImprensa",
+      "officialDiscoveryUrl": "https://www.bcb.gov.br/acessoinformacao/rss",
+      "httpStatus": 200,
+      "contentType": "application/atom+xml",
+      "parserFormat": "Atom 1.0",
+      "xmlRoot": "{http://www.w3.org/2005/Atom}feed",
+      "itemCountObserved": 10,
+      "dateField": "atom:entry/atom:updated",
+      "linkField": "atom:entry/atom:link[@rel=\"alternate\"]/@href",
+      "idField": "atom:entry/atom:id",
+      "bodyField": "atom:entry/atom:content (type=html)",
+      "recommended": true,
+      "sampleRelevantUrl": "https://www.bcb.gov.br/detalhenoticia/21267/nota",
+      "sampleRelevantDate": "2026-09-23T18:30:57-03:00",
+      "caveats": [
+        "Date is updated, not necessarily original publication. Preserve field meaning.",
+        "Ten entries only: persist by entry ID; this is discovery, not a complete historical archive.",
+        "Filter for crypto/self-custody/privacy terms and classify enacted norms vs press explanation."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    },
+    {
+      "id": "bcb-normatives",
+      "url": "https://www.bcb.gov.br/api/feed/app/normativos/normativos?ano=2026",
+      "officialDiscoveryUrl": "https://www.bcb.gov.br/acessoinformacao/rss",
+      "httpStatus": 200,
+      "contentType": "application/atom+xml",
+      "parserFormat": "Atom 1.0",
+      "xmlRoot": "{http://www.w3.org/2005/Atom}feed",
+      "itemCountObserved": 10,
+      "dateField": "atom:entry/atom:updated",
+      "linkField": "atom:entry/atom:link[@rel=\"alternate\"]/@href",
+      "idField": "atom:entry/atom:id",
+      "bodyField": "atom:entry/atom:content (type=html)",
+      "recommended": true,
+      "sampleEntry": {
+        "id": "normativos_53024",
+        "title": "BC - Instrução Normativa BCB N° 779 de 01/10/2026",
+        "updated": "2026-10-02T18:07:03-03:00"
+      },
+      "caveats": [
+        "Use the current calendar year; persist prior-year entries and handle year rollover.",
+        "Instrument date may be in title, while updated records publication/update; retrieve the norm for Gazette and application dates.",
+        "A live feed is not a legal status database; amendments and revoked instruments need review."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    },
+    {
+      "id": "sec-press-releases",
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "officialDiscoveryUrl": "https://www.sec.gov/about/rss-feeds",
+      "httpStatus": 200,
+      "contentType": "application/rss+xml; charset=utf-8",
+      "parserFormat": "RSS 2.0",
+      "xmlRoot": "rss",
+      "itemCountObserved": 25,
+      "dateField": "channel/item/pubDate (RFC 2822)",
+      "linkField": "channel/item/link",
+      "recommended": true,
+      "sampleRelevantUrl": "https://www.sec.gov/newsroom/press-releases/2026-100-sec-proposal-would-address-how-investment-advisers-funds-can-custody-crypto-assets-under-federal",
+      "sampleRelevantDate": "2026-10-01T12:16:07-04:00",
+      "caveats": [
+        "Filter crypto, digital assets, custody, privacy or self-custody.",
+        "Press release publication is not Federal Register publication or a rule effective date.",
+        "Keep proposal, final rule, litigation allegation and court judgment distinct."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    },
+    {
+      "id": "esma-news",
+      "url": "https://www.esma.europa.eu/rss.xml",
+      "officialDiscoveryUrl": "https://www.esma.europa.eu/interact-with-esma/stakeholder-engagement/stakeholder-relations",
+      "httpStatus": 200,
+      "contentType": "application/rss+xml; charset=utf-8",
+      "parserFormat": "RSS 2.0 with date embedded in description HTML",
+      "xmlRoot": "rss",
+      "itemCountObserved": 10,
+      "dateField": "Parse channel/item/description HTML time[@datetime]; no item pubDate observed",
+      "linkField": "channel/item/link",
+      "recommended": true,
+      "sampleRelevantUrl": "https://www.esma.europa.eu/press-news/esma-news/esma-calls-changes-make-mica-clearer-safer-and-ready-emerging-services",
+      "sampleRelevantDate": "2026-09-30T15:25:31+02:00",
+      "sampleRelevantStatus": "Policy recommendations, not enacted amendments to MiCA",
+      "caveats": [
+        "Do not substitute fetchedAt for a missing publication date. Skip undated items or verify article time metadata.",
+        "Filter MiCA, crypto, decentralisation, DeFi and custody.",
+        "Ten entries only; persist deduplicated canonical links."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    },
+    {
+      "id": "bcb-general-news",
+      "url": "https://www.bcb.gov.br/api/feed/sitebcb/sitefeeds/noticias",
+      "httpStatus": 200,
+      "contentType": "application/atom+xml",
+      "parserFormat": "Atom 1.0",
+      "itemCountObserved": 10,
+      "dateField": "atom:entry/atom:updated",
+      "linkField": "atom:entry/atom:link/@href",
+      "recommended": false,
+      "caveats": [
+        "Working supplementary feed but much broader than legal news; prefer press notes and normative feeds first."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    },
+    {
+      "id": "govinfo-federal-register",
+      "url": "https://www.govinfo.gov/rss/fr.xml",
+      "officialDiscoveryUrl": "https://www.govinfo.gov/feeds",
+      "httpStatus": 200,
+      "contentType": "text/xml",
+      "parserFormat": "RSS 2.0",
+      "itemCountObserved": 100,
+      "dateField": "channel/item/pubDate",
+      "linkField": "channel/item/link",
+      "recommended": false,
+      "caveats": [
+        "Feed pubDate describes newly added/updated packages, which can be old documents. Get publication date from package/document metadata.",
+        "Useful discovery fallback, not an automatically ordered current legal-news feed.",
+        "GovInfo JSON API requires an API key; do not label it keyless."
+      ],
+      "verifiedOn": "2026-10-05",
+      "authenticationRequired": false
+    }
+  ],
+  "feedRejections": [
+    {
+      "url": "https://home.treasury.gov/system/files/236/TreasuryRSS.xml",
+      "observed": "HTTP 404; do not configure as a working Treasury feed."
+    },
+    {
+      "url": "https://www.sec.gov/enforcement-litigation/litigation-releases/rss",
+      "observed": "HTTP 403 in direct verification; official listing exists but not operationally reliable from this environment."
+    },
+    {
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/RSS",
+      "observed": "HTTP 200 but actual RSS 1.0/RDF despite application/atom+xml; sample mixed folder, carousel and image entries rather than a clean latest-news stream. Do not use without document-type/date filtering."
+    },
+    {
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/colecao/RSS",
+      "observed": "HTTP 404."
+    }
+  ],
+  "freshnessCautions": [
+    {
+      "url": "https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?numero=589&tipo=Resolu%C3%A7%C3%A3o+BCB",
+      "note": "BCB Resolution 589 of 23 September 2026 amended Article 91 of Resolution 520. The relevant restriction date is now 6 November 2026, not the original 30 October; the Article 91 amendment took effect 1 October. Other 589 provisions take effect 1 January 2027. Read current amendments before reusing original 520 text."
+    }
+  ],
+  "editorialRules": [
+    "Keep publication, instrument/adoption, entry into force and application dates separate.",
+    "Legal status cannot be reliably inferred from a news-feed title; retain a reviewed curated rule record alongside automated discovery.",
+    "State actor and activity scope. A provider restriction is not a blanket ban on owning Zcash or using privacy.",
+    "Mark proposals, recommendations and reports explicitly; do not display them as enacted obligations.",
+    "Preserve actual source dates and distinguish historical background from newly published developments.",
+    "Allow only canonical primary domains; sanitize feed HTML and never execute markup or scripts.",
+    "Cache and deduplicate feeds by stable ID/canonical URL. A short rolling feed cannot establish complete coverage.",
+    "No legal or investment advice; no unsupported country-by-country legal/illegal badges."
+  ]
+}

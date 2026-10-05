@@ -142,6 +142,7 @@ export const APPS: AppDef[] = [
     ],
   },
   { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, DeFi liquidity & holdings", icon: "chart", pages: [] },
+  { id: "legal", label: "Privacy & Policy", href: "/legal", sub: "Rights, regulation & public debate", icon: "balance", pages: [{ href: "/legal", label: "Updates" }] },
   { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
   { id: "arborist", parentId: "ecosystem", parentGroup: "pages", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
@@ -248,7 +249,7 @@ export function placeOf(pathname: string): Place | undefined {
     // claims the plain path: /ecosystem belongs to the Ecosystem app.
     if (app.href.includes("?")) continue;
     const page = app.pages.find((p) => pathOf(p.href) === target);
-    if (pathOf(app.href) === target && !detail) return page ? { app, page } : { app };
+    if (pathOf(app.href) === target && !detail) return { app };
     if (page) {
       return detail
         ? { app, page, detail: { parent: page, label: detail.label } }
