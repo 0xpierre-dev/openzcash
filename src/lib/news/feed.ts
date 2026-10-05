@@ -6,12 +6,14 @@ import { formatUsdCents } from "@/lib/zcg/format";
 import { getZechubProposals } from "@/lib/dao/zechub";
 import { getGrantApplications } from "@/lib/zcg/github-applications";
 import { titlesMatch } from "@/lib/zcg/match-titles";
+import { NEWS_GITHUB_REPOSITORIES, readGitHubNews, githubNewsHealth } from "./github";
+export { githubNewsHealth } from "./github";
 
 /**
  * Cross-source "what's new" feed: the Zcash forum (Discourse), GitHub releases
  * of the core repos, and the latest rows from the ZCG spreadsheet (already
  * mirrored in our DB by the daily cron). Fetched live on the server and cached
- * ~10 min in-process. No DB table — "unread" is computed per-visitor from the
+ * hourly in-process. No DB table — "unread" is computed per-visitor from the
  * item timestamps vs a localStorage "last seen" marker.
  */
 
@@ -42,13 +44,6 @@ let cache: { at: number; items: NewsItem[] } | null = null;
 let inflight: Promise<NewsItem[]> | null = null;
 
 const FORUM = "https://forum.zcashcommunity.com";
-const GITHUB_REPOS = [
-  "ZcashFoundation/zebra",
-  "zingolabs/zaino",
-  "zcash/zcash",
-  "zcash/librustzcash",
-  "zcash/wallet",
-];
 const FORUM_MAX_AGE_MS = 120 * 24 * 60 * 60 * 1000; // surface topics from ~4 months
 
 function iso(s: string): string {
@@ -87,42 +82,6 @@ async function fetchForum(): Promise<NewsItem[]> {
         url: `${FORUM}/t/${t.slug}/${t.id}`,
         ts: iso(t.created_at),
         author: byId.get(t.posters?.[0]?.user_id ?? -1),
-      }));
-  } catch {
-    return [];
-  }
-}
-
-async function fetchRepo(repo: string): Promise<NewsItem[]> {
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${repo}/releases?per_page=2`,
-      {
-        headers: {
-          accept: "application/vnd.github+json",
-          "user-agent": "openzcash",
-        },
-        signal: AbortSignal.timeout(7_000),
-        cache: "no-store",
-      },
-    );
-    if (!res.ok) return [];
-    const arr = (await res.json()) as Array<{
-      name: string;
-      tag_name: string;
-      published_at: string;
-      html_url: string;
-    }>;
-    if (!Array.isArray(arr)) return [];
-    const name = repo.split("/")[1];
-    return arr
-      .filter((r) => r.published_at)
-      .map((r) => ({
-        source: "github" as const,
-        kind: name,
-        title: `${name} ${r.name || r.tag_name}`,
-        url: r.html_url,
-        ts: iso(r.published_at),
       }));
   } catch {
     return [];
@@ -243,7 +202,7 @@ async function refreshNews(now: number): Promise<NewsItem[]> {
     fetchProposals(),
     fetchDao(),
     fetchApplications(),
-    ...GITHUB_REPOS.map(fetchRepo),
+    ...NEWS_GITHUB_REPOSITORIES.map(readGitHubNews),
   ]);
   // Guard against future-dated source rows (e.g. a spreadsheet typo): one item
   // dated months ahead becomes `latest`, poisons every visitor's last-seen
@@ -282,7 +241,13 @@ async function refreshNews(now: number): Promise<NewsItem[]> {
     forum.length + sheet.length + proposals.length + dao.length + apps.length +
       repos.flat().length ===
     0;
-  if (allSourcesEmpty && cache) return cache.items;
+  if (allSourcesEmpty && cache) {
+    // GitHub has per-repository last-good reads already. Do not resurrect a
+    // release that a successful empty response removed from that source.
+    const retained = cache.items.filter(item => item.source !== "github" && item.ts >= minTs && item.ts <= maxTs);
+    cache = { at: githubNewsHealth().some(source => source.status === "live") ? now : cache.at, items: retained };
+    return retained;
+  }
   cache = { at: now, items: deduped };
   return deduped;
 }

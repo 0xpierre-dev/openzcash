@@ -1,12 +1,14 @@
 export type ArboristCallSource = "notes" | "agenda" | "youtube";
 
 export interface ArboristCall {
-  /** Published number, or the next sequence number while notes are pending. */
+  /** Published call number. Recording-only entries stay unnumbered until confirmed. */
   number: number | null;
   /** ISO meeting date (YYYY-MM-DD) when parseable. */
   date: string | null;
   /** Header/title date as written, kept when the date could not be parsed. */
   rawDate: string;
+  /** Explicit alternate source used only when the note omitted its year/date. */
+  dateSource?: string;
   /** Stated meeting duration, e.g. "15 minutes". */
   duration: string | null;
   /** YouTube recording URL — most calls have one. */
@@ -201,8 +203,8 @@ export function parseArboristYoutubeFeed(xml: string): ArboristCall[] {
 
 /**
  * Adds recent recordings that have not reached the notes repository yet.
- * Pending calls continue from the highest published call number in meeting
- * order. GitHub remains authoritative when the matching note arrives.
+ * GitHub remains authoritative when the matching note arrives. A video date
+ * alone does not establish the call number or justify filling a sequence gap.
  */
 export function mergeArboristCalls(
   notes: ArboristCall[],
@@ -230,11 +232,6 @@ export function mergeArboristCalls(
     };
   });
 
-  const latestNoteDate = enrichedNotes.reduce<string | null>(
-    (latest, call) =>
-      call.date && (!latest || call.date > latest) ? call.date : latest,
-    null,
-  );
   const knownVideoIds = new Set(
     enrichedNotes.flatMap((call) => (call.videoId ? [call.videoId] : [])),
   );
@@ -245,7 +242,6 @@ export function mergeArboristCalls(
 
   for (const recording of recordings) {
     if (!recording.date) continue;
-    if (latestNoteDate && recording.date <= latestNoteDate) continue;
     if (recording.videoId && knownVideoIds.has(recording.videoId)) continue;
     if (knownDates.has(recording.date)) continue;
 
@@ -254,21 +250,54 @@ export function mergeArboristCalls(
     knownDates.add(recording.date);
   }
 
-  const latestNoteNumber = enrichedNotes.reduce<number | null>(
-    (latest, call) =>
-      call.number != null && (latest == null || call.number > latest)
-        ? call.number
-        : latest,
-    null,
-  );
-  const chronological = pending.sort((a, b) =>
-    (a.date ?? "").localeCompare(b.date ?? ""),
-  );
-  const numbered = chronological.map((call, index) => ({
-    ...call,
-    number:
-      latestNoteNumber == null ? call.number : latestNoteNumber + index + 1,
-  }));
+  return [...pending.map(call => ({ ...call, number: null })), ...enrichedNotes]
+    .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? "") || (b.number ?? 0) - (a.number ?? 0));
+}
 
-  return [...numbered.reverse(), ...enrichedNotes];
+export const ARBORIST_CHANNEL_ID = "UCi01v05DNTUEC_eB0c9rpgQ";
+
+/** Reads JSON data, never executes scripts or follows URLs embedded by YouTube. */
+export function parseArboristYoutubePage(html: string): ArboristCall[] {
+  if (html.length > 3 * 1024 * 1024) throw new Error("ARBORIST_VIDEO_PAGE_TOO_LARGE");
+  let data: Record<string, unknown> | null = null;
+  for (const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) {
+    const payload = match[1].trim().match(/^(?:var\s+)?ytInitialData\s*=\s*(\{[\s\S]*\});?$/);
+    if (!payload) continue;
+    try { data = JSON.parse(payload[1]); } catch { throw new Error("ARBORIST_VIDEO_PAGE_INVALID"); }
+    break;
+  }
+  const object = (value: unknown): Record<string, unknown> => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+  const metadata = object(object(data?.metadata).channelMetadataRenderer);
+  if (metadata.externalId !== ARBORIST_CHANNEL_ID) throw new Error("ARBORIST_VIDEO_CHANNEL_UNVERIFIED");
+  const tabs = object(object(data?.contents).twoColumnBrowseResultsRenderer).tabs;
+  if (!Array.isArray(tabs)) throw new Error("ARBORIST_VIDEO_PAGE_INVALID");
+  const tab = tabs.map(value => object(object(value).tabRenderer)).find(value => value.selected === true);
+  if (!tab?.content) throw new Error("ARBORIST_VIDEO_PAGE_INVALID");
+  const videos = new Map<string, ArboristCall>();
+  let visited = 0, videoRecords = 0;
+  function walk(value: unknown, depth: number) {
+    if (++visited > 30_000 || depth > 40) throw new Error("ARBORIST_VIDEO_PAGE_TOO_COMPLEX");
+    if (Array.isArray(value)) { for (const part of value) walk(part, depth + 1); return; }
+    const row = object(value);
+    const lockup = object(row.lockupViewModel), legacy = object(row.videoRenderer);
+    const candidate = Object.keys(lockup).length ? lockup : legacy;
+    const pending = candidate.upcomingEventData || candidate.isLiveNow === true ||
+      /"(?:style|badgeStyle)":"BADGE_STYLE_TYPE_(?:LIVE_NOW|UPCOMING)"|"text":"(?:LIVE|UPCOMING)"/.test(JSON.stringify(candidate));
+    const title = lockup.contentType === "LOCKUP_CONTENT_TYPE_VIDEO"
+      ? object(object(object(lockup.metadata).lockupMetadataViewModel).title).content
+      : object(legacy.title).simpleText ?? (Array.isArray(object(legacy.title).runs)
+        ? (object(legacy.title).runs as unknown[]).map(run => object(run).text ?? "").join("") : undefined);
+    const id = lockup.contentType === "LOCKUP_CONTENT_TYPE_VIDEO" ? lockup.contentId : legacy.videoId;
+    if (typeof id === "string" && /^[\w-]{11}$/.test(id) && typeof title === "string") {
+      videoRecords++;
+      const date = meetingDateFromTitle(title);
+      if (date && !pending) videos.set(id, { number: null, date, rawDate: title.replace(/^(?:Zcash\s+)?Arborist\s+Call\s+/i, ""),
+        duration: null, video: `https://www.youtube.com/watch?v=${id}`, videoId: id, moderator: null,
+        notetaker: null, agenda: [], url: null, source: "youtube" });
+    }
+    for (const part of Object.values(row)) if (part && typeof part === "object") walk(part, depth + 1);
+  }
+  walk(tab.content, 0);
+  if (!videoRecords) throw new Error("ARBORIST_VIDEO_PAGE_NO_RECORDS");
+  return [...videos.values()];
 }

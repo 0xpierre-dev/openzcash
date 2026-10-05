@@ -80,8 +80,8 @@ const row = (call: ArboristCall) => ({
     call.source === "notes"
       ? "published notes"
       : call.source === "agenda"
-        ? "historical agenda only (calls 1-29)"
-        : "recording only; notes not yet published, number provisional",
+        ? "historical agenda only"
+        : "recording only; notes not yet published, call number unconfirmed",
 });
 /** Provenance first, then the calls a question names, newest first. */
 export function arboristContext(
@@ -119,7 +119,7 @@ export function arboristContext(
     calls: selected.slice(0, ARBORIST_ROWS).map(row),
     notesRepository: meta.repository,
     recordingsChannel: meta.recordings,
-    note: "Community-maintained call notes (ZcashCommunityGrants/arboretum-notes) and Zcash Foundation recordings, read from the same archive as /arborist and cached up to one hour. Dates are meeting dates. Calls 1-29 have historical agendas only. Agenda items and notes are discussion records, not protocol decisions or official statements; not every call is numbered or dated in its source.",
+    note: "Community-maintained call notes (ZcashCommunityGrants/arboretum-notes) and Zcash Foundation recordings, read from the same archive as /arborist and checked hourly; previously verified records remain available during source outages. Check archiveFetchedAt for the last complete verification. Dates are meeting dates. Agenda-only entries are labeled separately from full notes. Agenda items and notes are discussion records, not protocol decisions or official statements; not every call is numbered or dated in its source.",
   };
 }
 
@@ -193,9 +193,9 @@ export function arboristAnswer(content: string, lang: DirectLanguage): string {
   if (c.source.startsWith("recording only"))
     lines.push(
       t({
-        en: "The recording is published, but the notes have not reached the repository yet; the number is provisional.",
-        pt: "A gravação foi publicada, mas as notas ainda não chegaram ao repositório; o número é provisório.",
-        es: "La grabación fue publicada, pero las notas aún no llegaron al repositorio; el número es provisional.",
+        en: "The recording is published, but the notes have not reached the repository yet; the call number is not yet confirmed.",
+        pt: "A gravação foi publicada, mas as notas ainda não chegaram ao repositório; o número da chamada ainda não foi confirmado.",
+        es: "La grabación fue publicada, pero las notas aún no llegaron al repositorio; el número de la llamada todavía no está confirmado.",
       }),
     );
   lines.push(

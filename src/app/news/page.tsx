@@ -6,6 +6,7 @@ import { COMMUNITIES } from "@/lib/communities/data";
 import {
   getNews,
   newsFetchedAt,
+  githubNewsHealth,
   nowMs,
   type NewsItem,
   type NewsSource,
@@ -62,6 +63,12 @@ export default async function NewsPage({
 }) {
   const params = await searchParams;
   const items = await getNews();
+  const githubHealth = githubNewsHealth();
+  const githubUnavailable = githubHealth.filter((source) =>
+    source.status === "cached" || source.status === "unavailable",
+  );
+  const showGithubWarning = githubUnavailable.length > 0 &&
+    (!params.source || params.source === "github");
   const shown = items.filter(
     (i) =>
       (!params.source || i.source === params.source) &&
@@ -141,14 +148,24 @@ export default async function NewsPage({
           : `${shown.length} of ${items.length} updates`}
         {" · "}
         {newCount} new in 48 hours · last 7 days
-        {fetchedAgo ? ` · updated ${fetchedAgo}` : ""}. Older entries stay on
+        {fetchedAgo ? ` · feed checked ${fetchedAgo}` : ""}. Older entries stay on
         their own pages.
       </p>
+
+      {showGithubWarning ? (
+        <p role="status" className="mb-5 rounded-xl border border-amber-300/50 bg-amber-500/5 px-4 py-3 text-sm text-stone-700">
+          GitHub updates are incomplete: {githubUnavailable.length} of {githubHealth.length} repositories
+          could not be refreshed. Previously verified releases are kept within the seven-day window.
+          {" "}<Link href="/development" className="text-amber-700 underline underline-offset-4">Browse development activity ↗</Link>
+        </p>
+      ) : null}
 
       <div className="ws-news-list">
         {shown.length === 0 ? (
           <p className="ws-news-empty">
-            {items.length === 0
+            {params.source === "github" && githubUnavailable.length > 0
+              ? "No recent releases could be verified for this view. Try again shortly or browse development activity."
+              : items.length === 0
               ? "No recent activity. Sources may be momentarily unreachable."
               : "No updates match this view. Clear the filters or revisit the source later."}
           </p>
