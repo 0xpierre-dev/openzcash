@@ -12,6 +12,7 @@ import {
   type NewsSource,
 } from "@/lib/news/feed";
 import { NewsSeen } from "@/components/news-seen";
+import { newsView, NEW_WINDOW_MS, type NewsSearchParams } from "@/lib/news/view";
 
 export const dynamic = "force-dynamic";
 export const metadata = pageMetadata({
@@ -22,7 +23,6 @@ export const metadata = pageMetadata({
   card: { kicker: "The last seven days across the Zcash ecosystem" },
 });
 
-const NEW_WINDOW_MS = 48 * 60 * 60 * 1000;
 
 /**
  * Forum handle to community, so a post by a community lead is badged with
@@ -59,34 +59,23 @@ function rel(ts: string, now: number): string {
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ source?: string; q?: string }>;
+  searchParams: Promise<NewsSearchParams>;
 }) {
   const params = await searchParams;
   const items = await getNews();
+  const now = nowMs();
+  const { source, query, shown, counts, totalCount, newCount } = newsView(items, params, now);
   const githubHealth = githubNewsHealth();
   const githubUnavailable = githubHealth.filter((source) =>
     source.status === "cached" || source.status === "unavailable",
   );
-  const showGithubWarning = githubUnavailable.length > 0 &&
-    (!params.source || params.source === "github");
-  const shown = items.filter(
-    (i) =>
-      (!params.source || i.source === params.source) &&
-      (!params.q ||
-        `${i.title} ${i.author ?? ""} ${i.kind ?? ""}`
-          .toLowerCase()
-          .includes(params.q.toLowerCase())),
-  );
+  const showGithubWarning = githubUnavailable.length > 0 && (!source || source === "github");
   const latest = items[0]?.ts ?? "";
-  const now = nowMs();
   const newCut = now - NEW_WINDOW_MS;
-  const newCount = items.filter((i) => Date.parse(i.ts) > newCut).length;
   const fetchedAt = newsFetchedAt();
   const mins = fetchedAt ? Math.floor((now - fetchedAt) / 60_000) : null;
   const fetchedAgo = mins == null ? "" : mins < 1 ? "just now" : `${mins}m ago`;
-  const q = params.q ? `&q=${encodeURIComponent(params.q)}` : "";
-  const countBySource = (key: string) =>
-    items.filter((i) => i.source === key).length;
+  const q = query ? `&q=${encodeURIComponent(query)}` : "";
 
   return (
     <>
@@ -101,26 +90,26 @@ export default async function NewsPage({
 
       <nav className="ws-pipeline" aria-label="News sources">
         <Link
-          href={params.q ? `/news?q=${encodeURIComponent(params.q)}` : "/news"}
-          aria-current={!params.source ? "page" : undefined}
+          href={query ? `/news?q=${encodeURIComponent(query)}` : "/news"}
+          aria-current={!source ? "page" : undefined}
         >
           <span>All sources</span>
-          <strong>{items.length}</strong>
+          <strong>{totalCount}</strong>
         </Link>
         {Object.entries(SOURCE).map(([key, s]) => (
           <Link
             key={key}
             href={`/news?source=${key}${q}`}
-            aria-current={params.source === key ? "page" : undefined}
+            aria-current={source === key ? "page" : undefined}
           >
             <span>{s.label}</span>
-            <strong>{countBySource(key)}</strong>
+            <strong>{counts[key as NewsSource]}</strong>
           </Link>
         ))}
       </nav>
 
       <form
-        key={JSON.stringify([params.q ?? "", params.source ?? ""])}
+        key={JSON.stringify([query, source ?? ""])}
         className="ws-news-search"
         role="search"
       >
@@ -129,23 +118,23 @@ export default async function NewsPage({
           type="search"
           aria-label="Search news"
           placeholder="Search this week's updates…"
-          defaultValue={params.q ?? ""}
+          defaultValue={query}
         />
-        {params.source ? (
-          <input type="hidden" name="source" value={params.source} />
+        {source ? (
+          <input type="hidden" name="source" value={source} />
         ) : null}
         <button className="ws-button">Search</button>
-        {params.q ? (
-          <Link href={params.source ? `/news?source=${params.source}` : "/news"}>
+        {query ? (
+          <Link href={source ? `/news?source=${source}` : "/news"}>
             Clear
           </Link>
         ) : null}
       </form>
 
       <p className="ws-news-meta">
-        {shown.length === items.length
-          ? `${items.length} updates`
-          : `${shown.length} of ${items.length} updates`}
+        {shown.length === totalCount
+          ? `${totalCount} updates`
+          : `${shown.length} of ${totalCount} updates`}
         {" · "}
         {newCount} new in 48 hours · last 7 days
         {fetchedAgo ? ` · feed checked ${fetchedAgo}` : ""}. Older entries stay on
@@ -163,7 +152,7 @@ export default async function NewsPage({
       <div className="ws-news-list">
         {shown.length === 0 ? (
           <p className="ws-news-empty">
-            {params.source === "github" && githubUnavailable.length > 0
+            {source === "github" && githubUnavailable.length > 0
               ? "No recent releases could be verified for this view. Try again shortly or browse development activity."
               : items.length === 0
               ? "No recent activity. Sources may be momentarily unreachable."
@@ -184,7 +173,7 @@ export default async function NewsPage({
               : (i.kind ?? "");
           return (
             <a
-              key={`${i.source}:${i.url}`}
+              key={i.id}
               href={i.url}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
