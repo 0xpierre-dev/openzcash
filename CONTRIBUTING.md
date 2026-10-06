@@ -20,8 +20,18 @@ holds spend keys, and the legacy admin surface is retired (those routes return
 
 ## Environment setup
 
+Create `.env.local` with the connection string for your local development database:
+
+```dotenv
+DATABASE_URL=postgres://USER@localhost:5432/openzcash
+```
+
+Replace `USER` and the database name with your local settings. Use `.env.example`
+as a reference for additional settings, not a ready-to-run configuration. Omit
+unused optional variables: blank `CRON_SECRET` and placeholder RPC URLs fail
+validation even in mock mode. Only add a valid value when enabling that feature.
+
 ```bash
-cp .env.example .env.local   # fill in DATABASE_URL (the rest is optional)
 npm install
 npm run db:migrate           # apply the schema
 npm run import-zcg           # mirror the ZCG spreadsheet into the DB
@@ -29,8 +39,9 @@ npm run dev                  # http://localhost:3000
 ```
 
 Secrets live only in `.env.local` (gitignored). `.env.example` is names and
-placeholders only; never commit real values. `ZCG_SHEET_ID` is optional: the repo
-ships the public spreadsheet id by default (`src/lib/zcg/sheets.ts`).
+placeholders only; never commit real values. Leave `ZCG_SHEET_ID` unset to use the
+built-in public spreadsheet id (`src/lib/zcg/sheets.ts`); setting it to an empty
+string disables that fallback.
 
 ## Repository map
 
@@ -80,10 +91,18 @@ Other suites:
 - `npm run eval:zarvis` (Zarvis answer evaluation)
 
 To add tests, colocate a `*.test.ts` (or `.tsx`) file next to the module; vitest
-picks up `src/**/*.test.{ts,tsx}` (`vitest.config.ts`). Integration tests that
-need Postgres are skipped unless `ZCG_SNAPSHOT_TEST_DB_URL` points at a local
-(loopback) database
-(`src/lib/zcg/import-snapshots.integration.test.ts`).
+picks up `src/**/*.test.{ts,tsx}` (`vitest.config.ts`). Three PostgreSQL suites
+are independently skipped unless their environment variable is set:
+
+| Variable | Required local database | Suite |
+| --- | --- | --- |
+| `ZCG_SNAPSHOT_TEST_DB_URL` | A migrated database on a loopback host; uses temporary tables | `src/lib/zcg/import-snapshots.integration.test.ts` |
+| `ZCG_PUBLICATION_TEST_DB_URL` | Host `127.0.0.1`, database name starting with `openzcash_d1_test` | `src/lib/zcg/publications.integration.test.ts` |
+| `LEGAL_ARCHIVE_TEST_DB_URL` | Host `127.0.0.1`, database `openzcash_legal_test` | `src/lib/legal/archive-store.integration.test.ts` |
+
+Use disposable local databases only. The publication and legal suites apply
+migrations and clear their test tables. Setting one variable does not enable
+the other suites; report any skipped suites with your validation results.
 
 ## Debugging and common failures
 

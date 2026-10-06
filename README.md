@@ -55,11 +55,11 @@ lives at `GET /api/zcg`.
 | [Coinholders](https://openzcash.org/coinholders) | Coinholder-directed retroactive grants: rounds, results, independent verification. |
 | [Ecosystem](https://openzcash.org/ecosystem) | Zcash projects, community histories, and wallets. |
 | [ZEC Observatory](https://openzcash.org/zec-observatory) | ZEC price, markets, and liquidity. |
-| [Legal](https://openzcash.org/legal) | Zcash legal and regulatory news, with PGP coverage. |
+| [Privacy & Policy](https://openzcash.org/legal) | Zcash legal and regulatory news, with PGP coverage. |
 | [News](https://openzcash.org/news) | Community news, filterable by source. |
 | [Monthly](https://openzcash.org/monthly) | A monthly Zcash reading magazine, as PDF. |
 | [Ceremony](https://openzcash.org/ceremony) | The Zcash Ceremony archive and ten-year retrospective. |
-| [Funding history](https://openzcash.org/funding-history) | How the Dev Fund was spent over time. |
+| [Funding history](https://openzcash.org/funding-history) | Protocol funding allocations over time; allocations are distinct from recipient spending. |
 | [Governance](https://openzcash.org/governance) | Governance panels, compared side by side. |
 
 ## Public API
@@ -98,16 +98,26 @@ for open discovery.
 
 Requires Node 20.9+ and Postgres.
 
+Create `.env.local` with the connection string for your local development database:
+
+```dotenv
+DATABASE_URL=postgres://USER@localhost:5432/openzcash
+```
+
+Replace `USER` and the database name with your local settings. Use `.env.example`
+as a reference for additional settings; omit unused optional variables instead
+of copying blank values or placeholder URLs.
+
 ```bash
-cp .env.example .env.local   # fill in DATABASE_URL (the rest is optional)
 npm install
 npm run db:migrate           # apply the schema
 npm run import-zcg           # mirror the ZCG spreadsheet into the DB
 npm run dev                  # http://localhost:3000
 ```
 
-The public read side needs `DATABASE_URL` and a seeded ledger. `ZCG_SHEET_ID` is
-optional: the repo ships the public spreadsheet id by default. The legacy admin,
+The public read side needs `DATABASE_URL` and a seeded ledger. Leave
+`ZCG_SHEET_ID` unset to use the built-in public spreadsheet id; an empty value
+does not select the default. The legacy admin,
 treasury onboarding, viewing-key and scan HTTP routes are retired. Public-data
 imports still use the separate `CRON_SECRET` when triggered manually.
 
