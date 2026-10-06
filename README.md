@@ -91,8 +91,8 @@ the model's memory. BYO-LLM — no hosted service, no key. See
 
 The same mechanism publishes `coinholder-copilot` and `zechub-copilot`, and every
 skill is served from the site at
-[`/.well-known/skills/`](https://openzcash.org/.well-known/skills/) for open
-discovery.
+[`/.well-known/skills/index.json`](https://openzcash.org/.well-known/skills/index.json)
+for open discovery.
 
 ## Local development
 

@@ -55,8 +55,8 @@ what you touched.
 
 ## Dev workflow
 
-- Branches in this repo use topic prefixes such as `fix/`, `feat/`, `design/`, or
-  a personal `<name>/<topic>` prefix; PRs target `main`.
+- Branches in this repo use topic prefixes such as `fix/`, `docs/`, or a personal
+  `<name>/<topic>` prefix; PRs target `main`.
 - There are no `.github/` templates yet; a short description of what changed and
   why is enough.
 - Keep PRs to one surface when practical; the test gate below is fast.
