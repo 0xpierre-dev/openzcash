@@ -8,7 +8,7 @@ import {
   GUTTER,
   TITLE_LEADING,
   TITLE_MAX_LINES,
-  balancedBlock,
+  titleBlock,
   clampedBlock,
   titleSize,
   typeset,
@@ -165,7 +165,7 @@ export function ShareCard({
         ) : null}
         <div
           style={{
-            ...balancedBlock(size, TITLE_LEADING, TITLE_MAX_LINES),
+            ...titleBlock(size, TITLE_LEADING, TITLE_MAX_LINES),
             fontSize: size,
             fontWeight: 500,
             lineHeight: TITLE_LEADING,

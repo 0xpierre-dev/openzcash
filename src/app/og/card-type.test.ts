@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CARD_LIMITS } from "@/lib/seo/card-params";
 import {
   TITLE_MAX_LINES,
-  balancedBlock,
+  titleBlock,
   clampedBlock,
   titleSize,
   typeset,
@@ -13,7 +13,7 @@ describe("text blocks", () => {
   // clamped, and truncates text that fits (the site card lost its tagline).
   it("never balance and clamp the same block", () => {
     for (const style of [
-      balancedBlock(76, 1.08, 3),
+      titleBlock(76, 1.08, 3),
       clampedBlock(1),
       clampedBlock(2),
     ]) {
@@ -22,12 +22,12 @@ describe("text blocks", () => {
   });
 
   it("let words without break opportunities wrap inside the card", () => {
-    expect(balancedBlock(76, 1.08, 3).wordBreak).toBe("break-word");
+    expect(titleBlock(76, 1.08, 3).wordBreak).toBe("break-word");
     expect(clampedBlock(2).wordBreak).toBe("break-word");
   });
 
-  it("keep a balanced title to its line budget", () => {
-    expect(balancedBlock(50, 1.08, TITLE_MAX_LINES)).toMatchObject({
+  it("keep a title to its line budget", () => {
+    expect(titleBlock(50, 1.08, TITLE_MAX_LINES)).toMatchObject({
       maxHeight: 162,
       overflow: "hidden",
     });
