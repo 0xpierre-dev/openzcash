@@ -8,12 +8,12 @@
   "scripts": {
     "predev": "node scripts/publish-copilot.mjs && node scripts/build-zarvis-knowledge.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/publish-copilot.mjs && node scripts/build-zarvis-knowledge.mjs",
+    "prebuild": "node scripts/publish-copilot.mjs && node scripts/build-zarvis-knowledge.mjs && npm run errors:check",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs",
+    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs && node --test ops/error-fallback/handler.test.mjs && npm run errors:check",
     "test:watch": "vitest",
     "test:copilot": "node --test scripts/publish-copilot.test.mjs && python3 -B -m unittest discover -s skills/zcg-copilot/tests",
     "probe": "tsx scripts/probe-node.ts",
@@ -29,7 +29,10 @@
     "test:knowledge": "node --test scripts/build-zarvis-knowledge.test.mjs",
     "knowledge:sync": "npm run knowledge:sync:zips && python3 scripts/sync-zarvis-references.py",
     "eval:zarvis": "vitest run src/lib/zarvis/evaluation.test.ts",
-    "knowledge:sync:zips": "node --import tsx scripts/sync-zarvis-zips.ts"
+    "knowledge:sync:zips": "node --import tsx scripts/sync-zarvis-zips.ts",
+    "errors:build": "tsx scripts/build-error-fallback.tsx",
+    "errors:check": "tsx scripts/build-error-fallback.tsx --check",
+    "test:errors": "vitest run src/components/errors/error-state.test.tsx && node --test ops/error-fallback/handler.test.mjs && npm run errors:check"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.4",
