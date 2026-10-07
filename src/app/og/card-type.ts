@@ -3,12 +3,10 @@ import { CARD_SIZE } from "@/lib/seo/card-params";
 
 /**
  * Typesetting for the share card, kept apart from the JSX so it can be tested
- * without rendering. Satori has two traps this module avoids:
- * - `textWrap: "balance"` together with `lineClamp` narrows every clamped
- *   block to about half its width and truncates text that fits, so a block
- *   either balances or clamps, never both;
- * - text with no break opportunity runs off the canvas unless `wordBreak`
- *   allows a break inside the word.
+ * without rendering. Keep the title on ordinary wrapping: Satori's balance
+ * pass can shrink a single-glyph title below that glyph's width, causing its
+ * break-word loop to stop making progress and block the server event loop.
+ * Word breaking remains enabled so long tokens stay inside the card.
  */
 
 export const GUTTER = 72;
@@ -87,22 +85,21 @@ export function titleSize(text: CardLayoutText, site = false): number {
   return fits ? three : TITLE_SMALLEST;
 }
 
-/** A block of text that balances its lines. Never clamps (see the module note). */
-export function balancedBlock(
+/** A title with ordinary wrapping and a fixed vertical budget. */
+export function titleBlock(
   fontSize: number,
   leading: number,
   maxLines: number,
 ): CSSProperties {
   return {
     display: "block",
-    textWrap: "balance",
     wordBreak: "break-word",
     maxHeight: Math.ceil(fontSize * leading * maxLines),
     overflow: "hidden",
   };
 }
 
-/** A block of text clamped to `lines` with an ellipsis. Never balances (see the module note). */
+/** A block of text clamped to `lines` with an ellipsis. */
 export function clampedBlock(lines: number): CSSProperties {
   return { display: "block", lineClamp: lines, wordBreak: "break-word" };
 }
