@@ -69,7 +69,7 @@ describe("Zarvis on the Anthropic Messages API", () => {
     expect(params.messages).toEqual([evidenceMessage]);
     expect(params.messages[0].content[0]).not.toHaveProperty("cache_control");
     expect(params.tools[0]).toEqual({ name: "lookup_openzcash", description: lookupTool.description, input_schema: lookupTool.parameters });
-    expect(params.tools.map((tool: { name: string }) => tool.name)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "web_fetch", "web_search"]);
+    expect(params.tools.map((tool: { name: string }) => tool.name)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "read_grant_application", "web_fetch", "web_search"]);
     expect(params.tools.at(-1)).toMatchObject({ type: "web_search_20260318", allowed_domains: SEARCH_DOMAINS, max_uses: 2 });
     expect(options.signal).toBeInstanceOf(AbortSignal);
     expect(metrics).toMatchObject({ provider: "anthropic", model: "claude-sonnet-5-5", modelCalls: 1, inputTokens: 150, cachedInputTokens: 40, cacheWriteTokens: 10, outputTokens: 20, usageReported: true, webSearchCalls: 0 });

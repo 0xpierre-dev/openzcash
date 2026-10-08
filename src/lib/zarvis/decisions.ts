@@ -108,6 +108,13 @@ export function decisionsContext(
     return at && (!latest || at > latest) ? at : latest;
   }, null);
   const unavailable = meta.unavailable ?? [];
+  // The sheet records a requested amount for some rows only; the GitHub application holds it otherwise.
+  const requestedUsd = new Map(
+    proposals.map((p) => [
+      `proposal-${p.id}`,
+      p.requestedUsdCents == null ? null : Number(p.requestedUsdCents) / 100,
+    ]),
+  );
   return {
     publishedThrough: meta.publishedThrough,
     importedAt,
@@ -125,10 +132,12 @@ export function decisionsContext(
       subject: r.subject,
       detail: r.detail,
       decidedBy: r.decidedBy,
+      requestedUsd: requestedUsd.get(r.id) ?? null,
       sources: r.sources,
       grantPage: r.subjectHref ? `https://openzcash.org${r.subjectHref}` : null,
     })),
-    note: "Verdicts and dates come from the official ZCG sheet under the site's D-1 publication rule (publishedThrough is the last published day); status changes after that day are not shown. Committee verdicts link the minutes of that day when one exists; coinholder rows come from FPF polls. Withdrawn and cancelled rows are the applicant's own choice, dated by the sheet's decision or submission date. A verdict is not a payment or proof of delivery. Counts cover the whole sheet; the decisions array is an excerpt." +
+    note:
+      "Verdicts and dates come from the official ZCG sheet under the site's D-1 publication rule (publishedThrough is the last published day); status changes after that day are not shown. Committee verdicts link the minutes of that day when one exists; coinholder rows come from FPF polls. Withdrawn and cancelled rows are the applicant's own choice, dated by the sheet's decision or submission date. requestedUsd is the sheet's requested amount when it records one; null means the sheet has none, and the amount is readable from the Application link with read_grant_application (its issue number). A verdict is not a payment or proof of delivery. Counts cover the whole sheet; the decisions array is an excerpt." +
       (unavailable.length
         ? ` DEGRADED: ${unavailable.join(" and ")} could not be read, so ${unavailable.includes("meetings") ? "Minutes links" : ""}${unavailable.length === 2 ? " and " : ""}${unavailable.includes("grants") ? "grant pages" : ""} are missing from these rows, not absent in the record.`
         : ""),
