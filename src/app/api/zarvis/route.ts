@@ -7,6 +7,8 @@ import { acquireGeneration, recordGeneration, recordRejection, feedbackTicket } 
 import { GenerationFailure, classifyError, type ErrorClass } from "@/lib/zarvis/errors";
 import { logChatRequest, logRejection, type ChatOutcome } from "@/lib/zarvis/observe";
 import { spendTodayUsd } from "@/lib/zarvis/metrics-store";
+import { conversationTopic } from "@/lib/zarvis/topics";
+import { answerLanguage, directLanguage, type DirectLanguage } from "@/lib/zarvis/language";
 import type { ZarvisEvent } from "@/lib/zarvis/types";
 
 export const runtime = "nodejs";
@@ -48,9 +50,12 @@ export async function POST(request: Request) {
   const plan = answerPlan(input.messages, input.depth);
   const timeout = setTimeout(abort, plan.timeoutMs);
   const encoder = new TextEncoder();
+  // Two labels join the log line: a topic from the fixed taxonomy and the answer language the pipeline stamped on `done` (a failure before `done` is labelled by the question's own words). The question itself never leaves this handler.
+  let language: DirectLanguage | null = null;
+  const labels = () => { const lang = language ?? directLanguage(answerLanguage(input.messages, input.session)); return { topic: conversationTopic(input.messages, lang), lang }; };
   const stream = new ReadableStream<Uint8Array>({
     async start(out) {
-      const emit = (event: ZarvisEvent) => { if (!controller.signal.aborted) out.enqueue(encoder.encode(`${JSON.stringify(event.type === "done" ? { ...event, feedbackToken: feedbackTicket(Date.now(), event.provenance.route) } : event)}\n`)); };
+      const emit = (event: ZarvisEvent) => { if (event.type === "done") language = event.provenance.language; if (!controller.signal.aborted) out.enqueue(encoder.encode(`${JSON.stringify(event.type === "done" ? { ...event, feedbackToken: feedbackTicket(Date.now(), event.provenance.route) } : event)}\n`)); };
       try {
         emit({ type: "status", message: "Finding the right sources…" });
         const metrics = await generateAnswer(input.messages, controller.signal, emit, input.session, input.depth, { localOnly: capped });
@@ -60,7 +65,7 @@ export async function POST(request: Request) {
           // A direct answer called no model: the quota unit goes back, so only model answers count against the visitor.
           if (metrics?.route === "local" && metrics.modelCalls === 0 && refund) void refund();
           const estimatedUsd = recordGeneration("completed", ms, metrics);
-          logChatRequest({ at: new Date().toISOString(), route: metrics.route, outcome: "completed", depth: metrics.depth ?? plan.depth, ms: Math.round(ms), modelCalls: metrics.modelCalls, webSearchCalls: metrics.webSearchCalls, inputTokens: metrics.inputTokens, cachedInputTokens: metrics.cachedInputTokens, outputTokens: metrics.outputTokens, groundingFallbacks: metrics.groundingFallbacks ?? 0, repairRounds: metrics.repairRounds ?? 0, estimatedUsd, errorClass: null });
+          logChatRequest({ at: new Date().toISOString(), route: metrics.route, outcome: "completed", depth: metrics.depth ?? plan.depth, ms: Math.round(ms), modelCalls: metrics.modelCalls, webSearchCalls: metrics.webSearchCalls, inputTokens: metrics.inputTokens, cachedInputTokens: metrics.cachedInputTokens, outputTokens: metrics.outputTokens, groundingFallbacks: metrics.groundingFallbacks ?? 0, repairRounds: metrics.repairRounds ?? 0, estimatedUsd, errorClass: null, ...labels() });
         } catch { /* counters only */ }
       } catch (error) {
         const ms = performance.now() - started;
@@ -72,7 +77,7 @@ export async function POST(request: Request) {
           const errorClass: ErrorClass = request.signal.aborted ? "aborted" : controller.signal.aborted ? "deadline" : classifyError(error);
           const usage = error instanceof GenerationFailure ? error.usage : undefined;
           const estimatedUsd = recordGeneration(outcome, ms, usage, errorClass);
-          logChatRequest({ at: new Date().toISOString(), route: usage?.route ?? "model", outcome, depth: usage?.depth ?? plan.depth, ms: Math.round(ms), modelCalls: usage?.modelCalls ?? 0, webSearchCalls: usage?.webSearchCalls ?? 0, inputTokens: usage?.inputTokens ?? 0, cachedInputTokens: usage?.cachedInputTokens ?? 0, outputTokens: usage?.outputTokens ?? 0, groundingFallbacks: usage?.groundingFallbacks ?? 0, repairRounds: usage?.repairRounds ?? 0, estimatedUsd, errorClass });
+          logChatRequest({ at: new Date().toISOString(), route: usage?.route ?? "model", outcome, depth: usage?.depth ?? plan.depth, ms: Math.round(ms), modelCalls: usage?.modelCalls ?? 0, webSearchCalls: usage?.webSearchCalls ?? 0, inputTokens: usage?.inputTokens ?? 0, cachedInputTokens: usage?.cachedInputTokens ?? 0, outputTokens: usage?.outputTokens ?? 0, groundingFallbacks: usage?.groundingFallbacks ?? 0, repairRounds: usage?.repairRounds ?? 0, estimatedUsd, errorClass, ...labels() });
         }
         if (!request.signal.aborted) {
           const message = declined ? SPEND_CAP : controller.signal.aborted ? (plan.depth === "deep" ? "This analysis reached its time limit. Try a narrower question." : "This answer reached its time limit. Try a narrower question or choose Deep analysis.") : "Zarvis could not finish this answer. Please retry in a moment.";

@@ -25,6 +25,17 @@ beforeEach(() => {
   mocks.answer.mockImplementation(async (_messages, _signal, emit) => { emit({ type: "delta", text: "A grounded answer." }); emit({ type: "done", sources: [], provenance: prov("local") }); return completed(); });
 });
 describe("Zarvis API", () => {
+  it("logs a coarse topic and the answer language per request, never the question", async () => {
+    const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    mocks.answer.mockImplementationOnce(async (_messages, _signal, emit) => { emit({ type: "done", sources: [], provenance: { ...prov("local"), language: "pt" } }); return completed(); });
+    await (await POST(request({ messages: [{ role: "user", content: "Qual é a cotação do ZEC hoje?" }] }))).text();
+    mocks.answer.mockRejectedValueOnce(new Error("provider down"));
+    await (await POST(request({ messages: [{ role: "user", content: "¿Qué billetera recomiendan para iOS?" }] }))).text();
+    await (await POST(request({ messages: [{ role: "user", content: "What does ZCG hold?" }, { role: "assistant", content: "…" }, { role: "user", content: "and the lockbox" }] }))).text();
+    const lines = logLines(info);
+    expect(lines.map((line) => [line.topic, line.lang])).toEqual([["price", "pt"], ["wallets", "es"], ["treasuries", "en"]]);
+    for (const line of lines) for (const word of ["cotação", "billetera", "lockbox", "ZCG"]) expect(JSON.stringify(line)).not.toContain(word);
+  });
   it("refunds the quota unit after a direct answer and keeps it after a model answer or a failure", async () => {
     const refund = vi.fn(async () => true);
     mocks.reserve.mockResolvedValue({ allowed: true, retryAfter: 0, refund });
@@ -106,8 +117,12 @@ describe("Zarvis API", () => {
     expect(lines[3]).toMatchObject({ route: "model", outcome: "failed", errorClass: "unknown", estimatedUsd: null });
     expect(lines[4]).toMatchObject({ route: "rejected", outcome: "quota", modelCalls: 0, errorClass: null });
     expect(lines[5]).toMatchObject({ route: "rejected", outcome: "forbidden" });
+    // The question itself never reaches the log: only a label from the fixed taxonomy and the answer language.
+    expect(lines[0]).toMatchObject({ topic: "privacy-keys", lang: "en" });
+    expect(lines[4]).toMatchObject({ topic: null, lang: null });
+    expect(JSON.stringify(lines)).not.toContain("shielded");
     for (const line of lines) {
-      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "modelCalls", "ms", "outcome", "outputTokens", "repairRounds", "route", "webSearchCalls"]);
+      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "lang", "modelCalls", "ms", "outcome", "outputTokens", "repairRounds", "route", "topic", "webSearchCalls"]);
       expect(typeof line.ms).toBe("number"); expect(Number.isNaN(Date.parse(String(line.at)))).toBe(false);
     }
     expect(JSON.stringify(lines)).not.toMatch(/shielded|Compare|sk-secret|provider body|openzcash\.org/);

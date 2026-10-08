@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, PageHeader } from "@/components/ui";
 import { zarvisConfig } from "@/lib/zarvis/config";
 import { systemPrompt } from "@/lib/zarvis/prompt";
-import { DIRECT_ROUTES, FAQ, FRESHNESS_NOTE, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
+import { DIRECT_ROUTES, FAQ, FRESHNESS_NOTE, INCIDENTS, KEPT_AT_OPENZCASH, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "@/lib/zarvis/about";
 import { modelLabel } from "@/lib/zarvis/provenance";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
@@ -67,7 +67,7 @@ export default function AboutZarvisPage() {
       <Section title="What is kept, and for how long">
         <ul className="space-y-1.5">
           <li><span className="font-medium text-stone-800">In your browser:</span> the conversation stays in page memory while you move around the site, including the Monthly pages. Reloading or New chat clears it. Zarvis never writes your question into the page address; “Copy question link” under an answer makes a link that carries that one question and only fills the composer when opened. Shared calculator links carry only scenario assumptions.</li>
-          <li><span className="font-medium text-stone-800">At OpenZcash:</span> no question or answer is written to a database or a log. What is recorded per request is the route, the outcome, the duration, the token counts and the estimated cost; per day, those counts by route. Feedback sends your rating and, for “Needs work”, an optional reason chosen from a fixed list, without the conversation text. Hosting access logs and short-lived abuse counters, keyed by a hash of the network address, are separate.</li>
+          <li><span className="font-medium text-stone-800">At OpenZcash:</span> {KEPT_AT_OPENZCASH}</li>
           <li><span className="font-medium text-stone-800">At the model provider:</span> for model answers, the recent turns and the retrieved records are sent to {retention.provider}, which {retention.summary} Read on {shortDate(retention.readOn)} at <a href={retention.url} target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">{retention.linkLabel} ↗</a>{retention.training ? <> and <a href={retention.training.url} target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">{retention.training.linkLabel} ↗</a></> : null}.</li>
         </ul>
       </Section>

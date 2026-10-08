@@ -24,6 +24,8 @@ export const TOKEN_DISCLAIMER = {
   title: "No official token",
   body: "There is no official Zarvis token and no official OpenZcash token, coin or memecoin. Any token using the Zarvis or OpenZcash name is not created, endorsed or issued by OpenZcash, and this site is not connected to it. Zarvis is free to use; OpenZcash pays the model.",
 } as const;
+/** What the server records per request, in the visitor's words: labels and counts, never the text. The topic label comes from the fixed list in topics.ts. */
+export const KEPT_AT_OPENZCASH = "no question or answer is written to a database or a log. What is recorded per request is the route, the outcome, the duration, the token counts, the estimated cost, the language of the answer and a coarse topic label chosen from a fixed list of fifteen subjects (price, treasuries, grants, governance, ZIPs, wallets, privacy, mining, communities, news, calculator, history, site help, other), never a word of the question; per day, those counts by route. Feedback sends your rating and, for “Needs work”, an optional reason chosen from a fixed list, without the conversation text. Hosting access logs and short-lived abuse counters, keyed by a hash of the network address, are separate.";
 /** Direct answers: no model call, no cost, sources from this site's own records. */
 export const DIRECT_ROUTES = [
   { label: "Privacy and protocol FAQ", detail: "What makes a transaction private, halving, block subsidy, Dev Fund split, viewing keys, common wallet questions." },
