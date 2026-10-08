@@ -1,12 +1,13 @@
 import "server-only";
 import OpenAI from "openai";
 import type { Tool, ResponseCreateParamsStreaming } from "openai/resources/responses/responses";
-import type { zarvisConfig } from "./config";
+import type { ProviderConfig } from "./config";
 import { SEARCH_DOMAINS } from "./sources";
 import type { AnswerPlan } from "./depth";
 import type { ResearchScope } from "./research-scope";
 
-type Config = ReturnType<typeof zarvisConfig>;
+/** The Responses API providers (OpenAI, xAI); the Anthropic transport has its own client and search tool in anthropic.ts. */
+type Config = ProviderConfig;
 export function providerClient(config: Config, timeout = 50_000) {
   if (!config.apiKey) throw new Error("PROVIDER_NOT_CONFIGURED");
   // Fixed hosts: never route a credential using a user-supplied URL or SDK environment override.

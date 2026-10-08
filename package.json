@@ -35,6 +35,7 @@
     "test:errors": "vitest run src/components/errors/error-state.test.tsx && node --test ops/error-fallback/handler.test.mjs && npm run errors:check"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.132.0",
     "@grpc/grpc-js": "^1.14.4",
     "@grpc/proto-loader": "^0.8.1",
     "@react-three/drei": "^10.7.7",

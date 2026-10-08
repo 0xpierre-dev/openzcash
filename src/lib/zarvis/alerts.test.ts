@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-import { ALERT_INTERVAL_MS, alertState, noteOutcome, noteRejection, noteUnpriced, providerDegraded, resetAlertsForTests, sendAlert } from "./alerts";
+import { ALERT_INTERVAL_MS, alertState, noteFailover, noteOutcome, noteRejection, noteUnpriced, providerDegraded, resetAlertsForTests, sendAlert } from "./alerts";
 const fetchMock = vi.fn();
 beforeEach(() => { resetAlertsForTests(); fetchMock.mockReset().mockResolvedValue({ ok: true }); vi.stubGlobal("fetch", fetchMock); vi.stubEnv("ZARVIS_ALERT_WEBHOOK_URL", "https://hooks.example/abc"); });
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
@@ -55,6 +55,13 @@ describe("Operator alerts", () => {
     noteUnpriced("Custom-Model ", 1000); noteUnpriced("Custom-Model ", 2000);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).content).toMatch(/could not be priced \(model custom-model\)/);
+  });
+  it("alerts once per ten minutes when an answer ran on the fallback provider, with labels and the class only", () => {
+    noteFailover("Anthropic (Claude)", "xAI (Grok)", "provider_http_529", 1000); noteFailover("Anthropic (Claude)", "xAI (Grok)", "provider_timeout", 2000);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).content).toMatch(/Anthropic \(Claude\).*provider_http_529.*xAI \(Grok\)/);
+    noteFailover("Anthropic (Claude)", "xAI (Grok)", "provider_timeout", 1000 + ALERT_INTERVAL_MS);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
   it("counts a failed delivery without throwing", async () => {
     fetchMock.mockRejectedValueOnce(new Error("network down"));
