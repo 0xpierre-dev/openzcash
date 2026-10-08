@@ -603,6 +603,16 @@ export const zarvisFeedbackReasons = pgTable("zarvis_feedback_reasons", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 }, (t) => [primaryKey({ columns: [t.day, t.route, t.reason] })]);
 
+/** Anonymous question subjects: one count per UTC day, route, topic label and answer language. The question text never reaches the database. */
+export const zarvisTopicDaily = pgTable("zarvis_topic_daily", {
+  day: date("day").notNull(),
+  route: text("route").notNull(), // "local" | "model"
+  topic: text("topic").notNull(),
+  lang: text("lang").notNull(),
+  count: integer("count").notNull().default(0),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [primaryKey({ columns: [t.day, t.route, t.topic, t.lang] })]);
+
 export const zarvisCanary = pgTable("zarvis_canary", {
   ranAt: timestamp("ran_at", { withTimezone: true }).primaryKey(),
   ok: boolean("ok").notNull(),

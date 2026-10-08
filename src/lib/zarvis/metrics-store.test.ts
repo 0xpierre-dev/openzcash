@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({ getDb: vi.fn() }));
 vi.mock("@/lib/db/client", () => ({ getDb: mocks.getDb }));
 import { PgDialect } from "drizzle-orm/pg-core";
 import type { SQL } from "drizzle-orm";
-import { dailyMetrics, feedbackReasons, flushDaily, latestCanary, percentile, queueDaily, queueFeedbackReason, recordCanary, resetStoreForTests, spendTodayUsd, storeState } from "./metrics-store";
+import { dailyMetrics, feedbackReasons, flushDaily, latestCanary, percentile, queueDaily, queueFeedbackReason, queueTopic, recordCanary, resetStoreForTests, spendTodayUsd, storeState } from "./metrics-store";
 
 type Call = { method: string; args: unknown[] };
 type Chain = Record<string, unknown>;
@@ -40,6 +40,14 @@ describe("Durable daily metrics", () => {
     expect(calls.filter((c) => c.method === "onConflictDoUpdate")).toHaveLength(3);
     expect(calls[0].method).toBe("execute");
     expect(storeState()).toMatchObject({ pendingRows: 0, writeFailures: 0 });
+  });
+  it("flushes question subjects per day, route, topic and language, counts only", async () => {
+    const calls: Call[] = []; mocks.getDb.mockReturnValue(fakeDb([], calls));
+    queueTopic("model", "price", "pt"); queueTopic("model", "price", "pt"); queueTopic("local", "wallets", "en");
+    expect(storeState().pendingRows).toBe(2);
+    expect(await flushDaily()).toBe(true);
+    const inserted = calls.filter((c) => c.method === "values").map((c) => c.args[0] as Record<string, unknown>);
+    expect(inserted).toEqual([{ day: "2026-09-28", route: "local", topic: "wallets", lang: "en", count: 1 }, { day: "2026-09-28", route: "model", topic: "price", lang: "pt", count: 2 }]);
   });
   it("flushes needs-work reasons per day, route and reason in the same transaction, counts only", async () => {
     const calls: Call[] = []; mocks.getDb.mockReturnValue(fakeDb([], calls));

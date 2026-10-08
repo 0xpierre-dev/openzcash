@@ -235,6 +235,10 @@ Cost estimates use the built-in rate table above for the active model; the `ZARV
 
 Answer feedback sends only a signed one-hour ticket, a useful/needs-work vote and, with a needs-work vote, an optional reason id from the fixed list in `src/lib/zarvis/feedback.ts` (wrong_figure, outdated, missing_source, off_question, wrong_language, unclear, other; the chat shows them as chips after “Needs work”, with Skip). Reasons are counted per UTC day and route in `zarvis_feedback_reasons` (migration `0007_zarvis_feedback_reasons`, flushed in the same transaction as the daily counters); a reason with a useful vote, an unknown reason or any extra field is rejected with 400. Tickets contain a random nonce/expiry and the answer route (`local` or `model`, so votes can be attributed per route in the daily table), no question, answer, identity or scenario. Votes are deduplicated per process with bounded memory; counters are directional feedback, not an authenticated survey. The backend rejects arbitrary feedback text. Calculator links contain public numerical assumptions, not chat text.
 
+## Weekly review (2026-10-08)
+
+`npm run zarvis:review` (or `scripts/zarvis-review.sh 14` for two weeks) prints, from the linked Railway checkout: the subject and language distribution of the week's questions (labels only, from `zarvis_topic_daily`; `scripts/zarvis-topics.py` reads the same labels from one deployment's log), the daily outcomes, cost and votes from `zarvis_metrics_daily`, and the needs-work reasons from `zarvis_feedback_reasons`. The loop is: frequent model-route topics become direct answers, needs-work reasons become evaluation cases, `npm run knowledge:sync` refreshes every corpus, and the paid checks (`eval-zarvis-live.py --extended`, `eval-zarvis-zips.py`) run against a preview before anything ships. No question text exists anywhere in this chain.
+
 ## Repeatable evaluation
 
 - `npm run eval:zarvis`: offline retrieval, arithmetic, assumptions, continuity, grounding, limits and feedback cases. No model tokens or model-as-judge scoring.
