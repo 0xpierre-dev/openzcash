@@ -18,6 +18,46 @@ describe("Local knowledge coverage and size", () => {
   ])("reaches the source behind a paraphrase without the source's own words: %s", (question, url) => {
     expect(searchKnowledge(question, 3).map((doc) => doc.url)).toContainEqual(expect.stringContaining(url));
   });
+  it.each([
+    "How does Zcash provide financial privacy?",
+    "How does Zcash provide FINANCIAL privacy?",
+    "Why is financial privacy important?",
+    "How does Zcash protect financially vulnerable users' privacy?",
+  ])("does not expand an English financial word into development funding: %s", (question) => {
+    // Exercise the bundled corpus and production limits, not a larger result set
+    // that could hide irrelevant funding excerpts ahead of the privacy source.
+    const docs = searchKnowledge(question, 4, 5000);
+    expect(docs[0]?.id).toBe("privacy");
+    expect(docs.some((doc) => /zip-(?:0214|1012|1015)$/.test(doc.url))).toBe(false);
+    expect(docs.length).toBeLessThanOrEqual(4);
+    expect(JSON.stringify(docs).length).toBeLessThanOrEqual(5000);
+  });
+  it.each([
+    "financia", "financiam", "financian", "financiar", "financiamos", "financiando",
+    "financiará", "financiarão", "financiarán", "financiaron", "financiaram",
+    "financiado", "financiada", "financiados", "financiadas",
+    "financiamento", "financiamentos", "financiamiento", "financiamientos",
+    "financiación", "financiaciones",
+    "cofinanciamento", "refinanciamiento",
+    "autofinanciamento", "subfinanciamento", "microfinanciamiento", "desfinanciamento",
+  ])("preserves the Portuguese and Spanish funding-word family: %s", (word) => {
+    const docs = searchKnowledge(`${word}?`, 4, 5000);
+    expect(docs.some((doc) => doc.url.endsWith("zip-1015"))).toBe(true);
+    expect(docs.some((doc) => doc.id === "funding")).toBe(true);
+  });
+  it.each([
+    "Quem financia o desenvolvimento da Zcash?",
+    "Como funciona o financiamento da Zcash?",
+    "¿Cómo funciona la financiación de Zcash?",
+    "¿Cómo funciona el financiamiento de Zcash?",
+    "Who funds Zcash development?",
+  ])("keeps development funding reachable across languages: %s", (question) => {
+    expect(searchKnowledge(question, 4, 5000).some((doc) => doc.url.endsWith("zip-1015"))).toBe(true);
+  });
+  it("keeps an explicit Dev Fund intent even when financial privacy is also mentioned", () => {
+    const docs = searchKnowledge("How does the Dev Fund support financial privacy?", 4, 5000);
+    expect(docs.some((doc) => /zip-10(?:12|14|15)$/.test(doc.url))).toBe(true);
+  });
   it("keeps full-key scope attached to isolated ZIP 310 excerpts", () => {
     const docs = searchKnowledge("ZIP 310 new unspent note nullifier incoming IVK");
     const excerpts = docs.filter((doc) => doc.id.startsWith("reference:zip-0310:"));

@@ -44,7 +44,8 @@ const concepts: Array<[string, RegExp, string[]]> = [
   ["fees", /\btaxas?\b|\btarifa|\bfees?\b|comisi[oó]n|custo.*transa|transaction cost|zip.?317/, ["fee", "fees", "conventional", "logical", "actions"]],
   ["memo", /\bmemo\b|mensagem|mensaje|\brecado\b|note.*transaction|campo.*(?:mensagem|texto)/, ["memo", "field", "encrypted", "512"]],
   ["issuance", /halving|supply|oferta|emissao|issuance|cap.*coins|21.*million|21.*milh|block.*spacing/, ["issuance", "supply", "halving"]],
-  ["funding", /dev.?fund|fundo.*desenvolvimento|subsid|funding.*split|alocacao|miners.*25|mineradores.*25|\bbanca\b|financia|quem paga.*desenvolv|who (?:pays for|funds).*development|development fund/, ["funding", "allocation", "subsidy"]],
+  // Keep PT/ES funding inflections and compounds, but exclude English financial/financially.
+  ["funding", /dev.?fund|fundo.*desenvolvimento|subsid|funding.*split|alocacao|miners.*25|mineradores.*25|\bbanca\b|financia(?!l)|quem paga.*desenvolv|who (?:pays for|funds).*development|development fund/, ["funding", "allocation", "subsidy"]],
   ["ledger", /milestone|marcos|pagamento|pagou|paid|budget|orcamento|orcad|liquidacao|settlement|methodolog|metodolog|\bimport\b|imported|importad/, ["ledger", "methodology", "paid"]],
   ["calculator", /coverage|cobertura|runway|simul|cenario|scenario|\bmeta\b|ownership|participacao|calculad|calculator|cypherpunk|cipherpunk|20[x×]|quanto.*anos|how many years/, ["calculator", "treasury", "scenario"]],
   ["governance", /governan|governanc|ativad|activated|consensus|consenso|votacao|poll|enquete/, ["governance", "activation", "decision"]],
