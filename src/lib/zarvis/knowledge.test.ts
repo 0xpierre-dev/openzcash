@@ -34,6 +34,11 @@ describe("Local knowledge coverage and size", () => {
     expect(systemPrompt()).not.toContain("PUBLIC SITE GUIDE");
     expect(systemPrompt().length).toBeLessThan(6500);
   });
+  it("fixes the Portuguese gender of Zcash and the wallets", () => {
+    expect(systemPrompt()).toContain("a Zcash");
+    expect(systemPrompt()).toContain("Zallet");
+    expect(systemPrompt()).toContain("o Zebra");
+  });
   it("bounds large, escaped and deeply nested records without losing freshness markers", () => {
     const input = { stale: true, importedAt: "2026-09-26", rows: Array.from({ length: 200 }, () => ({ name: "A", text: '\"\\'.repeat(2000), amount: 100 })) };
     const result = compactData(input);
