@@ -6,7 +6,7 @@ import { generateAnswer } from "@/lib/zarvis/openai";
 import { acquireGeneration, recordGeneration, recordRejection, feedbackTicket } from "@/lib/zarvis/metrics";
 import { GenerationFailure, classifyError, type ErrorClass } from "@/lib/zarvis/errors";
 import { logChatRequest, logRejection, type ChatOutcome } from "@/lib/zarvis/observe";
-import { spendTodayUsd } from "@/lib/zarvis/metrics-store";
+import { queueTopic, spendTodayUsd } from "@/lib/zarvis/metrics-store";
 import { conversationTopic } from "@/lib/zarvis/topics";
 import { answerLanguage, directLanguage, type DirectLanguage } from "@/lib/zarvis/language";
 import type { ZarvisEvent } from "@/lib/zarvis/types";
@@ -65,7 +65,8 @@ export async function POST(request: Request) {
           // A direct answer called no model: the quota unit goes back, so only model answers count against the visitor.
           if (metrics?.route === "local" && metrics.modelCalls === 0 && refund) void refund();
           const estimatedUsd = recordGeneration("completed", ms, metrics);
-          logChatRequest({ at: new Date().toISOString(), route: metrics.route, outcome: "completed", depth: metrics.depth ?? plan.depth, ms: Math.round(ms), modelCalls: metrics.modelCalls, webSearchCalls: metrics.webSearchCalls, webFetchCalls: metrics.webFetchCalls, inputTokens: metrics.inputTokens, cachedInputTokens: metrics.cachedInputTokens, outputTokens: metrics.outputTokens, groundingFallbacks: metrics.groundingFallbacks ?? 0, repairRounds: metrics.repairRounds ?? 0, estimatedUsd, errorClass: null, ...labels() });
+          const tagged = labels(); queueTopic(metrics.route, tagged.topic, tagged.lang);
+          logChatRequest({ at: new Date().toISOString(), route: metrics.route, outcome: "completed", depth: metrics.depth ?? plan.depth, ms: Math.round(ms), modelCalls: metrics.modelCalls, webSearchCalls: metrics.webSearchCalls, webFetchCalls: metrics.webFetchCalls, inputTokens: metrics.inputTokens, cachedInputTokens: metrics.cachedInputTokens, outputTokens: metrics.outputTokens, groundingFallbacks: metrics.groundingFallbacks ?? 0, repairRounds: metrics.repairRounds ?? 0, estimatedUsd, errorClass: null, ...tagged });
         } catch { /* counters only */ }
       } catch (error) {
         const ms = performance.now() - started;
@@ -77,7 +78,8 @@ export async function POST(request: Request) {
           const errorClass: ErrorClass = request.signal.aborted ? "aborted" : controller.signal.aborted ? "deadline" : classifyError(error);
           const usage = error instanceof GenerationFailure ? error.usage : undefined;
           const estimatedUsd = recordGeneration(outcome, ms, usage, errorClass);
-          logChatRequest({ at: new Date().toISOString(), route: usage?.route ?? "model", outcome, depth: usage?.depth ?? plan.depth, ms: Math.round(ms), modelCalls: usage?.modelCalls ?? 0, webSearchCalls: usage?.webSearchCalls ?? 0, webFetchCalls: usage?.webFetchCalls ?? 0, inputTokens: usage?.inputTokens ?? 0, cachedInputTokens: usage?.cachedInputTokens ?? 0, outputTokens: usage?.outputTokens ?? 0, groundingFallbacks: usage?.groundingFallbacks ?? 0, repairRounds: usage?.repairRounds ?? 0, estimatedUsd, errorClass, ...labels() });
+          const tagged = labels(); queueTopic(usage?.route ?? "model", tagged.topic, tagged.lang);
+          logChatRequest({ at: new Date().toISOString(), route: usage?.route ?? "model", outcome, depth: usage?.depth ?? plan.depth, ms: Math.round(ms), modelCalls: usage?.modelCalls ?? 0, webSearchCalls: usage?.webSearchCalls ?? 0, webFetchCalls: usage?.webFetchCalls ?? 0, inputTokens: usage?.inputTokens ?? 0, cachedInputTokens: usage?.cachedInputTokens ?? 0, outputTokens: usage?.outputTokens ?? 0, groundingFallbacks: usage?.groundingFallbacks ?? 0, repairRounds: usage?.repairRounds ?? 0, estimatedUsd, errorClass, ...tagged });
         }
         if (!request.signal.aborted) {
           const message = declined ? SPEND_CAP : controller.signal.aborted ? (plan.depth === "deep" ? "This analysis reached its time limit. Try a narrower question." : "This answer reached its time limit. Try a narrower question or choose Deep analysis.") : "Zarvis could not finish this answer. Please retry in a moment.";

@@ -1,7 +1,7 @@
 import "server-only";
 import { desc, eq, gte, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
-import { zarvisCanary, zarvisFeedbackReasons, zarvisMetricsDaily } from "@/lib/db/schema";
+import { zarvisCanary, zarvisFeedbackReasons, zarvisMetricsDaily, zarvisTopicDaily } from "@/lib/db/schema";
 import type { FeedbackReason } from "./feedback";
 
 /** Durable daily counters and canary records in Postgres. Every write is fire-and-forget and short; nothing here delays or fails an answer. */
@@ -13,10 +13,10 @@ export type DailyDelta = Partial<Record<DailyCounter, number>> & { estimatedUsd?
 type Row = Record<DailyCounter, number> & { estimatedUsd: number; latency: number[] };
 export type CanaryRecord = { at: string; ok: boolean; passed: number; failed: number; ms: number; failedCases: string[] };
 type Spend = { day: string; dbUsd: number; flushedUsd: number; unwrittenUsd: number; readAt: number; reading: boolean };
-type StoreState = { pending: Map<string, Row>; pendingReasons: Map<string, number>; timer: ReturnType<typeof setTimeout> | null; spend: Spend; writeFailures: number; readFailures: number; lastFlushAt: number | null; canary: CanaryRecord | null; canaryReadAt: number };
+type StoreState = { pending: Map<string, Row>; pendingReasons: Map<string, number>; pendingTopics: Map<string, number>; timer: ReturnType<typeof setTimeout> | null; spend: Spend; writeFailures: number; readFailures: number; lastFlushAt: number | null; canary: CanaryRecord | null; canaryReadAt: number };
 const FLUSH_MS = 5_000, SPEND_REFRESH_MS = 30_000, CANARY_CACHE_MS = 60_000;
 const globalState = globalThis as typeof globalThis & { __zarvisMetricsStoreV1?: StoreState };
-const state: StoreState = globalState.__zarvisMetricsStoreV1 ??= { pending: new Map(), pendingReasons: new Map(), timer: null, spend: { day: "", dbUsd: 0, flushedUsd: 0, unwrittenUsd: 0, readAt: 0, reading: false }, writeFailures: 0, readFailures: 0, lastFlushAt: null, canary: null, canaryReadAt: 0 };
+const state: StoreState = globalState.__zarvisMetricsStoreV1 ??= { pending: new Map(), pendingReasons: new Map(), pendingTopics: new Map(), timer: null, spend: { day: "", dbUsd: 0, flushedUsd: 0, unwrittenUsd: 0, readAt: 0, reading: false }, writeFailures: 0, readFailures: 0, lastFlushAt: null, canary: null, canaryReadAt: 0 };
 export const utcDay = (now = Date.now()) => new Date(now).toISOString().slice(0, 10);
 export const latencyBucket = (ms: number) => LATENCY_BOUNDS_MS.findIndex((bound) => ms <= bound);
 export function percentile(latency: number[], q: number): number | null {
@@ -49,13 +49,21 @@ export function queueFeedbackReason(route: "local" | "model", reason: FeedbackRe
   state.pendingReasons.set(key, (state.pendingReasons.get(key) ?? 0) + 1);
   if (!state.timer) { state.timer = setTimeout(() => { state.timer = null; void flushDaily(); }, FLUSH_MS); state.timer.unref?.(); }
 }
+/** Buffers one answered question's subject for the UTC day; the label comes from the fixed taxonomy in topics.ts, never from the text. */
+export function queueTopic(route: "local" | "model", topic: string, lang: string, now = Date.now()) {
+  state.pendingTopics ??= new Map();
+  const key = `${utcDay(now)}|${route}|${topic}|${lang}`;
+  state.pendingTopics.set(key, (state.pendingTopics.get(key) ?? 0) + 1);
+  if (!state.timer) { state.timer = setTimeout(() => { state.timer = null; void flushDaily(); }, FLUSH_MS); state.timer.unref?.(); }
+}
 export async function flushDaily(): Promise<boolean> {
   if (state.timer) { clearTimeout(state.timer); state.timer = null; }
   // Rows are upserted in key order so two overlapping flushes (a second replica, or a slow flush) never deadlock on each other's locks.
   const batch = [...state.pending].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)); state.pending = new Map();
   const reasons = [...state.pendingReasons].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)); state.pendingReasons = new Map();
-  if (!batch.length && !reasons.length) return true;
-  const t = zarvisMetricsDaily, r = zarvisFeedbackReasons;
+  const topics = [...(state.pendingTopics ?? [])].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)); state.pendingTopics = new Map();
+  if (!batch.length && !reasons.length && !topics.length) return true;
+  const t = zarvisMetricsDaily, r = zarvisFeedbackReasons, p = zarvisTopicDaily;
   try {
     await getDb().transaction(async (tx) => {
       await shortStatement(tx);
@@ -71,6 +79,10 @@ export async function flushDaily(): Promise<boolean> {
       for (const [key, count] of reasons) {
         const [day, route, reason] = key.split("|");
         await tx.insert(r).values({ day, route, reason, count }).onConflictDoUpdate({ target: [r.day, r.route, r.reason], set: { count: sql`${r.count} + excluded.count`, updatedAt: sql`now()` } });
+      }
+      for (const [key, count] of topics) {
+        const [day, route, topic, lang] = key.split("|");
+        await tx.insert(p).values({ day, route, topic, lang, count }).onConflictDoUpdate({ target: [p.day, p.route, p.topic, p.lang], set: { count: sql`${p.count} + excluded.count`, updatedAt: sql`now()` } });
       }
     });
     const spend = spendState(Date.now());
@@ -114,6 +126,11 @@ export async function dailyMetrics(days = 14, now = Date.now()) {
   return rows.map((row) => ({ ...row, p50BucketUpperMs: percentile(row.latency, 0.5), p95BucketUpperMs: percentile(row.latency, 0.95) }));
 }
 /** "Needs work" reasons over the last days, newest day first: counts per day, route and reason. */
+/** Subject counts for the last days, newest first; labels only. */
+export async function topicCounts(days = 14, now = Date.now()) {
+  const since = utcDay(now - (days - 1) * 86_400_000);
+  return getDb().transaction(async (tx) => { await shortStatement(tx); return tx.select({ day: zarvisTopicDaily.day, route: zarvisTopicDaily.route, topic: zarvisTopicDaily.topic, lang: zarvisTopicDaily.lang, count: zarvisTopicDaily.count }).from(zarvisTopicDaily).where(gte(zarvisTopicDaily.day, since)).orderBy(desc(zarvisTopicDaily.day), desc(zarvisTopicDaily.count)); });
+}
 export async function feedbackReasons(days = 14, now = Date.now()) {
   const since = utcDay(now - (days - 1) * 86_400_000);
   return getDb().transaction(async (tx) => { await shortStatement(tx); return tx.select({ day: zarvisFeedbackReasons.day, route: zarvisFeedbackReasons.route, reason: zarvisFeedbackReasons.reason, count: zarvisFeedbackReasons.count }).from(zarvisFeedbackReasons).where(gte(zarvisFeedbackReasons.day, since)).orderBy(desc(zarvisFeedbackReasons.day), zarvisFeedbackReasons.route, zarvisFeedbackReasons.reason); });
@@ -136,11 +153,11 @@ export async function latestCanary(now = Date.now()): Promise<CanaryRecord | nul
   return state.canary;
 }
 export function storeState() {
-  return { pendingRows: state.pending.size + state.pendingReasons.size, writeFailures: state.writeFailures, readFailures: state.readFailures, lastFlushAt: state.lastFlushAt ? new Date(state.lastFlushAt).toISOString() : null, spendReadAt: state.spend.readAt ? new Date(state.spend.readAt).toISOString() : null };
+  return { pendingRows: state.pending.size + state.pendingReasons.size + (state.pendingTopics?.size ?? 0), writeFailures: state.writeFailures, readFailures: state.readFailures, lastFlushAt: state.lastFlushAt ? new Date(state.lastFlushAt).toISOString() : null, spendReadAt: state.spend.readAt ? new Date(state.spend.readAt).toISOString() : null };
 }
 export function resetStoreForTests() {
   if (state.timer) clearTimeout(state.timer);
-  state.pendingReasons = new Map();
+  state.pendingReasons = new Map(); state.pendingTopics = new Map();
   state.pending = new Map(); state.timer = null; state.spend = { day: "", dbUsd: 0, flushedUsd: 0, unwrittenUsd: 0, readAt: 0, reading: false };
   state.writeFailures = 0; state.readFailures = 0; state.lastFlushAt = null; state.canary = null; state.canaryReadAt = 0;
 }
