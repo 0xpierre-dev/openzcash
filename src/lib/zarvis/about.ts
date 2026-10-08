@@ -15,7 +15,11 @@ export function quotaLines(config: AboutQuotaConfig): string[] {
 }
 export function modelLine(config: AboutModelConfig): string {
   if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
-  return `${config.model} from ${config.providerLabel}, called through its ${providerRetention(config.providerLabel)?.api ?? "Responses API"}${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
+  const api = providerRetention(config.providerLabel)?.api ?? "Responses API";
+  const search = config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search";
+  // Only the Messages API transport has a page-reading tool; it reads a page the question links on the same domains, search on or off.
+  const fetch = api === "Messages API" ? "; a page you link on an official or community Zcash domain may be read in full" : "";
+  return `${config.model} from ${config.providerLabel}, called through its ${api}${search}${fetch}.`;
 }
 /** One place that says how old "live" is: sheet/GitHub import cadence, D-1 verdict publication, price cache. Numbers mirror docs/zcg-publication.md and the freshness pipeline. */
 export const FRESHNESS_NOTE = "Site records import from the official spreadsheet and GitHub every 6 hours, and pages refresh themselves when a visit arrives after a stale period. Grant verdict changes publish the next day at midnight, Brasilia time. Price quotes are cached for about 10 minutes. When sources disagree, the ZCG Grant Dashboard spreadsheet wins.";

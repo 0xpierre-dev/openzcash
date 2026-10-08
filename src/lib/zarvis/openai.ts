@@ -17,7 +17,7 @@ const FAILOVER_CLASSES: ErrorClass[] = ["provider_billing", "provider_http_429",
 const conversation = (config: ProviderConfig, plan: AnswerPlan): Conversation => config.provider === "anthropic" ? createAnthropicConversation(config, plan) : createResponsesConversation(config, plan);
 /** Before preparation the route is still local; afterwards it is model unless the local plan finishes the answer. */
 const freshMetrics = (config: ProviderConfig, prepared?: Prepared): GenerationMetrics => ({
-  route: prepared && !prepared.direct ? "model" : "local", provider: config.provider, model: config.model, modelCalls: 0, localLookups: prepared?.local.evidence.length ?? 0, webSearchCalls: 0, inputTokens: 0, cachedInputTokens: 0, cacheWriteTokens: 0, outputTokens: 0, usageReported: false,
+  route: prepared && !prepared.direct ? "model" : "local", provider: config.provider, model: config.model, modelCalls: 0, localLookups: prepared?.local.evidence.length ?? 0, webSearchCalls: 0, webFetchCalls: 0, inputTokens: 0, cachedInputTokens: 0, cacheWriteTokens: 0, outputTokens: 0, usageReported: false,
   ...(prepared ? { depth: prepared.plan.depth, reasoningEffort: prepared.plan.effort } : {}),
 });
 /** Every failure leaves here as a GenerationFailure: a fixed class plus the usage billed so far, never a provider body. */

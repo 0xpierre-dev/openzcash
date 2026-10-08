@@ -12,7 +12,7 @@ import { resetStoreForTests } from "@/lib/zarvis/metrics-store";
 import { resetAlertsForTests } from "@/lib/zarvis/alerts";
 import { resetObserveForTests } from "@/lib/zarvis/observe";
 const prov = (route: "local" | "model") => ({ route, model: route === "model" ? "grok-4.7" : null, webSearch: false, groundingFallback: false, withheldFigures: 0, language: "en" as const });
-const completed = (route: "local" | "model" = "local") => ({ route, provider: "xai", model: "grok-4.7", depth: "quick" as const, modelCalls: route === "model" ? 1 : 0, localLookups: 1, webSearchCalls: 0, inputTokens: route === "model" ? 1_000_000 : 0, cachedInputTokens: 0, outputTokens: 0, usageReported: route === "model" });
+const completed = (route: "local" | "model" = "local") => ({ route, provider: "xai", model: "grok-4.7", depth: "quick" as const, modelCalls: route === "model" ? 1 : 0, localLookups: 1, webSearchCalls: 0, webFetchCalls: 0, inputTokens: route === "model" ? 1_000_000 : 0, cachedInputTokens: 0, outputTokens: 0, usageReported: route === "model" });
 const logLines = (info: { mock: { calls: unknown[][] } }) => info.mock.calls.map((call: unknown[]) => String(call[0])).filter((line: string) => line.startsWith("{")).map((line: string) => JSON.parse(line) as Record<string, unknown>).filter((entry) => entry.event === "zarvis.chat");
 function request(body: unknown = { messages: [{ role: "user", content: "Explain shielded Zcash" }] }, origin = "https://openzcash.org") {
   return new Request("https://openzcash.org/api/zarvis", { method: "POST", headers: { origin, "content-type": "application/json" }, body: JSON.stringify(body) });
@@ -122,7 +122,7 @@ describe("Zarvis API", () => {
     expect(lines[4]).toMatchObject({ topic: null, lang: null });
     expect(JSON.stringify(lines)).not.toContain("shielded");
     for (const line of lines) {
-      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "lang", "modelCalls", "ms", "outcome", "outputTokens", "repairRounds", "route", "topic", "webSearchCalls"]);
+      expect(Object.keys(line).sort()).toEqual(["at", "cachedInputTokens", "depth", "errorClass", "estimatedUsd", "event", "groundingFallbacks", "inputTokens", "lang", "modelCalls", "ms", "outcome", "outputTokens", "repairRounds", "route", "topic", "webFetchCalls", "webSearchCalls"]);
       expect(typeof line.ms).toBe("number"); expect(Number.isNaN(Date.parse(String(line.at)))).toBe(false);
     }
     expect(JSON.stringify(lines)).not.toMatch(/shielded|Compare|sk-secret|provider body|openzcash\.org/);

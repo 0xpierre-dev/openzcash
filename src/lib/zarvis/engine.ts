@@ -15,15 +15,18 @@ import { amountClaims, isFinancialEvidence, isFinancialQuestion, numericFacts, u
 import { answerPlan, repairBudgetMs, roundBudget, type AnswerPlan, type ResponseDepth } from "./depth";
 import { researchScope, type ResearchScope } from "./research-scope";
 import { citedSources } from "./answer";
+import { fetchableSourceUrl } from "./sources";
 import type { AnswerProvenance, ChatMessage, ZarvisEvent, ZarvisSource } from "./types";
 
-/** cacheWriteTokens is the part of inputTokens a provider billed at its cache-write rate (Anthropic); Responses providers report none. */
-export type GenerationMetrics = { route: "local" | "model"; provider: string; model: string; modelCalls: number; localLookups: number; webSearchCalls: number; inputTokens: number; cachedInputTokens: number; cacheWriteTokens: number; outputTokens: number; usageReported: boolean; groundingFallbacks?: number; repairRounds?: number; depth?: "quick" | "deep"; reasoningEffort?: "low" | "medium" | "high" };
+/** cacheWriteTokens is the part of inputTokens a provider billed at its cache-write rate (Anthropic); Responses providers report none. webFetchCalls counts server-side page reads (Anthropic only; free beyond the tokens they add). */
+export type GenerationMetrics = { route: "local" | "model"; provider: string; model: string; modelCalls: number; localLookups: number; webSearchCalls: number; webFetchCalls: number; inputTokens: number; cachedInputTokens: number; cacheWriteTokens: number; outputTokens: number; usageReported: boolean; groundingFallbacks?: number; repairRounds?: number; depth?: "quick" | "deep"; reasoningEffort?: "low" | "medium" | "high" };
 export type RoundCall = { id: string; name: string; arguments: string };
 /** inputTokens is the whole input of the round, cached reads and cache writes included; reported is false when any request of the round came back without usage. */
 export type RoundUsage = { inputTokens: number; cachedInputTokens: number; cacheWriteTokens: number; outputTokens: number; reported: boolean };
-export type RoundResult = { text: string; sources: ZarvisSource[]; calls: RoundCall[]; searches: number; usage: RoundUsage; streamed: boolean };
-export type RoundOptions = { tools: FunctionTool[]; webSearch: ResearchScope | null; effort: AnswerPlan["effort"]; maxOutputTokens: number; streaming: boolean; signal: AbortSignal; emit: (event: ZarvisEvent) => void };
+/** fetches is reported only by a transport with a page-reading tool; absent means none. */
+export type RoundResult = { text: string; sources: ZarvisSource[]; calls: RoundCall[]; searches: number; fetches?: number; usage: RoundUsage; streamed: boolean };
+/** webFetch offers the provider's page-reading tool for the round; a transport without one (Responses) ignores it. */
+export type RoundOptions = { tools: FunctionTool[]; webSearch: ResearchScope | null; webFetch: boolean; effort: AnswerPlan["effort"]; maxOutputTokens: number; streaming: boolean; signal: AbortSignal; emit: (event: ZarvisEvent) => void };
 /** A round the provider cut short (max_tokens, context window, an exhausted pause_turn loop): the usage billed so far travels with it so the spend cap still counts it. */
 export class IncompleteRound extends Error { constructor(readonly usage: RoundUsage) { super("INCOMPLETE_RESPONSE"); this.name = "IncompleteRound"; } }
 /**
@@ -54,6 +57,14 @@ const FINAL_SYNTHESIS = "Final synthesis round: no further tools are available. 
 const SCENARIO_NOTE = "The application will display the verified calculator result separately. Now answer the requested analysis using that result and its limitations. Do not repeat calculations or look up data already supplied. A qualitative sensitivity test needs no new tool call; use another calculator call only if you need a numerical alternative. Do not research a hypothetical future price as though it were a fact. Clearly label missing governance/liquidity evidence instead of making it up.";
 function researchRequest(args: string): boolean {
   try { const value = JSON.parse(args); return Object.keys(value).length === 1 && ["missing_local_evidence", "stale_evidence", "current_external_fact"].includes(value.reason); } catch { return false; }
+}
+const LINKED_URL = /https:\/\/[^\s<>"'`]+/g;
+const MAX_LINKED_SOURCES = 3;
+/** The pages the latest visitor message links that the fetch tool may read: fetchable https URLs, trailing punctuation dropped, each once, at most three. A link elsewhere in the history enables nothing. */
+export function linkedSources(messages: ChatMessage[]): string[] {
+  const latest = messages.findLast((message) => message.role === "user")?.content ?? "";
+  const urls = (latest.match(LINKED_URL) ?? []).map((raw) => fetchableSourceUrl(raw.replace(/[.,;:!?)\]]+$/, ""))).filter((url): url is string => url !== null);
+  return [...new Set(urls)].slice(0, MAX_LINKED_SOURCES);
 }
 /** Lists only the offending strings; the discarded answer itself is never repeated to the provider, the log or the client. */
 const repairInstruction = (figures: string[]) => `These figures are not in the evidence: ${figures.map((figure) => JSON.stringify(figure)).join(", ")}. Restate the answer using only figures that appear in the evidence, or say which figure is unavailable. Do not introduce new figures.`;
@@ -117,6 +128,9 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
   // A transport with a fixed tool list cannot add search later, so it offers search from the start and never the research request step.
   let allowWeb = config.webSearch && (local.external || conversation.fixedTools === true);
   let webUsed = false;
+  // A page the visitor linked may be read even when no research is allowed; one read per answer, like one search.
+  const linked = linkedSources(messages);
+  let fetchUsed = false;
   let researchGranted = false;
   let lookups = 0;
   let usageReports = 0;
@@ -133,10 +147,10 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
     metrics.usageReported = usageReports === metrics.modelCalls;
   };
   /** One provider round. The call is counted before it runs, so a failure still carries it; a round may run under a shorter signal than the request's. */
-  async function modelRound(tools: FunctionTool[], webSearch: ResearchScope | null, streaming: boolean, roundSignal: AbortSignal = signal): Promise<RoundResult> {
+  async function modelRound(tools: FunctionTool[], webSearch: ResearchScope | null, webFetch: boolean, streaming: boolean, roundSignal: AbortSignal = signal): Promise<RoundResult> {
     metrics.modelCalls++; metrics.usageReported = false;
     try {
-      const result = await conversation.round({ tools, webSearch, effort: plan.effort, maxOutputTokens: plan.outputTokens, streaming, signal: roundSignal, emit });
+      const result = await conversation.round({ tools, webSearch, webFetch, effort: plan.effort, maxOutputTokens: plan.outputTokens, streaming, signal: roundSignal, emit });
       countUsage(result.usage);
       return result;
     } catch (error) { if (error instanceof IncompleteRound) countUsage(error.usage); throw error; }
@@ -157,7 +171,7 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
       conversation.note(repairInstruction(unsupported));
       metrics.repairRounds = (metrics.repairRounds ?? 0) + 1;
       try {
-        const repaired = await modelRound([], null, false, AbortSignal.any([signal, AbortSignal.timeout(budget)]));
+        const repaired = await modelRound([], null, false, false, AbortSignal.any([signal, AbortSignal.timeout(budget)]));
         candidates.push(...repaired.sources);
         if (repaired.text.trim()) candidate = repaired.text;
       } catch { signal.throwIfAborted(); /* a failed or timed-out repair round leaves the draft to the fallback below; only the request's own abort propagates */ }
@@ -217,12 +231,13 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
       ...(!final && config.webSearch && !allowWeb && !webUsed ? [researchTool] : []),
     ];
     const webSearch = !final && allowWeb && !webUsed ? researchScope(local.query ?? "") : null;
+    const webFetch = !final && !fetchUsed && (allowWeb || linked.length > 0);
     if (final) conversation.note(FINAL_SYNTHESIS);
-    const result = await modelRound(tools, webSearch, !isFinancialEvidence(evidence) && !financialQuestion);
+    const result = await modelRound(tools, webSearch, webFetch, !isFinancialEvidence(evidence) && !financialQuestion);
     if (result.text) text += `${text ? "\n\n" : ""}${result.text}`;
     candidates.push(...result.sources);
-    metrics.webSearchCalls += result.searches;
-    webUsed ||= result.searches > 0;
+    metrics.webSearchCalls += result.searches; metrics.webFetchCalls += result.fetches ?? 0;
+    webUsed ||= result.searches > 0; fetchUsed ||= (result.fetches ?? 0) > 0;
     if (!result.calls.length) {
       if (!text.trim()) throw new Error("EMPTY_RESPONSE");
       const checked = await checkFigures(text);
