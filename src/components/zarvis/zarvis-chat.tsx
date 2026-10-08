@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { safeSourceUrl, STARTERS } from "@/lib/zarvis/sources";
 import { fallbackNotice, provenanceLabel, retrievedLabel } from "@/lib/zarvis/provenance";
 import { MAX_QUESTION_LENGTH } from "@/lib/zarvis/context";
@@ -22,6 +23,10 @@ function answerHref(href: string) {
 // A static note, not a live region: the notice arrives together with its text, which screen readers would not announce as a status anyway.
 const notice = (p: AnswerProvenance) => { const text = fallbackNotice(p); return text ? <span className="zarvis-provenance-notice" role="note">{text}</span> : null; };
 const retrieved = (iso?: string) => { const text = iso ? retrievedLabel(iso) : undefined; return text ? <small>{text}</small> : null; };
+/** Answer text as Markdown: GFM tables for comparisons, links only to allowlisted sources, no raw HTML. */
+export function AnswerMarkdown({ children }: { children: string }) {
+  return <Markdown skipHtml remarkPlugins={[remarkGfm]} allowedElements={["p", "a", "strong", "em", "del", "ul", "ol", "li", "h1", "h2", "h3", "h4", "blockquote", "code", "pre", "br", "hr", "table", "thead", "tbody", "tr", "th", "td"]} urlTransform={(url) => safeSourceUrl(url) ?? ""} components={{ a: ({ href, children }) => href ? <a href={answerHref(href)} target="_blank" rel="noopener noreferrer">{children}</a> : <span>{children}</span> }}>{children}</Markdown>;
+}
 export function ZarvisChat({ compact = false }: { compact?: boolean }) {
   const chat = useZarvis();
   const scroll = useRef<HTMLDivElement>(null);
@@ -73,7 +78,7 @@ export function ZarvisChat({ compact = false }: { compact?: boolean }) {
         {message.role === "assistant" && index === chat.messages.length - 1 && chat.busy ? <div className="zarvis-message-heading">
           <div className="zarvis-progress" role="status">{chat.progress || "Writing an answer…"}</div>
         </div> : null}
-        {message.content ? <div className="zarvis-prose"><Markdown skipHtml allowedElements={["p", "a", "strong", "em", "ul", "ol", "li", "h1", "h2", "h3", "h4", "blockquote", "code", "pre", "br", "hr"]} urlTransform={(url) => safeSourceUrl(url) ?? ""} components={{ a: ({ href, children }) => href ? <a href={answerHref(href)} target="_blank" rel="noopener noreferrer">{children}</a> : <span>{children}</span> }}>{message.content}</Markdown></div> : null}
+        {message.content ? <div className="zarvis-prose"><AnswerMarkdown>{message.content}</AnswerMarkdown></div> : null}
         {message.role === "assistant" && message.content && !chat.busy && message.incomplete ? <small className="zarvis-incomplete">Incomplete response</small> : null}
         {message.role === "assistant" && message.provenance && !message.incomplete ? <div className="zarvis-provenance">
           <span className={`zarvis-provenance-badge zarvis-provenance-${message.provenance.route}`}>{provenanceLabel(message.provenance, message.sources?.length ?? 0, chat.status?.provider)}</span>

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { bundledZipCorpus, searchKnowledge, searchTerms } from "./knowledge";
 import { latestZipAnswer, zipCatalogEvidence, requestedZips } from "./zip-catalog";
 
+const latestNumbered = [...bundledZipCorpus.documents].filter((d) => d.number !== null && d.createdOn).sort((a, b) => b.createdOn!.localeCompare(a.createdOn!))[0];
 describe("ZIP catalog retrieval and date semantics", () => {
   it("retrieves every numbered ZIP by its own number within the context budget", () => {
     for (const doc of bundledZipCorpus.documents.filter((d) => d.number !== null)) {
@@ -20,7 +21,9 @@ describe("ZIP catalog retrieval and date semantics", () => {
     expect(data.numberedDocuments).toBe(bundledZipCorpus.documents.filter((d) => d.number !== null).length);
     expect(data.selectedBy).toContain("not publication date");
     expect(data.notes).toContain("NOT verified first publication");
-    expect(data.selected[0].number).not.toBe(data.highestNumber.number);
+    // Selection follows the Created header, whatever number that document carries; the highest number is reported separately.
+    expect(data.selected[0].number).toBe(latestNumbered.number);
+    expect(data.highestNumber.number).toBe(Math.max(...bundledZipCorpus.documents.map((d) => d.number ?? 0)));
     expect(data.missingCreatedDates).toBeGreaterThan(0);
   });
   it("reports unknown identifiers instead of substituting a similar ZIP", () => {
@@ -30,10 +33,10 @@ describe("ZIP catalog retrieval and date semantics", () => {
     expect(data.selected).toEqual([]); expect(data.missingNumbers).toEqual([99999]);
   });
   it("answers only plain single-intent latest questions directly, with provenance", () => {
-    expect(latestZipAnswer("Qual é o último ZIP?", bundledZipCorpus, false, "pt")).toMatch(/Created.*259/);
+    expect(latestZipAnswer("Qual é o último ZIP?", bundledZipCorpus, false, "pt")).toMatch(new RegExp(`Created.*${latestNumbered.number}`));
     expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, false, "en")).toContain("not verified first publication");
     const es = latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, false, "es")!;
-    expect(es).toMatch(/^Según el campo \*\*Created\*\* de los ZIP numerados en el catálogo oficial, el más reciente es el \*\*\[ZIP 259: /); expect(es).toContain("El estado del documento no comprueba la activación en la red.");
+    expect(es).toMatch(new RegExp(`^Según el campo \\*\\*Created\\*\\* de los ZIP numerados en el catálogo oficial, el más reciente es el \\*\\*\\[ZIP ${latestNumbered.number}: `)); expect(es).toContain("El estado del documento no comprueba la activación en la red.");
     expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, true, "es")).toBeUndefined();
     expect(latestZipAnswer("What is the latest ZIP?", bundledZipCorpus, true, "en")).toBeUndefined();
     expect(latestZipAnswer("What is the latest ZIP? Answer in French.", bundledZipCorpus, false, "en")).toBeUndefined();

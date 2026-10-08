@@ -6,7 +6,8 @@ import { createZipStore } from "./zip-source";
 import { zipCatalogEvidence } from "./zip-catalog";
 import { boundedRead } from "./timeout";
 const store = createZipStore(bundledZipCorpus);
-export const getZipCorpus = (signal: AbortSignal) => boundedRead(() => store.get(), signal, 9_000);
+// A visitor waits at most 9 s; the boot warm and the canary pass a longer signal so a large upstream batch can finish.
+export const getZipCorpus = (signal: AbortSignal) => boundedRead(() => store.get(), signal, 35_000);
 const querySchema = z.object({ query: z.string().trim().min(1).max(300) }).strict();
 export const zipTool: Tool = {
   type: "function", name: "lookup_zcash_zips", strict: true,
