@@ -10,6 +10,20 @@ describe("Model pricing", () => {
     expect(estimateUsageUsd({ ...usage, model: "GPT-5-mini " })).toBeCloseTo((6_000 * 0.25 + 4_000 * 0.025 + 1_000 * 2) / 1e6 + 0.01, 9);
     expect(estimateUsageUsd({ ...usage, model: "gpt-6-astra" })).toBeCloseTo((6_000 * 10 + 4_000 * 1 + 1_000 * 50) / 1e6 + 0.01, 9);
   });
+  it("prices the Claude models, with cache writes at the write rate and absent write counts as zero", () => {
+    expect(MODEL_RATES["claude-sonnet-5-5"]).toEqual({ inputUsdPerMillion: 2, cachedInputUsdPerMillion: 0.1, cacheWriteUsdPerMillion: 2.5, outputUsdPerMillion: 10, webSearchUsdPerCall: 0.01 });
+    expect(MODEL_RATES["claude-haiku-5-5"]).toEqual({ inputUsdPerMillion: 0.1, cachedInputUsdPerMillion: 0.01, cacheWriteUsdPerMillion: 0.125, outputUsdPerMillion: 0.5, webSearchUsdPerCall: 0.01 });
+    expect(MODEL_RATES["claude-opus-5-5"]).toEqual({ inputUsdPerMillion: 4, cachedInputUsdPerMillion: 0.2, cacheWriteUsdPerMillion: 5, outputUsdPerMillion: 20, webSearchUsdPerCall: 0.01 });
+    expect(MODEL_RATES["claude-haiku-4-5"]).toEqual({ inputUsdPerMillion: 1, cachedInputUsdPerMillion: 0.1, cacheWriteUsdPerMillion: 1.25, outputUsdPerMillion: 5, webSearchUsdPerCall: 0.01 });
+    // 4,000 plain * $2 + 4,000 cached * $0.10 + 2,000 written * $2.50 + 1,000 output * $10, per million, plus one search.
+    expect(estimateUsageUsd({ ...usage, model: "claude-sonnet-5-5", cacheWriteTokens: 2_000 })).toBeCloseTo((4_000 * 2 + 4_000 * 0.1 + 2_000 * 2.5 + 1_000 * 10) / 1e6 + 0.01, 9);
+    expect(estimateUsageUsd({ ...usage, model: "claude-sonnet-5-5" })).toBeCloseTo((6_000 * 2 + 4_000 * 0.1 + 1_000 * 10) / 1e6 + 0.01, 9);
+    expect(estimateUsageUsd({ ...usage, cacheWriteTokens: 0 })).toBe(estimateUsageUsd(usage));
+    expect(estimateUsageUsd({ ...usage, cacheWriteTokens: 10 })).toBeNull();
+    vi.stubEnv("ZARVIS_CACHE_WRITE_USD_PER_MILLION", "3");
+    expect(modelRates("grok-4.7").cacheWriteUsdPerMillion).toBe(3);
+    expect(estimateUsageUsd({ ...usage, cacheWriteTokens: 1_000 })).toBeCloseTo((5_000 * 2 + 4_000 * 0.5 + 1_000 * 3 + 1_000 * 6) / 1e6 + 0.005, 9);
+  });
   it("returns unknown, never zero, for an unlisted model or unreported usage, and zero for local answers", () => {
     expect(estimateUsageUsd({ ...usage, model: "future-model" })).toBeNull();
     expect(estimateUsageUsd({ ...usage, usageReported: false })).toBeNull();

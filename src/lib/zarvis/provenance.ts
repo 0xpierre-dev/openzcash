@@ -5,6 +5,9 @@ import type { AnswerProvenance } from "./types";
 export function modelLabel(model: string | null, provider?: string | null): string {
   const m = model?.match(/^(grok|gpt)-?(\d+(?:\.\d+)?)(?:-(.+))?$/i);
   if (m) return `${m[1].toLowerCase() === "grok" ? "Grok" : "GPT"}${m[1].toLowerCase() === "grok" ? " " : "-"}${m[2]}${m[3] ? ` ${m[3].replace(/-/g, " ")}` : ""}`;
+  // claude-<family>-<major>[-<minor>][-<yyyymmdd>]: the family is capitalised and the version dotted; a dated snapshot suffix is dropped.
+  const claude = model?.match(/^claude-(sonnet|haiku|opus)-(\d+)(?:-(\d+))?(?:-\d{8})?$/i);
+  if (claude) return `Claude ${claude[1][0].toUpperCase()}${claude[1].slice(1).toLowerCase()} ${claude[2]}${claude[3] ? `.${claude[3]}` : ""}`;
   return model || provider || "AI model";
 }
 export function provenanceLabel(p: AnswerProvenance, sources: number, provider?: string | null): string {

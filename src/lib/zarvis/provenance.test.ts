@@ -18,6 +18,15 @@ describe("Provenance badge", () => {
     expect(provenanceLabel({ ...base, language: "es" }, 1)).toBe("Grok 4.7 · 1 fuente · verifícalas");
     expect(provenanceLabel({ ...base, language: "es" }, 2)).toBe("Grok 4.7 · 2 fuentes · verifícalas");
   });
+  it("names Claude models by family and version", () => {
+    expect(modelLabel("claude-sonnet-5-5")).toBe("Claude Sonnet 5.5");
+    expect(modelLabel("claude-haiku-4-5")).toBe("Claude Haiku 4.5");
+    expect(modelLabel("claude-opus-5-5")).toBe("Claude Opus 5.5");
+    expect(modelLabel("claude-haiku-4-5-20251001")).toBe("Claude Haiku 4.5");
+    expect(modelLabel("claude-sonnet-5")).toBe("Claude Sonnet 5");
+    expect(modelLabel(null, "Anthropic (Claude)")).toBe("Anthropic (Claude)");
+    expect(provenanceLabel({ ...base, model: "claude-sonnet-5-5", webSearch: true }, 2)).toBe("Claude Sonnet 5.5 · web search · 2 sources · check them");
+  });
   it("falls back to the provider label for unknown model ids and never invents one", () => {
     expect(modelLabel("custom-model", "xAI (Grok)")).toBe("custom-model");
     expect(modelLabel(null, "xAI (Grok)")).toBe("xAI (Grok)");

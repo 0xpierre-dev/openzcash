@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FAQ, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, quotaLines } from "./about";
+import { FAQ, INCIDENTS, LIMITATIONS, PROVIDER_RETENTION, TOKEN_DISCLAIMER, modelLine, providerRetention, quotaLines } from "./about";
 const quota = { networkWindowLimit: 60, networkDailyLimit: 600, dailyUsdCap: 100, quotaPause: { active: false, until: null } };
 describe("Zarvis about content", () => {
   it("states the per-network limits and the presence of a spending ceiling without its value", () => {
@@ -40,9 +40,23 @@ describe("Zarvis about content", () => {
     expect(modelLine({ providerLabel: "xAI (Grok)", model: "grok-4.7", webSearch: true, enabled: true })).toMatch(/^grok-4\.7 from xAI \(Grok\), called through its Responses API, with the provider's hosted web search/);
     expect(modelLine({ providerLabel: "xAI (Grok)", model: "grok-4.7", webSearch: false, enabled: true })).toContain("without web search");
     expect(modelLine({ providerLabel: "OpenAI", model: "gpt-5-mini", webSearch: true, enabled: false })).toContain("switched off");
+    expect(modelLine({ providerLabel: "Anthropic (Claude)", model: "claude-sonnet-5-5", webSearch: true, enabled: true })).toMatch(/^claude-sonnet-5-5 from Anthropic \(Claude\), called through its Messages API, with the provider's hosted web search/);
+    expect(modelLine({ providerLabel: "OpenAI", model: "gpt-5-mini", webSearch: true, enabled: true })).toContain("Responses API");
+  });
+  it("looks retention up by provider, and only the Responses providers mention disabled response storage", () => {
+    expect(providerRetention("Anthropic (Claude)")).toMatchObject({ provider: "Anthropic", days: 30, api: "Messages API", url: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", readOn: "2026-10-07" });
+    expect(providerRetention("Anthropic (Claude)")?.summary).toMatch(/within 30 days.*does not train on them/);
+    expect(providerRetention("Anthropic (Claude)")?.summary).not.toContain("response storage");
+    // The retention article says nothing about training, so that clause carries its own link; the Responses entries need none.
+    expect(providerRetention("Anthropic (Claude)")?.training).toEqual({ url: "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training", linkLabel: expect.stringMatching(/training/) });
+    expect(providerRetention("xAI (Grok)")?.training).toBeUndefined(); expect(providerRetention("OpenAI")?.training).toBeUndefined();
+    expect(providerRetention("xAI (Grok)")).toBe(PROVIDER_RETENTION["xAI (Grok)"]);
+    expect(providerRetention("xAI (Grok)")?.summary).toContain("response storage disabled");
+    expect(providerRetention("OpenAI")).toMatchObject({ provider: "OpenAI", days: 30, api: "Responses API" });
+    expect(providerRetention("other")).toBeNull(); expect(providerRetention(null)).toBeNull();
   });
   it("keeps the retention statement and the incident record dated and sourced", () => {
-    expect(PROVIDER_RETENTION).toMatchObject({ days: 30, url: "https://docs.x.ai/developers/faq/security" });
+    expect(PROVIDER_RETENTION["xAI (Grok)"]).toMatchObject({ days: 30, url: "https://docs.x.ai/developers/faq/security" });
     expect(INCIDENTS.length).toBeGreaterThanOrEqual(3);
     for (const incident of INCIDENTS) { expect(incident.date).toMatch(/^\d{4}-\d{2}-\d{2}$/); expect(incident.fix.length).toBeGreaterThan(40); }
     expect(LIMITATIONS.some((l) => /not an official spokesperson/.test(l))).toBe(true);

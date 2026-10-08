@@ -1,5 +1,27 @@
 import "server-only";
 import { dailyUsdCap } from "./pricing";
+import type { ProviderLabel } from "./types";
+export type Provider = "openai" | "xai" | "anthropic";
+/** Everything a transport needs; the primary and the optional fallback share this shape. */
+export type ProviderConfig = { provider: Provider; apiKey: string; model: string; providerLabel: ProviderLabel; webSearch: boolean };
+const PROVIDERS: Record<Provider, { key: string; model: string; label: ProviderLabel }> = {
+  openai: { key: "OPENAI_API_KEY", model: "gpt-5-mini", label: "OpenAI" },
+  xai: { key: "XAI_API_KEY", model: "grok-4.7", label: "xAI (Grok)" },
+  anthropic: { key: "ANTHROPIC_API_KEY", model: "claude-sonnet-5-5", label: "Anthropic (Claude)" },
+};
+const isProvider = (value: string): value is Provider => Object.hasOwn(PROVIDERS, value);
+/** Each provider reads only its own key; nothing is borrowed from another provider's variable. */
+function providerConfig(provider: Provider, model: string | undefined, webSearch: boolean): ProviderConfig {
+  const spec = PROVIDERS[provider];
+  return { provider, apiKey: process.env[spec.key]?.trim() ?? "", model: model?.trim() || spec.model, providerLabel: spec.label, webSearch };
+}
+/** The Responses provider that answers when the primary fails its first model call (ZARVIS_FALLBACK_PROVIDER xai | openai): needs its own key and must differ from the primary. */
+function fallbackConfig(primary: Provider, webSearch: boolean): ProviderConfig | null {
+  const requested = process.env.ZARVIS_FALLBACK_PROVIDER?.trim() ?? "";
+  if (!isProvider(requested) || requested === "anthropic" || requested === primary) return null;
+  const config = providerConfig(requested, process.env.ZARVIS_FALLBACK_MODEL, webSearch);
+  return config.apiKey ? config : null;
+}
 function limit(name: string, fallback: number, max: number): number {
   const raw = process.env[name];
   if (!raw) return fallback;
@@ -30,18 +52,16 @@ function quotaPause(): { active: boolean; until: string | null } {
 
 export function zarvisConfig() {
   const requestedProvider = process.env.ZARVIS_PROVIDER?.trim() || "openai";
-  const provider = requestedProvider === "xai" ? "xai" : "openai";
-  const validProvider = requestedProvider === "openai" || requestedProvider === "xai";
-  const apiKey = (provider === "xai" ? process.env.XAI_API_KEY : process.env.OPENAI_API_KEY)?.trim() ?? "";
+  const validProvider = isProvider(requestedProvider);
+  const provider: Provider = validProvider ? requestedProvider : "openai";
+  const webSearch = process.env.ZARVIS_WEB_SEARCH !== "false";
+  const primary = providerConfig(provider, process.env.ZARVIS_MODEL, webSearch);
   return {
-    apiKey,
+    ...primary,
     // Keys abuse counters and feedback tickets. A dedicated secret keeps the provider key out of HMAC inputs; the key remains the fallback so nothing breaks unset.
-    hmacSecret: process.env.ZARVIS_HMAC_SECRET?.trim() || apiKey,
-    provider,
-    providerLabel: provider === "xai" ? "xAI (Grok)" as const : "OpenAI" as const,
-    enabled: process.env.ZARVIS_ENABLED === "true" && Boolean(validProvider && apiKey && process.env.DATABASE_URL),
-    model: process.env.ZARVIS_MODEL?.trim() || (provider === "xai" ? "grok-4.7" : "gpt-5-mini"),
-    webSearch: process.env.ZARVIS_WEB_SEARCH !== "false",
+    hmacSecret: process.env.ZARVIS_HMAC_SECRET?.trim() || primary.apiKey,
+    enabled: process.env.ZARVIS_ENABLED === "true" && Boolean(validProvider && primary.apiKey && process.env.DATABASE_URL),
+    fallback: fallbackConfig(provider, webSearch),
     unlimitedLocalTesting: unlimitedLocalTesting(),
     quotaPause: quotaPause(),
     dailyLimit: limit("ZARVIS_DAILY_REQUEST_LIMIT", 100, 10_000),

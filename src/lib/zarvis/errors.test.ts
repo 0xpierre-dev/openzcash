@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { APIConnectionError, APIConnectionTimeoutError, APIUserAbortError, BadRequestError, InternalServerError, RateLimitError } from "openai";
+import * as Anthropic from "@anthropic-ai/sdk";
 import { classifyError, ERROR_CLASSES, GenerationFailure } from "./errors";
+const body = (type: string, message: string, details?: Record<string, string>) => ({ type: "error", error: { type, message, ...(details ? { details } : {}) } });
 const headers = new Headers({ "x-request-id": "req_sentinel" });
 /** A bundler that mangles class names must not turn SDK errors into `unknown`. */
 class Mangled extends APIConnectionTimeoutError {}
@@ -32,6 +34,32 @@ describe("Failure classification", () => {
     const result = classifyError(error);
     expect(result).toBe(expected); expect(ERROR_CLASSES).toContain(result);
     expect(JSON.stringify(result)).not.toMatch(/secret|sentinel/);
+  });
+  it.each([
+    [new Anthropic.RateLimitError(429, body("rate_limit_error", "provider-secret-sentinel body"), "sentinel", headers, "rate_limit_error"), "provider_http_429"],
+    [new Anthropic.InternalServerError(529, body("overloaded_error", "Overloaded"), "Overloaded", headers, "overloaded_error"), "provider_http_5xx"],
+    [new Anthropic.InternalServerError(500, body("api_error", "sentinel"), "sentinel", headers, "api_error"), "provider_http_5xx"],
+    [new Anthropic.APIConnectionTimeoutError(), "provider_timeout"],
+    [new Anthropic.APIConnectionError({ message: "fetch failed", cause: new Error("ECONNRESET") }), "provider_connection"],
+    [new Anthropic.APIUserAbortError(), "aborted"],
+    [new Anthropic.BadRequestError(400, body("invalid_request_error", "Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."), "credit", headers, "invalid_request_error"), "provider_billing"],
+    [new Anthropic.BadRequestError(400, body("invalid_request_error", "You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC."), "limit", headers, "invalid_request_error"), "provider_billing"],
+    [new Anthropic.RateLimitError(429, body("rate_limit_error", "You have reached your API usage limits: sentinel", { error_code: "enforced_spend_limit_reached" }), "limit", headers, "rate_limit_error"), "provider_billing"],
+    [new Anthropic.BadRequestError(400, body("invalid_request_error", "messages: roles must alternate sentinel"), "bad", headers, "invalid_request_error"), "provider_http_4xx"],
+    [new Anthropic.AuthenticationError(401, body("authentication_error", "invalid x-api-key"), "auth", headers, "authentication_error"), "provider_http_4xx"],
+    // Mid-stream SSE errors carry no HTTP status, only the body's error type.
+    [new Anthropic.APIError(undefined, body("overloaded_error", "Overloaded"), undefined, headers, "overloaded_error"), "provider_http_5xx"],
+    [new Anthropic.APIError(undefined, body("api_error", "sentinel"), undefined, headers, "api_error"), "provider_http_5xx"],
+    [new Anthropic.APIError(undefined, body("rate_limit_error", "sentinel"), undefined, headers, "rate_limit_error"), "provider_http_429"],
+    [new Anthropic.APIError(undefined, body("invalid_request_error", "sentinel"), undefined, headers, "invalid_request_error"), "provider_http_4xx"],
+  ])("maps Anthropic SDK error %o to a fixed class", (error, expected) => {
+    const result = classifyError(error);
+    expect(result).toBe(expected); expect(ERROR_CLASSES).toContain(result);
+    expect(JSON.stringify(result)).not.toMatch(/secret|sentinel/);
+  });
+  it("lists the billing class and never derives it from an OpenAI 400", () => {
+    expect(ERROR_CLASSES).toContain("provider_billing");
+    expect(classifyError(new BadRequestError(400, { message: "Your credit balance is too low" }, "bad", headers))).toBe("provider_http_4xx");
   });
   it("prefers the abort signal and keeps the class of a wrapped failure", () => {
     expect(classifyError(new Error("INCOMPLETE_RESPONSE"), true)).toBe("aborted");

@@ -1,3 +1,5 @@
+import { providerRetention } from "./retention";
+export { PROVIDER_RETENTION, providerRetention, type ProviderRetention } from "./retention";
 /** Content for the public page /zarvis/about: how Zarvis works, what it costs a visitor, what it keeps and where it failed. No secrets, no counters. */
 export type AboutQuotaConfig = { networkWindowLimit: number; networkDailyLimit: number; dailyUsdCap: number | null; quotaPause: { active: boolean; until: string | null } };
 export type AboutModelConfig = { providerLabel: string; model: string; webSearch: boolean; enabled: boolean };
@@ -13,7 +15,7 @@ export function quotaLines(config: AboutQuotaConfig): string[] {
 }
 export function modelLine(config: AboutModelConfig): string {
   if (!config.enabled) return "Model answers are switched off at the moment; only direct answers from OpenZcash data are available.";
-  return `${config.model} from ${config.providerLabel}, called through its Responses API${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
+  return `${config.model} from ${config.providerLabel}, called through its ${providerRetention(config.providerLabel)?.api ?? "Responses API"}${config.webSearch ? ", with the provider's hosted web search limited to Zcash ecosystem domains when the evidence on this site is not enough" : ", without web search"}.`;
 }
 /** One place that says how old "live" is: sheet/GitHub import cadence, D-1 verdict publication, price cache. Numbers mirror docs/zcg-publication.md and the freshness pipeline. */
 export const FRESHNESS_NOTE = "Site records import from the official spreadsheet and GitHub every 6 hours, and pages refresh themselves when a visit arrives after a stale period. Grant verdict changes publish the next day at midnight, Brasilia time. Price quotes are cached for about 10 minutes. When sources disagree, the ZCG Grant Dashboard spreadsheet wins.";
@@ -40,13 +42,6 @@ export const LIMITATIONS = [
   "It stays on Zcash and OpenZcash. Unrelated requests are redirected. Never share recovery phrases, private keys or viewing keys.",
   "Answers follow the language of the question; the interface, the page chrome and this page are in English.",
 ] as const;
-export const PROVIDER_RETENTION = {
-  provider: "xAI",
-  days: 30,
-  url: "https://docs.x.ai/developers/faq/security",
-  readOn: "2026-09-28",
-  summary: "stores API requests and responses encrypted at rest for 30 days for abuse auditing, does not train on them and deletes them automatically afterwards. OpenZcash sends each request with response storage disabled, which is not the same as that provider's zero-data-retention setting.",
-} as const;
 /** The six questions visitors actually bring, answered without drifting numbers: quotas and dates live in the sections above, not here. */
 export const FAQ: Array<{ q: string; a: string }> = [
   { q: "Is there a Zarvis or OpenZcash token?", a: "No. See the notice at the top of this page: a token using the Zarvis or OpenZcash name is not created, endorsed or issued by OpenZcash." },

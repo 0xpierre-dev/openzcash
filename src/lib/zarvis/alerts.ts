@@ -1,6 +1,6 @@
 import "server-only";
 /** Operator alerts: counts and labels only, at most one per type per ten minutes per process. */
-export type AlertType = "provider_failures" | "rejection_spike" | "spend_cap" | "unpriced_usage" | "canary";
+export type AlertType = "provider_failures" | "rejection_spike" | "spend_cap" | "unpriced_usage" | "canary" | "failover";
 export const ALERT_INTERVAL_MS = 600_000;
 const WINDOW = 20, STREAK = 3, RATIO = 0.25, MIN_SAMPLE = 8, SPIKE = 20;
 type AlertState = { lastSent: Map<AlertType, number>; outcomes: boolean[]; streak: number; rejections: number[]; sent: number; failed: number; lastErrorClass: string | null };
@@ -40,6 +40,10 @@ export function noteRejection(kind: "quota" | "busy" | "spend_cap", now = Date.n
 /** A configured cap cannot count what has no price: unlisted model or missing usage report. */
 export function noteUnpriced(model: string, now = Date.now()) {
   sendAlert("unpriced_usage", `Zarvis: a model answer could not be priced (model ${model.trim().toLowerCase() || "unknown"}); the daily spend cap does not count it. Use a listed model or set the ZARVIS_*_USD_PER_MILLION overrides.`, now);
+}
+/** The primary provider failed on a request's first model call and the fallback answered instead; labels and the class only. */
+export function noteFailover(from: string, to: string, errorClass: string, now = Date.now()) {
+  sendAlert("failover", `Zarvis: ${from} failed on the first model call (${errorClass}); the answer ran on ${to} instead. Check the primary provider's status and billing.`, now);
 }
 export function alertState(now = Date.now()) {
   return { configured: webhook() !== null, sent: state.sent, failed: state.failed, providerDegraded: providerDegraded(), recentFailures: failures(), recentSample: state.outcomes.length, failureStreak: state.streak, rejectionsLast10Min: recentRejections(now), lastErrorClass: state.lastErrorClass };
