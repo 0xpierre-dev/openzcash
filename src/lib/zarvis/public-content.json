@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "7193f478a75b66c5",
+  "sourceRevision": "b191c8a20f6376d0",
   "sourceFiles": 55,
   "documents": [
     {
@@ -43,7 +43,7 @@
       "id": "src/app/zcg/methodology/page.tsx:5",
       "url": "https://openzcash.org/zcg/methodology",
       "title": "zcg · methodology",
-      "text": "OpenZcash is a read-only mirror: it never holds spend keys, moves no funds, does not audit ZCG and does not speak for the committee.\nNothing here is real time; every figure carries a retrieval time.\nAn approval is not a payment, and a payment is not delivery.\nThere is no per-payment on-chain proof; see\nReproduce it yourself\nEvery number here is queryable.\n/api/zcg\nis a read-only JSON index of the endpoints; the data endpoints under\n/api/zcg/data/\n(disbursements, recipients, grants) also return CSV via\n?format=csv\n. Rows carry provenance: the source sheet and row, a link to the live source row, and the collection time — which is retrieval, not publication.\nCorrections\nSpot a wrong figure? Open an issue at\ngithub.com/Michae2xl/openzcash/issues\n. Source corrections reach this site on the next scheduled collection and are recorded automatically in the overview changelog and the\nRSS feed\n. Errors in this site's own copy are fixed in the repository."
+      "text": "OpenZcash is a read-only mirror: it never holds spend keys, moves no funds, does not audit ZCG and does not speak for the committee.\nNothing here is real time; every figure carries a retrieval time.\nAn approval is not a payment, and a payment is not delivery.\nThere is no per-payment on-chain proof; see\nReproduce it yourself\nEvery number here is queryable.\n/api/zcg\nis a read-only JSON index of the endpoints; the data endpoints under\n/api/zcg/data/\n(disbursements, recipients, grants) also return CSV via\n?format=csv\n. Disbursement rows carry provenance: the source sheet and row, a link to the live source row, and the collection time — which is retrieval, not publication.\nCorrections\nSpot a wrong figure? Open an issue at\ngithub.com/Michae2xl/openzcash/issues\n. Source corrections reach this site on the next scheduled collection and are recorded automatically in the overview changelog and the\nRSS feed\n. Errors in this site's own copy are fixed in the repository."
     },
     {
       "id": "src/app/zcg/grants/page.tsx:0",

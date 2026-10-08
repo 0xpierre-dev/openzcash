@@ -59,6 +59,7 @@ describe("methodology page copy", () => {
 
   it("points CSV at the data endpoints and links reconciliation", () => {
     expect(html).toContain("/api/zcg/data/");
+    expect(html).toContain("Disbursement rows carry provenance");
     expect(html).toContain('href="/zcg/reconciliation"');
   });
 });

@@ -368,9 +368,10 @@ export default function MethodologyPage() {
             under{" "}
             <span className="font-mono text-xs">/api/zcg/data/</span>{" "}
             (disbursements, recipients, grants) also return CSV via{" "}
-            <span className="font-mono text-xs">?format=csv</span>. Rows carry
-            provenance: the source sheet and row, a link to the live source
-            row, and the collection time — which is retrieval, not publication.
+            <span className="font-mono text-xs">?format=csv</span>.
+            Disbursement rows carry provenance: the source sheet and row, a
+            link to the live source row, and the collection time — which is
+            retrieval, not publication.
           </p>
         </Section>
 
