@@ -42,6 +42,9 @@ describe("Zarvis about content", () => {
     expect(modelLine({ providerLabel: "OpenAI", model: "gpt-5-mini", webSearch: true, enabled: false })).toContain("switched off");
     expect(modelLine({ providerLabel: "Anthropic (Claude)", model: "claude-sonnet-5-5", webSearch: true, enabled: true })).toMatch(/^claude-sonnet-5-5 from Anthropic \(Claude\), called through its Messages API, with the provider's hosted web search/);
     expect(modelLine({ providerLabel: "OpenAI", model: "gpt-5-mini", webSearch: true, enabled: true })).toContain("Responses API");
+    // Page reading exists on the Messages API only, and a linked page can be read even with search off.
+    for (const webSearch of [true, false]) expect(modelLine({ providerLabel: "Anthropic (Claude)", model: "claude-sonnet-5-5", webSearch, enabled: true })).toMatch(/a page you link on an official or community Zcash domain may be read in full\.$/);
+    expect(modelLine({ providerLabel: "OpenAI", model: "gpt-5-mini", webSearch: true, enabled: true })).not.toContain("read in full");
   });
   it("looks retention up by provider, and only the Responses providers mention disabled response storage", () => {
     expect(providerRetention("Anthropic (Claude)")).toMatchObject({ provider: "Anthropic", days: 30, api: "Messages API", url: "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data", readOn: "2026-10-07" });

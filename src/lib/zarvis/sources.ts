@@ -27,6 +27,13 @@ export function safeSourceUrl(raw: string): string | null {
     return null;
   } catch { return null; }
 }
+/** A page the Claude fetch tool may read: a safe source whose host is on the fetch list. Fetch filtering matches hosts only, never paths, so a GitHub organization link is a citation but not a readable page. */
+export function fetchableSourceUrl(raw: string): string | null {
+  const url = safeSourceUrl(raw);
+  if (!url) return null;
+  const { hostname } = new URL(url);
+  return SEARCH_DOMAINS.some((d) => hostname === d || hostname.endsWith(`.${d}`)) ? url : null;
+}
 
 export type KnowledgeNote = ZarvisSource & { id: string; keywords: string; text: string; reviewedOn: string };
 const reviewedOn = "2026-09-25";
