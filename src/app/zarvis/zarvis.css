@@ -94,6 +94,12 @@
 .zarvis-prose > :first-child { margin-top: 0; }
 .zarvis-prose > :last-child { margin-bottom: 0; }
 .zarvis-prose p, .zarvis-prose ul, .zarvis-prose ol { margin: 0 0 12px; }
+/* Comparisons arrive as GFM tables: flat hairlines, numbers aligned, scroll instead of wrap on phones. */
+.zarvis-prose table { display: block; width: 100%; max-width: 100%; overflow-x: auto; margin: 4px 0 14px; border-collapse: collapse; font-size: 13px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.zarvis-prose th, .zarvis-prose td { padding: 7px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; white-space: nowrap; }
+.zarvis-prose th { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.zarvis-prose td:not(:first-child), .zarvis-prose th:not(:first-child) { text-align: right; }
+.zarvis-prose tr:last-child td { border-bottom: 0; }
 .zarvis-prose ul, .zarvis-prose ol { padding-left: 22px; }
 .zarvis-prose ul { list-style: disc; }
 .zarvis-prose ol { list-style: decimal; }

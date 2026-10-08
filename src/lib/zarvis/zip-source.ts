@@ -103,13 +103,16 @@ export async function refreshZipCorpus(previous?: ZipCorpus, options: { timeoutM
 }
 
 export const ZIP_REFRESH_MS = 6 * 60 * 60 * 1_000;
-/** Per-process public cache; coalesces refreshes and backs off after a source failure. No conversation data. */
-export function createZipStore(initial: ZipCorpus, refresh: typeof refreshZipCorpus = refreshZipCorpus, clock = Date.now) {
+/** The runtime refresh is bounded like the offline sync, only smaller: a month of upstream edits fits, a wholesale rewrite still waits for the offline sync. */
+export const ZIP_RUNTIME_REFRESH = { timeoutMs: 30_000, maxChanged: 80 } as const;
+const reportRefreshFailure = (errorClass: string) => console.warn(`[zarvis] ZIP corpus refresh failed: ${errorClass}`);
+/** Per-process public cache; coalesces refreshes, backs off after a source failure and reports only the fixed failure class. No conversation data. */
+export function createZipStore(initial: ZipCorpus, refresh: typeof refreshZipCorpus = refreshZipCorpus, clock = Date.now, report: (errorClass: string) => void = reportRefreshFailure) {
   let corpus = initial, pending: Promise<void> | undefined, retryAfter = 0;
   return { async get() {
     const age = clock() - Date.parse(corpus.retrievedAt);
     if ((!Number.isFinite(age) || age < -60_000 || age >= ZIP_REFRESH_MS) && clock() >= retryAfter) {
-      pending ??= refresh(corpus).then((value) => { corpus = value; }).catch(() => { retryAfter = clock() + 60_000; }).finally(() => { pending = undefined; });
+      pending ??= refresh(corpus, ZIP_RUNTIME_REFRESH).then((value) => { corpus = value; }).catch((error: unknown) => { retryAfter = clock() + 60_000; report(error instanceof Error && /^[A-Z_]+$/.test(error.message) ? error.message : "unknown"); }).finally(() => { pending = undefined; });
       await pending;
     }
     const currentAge = clock() - Date.parse(corpus.retrievedAt);

@@ -37,7 +37,7 @@ export function executeCanary(): Promise<CanaryOutcome> {
 export function startCanarySchedule(): boolean {
   if (process.env.ZARVIS_CANARY_SCHEDULE === "false") return false;
   const tick = () => { executeCanary().catch((error) => console.error("[cron] zarvis canary failed:", error instanceof Error ? error.message : error)); };
-  setTimeout(() => { getZipCorpus(AbortSignal.timeout(9_000)).catch(() => {}); }, CANARY_WARMUP_MS);
+  setTimeout(() => { getZipCorpus(AbortSignal.timeout(35_000)).catch(() => {}); }, CANARY_WARMUP_MS);
   setTimeout(tick, CANARY_FIRST_RUN_MS);
   setInterval(tick, CANARY_INTERVAL_MS);
   return true;

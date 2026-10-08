@@ -78,12 +78,20 @@ describe("Freshness without model searches", () => {
     const values = await Promise.all([store.get(), store.get(), store.get()]);
     expect(refresh).toHaveBeenCalledTimes(1); expect(values.every((v) => !v.stale)).toBe(true);
   });
-  it("labels a failed refresh stale, preserves the corpus and backs off", async () => {
+  it("labels a failed refresh stale, preserves the corpus, backs off and reports only the failure class", async () => {
     let time = now + ZIP_REFRESH_MS;
-    const refresh = vi.fn().mockRejectedValue(new Error("unavailable"));
-    const store = createZipStore(initial, refresh, () => time);
+    const refresh = vi.fn().mockRejectedValue(new Error("ZIP_OFFLINE_SYNC_REQUIRED"));
+    const report = vi.fn();
+    const store = createZipStore(initial, refresh, () => time, report);
     const result = await store.get(); await store.get();
     expect(result).toEqual({ corpus: initial, stale: true }); expect(refresh).toHaveBeenCalledTimes(1);
+    expect(report).toHaveBeenCalledWith("ZIP_OFFLINE_SYNC_REQUIRED");
     time += 60_001; await store.get(); expect(refresh).toHaveBeenCalledTimes(2);
+  });
+  it("refreshes with the background limits: many changed files and a longer deadline", async () => {
+    const time = now + ZIP_REFRESH_MS;
+    const refresh = vi.fn().mockResolvedValue({ ...initial, retrievedAt: new Date(time).toISOString() });
+    await createZipStore(initial, refresh, () => time).get();
+    expect(refresh).toHaveBeenCalledWith(initial, { timeoutMs: 30_000, maxChanged: 80 });
   });
 });
