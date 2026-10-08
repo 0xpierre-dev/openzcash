@@ -5,7 +5,8 @@ import { sha256 } from "./sheets";
 
 /**
  * Auto-imports the recurring "Zcash Community Grants Meeting Minutes" threads
- * from the community forum into zcg_meetings, as part of the daily refresh.
+ * from the community forum into zcg_meetings, as part of the six-hour refresh
+ * cycle.
  *
  * Dedupes by forum thread id, so it NEVER duplicates or overwrites
  * admin-entered meetings — it only inserts threads not already present. The

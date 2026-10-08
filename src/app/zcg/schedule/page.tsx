@@ -209,7 +209,14 @@ export default async function SchedulePage({
         dated entries have an unknown amount; {s.nonpositive} have a
         non-positive amount. Neither is counted as a future payment. Undated
         and past estimates remain available in each grant’s original milestone
-        table. Day boundary: Brasília time.
+        table. Day boundary: Brasília time. Amount rules:{" "}
+        <Link
+          href="/zcg/methodology"
+          className="text-amber-700 hover:underline"
+        >
+          methodology
+        </Link>
+        .
       </p>
       <Synced className="mt-4" />
     </>

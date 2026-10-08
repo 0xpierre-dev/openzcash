@@ -1,5 +1,6 @@
 import {
   SectionHeading,
+  SourceNote,
 } from "@/components/workspace";
 import { PageHeader } from "@/components/ui";
 import { BudgetCards } from "../budget-cards";
@@ -28,6 +29,12 @@ export default function ZcgBudgetPage() {
           description="Compare the ZEC budget, spending and remaining balance in their original units."
         />
         <BudgetCards />
+        <SourceNote>
+          This annual worksheet and the cumulative operations split on the
+          totals page are two readings of the same programme on purpose. The
+          methodology page explains why they are not one number, and why its
+          USD and ZEC columns must not be merged.
+        </SourceNote>
       </>
 
       <Synced className="mt-6" />

@@ -409,7 +409,14 @@ export default async function PropostasPage({
           {ghRejected + ghApproved === 1 ? "entry" : "entries"} from the
           spreadsheet already {ghRejected + ghApproved === 1 ? "has" : "have"} a
           committee decision on GitHub (issue closed and labelled). They show
-          the GitHub verdict until the spreadsheet catches up.
+          the GitHub verdict until the spreadsheet catches up, per the{" "}
+          <Link
+            href="/zcg/methodology#precedence"
+            className="text-amber-700 hover:underline"
+          >
+            source precedence rule
+          </Link>
+          .
         </p>
       ) : null}
 
