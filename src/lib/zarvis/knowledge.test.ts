@@ -68,6 +68,15 @@ const externalFixture: ExternalCorpus = {
   ],
 };
 describe("External corpus: blogs, ZecHub wiki and forum topics", () => {
+  it("ranks the newer of two dated posts first when the question asks for recent news", () => {
+    const post = (slug: string, publishedOn: string, text: string) => ({ id: `blog:zfnd.org:${slug}`, kind: "official blog" as const, site: "zfnd.org", title: `Zebra ${slug}`, url: `https://zfnd.org/${slug}/`, publishedOn, retrievedAt: "2026-10-08T00:00:00.000Z", sha256: "0".repeat(64), author: null, source: null, text });
+    const dated: ExternalCorpus = { ...externalFixture, sources: [
+      post("zebra-6-3-0-release", "2026-08-10", "Zcash Foundation releases Zebra 6.3.0 with a split transaction verifier for blocks and the mempool."),
+      post("zebra-7-0-0-rc-0", "2026-10-02", "Zcash Foundation releases Zebra 7.0.0-rc.0, the first release candidate for NU7, activating on testnet."),
+    ] };
+    const blogs = searchKnowledge("O que a Zcash Foundation anunciou recentemente sobre o Zebra?", 4, 5000, undefined, dated).filter((doc) => doc.kind === "official blog");
+    expect(blogs[0]?.url).toBe("https://zfnd.org/zebra-7-0-0-rc-0/");
+  });
   it.each([
     ["What did ECC announce about Zashi 2.4.9?", "official blog", "https://electriccoin.co/blog/zashi-2-4-9-is-faster/"],
     ["ZecHub guide: how do I choose a Zcash wallet?", "community wiki", "https://zechub.wiki/using-zcash/wallets"],
