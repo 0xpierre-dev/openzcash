@@ -9,6 +9,15 @@ describe("Local knowledge coverage and size", () => {
   it.each([["como funciona a metodologia dos pagamentos", "/zcg/methodology"], ["Zcash ceremony participants", "/ceremony/people"], ["viewing keys sender recipient", "zip-0310"], ["treasury calculator cypherpunk", "treasury-calculator"]])("finds relevant public material: %s", (q, target) => {
     expect(searchKnowledge(q).some((d) => d.url.includes(target))).toBe(true);
   });
+  it.each([
+    ["Como eu provo pra alguém que recebi um pagamento sem mostrar meu saldo?", "zips.z.cash/zip-0310"],
+    ["Quem banca o desenvolvimento da moeda?", "zips.z.cash/zip-1015"],
+    ["Quanto custa a taxa de uma transação?", "zips.z.cash/zip-0317"],
+    ["O que é o campo de mensagem de uma transação blindada?", "zips.z.cash/zip-0302"],
+    ["Qual a diferença entre endereço t e z?", "z.cash/learn/how-to-use-zcash/"],
+  ])("reaches the source behind a paraphrase without the source's own words: %s", (question, url) => {
+    expect(searchKnowledge(question, 3).map((doc) => doc.url)).toContainEqual(expect.stringContaining(url));
+  });
   it("keeps full-key scope attached to isolated ZIP 310 excerpts", () => {
     const docs = searchKnowledge("ZIP 310 new unspent note nullifier incoming IVK");
     const excerpts = docs.filter((doc) => doc.id.startsWith("reference:zip-0310:"));
