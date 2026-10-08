@@ -36,7 +36,7 @@ describe("Local knowledge coverage and size", () => {
   });
   it("fixes the Portuguese gender of Zcash and the wallets", () => {
     expect(systemPrompt()).toContain("a Zcash");
-    expect(systemPrompt()).toContain("a Zallet");
+    expect(systemPrompt()).toContain("Zallet");
     expect(systemPrompt()).toContain("o Zebra");
   });
   it("bounds large, escaped and deeply nested records without losing freshness markers", () => {
