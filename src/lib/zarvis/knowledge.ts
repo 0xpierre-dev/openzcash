@@ -105,6 +105,8 @@ const documents: KnowledgeDocument[] = [
 const indexes = new WeakMap<ZipCorpus, WeakMap<ExternalCorpus, ReturnType<typeof buildSearchIndex>>>();
 export const bundledZipCorpus = zipSnapshot as ZipCorpus;
 export const bundledExternalCorpus = external as ExternalCorpus;
+/** Half a year: posts older than that get no recency lift. */
+const RECENCY_WINDOW_MS = 183 * 86_400_000;
 function buildSearchIndex(corpus: ZipCorpus, externalCorpus: ExternalCorpus) {
   const zipDocs = corpus.documents.flatMap((source) => referenceChunks({ ...source,
     title: source.number === null ? source.title : `ZIP ${source.number}: ${source.title}`,
@@ -116,7 +118,8 @@ function buildSearchIndex(corpus: ZipCorpus, externalCorpus: ExternalCorpus) {
   const frequency = new Map<string, number>();
   for (const doc of normalized) for (const token of doc.tokens) frequency.set(token, (frequency.get(token) ?? 0) + 1);
   const averageLength = normalized.reduce((sum, item) => sum + item.length, 0) / normalized.length;
-  return { normalized, frequency, averageLength, count: all.length, zipChunks: zipDocs.length };
+  const newestPublished = externalCorpus.sources.reduce<string | null>((newest, source) => source.publishedOn && (!newest || source.publishedOn > newest) ? source.publishedOn : newest, null);
+  return { normalized, frequency, averageLength, count: all.length, zipChunks: zipDocs.length, newestPublished };
 }
 /** Assemble a bounded chronology from the site's actual public paragraphs, without model calls. */
 function personHistoryDocument(query: string): KnowledgeDocument | undefined {
@@ -169,6 +172,7 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
   const directory = /\b(?:wallets?|carteiras?)\b/.test(normalizedQuery) ? "https://openzcash.org/wallets" : /\b(?:communit(?:y|ies)|comunidades?|embaixador\w*|ambassadors?)\b/.test(normalizedQuery) ? "https://openzcash.org/communities" : null;
   // Provenance-aware nudges: announcement questions prefer the organizations' own posts, forum questions the forum, and a question naming ZecHub its wiki.
   const news = matchingConcepts.some(([id]) => id === "news");
+  const newestPublished = news ? searchIndex.newestPublished : null;
   const forumQuestion = /\b(?:forum|forums|foruns|discourse|threads?|topicos?|discuss\w*|debate\w*)\b/.test(normalizedQuery);
   const zechub = /\bzechub\b/.test(normalizedQuery);
   const scored = normalized.map(({ doc, title, tokens: body, length }, i) => {
@@ -192,6 +196,8 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
       if (monthly && doc.url.startsWith("https://openzcash.org/monthly")) score *= 3;
       if (directory && doc.url === directory && doc.kind === "site documentation") score *= 3;
       if (nudged) score *= 2;
+      // A dated post loses weight as it ages behind the newest one in the corpus, so a recent-news question reaches this month's announcement before last year's.
+      if (externalDoc && doc.publishedOn && newestPublished) score *= 1 + 2 * Math.max(0, 1 - (Date.parse(newestPublished) - Date.parse(doc.publishedOn)) / RECENCY_WINDOW_MS);
     }
     if (historical && score > 0) {
       if (doc.kind !== "navigation") {
