@@ -6,6 +6,7 @@ import { ledgerTool } from "./ledger";
 import { projectHistoryTool, lookupProjectHistory } from "./project-history";
 import { projectActivityTool, lookupProjectActivity } from "./project-activity";
 import { analyticsTool, lookupChainAnalytics } from "./chain-analytics";
+import { grantApplicationTool, lookupGrantApplication } from "./grant-application";
 import { zipTool, lookupZips } from "./zips";
 import { prepareLocal, lookupLedger, type Evidence, type LocalPlan, ledgerFactsAnswer } from "./local";
 import { answerLanguage, directLanguage, pick, type DirectLanguage } from "./language";
@@ -48,7 +49,7 @@ export interface Conversation {
 }
 export type Prepared = { messages: ChatMessage[]; plan: AnswerPlan; session: ZarvisSession; local: LocalPlan; lang: DirectLanguage; candidates: ZarvisSource[]; financialQuestion: boolean; direct: string | null };
 
-const LOCAL_TOOLS = ["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics"];
+const LOCAL_TOOLS = ["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "read_grant_application"];
 export const researchTool: FunctionTool = {
   type: "function", name: "request_external_research", description: "Enable official-source web research when local evidence is missing or too old for the question. Do not request if available local evidence is sufficient.", strict: true,
   parameters: { type: "object", properties: { reason: { type: "string", enum: ["missing_local_evidence", "stale_evidence", "current_external_fact"] } }, required: ["reason"], additionalProperties: false },
@@ -218,7 +219,7 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
       return { output: result, finished: false };
     }
     try {
-      const reader = call.name === "lookup_openzcash" ? lookupPublicData : call.name === "lookup_zcash_zips" ? lookupZips : call.name === "query_project_history" ? lookupProjectHistory : call.name === "query_project_activity" ? lookupProjectActivity : call.name === "query_zcash_analytics" ? lookupChainAnalytics : lookupLedger;
+      const reader = call.name === "lookup_openzcash" ? lookupPublicData : call.name === "lookup_zcash_zips" ? lookupZips : call.name === "query_project_history" ? lookupProjectHistory : call.name === "query_project_activity" ? lookupProjectActivity : call.name === "query_zcash_analytics" ? lookupChainAnalytics : call.name === "read_grant_application" ? lookupGrantApplication : lookupLedger;
       return { output: await reader(JSON.parse(call.arguments), signal), finished: false };
     } catch { signal.throwIfAborted(); return { output: limit, finished: false }; }
   }
@@ -227,7 +228,7 @@ export async function modelAnswer(prepared: Prepared, config: ProviderConfig, co
     signal.throwIfAborted();
     const final = round === rounds() - 1;
     const tools: FunctionTool[] = [
-      ...(!final && lookups < plan.lookups ? [lookupTool, ledgerTool, scenarioTool, zipTool, projectHistoryTool, projectActivityTool, analyticsTool] as FunctionTool[] : []),
+      ...(!final && lookups < plan.lookups ? [lookupTool, ledgerTool, scenarioTool, zipTool, projectHistoryTool, projectActivityTool, analyticsTool, grantApplicationTool] as FunctionTool[] : []),
       ...(!final && config.webSearch && !allowWeb && !webUsed ? [researchTool] : []),
     ];
     const webSearch = !final && allowWeb && !webUsed ? researchScope(local.query ?? "") : null;

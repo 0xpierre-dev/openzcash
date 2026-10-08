@@ -34,6 +34,7 @@ const proposals = [
     decisionDate: null,
     submittedDate: "2025-11-02",
     applicantsRaw: "Bob",
+    requestedUsdCents: null,
     platformLink: null,
   }),
   proposal({
@@ -81,6 +82,7 @@ describe("ZCG decision history lookup", () => {
     expect(all.decisions[1]).toMatchObject({
       decidedBy: "ZCG committee",
       detail: "Zingo Labs · $125,000 requested",
+      requestedUsd: 125_000,
       grantPage: "https://openzcash.org/zcg/grant?g=Zebra%20indexer",
       sources: [
         { label: "Application", href: expect.stringContaining("/issues/340") },
@@ -89,8 +91,10 @@ describe("ZCG decision history lookup", () => {
     });
     expect(all.decisions[3]).toMatchObject({
       decidedBy: "Applicant",
+      requestedUsd: null,
       sources: [],
     });
+    expect(all.note).toContain("read_grant_application");
     expect(all).toMatchObject({
       publishedThrough: "2026-09-27",
       importedAt: "2026-09-27T03:00:00.000Z",

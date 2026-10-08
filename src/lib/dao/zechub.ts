@@ -34,6 +34,8 @@ export type ZechubProposal = {
   abstain: number;
   proposer: string;
   url: string;
+  /** The proposer's own text (budget included), cut at DESCRIPTION_CHARS; "" when the indexer has none. */
+  description: string;
 };
 
 type IndexerItem = {
@@ -43,9 +45,19 @@ type IndexerItem = {
     title?: string;
     status?: string;
     proposer?: string;
+    description?: string;
     votes?: { yes?: string; no?: string; abstain?: string };
   };
 };
+
+/** Long enough for a budget table, short enough that thirty proposals stay a small cache. */
+export const DESCRIPTION_CHARS = 2_000;
+function excerpt(text: string | undefined): string {
+  const clean = (text ?? "").replace(/\r\n/g, "\n").trim();
+  return clean.length > DESCRIPTION_CHARS
+    ? `${clean.slice(0, DESCRIPTION_CHARS).trimEnd()}…`
+    : clean;
+}
 
 let cache: { at: number; items: ZechubProposal[] } | null = null;
 
@@ -91,6 +103,7 @@ export async function getZechubProposals(
         abstain: num(it.proposal!.votes?.abstain),
         proposer: it.proposal!.proposer ?? "",
         url: `${ZECHUB_DAO_URL}/proposals/${PREFIX}${it.id}`,
+        description: excerpt(it.proposal!.description),
       }));
     if (items.length === 0) return cache?.items.slice(0, limit) ?? [];
     cache = { at: now, items };

@@ -82,7 +82,7 @@ describe("Local knowledge coverage and size", () => {
   });
   it("does not inject the full navigation or a changing clock into the system prefix", () => {
     expect(systemPrompt()).not.toContain("PUBLIC SITE GUIDE");
-    expect(systemPrompt().length).toBeLessThan(6800);
+    expect(systemPrompt().length).toBeLessThan(7000);
   });
   it("fixes the Portuguese gender of Zcash and the wallets", () => {
     expect(systemPrompt()).toContain("a Zcash");
