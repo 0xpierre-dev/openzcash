@@ -27,7 +27,7 @@ not include helper scripts. Reading or copying the guide runs no installer.
 In a project terminal with Node.js 22.20 or newer:
 
 ```bash
-npx skills@1.7.0 add https://openzcash.org --skill zechub-copilot
+npx skills@1.7.2 add https://openzcash.org --skill zechub-copilot
 ```
 
 Choose the agent when prompted, or add -a cursor, -a claude-code, -a codex,

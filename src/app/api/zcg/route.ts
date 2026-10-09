@@ -14,6 +14,8 @@ export async function GET() {
         "Per-grant aggregation (milestones, paid, status). ?format=csv for CSV.",
       "/api/zcg/coinholder/round":
         "Open Coinholder-Directed Retroactive Grants review round: proposals, requested amounts, key dates, ballot options.",
+      "/api/zcg/office":
+        "Published proposals under review (D-1): GitHub applications reconciled with next-day published decisions. Returns { proposals: [...] }, capped at 100.",
     },
     notes:
       "Amounts are in USD (dollars) and ZEC. Budgeted USD includes unpaid entries; usdPaid is the budgeted value of settled entries, not current market value or proof of delivery. importedAt is collection time, not source publication time; sourceUrl opens a live row, not an immutable snapshot. See /zcg/methodology.",

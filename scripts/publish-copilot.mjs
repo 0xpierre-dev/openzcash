@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 // Publish only these reviewed MIT-licensed files, never the private repository.
 export const PACKAGES = {
   "zcg-copilot": [
-    "SKILL.md", "README.md", "LICENSE", "scripts/zcg.py",
+    "SKILL.md", "README.md", "CHANGELOG.md", "LICENSE", "scripts/zcg.py",
     "scripts/search.sh", "scripts/recipient.sh", "scripts/summary.sh",
   ],
   "coinholder-copilot": ["SKILL.md", "README.md", "LICENSE"],
