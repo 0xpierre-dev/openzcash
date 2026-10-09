@@ -27,7 +27,7 @@ export function safeSourceUrl(raw: string): string | null {
     return null;
   } catch { return null; }
 }
-/** A page the Claude fetch tool may read: a safe source whose host is on the fetch list. Fetch filtering matches hosts only, never paths, so a GitHub organization link is a citation but not a readable page. */
+/** A page the Claude fetch tool may read: a safe source whose host is on the fetch list. Fetch filtering matches hosts only, never paths, so a GitHub organization link is a citation but not a readable page; a ZCG application on GitHub is read by the read_grant_application tool instead. */
 export function fetchableSourceUrl(raw: string): string | null {
   const url = safeSourceUrl(raw);
   if (!url) return null;

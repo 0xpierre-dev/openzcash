@@ -593,6 +593,7 @@ export function OverviewView({ today }: { today: TodayPrice }) {
       <Rules />
 
       <p className={styles.sources}>
+        <Link href="/coinholders/activity">Voting activity →</Link>
         <a href={PROGRAM.zipUrl} target="_blank" rel="noreferrer">
           ZIP 1016 ↗
         </a>
@@ -619,7 +620,8 @@ export function ResultsView({ selected }: { selected: Round | "all" }) {
       <RoundTabs current={selected === "all" ? "all" : selected.id} />
       {selected === "all" ? <AllRounds /> : <RoundResults round={selected} />}
       <p className={styles.sources}>
-        <Link href="/coinholders">Overview and insights →</Link>
+        <Link href="/coinholders/activity">Voting activity →</Link>
+        <Link href="/coinholders">Program overview →</Link>
         <a href={PROGRAM.zipUrl} target="_blank" rel="noreferrer">
           ZIP 1016 ↗
         </a>

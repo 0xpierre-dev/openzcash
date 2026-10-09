@@ -50,6 +50,90 @@ export function requestedAmountFromBody(
   );
 }
 
+/** The "Total Budget (USD)" field alone, in whole USD, or null when blank or prose. */
+export function totalBudgetFromBody(body: string | undefined): number | null {
+  if (!body) return null;
+  return sectionAmount(body, "Total Budget (USD)");
+}
+
+export type ApplicationStatus = "review" | "approved" | "paid" | "other";
+
+/** The committee's verdict as the repository labels record it. Only OPEN issues
+ * are listed by the importer, so an unlabelled application is still awaiting
+ * judgement (e.g. #341, KeepKey, was filed with no labels at all). */
+export function statusFromLabels(labels: string[]): ApplicationStatus {
+  const has = (s: string) => labels.some((l) => l.includes(s));
+  if (has("Payment Completed")) return "paid";
+  if (has("Grant Approved") || has("Approved")) return "approved";
+  if (has("Declined") || has("Rejected") || has("Withdrawn")) return "other";
+  if (has("Ready For ZCG Review") || has("Review")) return "review";
+  return "review";
+}
+
+export type ApplicationSection = {
+  heading: string;
+  text: string;
+  truncated: boolean;
+};
+
+/** HTML comments, images, code fences and Markdown marks dropped; links keep their label. */
+function plainText(markdown: string): string {
+  return markdown
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/<[^>]*>/g, "")
+    .replace(/[*`~]/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\s*\n\s*/g, "\n")
+    .trim();
+}
+
+/**
+ * Every section of an issue body (the form renders "###" headers; hand-written
+ * re-applications use "##"), as plain text cut at `perSection` characters, up
+ * to `total` characters over the whole list. Text before the first header is
+ * returned under an empty heading. A cut section is marked truncated so the
+ * reader never mistakes an excerpt for the whole budget or milestone list.
+ */
+export function applicationSections(
+  body: string | undefined,
+  limits: { perSection: number; total: number },
+): ApplicationSection[] {
+  if (!body) return [];
+  const sections: ApplicationSection[] = [];
+  let heading = "",
+    lines: string[] = [],
+    used = 0;
+  const flush = () => {
+    const text = plainText(lines.join("\n"));
+    lines = [];
+    // The form's checkbox boilerplate is not application content.
+    if (/^terms and conditions$/i.test(heading)) return;
+    // The issue form renders an unanswered field as "_No response_".
+    if (!text || /^_*(?:no response|n\/a|none)\.?_*$/i.test(text)) return;
+    if (used >= limits.total) return;
+    const room = Math.min(limits.perSection, limits.total - used);
+    const cut = text.length > room;
+    const excerpt = cut ? text.slice(0, room).trimEnd() : text;
+    used += excerpt.length;
+    sections.push({ heading, text: excerpt, truncated: cut });
+  };
+  for (const line of body.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (HEADER.test(trimmed)) {
+      flush();
+      heading = trimmed
+        .replace(HEADER, "")
+        .replace(/\s*#+\s*$/, "")
+        .trim();
+    } else lines.push(line);
+  }
+  flush();
+  return sections;
+}
+
 /** A short, plain-text excerpt of the applicant's own project summary. */
 export function projectSummaryFromBody(
   body: string | null | undefined,
@@ -58,13 +142,23 @@ export function projectSummaryFromBody(
   const lines = body.split(/\r?\n/);
   const heading = /^#{1,6}\s+/;
   for (const section of ["project summary", "project description"]) {
-    const start = lines.findIndex((line) =>
-      heading.test(line.trim()) &&
-      line.trim().replace(heading, "").replace(/\s*#+\s*$/, "").trim().toLowerCase() === section,
+    const start = lines.findIndex(
+      (line) =>
+        heading.test(line.trim()) &&
+        line
+          .trim()
+          .replace(heading, "")
+          .replace(/\s*#+\s*$/, "")
+          .trim()
+          .toLowerCase() === section,
     );
     if (start < 0) continue;
-    const end = lines.findIndex((line, index) => index > start && heading.test(line.trim()));
-    const text = lines.slice(start + 1, end < 0 ? undefined : end).join("\n")
+    const end = lines.findIndex(
+      (line, index) => index > start && heading.test(line.trim()),
+    );
+    const text = lines
+      .slice(start + 1, end < 0 ? undefined : end)
+      .join("\n")
       .replace(/<!--[\s\S]*?-->/g, "")
       .replace(/```[\s\S]*?```/g, "")
       .replace(/!\[[^\]]*\]\([^)]*\)/g, "")

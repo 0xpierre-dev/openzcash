@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DAO_ROWS, daoContext, daoFilter } from "./dao";
 import type { ZechubProposal } from "@/lib/dao/zechub";
-const proposal = (id: number, title: string, status: string, over: Partial<ZechubProposal> = {}): ZechubProposal => ({ id, ref: `A${id}`, title, status, createdAt: `2026-0${(id % 9) + 1}-01T00:00:00.000Z`, yes: 10, no: 1, abstain: 0, proposer: "juno1abc", url: `https://daodao.zone/dao/juno1dao/proposals/A${id}`, ...over });
+const proposal = (id: number, title: string, status: string, over: Partial<ZechubProposal> = {}): ZechubProposal => ({ id, ref: `A${id}`, title, status, createdAt: `2026-0${(id % 9) + 1}-01T00:00:00.000Z`, yes: 10, no: 1, abstain: 0, proposer: "juno1abc", url: `https://daodao.zone/dao/juno1dao/proposals/A${id}`, description: `Budget for ${title}: 500 USD`, ...over });
 const proposals = [proposal(163, "Fund ZecHub Nigeria meetup", "open"), proposal(162, "Pay September contributors", "executed"), proposal(161, "Wiki translation bounty", "passed"), proposal(160, "Buy conference tickets", "rejected"), ...Array.from({ length: 20 }, (_, i) => proposal(159 - i, `Older proposal ${i}`, "executed"))];
 const meta = { url: "https://daodao.zone/dao/juno1dao", fetchedAt: "2026-09-28T21:00:00.000Z" };
 describe("ZecHub DAO context", () => {
@@ -16,6 +16,8 @@ describe("ZecHub DAO context", () => {
     expect(context).toMatchObject({ daoFetchedAt: meta.fetchedAt, dao: meta.url, proposalsListed: 24, latestProposal: { ref: "A163", status: "open" }, byStatus: { open: 1, executed: 21, passed: 1, rejected: 1 }, matched: 24 });
     expect(context.proposals).toHaveLength(DAO_ROWS); expect(context.proposals[0]).toMatchObject({ ref: "A163", votes: { yes: 10, no: 1, abstain: 0 }, url: proposals[0].url });
     expect(daoContext(proposals, "proposal A161", meta).proposals.map((p) => p.ref)).toEqual(["A161"]);
+    expect(daoContext(proposals, "proposal A161", meta).proposals[0]).toMatchObject({ description: "Budget for Wiki translation bounty: 500 USD" });
+    expect(context.proposals[0]).not.toHaveProperty("description");
     expect(daoContext(proposals, "which proposals were rejected", meta).proposals.map((p) => p.ref)).toEqual(["A160"]);
     expect(daoContext(proposals, "nigeria meetup", meta).proposals.map((p) => p.ref)).toEqual(["A163"]);
     expect(daoContext([], "anything", meta)).toMatchObject({ latestProposal: null, matched: 0, proposals: [] });

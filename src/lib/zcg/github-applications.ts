@@ -1,6 +1,6 @@
 import "server-only";
 import { ghHeaders } from "./github-headers";
-import { projectSummaryFromBody, requestedAmountFromBody } from "./github-applications-parse";
+import { projectSummaryFromBody, requestedAmountFromBody, statusFromLabels, type ApplicationStatus } from "./github-applications-parse";
 import { getDb } from "@/lib/db/client";
 import { readPublications, recordPublications } from "./publications-repo";
 
@@ -18,7 +18,7 @@ import { readPublications, recordPublications } from "./publications-repo";
 const REPO = "ZcashCommunityGrants/zcashcommunitygrants";
 const TTL_MS = 15 * 60_000;
 
-export type AppStatus = "review" | "approved" | "paid" | "other";
+export type AppStatus = ApplicationStatus;
 
 export interface GrantApplication {
   number: number;
@@ -55,18 +55,6 @@ async function publishedApplications(limit: number): Promise<GrantApplication[]>
   return [...published.values()].filter((a): a is GrantApplication => a != null)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.number - a.number)
     .slice(0, limit);
-}
-
-function statusFromLabels(labels: string[]): AppStatus {
-  const has = (s: string) => labels.some((l) => l.includes(s));
-  if (has("Payment Completed")) return "paid";
-  if (has("Grant Approved") || has("Approved")) return "approved";
-  if (has("Declined") || has("Rejected") || has("Withdrawn")) return "other";
-  if (has("Ready For ZCG Review") || has("Review")) return "review";
-  // We only fetch OPEN issues, so an application with no decision label yet
-  // (including freshly filed ones the committee has not triaged/labelled) is
-  // awaiting judgement — e.g. #341 (KeepKey) was filed with no labels at all.
-  return "review";
 }
 
 /** Grant applications are normally labelled, but re-applications filed outside

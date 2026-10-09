@@ -131,7 +131,7 @@ describe("Anthropic transport: the web fetch server tool", () => {
     mocks.config.mockReturnValue(config(false));
     mocks.stream.mockReturnValueOnce(reply([text("Read it.")]));
     await run(linked);
-    expect(names(params(0).tools)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "web_fetch"]);
+    expect(names(params(0).tools)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "read_grant_application", "web_fetch"]);
     expect(params(0)).not.toHaveProperty("tool_choice");
   });
   it.each(["https://evil.example/zcash-thread", "https://github.com/zcash/zips/blob/main/zips/zip-0317.rst"])("declares no server tool when search is off and the only link is unreadable: %s", async (url) => {
@@ -188,7 +188,7 @@ describe("Responses transport", () => {
     mocks.create.mockResolvedValueOnce((async function* () { yield completed; })());
     const { metrics } = await run(linked);
     const tools = mocks.create.mock.calls[0][0].tools as Array<{ type: string; name?: string }>;
-    expect(tools.map((tool) => tool.name ?? tool.type)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "request_external_research"]);
+    expect(tools.map((tool) => tool.name ?? tool.type)).toEqual(["lookup_openzcash", "query_openzcash_ledger", "calculate_openzcash_treasury", "lookup_zcash_zips", "query_project_history", "query_project_activity", "query_zcash_analytics", "read_grant_application", "request_external_research"]);
     expect(JSON.stringify(tools)).not.toContain("fetch");
     expect(mocks.create.mock.calls[0][0]).not.toHaveProperty("webFetch");
     expect(metrics.webFetchCalls).toBe(0);

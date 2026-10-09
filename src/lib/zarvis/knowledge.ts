@@ -27,17 +27,25 @@ const aliases: Record<string, string[]> = {
   cerimonia: ["ceremony"], historia: ["history"], mineracao: ["mining"], oferta: ["supply"], orcamento: ["budget"], comunidade: ["community"], comunidades: ["communities"],
   blossom: ["shorter", "target", "spacing"], intervalo: ["spacing"], blocos: ["block"],
   noticias: ["news"], ultimo: ["latest"], ultimos: ["latest"], atual: ["current"], mensal: ["monthly"], mensais: ["monthly", "reports"], relatorio: ["report"], relatorios: ["reports"],
+  // Added from the weekly subject review: the words visitors use for fees, memos, funding and proof of payment.
+  taxa: ["fee", "fees"], taxas: ["fees"], tarifa: ["fee"], comision: ["fee"], comisiones: ["fees"], mensagem: ["memo"], mensagens: ["memo"], mensaje: ["memo"], recado: ["memo"],
+  banca: ["funding", "fund"], financia: ["funding", "fund"], financiamento: ["funding", "fund"], financiacion: ["funding", "fund"], desenvolvimento: ["development", "dev"], desarrollo: ["development", "dev"],
+  provar: ["prove", "viewing"], provo: ["prove", "viewing"], comprovar: ["prove", "viewing"], comprovante: ["proof", "viewing"], recebi: ["received", "incoming"], recebido: ["received", "incoming"], recibido: ["received", "incoming"],
+  transparente: ["transparent"], transparentes: ["transparent"],
 };
 export function searchTerms(value: string): string[] {
   return [...new Set(terms(value).flatMap((word)=>[word, ...(Object.hasOwn(aliases, word) ? aliases[word] : [])]))];
 }
 // Concept expansion is explicit and auditable; no embedding API is needed for this corpus.
 const concepts: Array<[string, RegExp, string[]]> = [
-  ["viewing-keys", /viewing|visualizacao|\bivk\b|\bfvk\b|\bufvk\b|\buivk\b|read.only|somente leitura|see.*sender|ver.*remetente|can.*viewer/, ["viewing", "key", "sender", "recipient"]],
+  ["viewing-keys", /viewing|visualizacao|\bivk\b|\bfvk\b|\bufvk\b|\buivk\b|read.only|somente leitura|see.*sender|ver.*remetente|can.*viewer|prov(?:o|ar|e)\b.*(?:recebi|pagamento|payment)|proof of payment|comprovante|auditor/, ["viewing", "key", "sender", "recipient"]],
   ["addresses", /unified|unificad|receiver|recebedor|endereco|address/, ["unified", "addresses", "receiver"]],
-  ["privacy", /privac|shield|blindad|anonim|anonym|rastre|trace|hide.*amount|ocult.*valor/, ["privacy", "shielded", "transparent"]],
+  ["privacy", /privac|shield|blindad|anonim|anonym|rastre|trace|hide.*amount|ocult.*valor|endereco [tz]\b|\b[tz]-addr|t-address|z-address|transparente/, ["privacy", "shielded", "transparent"]],
+  ["fees", /\btaxas?\b|\btarifa|\bfees?\b|comisi[oó]n|custo.*transa|transaction cost|zip.?317/, ["fee", "fees", "conventional", "logical", "actions"]],
+  ["memo", /\bmemo\b|mensagem|mensaje|\brecado\b|note.*transaction|campo.*(?:mensagem|texto)/, ["memo", "field", "encrypted", "512"]],
   ["issuance", /halving|supply|oferta|emissao|issuance|cap.*coins|21.*million|21.*milh|block.*spacing/, ["issuance", "supply", "halving"]],
-  ["funding", /dev.?fund|fundo.*desenvolvimento|subsid|funding.*split|alocacao|miners.*25|mineradores.*25/, ["funding", "allocation", "subsidy"]],
+  // Keep PT/ES funding inflections and compounds, but exclude English financial/financially.
+  ["funding", /dev.?fund|fundo.*desenvolvimento|subsid|funding.*split|alocacao|miners.*25|mineradores.*25|\bbanca\b|financia(?!l)|quem paga.*desenvolv|who (?:pays for|funds).*development|development fund/, ["funding", "allocation", "subsidy"]],
   ["ledger", /milestone|marcos|pagamento|pagou|paid|budget|orcamento|orcad|liquidacao|settlement|methodolog|metodolog|\bimport\b|imported|importad/, ["ledger", "methodology", "paid"]],
   ["calculator", /coverage|cobertura|runway|simul|cenario|scenario|\bmeta\b|ownership|participacao|calculad|calculator|cypherpunk|cipherpunk|20[x×]|quanto.*anos|how many years/, ["calculator", "treasury", "scenario"]],
   ["governance", /governan|governanc|ativad|activated|consensus|consenso|votacao|poll|enquete/, ["governance", "activation", "decision"]],
@@ -172,6 +180,7 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
   const directory = /\b(?:wallets?|carteiras?)\b/.test(normalizedQuery) ? "https://openzcash.org/wallets" : /\b(?:communit(?:y|ies)|comunidades?|embaixador\w*|ambassadors?)\b/.test(normalizedQuery) ? "https://openzcash.org/communities" : null;
   // Provenance-aware nudges: announcement questions prefer the organizations' own posts, forum questions the forum, and a question naming ZecHub its wiki.
   const news = matchingConcepts.some(([id]) => id === "news");
+  const fees = matchingConcepts.some(([id]) => id === "fees");
   const newestPublished = news ? searchIndex.newestPublished : null;
   const forumQuestion = /\b(?:forum|forums|foruns|discourse|threads?|topicos?|discuss\w*|debate\w*)\b/.test(normalizedQuery);
   const zechub = /\bzechub\b/.test(normalizedQuery);
@@ -193,6 +202,8 @@ export function searchKnowledge(query: string, limit = 4, budget = 5000, corpus:
     if (zips.some((number) => doc.url.endsWith(`zip-${String(number).padStart(4, "0")}`))) score += 30;
     if (!zips.length && score > 0) {
       if (blossomSpacing && doc.url.endsWith("zip-0208")) score += 25;
+      // The fee question has one current answer: ZIP 317 superseded the older fee ZIPs that share its words.
+      if (fees && doc.url.endsWith("zip-0317")) score += 25;
       if (monthly && doc.url.startsWith("https://openzcash.org/monthly")) score *= 3;
       if (directory && doc.url === directory && doc.kind === "site documentation") score *= 3;
       if (nudged) score *= 2;
