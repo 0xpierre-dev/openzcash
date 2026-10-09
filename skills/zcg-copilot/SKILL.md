@@ -136,6 +136,10 @@ apply; reuse responses and inspect rate-limit headers rather than repeatedly fet
 4. **Disagreement is a finding.** Report which sources differ, their dates, and which
    one supports each figure. Do not conceal missing coverage or unresolved matches.
 
+These rules mirror the site's methodology page (see the source map). Treat that
+page as canonical for figures and statuses; if this file and the page diverge,
+report the divergence as a finding instead of picking one silently.
+
 **Research an idea / Colosseum:** fetch grants and the published queue, match related
 terms and synonyms locally, and follow the relevant application/forum links. Present
 existing work, requested funding, recorded payments, and possible gaps separately.

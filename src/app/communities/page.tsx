@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { PageHeader } from "@/components/ui";
 import { COMMUNITIES, LEDGER_FALLBACK_AS_OF } from "@/lib/communities/data";
 import { getCommunityActivity } from "@/lib/communities/forum-activity";
@@ -53,8 +54,14 @@ export default function CommunitiesPage() {
 
       <p className="mt-8 text-xs leading-relaxed text-stone-600">
         ZCG figures are read from the ZCG ledger mirror of the official
-        spreadsheet, collected every 6 hours (budgeted USD, not paid; see the
-        methodology), and match the recipients page. ZecHub DAO grants are
+        spreadsheet, collected every 6 hours (budgeted USD, not paid; see{" "}
+        <Link
+          href="/zcg/methodology"
+          className="text-amber-700 hover:underline"
+        >
+          the methodology
+        </Link>
+        ), and match the recipients page. ZecHub DAO grants are
         mapped by approved DAO DAO proposal; their paid and outstanding amounts
         come from the ZecHub treasury sheet mirror, also collected every 6
         hours, and grants older than the sheet show their period only. Umbrella

@@ -271,7 +271,14 @@ export default async function AnalyticsPage() {
           </div>
           <p className="mt-3 text-xs text-stone-600">
             Payment progress follows the ledger. A paid milestone is not
-            independent verification of a deliverable or its impact.
+            independent verification of a deliverable or its impact. See{" "}
+            <Link
+              href="/zcg/methodology#payment-not-delivery"
+              className="text-amber-700 hover:underline"
+            >
+              payment ≠ delivery
+            </Link>{" "}
+            on the methodology page.
           </p>
         </section>
 
