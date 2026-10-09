@@ -77,7 +77,7 @@ All read-only, public, no auth. Amounts are USD (dollars) and ZEC.
 
 Append `?format=csv` to the `data/*` endpoints for CSV. This table covers the
 ZCG data API; the live index at [openzcash.org/api](https://openzcash.org/api)
-lists every public endpoint. Methodology:
+lists the site's public endpoints by area. Methodology:
 [openzcash.org/zcg/methodology](https://openzcash.org/zcg/methodology).
 
 ## ZCG Copilot (agent skill)

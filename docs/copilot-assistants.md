@@ -48,7 +48,7 @@ https://survey.stackoverflow.co/2025/ai
   provides the same privacy guarantees.
 - Cursor: https://cursor.com/docs
 - Gemini CLI: https://geminicli.com/docs/cli/skills/
-  The pinned skills 1.7.0 installer supports the gemini-cli agent flag.
+  The pinned skills 1.7.2 installer supports the gemini-cli agent flag.
 - Claude Code: https://code.claude.com/docs/en/overview
 - Codex: https://github.com/openai/codex
 - GitHub Copilot: https://docs.github.com/en/copilot
