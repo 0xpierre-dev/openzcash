@@ -1,35 +1,48 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it, vi } from "vitest";
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }),
+}));
 import { Participate } from "./participate";
 
-it("opens a history bookmark inside the same service workspace without a second header or legacy table", () => {
-  const html = renderToStaticMarkup(<Participate view="history" service={{ url: "/participate" }}><p>Legacy table</p></Participate>);
-  expect(html).toContain('aria-label="Participation workspace"');
-  expect(html).toContain('src="/participate?view=history"');
-  expect(html).not.toContain("participate.openzcash.org");
-  expect(html).not.toContain('aria-label="Participation views"');
-  expect(html).not.toContain("Legacy table");
-});
-
-it("retains public history when an installation has no participation service configured", () => {
-  const html = renderToStaticMarkup(<Participate view="history" service={null}><p>Public history fallback</p></Participate>);
-  expect(html).toContain("Public history fallback");
+it("frames the native workspace without portal tabs and without an embedded document", () => {
+  const html = renderToStaticMarkup(
+    <Participate view="proposals" configured>
+      <p>Workspace</p>
+    </Participate>,
+  );
+  expect(html).toContain("Workspace");
   expect(html).not.toContain("<iframe");
+  expect(html).not.toContain('aria-label="Participation views"');
+  expect(html).toContain("An OpenZcash pilot.");
 });
 
-it("distinguishes the 25 anchored mainnet records from new free demo submissions", () => {
-  const html = renderToStaticMarkup(<Participate service={{ url: "/participate" }} />);
-  expect(html).toContain('aria-label="Participation workspace"');
+it("keeps its own tabs and the public history when no participation service is configured", () => {
+  const html = renderToStaticMarkup(
+    <Participate view="history" configured={false}>
+      <p>Public history fallback</p>
+    </Participate>,
+  );
+  expect(html).toContain("Public history fallback");
+  expect(html).toContain('aria-label="Participation views"');
+  expect(html).toContain('href="/zcg/participate?view=history"');
+  expect(html).toContain("View decision history");
+});
+
+it("distinguishes the 25 anchored mainnet records from new free demo submissions in the introduction", () => {
+  const html = renderToStaticMarkup(
+    <Participate view="proposals" configured />,
+  );
   expect(html.match(/Enter the pilot/g)).toHaveLength(1);
-  expect(html).not.toContain("From a proposal");
-  expect(html).not.toContain('aria-label="Participation views"');
   expect(html).toContain("25 proposals anchored");
   expect(html).toContain("Zcash mainnet");
-  expect(html).toContain("1bb7383043cab4d72b7129b5e5bdc7441ac7c073af59679bb91403216b795bf1");
+  expect(html).toContain(
+    "1bb7383043cab4d72b7129b5e5bdc7441ac7c073af59679bb91403216b795bf1",
+  );
   expect(html).toContain("Sign in with an email code.");
   expect(html).toContain("Test proposals stay in the demo");
-  expect(html).toContain("official ZCG GitHub source receive separate Zcash anchors");
-  expect(html).not.toContain("timestamping is in preparation");
+  expect(html).toContain(
+    "official ZCG GitHub source receive separate Zcash anchors",
+  );
 });

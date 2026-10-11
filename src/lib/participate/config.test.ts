@@ -1,27 +1,51 @@
 import { describe, expect, it } from "vitest";
-import { participationService, isParticipationReadyMessage, participationViewMessage, participationThemeMessage, participationWorkspaceUrl } from "./config";
+import {
+  archiveEndpoint,
+  isRecordId,
+  participationCommunityId,
+  participationView,
+  proposalFilter,
+  proposalPath,
+} from "./config";
 
-describe("participation service boundary", () => {
-  it("only exposes an OpenZcash path when its private upstream is configured", () => {
-    expect(participationService(true)).toEqual({ url: "/participate" });
-    expect(participationService(false)).toBeNull();
+describe("native Participate configuration", () => {
+  it("uses the public archive host id, with a safe default", () => {
+    expect(participationCommunityId(undefined)).toBe("preview_orchard");
+    expect(participationCommunityId("  ")).toBe("preview_orchard");
+    expect(participationCommunityId("zcg_host")).toBe("zcg_host");
+    expect(participationCommunityId("../etc")).toBe("preview_orchard");
   });
-  it("recognizes only the versioned readiness handshake", () => {
-    expect(isParticipationReadyMessage({ type: "participate:ready", version: 1 })).toBe(true);
-    for (const invalid of [null, "ready", { type: "participate:ready", version: 2 }, { type: "participate:balance", version: 1 }]) expect(isParticipationReadyMessage(invalid)).toBe(false);
+  it("only knows the fixed views and filters", () => {
+    expect(participationView("history")).toBe("history");
+    for (const value of [
+      "committee",
+      "about",
+      undefined,
+      "https://example.test",
+    ])
+      expect(participationView(value)).toBe("proposals");
+    expect(proposalFilter("rejected")).toBe("rejected");
+    for (const value of ["demo", undefined, 1])
+      expect(proposalFilter(value)).toBe("under_review");
   });
-  it("only allows the fixed public views, never navigation URLs or account actions", () => {
-    for (const view of ["proposals", "history", "committee", "about"] as const) expect(participationViewMessage({ type: "participate:view", version: 1, view })).toBe(view);
-    for (const data of [null, "history", { type: "participate:view", version: 2, view: "history" }, { type: "participate:auth", version: 1, view: "history" }, { type: "participate:view", version: 1, view: "https://example.test" }, { type: "participate:view", version: 1, view: "sign-in" }]) expect(participationViewMessage(data)).toBeNull();
+  it("builds same-origin API and page paths from encoded ids", () => {
+    expect(archiveEndpoint("preview_orchard")).toBe(
+      "/api/communities/preview_orchard/archives",
+    );
+    expect(archiveEndpoint("preview_orchard", "zcg-github-478")).toBe(
+      "/api/communities/preview_orchard/archives/zcg-github-478",
+    );
+    expect(proposalPath("zcg-github-478")).toBe(
+      "/zcg/participate/zcg-github-478",
+    );
+    expect(archiveEndpoint("a b", "c/d")).toBe(
+      "/api/communities/a%20b/archives/c%2Fd",
+    );
   });
-  it("keeps every workspace view on the participation service", () => {
-    const base = "/participate";
-    expect(participationWorkspaceUrl(base, "proposals")).toBe(base);
-    expect(participationWorkspaceUrl(base, "history")).toBe(`${base}?view=history`);
-    expect(participationWorkspaceUrl(base, "committee")).toBe(`${base}/committee`);
-  });
-  it("only retains an explicit versioned appearance preference", () => {
-    expect(participationThemeMessage({ type: "participate:theme", version: 1, theme: "dark" })).toBe("dark");
-    for (const data of [null, { type: "participate:theme", version: 2, theme: "dark" }, { type: "participate:auth", version: 1, theme: "light" }, { type: "participate:theme", version: 1, theme: "system" }]) expect(participationThemeMessage(data)).toBeNull();
+  it("accepts archive record ids and rejects paths or traversal", () => {
+    expect(isRecordId("zcg-github-478")).toBe(true);
+    expect(isRecordId("zcg-graphsense-2026-09-28")).toBe(true);
+    for (const value of ["", "../x", "a/b", "Upper", ".hidden", null, 12])
+      expect(isRecordId(value)).toBe(false);
   });
 });

@@ -379,6 +379,11 @@
 /* A proposal's chart and arithmetic share a wide reading canvas. The app
    header and phone navigation remain available; other workspace views keep
    their sidebar and treasury strip. */
+/* Participate renders a full workspace: it spans the content column edge to edge. */
+.rd-shell[data-layout="workspace"] .rd-main {
+  max-width: none;
+  padding: 0 0 65px;
+}
 .rd-shell[data-layout="proposal"] .rd-main {
   max-width: 1840px;
 }

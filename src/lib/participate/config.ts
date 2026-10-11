@@ -1,33 +1,51 @@
-/** The browser only receives a path on OpenZcash, never the private service origin. */
-export const participationService = (configured: boolean) => configured ? { url: "/participate" } : null;
+/** Native Participate screens: fixed views, filters and the public archive scope. */
+export const PARTICIPATE_PATH = "/zcg/participate";
+export const DEFAULT_PARTICIPATE_COMMUNITY_ID = "preview_orchard";
 
-export function isParticipationReadyMessage(data: unknown): boolean {
-  return typeof data === "object" && data !== null
-    && (data as Record<string, unknown>).type === "participate:ready"
-    && (data as Record<string, unknown>).version === 1;
+/** The archive host id is public: it is part of every same-origin API path. */
+export function participationCommunityId(
+  raw: string | undefined = process.env.PARTICIPATE_COMMUNITY_ID,
+): string {
+  const value = raw?.trim() ?? "";
+  return /^[a-z0-9_-]{1,128}$/i.test(value)
+    ? value
+    : DEFAULT_PARTICIPATE_COMMUNITY_ID;
 }
 
-/** Appearance is the only workspace preference shared with the host. */
-export function participationThemeMessage(data: unknown): "light" | "dark" | null {
-  if (!data || typeof data !== "object") return null;
-  const message = data as Record<string, unknown>;
-  if (message.type !== "participate:theme" || message.version !== 1) return null;
-  return message.theme === "light" || message.theme === "dark" ? message.theme : null;
+export type ParticipationView = "proposals" | "history";
+export function participationView(raw: unknown): ParticipationView {
+  return raw === "history" ? "history" : "proposals";
 }
 
-export type ParticipationView = "proposals" | "history" | "committee";
-
-/** Fixed destinations only. Committee authorization still belongs to the service. */
-export function participationWorkspaceUrl(url: string, view: ParticipationView) {
-  if (view === "history") return `${url}?view=history`;
-  if (view === "committee") return `${url}/committee`;
-  return url;
+export const PROPOSAL_FILTERS = [
+  { value: "under_review", label: "Under review" },
+  { value: "approved", label: "Approved" },
+  { value: "rejected", label: "Rejected" },
+  { value: "abandoned", label: "Abandoned" },
+] as const;
+export type ProposalFilter = (typeof PROPOSAL_FILTERS)[number]["value"];
+export function proposalFilter(raw: unknown): ProposalFilter {
+  return PROPOSAL_FILTERS.some((filter) => filter.value === raw)
+    ? (raw as ProposalFilter)
+    : "under_review";
 }
 
-/** The frame can select these views, never supply a URL or an account action. */
-export function participationViewMessage(data: unknown): ParticipationView | "about" | null {
-  if (!data || typeof data !== "object") return null;
-  const message = data as Record<string, unknown>;
-  if (message.type !== "participate:view" || message.version !== 1) return null;
-  return ["proposals", "history", "committee", "about"].includes(message.view as string) ? message.view as ParticipationView | "about" : null;
+/** Same-origin API paths shared by the browser and the server. */
+export function archiveEndpoint(
+  communityId: string,
+  recordId?: string,
+): string {
+  const base = `/api/communities/${encodeURIComponent(communityId)}/archives`;
+  return recordId ? `${base}/${encodeURIComponent(recordId)}` : base;
+}
+
+export function proposalPath(recordId: string): string {
+  return `${PARTICIPATE_PATH}/${encodeURIComponent(recordId)}`;
+}
+
+/** Record ids are fixed by the archive: lowercase slugs, never paths. */
+export function isRecordId(value: unknown): value is string {
+  return (
+    typeof value === "string" && /^[a-z0-9][a-z0-9._-]{0,127}$/.test(value)
+  );
 }

@@ -1,0 +1,330 @@
+{
+  "source": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/labels?per_page=100",
+  "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/labels",
+  "fetchedAt": "2026-10-10T17:43:19.657Z",
+  "sha256": "5cb9fceb8fd6731416396d274a8466ba6fad6d72707748cf6b3d52d87210c5f7",
+  "labels": [
+    {
+      "id": "7875994283",
+      "name": "⛔ Does Not Meet Criteria",
+      "color": "5bbced",
+      "description": "Failed requirements check",
+      "group": "Review"
+    },
+    {
+      "id": "7875997202",
+      "name": "✔️ Changes Approved",
+      "color": "a74996",
+      "description": "Modifications accepted",
+      "group": "Review"
+    },
+    {
+      "id": "7875994864",
+      "name": "✔️ Grant Complete",
+      "color": "72243a",
+      "description": "Grant Complete",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7876002404",
+      "name": "✔️ Milestone Payment Complete",
+      "color": "80a7c0",
+      "description": "Payment sent",
+      "group": "Payments"
+    },
+    {
+      "id": "11589627226",
+      "name": "Closed - Did Not Follow Process",
+      "color": "d31346",
+      "description": "Applicants have 3 days from submission to ensure that all submission guidelines have been followed",
+      "group": "Review"
+    },
+    {
+      "id": "8115283150",
+      "name": "Grant Withdrawn by Submitter",
+      "color": "f8782d",
+      "description": "Withdrawn",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7875999171",
+      "name": "⏰ Milestones Past Due",
+      "color": "48a7ef",
+      "description": "Deadlines missed",
+      "group": "Grant progress"
+    },
+    {
+      "id": "9948045004",
+      "name": "✅ Bounty Payment Completed",
+      "color": "8acd92",
+      "description": "",
+      "group": "Payments"
+    },
+    {
+      "id": "7875993326",
+      "name": "✅ Grant Approved",
+      "color": "034613",
+      "description": "Application accepted",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7875995861",
+      "name": "✅ KYC Verified",
+      "color": "30a9c9",
+      "description": "Identity verification passed",
+      "group": "Compliance"
+    },
+    {
+      "id": "7876002129",
+      "name": "✅ Milestone Payment Approved",
+      "color": "3c5ca1",
+      "description": "Payment authorized",
+      "group": "Payments"
+    },
+    {
+      "id": "8039982818",
+      "name": "✅ Startup Payment Completed",
+      "color": "006b75",
+      "description": "Startup funding has been requested and paid out",
+      "group": "Payments"
+    },
+    {
+      "id": "10251893246",
+      "name": "❌ Grant Cancelled Before Completion",
+      "color": "eb5b11",
+      "description": "",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7875993727",
+      "name": "❌ Grant Declined",
+      "color": "121782",
+      "description": "Application rejected",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7875998253",
+      "name": "🎯 Milestone 1 Complete",
+      "color": "9783c7",
+      "description": "Milestone Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040316978",
+      "name": "🎯 Milestone 10 Complete",
+      "color": "9783c7",
+      "description": "Milestone 10 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040318788",
+      "name": "🎯 Milestone 11 Complete",
+      "color": "9783c7",
+      "description": "Milestone 11 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040320717",
+      "name": "🎯 Milestone 12 Complete",
+      "color": "9783c7",
+      "description": "Milestone 12 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390622392",
+      "name": "🎯 Milestone 13 Complete",
+      "color": "9783c7",
+      "description": "Milestone 13 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390625433",
+      "name": "🎯 Milestone 14 Complete",
+      "color": "9783c7",
+      "description": "Milestone 14 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390628998",
+      "name": "🎯 Milestone 15 Complete",
+      "color": "9783c7",
+      "description": "Milestone 15 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390631475",
+      "name": "🎯 Milestone 16 Complete",
+      "color": "9783c7",
+      "description": "Milestone 16 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390633756",
+      "name": "🎯 Milestone 17 Complete",
+      "color": "9783c7",
+      "description": "Milestone 17 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390637222",
+      "name": "🎯 Milestone 18 Complete",
+      "color": "9783c7",
+      "description": "Milestone 18 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390639896",
+      "name": "🎯 Milestone 19 Complete",
+      "color": "9783c7",
+      "description": "Milestone 19 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040247932",
+      "name": "🎯 Milestone 2 Complete",
+      "color": "9783c7",
+      "description": "Milestone 2 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390642963",
+      "name": "🎯 Milestone 20 Complete",
+      "color": "9783c7",
+      "description": "Milestone 20 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390645943",
+      "name": "🎯 Milestone 21 Complete",
+      "color": "9783c7",
+      "description": "Milestone 21 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390648704",
+      "name": "🎯 Milestone 22 Complete",
+      "color": "9783c7",
+      "description": "Milestone 22 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390651179",
+      "name": "🎯 Milestone 23 Complete",
+      "color": "9783c7",
+      "description": "Milestone 23 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "9390653315",
+      "name": "🎯 Milestone 24 Complete",
+      "color": "9783c7",
+      "description": "Milestone 24 Complete",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040252094",
+      "name": "🎯 Milestone 3 Complete",
+      "color": "9783c7",
+      "description": "Milestone 3 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040258446",
+      "name": "🎯 Milestone 4 Complete",
+      "color": "9783c7",
+      "description": "Milestone 4 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040303985",
+      "name": "🎯 Milestone 5 Complete",
+      "color": "9783c7",
+      "description": "Milestone 5 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040306687",
+      "name": "🎯 Milestone 6 Complete",
+      "color": "9783c7",
+      "description": "Milestone 6 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040309607",
+      "name": "🎯 Milestone 7 Complete",
+      "color": "9783c7",
+      "description": "Milestone 7 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040311979",
+      "name": "🎯 Milestone 8 Complete",
+      "color": "9783c7",
+      "description": "Milestone 8 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "8040314559",
+      "name": "🎯 Milestone 9 Complete",
+      "color": "9783c7",
+      "description": "Milestone 9 completed",
+      "group": "Milestones"
+    },
+    {
+      "id": "7875992754",
+      "name": "👀 Ready For ZCG Review",
+      "color": "115858",
+      "description": "Ready for committee evaluation",
+      "group": "Review"
+    },
+    {
+      "id": "7876001197",
+      "name": "💳 Grant Milestone Payment Request",
+      "color": "8186be",
+      "description": "Payment request being reviewed",
+      "group": "Payments"
+    },
+    {
+      "id": "7875997736",
+      "name": "📊 Progress Update Required",
+      "color": "598a80",
+      "description": "Status report needed",
+      "group": "Grant progress"
+    },
+    {
+      "id": "7875990469",
+      "name": "📋 Grant Application",
+      "color": "bdb853",
+      "description": "Validated application",
+      "group": "Review"
+    },
+    {
+      "id": "7875996312",
+      "name": "📢 Forum Post Missing",
+      "color": "8c2eec",
+      "description": "Forum post requirement unfulfilled",
+      "group": "Review"
+    },
+    {
+      "id": "7875996689",
+      "name": "🔄 Changes Pending Review",
+      "color": "bb5508",
+      "description": "Modifications need review",
+      "group": "Review"
+    },
+    {
+      "id": "7875995439",
+      "name": "🔐 KYC Required",
+      "color": "5365bb",
+      "description": "Identity verification needed",
+      "group": "Compliance"
+    },
+    {
+      "id": "12576003853",
+      "name": "🛡️ V12 Credits Application",
+      "color": "5319e7",
+      "description": "Application for ZCG-funded V12 credits",
+      "group": "Review"
+    }
+  ]
+}
