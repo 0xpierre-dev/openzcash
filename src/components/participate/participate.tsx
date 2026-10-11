@@ -8,6 +8,7 @@ import { isParticipationReadyMessage, participationViewMessage, participationThe
 import styles from "./participate.module.css";
 
 const INTRO_KEY = "openzcash-participate-intro-v1";
+const WORKSPACE_RETRY_AFTER_MS = 8_000;
 
 export function Participate({ service, view = "proposals", children }: {
   service: { url: string } | null;
@@ -70,9 +71,17 @@ export function Participate({ service, view = "proposals", children }: {
     const observer = new MutationObserver(() => sendTheme(true));
     const shell = page.current?.closest(".rd-shell");
     if (shell) observer.observe(shell, { attributes: true, attributeFilter: ["data-theme"] });
-    const timer = window.setTimeout(() => setSlow(true), 15000);
-    return () => { window.removeEventListener("message", receive); observer.disconnect(); window.clearTimeout(timer); };
+    return () => { window.removeEventListener("message", receive); observer.disconnect(); };
   }, [view, service, attempt, router]);
+
+  useEffect(() => {
+    if (!service || ready) return;
+    const timer = window.setTimeout(() => {
+      if (attempt === 0) setAttempt(1);
+      else setSlow(true);
+    }, WORKSPACE_RETRY_AFTER_MS);
+    return () => window.clearTimeout(timer);
+  }, [service, ready, attempt]);
 
   function enter() {
     try { localStorage.setItem(INTRO_KEY, "entered"); } catch { /* Fall back to the current tab. */ }
@@ -90,9 +99,12 @@ export function Participate({ service, view = "proposals", children }: {
       <button type="button" ref={about} className={styles.about} onClick={() => setIntro(true)}>About the pilot</button>
     </header> : null}
     {service ? <section className={styles.workspace} aria-label="Participation workspace">
-      {!ready ? <div className={styles.workspaceBar} role="status"><span><i />Opening workspace…</span></div> : null}
-      {slow && !ready ? <div className={styles.connection} role="status"><p>The participation service has not responded yet.</p><button type="button" onClick={() => { setReady(false); setSlow(false); setAttempt(value => value + 1); }}>Try again</button></div> : null}
-      <iframe key={`${view}-${attempt}`} ref={frame} title="ZCG proposals, comments and credits" src={participationWorkspaceUrl(service.url, view)} className={styles.frame} referrerPolicy="strict-origin-when-cross-origin" />
+      {!ready && !slow ? <div className={styles.workspaceBar} role="status"><span><i />{attempt === 0 ? "Opening workspace…" : "Trying again…"}</span></div> : null}
+      <div className={styles.frameStage}>
+        {!ready && !slow ? <div className={styles.framePlaceholder} aria-hidden="true" /> : null}
+        {slow && !ready ? <div className={styles.connection} role="alert"><p>The workspace did not open.</p><button type="button" onClick={() => { setReady(false); setSlow(false); setAttempt(value => value + 1); }}>Try again</button></div> : null}
+        {!slow ? <iframe key={`${view}-${attempt}`} ref={frame} title="ZCG proposals, comments and credits" src={participationWorkspaceUrl(service.url, view)} className={`${styles.frame} ${!ready ? styles.framePending : ""}`} referrerPolicy="strict-origin-when-cross-origin" /> : null}
+      </div>
       <p className={styles.footnote}>An OpenZcash pilot. Official ZCG submissions and committee decisions follow the existing ZCG process.</p>
     </section> : history ? <section className={styles.history} aria-label="ZCG decision history">{children}</section> : <section className={styles.connection}>
       <p>The interactive workspace is being prepared. Decision history is available now.</p>
