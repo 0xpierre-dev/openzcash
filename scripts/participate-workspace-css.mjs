@@ -26,6 +26,7 @@ const FILES = [
   "credits.css",
   "credit-topup.css",
   "committee-labels.css",
+  "committee.css",
   "signed-decision.css",
   "participate-compose.css",
   "participate-history.css",

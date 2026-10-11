@@ -17,12 +17,8 @@ describe("native Participate configuration", () => {
   });
   it("only knows the fixed views and filters", () => {
     expect(participationView("history")).toBe("history");
-    for (const value of [
-      "committee",
-      "about",
-      undefined,
-      "https://example.test",
-    ])
+    expect(participationView("committee")).toBe("committee");
+    for (const value of ["about", undefined, "https://example.test"])
       expect(participationView(value)).toBe("proposals");
     expect(proposalFilter("rejected")).toBe("rejected");
     for (const value of ["demo", undefined, 1])

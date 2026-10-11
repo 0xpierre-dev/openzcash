@@ -3623,6 +3623,174 @@
   .oz-participate .committee-review-panel .committee-panel-tools > .committee-icon-button { width: 24px; min-width: 24px; }
 }
 
+/* ---- committee.css ---- */
+/* Committee operations share the proposal workspace's type, colors and controls. */
+.oz-participate .dao-app .committee-workspace { max-width: 1240px; margin: 0 auto; color: var(--dao-ink); font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+.oz-participate .committee-heading, .oz-participate .committee-title, .oz-participate .committee-heading-actions { display: flex; align-items: center; }
+.oz-participate .committee-heading { justify-content: space-between; gap: 20px; min-height: 50px; margin-bottom: 16px; }
+.oz-participate .committee-title { gap: 16px; min-width: 0; flex-wrap: wrap; }
+.oz-participate .dao-app .committee-title h1 { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -.035em; }
+.oz-participate .committee-title > span { color: var(--dao-muted); font-size: 12px; }
+.oz-participate .committee-title i { margin: 0 6px; font-style: normal; color: var(--dao-line-strong); }
+.oz-participate .committee-heading-actions { gap: 12px; flex-shrink: 0; }
+.oz-participate .dao-app .committee-icon-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 40px; min-height: 40px; border-radius: 7px; color: var(--dao-muted); cursor: pointer; }
+.oz-participate .dao-app .committee-icon-button:hover { color: var(--dao-ink); background: var(--dao-soft); }
+.oz-participate .committee-mode { position: relative; color: var(--dao-muted); font-size: 11px; }
+.oz-participate .committee-mode > summary { display: flex; align-items: center; gap: 7px; min-height: 40px; cursor: pointer; list-style: none; }
+.oz-participate .committee-mode summary::-webkit-details-marker { display: none; }
+.oz-participate .committee-mode svg { width: 14px; height: 14px; }
+.oz-participate .committee-mode > p { position: absolute; z-index: 4; right: 0; top: 100%; width: min(260px, 70vw); background: var(--dao-paper); box-shadow: 0 8px 30px var(--dao-shadow); padding: 16px; border-radius: 9px; font-size: 13px; line-height: 1.6; }
+.oz-participate .committee-tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--dao-line); margin-bottom: 20px; overflow-x: auto; }
+.oz-participate .dao-app .committee-tabs button { min-height: 44px; padding: 0 1px 12px; border-bottom: 2px solid transparent; font-size: 14px; font-weight: 500; color: var(--dao-muted); cursor: pointer; }
+.oz-participate .dao-app .committee-tabs button[aria-current="page"] { color: var(--dao-ink); border-color: var(--dao-gold); font-weight: 600; }
+.oz-participate .committee-tools { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.oz-participate .committee-filters { display: flex; gap: 6px; min-width: 0; max-width: 100%; overflow-x: auto; }
+.oz-participate .dao-app .committee-filters button { display: flex; align-items: center; gap: 7px; flex-shrink: 0; border-radius: 7px; min-height: 38px; padding: 7px 10px; color: var(--dao-muted); font-size: 12px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.oz-participate .dao-app .committee-filters button[aria-pressed="true"] { background: var(--dao-accent-soft); color: var(--dao-accent); font-weight: 600; }
+.oz-participate .committee-filters button > span { font-size: 11px; font-variant-numeric: tabular-nums; opacity: .8; }
+.oz-participate .dao-app .committee-workspace input:not([type="checkbox"]), .oz-participate .dao-app .committee-workspace select { min-width: 0; width: 100%; min-height: 42px; border: 1px solid var(--dao-line-strong); border-radius: 7px; padding: 9px 12px; font-family: var(--font-body); font-size: 14px; font-weight: 400; line-height: 1.4; }
+.oz-participate .dao-app .committee-workspace select { padding-right: 38px; }
+.oz-participate .committee-workspace label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 550; }
+.oz-participate .committee-tools .committee-search { position: relative; flex: 0 1 220px; min-width: 170px; }
+.oz-participate .committee-search > svg { position: absolute; left: 12px; top: 12px; color: var(--dao-muted); width: 16px; height: 16px; pointer-events: none; }
+.oz-participate .dao-app .committee-workspace .committee-search input { min-height: 40px; padding: 9px 12px 9px 36px; background: var(--dao-paper); border-color: transparent; font-size: 12px; }
+.oz-participate .committee-workspace :is(input, select, button, a, summary):focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; }
+.oz-participate .committee-workspace :disabled { opacity: .55; cursor: not-allowed; }
+.oz-participate .committee-queue, .oz-participate .committee-members { list-style: none; padding: 0; margin: 0; background: var(--dao-paper); border-radius: 10px; }
+.oz-participate .committee-queue > li + li { border-top: 1px solid var(--dao-line); }
+.oz-participate .committee-queue-row { display: grid; grid-template-columns: minmax(0, 1fr) 94px 112px; align-items: center; gap: 22px; padding: 20px 22px; }
+.oz-participate .committee-proposal { min-width: 0; }
+.oz-participate .dao-app .committee-proposal h2 { font-size: 15px; font-weight: 600; line-height: 1.5; letter-spacing: -.015em; margin: 0 0 6px; overflow-wrap: anywhere; }
+.oz-participate .dao-app .committee-proposal p { margin: 0; color: var(--dao-muted); font-size: 11px; line-height: 1.65; }
+.oz-participate .dao-app .committee-review-button { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 6px 0; font-size: 12px; font-weight: 600; color: var(--dao-accent); cursor: pointer; white-space: nowrap; }
+.oz-participate .committee-review-button svg { width: 16px; height: 16px; }
+.oz-participate .committee-state { justify-self: start; font-size: 10px; line-height: 1.5; font-weight: 600; letter-spacing: .01em; color: var(--dao-muted); background: var(--dao-soft); padding: 4px 8px; border-radius: 5px; white-space: nowrap; }
+.oz-participate .committee-state--open { color: var(--dao-accent); background: var(--dao-accent-soft); }
+.oz-participate .committee-state--approved { color: var(--dao-positive); background: var(--dao-positive-bg); }
+.oz-participate .committee-state--rejected, .oz-participate .committee-state--quorum_not_met { color: var(--dao-error); background: var(--dao-error-bg); }
+.oz-participate .committee-queue > li[data-selected="true"] { box-shadow: inset 3px 0 var(--dao-gold); }
+.oz-participate .committee-review-panel { padding: 0 22px 22px; scroll-margin-top: 80px; }
+.oz-participate .committee-review-panel:focus { outline: none; }
+.oz-participate .committee-panel-tools { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; border-top: 1px solid var(--dao-line); }
+.oz-participate .committee-panel-tabs { display: flex; gap: 20px; }
+.oz-participate .dao-app .committee-panel-tabs button { font-size: 12px; min-height: 40px; padding: 4px 0; font-weight: 500; color: var(--dao-muted); cursor: pointer; }
+.oz-participate .dao-app .committee-panel-tabs button[aria-pressed="true"] { color: var(--dao-accent); font-weight: 600; }
+.oz-participate .committee-review-panel > .proposal-inline > .proposal-inline-toolbar { display: none; }
+.oz-participate .committee-review-panel > .proposal-inline { margin-top: 12px; border: 0; padding: 0; }
+.oz-participate .committee-review-panel > div > .signed-decision { margin-top: 0; padding-top: 0; border-top: 0; }
+.oz-participate .committee-review-panel > div > .signed-decision > summary { display: none; }
+.oz-participate .committee-review-panel .signed-decision-body { font-size: 13px; padding-top: 8px; }
+.oz-participate .committee-review-panel .signed-decision-roster { margin: 16px 0 10px; }
+.oz-participate .committee-review-panel .signed-decision-fields { max-width: 640px; margin: 20px 0; }
+.oz-participate .committee-review-panel .signed-decision-body details:not(.signed-decision-feedback) { font-size: 12px; color: var(--dao-muted); }
+.oz-participate .committee-review-panel .signed-decision-body summary { cursor: pointer; padding-block: 8px; }
+.oz-participate .committee-review-panel .signed-decision-rules { margin-bottom: 12px; }
+.oz-participate .committee-review-panel .signed-decision-note { font-size: 12px; }
+.oz-participate .dao-app .committee-workspace .dao-button { min-height: 40px; font-size: 12px; padding: 9px 14px; border-radius: 7px; }
+.oz-participate .committee-section-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 40px; margin: 24px 0 20px; }
+.oz-participate .dao-app .committee-section-top h2, .oz-participate .dao-app .committee-invitations h2, .oz-participate .dao-app .committee-invitation h2 { font-size: 17px; line-height: 1.4; letter-spacing: -.02em; font-weight: 600; }
+.oz-participate .committee-section-top h2 > span { margin-left: 8px; font-size: 12px; color: var(--dao-muted); }
+.oz-participate .committee-section-top > span, .oz-participate .committee-section-top p { color: var(--dao-muted); font-size: 12px; }
+.oz-participate .dao-app .committee-section-top p { margin-top: 4px; }
+.oz-participate .committee-invite-form { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(140px, .5fr) auto; gap: 14px; align-items: end; margin-bottom: 20px; padding: 20px; background: var(--dao-paper); border-radius: 10px; }
+.oz-participate .committee-members > li { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 22px; }
+.oz-participate .committee-members > li + li { border-top: 1px solid var(--dao-line); }
+.oz-participate .committee-member-identity { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+.oz-participate .committee-member-identity .dao-account-avatar { width: 36px; height: 36px; flex-shrink: 0; font-size: 14px; }
+.oz-participate .committee-member-identity > div, .oz-participate .committee-member-state { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.oz-participate .committee-member-identity strong { font-weight: 600; }
+.oz-participate .committee-member-identity > div { min-width: 0; overflow-wrap: anywhere; }
+.oz-participate .committee-member-identity span, .oz-participate .committee-member-state small { color: var(--dao-muted); font-size: 11px; }
+.oz-participate .committee-member-edit { flex-basis: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 20px; border-top: 1px solid var(--dao-line); }
+.oz-participate .committee-edit-reason, .oz-participate .committee-member-edit p { grid-column: 1/-1; }
+.oz-participate .committee-member-edit p { color: var(--dao-muted); font-size: 12px; line-height: 1.6; margin: 0; }
+.oz-participate .committee-invite-link { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 16px 20px; background: var(--dao-paper); border-radius: 8px; }
+.oz-participate .committee-workspace code { font-family: var(--font-numeric); overflow-wrap: anywhere; white-space: pre-wrap; font-size: 11px; }
+.oz-participate .committee-invitations { margin-top: 24px; }
+.oz-participate .committee-invitations > div { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding: 16px 0; }
+.oz-participate .committee-invitations > div > div { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 5px; overflow-wrap: anywhere; font-size: 13px; }
+.oz-participate .committee-invitations strong { font-weight: 600; }
+.oz-participate .committee-invitations span { color: var(--dao-muted); font-size: 11px; }
+.oz-participate .committee-rules { background: var(--dao-paper); padding: 24px; border-radius: 10px; }
+.oz-participate .committee-rules .committee-section-top { margin-top: 0; }
+.oz-participate .committee-rules .signed-decision-fields { max-width: 780px; margin: 24px 0; gap: 24px; }
+.oz-participate .committee-rules .signed-decision-fields small { font-size: 11px; }
+.oz-participate .committee-history ol { list-style: none; padding: 0 22px; background: var(--dao-paper); border-radius: 10px; }
+.oz-participate .committee-history li { display: flex; gap: 20px; padding: 20px 0; }
+.oz-participate .committee-history li + li { border-top: 1px solid var(--dao-line); }
+.oz-participate .committee-event-number { color: var(--dao-accent); font-size: 11px; font-variant-numeric: tabular-nums; padding-top: 3px; }
+.oz-participate .committee-history li > div { min-width: 0; }
+.oz-participate .committee-history li strong { font-size: 13px; font-weight: 600; line-height: 1.6; }
+.oz-participate .dao-app .committee-history li p { font-size: 11px; color: var(--dao-muted); margin: 4px 0 8px; }
+.oz-participate .committee-history details { color: var(--dao-muted); font-size: 11px; }
+.oz-participate .committee-history summary { cursor: pointer; }
+.oz-participate .committee-history code { display: block; margin-top: 10px; }
+.oz-participate .committee-help { margin: 20px 0; color: var(--dao-muted); font-size: 12px; }
+.oz-participate .committee-help > summary { cursor: pointer; padding-block: 8px; width: fit-content; }
+.oz-participate .committee-help > div { max-width: 680px; padding-top: 8px; line-height: 1.7; }
+.oz-participate .dao-app .committee-help p + p { margin-top: 8px; }
+.oz-participate .committee-notice { margin-bottom: 16px; padding: 12px 16px; background: var(--dao-positive-bg); color: var(--dao-positive); border-radius: 8px; font-size: 13px; }
+.oz-participate .committee-empty { text-align: center; color: var(--dao-muted); line-height: 1.7; padding: 44px 20px; background: var(--dao-paper); border-radius: 10px; }
+.oz-participate .dao-app .committee-empty h2 { font-size: 20px; }
+.oz-participate .dao-app .committee-empty p { margin: 12px 0 20px; }
+.oz-participate .committee-invitation { display: flex; flex-direction: column; gap: 16px; max-width: 560px; padding: 24px; background: var(--dao-paper); border-radius: 12px; }
+.oz-participate .committee-invitation .committee-consent { flex-direction: row; align-items: flex-start; line-height: 1.6; font-weight: 400; }
+.oz-participate .committee-consent input { flex-shrink: 0; margin-top: 4px; }
+.oz-participate .committee-source-decision { margin-top: 18px; }
+.oz-participate .committee-source-summary { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; }
+.oz-participate .committee-source-summary > div { display: flex; align-items: baseline; gap: 9px; }
+.oz-participate .committee-source-summary strong { font-size: 26px; font-weight: 600; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.oz-participate .committee-source-summary > div > span { color: var(--dao-muted); font-size: 12px; }
+.oz-participate .committee-source-summary > p { display: flex; gap: 16px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.oz-participate .committee-source-decision [data-vote="approve"] { color: var(--dao-positive); }
+.oz-participate .committee-source-decision [data-vote="reject"] { color: var(--dao-error); }
+.oz-participate .committee-source-decision [data-vote="abstain"] { color: var(--dao-muted); }
+.oz-participate .committee-source-caption { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; color: var(--dao-muted); font-size: 12px; }
+.oz-participate .committee-source-decision a { color: var(--dao-accent); }
+.oz-participate .committee-source-feedback { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; padding: 0; margin: 10px 0 0; list-style: none; }
+.oz-participate .committee-source-feedback > li { display: flex; align-items: flex-start; gap: 11px; padding: 16px 0; border-top: 1px solid var(--dao-line); min-width: 0; }
+.oz-participate .committee-source-feedback > li > img { flex-shrink: 0; border-radius: 50%; object-fit: cover; }
+.oz-participate .committee-source-feedback > li > div { min-width: 0; }
+.oz-participate .committee-source-member { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px 12px; }
+.oz-participate .dao-app .committee-source-member h3 { font-size: 14px; font-weight: 600; line-height: 1.5; letter-spacing: -.015em; }
+.oz-participate .committee-source-member > span { font-size: 11px; font-weight: 600; }
+.oz-participate .dao-app .committee-source-feedback p { margin-top: 5px; color: var(--dao-muted); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.oz-participate .dao-app .committee-source-provenance { margin-top: 6px; color: var(--dao-muted); font-size: 11px; }
+.oz-participate .committee-source-provenance a { display: inline-block; margin-left: 8px; }
+.oz-participate .committee-source-unavailable { padding-block: 20px; color: var(--dao-muted); font-size: 13px; }
+@media (max-width: 900px) {
+  .oz-participate .committee-tools { flex-wrap: wrap; }
+  .oz-participate .committee-tools .committee-search { flex: 1; min-width: 200px; }
+}
+@media (max-width: 640px) {
+  .oz-participate .committee-source-feedback { grid-template-columns: 1fr; }
+  .oz-participate .committee-heading { align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .oz-participate .committee-title { display: grid; gap: 5px; }
+  .oz-participate .dao-app .committee-title h1 { font-size: 22px; }
+  .oz-participate .committee-title > span { font-size: 11px; }
+  .oz-participate .committee-heading-actions { gap: 4px; }
+  .oz-participate .committee-mode { font-size: 10px; }
+  .oz-participate .committee-tabs { gap: 26px; margin-bottom: 16px; }
+  .oz-participate .dao-app .committee-tabs button { font-size: 13px; }
+  .oz-participate .committee-tools { display: flex; flex-flow: column-reverse nowrap; align-items: stretch; gap: 12px; }
+  .oz-participate .committee-tools .committee-search { flex: auto; width: 100%; }
+  .oz-participate .committee-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; overflow: visible; }
+  .oz-participate .dao-app .committee-filters button { font-size: 11px; padding-inline: 8px; }
+  .oz-participate .committee-queue-row { grid-template-columns: 1fr auto; gap: 10px 14px; padding: 18px 16px; }
+  .oz-participate .committee-proposal { grid-column: 1/-1; }
+  .oz-participate .dao-app .committee-proposal h2 { font-size: 14px; }
+  .oz-participate .committee-review-panel { padding: 0 16px 18px; scroll-margin-top: 116px; }
+  .oz-participate .committee-section-top { margin-top: 18px; gap: 10px; }
+  .oz-participate .committee-invite-form { grid-template-columns: 1fr; padding: 18px; }
+  .oz-participate .committee-members > li { gap: 14px; padding: 18px 16px; }
+  .oz-participate .committee-member-state { width: 110px; }
+  .oz-participate .committee-rules { padding: 20px; }
+  .oz-participate .committee-rules .signed-decision-fields { grid-template-columns: 1fr; gap: 20px; }
+  .oz-participate .committee-invitations > div { flex-wrap: wrap; }
+  .oz-participate .committee-invitations > div > div { flex-basis: 100%; }
+  .oz-participate .dao-app .committee-workspace input:not([type="checkbox"]), .oz-participate .dao-app .committee-workspace select { font-size: 16px; }
+}
+
 /* ---- signed-decision.css ---- */
 .oz-participate .signed-decision { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--dao-line); }
 .oz-participate .signed-decision > summary { display: flex; align-items: center; gap: .65rem; width: fit-content; cursor: pointer; font-weight: 650; }
