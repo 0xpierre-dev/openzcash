@@ -5,23 +5,23 @@ import {
   participantCookies,
   participationConfigured,
   readParticipantSession,
-  readProfile,
   type ParticipantSession,
 } from "./service";
-import type { AccountProfile } from "./workspace/domain/account-profile";
 
 export type ViewerContext = {
   configured: boolean;
   cookie: string | null;
   session: ParticipantSession | null;
-  profile: AccountProfile | null;
 };
 
-/** The signed-in participant for this request, if the service is configured and the cookie is valid. */
+/**
+ * The signed-in participant for this request, if the service is configured
+ * and the cookie is valid. Only the session is read here: pages start the
+ * profile, board and draft reads together once they know who is asking.
+ */
 export async function readViewerContext(): Promise<ViewerContext> {
   const configured = participationConfigured();
   const cookie = participantCookies((await headers()).get("cookie"));
   const session = configured ? await readParticipantSession(cookie) : null;
-  const profile = session ? await readProfile(cookie) : null;
-  return { configured, cookie, session, profile };
+  return { configured, cookie, session };
 }

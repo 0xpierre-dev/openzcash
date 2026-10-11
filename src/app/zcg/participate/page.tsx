@@ -19,7 +19,7 @@ import {
   participationView,
 } from "@/lib/participate/config";
 import { readDecisionHistory } from "@/lib/participate/decision-history";
-import { readBoard, readDrafts } from "@/lib/participate/service";
+import { readBoard, readDrafts, readProfile } from "@/lib/participate/service";
 import { readViewerContext } from "@/lib/participate/viewer";
 import {
   historyResponseSchema,
@@ -94,12 +94,19 @@ export default async function ParticipatePage({
   }
 
   const communityId = participationCommunityId();
-  const { session, cookie, profile } = context;
-  const [board, drafts, history] = await Promise.all([
+  const { session, cookie } = context;
+  const composing = view !== "history" && Boolean(search.compose);
+  // One session read, then every other service read in parallel: a restarting
+  // service costs a single timeout, not one per request.
+  const [profile, board, drafts, history] = await Promise.all([
+    session ? readProfile(cookie) : Promise.resolve(null),
     readBoard(session ? cookie : null),
     session && view !== "history" ? readDrafts(cookie) : Promise.resolve(null),
     view === "history" ? readHistory() : Promise.resolve(null),
   ]);
+  // A failed draft read is not proof that a draft does not exist.
+  const draftsUnavailable =
+    Boolean(session) && view !== "history" && drafts === null;
   const community = {
     id: communityId,
     name: COMMUNITY_NAME,
@@ -142,6 +149,7 @@ export default async function ParticipatePage({
     initialProfile: profile,
     initialCreditSummary,
   };
+  const retryHref = `${PARTICIPATE_PATH}${search.compose ? `?compose=${encodeURIComponent(search.compose)}` : ""}`;
 
   let content;
   if (view === "history") {
@@ -150,7 +158,22 @@ export default async function ParticipatePage({
         <ParticipateHistory data={history} />
       </WorkspaceFrame>
     );
-  } else if (search.compose) {
+  } else if (composing && search.compose !== "new" && draftsUnavailable) {
+    content = (
+      <WorkspaceFrame {...frame} embedded>
+        <div className="dao-empty-state" role="alert">
+          <h1>Drafts temporarily unavailable</h1>
+          <p>
+            Your saved drafts could not be loaded. Nothing was lost; try again
+            in a moment.
+          </p>
+          <a className="dao-button" href={retryHref}>
+            Try again
+          </a>
+        </div>
+      </WorkspaceFrame>
+    );
+  } else if (composing) {
     const initial = (drafts ?? []).find((draft) => draft.id === search.compose);
     content = (
       <WorkspaceFrame {...frame} embedded>
@@ -199,6 +222,7 @@ export default async function ParticipatePage({
         initialProfile={profile}
         initialCreditSummary={initialCreditSummary}
         drafts={drafts ?? []}
+        draftsUnavailable={draftsUnavailable}
         initialRecordId={search.record}
         initialCommentId={search.comment}
       />

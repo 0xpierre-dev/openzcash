@@ -16,7 +16,7 @@ import { CommitteeLabels } from "@/components/participate/workspace/committee-la
 import { ZcgProposalLabels } from "@/components/participate/workspace/zcg-proposal-labels";
 import { AbandonmentNotice, SubmissionLifecycleAction } from "@/components/participate/workspace/submission-lifecycle";
 
-export function ProposalWorkspace({ community, communities, viewer, board, initialProfile, initialCreditSummary, embedded = false, drafts = [], initialRecordId, initialCommentId }: Omit<WorkspaceFrameProps, "children"> & { board: ProposalParticipationBoard; drafts?: SubmissionDraft[]; initialRecordId?: string; initialCommentId?: string }) {
+export function ProposalWorkspace({ community, communities, viewer, board, initialProfile, initialCreditSummary, embedded = false, drafts = [], draftsUnavailable = false, initialRecordId, initialCommentId }: Omit<WorkspaceFrameProps, "children"> & { board: ProposalParticipationBoard; drafts?: SubmissionDraft[]; draftsUnavailable?: boolean; initialRecordId?: string; initialCommentId?: string }) {
   const [panels, setPanels] = useState<Record<string, ProposalPanel | null>>(initialRecordId ? { [initialRecordId]: initialCommentId ? "discussion" : "record" } : {});
   const [commentTarget, setCommentTarget] = useState({ recordId: initialRecordId, id: initialCommentId, request: 0 });
   useEffect(() => {
@@ -63,8 +63,9 @@ export function ProposalWorkspace({ community, communities, viewer, board, initi
       <h1 className="dao-sr-only">Proposals</h1>
       {embedded ? <ParticipateTour signedIn={Boolean(viewer)} canUseCredits={Boolean(viewer && viewer.canEditProfile !== false)} /> : null}
       <ProposalEconomyNotice />
+      {draftsUnavailable ? <p className="proposal-economy-warning" role="status">Your proposals and drafts could not be loaded. <a className="dao-text-button" href="/zcg/participate">Try again</a></p> : null}
       {ids.length ? <ZcgProposalExamples filterResetKey={commentTarget.request} filterTarget={commentTarget.recordId ? { recordId: commentTarget.recordId, fallback: board.proposals.find(row => row.recordId === commentTarget.recordId)?.abandonment ? "abandoned" : "under_review" } : undefined} committeeLabels={Object.fromEntries(board.proposals.map(row => [row.recordId, row.labels ?? []]))} proposals={examples} communityId={community.id} archiveRecordIds={ids} renderActions={renderActions} toolbar={toolbar} additionalRecords={additionalRecords} additionalCount={filter => nativeRecords(filter).length} inline={{ isRecordOpen: recordId => panels[recordId] === "record", toggleRecord: recordId => toggle(recordId, "record"), renderPanel }} /> : toolbar}
-      {!ids.length ? <div className="dao-empty-state"><p>No public proposals yet.</p><Link href={`/communities/${encodeURIComponent(community.id)}/dao`} className="dao-text-button">Open DAO →</Link></div> : null}
+      {!ids.length ? <div className="dao-empty-state"><p>No public proposals yet.</p><Link href="/zcg/participate?view=history" className="dao-text-button">View decision history →</Link></div> : null}
     </ProposalEconomyProvider>
   </WorkspaceFrame>;
 }

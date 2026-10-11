@@ -27,7 +27,7 @@ export function WorkspaceSignInForm({ next = "/zcg/participate", errorCode, onSu
   useEffect(() => {
     let current = true;
     emailFetch<{ emailAvailable: boolean; demoAvailable: boolean }>("/api/auth/email/options")
-      .then(data => { if (current) setOptions(data); })
+      .then(data => { if (current) setOptions({ ...data, demoAvailable: false }); }) // The portal never proxies the shared demo persona.
       .catch(() => { if (current) setError("Sign-in options are unavailable. Reload the page to try again."); });
     return () => { current = false; };
   }, []);
