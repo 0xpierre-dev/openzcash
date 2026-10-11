@@ -30,7 +30,7 @@ files under the same skill's `scripts/` directory. The installer does this for y
 Run in your project terminal with Node.js 22.20 or newer installed:
 
 ```bash
-npx skills@1.7.0 add https://openzcash.org --skill zcg-copilot
+npx skills@1.7.2 add https://openzcash.org --skill zcg-copilot
 ```
 
 The [official skills CLI](https://github.com/vercel-labs/skills) downloads the skill
@@ -72,6 +72,17 @@ credentials, or conversation history are read or uploaded; no files are written.
 Failed requests and capped/incomplete responses stop the report instead of showing
 misleading zeroes. Budgets, paid amounts, and requested amounts remain distinct.
 The queue follows D-1 publication; retrieval time is not the underlying event time.
+
+## Version and feedback
+
+Current skill version: 1.1.0 (also in the `metadata.version` frontmatter of
+SKILL.md). See CHANGELOG.md in this folder for what changed.
+
+Found a wrong figure or a problem in the skill? Report it in the OpenZcash
+public transparency thread:
+https://forum.zcashcommunity.com/t/openzcash-org-public-transparency/56404.
+Ledger figures usually originate in the official ZCG spreadsheet; the
+methodology page explains how corrections flow.
 
 ## Sources and limits
 

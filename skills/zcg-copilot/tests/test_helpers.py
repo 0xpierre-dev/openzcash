@@ -11,6 +11,21 @@ zcg = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(zcg)
 
 
+class FakeResponse:
+    def __init__(self, body):
+        self._body = body
+        self.headers = {}
+
+    def read(self, limit=-1):
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+
 class HelpersTest(unittest.TestCase):
     def output(self, func, *args):
         out = io.StringIO()
@@ -24,12 +39,22 @@ class HelpersTest(unittest.TestCase):
                 zcg.rows_from(payload, "grants")
         self.assertEqual(zcg.rows_from({"data": [], "count": 0, "total": 0}, "grants"), [])
 
-    def test_caps_prevent_false_complete_totals(self):
+    def test_payments_cap_prevents_false_complete_totals(self):
         rows = [{"recipient": "Team", "isPaid": True}] * 2000
         with self.assertRaisesRegex(ValueError, "cap"):
             zcg.rows_from({"data": rows, "count": 2000, "total": 2000}, "payments")
-        with self.assertRaisesRegex(ValueError, "cap"):
-            zcg.rows_from({"proposals": [{"title": "Proposal"}] * 100}, "queue")
+
+    def test_queue_cap_reports_incomplete_coverage_without_totals(self):
+        queue = [{"title": "Proposal", "number": 1, "amount": 100}] * zcg.QUEUE_CAP
+        result = self.output(zcg.summary, {"grants": [], "recipients": [], "queue": queue})
+        self.assertIn(f"{zcg.QUEUE_CAP}+ proposals (API cap reached", result)
+        self.assertNotIn("$10,000.00", result)
+
+    def test_search_flags_queue_cap_on_raw_count(self):
+        queue = [{"title": "Wallet idea", "number": 1, "amount": 100}] * zcg.QUEUE_CAP
+        data = {"grants": [], "payments": [], "queue": queue}
+        result = self.output(zcg.search, data, ["wallet"])
+        self.assertIn("API cap reached; coverage not established", result)
 
     def test_unknown_amounts_remain_unknown(self):
         self.assertEqual(zcg.amount(None), "unavailable")
@@ -79,6 +104,32 @@ class HelpersTest(unittest.TestCase):
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(zcg.main(), 0)
         fetch.assert_called_once_with("recipients")
+
+    def test_transient_failure_is_retried_once(self):
+        body = b'{"data": [], "count": 0, "total": 0}'
+        calls = []
+
+        def flaky(req, timeout=None):
+            calls.append(1)
+            if len(calls) == 1:
+                raise OSError("transient")
+            return FakeResponse(body)
+
+        with patch.object(zcg, "urlopen", side_effect=flaky), patch("time.sleep"):
+            self.assertEqual(zcg.fetch("recipients"), [])
+        self.assertEqual(len(calls), 2)
+
+    def test_persistent_failure_fails_after_one_retry(self):
+        calls = []
+
+        def down(req, timeout=None):
+            calls.append(1)
+            raise OSError("offline")
+
+        with patch.object(zcg, "urlopen", side_effect=down), patch("time.sleep"):
+            with self.assertRaises(OSError):
+                zcg.fetch("grants")
+        self.assertEqual(len(calls), 2)
 
 
 if __name__ == "__main__":

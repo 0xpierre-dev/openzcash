@@ -9,6 +9,7 @@ import io
 import json
 import re
 import sys
+import time
 import unicodedata
 from urllib.request import Request, urlopen
 
@@ -20,6 +21,7 @@ URLS = {
     "queue": BASE + "/api/zcg/office",
 }
 MAX_BYTES = 8 * 1024 * 1024
+QUEUE_CAP = 100  # /api/zcg/office returns at most this many proposals.
 
 
 def clean(value):
@@ -67,8 +69,10 @@ def rows_from(payload, key):
         count, full = payload.get("count"), payload.get("total")
         if type(count) is not int or type(full) is not int or count != len(rows) or full != count:
             raise ValueError(f"Incomplete {key} response; totals cannot be verified")
-    if (key == "payments" and len(rows) >= 2000) or (key == "queue" and len(rows) >= 100):
-        raise ValueError(f"{key} reached the API cap; narrow the query before reporting totals")
+    if key == "payments" and len(rows) >= 2000:
+        raise ValueError("payments reached the API cap; narrow the query before reporting totals")
+    # The queue cap cannot be narrowed client-side; callers report incomplete
+    # coverage instead of refusing the data outright.
     required = {"grants": "grant", "recipients": "recipient", "payments": "recipient", "queue": "title"}[key]
     if any(not isinstance(row.get(required), str) for row in rows):
         raise ValueError(f"Missing {key} identity")
@@ -78,18 +82,28 @@ def rows_from(payload, key):
 
 
 def fetch(key):
-    req = Request(URLS[key], headers={"Accept": "application/json", "Accept-Encoding": "gzip",
-                                     "User-Agent": "OpenZcash-ZCG-Copilot/1.0"})
-    with urlopen(req, timeout=15) as response:
-        raw = response.read(MAX_BYTES + 1)
-        if len(raw) > MAX_BYTES:
-            raise ValueError("Response exceeds the download limit")
-        if response.headers.get("Content-Encoding") == "gzip":
-            with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
-                raw = stream.read(MAX_BYTES + 1)
-        if len(raw) > MAX_BYTES:
-            raise ValueError("Response exceeds the expanded size limit")
-    return rows_from(json.loads(raw, parse_float=Decimal), key)
+    # One retry for transient network failures, matching the documented agent rule.
+    # ValueError from validation is never retried; only OSError (network) is.
+    last_error = None
+    for attempt in (1, 2):
+        req = Request(URLS[key], headers={"Accept": "application/json", "Accept-Encoding": "gzip",
+                                         "User-Agent": "OpenZcash-ZCG-Copilot/1.1"})
+        try:
+            with urlopen(req, timeout=15) as response:
+                raw = response.read(MAX_BYTES + 1)
+                if len(raw) > MAX_BYTES:
+                    raise ValueError("Response exceeds the download limit")
+                if response.headers.get("Content-Encoding") == "gzip":
+                    with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+                        raw = stream.read(MAX_BYTES + 1)
+                if len(raw) > MAX_BYTES:
+                    raise ValueError("Response exceeds the expanded size limit")
+            return rows_from(json.loads(raw, parse_float=Decimal), key)
+        except OSError as error:
+            last_error = error
+            if attempt == 1:
+                time.sleep(2)
+    raise last_error
 
 
 def sources(keys):
@@ -125,7 +139,11 @@ def summary(data):
         print(f"  - {clean(r['recipient'])}: {amount(r.get('usdPaid'))} paid | {amount(r.get('usd'))} budgeted")
     if len(known) != len(recipients):
         print(f"  {len(recipients) - len(known)} recipients excluded from ranking: paid amount unavailable")
-    print(f"- Published review queue: {len(queue)} proposals | {total(queue, 'amount')} requested")
+    if len(queue) >= QUEUE_CAP:
+        print(f"- Published review queue: {QUEUE_CAP}+ proposals (API cap reached; coverage not established)")
+        print("- Requested-amount total omitted: the queue is incomplete at the cap")
+    else:
+        print(f"- Published review queue: {len(queue)} proposals | {total(queue, 'amount')} requested")
 
 
 def search(data, terms):
@@ -150,7 +168,9 @@ def search(data, terms):
               f"{amount(r.get('amountUsd'))} recorded USD | {amount(r.get('zec'), 'ZEC')}")
     if len(payments) > 12:
         print(f"Showing 12 of {len(payments)} matching rows; totals cover all matches.")
-    print(f"\n## Published review queue: {len(queue)} matches")
+    capped = len(data["queue"]) >= QUEUE_CAP
+    suffix = " (API cap reached; coverage not established)" if capped else ""
+    print(f"\n## Published review queue: {len(queue)}{'+' if capped else ''} matches{suffix}")
     for r in queue:
         issue = r.get("number")
         if type(issue) is not int or issue <= 0:

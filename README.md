@@ -75,14 +75,20 @@ All read-only, public, no auth. Amounts are USD (dollars) and ZEC.
 | `GET /api/zcg/office`             | Proposals under review right now                                              |
 | `GET /api/chain-tip`              | Current block height                                                          |
 
-Append `?format=csv` to the `data/*` endpoints for CSV. Methodology:
+Append `?format=csv` to the `data/*` endpoints for CSV. This table covers the
+ZCG data API; the live index at [openzcash.org/api](https://openzcash.org/api)
+lists the site's public endpoints by area. Methodology:
 [openzcash.org/zcg/methodology](https://openzcash.org/zcg/methodology).
 
 ## ZCG Copilot (agent skill)
 
 ```bash
-npx skills add Michae2xl/openzcash --skill zcg-copilot
+npx skills@1.7.2 add https://openzcash.org --skill zcg-copilot
 ```
+
+Install from the site's published copies; the repository itself is currently
+private. Once this repository is public, `npx skills add Michae2xl/openzcash
+--skill zcg-copilot` works from the source repository too.
 
 Ask your agent about grants, spending, recipients, and proposals under review;
 answers come from the live API above with a citation on every figure, never from
