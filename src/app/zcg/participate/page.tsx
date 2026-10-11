@@ -134,7 +134,8 @@ export default async function ParticipatePage({
       ? readDrafts(cookie)
       : Promise.resolve(null),
     view === "history" ? readHistory() : Promise.resolve(null),
-    view === "committee" || (session && admin)
+    // Every signed-in visitor: members and invitees need the header entry too.
+    view === "committee" || session
       ? readCommitteeWorkspace(cookie)
       : Promise.resolve(null),
   ]);
