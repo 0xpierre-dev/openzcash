@@ -6,6 +6,7 @@ import { participationUpstream } from "./upstream";
 import type { AccountProfile } from "./workspace/domain/account-profile";
 import type { ProposalParticipationBoard } from "./workspace/domain/proposal-participation";
 import type { SubmissionDraft } from "./workspace/domain/proposal-submission";
+import type { CommitteeWorkspace } from "./workspace/domain/committee";
 
 /**
  * Server-to-server reads from the private participation service. The browser
@@ -16,7 +17,8 @@ import type { SubmissionDraft } from "./workspace/domain/proposal-submission";
 const TIMEOUT_MS = 8_000;
 const BOARD_TTL_MS = 30_000;
 export const SESSION_COOKIE = "zcap_session";
-const FORWARDED_COOKIE = /^(?:__Host-)?(?:zcap_|participate_)/;
+const FORWARDED_COOKIE =
+  /^(?:__Host-)?(?:zcap_|participate_|participate-|committee-)/;
 
 export type ParticipantSession = {
   userId: string;
@@ -185,4 +187,17 @@ export async function readProfile(
     { cookie },
   );
   return result.ok && result.data?.profile ? result.data.profile : null;
+}
+
+/** The committee view: access, queue, members and history as the service computes them for this visitor. */
+export async function readCommitteeWorkspace(
+  cookie: string | null,
+): Promise<CommitteeWorkspace | null> {
+  const result = await upstreamJson<CommitteeWorkspace>(
+    "/api/participate/committee",
+    { cookie },
+  );
+  return result.ok && typeof result.data?.access === "string"
+    ? result.data
+    : null;
 }

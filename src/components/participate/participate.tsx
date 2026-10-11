@@ -19,7 +19,7 @@ export function Participate({
   configured,
   children,
 }: {
-  view: "proposals" | "history";
+  view: "proposals" | "history" | "committee";
   configured: boolean;
   children?: ReactNode;
 }) {

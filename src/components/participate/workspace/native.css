@@ -6,3 +6,53 @@
   clip-path: inset(50%);
   pointer-events: none;
 }
+
+/* Dark appearance follows the OpenZcash palette (black and gold, the values of
+   theme.css) instead of the service's own greys, so the workspace reads as one
+   system with the shell. Literal values: the service's scoped root redefines
+   --muted, --line-strong and --border, so the portal variables cannot be read here. */
+.oz-participate .dao-theme-root[data-theme="dark"] {
+  --dao-canvas: #0f0e0c;
+  --dao-paper: #171613;
+  --dao-soft: #1d1b18;
+  --dao-ink: #f5f5f4;
+  --dao-secondary: #d6d3d1;
+  --dao-muted: #a8a29e;
+  --dao-line: rgba(231, 229, 228, 0.12);
+  --dao-line-strong: rgba(231, 229, 228, 0.24);
+  --dao-control-border: rgba(231, 229, 228, 0.28);
+  --dao-gold: #f4b728;
+  --dao-accent: #e8c06a;
+  --dao-accent-soft: rgba(217, 164, 65, 0.14);
+  --dao-header: #171613;
+  --dao-header-line: rgba(231, 229, 228, 0.12);
+  --dao-switcher: #1d1b18;
+  --dao-switcher-hover: #262320;
+  --dao-avatar-bg: rgba(217, 164, 65, 0.14);
+  --dao-avatar-line: rgba(217, 164, 65, 0.4);
+  --dao-avatar-ink: #e8c06a;
+  --dao-selected-bg: #1d1b18;
+  --dao-selected-line: rgba(217, 164, 65, 0.4);
+  --dao-primary-bg: #f4b728;
+  --dao-primary-ink: #201a0d;
+  --dao-primary-hover: #f3cb7b;
+  --dao-status-bg: #1d1b18;
+  --dao-status-line: rgba(231, 229, 228, 0.24);
+  --dao-positive: #4ade80;
+  --dao-positive-bg: rgba(74, 222, 128, 0.14);
+  --dao-positive-line: rgba(74, 222, 128, 0.35);
+  --dao-error: #fb7185;
+  --dao-error-bg: rgba(251, 113, 133, 0.14);
+  --dao-error-line: rgba(251, 113, 133, 0.35);
+  --dao-shadow: #00000099;
+  --dao-logo-ink: #f4b728;
+  --dao-vote-yes: #4ade80;
+  --dao-vote-no: #fb7185;
+}
+/* The service's parchment page background and grid belong to its light theme only. */
+.oz-participate:has(.dao-theme-root[data-theme="dark"]) {
+  background: #0f0e0c;
+}
+.oz-participate:has(.dao-theme-root[data-theme="dark"])::before {
+  display: none;
+}

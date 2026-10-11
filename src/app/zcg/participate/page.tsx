@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DecisionHistory } from "@/components/participate/decision-history";
 import { Participate } from "@/components/participate/participate";
+import { CommitteeWorkspacePanel } from "@/components/participate/workspace/committee-workspace";
 import {
   WorkspaceFrame,
   type WorkspaceViewer,
@@ -19,8 +20,14 @@ import {
   participationView,
 } from "@/lib/participate/config";
 import { readDecisionHistory } from "@/lib/participate/decision-history";
-import { readBoard, readDrafts, readProfile } from "@/lib/participate/service";
+import {
+  readBoard,
+  readCommitteeWorkspace,
+  readDrafts,
+  readProfile,
+} from "@/lib/participate/service";
 import { readViewerContext } from "@/lib/participate/viewer";
+import type { CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
 import {
   historyResponseSchema,
   type HistoryRecord,
@@ -42,6 +49,7 @@ type Search = {
   view?: string;
 };
 const COMMUNITY_NAME = "ZCG";
+const COMMITTEE_HREF = `${PARTICIPATE_PATH}?view=committee`;
 
 /** The workspace's history view reads the portal's own committee register directly. */
 async function readHistory(): Promise<{
@@ -57,6 +65,25 @@ async function readHistory(): Promise<{
   } catch {
     return null;
   }
+}
+
+/** The header's Committee entry follows the access the service grants this visitor. */
+function committeeEntry(
+  committee: CommitteeWorkspace | null,
+): WorkspaceViewer["committeeEntry"] {
+  if (!committee) return undefined;
+  if (committee.access === "MEMBER")
+    return {
+      label: committee.role ? "Committee workspace" : "Committee preview",
+      href: COMMITTEE_HREF,
+    };
+  if (
+    committee.invitations?.some(
+      (invite) => invite.mine && invite.state === "PENDING",
+    )
+  )
+    return { label: "Committee invitation", href: COMMITTEE_HREF };
+  return undefined;
 }
 
 export default async function ParticipatePage({
@@ -95,25 +122,30 @@ export default async function ParticipatePage({
 
   const communityId = participationCommunityId();
   const { session, cookie } = context;
-  const composing = view !== "history" && Boolean(search.compose);
+  const admin =
+    session?.role === "ADMIN" && !session.userId.startsWith("preview_");
+  const composing = view === "proposals" && Boolean(search.compose);
   // One session read, then every other service read in parallel: a restarting
   // service costs a single timeout, not one per request.
-  const [profile, board, drafts, history] = await Promise.all([
+  const [profile, board, drafts, history, committee] = await Promise.all([
     session ? readProfile(cookie) : Promise.resolve(null),
     readBoard(session ? cookie : null),
-    session && view !== "history" ? readDrafts(cookie) : Promise.resolve(null),
+    session && view === "proposals"
+      ? readDrafts(cookie)
+      : Promise.resolve(null),
     view === "history" ? readHistory() : Promise.resolve(null),
+    view === "committee" || (session && admin)
+      ? readCommitteeWorkspace(cookie)
+      : Promise.resolve(null),
   ]);
   // A failed draft read is not proof that a draft does not exist.
   const draftsUnavailable =
-    Boolean(session) && view !== "history" && drafts === null;
+    Boolean(session) && view === "proposals" && drafts === null;
   const community = {
     id: communityId,
     name: COMMUNITY_NAME,
     slug: communityId,
   };
-  const admin =
-    session?.role === "ADMIN" && !session.userId.startsWith("preview_");
   const viewer: WorkspaceViewer | null = session
     ? {
         nick: session.nick,
@@ -121,6 +153,7 @@ export default async function ParticipatePage({
         canEditProfile: true,
         canPreviewCommittee: admin,
         canModeratePilot: admin,
+        committeeEntry: committeeEntry(committee),
       }
     : null;
   const participation = board?.participation ?? null;
@@ -156,6 +189,24 @@ export default async function ParticipatePage({
     content = (
       <WorkspaceFrame {...frame} embedded embeddedSection="history">
         <ParticipateHistory data={history} />
+      </WorkspaceFrame>
+    );
+  } else if (view === "committee") {
+    content = (
+      <WorkspaceFrame {...frame} embedded embeddedSection="committee">
+        {committee ? (
+          <CommitteeWorkspacePanel
+            key={session?.userId ?? "guest"}
+            initial={committee}
+          />
+        ) : (
+          <div className="dao-empty-state" role="alert">
+            <p>The committee workspace is temporarily unavailable.</p>
+            <a className="dao-button" href={COMMITTEE_HREF}>
+              Try again
+            </a>
+          </div>
+        )}
       </WorkspaceFrame>
     );
   } else if (composing && search.compose !== "new" && draftsUnavailable) {

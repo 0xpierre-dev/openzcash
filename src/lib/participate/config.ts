@@ -12,9 +12,9 @@ export function participationCommunityId(
     : DEFAULT_PARTICIPATE_COMMUNITY_ID;
 }
 
-export type ParticipationView = "proposals" | "history";
+export type ParticipationView = "proposals" | "history" | "committee";
 export function participationView(raw: unknown): ParticipationView {
-  return raw === "history" ? "history" : "proposals";
+  return raw === "history" || raw === "committee" ? raw : "proposals";
 }
 
 export const PROPOSAL_FILTERS = [
