@@ -1,0 +1,8 @@
+/* Native adjustments for the workspace rendered inside the OpenZcash shell. */
+
+/* The workspace sits inside the page, so its skip link must stay hidden until focused
+   instead of sliding above the portal's top bar. */
+.oz-participate .dao-skip-link:not(:focus) {
+  clip-path: inset(50%);
+  pointer-events: none;
+}

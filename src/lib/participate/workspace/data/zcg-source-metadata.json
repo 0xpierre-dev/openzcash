@@ -1,0 +1,596 @@
+{
+  "source": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants",
+  "checkedAt": "2026-10-10T19:11:07.811Z",
+  "proposals": [
+    {
+      "recordId": "zcg-github-478",
+      "issueNumber": 478,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/478",
+      "title": "Grant Application - Travel Support for Devcon 8 Mumbai — Speaker, Curator, Performer (ZK-Music)",
+      "state": "open",
+      "updatedAt": "2026-10-08T19:37:44Z",
+      "category": "Education",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-477",
+      "issueNumber": 477,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/477",
+      "title": "Grant Application - VKX Wallet: Native Shielded Zcash Integration & Open-Source React Native Module",
+      "state": "open",
+      "updatedAt": "2026-10-08T19:23:04Z",
+      "category": "Wallets",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-474",
+      "issueNumber": 474,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/474",
+      "title": "Zcash Kenya — Privacy, Community & Economic Adoption Initiative",
+      "state": "open",
+      "updatedAt": "2026-10-08T13:29:54Z",
+      "category": "Community",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-468",
+      "issueNumber": 468,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/468",
+      "title": "Grant Application - Hito Zcash: Stable Firmware, Internal Security Review, and Maintenance",
+      "state": "open",
+      "updatedAt": "2026-10-05T20:36:55Z",
+      "category": "Wallets",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-467",
+      "issueNumber": 467,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/467",
+      "title": "Grant Application - Zcash Shielded Payments: An English/Korean Research Report",
+      "state": "open",
+      "updatedAt": "2026-10-08T13:32:07Z",
+      "category": "Research & Development",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-462",
+      "issueNumber": 462,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/462",
+      "title": "Grant Application - Tells: a privacy checkup for Zcash wallets",
+      "state": "open",
+      "updatedAt": "2026-10-04T14:01:22Z",
+      "category": "Security",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-460",
+      "issueNumber": 460,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/460",
+      "title": "Grant Application - Fixing, Updating & Streamlining of Zcash Documentation (https://zcash.readthedocs.io/en/master/index.html)",
+      "state": "open",
+      "updatedAt": "2026-10-01T23:31:30Z",
+      "category": "Infrastructure",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-458",
+      "issueNumber": 458,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/458",
+      "title": "Grant Application - VaihtoFX: Shielded ZEC On/Off-Ramp via M-Pesa & Airtel Money in Kenya",
+      "state": "open",
+      "updatedAt": "2026-10-02T18:33:19Z",
+      "category": "Integration",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-457",
+      "issueNumber": 457,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/457",
+      "title": "Build Buddies x Zcash: Privacy Education and Community Adoption in Latin America and Asia",
+      "state": "open",
+      "updatedAt": "2026-10-02T18:34:20Z",
+      "category": "Community",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-456",
+      "issueNumber": 456,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/456",
+      "title": "Grant Application - Zcash Privacy Payment Rail & NFC Programmable Cards",
+      "state": "open",
+      "updatedAt": "2026-10-02T11:10:59Z",
+      "category": "Infrastructure",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-455",
+      "issueNumber": 455,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/455",
+      "title": "ZCG GitHub form fill - Nozy Sync Engine public ($45k)",
+      "state": "open",
+      "updatedAt": "2026-09-30T12:48:49Z",
+      "category": "Infrastructure",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-454",
+      "issueNumber": 454,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/454",
+      "title": "Grant Application - 0xramp: ZEC payments and wallet integrations (revision of #408)",
+      "state": "open",
+      "updatedAt": "2026-09-29T19:29:31Z",
+      "category": "Integration",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-453",
+      "issueNumber": 453,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/453",
+      "title": "Grant Application - zswap by stalllion labs",
+      "state": "open",
+      "updatedAt": "2026-09-30T12:43:41Z",
+      "category": "Security",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-450",
+      "issueNumber": 450,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/450",
+      "title": "Grant Application - Zcash Global Community & Marketing Operations",
+      "state": "open",
+      "updatedAt": "2026-09-28T14:54:21Z",
+      "category": "Community",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-448",
+      "issueNumber": 448,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/448",
+      "title": "Grant Application - Zcash Privacy Ecosystem Mapping & Adoption Data",
+      "state": "open",
+      "updatedAt": "2026-09-26T17:53:16Z",
+      "category": "Research & Development",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-444",
+      "issueNumber": 444,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/444",
+      "title": "Grant Application - Independent Recomputation of the Zcash Supply Ledger, including the NU7 NSM Reserve",
+      "state": "open",
+      "updatedAt": "2026-09-25T11:43:49Z",
+      "category": "Research & Development",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-442",
+      "issueNumber": 442,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/442",
+      "title": "Grant Application - ZCASH AFRICA PRIVACY ENGINEERING RESIDENCY",
+      "state": "open",
+      "updatedAt": "2026-09-24T21:32:36Z",
+      "category": "Education",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-439",
+      "issueNumber": 439,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/439",
+      "title": "Grant Application - Zebra-Native Non-Custodial Mining Stack (RobotBase)",
+      "state": "closed",
+      "updatedAt": "2026-10-10T13:05:31Z",
+      "category": "Infrastructure",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "Grant Withdrawn by Submitter",
+          "color": "f8782d",
+          "description": "Withdrawn"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-435",
+      "issueNumber": 435,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/435",
+      "title": "Grant Application - P2P Cash-to-ZEC Onboarding via Bank CDMs",
+      "state": "open",
+      "updatedAt": "2026-09-22T13:10:26Z",
+      "category": "Non-Wallet Applications",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-github-386",
+      "issueNumber": 386,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/386",
+      "title": "Grant Application - {ZKP-cryptography course}",
+      "state": "open",
+      "updatedAt": "2026-09-30T17:33:56Z",
+      "category": "Education",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-graphsense-2026-09-28",
+      "issueNumber": 424,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/424",
+      "title": "Grant Application - GraphSense Zcash Shielded Accounting Repair",
+      "state": "open",
+      "updatedAt": "2026-10-09T16:52:35Z",
+      "category": "Infrastructure",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "✅ Grant Approved",
+          "color": "034613",
+          "description": "Application accepted"
+        },
+        {
+          "name": "🎯 Milestone 1 Complete",
+          "color": "9783c7",
+          "description": "Milestone Complete"
+        },
+        {
+          "name": "🎯 Milestone 2 Complete",
+          "color": "9783c7",
+          "description": "Milestone 2 completed"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-ironwood-2026-09-28",
+      "issueNumber": 438,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/438",
+      "title": "Grant Application - Human readable version of Ironwood formal verification, first steps - bulletproofs in the AGM",
+      "state": "open",
+      "updatedAt": "2026-09-28T23:22:12Z",
+      "category": "Security",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "✅ Grant Approved",
+          "color": "034613",
+          "description": "Application accepted"
+        },
+        {
+          "name": "✅ Startup Payment Completed",
+          "color": "006b75",
+          "description": "Startup funding has been requested and paid out"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-seedsigner-2026-09-14",
+      "issueNumber": 411,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/411",
+      "title": "Grant Application - Zcash SeedSigner: DIY open source air gapped signer for shielded ZEC",
+      "state": "closed",
+      "updatedAt": "2026-09-15T15:13:22Z",
+      "category": "Wallets",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "❌ Grant Declined",
+          "color": "121782",
+          "description": "Application rejected"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-mumbai-2026-09-14",
+      "issueNumber": 405,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/405",
+      "title": "Grant Application — Zcash World, Mumbai (Devcon 8 week)",
+      "state": "open",
+      "updatedAt": "2026-09-30T20:04:50Z",
+      "category": "Community",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "✅ Grant Approved",
+          "color": "034613",
+          "description": "Application accepted"
+        },
+        {
+          "name": "✅ Startup Payment Completed",
+          "color": "006b75",
+          "description": "Startup funding has been requested and paid out"
+        }
+      ]
+    },
+    {
+      "recordId": "zcg-arabia-2026-08-31",
+      "issueNumber": 400,
+      "url": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/400",
+      "title": "Grant Application - Zcash Arabia (August to December 2026",
+      "state": "open",
+      "updatedAt": "2026-09-30T19:59:05Z",
+      "category": "Education",
+      "labels": [
+        {
+          "name": "📋 Grant Application",
+          "color": "bdb853",
+          "description": "Validated application"
+        },
+        {
+          "name": "👀 Ready For ZCG Review",
+          "color": "115858",
+          "description": "Ready for committee evaluation"
+        },
+        {
+          "name": "✅ Grant Approved",
+          "color": "034613",
+          "description": "Application accepted"
+        },
+        {
+          "name": "🎯 Milestone 1 Complete",
+          "color": "9783c7",
+          "description": "Milestone Complete"
+        },
+        {
+          "name": "✅ Startup Payment Completed",
+          "color": "006b75",
+          "description": "Startup funding has been requested and paid out"
+        },
+        {
+          "name": "🎯 Milestone 2 Complete",
+          "color": "9783c7",
+          "description": "Milestone 2 completed"
+        }
+      ]
+    }
+  ]
+}

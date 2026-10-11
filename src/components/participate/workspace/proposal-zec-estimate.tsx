@@ -1,0 +1,99 @@
+"use client";
+
+import { useEffect, useId, useRef, useState } from "react";
+import type { ZcgApprovedBudget } from "@/lib/participate/workspace/data/zcg-approved-budgets";
+import { estimateFundingZat, formatUsdPerZec, FUNDING_QUOTE_SOURCE_URL } from "@/lib/participate/workspace/domain/funding-quote";
+import { formatProposalUsd } from "@/lib/participate/workspace/domain/proposal-funding";
+import { formatEstimatedZec, readFreshZecPrice, type PublicZecPrice } from "@/lib/participate/workspace/domain/zec-price";
+
+type PriceState = { status: "loading" | "ready" | "unavailable"; price: PublicZecPrice | null };
+const updatedFormat = new Intl.DateTimeFormat("en-US", {
+  month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "UTC"
+});
+
+/** Call once for the list, not once per proposal. Expire prices even during a stalled refresh. */
+export function useProposalZecPrice(enabled: boolean): PriceState {
+  const [state, setState] = useState<PriceState>({ status: "loading", price: null });
+  useEffect(() => {
+    if (!enabled) return;
+    let active = true;
+    let pending: AbortController | null = null;
+    let expiry: ReturnType<typeof setTimeout> | undefined;
+    async function refresh() {
+      if (pending || document.visibilityState === "hidden") return;
+      const controller = new AbortController();
+      pending = controller;
+      const timeout = setTimeout(() => controller.abort(), 12_000);
+      try {
+        const response = await fetch("/api/participate/zec-price", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error("Price unavailable");
+        const price = readFreshZecPrice(await response.json());
+        if (!active) return;
+        clearTimeout(expiry);
+        setState({ status: "ready", price });
+        expiry = setTimeout(() => setState({ status: "unavailable", price: null }), +new Date(price.expiresAt) - Date.now());
+      } catch {
+        if (active) {
+          clearTimeout(expiry);
+          setState({ status: "unavailable", price: null });
+        }
+      } finally {
+        clearTimeout(timeout);
+        pending = null;
+      }
+    }
+    void refresh();
+    const interval = setInterval(() => void refresh(), 60_000);
+    const onVisible = () => { if (document.visibilityState === "visible") void refresh(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      active = false;
+      pending?.abort();
+      clearTimeout(expiry);
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [enabled]);
+  return state;
+}
+
+export function ProposalZecEstimate({ budget, state }: { budget: ZcgApprovedBudget; state: PriceState }) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const button = useRef<HTMLButtonElement>(null);
+  const id = useId();
+  let price: PublicZecPrice | null = null;
+  let estimate: string | null = null;
+  try {
+    if (state.price) {
+      price = readFreshZecPrice(state.price);
+      estimate = formatEstimatedZec(estimateFundingZat(BigInt(budget.usdCents), BigInt(price.rateUsdPerZecE8)));
+    }
+  } catch { price = null; }
+
+  useEffect(() => {
+    if (!open) return;
+    const dismiss = (event: PointerEvent) => { if (event.target instanceof Node && !root.current?.contains(event.target)) setOpen(false); };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [open]);
+
+  return <div className="proposal-zec-estimate" ref={root} onBlur={event => {
+    if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+  }} onKeyDown={event => {
+    if (event.key === "Escape") { event.preventDefault(); setOpen(false); button.current?.focus(); }
+  }}>
+    <button ref={button} type="button" className="proposal-zec-trigger" data-available={!!price} aria-expanded={open} aria-controls={id} onClick={() => setOpen(value => !value)}>
+      {estimate ? <><strong>{estimate.startsWith("<") ? "" : "≈ "}{estimate} ZEC</strong><span>today</span></> : <span>{state.status === "loading" ? "Estimating ZEC…" : "ZEC estimate unavailable"}</span>}
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="7.25" strokeWidth="1.5"/><path d="M10 9v5M10 6v1" strokeWidth="1.5"/></svg>
+    </button>
+    {open ? <div id={id} className="proposal-zec-detail" role="region" aria-label="ZEC estimate details">
+      <div className="proposal-zec-detail-heading"><strong>At today’s rate</strong><button type="button" aria-label="Close ZEC estimate" onClick={() => { setOpen(false); button.current?.focus(); }}>×</button></div>
+      <dl>
+        <div><dt><a href={budget.sourceUrl} target="_blank" rel="noopener noreferrer">Approved budget ↗</a></dt><dd>{formatProposalUsd(budget.usdCents)}</dd></div>
+        {price ? <div><dt>1 ZEC</dt><dd>{formatUsdPerZec(price.rateUsdPerZecE8)} USD</dd></div> : null}
+      </dl>
+      {price ? <><p>Total grant estimate: USD budget ÷ current ZEC price. Prior payments aren’t deducted. Each payment uses its payment-day rate.</p><div className="proposal-zec-price-source"><a href={FUNDING_QUOTE_SOURCE_URL} target="_blank" rel="noopener noreferrer">CoinGecko ↗</a><time dateTime={price.quotedAt}>{updatedFormat.format(new Date(price.quotedAt))} UTC</time></div></> : <p>A fresh price is unavailable. We check again every minute; the approved USD budget stays the same.</p>}
+    </div> : null}
+  </div>;
+}
