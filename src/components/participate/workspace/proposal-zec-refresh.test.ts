@@ -54,7 +54,7 @@ function response() {
 }
 
 async function mount() {
-  lifecycle.render = () => {
+  lifecycle.render = function ProposalPriceHarness() {
     lifecycle.effectIndex = 0;
     lifecycle.refIndex = 0;
     useProposalZecPrice(true);

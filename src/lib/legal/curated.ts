@@ -6,7 +6,7 @@ export const LEGAL_ITEMS: LegalItem[] = [
     "id": "pgpz-2026-07-24-statements-for-the-record",
     "title": "Statements for the Record—July 17 CLARITY Act and July 21 FinCEN Oversight Hearings",
     "summary": "PGPZ reports submitting statements following House Financial Services Committee hearings on the CLARITY Act and FinCEN oversight.",
-    "url": "https://community.pgpz.org/updates/2026-07-24-statements-for-the-record",
+    "url": "https://pgpz.org/updates/2026-07-24-statements-for-the-record",
     "sourceId": "pgp",
     "publishedAt": "2026-07-24",
     "regions": [
@@ -28,7 +28,7 @@ export const LEGAL_ITEMS: LegalItem[] = [
     "id": "pgpz-2026-09-28-weekly-policy-memo",
     "title": "Weekly Policy Memo: Week of September 28, 2026",
     "summary": "PGPZ reviews US crypto custody proposals, tax legislation and agency guidance, with state-level developments in Illinois, New York and Wyoming.",
-    "url": "https://community.pgpz.org/updates/2026-09-28-weekly-policy-memo",
+    "url": "https://pgpz.org/updates/2026-09-28-weekly-policy-memo",
     "sourceId": "pgp",
     "publishedAt": "2026-09-28",
     "regions": [
@@ -46,7 +46,7 @@ export const LEGAL_ITEMS: LegalItem[] = [
     ],
     "kind": "Policy memo",
     "status": "Analysis",
-    "statusDetail": "Publisher analysis. The full memo may require PGPZ sign-in.",
+    "statusDetail": "Publisher analysis. Full memo available in the public PGPZ archive.",
     "reviewedAt": "2026-10-05"
   },
   {

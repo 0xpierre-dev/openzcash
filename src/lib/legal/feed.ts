@@ -1,7 +1,8 @@
 import "server-only";
 import { LEGAL_ITEMS, LEGAL_SOURCES } from "./curated";
+import { AAIP_NEWS_URL, URCDP_NEWS_URL, LATAM_SOURCES, parseAaipNews, parseUrcdpNews } from "./public-sources";
 import { BCB_NOTES_URL, parseBcbNotes } from "./bcb-parser";
-import { legalSourceUrl, mergeLegalItems, parsePgpHomepage, PGP_PUBLIC_URL } from "./pgp-parser";
+import { legalSourceUrl, mergeLegalItems, parsePgpArchive, PGP_PUBLIC_URL } from "./pgp-parser";
 import type { LegalFeed, LegalItem, LegalSource } from "./types";
 import { LEGAL_SOURCE_IDS, type LegalArchiveSource, type LegalSourceId } from "./archive";
 
@@ -16,9 +17,12 @@ export const BCB_SOURCE: LegalSource = {
   id: "bcb", name: "Banco Central do Brasil", url: "https://www.bcb.gov.br/",
   role: "Primary authority", mode: "live",
 };
+const HTML_MEDIA = /^(?:text\/html|application\/xhtml\+xml)\b/i;
 const FEEDS = [
-  { source: PGP_SOURCE, url: PGP_PUBLIC_URL, mediaType: /^(?:text\/html|application\/xhtml\+xml)\b/i, parse: parsePgpHomepage },
+  { source: PGP_SOURCE, url: PGP_PUBLIC_URL, mediaType: /^(?:text\/html|application\/xhtml\+xml)\b/i, parse: parsePgpArchive },
   { source: BCB_SOURCE, url: BCB_NOTES_URL, mediaType: /^(?:application\/(?:atom\+xml|xml)|text\/xml)\b/i, parse: parseBcbNotes },
+  { source: LATAM_SOURCES[0], url: AAIP_NEWS_URL, mediaType: HTML_MEDIA, parse: parseAaipNews },
+  { source: LATAM_SOURCES[1], url: URCDP_NEWS_URL, mediaType: HTML_MEDIA, parse: parseUrcdpNews },
 ];
 
 async function boundedText(response: Response, mediaType: RegExp): Promise<string> {
@@ -124,7 +128,7 @@ export function createArchivedLegalFeedLoader({ read, items, sources, now = Date
     if (result.available) lastRead = { at, rows: result.rows };
     const rows = result.available ? result.rows : lastRead?.rows ?? [];
     const entries = rows.flatMap(row => row.entries);
-    const byUrl = new Map(entries.map(entry => [entry.item.url, entry]));
+    const byUrl = new Map(entries.map(entry => [legalSourceUrl(entry.item.url), entry]));
     const reviewed = items.map(item => {
       const entry = byUrl.get(legalSourceUrl(item.url) ?? "");
       return entry?.changedAt && item.reviewedAt && entry.changedAt.slice(0, 10) >= item.reviewedAt

@@ -6,6 +6,10 @@ export function legalDate(value: string): string {
     ? date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" })
     : "Date not provided";
 }
+export function legalItemDate(item: LegalItem): string {
+  const prefix = item.dateBasis === "updated" ? "Updated " : item.dateBasis === "reporting-period" ? "Week of " : item.dateBasis === "source-date" ? "Source date · " : "";
+  return prefix + legalDate(item.publishedAt);
+}
 export function filterLegalItems(items: readonly LegalItem[], filters: { region?: string; topic?: string; q?: string; sourceId?: string }) {
   const words = (filters.q ?? "").toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
   return items.filter(item => (!filters.sourceId || item.sourceId === filters.sourceId)

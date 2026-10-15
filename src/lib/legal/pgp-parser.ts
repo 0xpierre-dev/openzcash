@@ -1,6 +1,7 @@
 import type { LegalItem, LegalRegion } from "./types";
+import { attr, elements, excerpt, first, hasClass, htmlText, publicHtml } from "./public-html";
 
-export const PGP_PUBLIC_URL = "https://community.pgpz.org/";
+export const PGP_PUBLIC_URL = "https://pgpz.org/updates";
 
 /** Publication dates come from the public record, never its URL or fetch time. */
 export function validLegalDate(value: unknown): value is string {
@@ -9,63 +10,7 @@ export function validLegalDate(value: unknown): value is string {
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
 
-function plainText(value: unknown, max: number): string | null {
-  if (typeof value !== "string" || value.length > max) return null;
-  return value.replace(/\s+/g, " ").trim() || null;
-}
-
-/** Read a JSON array while respecting strings; brackets in summaries are text. */
-function arrayAt(text: string, start: number): unknown[] | null {
-  let depth = 0, quoted = false, escaped = false;
-  for (let i = start; i < text.length; i++) {
-    const char = text[i];
-    if (quoted) {
-      if (escaped) escaped = false;
-      else if (char === "\\") escaped = true;
-      else if (char === '"') quoted = false;
-      continue;
-    }
-    if (char === '"') quoted = true;
-    else if (char === "[") depth++;
-    else if (char === "]" && --depth === 0) {
-      try {
-        const parsed: unknown = JSON.parse(text.slice(start, i + 1));
-        return Array.isArray(parsed) ? parsed : null;
-      } catch { return null; }
-    }
-  }
-  return null;
-}
-
-function featuredRecords(html: string): unknown[] {
-  const chunks: string[] = [];
-  for (const script of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) {
-    const push = script[1].trim().match(/^self\.__next_f\.push\(([\s\S]*)\);?$/);
-    if (!push) continue;
-    try {
-      const payload: unknown = JSON.parse(push[1]);
-      if (Array.isArray(payload) && payload[0] === 1 && typeof payload[1] === "string") chunks.push(payload[1]);
-    } catch { /* Other scripts are neither executed nor interpreted. */ }
-  }
-  const data = chunks.join("");
-  const key = /"featuredPolicyUpdates"\s*:\s*\[/g;
-  const found = key.exec(data);
-  const records = found ? arrayAt(data, key.lastIndex - 1) : null;
-  if (!records || records.length > 100) throw new Error("PGP_PUBLIC_SCHEMA_UNAVAILABLE");
-  return records;
-}
-
-function pgpItem(value: unknown, asOf: string): LegalItem | null {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
-  const record = value as Record<string, unknown>;
-  const slug = record.slug;
-  const title = plainText(record.title, 600), summary = plainText(record.summary, 4_000);
-  if (typeof slug !== "string" || !/^[a-z0-9][a-z0-9-]{0,159}$/.test(slug) ||
-      record.portalPath !== `/updates/${slug}` || !title || !summary ||
-      !validLegalDate(record.publishedAt) || record.publishedAt > asOf) return null;
-  // A regional tag needs explicit context in the public preview. Publisher
-  // location alone does not establish a memo's jurisdiction.
-  const context = `${title} ${summary}`;
+function pgpJurisdictions(context: string) {
   const places: Array<{ pattern: RegExp; region: LegalRegion; jurisdiction: string }> = [
     { pattern: /\b(?:United States|U\.S\b|US Congress|House Financial Services Committee|CFTC|FinCEN|NY DFS|WY DOB)\b/i, region: "north-america", jurisdiction: "United States" },
     { pattern: /\b(?:European Union|European Commission|European Parliament|MiCA)\b/i, region: "europe", jurisdiction: "European Union" },
@@ -74,29 +19,7 @@ function pgpItem(value: unknown, asOf: string): LegalItem | null {
   const matched = places.filter(place => place.pattern.test(context));
   const regions = [...new Set(matched.map(place => place.region))];
   if (/\b(?:global|worldwide)\b/i.test(context)) regions.push("global");
-  const weekly = record.categoryLabel === "Weekly Policy Memo";
-  return {
-    id: `pgp:${slug}`, title, summary,
-    url: new URL(`/updates/${slug}`, PGP_PUBLIC_URL).href,
-    sourceId: "pgp", publishedAt: record.publishedAt,
-    regions, jurisdictions: matched.map(place => place.jurisdiction),
-    topics: ["Policy"], kind: weekly ? "Policy memo" : "Official update",
-    status: "Analysis",
-    statusDetail: "PGPZ public homepage preview. Advocacy and analysis; the linked full update may require sign-in. Featured items are not the complete archive.",
-  };
-}
-
-/** Parse only the homepage's confirmed public featured-preview schema. */
-export function parsePgpHomepage(html: string, asOf: string): LegalItem[] {
-  if (!validLegalDate(asOf)) throw new Error("INVALID_AS_OF_DATE");
-  const records = featuredRecords(html);
-  const items = records.flatMap(record => {
-    const item = pgpItem(record, asOf);
-    return item ? [item] : [];
-  });
-  if (records.length && !items.length) throw new Error("PGP_PUBLIC_RECORDS_UNAVAILABLE");
-  return [...new Map(items.map(item => [item.url, item])).values()]
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.id.localeCompare(b.id));
+  return { regions, jurisdictions: matched.map(place => place.jurisdiction) };
 }
 
 /** Canonicalize safe public links for deduplication, preserving document query IDs. */
@@ -104,6 +27,7 @@ export function legalSourceUrl(value: string): string | null {
   try {
     const url = new URL(value);
     if (url.protocol !== "https:" || url.username || url.password) return null;
+    if (url.hostname === "community.pgpz.org" && !url.port && /^\/updates\/[A-Za-z0-9-]+\/?$/.test(url.pathname)) url.hostname = "pgpz.org";
     url.hash = "";
     for (const key of [...url.searchParams.keys()]) if (/^utm_/i.test(key)) url.searchParams.delete(key);
     url.searchParams.sort();
@@ -125,4 +49,45 @@ export function mergeLegalItems(curated: readonly LegalItem[], live: readonly Le
     ids.add(item.id);
   }
   return [...byUrl.values()].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.id.localeCompare(b.id));
+}
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+function archiveDate(label: string): string | null {
+  const match = label.match(/^(?:Week of )?([A-Za-z]+) (\d{1,2}), (\d{4})$/);
+  if (!match) return null;
+  const month = MONTHS.indexOf(match[1]) + 1;
+  const value = `${match[3]}-${String(month).padStart(2, "0")}-${match[2].padStart(2, "0")}`;
+  return month && validLegalDate(value) ? value : null;
+}
+
+/** Public archive introduced in October 2026. Only metadata, never full/member content. */
+export function parsePgpArchive(html: string, asOf: string): LegalItem[] {
+  if (!validLegalDate(asOf)) throw new Error("INVALID_AS_OF_DATE");
+  const root = publicHtml(html);
+  const grids = elements(root, node => node.tagName === "div" && hasClass(node, "archive-grid"));
+  const cards = grids.flatMap(grid => elements(grid, node => node.tagName === "article" && hasClass(node, "card")));
+  if (!grids.length || !cards.length || cards.length > 100) throw new Error("PGP_PUBLIC_SCHEMA_UNAVAILABLE");
+  const items: LegalItem[] = [];
+  for (const card of cards) {
+    const heading = first(card, "h3"), link = heading && first(heading, "a");
+    const title = htmlText(heading), label = htmlText(first(card, "p", "eyebrow"));
+    const summary = htmlText(elements(card, node => node.tagName === "p" && !hasClass(node, "eyebrow"))[0]);
+    const href = link ? attr(link, "href") : "";
+    let url: URL;
+    try { url = new URL(href, PGP_PUBLIC_URL); } catch { throw new Error("PGP_PUBLIC_RECORD_UNAVAILABLE"); }
+    if (url.origin !== "https://pgpz.org" || url.username || url.password || url.search || url.hash || !/^\/updates\/[A-Za-z0-9-]+$/.test(url.pathname) || !title || title.length > 600 || !summary) throw new Error("PGP_PUBLIC_RECORD_UNAVAILABLE");
+    const weekly = /^Week of /.test(label);
+    // The H1 report exposes a semester, not an exact publication day. It remains
+    // available via the public archive; never invent a day or use discovery time.
+    if (!weekly && /^H[12] \d{4}\b/.test(label)) continue;
+    const date = archiveDate(label);
+    if (!date || date > asOf) throw new Error("PGP_PUBLIC_DATE_UNAVAILABLE");
+    items.push({ id: `pgp:${url.pathname.split("/").at(-1)}`, title, summary: excerpt(summary), url: url.href, sourceId: "pgp", publishedAt: date,
+      dateBasis: weekly ? "reporting-period" : "source-date", ...pgpJurisdictions(`${title} ${summary}`), topics: ["Policy"],
+      kind: weekly ? "Policy memo" : "Official update", status: "Analysis",
+      statusDetail: weekly ? "PGPZ analysis. Dated by the week covered; the archive does not specify a publication day." : "PGPZ analysis. Date shown by the public archive; not a legal effective date.",
+    });
+  }
+  if (!items.length) throw new Error("PGP_PUBLIC_RECORDS_UNAVAILABLE");
+  return mergeLegalItems([], items, asOf);
 }
