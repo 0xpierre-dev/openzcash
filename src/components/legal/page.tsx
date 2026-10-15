@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { IconBalance } from "@/components/icons";
 import type { LegalFeed } from "@/lib/legal/types";
-import { legalDate } from "@/lib/legal/presentation";
+import { legalDate, legalItemDate } from "@/lib/legal/presentation";
 import { LegalNewsroom } from "./newsroom";
 import styles from "./legal.module.css";
 
@@ -25,8 +25,8 @@ function PgpSpotlight({ feed }: { feed: LegalFeed }) {
         <a className={styles.primaryAction} href={PGP_JOIN_URL} target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>Join PGP by email <span aria-hidden="true">↗</span></a>
         <a className={styles.secondaryAction} href="https://pgpz.org/" target="_blank" rel="noopener noreferrer">About PGP <span aria-hidden="true">↗</span></a>
       </div>
-      <p className={styles.signupNote}>Create an account on PGPZ with an email sign-in link. Full memos and discussions may require membership.</p>
-      {latest && <a className={styles.latestMemo} href={latest.url} target="_blank" rel="noopener noreferrer"><span>Latest public highlight · <time dateTime={latest.publishedAt}>{legalDate(latest.publishedAt)}</time></span><strong>{latest.title}<span aria-hidden="true"> ↗</span></strong></a>}
+      <p className={styles.signupNote}>Memos and reports are public. Join the PGPZ community to receive updates by email; signup happens on their website.</p>
+      {latest && <a className={styles.latestMemo} href={latest.url} target="_blank" rel="noopener noreferrer"><span>Latest public highlight · <time dateTime={latest.publishedAt}>{legalItemDate(latest)}</time></span><strong>{latest.title}<span aria-hidden="true"> ↗</span></strong></a>}
     </div>
   </section>;
 }
@@ -44,10 +44,10 @@ export function LegalPage({ feed }: { feed: LegalFeed }) {
       <Suspense fallback={<p>Loading filters…</p>}><LegalNewsroom feed={feed}/></Suspense>
     </section>
     <details className={styles.sources}><summary>Sources &amp; coverage <span aria-hidden="true">+</span></summary>
-      <div className={styles.sourceContent}><p>Public PGPZ highlights and relevant Banco Central do Brasil press notes are collected from their official public feeds. Reviewed documents add context from other authorities. Publication, update and application dates stay separate.</p>
+      <div className={styles.sourceContent}><p>Daily collection covers the PGPZ public archive, Banco Central do Brasil, Argentina’s AAIP and Uruguay’s URCDP. Reviewed documents add context from other authorities. Publication, update, memo period and application dates stay separate.</p>
       {feed.archive && <p><strong>Daily collection:</strong> {feed.archive.status === "available" && feed.archive.lastCollectedAt ? `Public-source history is stored. Last successful collection: ${legalDate(feed.archive.lastCollectedAt)} (São Paulo calendar).` : "The daily archive is not available in this environment. Reviewed source records remain visible."}</p>}
       {health.map(health => <p key={health.sourceId}><strong>{feed.sources.find(source => source.id === health.sourceId)?.name ?? health.sourceId}:</strong> {health.status === "live" ? "Public feed retrieved successfully." : health.status === "cached" ? "Temporarily unavailable. Showing the last successful retrieval." : "Could not refresh. Reviewed records remain available."}{health.lastSuccessAt ? ` Last successful read: ${legalDate(health.lastSuccessAt)}.` : ""}</p>)}
-      <p>The complete PGPZ member archive is not covered. PGP is an independent source of advocacy and analysis; it does not speak for regulators.</p>
+      <p>Only public metadata is collected. Undated PGPZ reports remain available on its public archive. PGPZ provides independent analysis; it does not speak for regulators.</p>
       <ul>{feed.sources.map(source => <li key={source.id}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.name} ↗</a><span>{source.role} · {source.mode === "live" ? "Public feed + reviewed records" : "Reviewed documents"}</span></li>)}</ul>
       <p>Coverage is selective. Status labels summarize dated source documents; they do not replace legal advice or establish Zcash’s legality in every jurisdiction.</p></div>
     </details>

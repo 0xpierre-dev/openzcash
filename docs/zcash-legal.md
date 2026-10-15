@@ -6,11 +6,12 @@
 
 Pretty Good Policy for Zcash is an independent source of education, analysis and advocacy. The feature uses its official logo unchanged, links its public website, and highlights the newest dated public item. **Join PGP by email** opens the official community signup at `https://community.pgpz.org/signin?callbackUrl=%2F&reason=signup`.
 
-Verified on 5 October 2026: that flow creates an account with an email sign-in link. Full memos and discussions can require membership. A separate newsletter opt-in or automatic delivery of new memos was not verified, so the UI makes no newsletter-delivery promise. OpenZcash does not collect email addresses or submit subscription forms.
+Verified on 15 October 2026: PGPZ now advertises public memos and special reports at `https://pgpz.org/updates`, and invites visitors to join its community to receive policy memos by email. The signup is on PGPZ; OpenZcash does not collect email addresses or submit subscription forms.
 
 ## Coverage
 
-- PGPZ's public homepage highlights. No authenticated pages, complete member archive or X scraping.
+- PGPZ public archive: dated weekly memos and special reports. The retired community-homepage featured schema is no longer used. No authenticated pages or X scraping.
+- Argentina AAIP and Uruguay URCDP: public authority news listings covering data protection, privacy, access to information and policy. Original Spanish metadata is retained.
 - Banco Central do Brasil's public press-note Atom feed, filtered for crypto, virtual assets and self-custody.
 - Reviewed primary-source records from Brazil, Argentina, the EU, the US and FATF. LATAM is a regional filter, not complete coverage of every country.
 - PGPZ analysis, official proposals, enacted instruments and application dates remain distinct. No country legal/illegal rating is inferred.
@@ -34,7 +35,7 @@ The daily server schedule becomes active **after the feature and migration are d
 
 ## Editorial contract
 
-1. Use a verified canonical source and its actual publication date; never substitute crawl time, a URL date or the week discussed.
+1. Use a verified canonical source and its actual publication date. Never substitute crawl time or a URL date. Where PGPZ supplies only a memo week, store `dateBasis: "reporting-period"` and show **Week of**, not a publication claim. Labeled dates on special reports use `source-date`. Reports without an exact day (such as H1) stay accessible on the publisher archive and are not assigned an invented timeline date.
 2. If only `updated` exists, set `dateBasis: "updated"`. Keep `sourceUpdatedAt` when publication and update both exist.
 3. `effectiveAt` means **Applies from**, not adoption. Explain transitional or actor-specific scope.
 4. Collected items remain Analysis or Official update. Legal-effect labels require primary-source review.
@@ -42,9 +43,11 @@ The daily server schedule becomes active **after the feature and migration are d
 6. Reviewed records win URL duplicates. Amendments and cancellations need review; an old article does not establish current country-wide legality.
 7. Keep source failures, empty filter states and coverage limits visible.
 
-Filters (region, source, topic and search) are shareable. Source links open externally with that behavior indicated. The feature adds no new runtime dependency.
+Filters (region, source, topic and search) are shareable. Source links open externally with that behavior indicated. The HTML sources use the inert `parse5` parser, with no script execution, resource loading, or browser automation. Layout/schema changes fail the affected source instead of advancing its success timestamp. The old PGPZ community URLs reconcile to the public archive without deleting earlier revisions.
 
 ## Source review and artwork
+
+Current source check: `docs/audits/2026-10-15-legal-collection.json`. ANPD and EDPB were not enabled: their tested public endpoints returned maintenance/blocked responses rather than stable collector data. They are not counted as automatic coverage.
 
 Initial audit: `docs/audits/2026-10-05-zcash-legal-sources.json`. Signup/brand audit: `docs/audits/2026-10-05-pgp-signup.json`.
 

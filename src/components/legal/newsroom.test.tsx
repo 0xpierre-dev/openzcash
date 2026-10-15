@@ -6,7 +6,7 @@ const location = vi.hoisted(() => ({ query: "" }));
 vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(location.query) }));
 import { LegalNewsroom } from "./newsroom";
 import { LegalPage } from "./page";
-const feed: LegalFeed = { items: LEGAL_ITEMS, sources: LEGAL_SOURCES, fetchedAt: null, pgpStatus: "unavailable", pgpLastSuccessAt: null };
+const feed: LegalFeed = { items: LEGAL_ITEMS, sources: [{ id: "pgp", name: "Pretty Good Policy for Zcash", url: "https://pgpz.org/updates", mode: "live", role: "Advocacy & analysis" }, ...LEGAL_SOURCES], fetchedAt: null, pgpStatus: "unavailable", pgpLastSuccessAt: null };
 beforeEach(() => { location.query = ""; });
 describe("Legal newsroom", () => {
   it("restores the regional filter from a shared URL and excludes other jurisdictions", () => {
@@ -28,7 +28,7 @@ describe("Legal newsroom", () => {
     expect(html.indexOf('id="pgp"')).toBeLessThan(html.indexOf('id="updates"'));
     expect(html).toContain('https://community.pgpz.org/signin?callbackUrl=%2F&amp;reason=signup');
     expect(html).toContain('Join PGP by email');
-    expect(html).toContain('may require membership');
+    expect(html).toContain('Memos and reports are public.');
     expect(html).not.toContain('href="/legal/pgp"');
   });
   it("labels updated timestamps distinctly from publication", () => {
@@ -43,4 +43,17 @@ describe("Legal newsroom", () => {
     expect(html).toContain("04 Oct 2026");
     expect(html).toContain("Sources &amp; coverage");
   });
+  it("supports every registered source and intersects it with region, topic and search", () => {
+    location.query = "source=bcb&region=latam&topic=Privacy&q=self-custody";
+    const html = renderToStaticMarkup(<LegalNewsroom feed={feed}/>);
+    expect(html).toContain("Brazil adds reporting");
+    expect(html).not.toContain("Argentina regulates"); expect(html).not.toContain("Weekly Policy Memo");
+    expect(html).toContain('<option value="bcb" selected="">');
+  });
+  it("shows memo periods in both the feature and article without implying a publication date", () => {
+    const item = { ...LEGAL_ITEMS[1], dateBasis: "reporting-period" as const };
+    const html = renderToStaticMarkup(<LegalPage feed={{ ...feed, items: [item] }}/>);
+    expect(html.match(/Week of 28 Sept? 2026/g)).toHaveLength(2);
+  });
+
 });

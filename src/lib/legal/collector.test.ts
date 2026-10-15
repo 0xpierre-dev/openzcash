@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 import { createLegalCollector } from "./collector";
-import { claimLegalArchive, completeLegalArchive, emptyLegalArchive, type LegalArchiveSource, type LegalSourceId } from "./archive";
+import { LEGAL_SOURCE_IDS, claimLegalArchive, completeLegalArchive, emptyLegalArchive, type LegalArchiveSource, type LegalSourceId } from "./archive";
 import type { LegalItem } from "./types";
 
 const at = "2026-10-05T12:00:00.000Z";
@@ -28,7 +28,7 @@ describe("Daily public policy collector", () => {
     const f = fixture(), deps = { ...f, now: () => Date.parse(at), enabled: () => true };
     expect(await createLegalCollector(deps)(input)).toMatchObject({ ok: true, outcome: "collected" });
     expect(await createLegalCollector(deps)(input)).toMatchObject({ ok: true, outcome: "already-collected" });
-    expect(f.fetchSource).toHaveBeenCalledTimes(2);
+    expect(f.fetchSource).toHaveBeenCalledTimes(LEGAL_SOURCE_IDS.length);
   });
   it("commits one source despite failure of the other and retries only the failed source", async () => {
     const f = fixture(); let clock = Date.parse(at);
@@ -38,10 +38,10 @@ describe("Daily public policy collector", () => {
     expect(first).toMatchObject({ ok: false, outcome: "partial", nextRetryAt: "2026-10-05T13:00:00.000Z" });
     clock += 15 * 60_000;
     await run({ ...input, now: new Date(clock).toISOString() });
-    expect(f.fetchSource).toHaveBeenCalledTimes(2);
+    expect(f.fetchSource).toHaveBeenCalledTimes(LEGAL_SOURCE_IDS.length);
     clock += 60 * 60_000;
     await run({ ...input, now: new Date(clock).toISOString() });
-    expect(f.fetchSource).toHaveBeenCalledTimes(3);
+    expect(f.fetchSource).toHaveBeenCalledTimes(LEGAL_SOURCE_IDS.length + 1);
     expect(f.rows.get("pgp")?.lastSuccessAt).toBe(at);
   });
   it("does not count a database write failure as durable collection success", async () => {
@@ -58,7 +58,7 @@ describe("Daily public policy collector", () => {
     const first = run(input), second = run(input);
     expect(await second).toMatchObject({ ok: false, outcome: "locked" });
     resolve(); expect((await first).ok).toBe(true);
-    expect(f.fetchSource).toHaveBeenCalledTimes(2);
+    expect(f.fetchSource).toHaveBeenCalledTimes(LEGAL_SOURCE_IDS.length);
   });
   it("makes no fetches or writes when collection is disabled for a preview", async () => {
     const f = fixture();

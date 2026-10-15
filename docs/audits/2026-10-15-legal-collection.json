@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-15T16:44:36.841200+00:00",
+  "purpose": "Public collector source verification; no member content or subscription data.",
+  "checks": [
+    {
+      "source": "pgp",
+      "status": "ok",
+      "items": 20,
+      "latestDate": "2026-10-05",
+      "elapsedMs": 2007
+    },
+    {
+      "source": "bcb",
+      "status": "ok",
+      "items": 1,
+      "latestDate": "2026-09-23",
+      "elapsedMs": 2302
+    },
+    {
+      "source": "aaip",
+      "status": "ok",
+      "items": 16,
+      "latestDate": "2026-10-09",
+      "elapsedMs": 1062
+    },
+    {
+      "source": "urcdp",
+      "status": "ok",
+      "items": 10,
+      "latestDate": "2026-09-03",
+      "elapsedMs": 3007
+    }
+  ],
+  "endpoints": {
+    "pgp": "https://pgpz.org/updates",
+    "bcb": "https://www.bcb.gov.br/api/feed/sitebcb/sitefeeds/notasImprensa",
+    "aaip": "https://www.argentina.gob.ar/aaip/noticias",
+    "urcdp": "https://www.gub.uy/unidad-reguladora-control-datos-personales/comunicacion/noticias"
+  },
+  "dateRules": [
+    "PGP weekly labels are reporting periods, not publication dates.",
+    "PGP special report dates are explicitly source dates. H1 report has no exact day and is not assigned one.",
+    "AAIP uses time datetime; URCDP uses its published listing date.",
+    "Discovery never advances source date or legal review."
+  ],
+  "notEnabled": [
+    {
+      "source": "ANPD",
+      "reason": "Public listing requires client data; tested public search returned maintenance and RSS returned 404."
+    },
+    {
+      "source": "EDPB",
+      "reason": "Public feed returned HTTP 403 to the collector."
+    }
+  ],
+  "parsedSnapshots": [
+    {
+      "source": "pgp",
+      "sha256": "e700b42b416a080178d04e8784f2b25fce1bb78018f299826d341fa4c4f59003"
+    },
+    {
+      "source": "bcb",
+      "sha256": "34aade90c13b253398655f1788cc13336b1922c4d0dbec3e52b787fb1eb466ee"
+    },
+    {
+      "source": "aaip",
+      "sha256": "3b146d3c3b28d5865801875c29ea7c359e910a04ea665d3d8dd1abbcecc18365"
+    },
+    {
+      "source": "urcdp",
+      "sha256": "f01262e29df3681baf0383081827cd190d19435e7abee5c5556c067a5f9dcc51"
+    }
+  ]
+}

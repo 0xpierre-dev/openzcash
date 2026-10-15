@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { legalSourceUrl, validLegalDate } from "./pgp-parser";
 import type { LegalItem } from "./types";
 
-export const LEGAL_SOURCE_IDS = ["pgp", "bcb"] as const;
+export const LEGAL_SOURCE_IDS = ["pgp", "bcb", "aaip", "urcdp"] as const;
 export type LegalSourceId = (typeof LEGAL_SOURCE_IDS)[number];
 export const LEGAL_LEASE_MS = 120_000;
 export const LEGAL_RETRY_MS = 60 * 60_000;
@@ -83,7 +83,7 @@ export function completeLegalArchive(row: LegalArchiveSource, id: string, comple
   const lease = row.lease;
   if (!lease || lease.id !== id || Date.parse(completedAt) < Date.parse(lease.startedAt)) return row;
   if (items === null) return { ...row, lease: null, errorClass: "source-unavailable", nextRetryAt: new Date(Date.parse(completedAt) + LEGAL_RETRY_MS).toISOString() };
-  const entries = new Map(row.entries.map(entry => [entry.item.url, entry]));
+  const entries = new Map(row.entries.map(entry => [legalSourceUrl(entry.item.url)!, entry]));
   for (const candidate of items) {
     const item = publicItem(candidate, row.sourceId, completedAt.slice(0, 10));
     const hash = legalContentHash(item), previous = entries.get(item.url);

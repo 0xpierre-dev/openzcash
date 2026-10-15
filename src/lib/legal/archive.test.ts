@@ -79,7 +79,7 @@ describe("Archive-backed feed reads", () => {
     const seed = item("a", { title: "Reviewed title", status: "Adopted", publishedAt: "2026-09-27", reviewedAt: "2026-10-05" });
     const read = vi.fn().mockResolvedValue({ available: true, rows: [changed] });
     const result = await createArchivedLegalFeedLoader({ read, items: [seed], sources: [], now: () => Date.parse("2026-10-06T13:00:00Z") })();
-    expect(result.items[0]).toMatchObject({ ...seed, sourceChangedAt: "2026-10-06T12:00:00.000Z" });
+    expect(result.items[0]).toMatchObject({ ...seed, url: "https://pgpz.org/updates/a", sourceChangedAt: "2026-10-06T12:00:00.000Z" });
     expect(result.archive).toMatchObject({ status: "available", itemCount: 1, cadence: "daily" });
   });
   it("serves the last persisted read on DB outage but reports archive unavailable", async () => {

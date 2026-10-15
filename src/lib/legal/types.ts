@@ -16,8 +16,8 @@ export type LegalItem = {
   url: string;
   sourceId: string;
   publishedAt: string;
-  /** Some official feeds expose only their last update date. */
-  dateBasis?: "published" | "updated";
+  /** Date semantics: publication, publisher update, memo week or labeled archive date. */
+  dateBasis?: "published" | "updated" | "reporting-period" | "source-date";
   /** Publisher timestamp, separately preserved when a first-publication date exists. */
   sourceUpdatedAt?: string;
   /** A later observed source revision does not renew the earlier editorial review. */
