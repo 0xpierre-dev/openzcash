@@ -1,6 +1,7 @@
 import { WALLET_EVIDENCE } from "@/lib/wallet-finder/evidence";
 import { DEFAULT_REQUIREMENTS, matchWallets } from "@/lib/wallet-finder/matching";
 import type { WalletPlatform } from "@/lib/wallet-finder/types";
+import { darkWalletLogo } from "@/lib/wallet-logos";
 
 /** Shared catalog and evidence-derived privacy labels for /wallets/find and Zarvis. */
 /** Date of the last edit to the entries below (maintainer-set, not a review pass): update it in the same commit that adds, removes or corrects a wallet. */
@@ -21,6 +22,8 @@ export interface Wallet {
   /** Short discovery copy; full platform and release limits stay in note/evidence. */
   summary: string;
   logo?: string;
+  /** Light rendition for the dark theme, where the logo tile has no white fill; derived from the shared map for marks drawn in ink. */
+  logoDark?: string;
   flagship?: boolean;
   tag?: "Beta" | "Coming soon";
   /** Public source repository — set ONLY when the wallet itself (app or
@@ -40,7 +43,7 @@ const SOFTWARE_ENTRIES: Omit<Wallet, "shielded">[] = [
     maker: "Zcash Open Development Lab",
     url: "https://zodl.com",
     // Official iOS AppIcon (zodl-inc/zodl-ios); content version refreshes cached artwork.
-    logo: "/wallet-logos/zodl.png?v=1ae79a66",
+    logo: "/wallet-logos/zodl.png?v=ff209828",
     platforms: ["iOS", "Android"],
     flagship: true,
     note: "Formerly Zashi. Shielded by default, from the original core team.",
@@ -51,7 +54,7 @@ const SOFTWARE_ENTRIES: Omit<Wallet, "shielded">[] = [
     summary: "Shielded ZEC on iOS and Android, from Zingo Labs.",
     maker: "Zingo Labs",
     url: "https://zingolabs.org/zingo/",
-    logo: "/wallet-logos/zingo.png",
+    logo: "/wallet-logos/zingo.png?v=e269f01b",
     platforms: ["iOS", "Android"],
     note: "Shielded sending and receiving on iOS and Android. Desktop availability is not verified.",
     source: "https://github.com/zingolabs",
@@ -173,7 +176,7 @@ const SOFTWARE_ENTRIES: Omit<Wallet, "shielded">[] = [
     summary: "Desktop wallet announced; no usable public release.",
     maker: "Independent",
     url: "https://zstash.app/",
-    logo: "/wallet-logos/zstash.png",
+    logo: "/wallet-logos/zstash.png?v=f9e1a9e1",
     platforms: ["Desktop"],
     tag: "Coming soon",
     note: "Announced desktop wallet. No public usable release or planned capabilities are confirmed.",
@@ -232,7 +235,7 @@ const HARDWARE_ENTRIES: Omit<Wallet, "shielded">[] = [
     summary: "Hardware storage for transparent ZEC; no shielded support.",
     maker: "SatoshiLabs",
     url: "https://trezor.io/coins/wallet/zcash",
-    logo: "/wallet-logos/trezor.png",
+    logo: "/wallet-logos/trezor.png?v=675e01fc",
     platforms: ["Hardware"],
     note: "Transparent (t-address) only; no shielded support.",
     source: "https://github.com/trezor/trezor-firmware",
@@ -283,5 +286,9 @@ export function walletPrivacy(walletName: string, selectedPlatform = ""): {
   return { ...result, level: directionConfirmed ? "partial" : "unknown" };
 }
 
-export const SOFTWARE: Wallet[] = SOFTWARE_ENTRIES.map((wallet) => ({ ...wallet, shielded: walletPrivacy(wallet.name).level }));
-export const HARDWARE: Wallet[] = HARDWARE_ENTRIES.map((wallet) => ({ ...wallet, shielded: walletPrivacy(wallet.name).level }));
+function describeWallet(wallet: Omit<Wallet, "shielded">): Wallet {
+  const logoDark = wallet.logo ? darkWalletLogo(wallet.logo) : undefined;
+  return { ...wallet, ...(logoDark ? { logoDark } : {}), shielded: walletPrivacy(wallet.name).level };
+}
+export const SOFTWARE: Wallet[] = SOFTWARE_ENTRIES.map(describeWallet);
+export const HARDWARE: Wallet[] = HARDWARE_ENTRIES.map(describeWallet);
