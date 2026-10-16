@@ -1,4 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  DEMO_HOME,
+  demoPathAllowed,
+  participateDemoMode,
+} from "@/lib/participate/demo";
 
 /** The former admin, onboarding and viewing-key HTTP surface is retired. */
 const RETIRED_PATHS = [
@@ -41,6 +46,14 @@ export function proxy(req: NextRequest) {
     });
   }
 
+  // The committee demo host serves Participate only, never indexed.
+  const demo = participateDemoMode();
+  if (demo && !demoPathAllowed(pathname)) {
+    const response = NextResponse.redirect(new URL(DEMO_HOME, req.url), 307);
+    response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+    return response;
+  }
+
   const headers = new Headers(req.headers);
   headers.set("x-pathname", pathname);
   headers.set("x-admin", "0");
@@ -50,7 +63,7 @@ export function proxy(req: NextRequest) {
   headers.set("x-forwarded-proto", req.nextUrl.protocol.slice(0, -1));
   headers.delete("x-forwarded-port");
   const response = NextResponse.next({ request: { headers } });
-  if (process.env.OPENZCASH_ENV === "redesign") {
+  if (demo || process.env.OPENZCASH_ENV === "redesign") {
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   }
   return response;

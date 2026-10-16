@@ -29,6 +29,8 @@ import {
   readProfile,
 } from "@/lib/participate/service";
 import { readViewerContext } from "@/lib/participate/viewer";
+import { participateDemoMode } from "@/lib/participate/demo";
+import { DemoBanner } from "@/components/participate/workspace/committee-demo";
 import type { CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
 import {
   historyResponseSchema,
@@ -123,6 +125,7 @@ export default async function ParticipatePage({
   }
 
   const communityId = participationCommunityId();
+  const demoMode = participateDemoMode();
   const { session, cookie } = context;
   const admin =
     session?.role === "ADMIN" && !session.userId.startsWith("preview_");
@@ -204,6 +207,7 @@ export default async function ParticipatePage({
             key={`${session?.userId ?? "guest"}:${search.record ?? "queue"}`}
             initial={committee}
             initialRecordId={search.record}
+            demoMode={demoMode}
           />
         ) : (
           <div className="dao-empty-state" role="alert">
@@ -293,6 +297,7 @@ export default async function ParticipatePage({
     <Participate view={view} configured>
       <div className="oz-participate">
         <WorkspaceThemeProvider>
+          {demoMode ? <DemoBanner /> : null}
           <ParticipateBridge>{content}</ParticipateBridge>
         </WorkspaceThemeProvider>
       </div>

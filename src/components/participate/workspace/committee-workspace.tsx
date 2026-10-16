@@ -14,6 +14,7 @@ import { CommitteeLabels, CommitteeLabelEditor } from "@/components/participate/
 import { CommitteeReviewGuide } from "./committee-review-guide";
 import { CommitteeReviewTabs, reviewTabId, type CommitteeReviewPanel } from "./committee-review-tabs";
 import { ReviewFinish } from "./review-finish";
+import { DemoFillSeats, DemoReset } from "./committee-demo";
 import { CommitteeSourceDecision } from "@/components/participate/workspace/committee-source-decision";
 import { passkeyFetch } from "@/lib/participate/workspace/auth/passkey-client";
 import { committeeRoleLabels, reviewerRoles, type CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
@@ -44,7 +45,8 @@ const date = (value: string) => new Intl.DateTimeFormat("en", { dateStyle: "medi
 const sourceDate = (value: string) => new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${value}T12:00:00Z`));
 const getForm = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); return new FormData(event.currentTarget); };
 
-export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial: CommitteeWorkspace; initialRecordId?: string }) {
+/** `demoMode` is set only by the committee demo deployment (test seats and reset). */
+export function CommitteeWorkspacePanel({ initial, initialRecordId, demoMode = false }: { initial: CommitteeWorkspace; initialRecordId?: string; demoMode?: boolean }) {
   const openHostView = useParticipateHost();
   const [data, setData] = useState(initial), [tab, setTab] = useState<(typeof tabs)[number]>("Reviews");
   const [busy, setBusy] = useState(false), [error, setError] = useState(""), [notice, setNotice] = useState("");
@@ -53,6 +55,8 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
   const [panel, setPanel] = useState<CommitteeReviewPanel>(() => { const row = initial.queue.find(p => p.recordId === initialRecordId); return row && matchesFilter(row, "Closed") ? "Finish" : row?.state === "HISTORICAL" ? "Vote" : "Proposal"; });
   const [discussion, setDiscussion] = useState<"source" | "discussion">("source");
   const [inviting, setInviting] = useState(false);
+  // Demo only: bumped after the TEST seats sign, so the vote and Finish panels reload.
+  const [demoFills, setDemoFills] = useState(0);
   const guard = useRef(false);
   const reviewPanel = useRef<HTMLDivElement>(null);
   const reviewTrigger = useRef<HTMLButtonElement | null>(null);
@@ -110,7 +114,7 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
   return <section className="committee-workspace" aria-labelledby="committee-heading">
     <header className="committee-heading">
       <div className="committee-title"><h1 id="committee-heading">Committee</h1>{data.access === "MEMBER" ? <span>{data.name} <i aria-hidden="true">/</i> {data.role ? committeeRoleLabels[data.role] : "Admin preview"}</span> : null}</div>
-      <div className="committee-heading-actions">{data.access === "MEMBER" && (data.demo || !data.canMutate) ? <details className="committee-mode"><summary>{data.demo ? "Preview · Read only" : !data.emailReady ? "Verify email" : "Read only"}<CommitteeIcon kind="info" /></summary><p>{data.demo ? "Committee operations are not enabled. This preview cannot submit votes or change decisions." : !data.emailReady ? "Verify your email to make changes." : "Changes are unavailable for this session."}</p></details> : null}<button type="button" className="committee-icon-button" aria-label="Refresh committee" title="Refresh" disabled={busy} onClick={() => void refresh()}><CommitteeIcon kind="refresh" /></button></div>
+      <div className="committee-heading-actions">{data.access === "MEMBER" && (data.demo || !data.canMutate) ? <details className="committee-mode"><summary>{data.demo ? "Preview · Read only" : !data.emailReady ? "Verify email" : "Read only"}<CommitteeIcon kind="info" /></summary><p>{data.demo ? "Committee operations are not enabled. This preview cannot submit votes or change decisions." : !data.emailReady ? "Verify your email to make changes." : "Changes are unavailable for this session."}</p></details> : null}{demoMode && data.access === "MEMBER" ? <DemoReset disabled={busy} onDone={async notice => { setSelected(null); await refresh(); setNotice(notice); }} /> : null}<button type="button" className="committee-icon-button" aria-label="Refresh committee" title="Refresh" disabled={busy} onClick={() => void refresh()}><CommitteeIcon kind="refresh" /></button></div>
     </header>
     {error ? <p className="dao-form-error" role="alert">{error}</p> : null}
     {notice ? <p className="committee-notice" role="status">{notice}</p> : null}
@@ -149,8 +153,8 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
                   setData(previous => ({ ...previous, queue: previous.queue.map(row => row.recordId === proposal.recordId ? { ...row, ...value } : row) }));
                   setNotice("Labels saved."); void refresh();
                 }} /></details>
-                <div hidden={panel !== "Vote"}>{historical ? <CommitteeSourceDecision decision={source} /> : <SignedDecision key={proposal.recordId} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} revision={proposal.revision} initiallyOpen compact readOnlyReason={data.demo ? "Committee operations are disabled. This admin preview cannot open reviews or sign votes." : undefined} visible={panel === "Vote"} onChanged={() => reviewChanged(proposal.recordId)} />}</div>
-                {!historical ? <div hidden={panel !== "Finish"}><ReviewFinish endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} recordId={proposal.recordId} revision={proposal.revision} roundId={proposal.roundId} visible={panel === "Finish"} /></div> : null}
+                <div hidden={panel !== "Vote"}>{!historical && demoMode ? <DemoFillSeats proposal={proposal} onDone={async notice => { await reviewChanged(proposal.recordId); setDemoFills(count => count + 1); setNotice(notice); }} /> : null}{historical ? <CommitteeSourceDecision decision={source} /> : <SignedDecision key={demoMode ? `${proposal.recordId}:${proposal.roundId ?? "none"}:${demoFills}` : proposal.recordId} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} revision={proposal.revision} initiallyOpen compact readOnlyReason={data.demo ? "Committee operations are disabled. This admin preview cannot open reviews or sign votes." : undefined} visible={panel === "Vote"} onChanged={() => reviewChanged(proposal.recordId)} />}</div>
+                {!historical ? <div hidden={panel !== "Finish"}><ReviewFinish key={demoMode ? `${proposal.roundId ?? "none"}:${demoFills}` : undefined} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} recordId={proposal.recordId} revision={proposal.revision} roundId={proposal.roundId} visible={panel === "Finish"} /></div> : null}
                 {panel === "Discussion" ? <div className="committee-discussion-switch" aria-label="Discussion source"><button type="button" aria-pressed={discussion === "source"} onClick={() => setDiscussion("source")}>Source comments</button><button type="button" aria-pressed={discussion === "discussion"} onClick={() => setDiscussion("discussion")}>OpenZcash</button></div> : null}
                 <ProposalInlineDetails committeeReview key={proposal.recordId} communityId={proposal.hostId} recordId={proposal.recordId} active={panel === "Discussion" ? discussion : panel === "Proposal" ? "record" : null} onClose={closeReview} />
                 </div>

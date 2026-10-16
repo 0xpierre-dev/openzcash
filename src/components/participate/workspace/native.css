@@ -432,3 +432,55 @@
   .oz-participate .committee-review-tab-copy small { font-size: 10px; }
   .oz-participate .committee-review-context { font-size: 11px; }
 }
+
+/* Committee demo deployment only (PARTICIPATE_DEMO_ENVIRONMENT=true). */
+.oz-participate .participate-demo-banner {
+  /* Stays visible under the portal's sticky 56px top bar. */
+  position: sticky;
+  top: 56px;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 10px 22px;
+  border-bottom: 1px solid var(--dao-line);
+  border-left: 3px solid var(--dao-gold);
+  background: var(--dao-soft);
+  color: var(--dao-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.oz-participate .participate-demo-banner strong {
+  color: var(--dao-ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.oz-participate .participate-demo-fill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  border: 1px dashed var(--dao-gold);
+  border-radius: 10px;
+  background: var(--dao-soft);
+}
+.oz-participate .participate-demo-fill strong { color: var(--dao-ink); font-size: 14px; }
+.oz-participate .dao-app .participate-demo-fill p { margin: 4px 0 0; max-width: 62ch; color: var(--dao-muted); font-size: 13px; line-height: 1.55; }
+.oz-participate .participate-demo-fill--note { display: block; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .participate-demo-fill-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.oz-participate .participate-demo-fill-actions label { display: grid; gap: 4px; color: var(--dao-muted); font-size: 12px; }
+.oz-participate .participate-demo-fill-actions select { min-height: 40px; padding: 0 10px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-paper); color: var(--dao-ink); font: inherit; font-size: 14px; }
+.oz-participate .participate-demo-fill .dao-form-error { flex-basis: 100%; margin: 0; }
+.oz-participate .participate-demo-reset { min-height: 36px; font-size: 13px; }
+.oz-participate .participate-demo-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .participate-demo-confirm .dao-form-error { flex-basis: 100%; margin: 0; }
+@media (max-width: 640px) {
+  .oz-participate .participate-demo-banner { position: static; padding: 10px 16px; }
+  .oz-participate .participate-demo-fill-actions, .oz-participate .participate-demo-fill-actions label, .oz-participate .participate-demo-fill-actions select, .oz-participate .participate-demo-fill-actions button { width: 100%; }
+}

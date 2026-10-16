@@ -42,10 +42,20 @@ export const participationRoutes = [
   "/verify/:file(archive-verify\\.mjs|activity-verify\\.mjs|decision-verify\\.mjs|ZOD-LICENSE\\.txt)",
 ] as const;
 
-export function participationRewrites(raw: string | undefined) {
+// Demo deployments only: the committee demo's test-seat and reset actions.
+// Production builds never mount this path.
+export const participationDemoRoutes = ["/api/participate/demo"] as const;
+
+export function participationRewrites(
+  raw: string | undefined,
+  { demo = false }: { demo?: boolean } = {},
+) {
   const origin = participationUpstream(raw);
+  const routes: readonly string[] = demo
+    ? [...participationRoutes, ...participationDemoRoutes]
+    : participationRoutes;
   return origin
-    ? participationRoutes.map((source) => ({
+    ? routes.map((source) => ({
         source,
         destination: `${origin}${source.replace(/(:\w+)\([^)]*\)/g, "$1")}`,
       }))

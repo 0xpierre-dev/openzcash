@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createSession, verifySession, SESSION_COOKIE } from "@/lib/auth/session";
 import { isRetiredPath, proxy } from "./proxy";
 
@@ -60,5 +60,30 @@ describe("retired admin routes", () => {
     expect(response.headers.get("x-middleware-request-x-forwarded-proto")).toBe("https");
     expect(response.headers.get("x-middleware-request-x-forwarded-port")).toBeNull();
     expect(response.headers.get("x-middleware-request-origin")).toBe("https://attacker.example");
+  });
+});
+
+describe("committee demo host", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("serves only Participate and never asks to be indexed", () => {
+    vi.stubEnv("PARTICIPATE_DEMO_ENVIRONMENT", "true");
+    for (const path of ["/", "/zcg", "/zarvis", "/zcg/participate/zcg-github-478", "/api/zarvis/chat", "/coinholders"]) {
+      const response = proxy(new NextRequest(`https://demo.openzcash.org${path}`));
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe("https://demo.openzcash.org/zcg/participate?view=committee");
+      expect(response.headers.get("x-robots-tag")).toContain("noindex");
+    }
+    for (const path of ["/zcg/participate", "/api/participate/demo", "/api/participate/sheet-handoff", "/api/auth/session", "/api/communities/host/archives/participation", "/brand/zcash-secondary-yellow.svg"]) {
+      const response = proxy(new NextRequest(`https://demo.openzcash.org${path}`));
+      expect(response.status).toBe(200);
+      expect(response.headers.get("x-robots-tag")).toContain("noindex");
+    }
+  });
+
+  it("leaves production routing unchanged without the demo flag", () => {
+    const response = proxy(new NextRequest("https://openzcash.org/zarvis"));
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-robots-tag")).toBeNull();
   });
 });
