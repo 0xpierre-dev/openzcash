@@ -131,8 +131,8 @@ export default async function ParticipatePage({
 
   const communityId = participationCommunityId();
   const demoMode = participateDemoMode();
-  // Demo host only: no portal shell to follow, so the banner toggle's cookie decides the theme.
-  const themePreference = demoMode ? parseWorkspaceThemePreference((await cookies()).get(WORKSPACE_THEME_COOKIE)?.value) : undefined;
+  // Demo host only: light by default; the banner toggle saves dark in the theme cookie.
+  const themePreference = demoMode ? (parseWorkspaceThemePreference((await cookies()).get(WORKSPACE_THEME_COOKIE)?.value) === "dark" ? "dark" : "light") : undefined;
   const { session, cookie } = context;
   const admin =
     session?.role === "ADMIN" && !session.userId.startsWith("preview_");
