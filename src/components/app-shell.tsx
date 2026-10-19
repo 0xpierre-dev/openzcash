@@ -255,6 +255,7 @@ export function AppShell({
             compact={compact}
             onToggle={toggleApp}
             onOpen={openApp}
+            onVisit={() => setNavOpen(false)}
           />
         </nav>
         <div className="rd-side-foot">
@@ -305,7 +306,7 @@ export function AppShell({
                   </>
                 ) : null}
                 {place.page ? (
-                  <Link href={place.app.href}>{place.app.label}</Link>
+                  place.app.navigationOnly ? <span>{place.app.label}</span> : <Link href={place.app.href}>{place.app.label}</Link>
                 ) : (
                   <span>{place.app.label}</span>
                 )}
