@@ -523,3 +523,14 @@
 /* Without the portal shell the page background follows the workspace theme edge to edge. */
 html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="dark"]) body { background: #0f0e0c; }
 html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { background: var(--dao-canvas, #f8f6f1); }
+
+/* Proposal tags: always open, every tag visible as a toggle. */
+.oz-participate .committee-tags-open { margin: 0 0 16px; padding: 0 0 16px; border-bottom: 1px solid var(--dao-line); }
+.oz-participate .committee-label-groups { display: grid; gap: 12px; }
+.oz-participate .committee-label-group { margin: 0; padding: 0; border: 0; min-width: 0; }
+.oz-participate .committee-label-group legend { margin: 0 0 6px; padding: 0; color: var(--dao-muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.oz-participate .committee-label-group > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.oz-participate .dao-app .committee-label-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 2px; border: 1px solid transparent; border-radius: 8px; background: transparent; cursor: pointer; opacity: 0.55; }
+.oz-participate .dao-app .committee-label-chip:hover { opacity: 0.85; }
+.oz-participate .dao-app .committee-label-chip[aria-pressed="true"] { border-color: var(--dao-gold); opacity: 1; }
+.oz-participate .dao-app .committee-label-chip > span[aria-hidden] { padding: 0 4px; color: var(--dao-gold); font-size: 12px; }
