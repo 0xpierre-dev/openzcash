@@ -32,7 +32,7 @@ it("explains admin preview and exposes separate paths for source, discussion, vo
 });
 it("opens a decided proposal from its direct link instead of hiding it in To review", () => {
   render(<CommitteeWorkspacePanel initial={{ ...initial, queue: [{ ...proposal, state: "APPROVED", signed: 5 }] }} initialRecordId="local-proposal" />);
-  expect(screen.getByRole("button", { name: "Closed" }).getAttribute("aria-pressed")).toBe("true");
+  expect(screen.getByRole("button", { name: "Decided" }).getAttribute("aria-pressed")).toBe("true");
   expect(screen.getByRole("region", { name: "Review: Local test proposal" })).toBeTruthy();
   expect(screen.getByText("Review closeout")).toBeTruthy();
 });
@@ -42,7 +42,7 @@ it("keeps the completed review selected and moves it to Finish after the fifth r
   render(<CommitteeWorkspacePanel initial={initial} initialRecordId="local-proposal" />);
   fireEvent.click(screen.getByRole("tab", { name: "Vote" }));
   fireEvent.click(screen.getByRole("button", { name: "Test completed vote" }));
-  await waitFor(() => expect(screen.getByRole("button", { name: "Closed" }).getAttribute("aria-pressed")).toBe("true"));
+  await waitFor(() => expect(screen.getByRole("button", { name: "Decided" }).getAttribute("aria-pressed")).toBe("true"));
   expect(screen.getByRole("region", { name: "Review: Local test proposal" })).toBeTruthy();
   expect(screen.getByText("Review closeout")).toBeTruthy();
 });
@@ -55,7 +55,7 @@ it("opens a notified proposal from another committee tab, resetting stale filter
   act(() => { window.dispatchEvent(new CustomEvent("participate:open-committee-review", { detail: { communityId: "local-host", recordId: "local-proposal" } })); });
   expect(screen.getByRole("region", { name: "Review: Local test proposal" })).toBeTruthy();
   expect(screen.getByTestId("proposal-surface").textContent).toBe("local-host/local-proposal/record");
-  expect(screen.getByRole("button", { name: "To review" }).getAttribute("aria-pressed")).toBe("true");
+  expect(screen.getByRole("button", { name: "Open" }).getAttribute("aria-pressed")).toBe("true");
 });
 
 it("shows queue-wide review totals without treating withdrawals or source history as committee verdicts", () => {
@@ -63,15 +63,15 @@ it("shows queue-wide review totals without treating withdrawals or source histor
   render(<CommitteeWorkspacePanel initial={{ ...initial, queue }} />);
   const summary = screen.getByLabelText("Review overview");
   const count = (label: string) => within(summary).getByText(label).parentElement?.querySelector("dd")?.textContent;
-  expect(count("Awaiting review")).toBe("2");
-  expect(count("Review started")).toBe("1");
-  expect(count("Decided")).toBe("2");
-  expect(screen.getByRole("button", { name: "Closed" }).textContent).toBe("Closed4");
-  fireEvent.click(screen.getByRole("button", { name: "Source decisions" }));
+  expect(count("awaiting")).toBe("2");
+  expect(count("voting")).toBe("1");
+  expect(count("decided")).toBe("2");
+  expect(screen.getByRole("button", { name: "Decided" }).textContent).toBe("Decided4");
+  fireEvent.click(screen.getByRole("button", { name: "Source" }));
   fireEvent.change(screen.getByRole("searchbox", { name: "Search committee proposals" }), { target: { value: "no match" } });
-  expect(count("Awaiting review")).toBe("2");
-  expect(count("Review started")).toBe("1");
-  expect(count("Decided")).toBe("2");
+  expect(count("awaiting")).toBe("2");
+  expect(count("voting")).toBe("1");
+  expect(count("decided")).toBe("2");
   fireEvent.click(screen.getByRole("button", { name: "Members" }));
   expect(screen.getByLabelText("Review overview")).toBeTruthy();
 });
@@ -81,12 +81,12 @@ it("updates management totals after a completed review is refreshed", async () =
   render(<CommitteeWorkspacePanel initial={initial} initialRecordId="local-proposal" />);
   const summary = screen.getByLabelText("Review overview");
   const count = (label: string) => within(summary).getByText(label).parentElement?.querySelector("dd")?.textContent;
-  expect(count("Review started")).toBe("1");
-  expect(count("Decided")).toBe("0");
+  expect(count("voting")).toBe("1");
+  expect(count("decided")).toBe("0");
   fireEvent.click(screen.getByRole("tab", { name: "Vote" }));
   fireEvent.click(screen.getByRole("button", { name: "Test completed vote" }));
-  await waitFor(() => expect(count("Decided")).toBe("1"));
-  expect(count("Review started")).toBe("0");
+  await waitFor(() => expect(count("decided")).toBe("1"));
+  expect(count("voting")).toBe("0");
 });
 
 it.each(["RESTRICTED", "SIGNED_OUT", "DENIED", "INVITED"] as const)("does not expose management totals to %s sessions", access => {
