@@ -307,7 +307,7 @@ export default async function ParticipatePage({
   }
 
   return (
-    <Participate view={view} configured>
+    <Participate view={view} configured wide={demoMode}>
       <div className="oz-participate" data-demo={demoMode ? "" : undefined}>
         <WorkspaceThemeProvider initialPreference={themePreference}>
           {demoMode ? <DemoBanner /> : null}
