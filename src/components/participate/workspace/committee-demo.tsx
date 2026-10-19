@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { passkeyFetch } from "@/lib/participate/workspace/auth/passkey-client";
+import { WorkspaceThemeControl } from "./workspace-theme";
 import type { CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
 
 // Committee demo deployment only. These controls call /api/participate/demo,
@@ -45,6 +46,7 @@ export function DemoBanner() {
         votes, tags and results here are tests. Nothing is anchored, posted to
         GitHub or written to Google Sheets.
       </span>
+      <WorkspaceThemeControl />
     </aside>
   );
 }

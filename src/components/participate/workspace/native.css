@@ -537,3 +537,8 @@ html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { 
 @media (prefers-color-scheme: dark) {
   html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="system"]) body { background: #0f0e0c; }
 }
+/* Demo banner light/dark toggle (the demo host has no portal top bar). */
+.oz-participate .participate-demo-banner { align-items: center; }
+.oz-participate .participate-demo-banner .dao-theme-toggle { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: auto; padding: 0; border: 1px solid var(--dao-line); border-radius: 8px; background: transparent; color: var(--dao-ink); cursor: pointer; }
+.oz-participate .participate-demo-banner .dao-theme-toggle:hover { border-color: var(--dao-gold); }
+.oz-participate .participate-demo-banner .dao-theme-icon { width: 18px; height: 18px; }

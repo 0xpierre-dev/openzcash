@@ -30,6 +30,8 @@ import {
 } from "@/lib/participate/service";
 import { readViewerContext } from "@/lib/participate/viewer";
 import { participateDemoMode } from "@/lib/participate/demo";
+import { cookies } from "next/headers";
+import { parseWorkspaceThemePreference, WORKSPACE_THEME_COOKIE } from "@/lib/participate/workspace/domain/workspace-theme";
 import { DemoBanner } from "@/components/participate/workspace/committee-demo";
 import { DemoPractice } from "@/components/participate/workspace/committee-demo-practice";
 import type { CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
@@ -129,6 +131,8 @@ export default async function ParticipatePage({
 
   const communityId = participationCommunityId();
   const demoMode = participateDemoMode();
+  // Demo host only: no portal shell to follow, so the banner toggle's cookie decides the theme.
+  const themePreference = demoMode ? parseWorkspaceThemePreference((await cookies()).get(WORKSPACE_THEME_COOKIE)?.value) : undefined;
   const { session, cookie } = context;
   const admin =
     session?.role === "ADMIN" && !session.userId.startsWith("preview_");
@@ -305,7 +309,7 @@ export default async function ParticipatePage({
   return (
     <Participate view={view} configured>
       <div className="oz-participate" data-demo={demoMode ? "" : undefined}>
-        <WorkspaceThemeProvider>
+        <WorkspaceThemeProvider initialPreference={themePreference}>
           {demoMode ? <DemoBanner /> : null}
           <ParticipateBridge>{content}</ParticipateBridge>
         </WorkspaceThemeProvider>
