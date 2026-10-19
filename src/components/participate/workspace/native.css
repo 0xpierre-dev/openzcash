@@ -520,3 +520,6 @@
 /* The demo host renders without the portal top bar. */
 .oz-participate[data-demo] .participate-demo-banner { top: 0; }
 .oz-participate[data-demo] .dao-auth-help { display: none; }
+/* Without the portal shell the page background follows the workspace theme edge to edge. */
+html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="dark"]) body { background: #0f0e0c; }
+html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { background: var(--dao-canvas, #f8f6f1); }
