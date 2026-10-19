@@ -562,3 +562,16 @@ html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { 
 .oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label { flex-direction: row; justify-content: flex-start; align-items: center; gap: 10px; margin: 0; font-size: 13px; }
 .oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label input[type="checkbox"] { flex: none; margin: 0; }
 .oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label input[type="checkbox"] { width: 16px; height: 16px; min-height: 0; padding: 0; }
+
+/* Committee demo: one centred 1240px column for banner, header and content, and News-style headings. */
+.oz-participate[data-demo] .participate-demo-banner { padding-inline: max(22px, calc((100% - 1240px) / 2)); border-left: 0; }
+.oz-participate[data-demo] .dao-header > * { max-width: 1284px; margin-inline: auto; }
+.oz-participate[data-demo] .committee-heading { align-items: center; }
+.oz-participate[data-demo] .dao-app .committee-heading h1 { font-size: 28px; font-weight: 400; letter-spacing: -0.01em; }
+.oz-participate[data-demo] .committee-review-summary dd { font-weight: 500; }
+.oz-participate[data-demo] .committee-heading-actions { gap: 8px; }
+.oz-participate[data-demo] .dao-app .committee-heading-actions .participate-demo-reset,
+.oz-participate[data-demo] .dao-app .committee-heading-actions .committee-icon-button { min-height: 36px; height: 36px; }
+.oz-participate[data-demo] .dao-app .committee-heading-actions .committee-icon-button { width: 36px; }
+.oz-participate[data-demo] .demo-practice { max-width: 1240px; padding-inline: 22px; }
+.oz-participate[data-demo] .dao-app .demo-practice-head h1 { font-size: 28px; font-weight: 400; letter-spacing: -0.01em; }
