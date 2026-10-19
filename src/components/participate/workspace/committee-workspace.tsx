@@ -131,10 +131,12 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId, demoMode = f
           <button className="dao-button dao-button--primary" disabled={busy}>Accept invitation</button>
         </form>)}
         {data.access === "MEMBER" ? <>
-          <dl className="committee-review-summary" aria-label="Review overview">
-            {reviewSummary.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.count.toLocaleString("en-US")}</dd></div>)}
-          </dl>
-          <nav className="committee-tabs" aria-label="Committee sections">{tabs.map(item => <button key={item} type="button" aria-current={tab === item ? "page" : undefined} onClick={() => { setTab(item); setError(""); setSelected(null); }}>{tabLabels[item]}</button>)}</nav>
+          <div className="committee-nav-row">
+            <nav className="committee-tabs" aria-label="Committee sections">{tabs.map(item => <button key={item} type="button" aria-current={tab === item ? "page" : undefined} onClick={() => { setTab(item); setError(""); setSelected(null); }}>{tabLabels[item]}</button>)}</nav>
+            <dl className="committee-review-summary" aria-label="Review overview">
+              {reviewSummary.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.count.toLocaleString("en-US")}</dd></div>)}
+            </dl>
+          </div>
           {tab === "Reviews" ? <>
             <CommitteeReviewGuide data={data} onMembers={() => { setTab("Members"); setSelected(null); }} />
             <div className="committee-tools"><div className="committee-filters" aria-label="Review filters">{filters.map(item => <button type="button" key={item} aria-label={filterLabels[item]} aria-pressed={filter === item} onClick={() => { setFilter(item); setSelected(null); }}>{filterLabels[item]}<span>{data.queue.filter(p => matchesFilter(p, item)).length}</span></button>)}</div><label className="committee-search"><CommitteeIcon kind="search" /><span className="dao-sr-only">Search committee proposals</span><input type="search" placeholder="Search proposals" value={search} onChange={e => { setSearch(e.target.value); setSelected(null); }} /></label></div>
@@ -158,7 +160,7 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId, demoMode = f
                 }} /></div>
                 <div hidden={panel !== "Vote"}>{!historical && demoMode ? <DemoFillSeats proposal={proposal} onDone={async notice => { await reviewChanged(proposal.recordId); setDemoFills(count => count + 1); setNotice(notice); }} /> : null}{historical ? <CommitteeSourceDecision decision={source} /> : <SignedDecision key={demoMode ? `${proposal.recordId}:${proposal.roundId ?? "none"}:${demoFills}` : proposal.recordId} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} revision={proposal.revision} initiallyOpen compact readOnlyReason={data.demo ? "Committee operations are disabled. This admin preview cannot open reviews or sign votes." : undefined} visible={panel === "Vote"} onChanged={() => reviewChanged(proposal.recordId)} />}</div>
                 {!historical ? <div hidden={panel !== "Finish"}><ReviewFinish key={demoMode ? `${proposal.roundId ?? "none"}:${demoFills}` : undefined} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} recordId={proposal.recordId} revision={proposal.revision} roundId={proposal.roundId} visible={panel === "Finish"} /></div> : null}
-                {panel === "Discussion" ? <div className="committee-discussion-switch" aria-label="Discussion source"><button type="button" aria-pressed={discussion === "source"} onClick={() => setDiscussion("source")}>Source comments</button><button type="button" aria-pressed={discussion === "discussion"} onClick={() => setDiscussion("discussion")}>OpenZcash</button></div> : null}
+                {panel === "Discussion" ? <div className="committee-discussion-switch"><div className="committee-discussion-options" role="group" aria-label="Discussion source"><button type="button" aria-pressed={discussion === "source"} onClick={() => setDiscussion("source")}>GitHub comments</button><button type="button" aria-pressed={discussion === "discussion"} onClick={() => setDiscussion("discussion")}>Community comments</button></div><p className="committee-discussion-hint">{discussion === "source" ? "From the official application on GitHub." : "Posted by the community here on OpenZcash."}</p></div> : null}
                 <ProposalInlineDetails committeeReview key={proposal.recordId} communityId={proposal.hostId} recordId={proposal.recordId} active={panel === "Discussion" ? discussion : panel === "Proposal" ? "record" : null} onClose={closeReview} />
                 </div>
               </div> : null}

@@ -20,9 +20,9 @@ it("explains admin preview and exposes separate paths for source, discussion, vo
   expect(screen.getByText("Admin preview · Read only")).toBeTruthy();
   expect(screen.getByTestId("proposal-surface").textContent).toBe("local-host/local-proposal/record");
   fireEvent.click(screen.getByRole("tab", { name: "Discussion" }));
-  fireEvent.click(screen.getByRole("button", { name: "Source comments" }));
+  fireEvent.click(screen.getByRole("button", { name: "GitHub comments" }));
   expect(screen.getByTestId("proposal-surface").textContent).toBe("local-host/local-proposal/source");
-  fireEvent.click(screen.getByRole("button", { name: "OpenZcash" }));
+  fireEvent.click(screen.getByRole("button", { name: "Community comments" }));
   expect(screen.getByTestId("proposal-surface").textContent).toBe("local-host/local-proposal/discussion");
   fireEvent.click(screen.getByRole("tab", { name: "Vote" }));
   expect(screen.getByText(/This admin preview cannot open reviews or sign votes/)).toBeTruthy();
