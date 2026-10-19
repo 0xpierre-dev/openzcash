@@ -534,3 +534,6 @@ html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { 
 .oz-participate .dao-app .committee-label-chip:hover { opacity: 0.85; }
 .oz-participate .dao-app .committee-label-chip[aria-pressed="true"] { border-color: var(--dao-gold); opacity: 1; }
 .oz-participate .dao-app .committee-label-chip > span[aria-hidden] { padding: 0 4px; color: var(--dao-gold); font-size: 12px; }
+@media (prefers-color-scheme: dark) {
+  html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="system"]) body { background: #0f0e0c; }
+}
