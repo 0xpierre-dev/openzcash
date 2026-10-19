@@ -10,6 +10,7 @@ describe("committee demo deployment flag", () => {
   });
   it.each([
     "/zcg/participate",
+    "/api",
     "/api/participate/committee",
     "/api/participate/demo",
     "/api/auth/email/request",

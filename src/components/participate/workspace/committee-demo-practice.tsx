@@ -88,6 +88,7 @@ export function DemoPractice({
   const [result, setResult] = useState<DecisionState | null>(null);
   const [progress, setProgress] = useState<Seat[] | null>(null);
   const [outcome, setOutcome] = useState<Outcome>("SPLIT");
+  const outcomeRef = useRef<Outcome>("SPLIT");
   const [adding, setAdding] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -106,6 +107,29 @@ export function DemoPractice({
     );
   }, []);
 
+  /** Signs the remaining TEST seats one per request; also resumes after a reload or a failed request. */
+  const fillSeats = useCallback(async (round: Practice, alreadySigned: number) => {
+    if (filling.current) return;
+    filling.current = true;
+    setBusy(true);
+    setError("");
+    // Seats that signed before a reload show as already signed.
+    setProgress(Array.from({ length: Math.max(0, alreadySigned - 1) }, (_, index) => ({ seat: `Test seat ${index + 2}`, choice: "signed" })));
+    try {
+      for (let guard = 0; guard < 4; guard++) {
+        const step = await passkeyFetch<{ signed: Seat[]; remaining: number }>(demoEndpoint, { action: "fill", recordId: round.recordId, outcome: outcomeRef.current, limit: 1 });
+        setProgress((previous) => [...(previous ?? []), ...step.signed]);
+        if (!step.remaining) break;
+      }
+      await loadResult(round);
+    } catch (cause) {
+      setError(explain(cause));
+    } finally {
+      filling.current = false;
+      setBusy(false);
+    }
+  }, [loadResult]);
+
   const start = useCallback(
     async (fresh = false) => {
       setBusy(true);
@@ -120,13 +144,18 @@ export function DemoPractice({
         });
         setPractice(round);
         if (round.complete) await loadResult(round);
+        else if (round.signed > 0) {
+          // The tester already voted (page reloaded mid-fill): continue with the test seats.
+          const state = await passkeyFetch<DecisionState>(`${archiveEndpoint(round)}/decisions?revision=${round.revision}`, undefined, "GET");
+          if (state.myChoice) { setBusy(false); await fillSeats(round, round.signed); return; }
+        }
       } catch (cause) {
         setError(explain(cause));
       } finally {
         setBusy(false);
       }
     },
-    [loadResult],
+    [loadResult, fillSeats],
   );
 
   useEffect(() => {
@@ -138,32 +167,19 @@ export function DemoPractice({
 
   async function afterVote() {
     if (!practice || filling.current) return;
-    const state = await passkeyFetch<DecisionState>(
-      `${archiveEndpoint(practice)}/decisions?revision=${practice.revision}`,
-      undefined,
-      "GET",
-    );
-    if (!state.myChoice) return;
-    filling.current = true;
+    const state = await passkeyFetch<DecisionState>(`${archiveEndpoint(practice)}/decisions?revision=${practice.revision}`, undefined, "GET");
+    if (state.myChoice) await fillSeats(practice, 1);
+  }
+
+  async function signOut() {
     setBusy(true);
-    setError("");
-    setProgress([]);
     try {
-      for (let guard = 0; guard < 4; guard++) {
-        const step = await passkeyFetch<{ signed: Seat[]; remaining: number }>(
-          demoEndpoint,
-          { action: "fill", recordId: practice.recordId, outcome, limit: 1 },
-        );
-        setProgress((previous) => [...(previous ?? []), ...step.signed]);
-        if (!step.remaining) break;
-      }
-      await loadResult(practice);
-    } catch (cause) {
-      setError(explain(cause));
-    } finally {
-      filling.current = false;
-      setBusy(false);
-    }
+      const response = await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin", cache: "no-store",
+        headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ next: PRACTICE_PATH }) });
+      if (!response.ok) throw new Error("SIGN_OUT_FAILED");
+      router.refresh();
+    } catch { setError("Could not sign out. Try again."); }
+    finally { setBusy(false); }
   }
 
   const current = !signedIn ? 0 : !ready ? 1 : result?.tally ? 3 : 2;
@@ -192,6 +208,9 @@ export function DemoPractice({
             >
               Full committee workspace →
             </a>
+            <button type="button" className="dao-text-button" disabled={busy} onClick={() => void signOut()}>
+              Sign out
+            </button>
           </div>
         ) : null}
       </header>
@@ -226,10 +245,15 @@ export function DemoPractice({
             Face ID or your device PIN.
           </p>
           {committee?.access !== "MEMBER" ? (
-            <p className="dao-form-error" role="alert">
-              This account could not take a demo seat. Sign in with another
-              email.
-            </p>
+            <>
+              <p className="dao-form-error" role="alert">
+                This account could not take a demo seat. Sign in with another
+                email.
+              </p>
+              <button type="button" className="dao-button" disabled={busy} onClick={() => void signOut()}>
+                Sign out
+              </button>
+            </>
           ) : adding ? (
             <PasskeyConfirmationForm
               onComplete={() => router.refresh()}
@@ -296,7 +320,7 @@ export function DemoPractice({
                     <select
                       value={outcome}
                       onChange={(event) =>
-                        setOutcome(event.target.value as Outcome)
+                        { outcomeRef.current = event.target.value as Outcome; setOutcome(outcomeRef.current); }
                       }
                     >
                       {outcomes.map((item) => (

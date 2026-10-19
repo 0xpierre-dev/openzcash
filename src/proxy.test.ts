@@ -74,7 +74,7 @@ describe("committee demo host", () => {
       expect(response.headers.get("location")).toBe("https://demo.openzcash.org/zcg/participate?view=practice");
       expect(response.headers.get("x-robots-tag")).toContain("noindex");
     }
-    for (const path of ["/zcg/participate", "/api/participate/demo", "/api/participate/sheet-handoff", "/api/auth/session", "/api/communities/host/archives/participation", "/brand/zcash-secondary-yellow.svg"]) {
+    for (const path of ["/zcg/participate", "/api", "/api/participate/demo", "/api/participate/sheet-handoff", "/api/auth/session", "/api/communities/host/archives/participation", "/brand/zcash-secondary-yellow.svg"]) {
       const response = proxy(new NextRequest(`https://demo.openzcash.org${path}`));
       expect(response.status).toBe(200);
       expect(response.headers.get("x-robots-tag")).toContain("noindex");

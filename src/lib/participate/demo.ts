@@ -26,7 +26,8 @@ const DEMO_PREFIXES = [
 ];
 
 export function demoPathAllowed(pathname: string): boolean {
-  if (pathname === "/zcg/participate") return true;
+  // `/api` is the Railway healthcheck (railway.toml); it must answer 200, not redirect.
+  if (pathname === "/zcg/participate" || pathname === "/api") return true;
   if (DEMO_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return true;
   // Public files such as icons and fonts, never pages.
   return (

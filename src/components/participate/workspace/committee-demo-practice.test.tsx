@@ -158,3 +158,25 @@ it("opens a practice round, signs the four test seats one by one after the vote 
     }),
   );
 });
+
+it("resumes the test seats after a reload once the tester has already voted", async () => {
+  let seat = 1;
+  api.fetch.mockImplementation(async (url: string, body?: { action?: string }) => {
+    if (url === "/api/participate/demo" && body?.action === "practice") return { ...round, signed: 2 };
+    if (url === "/api/participate/demo" && body?.action === "fill") { seat++; return { signed: [{ seat: `Test seat ${seat + 1}`, choice: "REJECT" }], remaining: 4 - seat }; }
+    return seat < 4 ? { ...published, tally: undefined } : published;
+  });
+  render(<DemoPractice committee={member(true)} signedIn />);
+  await screen.findByRole("heading", { name: "Approved · 3 of 5 approve" });
+  expect(api.fetch.mock.calls.filter(([, body]) => body?.action === "fill")).toHaveLength(3);
+  expect(screen.queryByText("Signed vote form")).toBeNull();
+});
+
+it("lets an account without a demo seat sign out and switch emails", async () => {
+  const logout = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+  render(<DemoPractice committee={{ ...member(false), access: "DENIED" }} signedIn />);
+  fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+  await waitFor(() => expect(logout).toHaveBeenCalledWith("/api/auth/logout", expect.objectContaining({ method: "POST" })));
+  logout.mockRestore();
+});
+
