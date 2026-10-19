@@ -484,3 +484,39 @@
   .oz-participate .participate-demo-banner { position: static; padding: 10px 16px; }
   .oz-participate .participate-demo-fill-actions, .oz-participate .participate-demo-fill-actions label, .oz-participate .participate-demo-fill-actions select, .oz-participate .participate-demo-fill-actions button { width: 100%; }
 }
+
+/* Committee demo: guided practice page and quieter account settings. */
+.oz-participate[data-demo] .dao-account-credits { display: none; }
+.oz-participate .demo-practice { display: grid; gap: 18px; max-width: 880px; margin: 0 auto; padding: 32px 22px 64px; }
+.oz-participate .demo-practice-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.oz-participate .dao-app .demo-practice-head h1, .oz-participate .demo-practice-head h1 { margin: 0; color: var(--dao-ink); font-size: 28px; font-weight: 600; letter-spacing: -0.01em; }
+.oz-participate .demo-practice-head p { margin: 6px 0 0; color: var(--dao-muted); font-size: 15px; }
+.oz-participate .demo-practice-tools { display: flex; align-items: center; gap: 14px; }
+.oz-participate .demo-practice-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.oz-participate .demo-practice-steps li { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--dao-line); border-radius: 10px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .demo-practice-steps li span { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--dao-soft); color: var(--dao-ink); font-size: 12px; font-weight: 600; }
+.oz-participate .demo-practice-steps li[data-state="current"] { border-color: var(--dao-gold); color: var(--dao-ink); }
+.oz-participate .demo-practice-steps li[data-state="current"] span { background: var(--dao-gold); color: #171613; }
+.oz-participate .demo-practice-steps li[data-state="done"] { color: var(--dao-ink); }
+.oz-participate .demo-practice-steps li[data-state="done"] span { background: var(--dao-positive-soft, var(--dao-soft)); color: var(--dao-positive, var(--dao-ink)); }
+.oz-participate .demo-practice-card { display: grid; gap: 12px; padding: 24px 26px; border: 1px solid var(--dao-line); border-radius: 14px; background: var(--dao-paper); }
+.oz-participate .demo-practice-card--narrow { max-width: 520px; }
+.oz-participate .dao-app .demo-practice-card h2, .oz-participate .demo-practice-card h2 { margin: 0; color: var(--dao-ink); font-size: 21px; font-weight: 600; }
+.oz-participate .demo-practice-card > p { margin: 0; color: var(--dao-muted); font-size: 14px; line-height: 1.6; }
+.oz-participate .demo-practice-card > .dao-button--primary { justify-self: start; }
+.oz-participate .demo-practice-kicker { color: var(--dao-muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.oz-participate .demo-practice-outcome { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .demo-practice-outcome select { min-height: 36px; padding: 0 10px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-paper); color: var(--dao-ink); font: inherit; font-size: 13px; }
+.oz-participate .demo-practice-progress { display: grid; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.oz-participate .demo-practice-progress li { padding: 10px 14px; border-radius: 8px; background: var(--dao-soft); color: var(--dao-muted); font-size: 14px; }
+.oz-participate .demo-practice-progress li[data-state="done"] { color: var(--dao-ink); }
+.oz-participate .demo-practice-progress li[data-state="done"]::before { content: "✓ "; color: var(--dao-positive, var(--dao-gold)); }
+.oz-participate .demo-practice-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+@media (max-width: 640px) {
+  .oz-participate .demo-practice { padding: 20px 16px 48px; }
+  .oz-participate .demo-practice-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .oz-participate .demo-practice-actions > * { flex: 1 1 100%; }
+}
+/* The demo host renders without the portal top bar. */
+.oz-participate[data-demo] .participate-demo-banner { top: 0; }
+.oz-participate[data-demo] .dao-auth-help { display: none; }

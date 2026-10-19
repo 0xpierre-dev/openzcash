@@ -12,7 +12,7 @@ export function participateDemoMode(
   return env.PARTICIPATE_DEMO_ENVIRONMENT === "true";
 }
 
-export const DEMO_HOME = "/zcg/participate?view=committee";
+export const DEMO_HOME = "/zcg/participate?view=practice";
 
 // The demo host serves Participate only: its page, the pilot's proxied APIs,
 // the portal's own Participate routes, the verifier downloads and static files.

@@ -79,6 +79,7 @@ export default async function RootLayout({
         <TapFeedback />
         <ShellGate
           isAdmin={isAdmin}
+          bare={participateDemoMode()}
           isPreview={process.env.OPENZCASH_ENV === "redesign"}
           footer={
             <Suspense

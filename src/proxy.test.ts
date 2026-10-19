@@ -71,7 +71,7 @@ describe("committee demo host", () => {
     for (const path of ["/", "/zcg", "/zarvis", "/zcg/participate/zcg-github-478", "/api/zarvis/chat", "/coinholders"]) {
       const response = proxy(new NextRequest(`https://demo.openzcash.org${path}`));
       expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe("https://demo.openzcash.org/zcg/participate?view=committee");
+      expect(response.headers.get("location")).toBe("https://demo.openzcash.org/zcg/participate?view=practice");
       expect(response.headers.get("x-robots-tag")).toContain("noindex");
     }
     for (const path of ["/zcg/participate", "/api/participate/demo", "/api/participate/sheet-handoff", "/api/auth/session", "/api/communities/host/archives/participation", "/brand/zcash-secondary-yellow.svg"]) {
