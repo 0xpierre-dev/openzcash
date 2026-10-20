@@ -1,0 +1,854 @@
+[
+  {
+    "id": "cash-online",
+    "theme": "cash",
+    "audiences": [
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Send the money. Keep your space.",
+      "pt-BR": "Envie o dinheiro. Preserve seu espaço.",
+      "es": "Envía el dinero. Conserva tu espacio."
+    },
+    "context": {
+      "en": "For everyday payments, shared expenses and first conversations about Zcash.",
+      "pt-BR": "Para pagamentos cotidianos, despesas compartilhadas e primeiras conversas sobre Zcash.",
+      "es": "Para pagos cotidianos, gastos compartidos y primeras conversaciones sobre Zcash."
+    },
+    "approach": {
+      "en": "The payment can travel. Your personal life does not have to travel with it.",
+      "pt-BR": "O pagamento pode circular. Sua vida pessoal não precisa ir junto.",
+      "es": "El pago puede viajar. Tu vida personal no tiene que ir con él."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash brings a simple expectation to digital money: a payment can reach another person without putting its private details on public display.",
+        "30s": "Zcash brings a simple expectation to digital money: a payment can reach another person without putting its private details on public display. Splitting lunch or paying someone back should not require a public account of your life. With a fully shielded Zcash transfer, the sender, recipient and amount stay off the public record while the network verifies the payment.",
+        "60s": "Zcash brings a simple expectation to digital money: a payment can reach another person without putting its private details on public display. Splitting lunch or paying someone back should not require a public account of your life. With a fully shielded Zcash transfer, the sender, recipient and amount stay off the public record while the network verifies the payment.\n\nThat makes privacy part of an ordinary exchange, rather than something reserved for exceptional situations. Start with a wallet that supports shielded transfers and check the payment details before sending."
+      },
+      "pt-BR": {
+        "sentence": "Zcash leva uma expectativa simples ao dinheiro digital: um pagamento pode chegar a outra pessoa sem colocar seus detalhes privados em exposição pública.",
+        "30s": "Zcash leva uma expectativa simples ao dinheiro digital: um pagamento pode chegar a outra pessoa sem colocar seus detalhes privados em exposição pública. Dividir um almoço ou devolver dinheiro a alguém não deveria exigir um relato público da sua vida. Em uma transferência Zcash totalmente protegida, remetente, destinatário e valor ficam fora do registro público enquanto a rede verifica o pagamento.",
+        "60s": "Zcash leva uma expectativa simples ao dinheiro digital: um pagamento pode chegar a outra pessoa sem colocar seus detalhes privados em exposição pública. Dividir um almoço ou devolver dinheiro a alguém não deveria exigir um relato público da sua vida. Em uma transferência Zcash totalmente protegida, remetente, destinatário e valor ficam fora do registro público enquanto a rede verifica o pagamento.\n\nAssim, a privacidade faz parte de uma troca comum, sem ficar reservada a situações excepcionais. Comece com uma carteira compatível com transferências protegidas e confira os detalhes antes de enviar."
+      },
+      "es": {
+        "sentence": "Zcash lleva una expectativa sencilla al dinero digital: un pago puede llegar a otra persona sin poner sus detalles privados a la vista de todos.",
+        "30s": "Zcash lleva una expectativa sencilla al dinero digital: un pago puede llegar a otra persona sin poner sus detalles privados a la vista de todos. Compartir el gasto de un almuerzo o devolver dinero no debería exigir un relato público de tu vida. En una transferencia Zcash completamente blindada, remitente, destinatario e importe quedan fuera del registro público mientras la red verifica el pago.",
+        "60s": "Zcash lleva una expectativa sencilla al dinero digital: un pago puede llegar a otra persona sin poner sus detalles privados a la vista de todos. Compartir el gasto de un almuerzo o devolver dinero no debería exigir un relato público de tu vida. En una transferencia Zcash completamente blindada, remitente, destinatario e importe quedan fuera del registro público mientras la red verifica el pago.\n\nAsí, la privacidad forma parte de un intercambio cotidiano, sin quedar reservada para situaciones excepcionales. Empieza con una cartera compatible con transferencias blindadas y comprueba los detalles antes de enviar."
+      }
+    }
+  },
+  {
+    "id": "bitcoin-with-privacy",
+    "theme": "bitcoin",
+    "audiences": [
+      "bitcoin"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Keep the open network. Rethink the exposure.",
+      "pt-BR": "Mantenha a rede aberta. Repense a exposição.",
+      "es": "Conserva la red abierta. Replantea la exposición."
+    },
+    "context": {
+      "en": "For people familiar with Bitcoin, public ledgers and monetary scarcity.",
+      "pt-BR": "Para quem conhece Bitcoin, registros públicos e escassez monetária.",
+      "es": "Para quienes conocen Bitcoin, los registros públicos y la escasez monetaria."
+    },
+    "approach": {
+      "en": "A public network can move money without making every payment a public story.",
+      "pt-BR": "Uma rede pública pode movimentar dinheiro sem transformar cada pagamento em uma história pública.",
+      "es": "Una red pública puede mover dinero sin convertir cada pago en una historia pública."
+    },
+    "translations": {
+      "en": {
+        "sentence": "If Bitcoin got you interested in open money, Zcash adds another question: how much should a payment reveal to everyone else?",
+        "30s": "If Bitcoin got you interested in open money, Zcash adds another question: how much should a payment reveal to everyone else? Zcash has its own network and currency, ZEC. Its shielded transfers keep sensitive payment details off the public ledger while allowing the network to verify the transaction. It is a way to explore digital money where participation in a public network does not require public payment details.",
+        "60s": "If Bitcoin got you interested in open money, Zcash adds another question: how much should a payment reveal to everyone else? Zcash has its own network and currency, ZEC. Its shielded transfers keep sensitive payment details off the public ledger while allowing the network to verify the transaction. It is a way to explore digital money where participation in a public network does not require public payment details.\n\nThe useful comparison is about design choices: what the system validates and what the public can learn. You can value an open network and still want a private financial life."
+      },
+      "pt-BR": {
+        "sentence": "Se o Bitcoin despertou seu interesse por dinheiro aberto, o Zcash acrescenta uma pergunta: quanto um pagamento deveria revelar para todo mundo?",
+        "30s": "Se o Bitcoin despertou seu interesse por dinheiro aberto, o Zcash acrescenta uma pergunta: quanto um pagamento deveria revelar para todo mundo? Zcash tem sua própria rede e moeda, ZEC. Suas transferências protegidas mantêm detalhes sensíveis fora do registro público e permitem que a rede verifique a transação. É uma forma de explorar dinheiro digital em que participar de uma rede pública não exige expor os detalhes do pagamento.",
+        "60s": "Se o Bitcoin despertou seu interesse por dinheiro aberto, o Zcash acrescenta uma pergunta: quanto um pagamento deveria revelar para todo mundo? Zcash tem sua própria rede e moeda, ZEC. Suas transferências protegidas mantêm detalhes sensíveis fora do registro público e permitem que a rede verifique a transação. É uma forma de explorar dinheiro digital em que participar de uma rede pública não exige expor os detalhes do pagamento.\n\nA comparação útil está nas escolhas de projeto: o que o sistema valida e o que o público pode descobrir. É possível valorizar uma rede aberta e ainda querer uma vida financeira privada."
+      },
+      "es": {
+        "sentence": "Si Bitcoin despertó tu interés por el dinero abierto, Zcash añade una pregunta: ¿cuánto debería revelar un pago al resto del mundo?",
+        "30s": "Si Bitcoin despertó tu interés por el dinero abierto, Zcash añade una pregunta: ¿cuánto debería revelar un pago al resto del mundo? Zcash tiene su propia red y moneda, ZEC. Sus transferencias blindadas mantienen los detalles sensibles fuera del registro público y permiten que la red verifique la transacción. Es una forma de explorar dinero digital donde participar en una red pública no exige exponer los detalles del pago.",
+        "60s": "Si Bitcoin despertó tu interés por el dinero abierto, Zcash añade una pregunta: ¿cuánto debería revelar un pago al resto del mundo? Zcash tiene su propia red y moneda, ZEC. Sus transferencias blindadas mantienen los detalles sensibles fuera del registro público y permiten que la red verifique la transacción. Es una forma de explorar dinero digital donde participar en una red pública no exige exponer los detalles del pago.\n\nLa comparación útil está en las decisiones de diseño: qué valida el sistema y qué puede descubrir el público. Es posible valorar una red abierta y querer una vida financiera privada."
+      }
+    }
+  },
+  {
+    "id": "verify-without-exposing",
+    "theme": "cryptography",
+    "audiences": [
+      "developers"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Verify the rules, not a public dossier",
+      "pt-BR": "Verifique as regras, sem um dossiê público",
+      "es": "Verifica las reglas, sin un expediente público"
+    },
+    "context": {
+      "en": "For developers, curious builders and anyone asking how private payments work.",
+      "pt-BR": "Para desenvolvedores, pessoas que criam produtos e quem quer entender pagamentos privados.",
+      "es": "Para desarrolladores, creadores de productos y quienes quieren entender los pagos privados."
+    },
+    "approach": {
+      "en": "Let the network verify the payment. Keep the personal details with the people involved.",
+      "pt-BR": "Deixe a rede verificar o pagamento. Mantenha os detalhes pessoais com quem participa dele.",
+      "es": "Deja que la red verifique el pago. Mantén los detalles personales entre quienes participan."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash uses zero-knowledge proofs to help verify shielded payments without publishing the private information that makes those payments possible.",
+        "30s": "Zcash uses zero-knowledge proofs to help verify shielded payments without publishing the private information that makes those payments possible. For a builder, that changes the starting point. A network needs evidence that its rules are satisfied; it does not necessarily need to expose the people and amounts behind every transfer. Zcash puts that distinction into a working payment system, alongside signatures and other protocol checks.",
+        "60s": "Zcash uses zero-knowledge proofs to help verify shielded payments without publishing the private information that makes those payments possible. For a builder, that changes the starting point. A network needs evidence that its rules are satisfied; it does not necessarily need to expose the people and amounts behind every transfer. Zcash puts that distinction into a working payment system, alongside signatures and other protocol checks.\n\nThe opportunity is to build useful payment experiences with less public disclosure built into the foundation. Start by separating what the application needs to know from what everyone else needs to see."
+      },
+      "pt-BR": {
+        "sentence": "Zcash usa provas de conhecimento zero para ajudar a verificar pagamentos protegidos sem publicar as informações privadas que tornam esses pagamentos possíveis.",
+        "30s": "Zcash usa provas de conhecimento zero para ajudar a verificar pagamentos protegidos sem publicar as informações privadas que tornam esses pagamentos possíveis. Para quem desenvolve, isso muda o ponto de partida. Uma rede precisa de evidências de que suas regras foram cumpridas; não precisa necessariamente expor as pessoas e os valores de cada transferência. Zcash aplica essa distinção a um sistema de pagamentos, junto de assinaturas e outras verificações do protocolo.",
+        "60s": "Zcash usa provas de conhecimento zero para ajudar a verificar pagamentos protegidos sem publicar as informações privadas que tornam esses pagamentos possíveis. Para quem desenvolve, isso muda o ponto de partida. Uma rede precisa de evidências de que suas regras foram cumpridas; não precisa necessariamente expor as pessoas e os valores de cada transferência. Zcash aplica essa distinção a um sistema de pagamentos, junto de assinaturas e outras verificações do protocolo.\n\nA oportunidade é criar experiências úteis de pagamento com menos exposição pública desde a base. Comece separando o que o aplicativo precisa saber do que todas as outras pessoas precisam ver."
+      },
+      "es": {
+        "sentence": "Zcash utiliza pruebas de conocimiento cero para ayudar a verificar pagos blindados sin publicar la información privada que hace posibles esos pagos.",
+        "30s": "Zcash utiliza pruebas de conocimiento cero para ayudar a verificar pagos blindados sin publicar la información privada que hace posibles esos pagos. Para quien desarrolla, eso cambia el punto de partida. Una red necesita pruebas de que sus reglas se cumplen; no necesita necesariamente exponer a las personas y los importes de cada transferencia. Zcash aplica esa distinción a un sistema de pagos, junto con firmas y otras comprobaciones del protocolo.",
+        "60s": "Zcash utiliza pruebas de conocimiento cero para ayudar a verificar pagos blindados sin publicar la información privada que hace posibles esos pagos. Para quien desarrolla, eso cambia el punto de partida. Una red necesita pruebas de que sus reglas se cumplen; no necesita necesariamente exponer a las personas y los importes de cada transferencia. Zcash aplica esa distinción a un sistema de pagos, junto con firmas y otras comprobaciones del protocolo.\n\nLa oportunidad es crear experiencias de pago útiles con menos exposición pública desde la base. Empieza separando lo que necesita saber la aplicación de lo que necesitan ver todas las demás personas."
+      }
+    }
+  },
+  {
+    "id": "donate-with-dignity",
+    "theme": "freedom",
+    "audiences": [
+      "organizations",
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Let the support be the story",
+      "pt-BR": "Deixe o apoio ser a história",
+      "es": "Que el apoyo sea la historia"
+    },
+    "context": {
+      "en": "For community support, independent work and conversations about personal autonomy.",
+      "pt-BR": "Para apoio comunitário, trabalho independente e conversas sobre autonomia pessoal.",
+      "es": "Para el apoyo comunitario, el trabajo independiente y las conversaciones sobre autonomía personal."
+    },
+    "approach": {
+      "en": "A contribution can speak for what you believe in without publishing your financial life.",
+      "pt-BR": "Uma contribuição pode expressar o que você valoriza sem publicar sua vida financeira.",
+      "es": "Una contribución puede expresar lo que valoras sin publicar tu vida financiera."
+    },
+    "translations": {
+      "en": {
+        "sentence": "A donation should strengthen a cause, not automatically turn the supporter’s payment details into a public record; Zcash offers a shielded way to give.",
+        "30s": "A donation should strengthen a cause, not automatically turn the supporter’s payment details into a public record; Zcash offers a shielded way to give. A community project needs resources to keep going. A supporter may want to help without broadcasting the amount or the connection on a public blockchain. A fully shielded Zcash donation can protect those details while still delivering funds to the recipient. Privacy makes room for quieter participation.",
+        "60s": "A donation should strengthen a cause, not automatically turn the supporter’s payment details into a public record; Zcash offers a shielded way to give. A community project needs resources to keep going. A supporter may want to help without broadcasting the amount or the connection on a public blockchain. A fully shielded Zcash donation can protect those details while still delivering funds to the recipient. Privacy makes room for quieter participation.\n\nThe organization can explain its work and how it uses funds without asking every donor to become publicly visible. Agree on any receipt or acknowledgment separately from the transfer itself."
+      },
+      "pt-BR": {
+        "sentence": "Uma doação deve fortalecer uma causa, sem transformar automaticamente os detalhes do pagamento em registro público; Zcash oferece uma forma protegida de contribuir.",
+        "30s": "Uma doação deve fortalecer uma causa, sem transformar automaticamente os detalhes do pagamento em registro público; Zcash oferece uma forma protegida de contribuir. Um projeto comunitário precisa de recursos para continuar. Alguém pode querer ajudar sem divulgar o valor ou o vínculo em uma blockchain pública. Uma doação Zcash totalmente protegida pode resguardar esses detalhes e entregar os fundos ao destinatário. A privacidade abre espaço para uma participação mais discreta.",
+        "60s": "Uma doação deve fortalecer uma causa, sem transformar automaticamente os detalhes do pagamento em registro público; Zcash oferece uma forma protegida de contribuir. Um projeto comunitário precisa de recursos para continuar. Alguém pode querer ajudar sem divulgar o valor ou o vínculo em uma blockchain pública. Uma doação Zcash totalmente protegida pode resguardar esses detalhes e entregar os fundos ao destinatário. A privacidade abre espaço para uma participação mais discreta.\n\nA organização pode explicar seu trabalho e como usa os recursos sem exigir que cada doador se torne publicamente visível. Combine recibos ou agradecimentos separadamente da transferência."
+      },
+      "es": {
+        "sentence": "Una donación debería fortalecer una causa, sin convertir automáticamente los detalles del pago en un registro público; Zcash ofrece una forma blindada de contribuir.",
+        "30s": "Una donación debería fortalecer una causa, sin convertir automáticamente los detalles del pago en un registro público; Zcash ofrece una forma blindada de contribuir. Un proyecto comunitario necesita recursos para continuar. Alguien puede querer ayudar sin difundir el importe o el vínculo en una blockchain pública. Una donación Zcash completamente blindada puede proteger esos detalles y entregar los fondos al destinatario. La privacidad deja espacio para una participación más discreta.",
+        "60s": "Una donación debería fortalecer una causa, sin convertir automáticamente los detalles del pago en un registro público; Zcash ofrece una forma blindada de contribuir. Un proyecto comunitario necesita recursos para continuar. Alguien puede querer ayudar sin difundir el importe o el vínculo en una blockchain pública. Una donación Zcash completamente blindada puede proteger esos detalles y entregar los fondos al destinatario. La privacidad deja espacio para una participación más discreta.\n\nLa organización puede explicar su trabajo y cómo utiliza los fondos sin exigir que cada donante sea públicamente visible. Acuerda los recibos o agradecimientos por separado de la transferencia."
+      }
+    }
+  },
+  {
+    "id": "private-business",
+    "theme": "cash",
+    "audiences": [
+      "businesses"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "A payment is not a customer directory",
+      "pt-BR": "Pagamento não é cadastro público de clientes",
+      "es": "Un pago no es un directorio de clientes"
+    },
+    "context": {
+      "en": "For everyday payments, shared expenses and first conversations about Zcash.",
+      "pt-BR": "Para pagamentos cotidianos, despesas compartilhadas e primeiras conversas sobre Zcash.",
+      "es": "Para pagos cotidianos, gastos compartidos y primeras conversaciones sobre Zcash."
+    },
+    "approach": {
+      "en": "The payment can travel. Your personal life does not have to travel with it.",
+      "pt-BR": "O pagamento pode circular. Sua vida pessoal não precisa ir junto.",
+      "es": "El pago puede viajar. Tu vida personal no tiene que ir con él."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash lets a business receive shielded payments without publishing each customer relationship and payment amount to the public blockchain.",
+        "30s": "Zcash lets a business receive shielded payments without publishing each customer relationship and payment amount to the public blockchain. Serving a customer means exchanging value, not inviting strangers to study the transaction. A fully shielded transfer protects the sender, recipient and amount from public view. The business can still keep the records it needs through its own processes, with access designed around the people who need them.",
+        "60s": "Zcash lets a business receive shielded payments without publishing each customer relationship and payment amount to the public blockchain. Serving a customer means exchanging value, not inviting strangers to study the transaction. A fully shielded transfer protects the sender, recipient and amount from public view. The business can still keep the records it needs through its own processes, with access designed around the people who need them.\n\nFor a small shop or an independent service provider, this is a practical boundary between running the business and publishing its activity. Wallet support, bookkeeping and the checkout experience all need planning."
+      },
+      "pt-BR": {
+        "sentence": "Zcash permite que um negócio receba pagamentos protegidos sem publicar cada relação com clientes e cada valor na blockchain pública.",
+        "30s": "Zcash permite que um negócio receba pagamentos protegidos sem publicar cada relação com clientes e cada valor na blockchain pública. Atender um cliente significa trocar valor, sem convidar desconhecidos a estudar a transação. Uma transferência totalmente protegida resguarda remetente, destinatário e valor da visão pública. O negócio pode manter os registros necessários em seus próprios processos, com acesso pensado para quem precisa deles.",
+        "60s": "Zcash permite que um negócio receba pagamentos protegidos sem publicar cada relação com clientes e cada valor na blockchain pública. Atender um cliente significa trocar valor, sem convidar desconhecidos a estudar a transação. Uma transferência totalmente protegida resguarda remetente, destinatário e valor da visão pública. O negócio pode manter os registros necessários em seus próprios processos, com acesso pensado para quem precisa deles.\n\nPara uma pequena loja ou um prestador de serviços, isso cria um limite prático entre operar o negócio e publicar sua atividade. Suporte da carteira, contabilidade e experiência de pagamento precisam de planejamento."
+      },
+      "es": {
+        "sentence": "Zcash permite que un negocio reciba pagos blindados sin publicar cada relación con sus clientes y cada importe en la blockchain pública.",
+        "30s": "Zcash permite que un negocio reciba pagos blindados sin publicar cada relación con sus clientes y cada importe en la blockchain pública. Atender a un cliente significa intercambiar valor, sin invitar a desconocidos a estudiar la transacción. Una transferencia completamente blindada protege al remitente, al destinatario y al importe de la vista pública. El negocio puede mantener los registros necesarios en sus propios procesos, con acceso pensado para quienes los necesitan.",
+        "60s": "Zcash permite que un negocio reciba pagos blindados sin publicar cada relación con sus clientes y cada importe en la blockchain pública. Atender a un cliente significa intercambiar valor, sin invitar a desconocidos a estudiar la transacción. Una transferencia completamente blindada protege al remitente, al destinatario y al importe de la vista pública. El negocio puede mantener los registros necesarios en sus propios procesos, con acceso pensado para quienes los necesitan.\n\nPara una pequeña tienda o un profesional independiente, esto crea un límite práctico entre operar el negocio y publicar su actividad. El soporte de la cartera, la contabilidad y la experiencia de pago requieren planificación."
+      }
+    }
+  },
+  {
+    "id": "selective-disclosure",
+    "theme": "disclosure",
+    "audiences": [
+      "businesses",
+      "organizations"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Share access with intention",
+      "pt-BR": "Compartilhe acesso com intenção",
+      "es": "Comparte acceso con intención"
+    },
+    "context": {
+      "en": "For teams, organizations and people who need to share financial information responsibly.",
+      "pt-BR": "Para equipes, organizações e pessoas que precisam compartilhar informações financeiras com responsabilidade.",
+      "es": "Para equipos, organizaciones y personas que necesitan compartir información financiera con responsabilidad."
+    },
+    "approach": {
+      "en": "Keeping a record and publishing it to the world are two different decisions.",
+      "pt-BR": "Guardar um registro e publicá-lo para o mundo são duas decisões diferentes.",
+      "es": "Guardar un registro y publicarlo para todo el mundo son dos decisiones distintas."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash separates the ability to view certain payment information from the ability to spend, giving teams more deliberate ways to share financial access.",
+        "30s": "Zcash separates the ability to view certain payment information from the ability to spend, giving teams more deliberate ways to share financial access. A team may need someone to inspect records without giving them control of the funds. Viewing keys can support that distinction. This makes a useful starting point for conversations about privacy and accountability: decide who needs access, understand what the key reveals, and keep spending authority separate.",
+        "60s": "Zcash separates the ability to view certain payment information from the ability to spend, giving teams more deliberate ways to share financial access. A team may need someone to inspect records without giving them control of the funds. Viewing keys can support that distinction. This makes a useful starting point for conversations about privacy and accountability: decide who needs access, understand what the key reveals, and keep spending authority separate.\n\nThe goal is a considered access policy, not a public feed of every transaction. Test the exact wallet and key type before building a reporting process around it."
+      },
+      "pt-BR": {
+        "sentence": "Zcash separa a possibilidade de visualizar certas informações de pagamento da permissão para gastar, oferecendo às equipes formas mais conscientes de compartilhar acesso financeiro.",
+        "30s": "Zcash separa a possibilidade de visualizar certas informações de pagamento da permissão para gastar, oferecendo às equipes formas mais conscientes de compartilhar acesso financeiro. Uma equipe pode precisar que alguém examine registros sem controlar os fundos. Chaves de visualização podem apoiar essa separação. É um bom ponto de partida para falar de privacidade e prestação de contas: definir quem precisa de acesso, entender o que a chave revela e separar a autoridade para gastar.",
+        "60s": "Zcash separa a possibilidade de visualizar certas informações de pagamento da permissão para gastar, oferecendo às equipes formas mais conscientes de compartilhar acesso financeiro. Uma equipe pode precisar que alguém examine registros sem controlar os fundos. Chaves de visualização podem apoiar essa separação. É um bom ponto de partida para falar de privacidade e prestação de contas: definir quem precisa de acesso, entender o que a chave revela e separar a autoridade para gastar.\n\nO objetivo é uma política de acesso bem pensada, sem um fluxo público de todas as transações. Teste a carteira e o tipo exato de chave antes de criar um processo de prestação de contas."
+      },
+      "es": {
+        "sentence": "Zcash separa la posibilidad de ver cierta información de pagos del permiso para gastar, ofreciendo a los equipos formas más deliberadas de compartir acceso financiero.",
+        "30s": "Zcash separa la posibilidad de ver cierta información de pagos del permiso para gastar, ofreciendo a los equipos formas más deliberadas de compartir acceso financiero. Un equipo puede necesitar que alguien examine registros sin controlar los fondos. Las claves de visualización pueden facilitar esa separación. Es un buen punto de partida para hablar de privacidad y rendición de cuentas: decidir quién necesita acceso, entender qué revela la clave y separar la autoridad para gastar.",
+        "60s": "Zcash separa la posibilidad de ver cierta información de pagos del permiso para gastar, ofreciendo a los equipos formas más deliberadas de compartir acceso financiero. Un equipo puede necesitar que alguien examine registros sin controlar los fondos. Las claves de visualización pueden facilitar esa separación. Es un buen punto de partida para hablar de privacidad y rendición de cuentas: decidir quién necesita acceso, entender qué revela la clave y separar la autoridad para gastar.\n\nEl objetivo es una política de acceso bien pensada, sin un flujo público de todas las transacciones. Prueba la cartera y el tipo exacto de clave antes de crear un proceso de rendición de cuentas."
+      }
+    }
+  },
+  {
+    "id": "sealed-envelope",
+    "theme": "metaphors",
+    "audiences": [
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Give the payment an envelope",
+      "pt-BR": "Dê um envelope ao pagamento",
+      "es": "Dale un sobre al pago"
+    },
+    "context": {
+      "en": "For a first introduction that begins with ordinary life instead of technical vocabulary.",
+      "pt-BR": "Para uma primeira apresentação que começa na vida cotidiana, sem vocabulário técnico.",
+      "es": "Para una primera presentación que empieza en la vida cotidiana, sin vocabulario técnico."
+    },
+    "approach": {
+      "en": "We already make room for private conversations. Payments deserve that consideration too.",
+      "pt-BR": "Já reservamos espaço para conversas privadas. Pagamentos também merecem esse cuidado.",
+      "es": "Ya dejamos espacio para conversaciones privadas. Los pagos también merecen ese cuidado."
+    },
+    "translations": {
+      "en": {
+        "sentence": "An envelope helps explain Zcash: the message reaches its recipient without being displayed to everyone along the way.",
+        "30s": "An envelope helps explain Zcash: the message reaches its recipient without being displayed to everyone along the way. For a fully shielded payment, cryptography protects the sensitive details while the network checks the transfer. The recipient gets the payment, and the public does not get its sender, recipient and amount. That is the part of the envelope comparison worth carrying into the conversation.",
+        "60s": "An envelope helps explain Zcash: the message reaches its recipient without being displayed to everyone along the way. For a fully shielded payment, cryptography protects the sensitive details while the network checks the transfer. The recipient gets the payment, and the public does not get its sender, recipient and amount. That is the part of the envelope comparison worth carrying into the conversation.\n\nYou do not need to begin with a cryptography lesson. Begin with the ordinary choice to keep something between the people involved, then explain how a shielded transfer supports that choice."
+      },
+      "pt-BR": {
+        "sentence": "Um envelope ajuda a explicar Zcash: a mensagem chega ao destinatário sem ficar exposta a todas as pessoas pelo caminho.",
+        "30s": "Um envelope ajuda a explicar Zcash: a mensagem chega ao destinatário sem ficar exposta a todas as pessoas pelo caminho. Em um pagamento totalmente protegido, a criptografia resguarda os detalhes sensíveis enquanto a rede verifica a transferência. O destinatário recebe o pagamento, e o público não recebe seu remetente, destinatário e valor. Essa é a parte da comparação com o envelope que vale levar para a conversa.",
+        "60s": "Um envelope ajuda a explicar Zcash: a mensagem chega ao destinatário sem ficar exposta a todas as pessoas pelo caminho. Em um pagamento totalmente protegido, a criptografia resguarda os detalhes sensíveis enquanto a rede verifica a transferência. O destinatário recebe o pagamento, e o público não recebe seu remetente, destinatário e valor. Essa é a parte da comparação com o envelope que vale levar para a conversa.\n\nNão é preciso começar com uma aula de criptografia. Comece pela escolha comum de manter algo entre as pessoas envolvidas e explique como uma transferência protegida apoia essa escolha."
+      },
+      "es": {
+        "sentence": "Un sobre ayuda a explicar Zcash: el mensaje llega a su destinatario sin quedar expuesto a todas las personas por el camino.",
+        "30s": "Un sobre ayuda a explicar Zcash: el mensaje llega a su destinatario sin quedar expuesto a todas las personas por el camino. En un pago completamente blindado, la criptografía protege los detalles sensibles mientras la red verifica la transferencia. El destinatario recibe el pago, y el público no recibe su remitente, destinatario e importe. Esa es la parte de la comparación con el sobre que merece llevarse a la conversación.",
+        "60s": "Un sobre ayuda a explicar Zcash: el mensaje llega a su destinatario sin quedar expuesto a todas las personas por el camino. En un pago completamente blindado, la criptografía protege los detalles sensibles mientras la red verifica la transferencia. El destinatario recibe el pago, y el público no recibe su remitente, destinatario e importe. Esa es la parte de la comparación con el sobre que merece llevarse a la conversación.\n\nNo hace falta empezar con una clase de criptografía. Empieza por la elección cotidiana de mantener algo entre las personas implicadas y explica cómo una transferencia blindada apoya esa elección."
+      }
+    }
+  },
+  {
+    "id": "privacy-in-one-line",
+    "theme": "taglines",
+    "audiences": [
+      "beginners",
+      "organizations"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Your money can move with discretion",
+      "pt-BR": "Seu dinheiro pode circular com discrição",
+      "es": "Tu dinero puede moverse con discreción"
+    },
+    "context": {
+      "en": "For event introductions, short posts and the first line of a presentation.",
+      "pt-BR": "Para apresentações em eventos, publicações curtas e a primeira frase de uma conversa.",
+      "es": "Para presentaciones en eventos, publicaciones breves y la primera frase de una conversación."
+    },
+    "approach": {
+      "en": "Start with a reason to care. Leave room for the next question.",
+      "pt-BR": "Comece com um motivo para se importar. Deixe espaço para a próxima pergunta.",
+      "es": "Empieza con un motivo para interesarse. Deja espacio para la siguiente pregunta."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash is digital money with room for a private financial life.",
+        "30s": "Zcash is digital money with room for a private financial life. That starts with shielded payments: a way to transfer value without publishing the sender, recipient and amount to everyone watching the blockchain. It gives people a practical reason to care about cryptography. You can take part in a digital payment network while sharing fewer personal financial details in public.",
+        "60s": "Zcash is digital money with room for a private financial life. That starts with shielded payments: a way to transfer value without publishing the sender, recipient and amount to everyone watching the blockchain. It gives people a practical reason to care about cryptography. You can take part in a digital payment network while sharing fewer personal financial details in public.\n\nUse the short version to open a conversation, then ask which situation matters to the listener: being paid for work, helping family or supporting a project. A concrete example makes the idea easier to explore."
+      },
+      "pt-BR": {
+        "sentence": "Zcash é dinheiro digital com espaço para uma vida financeira privada.",
+        "30s": "Zcash é dinheiro digital com espaço para uma vida financeira privada. Isso começa nos pagamentos protegidos: uma forma de transferir valor sem publicar remetente, destinatário e quantia para quem observa a blockchain. É um motivo prático para se interessar por criptografia. Você pode participar de uma rede de pagamentos digitais expondo menos detalhes financeiros pessoais em público.",
+        "60s": "Zcash é dinheiro digital com espaço para uma vida financeira privada. Isso começa nos pagamentos protegidos: uma forma de transferir valor sem publicar remetente, destinatário e quantia para quem observa a blockchain. É um motivo prático para se interessar por criptografia. Você pode participar de uma rede de pagamentos digitais expondo menos detalhes financeiros pessoais em público.\n\nUse a versão curta para abrir uma conversa e pergunte qual situação importa para a pessoa: receber por um trabalho, ajudar a família ou apoiar um projeto. Um exemplo concreto facilita explorar a ideia."
+      },
+      "es": {
+        "sentence": "Zcash es dinero digital con espacio para una vida financiera privada.",
+        "30s": "Zcash es dinero digital con espacio para una vida financiera privada. Eso empieza con los pagos blindados: una forma de transferir valor sin publicar remitente, destinatario e importe para quienes observan la blockchain. Es un motivo práctico para interesarse por la criptografía. Puedes participar en una red de pagos digitales exponiendo menos detalles financieros personales en público.",
+        "60s": "Zcash es dinero digital con espacio para una vida financiera privada. Eso empieza con los pagos blindados: una forma de transferir valor sin publicar remitente, destinatario e importe para quienes observan la blockchain. Es un motivo práctico para interesarse por la criptografía. Puedes participar en una red de pagos digitales exponiendo menos detalles financieros personales en público.\n\nUsa la versión breve para abrir una conversación y pregunta qué situación le importa a la persona: cobrar por un trabajo, ayudar a la familia o apoyar un proyecto. Un ejemplo concreto facilita explorar la idea."
+      }
+    }
+  },
+  {
+    "id": "less-data-to-profile",
+    "theme": "surveillance",
+    "audiences": [
+      "developers",
+      "organizations"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Do not make every payment a data point",
+      "pt-BR": "Nem todo pagamento precisa virar um dado público",
+      "es": "No conviertas cada pago en un dato público"
+    },
+    "context": {
+      "en": "For conversations about data collection, financial profiling and privacy over time.",
+      "pt-BR": "Para conversas sobre coleta de dados, perfis financeiros e privacidade ao longo do tempo.",
+      "es": "Para conversaciones sobre recopilación de datos, perfiles financieros y privacidad a lo largo del tiempo."
+    },
+    "approach": {
+      "en": "The best place to protect a payment detail is before it becomes public data.",
+      "pt-BR": "O melhor momento para proteger um detalhe financeiro é antes que ele vire um dado público.",
+      "es": "El mejor momento para proteger un detalle financiero es antes de que se convierta en un dato público."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash shielding reduces the public payment details available to turn a person’s activity into a financial profile.",
+        "30s": "Zcash shielding reduces the public payment details available to turn a person’s activity into a financial profile. A public transaction can remain available long after the reason for making it has passed. Those details can be collected and connected with other information. Fully shielded Zcash transfers protect the sender, recipient and amount at the point of payment, reducing what is published for others to analyze later.",
+        "60s": "Zcash shielding reduces the public payment details available to turn a person’s activity into a financial profile. A public transaction can remain available long after the reason for making it has passed. Those details can be collected and connected with other information. Fully shielded Zcash transfers protect the sender, recipient and amount at the point of payment, reducing what is published for others to analyze later.\n\nFor developers, the lesson is to minimize disclosure before trying to manage its consequences. For users, it is a choice about how much of everyday financial activity should become permanently public."
+      },
+      "pt-BR": {
+        "sentence": "A proteção do Zcash reduz os detalhes públicos de pagamentos disponíveis para transformar a atividade de alguém em um perfil financeiro.",
+        "30s": "A proteção do Zcash reduz os detalhes públicos de pagamentos disponíveis para transformar a atividade de alguém em um perfil financeiro. Uma transação pública pode continuar disponível muito depois de passar o motivo que a originou. Seus detalhes podem ser coletados e conectados a outras informações. Transferências Zcash totalmente protegidas resguardam remetente, destinatário e valor no momento do pagamento, reduzindo o que fica publicado para análises futuras.",
+        "60s": "A proteção do Zcash reduz os detalhes públicos de pagamentos disponíveis para transformar a atividade de alguém em um perfil financeiro. Uma transação pública pode continuar disponível muito depois de passar o motivo que a originou. Seus detalhes podem ser coletados e conectados a outras informações. Transferências Zcash totalmente protegidas resguardam remetente, destinatário e valor no momento do pagamento, reduzindo o que fica publicado para análises futuras.\n\nPara desenvolvedores, a lição é minimizar a exposição antes de tentar administrar suas consequências. Para usuários, é uma escolha sobre quanto da atividade financeira cotidiana deve se tornar permanentemente público."
+      },
+      "es": {
+        "sentence": "El blindaje de Zcash reduce los detalles públicos de pagos disponibles para convertir la actividad de alguien en un perfil financiero.",
+        "30s": "El blindaje de Zcash reduce los detalles públicos de pagos disponibles para convertir la actividad de alguien en un perfil financiero. Una transacción pública puede seguir disponible mucho después de que pase el motivo que la originó. Sus detalles pueden recopilarse y conectarse con otra información. Las transferencias Zcash completamente blindadas protegen remitente, destinatario e importe al pagar, reduciendo lo publicado para análisis futuros.",
+        "60s": "El blindaje de Zcash reduce los detalles públicos de pagos disponibles para convertir la actividad de alguien en un perfil financiero. Una transacción pública puede seguir disponible mucho después de que pase el motivo que la originó. Sus detalles pueden recopilarse y conectarse con otra información. Las transferencias Zcash completamente blindadas protegen remitente, destinatario e importe al pagar, reduciendo lo publicado para análisis futuros.\n\nPara desarrolladores, la lección es minimizar la exposición antes de intentar gestionar sus consecuencias. Para usuarios, es una elección sobre cuánto de su actividad financiera cotidiana debería hacerse público de forma permanente."
+      }
+    }
+  },
+  {
+    "id": "scarcity-with-context",
+    "theme": "bitcoin",
+    "audiences": [
+      "bitcoin"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Two questions worth keeping separate",
+      "pt-BR": "Duas perguntas que merecem respostas próprias",
+      "es": "Dos preguntas que merecen respuestas propias"
+    },
+    "context": {
+      "en": "For people familiar with Bitcoin, public ledgers and monetary scarcity.",
+      "pt-BR": "Para quem conhece Bitcoin, registros públicos e escassez monetária.",
+      "es": "Para quienes conocen Bitcoin, los registros públicos y la escasez monetaria."
+    },
+    "approach": {
+      "en": "A public network can move money without making every payment a public story.",
+      "pt-BR": "Uma rede pública pode movimentar dinheiro sem transformar cada pagamento em uma história pública.",
+      "es": "Una red pública puede mover dinero sin convertir cada pago en una historia pública."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash lets you ask both how money is issued and how much a payment reveals: its supply rules and shielded transfers address different needs.",
+        "30s": "Zcash lets you ask both how money is issued and how much a payment reveals: its supply rules and shielded transfers address different needs. Its monetary rules limit total issuance to 21 million ZEC. Its privacy design lets fully shielded payments keep sensitive details off the public ledger. One concerns the supply of the asset; the other concerns the experience of using it. Understanding both gives a clearer picture of what Zcash offers.",
+        "60s": "Zcash lets you ask both how money is issued and how much a payment reveals: its supply rules and shielded transfers address different needs. Its monetary rules limit total issuance to 21 million ZEC. Its privacy design lets fully shielded payments keep sensitive details off the public ledger. One concerns the supply of the asset; the other concerns the experience of using it. Understanding both gives a clearer picture of what Zcash offers.\n\nA useful introduction connects these properties to a person’s questions without turning them into an investment promise. The reasons to learn about a technology can stand on their own."
+      },
+      "pt-BR": {
+        "sentence": "Zcash permite perguntar como o dinheiro é emitido e quanto um pagamento revela: suas regras de oferta e transferências protegidas atendem a necessidades diferentes.",
+        "30s": "Zcash permite perguntar como o dinheiro é emitido e quanto um pagamento revela: suas regras de oferta e transferências protegidas atendem a necessidades diferentes. Suas regras monetárias limitam a emissão total a 21 milhões de ZEC. Seu desenho de privacidade permite que pagamentos totalmente protegidos mantenham detalhes sensíveis fora do registro público. Uma característica trata da oferta do ativo; a outra, da experiência de usá-lo. Entender ambas ajuda a compreender o que Zcash oferece.",
+        "60s": "Zcash permite perguntar como o dinheiro é emitido e quanto um pagamento revela: suas regras de oferta e transferências protegidas atendem a necessidades diferentes. Suas regras monetárias limitam a emissão total a 21 milhões de ZEC. Seu desenho de privacidade permite que pagamentos totalmente protegidos mantenham detalhes sensíveis fora do registro público. Uma característica trata da oferta do ativo; a outra, da experiência de usá-lo. Entender ambas ajuda a compreender o que Zcash oferece.\n\nUma boa apresentação conecta essas propriedades às perguntas da pessoa sem transformá-las em promessa de investimento. Os motivos para conhecer uma tecnologia podem se sustentar por si mesmos."
+      },
+      "es": {
+        "sentence": "Zcash permite preguntar cómo se emite el dinero y cuánto revela un pago: sus reglas de oferta y transferencias blindadas atienden necesidades diferentes.",
+        "30s": "Zcash permite preguntar cómo se emite el dinero y cuánto revela un pago: sus reglas de oferta y transferencias blindadas atienden necesidades diferentes. Sus reglas monetarias limitan la emisión total a 21 millones de ZEC. Su diseño de privacidad permite que los pagos completamente blindados mantengan los detalles sensibles fuera del registro público. Una característica trata de la oferta del activo; la otra, de la experiencia de usarlo. Entender ambas aclara lo que ofrece Zcash.",
+        "60s": "Zcash permite preguntar cómo se emite el dinero y cuánto revela un pago: sus reglas de oferta y transferencias blindadas atienden necesidades diferentes. Sus reglas monetarias limitan la emisión total a 21 millones de ZEC. Su diseño de privacidad permite que los pagos completamente blindados mantengan los detalles sensibles fuera del registro público. Una característica trata de la oferta del activo; la otra, de la experiencia de usarlo. Entender ambas aclara lo que ofrece Zcash.\n\nUna buena presentación conecta estas propiedades con las preguntas de la persona sin convertirlas en una promesa de inversión. Los motivos para conocer una tecnología pueden sostenerse por sí mismos."
+      }
+    }
+  },
+  {
+    "id": "work-and-pay",
+    "theme": "cash",
+    "audiences": [
+      "businesses",
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Your work has value. Your income has boundaries.",
+      "pt-BR": "Seu trabalho tem valor. Sua renda tem limites de acesso.",
+      "es": "Tu trabajo tiene valor. Tu ingreso tiene límites de acceso."
+    },
+    "context": {
+      "en": "For everyday payments, shared expenses and first conversations about Zcash.",
+      "pt-BR": "Para pagamentos cotidianos, despesas compartilhadas e primeiras conversas sobre Zcash.",
+      "es": "Para pagos cotidianos, gastos compartidos y primeras conversaciones sobre Zcash."
+    },
+    "approach": {
+      "en": "The payment can travel. Your personal life does not have to travel with it.",
+      "pt-BR": "O pagamento pode circular. Sua vida pessoal não precisa ir junto.",
+      "es": "El pago puede viajar. Tu vida personal no tiene que ir con él."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Getting paid should reward your work without making your income a public announcement; shielded Zcash payments help create that boundary.",
+        "30s": "Getting paid should reward your work without making your income a public announcement; shielded Zcash payments help create that boundary. An independent designer finishes a project and sends an invoice. The client needs to pay, and both sides need their records. Strangers do not need a public view of the amount. A fully shielded transfer keeps that payment information between the participants instead of publishing it on the blockchain.",
+        "60s": "Getting paid should reward your work without making your income a public announcement; shielded Zcash payments help create that boundary. An independent designer finishes a project and sends an invoice. The client needs to pay, and both sides need their records. Strangers do not need a public view of the amount. A fully shielded transfer keeps that payment information between the participants instead of publishing it on the blockchain.\n\nThis does not replace invoices, tax records or agreements with a client. It gives the payment itself a more private foundation, so sharing a record can be a separate, considered decision."
+      },
+      "pt-BR": {
+        "sentence": "Receber deve valorizar seu trabalho sem transformar sua renda em um anúncio público; pagamentos protegidos em Zcash ajudam a estabelecer esse limite.",
+        "30s": "Receber deve valorizar seu trabalho sem transformar sua renda em um anúncio público; pagamentos protegidos em Zcash ajudam a estabelecer esse limite. Uma designer independente termina um projeto e envia a cobrança. O cliente precisa pagar, e ambos precisam dos seus registros. Desconhecidos não precisam ter uma visão pública do valor. Uma transferência totalmente protegida mantém essas informações entre os participantes em vez de publicá-las na blockchain.",
+        "60s": "Receber deve valorizar seu trabalho sem transformar sua renda em um anúncio público; pagamentos protegidos em Zcash ajudam a estabelecer esse limite. Uma designer independente termina um projeto e envia a cobrança. O cliente precisa pagar, e ambos precisam dos seus registros. Desconhecidos não precisam ter uma visão pública do valor. Uma transferência totalmente protegida mantém essas informações entre os participantes em vez de publicá-las na blockchain.\n\nIsso não substitui notas, registros fiscais ou acordos com o cliente. Oferece ao pagamento uma base mais privada, para que compartilhar um registro seja uma decisão separada e consciente."
+      },
+      "es": {
+        "sentence": "Cobrar debería reconocer tu trabajo sin convertir tus ingresos en un anuncio público; los pagos blindados en Zcash ayudan a establecer ese límite.",
+        "30s": "Cobrar debería reconocer tu trabajo sin convertir tus ingresos en un anuncio público; los pagos blindados en Zcash ayudan a establecer ese límite. Una diseñadora independiente termina un proyecto y envía la factura. El cliente necesita pagar, y ambos necesitan sus registros. Los desconocidos no necesitan una vista pública del importe. Una transferencia completamente blindada mantiene esa información entre los participantes en lugar de publicarla en la blockchain.",
+        "60s": "Cobrar debería reconocer tu trabajo sin convertir tus ingresos en un anuncio público; los pagos blindados en Zcash ayudan a establecer ese límite. Una diseñadora independiente termina un proyecto y envía la factura. El cliente necesita pagar, y ambos necesitan sus registros. Los desconocidos no necesitan una vista pública del importe. Una transferencia completamente blindada mantiene esa información entre los participantes en lugar de publicarla en la blockchain.\n\nEsto no sustituye facturas, registros fiscales ni acuerdos con el cliente. Ofrece al pago una base más privada, para que compartir un registro sea una decisión separada y consciente."
+      }
+    }
+  },
+  {
+    "id": "privacy-is-a-design-choice",
+    "theme": "cryptography",
+    "audiences": [
+      "developers",
+      "businesses"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Start with less to disclose",
+      "pt-BR": "Comece com menos exposição",
+      "es": "Empieza con menos exposición"
+    },
+    "context": {
+      "en": "For developers, curious builders and anyone asking how private payments work.",
+      "pt-BR": "Para desenvolvedores, pessoas que criam produtos e quem quer entender pagamentos privados.",
+      "es": "Para desarrolladores, creadores de productos y quienes quieren entender los pagos privados."
+    },
+    "approach": {
+      "en": "Let the network verify the payment. Keep the personal details with the people involved.",
+      "pt-BR": "Deixe a rede verificar o pagamento. Mantenha os detalhes pessoais com quem participa dele.",
+      "es": "Deja que la red verifique el pago. Mantén los detalles personales entre quienes participan."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash gives builders a payment foundation where confidentiality is part of the protocol, rather than a promise placed on top of public transaction details.",
+        "30s": "Zcash gives builders a payment foundation where confidentiality is part of the protocol, rather than a promise placed on top of public transaction details. When sensitive details are already on a public ledger, a polished interface cannot make them private again. Shielded transfers take a different starting point: protect those details as the network verifies the payment. That opens useful design questions about what an application collects, displays and retains.",
+        "60s": "Zcash gives builders a payment foundation where confidentiality is part of the protocol, rather than a promise placed on top of public transaction details. When sensitive details are already on a public ledger, a polished interface cannot make them private again. Shielded transfers take a different starting point: protect those details as the network verifies the payment. That opens useful design questions about what an application collects, displays and retains.\n\nA thoughtful product carries that restraint through its entire experience, from payment requests to support logs. Protocol privacy is a strong starting point, and the surrounding design should support it."
+      },
+      "pt-BR": {
+        "sentence": "Zcash oferece a quem desenvolve uma base de pagamentos em que a confidencialidade faz parte do protocolo, em vez de ser uma promessa sobre dados de transações públicas.",
+        "30s": "Zcash oferece a quem desenvolve uma base de pagamentos em que a confidencialidade faz parte do protocolo, em vez de ser uma promessa sobre dados de transações públicas. Quando detalhes sensíveis já estão em um registro público, uma interface bonita não consegue torná-los privados de novo. Transferências protegidas partem de outro ponto: resguardar esses detalhes enquanto a rede verifica o pagamento. Isso abre perguntas úteis sobre o que um aplicativo coleta, mostra e guarda.",
+        "60s": "Zcash oferece a quem desenvolve uma base de pagamentos em que a confidencialidade faz parte do protocolo, em vez de ser uma promessa sobre dados de transações públicas. Quando detalhes sensíveis já estão em um registro público, uma interface bonita não consegue torná-los privados de novo. Transferências protegidas partem de outro ponto: resguardar esses detalhes enquanto a rede verifica o pagamento. Isso abre perguntas úteis sobre o que um aplicativo coleta, mostra e guarda.\n\nUm produto bem pensado leva esse cuidado a toda a experiência, dos pedidos de pagamento aos registros de suporte. A privacidade do protocolo é um bom ponto de partida, e o restante do projeto deve apoiá-la."
+      },
+      "es": {
+        "sentence": "Zcash ofrece a quienes desarrollan una base de pagos donde la confidencialidad forma parte del protocolo, en lugar de ser una promesa sobre datos de transacciones públicas.",
+        "30s": "Zcash ofrece a quienes desarrollan una base de pagos donde la confidencialidad forma parte del protocolo, en lugar de ser una promesa sobre datos de transacciones públicas. Cuando los detalles sensibles ya están en un registro público, una interfaz cuidada no puede volver a hacerlos privados. Las transferencias blindadas parten de otro punto: proteger esos detalles mientras la red verifica el pago. Esto abre preguntas útiles sobre lo que una aplicación recopila, muestra y conserva.",
+        "60s": "Zcash ofrece a quienes desarrollan una base de pagos donde la confidencialidad forma parte del protocolo, en lugar de ser una promesa sobre datos de transacciones públicas. Cuando los detalles sensibles ya están en un registro público, una interfaz cuidada no puede volver a hacerlos privados. Las transferencias blindadas parten de otro punto: proteger esos detalles mientras la red verifica el pago. Esto abre preguntas útiles sobre lo que una aplicación recopila, muestra y conserva.\n\nUn producto bien pensado lleva ese cuidado a toda la experiencia, desde las solicitudes de pago hasta los registros de soporte. La privacidad del protocolo es un buen punto de partida, y el resto del diseño debe apoyarla."
+      }
+    }
+  },
+  {
+    "id": "coffee-without-a-history",
+    "theme": "cash",
+    "audiences": [
+      "beginners",
+      "businesses"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Just a coffee, please",
+      "pt-BR": "Só um café, por favor",
+      "es": "Solo un café, por favor"
+    },
+    "context": {
+      "en": "For everyday payments, shared expenses and first conversations about Zcash.",
+      "pt-BR": "Para pagamentos cotidianos, despesas compartilhadas e primeiras conversas sobre Zcash.",
+      "es": "Para pagos cotidianos, gastos compartidos y primeras conversaciones sobre Zcash."
+    },
+    "approach": {
+      "en": "The payment can travel. Your personal life does not have to travel with it.",
+      "pt-BR": "O pagamento pode circular. Sua vida pessoal não precisa ir junto.",
+      "es": "El pago puede viajar. Tu vida personal no tiene que ir con él."
+    },
+    "translations": {
+      "en": {
+        "sentence": "A coffee purchase should be a small moment in your day, not another public entry about your life; Zcash makes shielded payment possible.",
+        "30s": "A coffee purchase should be a small moment in your day, not another public entry about your life; Zcash makes shielded payment possible. The merchant needs to receive the agreed amount. You need to know that the payment went through. A public blockchain does not need to reveal those private details to everyone else. When both sides use a fully shielded Zcash transfer, the payment can happen with that everyday boundary intact.",
+        "60s": "A coffee purchase should be a small moment in your day, not another public entry about your life; Zcash makes shielded payment possible. The merchant needs to receive the agreed amount. You need to know that the payment went through. A public blockchain does not need to reveal those private details to everyone else. When both sides use a fully shielded Zcash transfer, the payment can happen with that everyday boundary intact.\n\nThis is an illustration of what a private payment can mean, not a claim that every café accepts ZEC. The experience depends on the merchant, wallet and payment flow available."
+      },
+      "pt-BR": {
+        "sentence": "Comprar um café deveria ser um pequeno momento do dia, sem mais um registro público sobre sua vida; Zcash permite pagar com proteção.",
+        "30s": "Comprar um café deveria ser um pequeno momento do dia, sem mais um registro público sobre sua vida; Zcash permite pagar com proteção. O estabelecimento precisa receber o valor combinado. Você precisa saber que o pagamento foi concluído. Uma blockchain pública não precisa revelar esses detalhes privados a todas as outras pessoas. Quando as duas partes usam uma transferência Zcash totalmente protegida, o pagamento pode acontecer preservando esse limite cotidiano.",
+        "60s": "Comprar um café deveria ser um pequeno momento do dia, sem mais um registro público sobre sua vida; Zcash permite pagar com proteção. O estabelecimento precisa receber o valor combinado. Você precisa saber que o pagamento foi concluído. Uma blockchain pública não precisa revelar esses detalhes privados a todas as outras pessoas. Quando as duas partes usam uma transferência Zcash totalmente protegida, o pagamento pode acontecer preservando esse limite cotidiano.\n\nÉ uma ilustração do que um pagamento privado pode significar, não uma afirmação de que toda cafeteria aceita ZEC. A experiência depende do estabelecimento, da carteira e do fluxo de pagamento disponível."
+      },
+      "es": {
+        "sentence": "Comprar un café debería ser un pequeño momento del día, sin otra entrada pública sobre tu vida; Zcash permite pagar con blindaje.",
+        "30s": "Comprar un café debería ser un pequeño momento del día, sin otra entrada pública sobre tu vida; Zcash permite pagar con blindaje. El comercio necesita recibir el importe acordado. Tú necesitas saber que el pago se completó. Una blockchain pública no necesita revelar esos detalles privados a todas las demás personas. Cuando ambas partes utilizan una transferencia Zcash completamente blindada, el pago puede preservar ese límite cotidiano.",
+        "60s": "Comprar un café debería ser un pequeño momento del día, sin otra entrada pública sobre tu vida; Zcash permite pagar con blindaje. El comercio necesita recibir el importe acordado. Tú necesitas saber que el pago se completó. Una blockchain pública no necesita revelar esos detalles privados a todas las demás personas. Cuando ambas partes utilizan una transferencia Zcash completamente blindada, el pago puede preservar ese límite cotidiano.\n\nEs una ilustración de lo que puede significar un pago privado, no una afirmación de que todas las cafeterías acepten ZEC. La experiencia depende del comercio, de la cartera y del flujo de pago disponible."
+      }
+    }
+  },
+  {
+    "id": "help-family-privately",
+    "theme": "cash",
+    "audiences": [
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Keep family support personal",
+      "pt-BR": "Mantenha o apoio à família no âmbito pessoal",
+      "es": "Mantén el apoyo familiar en el ámbito personal"
+    },
+    "context": {
+      "en": "For everyday payments, shared expenses and first conversations about Zcash.",
+      "pt-BR": "Para pagamentos cotidianos, despesas compartilhadas e primeiras conversas sobre Zcash.",
+      "es": "Para pagos cotidianos, gastos compartidos y primeras conversaciones sobre Zcash."
+    },
+    "approach": {
+      "en": "The payment can travel. Your personal life does not have to travel with it.",
+      "pt-BR": "O pagamento pode circular. Sua vida pessoal não precisa ir junto.",
+      "es": "El pago puede viajar. Tu vida personal no tiene que ir con él."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Helping someone close to you does not need a public audience; a fully shielded Zcash transfer keeps its payment details off the public ledger.",
+        "30s": "Helping someone close to you does not need a public audience; a fully shielded Zcash transfer keeps its payment details off the public ledger. A relative needs help with an expense. What matters is that the money arrives and that both people understand the transfer. Shielding protects the sender, recipient and amount from public view, leaving more of the relationship where it belongs: with the people involved.",
+        "60s": "Helping someone close to you does not need a public audience; a fully shielded Zcash transfer keeps its payment details off the public ledger. A relative needs help with an expense. What matters is that the money arrives and that both people understand the transfer. Shielding protects the sender, recipient and amount from public view, leaving more of the relationship where it belongs: with the people involved.\n\nBefore sending, make sure the recipient can receive and use ZEC in the way they need. Privacy is most useful when it comes with a payment experience that both sides understand."
+      },
+      "pt-BR": {
+        "sentence": "Ajudar alguém próximo não precisa de uma plateia; uma transferência Zcash totalmente protegida mantém os detalhes do pagamento fora do registro público.",
+        "30s": "Ajudar alguém próximo não precisa de uma plateia; uma transferência Zcash totalmente protegida mantém os detalhes do pagamento fora do registro público. Um familiar precisa de ajuda com uma despesa. O que importa é que o dinheiro chegue e que as duas pessoas entendam a transferência. A proteção resguarda remetente, destinatário e valor da visão pública, mantendo mais dessa relação onde ela pertence: com as pessoas envolvidas.",
+        "60s": "Ajudar alguém próximo não precisa de uma plateia; uma transferência Zcash totalmente protegida mantém os detalhes do pagamento fora do registro público. Um familiar precisa de ajuda com uma despesa. O que importa é que o dinheiro chegue e que as duas pessoas entendam a transferência. A proteção resguarda remetente, destinatário e valor da visão pública, mantendo mais dessa relação onde ela pertence: com as pessoas envolvidas.\n\nAntes de enviar, confirme que a pessoa pode receber e usar ZEC da maneira de que precisa. A privacidade é mais útil quando vem com uma experiência de pagamento compreensível para os dois lados."
+      },
+      "es": {
+        "sentence": "Ayudar a alguien cercano no necesita público; una transferencia Zcash completamente blindada mantiene los detalles del pago fuera del registro público.",
+        "30s": "Ayudar a alguien cercano no necesita público; una transferencia Zcash completamente blindada mantiene los detalles del pago fuera del registro público. Un familiar necesita ayuda con un gasto. Lo que importa es que el dinero llegue y que ambas personas entiendan la transferencia. El blindaje protege remitente, destinatario e importe de la vista pública, manteniendo más de esa relación donde corresponde: con las personas implicadas.",
+        "60s": "Ayudar a alguien cercano no necesita público; una transferencia Zcash completamente blindada mantiene los detalles del pago fuera del registro público. Un familiar necesita ayuda con un gasto. Lo que importa es que el dinero llegue y que ambas personas entiendan la transferencia. El blindaje protege remitente, destinatario e importe de la vista pública, manteniendo más de esa relación donde corresponde: con las personas implicadas.\n\nAntes de enviar, confirma que la persona puede recibir y utilizar ZEC de la forma que necesita. La privacidad es más útil cuando viene con una experiencia de pago comprensible para ambas partes."
+      }
+    }
+  },
+  {
+    "id": "proof-not-a-public-receipt",
+    "theme": "cryptography",
+    "audiences": [
+      "developers",
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Enough to verify. Less to reveal.",
+      "pt-BR": "O necessário para verificar. Menos para expor.",
+      "es": "Lo necesario para verificar. Menos para revelar."
+    },
+    "context": {
+      "en": "For developers, curious builders and anyone asking how private payments work.",
+      "pt-BR": "Para desenvolvedores, pessoas que criam produtos e quem quer entender pagamentos privados.",
+      "es": "Para desarrolladores, creadores de productos y quienes quieren entender los pagos privados."
+    },
+    "approach": {
+      "en": "Let the network verify the payment. Keep the personal details with the people involved.",
+      "pt-BR": "Deixe a rede verificar o pagamento. Mantenha os detalhes pessoais com quem participa dele.",
+      "es": "Deja que la red verifique el pago. Mantén los detalles personales entre quienes participan."
+    },
+    "translations": {
+      "en": {
+        "sentence": "A payment network needs to check that money moves according to its rules; Zcash shows that this need not mean publishing every private detail.",
+        "30s": "A payment network needs to check that money moves according to its rules; Zcash shows that this need not mean publishing every private detail. Think of the difference between proving that a requirement is satisfied and showing everyone the information behind it. Zcash uses zero-knowledge proofs as part of verifying shielded transfers. The network gets the evidence it needs, while the public does not get the sender, recipient and amount of a fully shielded payment.",
+        "60s": "A payment network needs to check that money moves according to its rules; Zcash shows that this need not mean publishing every private detail. Think of the difference between proving that a requirement is satisfied and showing everyone the information behind it. Zcash uses zero-knowledge proofs as part of verifying shielded transfers. The network gets the evidence it needs, while the public does not get the sender, recipient and amount of a fully shielded payment.\n\nThat distinction is the heart of the explanation. You can introduce the mathematical details later; first, make clear that verification and public disclosure are different jobs."
+      },
+      "pt-BR": {
+        "sentence": "Uma rede de pagamentos precisa verificar se o dinheiro segue suas regras; Zcash mostra que isso não precisa significar publicar cada detalhe privado.",
+        "30s": "Uma rede de pagamentos precisa verificar se o dinheiro segue suas regras; Zcash mostra que isso não precisa significar publicar cada detalhe privado. Pense na diferença entre provar que uma exigência foi atendida e mostrar a todos as informações por trás dela. Zcash usa provas de conhecimento zero na verificação de transferências protegidas. A rede recebe as evidências necessárias, enquanto o público não recebe remetente, destinatário e valor de um pagamento totalmente protegido.",
+        "60s": "Uma rede de pagamentos precisa verificar se o dinheiro segue suas regras; Zcash mostra que isso não precisa significar publicar cada detalhe privado. Pense na diferença entre provar que uma exigência foi atendida e mostrar a todos as informações por trás dela. Zcash usa provas de conhecimento zero na verificação de transferências protegidas. A rede recebe as evidências necessárias, enquanto o público não recebe remetente, destinatário e valor de um pagamento totalmente protegido.\n\nEssa distinção é o centro da explicação. Os detalhes matemáticos podem vir depois; primeiro, deixe claro que verificar e divulgar publicamente são tarefas diferentes."
+      },
+      "es": {
+        "sentence": "Una red de pagos necesita comprobar que el dinero sigue sus reglas; Zcash demuestra que eso no tiene por qué significar publicar cada detalle privado.",
+        "30s": "Una red de pagos necesita comprobar que el dinero sigue sus reglas; Zcash demuestra que eso no tiene por qué significar publicar cada detalle privado. Piensa en la diferencia entre demostrar que se cumple un requisito y mostrar a todos la información que hay detrás. Zcash utiliza pruebas de conocimiento cero al verificar transferencias blindadas. La red recibe las pruebas necesarias, mientras el público no recibe remitente, destinatario e importe de un pago completamente blindado.",
+        "60s": "Una red de pagos necesita comprobar que el dinero sigue sus reglas; Zcash demuestra que eso no tiene por qué significar publicar cada detalle privado. Piensa en la diferencia entre demostrar que se cumple un requisito y mostrar a todos la información que hay detrás. Zcash utiliza pruebas de conocimiento cero al verificar transferencias blindadas. La red recibe las pruebas necesarias, mientras el público no recibe remitente, destinatario e importe de un pago completamente blindado.\n\nEsa distinción es el centro de la explicación. Los detalles matemáticos pueden venir después; primero, deja claro que verificar y divulgar públicamente son tareas distintas."
+      }
+    }
+  },
+  {
+    "id": "curtains-for-financial-life",
+    "theme": "metaphors",
+    "audiences": [
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Everyday privacy needs no special occasion",
+      "pt-BR": "Privacidade cotidiana não exige ocasião especial",
+      "es": "La privacidad cotidiana no necesita una ocasión especial"
+    },
+    "context": {
+      "en": "For a first introduction that begins with ordinary life instead of technical vocabulary.",
+      "pt-BR": "Para uma primeira apresentação que começa na vida cotidiana, sem vocabulário técnico.",
+      "es": "Para una primera presentación que empieza en la vida cotidiana, sin vocabulario técnico."
+    },
+    "approach": {
+      "en": "We already make room for private conversations. Payments deserve that consideration too.",
+      "pt-BR": "Já reservamos espaço para conversas privadas. Pagamentos também merecem esse cuidado.",
+      "es": "Ya dejamos espacio para conversaciones privadas. Los pagos también merecen ese cuidado."
+    },
+    "translations": {
+      "en": {
+        "sentence": "We close a curtain for comfort, not for a special reason; Zcash brings that everyday idea of a personal boundary to shielded payments.",
+        "30s": "We close a curtain for comfort, not for a special reason; Zcash brings that everyday idea of a personal boundary to shielded payments. You can take part in the world without opening every part of your life to inspection. Financial activity deserves the same consideration. A fully shielded Zcash payment protects its sender, recipient and amount from public view while remaining verifiable by the network. Participation and privacy can coexist.",
+        "60s": "We close a curtain for comfort, not for a special reason; Zcash brings that everyday idea of a personal boundary to shielded payments. You can take part in the world without opening every part of your life to inspection. Financial activity deserves the same consideration. A fully shielded Zcash payment protects its sender, recipient and amount from public view while remaining verifiable by the network. Participation and privacy can coexist.\n\nThis comparison gives the conversation a human starting point. Privacy can be an ordinary preference about personal space, long before the discussion reaches technical terms or exceptional situations."
+      },
+      "pt-BR": {
+        "sentence": "Fechamos uma cortina por conforto, sem precisar de um motivo especial; Zcash leva essa ideia cotidiana de limite pessoal aos pagamentos protegidos.",
+        "30s": "Fechamos uma cortina por conforto, sem precisar de um motivo especial; Zcash leva essa ideia cotidiana de limite pessoal aos pagamentos protegidos. É possível participar do mundo sem abrir cada parte da sua vida à observação. A atividade financeira merece o mesmo cuidado. Um pagamento Zcash totalmente protegido resguarda remetente, destinatário e valor da visão pública e continua verificável pela rede. Participação e privacidade podem conviver.",
+        "60s": "Fechamos uma cortina por conforto, sem precisar de um motivo especial; Zcash leva essa ideia cotidiana de limite pessoal aos pagamentos protegidos. É possível participar do mundo sem abrir cada parte da sua vida à observação. A atividade financeira merece o mesmo cuidado. Um pagamento Zcash totalmente protegido resguarda remetente, destinatário e valor da visão pública e continua verificável pela rede. Participação e privacidade podem conviver.\n\nEssa comparação dá um ponto de partida humano à conversa. Privacidade pode ser uma preferência comum sobre espaço pessoal, muito antes de a discussão chegar a termos técnicos ou situações excepcionais."
+      },
+      "es": {
+        "sentence": "Cerramos una cortina por comodidad, sin necesitar un motivo especial; Zcash lleva esa idea cotidiana de límite personal a los pagos blindados.",
+        "30s": "Cerramos una cortina por comodidad, sin necesitar un motivo especial; Zcash lleva esa idea cotidiana de límite personal a los pagos blindados. Es posible participar en el mundo sin abrir cada parte de tu vida a la observación. La actividad financiera merece el mismo cuidado. Un pago Zcash completamente blindado protege remitente, destinatario e importe de la vista pública y sigue siendo verificable por la red. Participación y privacidad pueden convivir.",
+        "60s": "Cerramos una cortina por comodidad, sin necesitar un motivo especial; Zcash lleva esa idea cotidiana de límite personal a los pagos blindados. Es posible participar en el mundo sin abrir cada parte de tu vida a la observación. La actividad financiera merece el mismo cuidado. Un pago Zcash completamente blindado protege remitente, destinatario e importe de la vista pública y sigue siendo verificable por la red. Participación y privacidad pueden convivir.\n\nEsta comparación da un punto de partida humano a la conversación. La privacidad puede ser una preferencia cotidiana sobre el espacio personal, mucho antes de llegar a términos técnicos o situaciones excepcionales."
+      }
+    }
+  },
+  {
+    "id": "support-independent-work",
+    "theme": "freedom",
+    "audiences": [
+      "organizations",
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Keep good work going",
+      "pt-BR": "Ajude um bom trabalho a continuar",
+      "es": "Ayuda a que un buen trabajo continúe"
+    },
+    "context": {
+      "en": "For community support, independent work and conversations about personal autonomy.",
+      "pt-BR": "Para apoio comunitário, trabalho independente e conversas sobre autonomia pessoal.",
+      "es": "Para el apoyo comunitario, el trabajo independiente y las conversaciones sobre autonomía personal."
+    },
+    "approach": {
+      "en": "A contribution can speak for what you believe in without publishing your financial life.",
+      "pt-BR": "Uma contribuição pode expressar o que você valoriza sem publicar sua vida financeira.",
+      "es": "Una contribución puede expresar lo que valoras sin publicar tu vida financiera."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Zcash gives supporters a way to fund independent work through shielded payments, without automatically publishing the financial connection on the blockchain.",
+        "30s": "Zcash gives supporters a way to fund independent work through shielded payments, without automatically publishing the financial connection on the blockchain. A creator, educator or community maintainer can receive support while a contributor keeps more payment information out of public view. The work can remain visible and accessible without turning every supporting transfer into an open record of who paid whom and how much. That is a useful role for financial privacy.",
+        "60s": "Zcash gives supporters a way to fund independent work through shielded payments, without automatically publishing the financial connection on the blockchain. A creator, educator or community maintainer can receive support while a contributor keeps more payment information out of public view. The work can remain visible and accessible without turning every supporting transfer into an open record of who paid whom and how much. That is a useful role for financial privacy.\n\nRecipients can decide how to acknowledge support and explain their work. Contributors can decide what to disclose beyond the transfer. A thoughtful arrangement makes those expectations clear on both sides."
+      },
+      "pt-BR": {
+        "sentence": "Zcash oferece uma forma de financiar trabalho independente com pagamentos protegidos, sem publicar automaticamente esse vínculo financeiro na blockchain.",
+        "30s": "Zcash oferece uma forma de financiar trabalho independente com pagamentos protegidos, sem publicar automaticamente esse vínculo financeiro na blockchain. Quem cria, ensina ou mantém uma comunidade pode receber apoio enquanto a pessoa que contribui preserva mais informações do pagamento. O trabalho pode continuar visível e acessível sem transformar cada contribuição em um registro aberto de quem pagou quem e quanto. Esse é um papel útil para a privacidade financeira.",
+        "60s": "Zcash oferece uma forma de financiar trabalho independente com pagamentos protegidos, sem publicar automaticamente esse vínculo financeiro na blockchain. Quem cria, ensina ou mantém uma comunidade pode receber apoio enquanto a pessoa que contribui preserva mais informações do pagamento. O trabalho pode continuar visível e acessível sem transformar cada contribuição em um registro aberto de quem pagou quem e quanto. Esse é um papel útil para a privacidade financeira.\n\nDestinatários podem decidir como reconhecer o apoio e explicar seu trabalho. Quem contribui pode decidir o que revelar além da transferência. Um acordo bem pensado deixa essas expectativas claras para os dois lados."
+      },
+      "es": {
+        "sentence": "Zcash ofrece una forma de financiar trabajo independiente con pagos blindados, sin publicar automáticamente ese vínculo financiero en la blockchain.",
+        "30s": "Zcash ofrece una forma de financiar trabajo independiente con pagos blindados, sin publicar automáticamente ese vínculo financiero en la blockchain. Quien crea, enseña o mantiene una comunidad puede recibir apoyo mientras la persona que contribuye preserva más información del pago. El trabajo puede seguir visible y accesible sin convertir cada contribución en un registro abierto de quién pagó a quién y cuánto. Ese es un papel útil para la privacidad financiera.",
+        "60s": "Zcash ofrece una forma de financiar trabajo independiente con pagos blindados, sin publicar automáticamente ese vínculo financiero en la blockchain. Quien crea, enseña o mantiene una comunidad puede recibir apoyo mientras la persona que contribuye preserva más información del pago. El trabajo puede seguir visible y accesible sin convertir cada contribución en un registro abierto de quién pagó a quién y cuánto. Ese es un papel útil para la privacidad financiera.\n\nLos destinatarios pueden decidir cómo reconocer el apoyo y explicar su trabajo. Quienes contribuyen pueden decidir qué revelar más allá de la transferencia. Un acuerdo bien pensado deja claras esas expectativas para ambas partes."
+      }
+    }
+  },
+  {
+    "id": "records-without-publication",
+    "theme": "disclosure",
+    "audiences": [
+      "organizations",
+      "businesses"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Accountability can have an audience",
+      "pt-BR": "Prestação de contas pode ter público definido",
+      "es": "La rendición de cuentas puede tener un público definido"
+    },
+    "context": {
+      "en": "For teams, organizations and people who need to share financial information responsibly.",
+      "pt-BR": "Para equipes, organizações e pessoas que precisam compartilhar informações financeiras com responsabilidade.",
+      "es": "Para equipos, organizaciones y personas que necesitan compartir información financiera con responsabilidad."
+    },
+    "approach": {
+      "en": "Keeping a record and publishing it to the world are two different decisions.",
+      "pt-BR": "Guardar um registro e publicá-lo para o mundo são duas decisões diferentes.",
+      "es": "Guardar un registro y publicarlo para todo el mundo son dos decisiones distintas."
+    },
+    "translations": {
+      "en": {
+        "sentence": "A team can need financial records without needing a worldwide audience for them; Zcash viewing keys help separate access to information from control of funds.",
+        "30s": "A team can need financial records without needing a worldwide audience for them; Zcash viewing keys help separate access to information from control of funds. Start with the practical question: who needs to inspect what? A person reviewing transactions may need visibility without spending authority. Viewing keys offer a mechanism for that separation, with different scopes depending on the key and software. The reporting process should be built around those actual capabilities.",
+        "60s": "A team can need financial records without needing a worldwide audience for them; Zcash viewing keys help separate access to information from control of funds. Start with the practical question: who needs to inspect what? A person reviewing transactions may need visibility without spending authority. Viewing keys offer a mechanism for that separation, with different scopes depending on the key and software. The reporting process should be built around those actual capabilities.\n\nPrivacy and accountability become easier to discuss when access is specific rather than assumed. Decide what must be public, what can be shared privately and what should not be collected at all."
+      },
+      "pt-BR": {
+        "sentence": "Uma equipe pode precisar de registros financeiros sem precisar de uma audiência mundial; chaves de visualização do Zcash ajudam a separar acesso à informação de controle dos fundos.",
+        "30s": "Uma equipe pode precisar de registros financeiros sem precisar de uma audiência mundial; chaves de visualização do Zcash ajudam a separar acesso à informação de controle dos fundos. Comece pela pergunta prática: quem precisa examinar o quê? Uma pessoa que revisa transações pode precisar de visibilidade sem autoridade para gastar. Chaves de visualização oferecem um mecanismo para essa separação, com alcances diferentes conforme a chave e o software. O processo de prestação de contas deve respeitar essas capacidades reais.",
+        "60s": "Uma equipe pode precisar de registros financeiros sem precisar de uma audiência mundial; chaves de visualização do Zcash ajudam a separar acesso à informação de controle dos fundos. Comece pela pergunta prática: quem precisa examinar o quê? Uma pessoa que revisa transações pode precisar de visibilidade sem autoridade para gastar. Chaves de visualização oferecem um mecanismo para essa separação, com alcances diferentes conforme a chave e o software. O processo de prestação de contas deve respeitar essas capacidades reais.\n\nPrivacidade e prestação de contas ficam mais fáceis de discutir quando o acesso é definido, não presumido. Decida o que deve ser público, o que pode ser compartilhado em privado e o que nem precisa ser coletado."
+      },
+      "es": {
+        "sentence": "Un equipo puede necesitar registros financieros sin necesitar una audiencia mundial; las claves de visualización de Zcash ayudan a separar el acceso a la información del control de los fondos.",
+        "30s": "Un equipo puede necesitar registros financieros sin necesitar una audiencia mundial; las claves de visualización de Zcash ayudan a separar el acceso a la información del control de los fondos. Empieza por la pregunta práctica: ¿quién necesita examinar qué? Una persona que revisa transacciones puede necesitar visibilidad sin autoridad para gastar. Las claves de visualización ofrecen un mecanismo para esa separación, con distintos alcances según la clave y el software. El proceso de rendición de cuentas debe respetar esas capacidades reales.",
+        "60s": "Un equipo puede necesitar registros financieros sin necesitar una audiencia mundial; las claves de visualización de Zcash ayudan a separar el acceso a la información del control de los fondos. Empieza por la pregunta práctica: ¿quién necesita examinar qué? Una persona que revisa transacciones puede necesitar visibilidad sin autoridad para gastar. Las claves de visualización ofrecen un mecanismo para esa separación, con distintos alcances según la clave y el software. El proceso de rendición de cuentas debe respetar esas capacidades reales.\n\nLa privacidad y la rendición de cuentas son más fáciles de discutir cuando el acceso se define en lugar de darse por supuesto. Decide qué debe ser público, qué puede compartirse en privado y qué ni siquiera necesita recopilarse."
+      }
+    }
+  },
+  {
+    "id": "address-is-not-an-identity",
+    "theme": "bitcoin",
+    "audiences": [
+      "bitcoin",
+      "beginners"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Look beyond the address",
+      "pt-BR": "Olhe além do endereço",
+      "es": "Mira más allá de la dirección"
+    },
+    "context": {
+      "en": "For people familiar with Bitcoin, public ledgers and monetary scarcity.",
+      "pt-BR": "Para quem conhece Bitcoin, registros públicos e escassez monetária.",
+      "es": "Para quienes conocen Bitcoin, los registros públicos y la escasez monetaria."
+    },
+    "approach": {
+      "en": "A public network can move money without making every payment a public story.",
+      "pt-BR": "Uma rede pública pode movimentar dinheiro sem transformar cada pagamento em uma história pública.",
+      "es": "Una red pública puede mover dinero sin convertir cada pago en una historia pública."
+    },
+    "translations": {
+      "en": {
+        "sentence": "An address without a name can still leave a public trail of activity; Zcash shielding protects the payment details themselves.",
+        "30s": "An address without a name can still leave a public trail of activity; Zcash shielding protects the payment details themselves. On a transparent ledger, people can examine transfers even when they do not immediately know who owns an address. Other information may later give those records more context. A fully shielded Zcash transfer takes a different approach by keeping its sender, recipient and amount out of public view from the start.",
+        "60s": "An address without a name can still leave a public trail of activity; Zcash shielding protects the payment details themselves. On a transparent ledger, people can examine transfers even when they do not immediately know who owns an address. Other information may later give those records more context. A fully shielded Zcash transfer takes a different approach by keeping its sender, recipient and amount out of public view from the start.\n\nThis is not a claim that every public address identifies a person. It is a reason to distinguish a missing name from protected transaction information when comparing payment systems."
+      },
+      "pt-BR": {
+        "sentence": "Um endereço sem nome ainda pode deixar um rastro público de atividade; a proteção do Zcash resguarda os próprios detalhes do pagamento.",
+        "30s": "Um endereço sem nome ainda pode deixar um rastro público de atividade; a proteção do Zcash resguarda os próprios detalhes do pagamento. Em um registro transparente, pessoas podem examinar transferências mesmo sem saber de imediato quem controla um endereço. Outras informações podem depois dar mais contexto a esses registros. Uma transferência Zcash totalmente protegida segue outro caminho ao manter remetente, destinatário e valor fora da visão pública desde o início.",
+        "60s": "Um endereço sem nome ainda pode deixar um rastro público de atividade; a proteção do Zcash resguarda os próprios detalhes do pagamento. Em um registro transparente, pessoas podem examinar transferências mesmo sem saber de imediato quem controla um endereço. Outras informações podem depois dar mais contexto a esses registros. Uma transferência Zcash totalmente protegida segue outro caminho ao manter remetente, destinatário e valor fora da visão pública desde o início.\n\nIsso não significa que todo endereço público identifique uma pessoa. É um motivo para distinguir a ausência de um nome da proteção dos dados da transação ao comparar sistemas de pagamento."
+      },
+      "es": {
+        "sentence": "Una dirección sin nombre aún puede dejar un rastro público de actividad; el blindaje de Zcash protege los propios detalles del pago.",
+        "30s": "Una dirección sin nombre aún puede dejar un rastro público de actividad; el blindaje de Zcash protege los propios detalles del pago. En un registro transparente, las personas pueden examinar transferencias incluso sin saber de inmediato quién controla una dirección. Otra información puede dar después más contexto a esos registros. Una transferencia Zcash completamente blindada sigue otro camino al mantener remitente, destinatario e importe fuera de la vista pública desde el principio.",
+        "60s": "Una dirección sin nombre aún puede dejar un rastro público de actividad; el blindaje de Zcash protege los propios detalles del pago. En un registro transparente, las personas pueden examinar transferencias incluso sin saber de inmediato quién controla una dirección. Otra información puede dar después más contexto a esos registros. Una transferencia Zcash completamente blindada sigue otro camino al mantener remitente, destinatario e importe fuera de la vista pública desde el principio.\n\nEsto no significa que toda dirección pública identifique a una persona. Es un motivo para distinguir la ausencia de un nombre de la protección de los datos de la transacción al comparar sistemas de pago."
+      }
+    }
+  },
+  {
+    "id": "habits-are-not-a-data-product",
+    "theme": "surveillance",
+    "audiences": [
+      "beginners",
+      "developers"
+    ],
+    "kind": "openzcash-editorial",
+    "reviewStatus": "reviewed",
+    "reviewedAt": "2026-10-20",
+    "title": {
+      "en": "Your routine is yours",
+      "pt-BR": "Sua rotina pertence a você",
+      "es": "Tu rutina te pertenece"
+    },
+    "context": {
+      "en": "For conversations about data collection, financial profiling and privacy over time.",
+      "pt-BR": "Para conversas sobre coleta de dados, perfis financeiros e privacidade ao longo do tempo.",
+      "es": "Para conversaciones sobre recopilación de datos, perfiles financieros y privacidad a lo largo del tiempo."
+    },
+    "approach": {
+      "en": "The best place to protect a payment detail is before it becomes public data.",
+      "pt-BR": "O melhor momento para proteger um detalhe financeiro é antes que ele vire um dado público.",
+      "es": "El mejor momento para proteger un detalle financiero es antes de que se convierta en un dato público."
+    },
+    "translations": {
+      "en": {
+        "sentence": "Small payments can say a lot when combined; Zcash helps keep the details of shielded transfers out of that public collection.",
+        "30s": "Small payments can say a lot when combined; Zcash helps keep the details of shielded transfers out of that public collection. One purchase may seem unimportant. A series of payments can tell a richer story about relationships and activity, especially when combined with other records. Fully shielded transfers reduce the payment information a public observer can collect from the blockchain. It is privacy designed for ordinary repetition, not only for a single important moment.",
+        "60s": "Small payments can say a lot when combined; Zcash helps keep the details of shielded transfers out of that public collection. One purchase may seem unimportant. A series of payments can tell a richer story about relationships and activity, especially when combined with other records. Fully shielded transfers reduce the payment information a public observer can collect from the blockchain. It is privacy designed for ordinary repetition, not only for a single important moment.\n\nChoosing to reveal less today can preserve more room for choice later. That is a practical reason to understand how a wallet handles shielded payments before building a payment habit around it."
+      },
+      "pt-BR": {
+        "sentence": "Pequenos pagamentos podem dizer muito quando combinados; Zcash ajuda a manter os detalhes de transferências protegidas fora dessa coleção pública.",
+        "30s": "Pequenos pagamentos podem dizer muito quando combinados; Zcash ajuda a manter os detalhes de transferências protegidas fora dessa coleção pública. Uma compra pode parecer pouco importante. Uma sequência de pagamentos pode contar mais sobre relações e atividades, especialmente quando combinada com outros registros. Transferências totalmente protegidas reduzem as informações que um observador público consegue coletar da blockchain. É privacidade pensada para a repetição cotidiana, não só para um momento importante.",
+        "60s": "Pequenos pagamentos podem dizer muito quando combinados; Zcash ajuda a manter os detalhes de transferências protegidas fora dessa coleção pública. Uma compra pode parecer pouco importante. Uma sequência de pagamentos pode contar mais sobre relações e atividades, especialmente quando combinada com outros registros. Transferências totalmente protegidas reduzem as informações que um observador público consegue coletar da blockchain. É privacidade pensada para a repetição cotidiana, não só para um momento importante.\n\nEscolher revelar menos hoje pode preservar mais espaço de escolha depois. É um motivo prático para entender como uma carteira lida com pagamentos protegidos antes de criar um hábito de uso."
+      },
+      "es": {
+        "sentence": "Los pequeños pagos pueden decir mucho al combinarse; Zcash ayuda a mantener los detalles de las transferencias blindadas fuera de esa colección pública.",
+        "30s": "Los pequeños pagos pueden decir mucho al combinarse; Zcash ayuda a mantener los detalles de las transferencias blindadas fuera de esa colección pública. Una compra puede parecer poco importante. Una secuencia de pagos puede contar más sobre relaciones y actividades, especialmente al combinarse con otros registros. Las transferencias completamente blindadas reducen la información que un observador público puede recopilar de la blockchain. Es privacidad pensada para la repetición cotidiana, no solo para un momento importante.",
+        "60s": "Los pequeños pagos pueden decir mucho al combinarse; Zcash ayuda a mantener los detalles de las transferencias blindadas fuera de esa colección pública. Una compra puede parecer poco importante. Una secuencia de pagos puede contar más sobre relaciones y actividades, especialmente al combinarse con otros registros. Las transferencias completamente blindadas reducen la información que un observador público puede recopilar de la blockchain. Es privacidad pensada para la repetición cotidiana, no solo para un momento importante.\n\nElegir revelar menos hoy puede preservar más espacio de elección después. Es un motivo práctico para entender cómo una cartera gestiona los pagos blindados antes de crear un hábito de uso."
+      }
+    }
+  }
+]
