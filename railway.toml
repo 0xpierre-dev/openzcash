@@ -1,7 +1,7 @@
 # Railway deploy config for the Zcash Back Office (ZBO).
 #
-# Pure Next.js app (Nixpacks builds it: npm install -> npm run build -> npm run
-# start). Public data comes from external sources and the database.
+# Pure Next.js app built with the security-pinned Node Dockerfile.
+# Public data comes from external sources and the database.
 #
 # Scheduling: no external cron. src/instrumentation.ts starts an in-process
 # timer in this always-on service: the ZCG/ZecHub refresh every 6h (first run
@@ -9,14 +9,15 @@
 # hourly. GET /api/cron/refresh (Bearer $CRON_SECRET) remains a manual trigger.
 
 [build]
-builder = "NIXPACKS"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 # Apply DB migrations on boot (prod-deps only, best-effort), then start.
 # `next start` honors $PORT. Migrations run from inside Railway's network — the
 # Postgres host is only reachable on the private network. Healthcheck hits a
 # DB-free page so app-boot is what's measured, not data readiness.
-startCommand = "node scripts/assert-redesign.mjs && node scripts/migrate.mjs && node scripts/seed-governance.mjs && npm run start"
+startCommand = "sh scripts/start-production.sh"
 healthcheckPath = "/api"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
