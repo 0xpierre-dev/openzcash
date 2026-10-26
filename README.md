@@ -10,6 +10,7 @@ answer.
 
 Live: **[openzcash.org](https://openzcash.org)**
 
+[![CI](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml/badge.svg)](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node >= 20.9](https://img.shields.io/badge/node-%3E%3D%2020.9-brightgreen.svg)](package.json)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fopenzcash.org)](https://openzcash.org)
