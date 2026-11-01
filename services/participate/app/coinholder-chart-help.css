@@ -1,0 +1,16 @@
+.coin-chart-help { margin: -5px 0 14px; }
+.dao-app .coin-chart-help-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 0; border: 0; background: transparent; color: var(--dao-muted); font-size: 11px; font-weight: 400; line-height: 1.5; cursor: pointer; }
+.dao-app .coin-chart-help-toggle:hover, .dao-app .coin-chart-help-toggle[aria-expanded="true"] { color: var(--dao-accent); }
+.dao-app .coin-chart-help-toggle:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; border-radius: 3px; }
+.coin-chart-help-toggle svg { flex: none; }
+.coin-chart-help-chevron { transition: transform 140ms ease; }
+.coin-chart-help-toggle[aria-expanded="true"] .coin-chart-help-chevron { transform: rotate(180deg); }
+.coin-chart-help-copy { max-width: 80ch; padding: 6px 0 8px; color: var(--dao-secondary); font-size: 12px; line-height: 1.7; }
+.coin-chart-help-copy p { margin: 0; }.coin-chart-help-copy p + p { margin-top: 8px; }
+@media (max-width: 600px) {
+  .dao-app .coin-chart-help-toggle { min-height: 36px; }
+  .coin-chart-help-copy { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-chart-help-chevron { transition: none; }
+}

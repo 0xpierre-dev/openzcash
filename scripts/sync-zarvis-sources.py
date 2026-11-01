@@ -23,6 +23,8 @@ BLOG_POSTS_PER_SITE, BLOG_CHARS = 40, 12_000
 WIKI_CHARS = 15_000
 FORUM_TOPICS_PER_CATEGORY, FORUM_CHARS = 30, 4_000
 TOTAL_JSON_CHARS = 4_000_000
+EMAIL_ADDRESS = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
+ANGLED_EMAIL_ADDRESS = re.compile(r"[ \t]*<[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}>", re.I)
 
 ECC_FEED = "https://electriccoin.co/feed/"
 ECC_HOSTS = ("electriccoin.co", "zodl.com")  # ECC's post pages redirect permanently to zodl.com, the blog's current home; the final URL is the citation.
@@ -52,6 +54,17 @@ VOID_TAGS = {"br", "img", "hr", "input", "meta", "link", "source", "wbr", "area"
 def digest(text: str) -> str: return hashlib.sha256(text.encode("utf-8")).hexdigest()
 def now_iso() -> str: return datetime.now(timezone.utc).isoformat()
 def clip(text: str, limit: int) -> str: return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
+def sanitize_contacts(text: str) -> str:
+    """Retain public words and author names without committing contact addresses."""
+    return EMAIL_ADDRESS.sub("[contact removed]", ANGLED_EMAIL_ADDRESS.sub("", text))
+def sanitize_record(item: dict) -> dict:
+    clean = dict(item)
+    for field in ("id", "site", "url", "source"):
+        if isinstance(clean.get(field), str) and EMAIL_ADDRESS.search(clean[field]): raise ValueError("CONTACT_IN_SOURCE_METADATA")
+    for field in ("title", "author", "marker", "text"):
+        if isinstance(clean.get(field), str): clean[field] = sanitize_contacts(clean[field])
+    clean["sha256"] = digest(clean["text"])
+    return clean
 def tidy(text: str) -> str:
     lines = (re.sub(r"[ \t ]+", " ", line).strip() for line in unescape(text).splitlines())
     return "\n".join(line for line in lines if line)
@@ -148,8 +161,8 @@ def iso_date(value: str) -> str | None:
     try: return (parsedate_to_datetime(value) if "," in value else datetime.fromisoformat(value.replace("Z", "+00:00"))).date().isoformat()
     except (TypeError, ValueError): return None
 def record(ident: str, kind: str, site: str, title: str, url: str, published: str | None, text: str, limit: int, author: str | None = None, source: str | None = None, marker: str | None = None) -> dict:
-    body = clip(text, limit)
-    return {"id": ident, "kind": kind, "site": site, "title": clip(tidy(title), 200), "url": url, "publishedOn": published, "retrievedAt": now_iso(), "sha256": digest(body), "author": author, "source": source, "marker": marker, "text": body}
+    body = clip(sanitize_contacts(text), limit)
+    return sanitize_record({"id": ident, "kind": kind, "site": site, "title": clip(tidy(title), 200), "url": url, "publishedOn": published, "retrievedAt": now_iso(), "sha256": digest(body), "author": author, "source": source, "marker": marker, "text": body})
 def unchanged(prior: dict | None, marker: str | None) -> bool:
     return bool(prior and marker and prior.get("marker") == marker and prior.get("text"))
 
@@ -230,6 +243,7 @@ def forum_topics(previous: dict) -> list:
 FAMILIES = (("ecc", ecc_posts, lambda s: s["site"] == "electriccoin.co"), ("zf", zf_posts, lambda s: s["site"] == "zfnd.org"), ("zechub", zechub_pages, lambda s: s["kind"] == "community wiki"), ("forum", forum_topics, lambda s: s["kind"] == "forum topic"))
 def sync() -> int:
     old = json.loads(TARGET.read_text()) if TARGET.exists() else {"sources": []}
+    old["sources"] = [sanitize_record(source) for source in old["sources"]]
     previous = {s["id"]: s for s in old["sources"]}
     sources, failed = [], []
     for name, read, belongs in FAMILIES:
@@ -243,6 +257,7 @@ def sync() -> int:
             print(f"{name}: refresh failed ({type(error).__name__}: {error}); kept {len(kept)} prior records.", file=sys.stderr)
     corpus = {"version": 1, "retrievedAt": now_iso(), "sources": sources}
     serialized = json.dumps(corpus, ensure_ascii=False, indent=1) + "\n"
+    if EMAIL_ADDRESS.search(serialized): raise ValueError("CONTACT_IN_EXTERNAL_CORPUS")
     if len(serialized) > TOTAL_JSON_CHARS: raise ValueError(f"External corpus too large: {len(serialized):,} characters")
     temp = TARGET.with_suffix(".tmp"); temp.write_text(serialized); temp.replace(TARGET)
     print(f"Saved {len(sources)} external sources ({sum(len(s['text']) for s in sources):,} characters, {len(serialized):,} JSON characters).")

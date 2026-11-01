@@ -2,16 +2,20 @@ import postgres from "postgres";
 // Isolation check for the redesign test environment. When OPENZCASH_ENV is
 // "redesign" the process must be running in the dedicated Railway environment
 // against the isolated database, never against production data. Any other
-// environment (production included) skips the check, so the same branch can be
-// deployed there once the redesign is approved.
+// environment (production included) skips the check. Redesign deployments must
+// configure REDESIGN_ENVIRONMENT_ID and REDESIGN_DATABASE_NAME privately.
 if (process.env.OPENZCASH_ENV !== "redesign") {
   console.log(
     "[redesign] OPENZCASH_ENV is not 'redesign'; isolation check skipped.",
   );
   process.exit(0);
 }
-const expectedEnvironment = "c28d22c7-0df0-47c5-92e5-361df867ee42";
-const expectedDatabase = "openzcash_redesign";
+const expectedEnvironment = process.env.REDESIGN_ENVIRONMENT_ID;
+const expectedDatabase = process.env.REDESIGN_DATABASE_NAME;
+// Keep deployment identifiers in private environment configuration.
+if (!expectedEnvironment || !expectedDatabase) {
+  throw new Error("Redesign deployment requires its private environment configuration.");
+}
 if (process.env.RAILWAY_ENVIRONMENT_ID !== expectedEnvironment) {
   throw new Error(
     "Redesign deployment requires its dedicated Railway environment.",

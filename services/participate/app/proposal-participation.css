@@ -1,0 +1,232 @@
+.dao-module-bar { display: flex; align-items: center; gap: 32px; max-width: 1440px; margin: auto; padding: 10px 32px; color: var(--dao-muted); font-size: 13px; }
+.dao-module-bar > span { font-weight: 600; }
+.dao-module-bar nav { display: flex; gap: 6px; }
+.dao-module-bar a { padding: 8px 12px; border-radius: 6px; color: var(--dao-muted); }
+.dao-module-bar a[aria-current] { color: var(--dao-ink); background: var(--dao-paper); }
+.participate-account-anchor { display: flex; align-items: center; min-width: 0; }
+.proposal-economy-warning { margin: 0 0 18px; font-size: 13px; color: var(--dao-muted); }
+.proposal-engagement { min-width: 0; }
+.proposal-engagement-actions { display: flex; align-items: center; flex-wrap: wrap; column-gap: 22px; row-gap: 10px; }
+.dao-app :is(.proposal-like, .proposal-comment-link) { display: inline-flex; align-items: center; gap: 7px; padding: 7px 0; min-height: 36px; border: 0; background: none; color: var(--dao-muted); font-size: 13px; font-weight: 500; line-height: 1.5; }
+.dao-app .proposal-like[aria-pressed="true"], .dao-app .proposal-like:hover, .proposal-comment-link:hover { color: var(--dao-accent); }
+.proposal-engagement small { margin-left: 2px; color: var(--dao-muted); font-size: 11px; font-weight: 400; white-space: nowrap; }
+.proposal-engagement-error { margin: 8px 0 0; font-size: 12px; color: var(--dao-error); max-width: 560px; }
+.proposal-record-engagement { margin: -10px 0 24px; }
+.dao-app .proposal-title-toggle { border: 0; padding: 0; background: none; text-align: left; line-height: inherit; cursor: pointer; }
+.dao-app .proposal-comment-link[aria-expanded="true"], .proposal-read-toggle[aria-expanded="true"] { color: var(--dao-accent); }
+.proposal-read-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; font-size: 13px; white-space: nowrap; }
+.proposal-disclosure-arrow { display: inline-block; transition: transform .15s ease; }
+[aria-expanded="true"] > .proposal-disclosure-arrow { transform: rotate(180deg); }
+.proposal-inline { margin-top: 12px; padding: 0 0 18px; border-top: 1px solid var(--dao-line); }
+.proposal-inline[hidden], .proposal-inline > [hidden] { display: none; }
+.proposal-inline-toolbar { display: flex; justify-content: flex-end; padding-top: 12px; }
+.proposal-inline-toolbar button { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: 12px; color: var(--dao-muted); }
+.proposal-inline-toolbar button span { font-size: 20px; font-weight: 400; }
+.proposal-inline-discussion { margin-top: 0; padding: 0; }
+.proposal-inline-discussion .dao-section-heading h2 { font-size: 20px; }
+.proposal-inline-discussion .dao-section-heading .dao-eyebrow { display: none; }
+.proposal-inline-discussion .dao-comment-composer { border: 0; margin-top: 18px; padding: 18px; }
+.proposal-inline-discussion .dao-comment-composer textarea { min-height: 96px; }
+.proposal-inline-discussion .dao-comment-body { font-size: 14px; line-height: 1.7; }
+.proposal-inline-signin { margin-bottom: 18px; }
+.proposal-inline-state { display: flex; gap: 12px; align-items: center; padding: 24px 0; color: var(--dao-muted); font-size: 14px; }
+.proposal-inline-record-heading { scroll-margin-top: 80px; display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 0 0 24px; }
+.proposal-inline-record h3 { margin: 0; font-size: 20px; }
+.proposal-inline-record-heading p { color: var(--dao-muted); font-size: 12px; margin: 7px 0 0; }
+.proposal-inline-record > .dao-markdown { max-width: 80ch; font-size: 14px; }
+.proposal-inline-verification { margin-top: 28px; border-top: 1px solid var(--dao-line); padding-top: 12px; }
+.proposal-inline-verification > summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; min-height: 44px; cursor: pointer; font-size: 14px; font-weight: 600; }
+.proposal-inline-verification > summary::before { content: "+"; color: var(--dao-accent); }
+.proposal-inline-verification[open] > summary::before { content: "−"; }
+.proposal-inline-verification > summary > span { margin-left: auto; color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.proposal-inline-proof { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; font-size: 14px; }
+.proposal-inline-proof p { margin: 5px 0; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.proposal-inline-downloads { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; font-size: 13px; }
+.proposal-inline-downloads .dao-button { font-size: 13px; min-height: 40px; }
+.proposal-inline-verification .dao-archive-file-check { margin: 22px 0; padding: 20px 0; }
+.proposal-inline-verification .dao-archive-file-check h3 { font-size: 15px; }
+.proposal-activity { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--dao-line); }
+.proposal-activity > summary { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-size: 14px; font-weight: 600; }
+.proposal-activity > summary::before { content: "+"; color: var(--dao-accent); }
+.proposal-activity[open] > summary::before { content: "−"; }
+.proposal-activity-content { font-size: 13px; line-height: 1.6; padding: 6px 0 14px; }
+.proposal-activity-hint { color: var(--dao-muted); margin: 4px 0 12px; }
+.proposal-activity-tools { display: flex; gap: 24px; align-items: center; }
+.proposal-activity a { color: var(--dao-accent); font-weight: 500; }
+.proposal-activity-list { list-style: none; padding: 0; margin: 14px 0 0; }
+.proposal-activity-list > li { padding: 14px 0; }
+.proposal-activity-list > li + li { border-top: 1px solid var(--dao-line); }
+.proposal-activity-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 10px 22px; }
+.proposal-activity-row > div { display: grid; gap: 3px; }
+.proposal-activity-row > div > span { color: var(--dao-muted); font-size: 12px; }
+.proposal-activity-state { color: var(--dao-muted); font-size: 12px; }
+.proposal-activity-state.is-verified { color: var(--dao-success, #278555); }
+.proposal-activity-verify { margin-top: 8px; color: var(--dao-muted); font-size: 12px; }
+.proposal-activity-verify > summary { cursor: pointer; width: fit-content; padding: 5px 0; }
+.proposal-activity-verify > div { padding: 4px 0; max-width: 85ch; }
+.proposal-activity-verify code { font-size: 11px; overflow-wrap: anywhere; }
+.proposal-activity-verify > div > code { display: block; margin: 8px 0; }
+.proposal-activity-chain { display: grid; gap: 10px; margin: 14px 0; }
+.proposal-activity-chain > div { display: grid; gap: 3px; }
+.proposal-activity-chain dt { font-weight: 600; color: var(--dao-ink); }
+.proposal-activity-chain dd { margin: 0; overflow-wrap: anywhere; }
+.proposal-activity-verify pre { white-space: pre-wrap; background: var(--dao-bg); padding: 12px; border-radius: 8px; }
+.proposal-activity-verify label { display: inline-flex; position: relative; align-items: center; min-height: 40px; width: fit-content; margin-top: 8px; cursor: pointer; }
+.proposal-activity-verify label:focus-within { outline: 2px solid var(--dao-gold); outline-offset: 3px; border-radius: 4px; }
+.proposal-activity-verify input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; padding: 0; cursor: pointer; }
+@media (max-width: 600px) {
+  .proposal-activity-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; }
+  .proposal-activity-row > div { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .dao-module-navigation .dao-nav-link > span { display: inline; }
+  .dao-module-navigation .dao-nav-link { gap: 5px; padding-left: 10px; padding-right: 10px; font-size: 13px; }
+  .dao-module-navigation .dao-nav-link svg { display: none; }
+  .dao-module-bar { flex-wrap: wrap; gap: 6px 14px; padding: 10px 16px; }
+  .dao-zcg-proposal .dao-proposal-card-footer { align-items: flex-start; }
+  .proposal-engagement-actions { column-gap: 16px; }
+  .proposal-inline-discussion .dao-comment-composer { padding: 14px; }
+  .proposal-inline-record-heading { align-items: flex-start; flex-wrap: wrap; }
+  .proposal-inline-proof { grid-template-columns: 1fr; gap: 12px; }
+  .proposal-inline .dao-composer-footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .proposal-inline .dao-composer-footer .dao-button { width: 100%; }
+}
+.dao-app--embedded { min-height: 100vh; }
+.dao-app--embedded .dao-header { border-top: 0; position: sticky; top: 0; }
+.dao-app--embedded .dao-header-main { padding: 0 22px; min-height: 64px; gap: 28px; }
+.dao-app--embedded .dao-brand { --dao-brand-mark-size: 34px; }
+.dao-app--embedded .participate-navigation { --dao-nav-font-size: 14px; min-width: 0; gap: 24px; }
+.dao-app--embedded .participate-navigation .dao-nav-link { min-height: 64px; padding: 2px 0 0; font-weight: 500; white-space: nowrap; }
+.dao-app--embedded .participate-about { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 40px; height: 44px; padding: 0 8px; font-size: 12px; white-space: nowrap; color: var(--dao-muted); border-radius: 8px; cursor: pointer; }
+.dao-app--embedded .participate-about:hover { background: var(--dao-soft); color: var(--dao-ink); }
+.dao-app--embedded .dao-main { padding: 18px 22px; }
+@media (max-width: 700px) {
+  .dao-app--embedded .participate-about span { display: none; }
+  .dao-app--embedded .dao-header-main { flex-wrap: wrap; column-gap: 16px; row-gap: 0; padding-top: 6px; }
+  .dao-app--embedded .participate-navigation { --dao-nav-font-size: 13px; order: 3; width: 100%; gap: 24px; overflow-x: auto; }
+  .dao-app--embedded .participate-navigation .dao-nav-link { min-height: 44px; }
+}
+@media (max-width: 550px) {
+  .dao-app--embedded .dao-header-main { padding: 0 12px; }
+  .dao-app--embedded .dao-main { padding: 14px 12px; }
+}
+
+/* A short, first-visit guide; the workspace stays visible behind each step. */
+.dao-app .participate-tour { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--dao-ink); overflow: hidden; }
+.participate-tour::backdrop { background: transparent; }
+.participate-tour-spotlight { position: absolute; border-radius: 9px; outline: 2px solid var(--dao-gold); box-shadow: 0 0 0 100vmax #15130f66; pointer-events: none; }
+.participate-tour-card { position: absolute; box-sizing: border-box; padding: 18px 22px 20px; max-height: calc(100% - 32px); overflow-y: auto; border-radius: 14px; background: var(--dao-paper); box-shadow: 0 12px 48px #0003; }
+.participate-tour-card::before { content: ""; position: absolute; left: var(--tour-pointer); width: 12px; height: 12px; background: var(--dao-paper); transform: translateX(-50%) rotate(45deg); }
+.participate-tour-card[data-side="below"]::before { top: -5px; }
+.participate-tour-card[data-side="above"]::before { bottom: -5px; }
+.participate-tour-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--dao-muted); font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.participate-tour-top > span { display: inline-flex; gap: 7px; }
+.dao-app .participate-tour-top button, .dao-app .participate-tour-back { min-height: 40px; padding: 0 6px; color: var(--dao-muted); font-size: 13px; }
+.dao-app .participate-tour-top button:hover, .dao-app .participate-tour-back:hover { color: var(--dao-ink); }
+.participate-tour-copy h2 { margin: 10px 0 9px; font-size: 21px; line-height: 1.3; letter-spacing: -.035em; font-weight: 650; outline: none; }
+.participate-tour-copy h2:focus-visible { outline: none; }
+.participate-tour-copy p { margin: 0; font-size: 14px; line-height: 1.65; color: var(--dao-muted); }
+.participate-tour-path { margin-top: 14px; color: var(--dao-accent); font-size: 13px; font-weight: 600; }
+.participate-tour-card footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; }
+.participate-tour-progress { display: flex; gap: 5px; }
+.participate-tour-progress i { width: 5px; height: 5px; border-radius: 99px; background: var(--dao-line-strong); }
+.participate-tour-progress i[data-current="true"] { width: 18px; background: var(--dao-gold); }
+.participate-tour-actions { display: flex; align-items: center; gap: 12px; }
+.dao-app .participate-tour-actions .dao-button { min-height: 40px; padding: 8px 14px; gap: 14px; font-size: 13px; border-radius: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .participate-tour-copy { animation: participate-tour-in .16s ease-out; }
+  @keyframes participate-tour-in { from { opacity: 0; } to { opacity: 1; } }
+}
+.dao-app .proposal-inline--comments { position: relative; padding: 14px 0 0; margin-top: 10px; scroll-margin-top: 76px; }
+.dao-app .proposal-inline--comments > .proposal-inline-toolbar { position: absolute; top: 11px; right: 0; padding: 0; }
+.dao-app .proposal-inline--comments:focus { outline: none; }
+.dao-app .proposal-inline-discussion { margin: 0; padding: 0; }
+.dao-app .proposal-inline-discussion .dao-section-heading { min-height: 32px; margin: 0 76px 10px 0; gap: 12px; }
+.dao-app .proposal-inline-discussion .dao-section-heading h2 { font-size: 16px; letter-spacing: -.02em; }
+.dao-app .proposal-inline-discussion .dao-comment-sort select { min-height: 30px; padding-top: 4px; padding-bottom: 4px; font-size: 12px; }
+.dao-app .proposal-inline-discussion .dao-comment-composer { margin: 0; padding: 0; border: 0; background: transparent; }
+.dao-app .proposal-inline-discussion .dao-composer-heading:has(> .dao-sr-only) { margin: 0; }
+.dao-app .proposal-inline-discussion .dao-comment-composer textarea { display: block; min-height: 76px; padding: 11px 13px; font-size: 14px; line-height: 1.5; border: 1px solid var(--dao-line); background: var(--dao-paper); border-radius: 9px; }
+.dao-app .proposal-inline-discussion .dao-composer-footer { margin-top: 9px; align-items: center; gap: 12px; }
+.dao-app .proposal-inline-discussion .dao-composer-footer p { margin: 0; font-size: 11px; line-height: 1.4; }
+.dao-app .proposal-inline-discussion .dao-composer-footer .dao-button { min-height: 34px; font-size: 12px; padding: 7px 14px; }
+.dao-app .proposal-inline-discussion .dao-comment-list { margin-top: 14px; }
+.dao-app .proposal-inline-discussion .dao-comment-list:empty { display: none; }
+.dao-app .proposal-inline-discussion .dao-comment { padding-top: 14px; padding-bottom: 14px; }
+@media (max-width: 540px) {
+  .dao-app .proposal-inline-discussion .dao-section-heading { flex-wrap: wrap; row-gap: 4px; }
+  .dao-app .proposal-inline-discussion .dao-composer-footer { flex-direction: row; }
+  .dao-app .proposal-inline-discussion .dao-comment-composer textarea { font-size: 16px; }
+  .dao-app .proposal-inline-discussion .dao-composer-footer .dao-button { width: auto; min-height: 40px; flex-shrink: 0; }
+}
+/* Keep every record section within reach, before the long proposal text. */
+.proposal-record-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 10px; margin: 0 0 20px; }
+.proposal-record-nav > button { display: flex; align-items: flex-start; gap: 10px; min-width: 0; min-height: 80px; padding: 16px 14px; border: 1px solid var(--dao-line); border-radius: 12px; background: var(--dao-paper); color: var(--dao-muted); text-align: left; font: inherit; cursor: pointer; transition: border-color .15s, background .15s; }
+.proposal-record-nav > button:hover { border-color: var(--dao-accent); }
+.proposal-record-nav > button[aria-pressed="true"] { background: var(--dao-soft); border-color: var(--dao-accent); color: var(--dao-accent); box-shadow: inset 0 -2px 0 var(--dao-accent); }
+.proposal-record-nav > button:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; }
+.proposal-record-nav svg { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 1px; }
+.proposal-record-nav > button > span { display: grid; gap: 5px; min-width: 0; }
+.proposal-record-nav strong { color: var(--dao-ink); font-size: 13px; font-weight: 650; line-height: 1.35; }
+.proposal-record-nav small { color: var(--dao-muted); font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
+.proposal-record-panel { min-width: 0; padding: 4px 0 0; }
+.proposal-record-panel[hidden] { display: none; }
+.proposal-record-panel > .dao-markdown { max-width: 85ch; font-size: 14px; }
+.proposal-record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; }
+.proposal-record-box { min-width: 0; padding: 20px; border: 1px solid var(--dao-line); border-radius: 12px; background: var(--dao-paper); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.proposal-record-box > header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 12px; }
+.proposal-record-box h4 { margin: 0; font-size: 14px; color: var(--dao-ink); font-weight: 650; }
+.proposal-record-box > header > span { color: var(--dao-muted); font-size: 11px; }
+.proposal-record-box p { margin: 0 0 16px; color: var(--dao-muted); }
+.proposal-record-box .proposal-record-caption, .proposal-record-caption { font-size: 11px; color: var(--dao-muted); line-height: 1.65; }
+.proposal-record-box .dao-archive-file-check { margin: 20px 0 0; padding: 18px 0 0; border-top: 1px solid var(--dao-line); background: none; border-radius: 0; }
+.proposal-record-box .dao-archive-file-check h3 { font-size: 14px; margin: 0 0 8px; }
+.proposal-record-box .dao-archive-file-check p { font-size: 12px; }
+.proposal-record-box .dao-archive-file-check .dao-button { min-height: 38px; font-size: 12px; }
+.proposal-record-box .dao-archive-details { margin-bottom: 0; }
+.proposal-record-box .proposal-record-fingerprint { margin-top: 12px; }
+.proposal-record-box .dao-archive-details > summary { font-size: 12px; }
+.proposal-record-box .dao-archive-details > summary:focus-visible, .proposal-source-comment > summary:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; border-radius: 4px; }
+.proposal-record-box .archive-recovery-guide ol { padding-left: 18px; }
+.proposal-record-box .archive-recovery-guide li { margin-bottom: 12px; }
+.proposal-source-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px 20px; margin: 0 0 16px; font-size: 13px; }
+.proposal-source-heading strong { font-size: 15px; }
+.proposal-source-heading p { color: var(--dao-muted); font-size: 11px; margin: 4px 0 0; }
+.proposal-source-timeline { list-style: none; margin: 0; padding: 0; }
+.proposal-source-timeline > li { position: relative; display: grid; gap: 4px; padding: 0 0 18px 18px; border-left: 1px solid var(--dao-line); margin-left: 4px; }
+.proposal-source-timeline > li::before { content: ""; position: absolute; left: -4px; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--dao-accent); }
+.proposal-source-timeline > li:last-child { border-left-color: transparent; padding-bottom: 8px; }
+.proposal-source-timeline strong { font-size: 12px; font-weight: 600; }
+.proposal-source-timeline span { font-size: 11px; color: var(--dao-muted); }
+.proposal-source-timeline a { width: fit-content; color: var(--dao-accent); font-size: 11px; }
+.proposal-source-comment { border-top: 1px solid var(--dao-line); padding: 4px 0; }
+.proposal-source-comment > summary { display: flex; align-items: center; gap: 10px; min-height: 58px; cursor: pointer; list-style: none; }
+.proposal-source-comment > summary::-webkit-details-marker { display: none; }
+.proposal-source-comment > summary::after { content: "+"; color: var(--dao-accent); margin-left: auto; }
+.proposal-source-comment[open] > summary::after { content: "−"; }
+.proposal-source-comment > summary > span { display: grid; gap: 3px; }
+.proposal-source-comment > summary strong { font-size: 12px; font-weight: 600; }
+.proposal-source-comment > summary small { font-size: 11px; color: var(--dao-muted); }
+.proposal-source-comment .dao-markdown { font-size: 13px; }
+.proposal-record-box .proposal-record-empty { padding: 18px 0 8px; margin: 0; font-size: 12px; }
+.proposal-source-download { display: inline-flex; min-height: 44px; align-items: center; margin-top: 8px; font-size: 12px; }
+.proposal-record-panel--review > .signed-decision, .proposal-record-panel--activity > .proposal-activity { border: 1px solid var(--dao-line); border-radius: 12px; padding: 20px; margin: 0; background: var(--dao-paper); }
+.proposal-record-panel--review > .signed-decision > summary, .proposal-record-panel--activity > .proposal-activity > summary { display: none; }
+.proposal-record-panel--review .signed-decision-body, .proposal-record-panel--activity .proposal-activity-content { padding: 0; }
+.proposal-record-panel--activity .proposal-activity-tools { flex-wrap: wrap; gap: 10px 24px; }
+@media (max-width: 760px) {
+  .proposal-record-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .proposal-record-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .proposal-record-nav > button { min-height: 72px; padding: 12px; gap: 8px; }
+  .proposal-record-box, .proposal-record-panel--review > .signed-decision, .proposal-record-panel--activity > .proposal-activity { padding: 16px; }
+}
+
+@media (min-width: 1100px) {
+  .proposal-record-nav { position: sticky; top: 72px; z-index: 4; padding-block: 8px; margin-top: -8px; background: var(--dao-paper); }
+  .proposal-record-panel { scroll-margin-top: 176px; }
+}
+@media (max-width: 550px) {
+  .proposal-record-nav > button { min-height: 56px; padding: 10px; align-items: center; }
+  .proposal-record-nav small { display: none; }
+  .proposal-record-nav svg { width: 18px; height: 18px; flex-basis: 18px; margin-top: 0; }
+}

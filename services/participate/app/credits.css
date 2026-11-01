@@ -1,0 +1,80 @@
+.dao-app .dao-credits-dialog { width: min(480px, calc(100vw - 32px)); }
+.dao-credits-dialog .dao-settings-heading { padding: 24px 28px 12px; }
+.dao-credits-dialog .dao-settings-heading h2 { margin: 0; font-size: 24px; }
+.dao-credits-content { padding: 0 28px 16px; }
+.dao-credits-content > p { font-size: 13px; color: var(--dao-muted); }
+.dao-credits-community { display: block; margin: 0 0 24px; }
+.dao-app .dao-credits-community select { width: 100%; min-height: 44px; border: 0; border-radius: 8px; padding: 10px 42px 10px 12px; background-color: var(--dao-soft); color: var(--dao-secondary); font: inherit; font-size: 14px; }
+.dao-credits-scope { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-bottom: 24px; }
+.dao-credits-scope strong { color: var(--dao-ink); font-size: 16px; font-weight: 550; }
+.dao-credits-scope > span { padding: 3px 8px; border-radius: 4px; background: var(--dao-soft); color: var(--dao-muted); font-size: 12px; }
+.dao-credits-community-name { margin: 0 0 24px; }
+.dao-credit-balance { padding: 0; }
+.dao-credit-balance-label { display: flex; align-items: center; gap: 8px; min-height: 24px; color: var(--dao-muted); font-size: 13px; }
+.dao-credit-demo-label { padding: 2px 7px; border-radius: 4px; background: var(--dao-soft); color: var(--dao-secondary); font-size: 11px; line-height: 1.5; }
+.dao-credit-amount { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.dao-credit-amount strong { min-width: 0; font: 500 48px/1.15 var(--font-numeric); color: var(--dao-ink); letter-spacing: -.05em; overflow-wrap: anywhere; }
+.dao-credit-unit { font-size: 16px; color: var(--dao-muted); }
+.dao-credit-costs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 22px 0 24px; }
+.dao-credit-costs > span { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: var(--dao-muted); font-size: 13px; }
+.dao-credit-costs strong { color: var(--dao-secondary); font-weight: 550; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dao-credit-demo-allowance { display: grid; gap: 8px; margin: 0 0 24px; text-align: center; }
+.dao-credit-demo-allowance > span { color: var(--dao-muted); font-size: 12px; }
+.dao-app .dao-credit-demo-allowance .dao-button, .dao-app .dao-credit-policy-form .dao-button { min-height: 44px; padding: 9px 14px; font-size: 13px; }
+.dao-credit-section { border-top: 1px solid var(--dao-line); }
+.dao-credit-section > summary { display: flex; align-items: center; gap: 12px; min-height: 52px; color: var(--dao-secondary); font-size: 14px; font-weight: 500; list-style: none; cursor: pointer; }
+.dao-credit-section > summary::-webkit-details-marker { display: none; }
+.dao-credit-section > summary:hover { color: var(--dao-ink); }
+.dao-credit-section > summary::after { content: ''; flex: none; width: 6px; height: 6px; margin: 0 4px 3px auto; border-right: 1.5px solid; border-bottom: 1.5px solid; transform: rotate(45deg); }
+.dao-credit-section[open] > summary::after { transform: rotate(225deg); margin-bottom: -3px; }
+.dao-credit-section > p { margin: 0 0 12px; color: var(--dao-muted); font-size: 13px; line-height: 1.65; }
+.dao-credit-section > p:last-child { margin-bottom: 20px; }
+.dao-topup-unavailable-details > summary > span { margin-left: auto; color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.dao-topup-unavailable-details > summary::after { margin-left: 0; }
+.dao-app .dao-topup-unavailable-details > button { min-height: 44px; margin: -4px 0 12px; font-size: 13px; }
+.dao-credit-policy-form { display: grid; gap: 10px; padding: 0 0 20px; font-size: 13px; }
+.dao-credit-policy-form > p { color: var(--dao-muted); font-size: 12px; line-height: 1.6; margin: 0; }
+.dao-app .dao-credit-policy-form select, .dao-app .dao-credit-policy-form input { width: 100%; min-height: 44px; border: 1px solid var(--dao-line-strong); border-radius: 8px; padding: 9px 12px; background-color: var(--dao-paper); color: var(--dao-ink); font: inherit; font-size: 14px; }
+.dao-app .dao-credit-policy-form select { padding-right: 42px; }
+.dao-credit-price-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dao-credit-price-fields label { display: grid; gap: 7px; }
+.dao-credit-policy-form > button { justify-self: start; margin-top: 4px; }
+.dao-credit-history ul { list-style: none; margin: 0; padding: 0 0 20px; display: grid; gap: 16px; }
+.dao-credit-history li { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.dao-credit-history li > div { display: grid; gap: 3px; }
+.dao-credit-history strong { color: var(--dao-secondary); font-size: 13px; font-weight: 500; }
+.dao-credit-history time { font-size: 12px; color: var(--dao-muted); }
+.dao-credit-history li > span { font: 500 15px var(--font-numeric); }
+.dao-credit-positive { color: var(--dao-positive); }
+@media (max-width: 600px) {
+  .dao-credits-dialog .dao-settings-heading { padding: 20px 20px 12px; }
+  .dao-credits-content { padding: 0 20px 12px; }
+  .dao-credit-costs { gap: 20px; }
+  .dao-app .dao-credits-community select, .dao-app .dao-credit-policy-form select, .dao-app .dao-credit-policy-form input { font-size: 16px; }
+}
+
+.dao-credits-inline { padding: 0 28px; }
+.dao-credits-inline .dao-credit-balance { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dao-credits-inline .dao-credit-balance-label { min-width: 0; }
+.dao-credits-inline .dao-credit-balance-label > span:first-child { color: var(--dao-ink); font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+.dao-credits-inline .dao-credit-total { flex: none; text-align: right; }
+.dao-credits-inline .dao-credit-total > small { display: block; margin-top: 2px; font-size: 10px; color: var(--dao-muted); }
+.dao-credits-inline .dao-credit-amount { flex: none; margin: 0; gap: 6px; }
+.dao-credits-inline .dao-credit-amount strong { font-family: var(--font-body); font-size: 32px; font-weight: 600; color: var(--dao-accent); letter-spacing: -.04em; }
+.dao-credits-inline .dao-credit-unit { font-size: 12px; color: var(--dao-accent); }
+.dao-credits-inline .dao-credit-intro { margin: 12px 0 0; font-size: 12px; line-height: 1.6; color: var(--dao-muted); text-wrap: pretty; }
+.dao-credits-inline .dao-credit-costs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 16px; padding: 16px 0 18px; }
+.dao-credits-inline .dao-credit-costs > span { display: grid; justify-content: start; gap: 5px; font-size: 12px; }
+.dao-credits-inline .dao-credit-costs strong { font-size: 14px; font-weight: 550; }
+.dao-credits-inline .dao-credit-demo-allowance { margin: 12px 0; gap: 6px; }
+.dao-credits-inline .dao-credit-demo-allowance > span { font-size: 11px; }
+.dao-credits-inline .dao-credit-history ul { gap: 12px; padding: 4px 0 16px; }
+.dao-credits-inline .dao-credit-history strong { font-size: 12px; }
+.dao-credits-inline .dao-credit-history time { font-size: 11px; }
+.dao-credits-inline .dao-credit-section > p { font-size: 12px; }
+.dao-credits-inline .dao-topup { border: 0; }
+@media (max-width: 450px) {
+  .dao-credits-inline { padding-inline: 20px; }
+  .dao-credits-inline .dao-credit-amount strong { font-size: 28px; }
+  .dao-credits-inline .dao-credit-costs { gap: 8px; }
+}

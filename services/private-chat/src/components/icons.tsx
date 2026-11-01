@@ -1,0 +1,252 @@
+/** Ícones SVG inline (stroke = currentColor). Leves, sem dependência externa. */
+
+import type { ReactNode } from "react";
+
+type IconProps = { className?: string };
+
+function svg(path: ReactNode) {
+  return function Icon({ className }: IconProps) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        aria-hidden="true"
+      >
+        {path}
+      </svg>
+    );
+  };
+}
+
+export const IconBook = svg(
+  <>
+    <path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Z" />
+    <path d="M12 5v15" />
+  </>,
+);
+
+/** A private conversation, with the lock contained inside the speech bubble. */
+export const IconPrivateChat = svg(
+  <>
+    <path d="M6 3.5h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H8L3 22V6.5a3 3 0 0 1 3-3Z" />
+    <rect x="9" y="10" width="6" height="5.5" rx="1" />
+    <path d="M10 10V8a2 2 0 0 1 4 0v2M12 12.5v.5" />
+  </>,
+);
+
+/** Connected participants: projects, teams and organizations in one ecosystem. */
+export const IconEcosystem = svg(
+  <>
+    <path d="M10 10 6 6m8 4 4-4m-8 8-4 4m8-4 4 4" />
+    <circle cx="12" cy="12" r="3" />
+    <circle cx="4.5" cy="4.5" r="2.2" />
+    <circle cx="19.5" cy="4.5" r="2.2" />
+    <circle cx="4.5" cy="19.5" r="2.2" />
+    <circle cx="19.5" cy="19.5" r="2.2" />
+  </>,
+);
+
+export const IconDashboard = svg(
+  <>
+    <rect x="3" y="3" width="7" height="9" rx="1.5" />
+    <rect x="14" y="3" width="7" height="5" rx="1.5" />
+    <rect x="14" y="12" width="7" height="9" rx="1.5" />
+    <rect x="3" y="16" width="7" height="5" rx="1.5" />
+  </>,
+);
+
+export const IconList = svg(
+  <>
+    <path d="M8 6h13M8 12h13M8 18h13" />
+    <circle cx="3.5" cy="6" r="1" />
+    <circle cx="3.5" cy="12" r="1" />
+    <circle cx="3.5" cy="18" r="1" />
+  </>,
+);
+
+export const IconKey = svg(
+  <>
+    <circle cx="7.5" cy="15.5" r="4.5" />
+    <path d="M10.5 12.5 21 2m-4 1 2.5 2.5M14.5 5.5 17 8" />
+  </>,
+);
+
+export const IconBalance = svg(
+  <>
+    <path d="M12 3v18M5 7h14M7 7l-3 6a3 3 0 0 0 6 0L7 7Zm10 0-3 6a3 3 0 0 0 6 0l-3-6Z" />
+  </>,
+);
+
+export const IconArrowDown = svg(<path d="M12 5v14M19 12l-7 7-7-7" />);
+export const IconArrowUp = svg(<path d="M12 19V5M5 12l7-7 7 7" />);
+
+/** A rising line in a frame: positions and investments. */
+export const IconPlay = svg(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M10 8.5v7l6-3.5z" />
+  </>,
+);
+
+export const IconTrend = svg(
+  <>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M6.5 15.5l3.5-4 3 2.5 4.5-5.5" />
+    <path d="M14.5 8.5h3v3" />
+  </>,
+);
+
+export const IconShield = svg(
+  <path d="M12 3 5 6v6c0 4 3 6.5 7 9 4-2.5 7-5 7-9V6l-7-3Z" />,
+);
+
+export const IconAlert = svg(
+  <>
+    <path d="M12 9v4M12 17h.01" />
+    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+  </>,
+);
+
+export const IconCheck = svg(<path d="M20 6 9 17l-5-5" />);
+
+export const IconCoins = svg(
+  <>
+    <ellipse cx="9" cy="7" rx="6" ry="3" />
+    <path d="M3 7v5c0 1.66 2.69 3 6 3s6-1.34 6-3V7" />
+    <path d="M15 11.5c2.5.3 6 1.4 6 3.5 0 1.66-2.69 3-6 3-1.2 0-2.3-.18-3.2-.48" />
+  </>,
+);
+
+export const IconWallet = svg(
+  <>
+    <rect x="3" y="6" width="18" height="13" rx="2.5" />
+    <path d="M3 10.5h18" />
+    <circle cx="16.5" cy="14.5" r="1.15" />
+  </>,
+);
+
+export const IconGrant = svg(
+  <>
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <path d="M8 8h8M8 12h4" />
+    <circle cx="15.5" cy="15.5" r="2.5" />
+    <path d="M14 17.5l-1.2 2.8 2.7-1.2 2.7 1.2-1.2-2.8" />
+  </>,
+);
+
+export const IconReceipt = svg(
+  <path d="M5 3v18l2-1.2L9 21l2-1.2L13 21l2-1.2L17 21l2-1.2V3l-2 1.2L15 3l-2 1.2L11 3 9 4.2 7 3 5 4.2zM9 8h6M9 12h6" />,
+);
+
+export const IconOrganizations = svg(
+  <>
+    <rect x="5" y="3" width="14" height="18" rx="2" />
+    <path d="M9 7h1m4 0h1M9 11h1m4 0h1M10 21v-5h4v5" />
+  </>,
+);
+
+export const IconUsers = svg(
+  <>
+    <circle cx="9" cy="8" r="3" />
+    <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+    <path d="M16 5.4a3 3 0 0 1 0 5.2M21 20a5.5 5.5 0 0 0-3.5-5.1" />
+  </>,
+);
+
+export const IconCalculator = svg(
+  <>
+    <rect x="5" y="2.5" width="14" height="19" rx="2.5" />
+    <rect x="8" y="6" width="8" height="3" rx="0.7" />
+    <path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 17h.01M12 17h.01M15.5 17h.01" strokeWidth="2.8" />
+  </>,
+);
+
+export const IconChart = svg(
+  <>
+    <path d="M3 3v18h18" />
+    <rect x="6.5" y="12" width="3" height="6" rx="0.5" />
+    <rect x="11.5" y="8" width="3" height="10" rx="0.5" />
+    <rect x="16.5" y="5" width="3" height="13" rx="0.5" />
+  </>,
+);
+
+export const IconVote = svg(
+  <>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M8 12l2.5 2.5L16 9" />
+  </>,
+);
+
+export const IconGlobe = svg(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z" />
+  </>,
+);
+
+export const IconSigma = svg(<path d="M18 4H6l6 8-6 8h12" />);
+
+export const IconTerminal = svg(
+  <>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M7 9l3 3-3 3M13 15h4" />
+  </>,
+);
+
+export const IconSwap = svg(
+  <>
+    <path d="M16 3l4 4-4 4" />
+    <path d="M20 7H9a4 4 0 0 0-4 4" />
+    <path d="M8 21l-4-4 4-4" />
+    <path d="M4 17h11a4 4 0 0 0 4-4" />
+  </>,
+);
+
+export const IconMail = svg(
+  <>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7.5l9 6 9-6" />
+  </>,
+);
+
+export const IconGrid = svg(
+  <>
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+  </>,
+);
+
+export const IconClose = svg(<path d="M6 6l12 12M18 6L6 18" />);
+
+export const IconPencil = svg(
+  <path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z" />,
+);
+
+export const IconNews = svg(
+  <>
+    <path d="M4 5h13v14H6a2 2 0 0 1-2-2z" />
+    <path d="M17 8h2a1 1 0 0 1 1 1v8a2 2 0 0 1-2 2" />
+    <path d="M8 9h6M8 13h6M8 17h3" />
+  </>,
+);
+
+export const IconHome = svg(
+  <>
+    <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+    <path d="M9.5 20v-5.5h5V20" />
+  </>,
+);
+
+export const IconSearch = svg(
+  <>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="M20 20l-4.3-4.3" />
+  </>,
+);

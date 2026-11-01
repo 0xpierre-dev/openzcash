@@ -1,0 +1,8 @@
+Participate / community-shielded-voting
+Licensed under Apache License 2.0; see LICENSE.
+
+This distribution preserves the application and its contributors' code.
+OpenZcash public-release preparation, 2026-11-01: packaging, dependency updates,
+installation documentation, configurable local test port, and database bootstrap.
+Private deployment records, credentials, operational evidence and funding
+applications are not part of this distribution. No license change is intended.

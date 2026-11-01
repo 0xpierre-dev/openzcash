@@ -43,7 +43,7 @@ it("combines text and category filters for a new official proposal before import
 
 it("searches imported, published-only and historical cards in one status list without losing engagement identity", async () => {
   const captured = await buildSourceProposal({ number: 454, html_url: snapshot.proposals[0].url, title: "0xramp: ZEC payments and wallet integrations", body: "### Requested Grant Amount (USD)\n\n$45,000",
-    user: { login: "vinibarbosabr" }, state: "open", created_at: "2026-09-29T12:00:00Z", updated_at: "2026-10-12T12:00:00Z",
+    user: { login: "sample-applicant" }, state: "open", created_at: "2026-09-29T12:00:00Z", updated_at: "2026-10-12T12:00:00Z",
     labels: [{ name: "📋 Grant Application", color: "bdb853", description: null }, { name: "👀 Ready For ZCG Review", color: "115858", description: null }] }, 454, "2026-10-14T14:00:00.000Z");
   const historical = ZCG_PROPOSAL_EXAMPLES[0];
   const base = { commentCount: 2, likes: 2, likedByMe: false, chargedBefore: false };
@@ -54,7 +54,7 @@ it("searches imported, published-only and historical cards in one status list wi
     ] }} />);
   const search = screen.getByRole("searchbox");
   expect(screen.getByRole("status", { name: "Proposal count" }).textContent).toBe("3 proposals");
-  fireEvent.change(search, { target: { value: "#454 @vinibar" } });
+  fireEvent.change(search, { target: { value: "#454 @sample" } });
   fireEvent.change(screen.getByRole("combobox", { name: "Category" }), { target: { value: "wallets" } });
   expect(screen.getByText("Comments for zcg-github-454")).toBeTruthy();
   expect(screen.queryByRole("heading", { name: /Mexico/ })).toBeNull();

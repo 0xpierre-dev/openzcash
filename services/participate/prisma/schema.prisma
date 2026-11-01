@@ -1,0 +1,1353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CREATOR
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum CommunityMembershipRole {
+  OWNER
+  MANAGER
+  REVIEWER
+  MODERATOR
+}
+
+enum CommunityMembershipStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum TreasuryKind {
+  COMMUNITY
+  SUSTAINABILITY
+}
+
+enum TreasuryOperationKind {
+  FUNDING
+  ALLOCATION
+}
+
+enum ParticipationMode {
+  FREE
+  CREDITS
+}
+
+enum CreditOperationKind {
+  PREVIEW_GRANT
+  ADMIN_DEMO_GRANT
+  COMMENT
+  REACTION
+  PURCHASE
+  PROPOSAL_SUBMISSION
+}
+
+enum CreditPurchaseState {
+  PENDING
+  CONFIRMING
+  CREDITED
+  EXPIRED
+  REVIEW
+}
+
+enum CreditPaymentNetwork {
+  mainnet
+  testnet
+  regtest
+}
+
+enum CreditPaymentPool {
+  sapling
+  orchard
+}
+
+enum PollStatus {
+  DRAFT
+  ANCHORING
+  SCHEDULED
+  OPEN
+  CLOSED
+  FINALIZED
+  ARCHIVED
+}
+
+enum PollVoteModel {
+  SINGLE_CHOICE
+}
+
+enum TicketStatus {
+  ISSUED
+  LOCKED
+  VOTED
+  EXPIRED
+  REVOKED
+}
+
+enum VoteRequestStatus {
+  ACTIVE
+  USED
+  EXPIRED
+}
+
+enum VoteReceiptStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+  DUPLICATE_IGNORED
+}
+
+enum PollInviteStatus {
+  PENDING
+  SENT
+  OPENED
+  FAILED
+}
+
+enum PollInviteDeliveryChannel {
+  EMAIL
+  SIGNAL
+}
+
+enum PollAudience {
+  CUSTOM
+  DAO_MEMBERS
+}
+
+enum DaoMemberStatus {
+  ACTIVE
+  REMOVED
+}
+
+enum DaoMembershipActionType {
+  ADD_MEMBER
+  REMOVE_MEMBER
+}
+
+enum DaoMembershipActionStatus {
+  PENDING
+  APPLIED
+  REJECTED
+}
+
+enum PollVoterAccessStatus {
+  ACTIVE
+  USED
+  EXPIRED
+  REVOKED
+}
+
+enum VoteOptionLetter {
+  A
+  B
+  C
+  D
+  E
+}
+
+enum PublicAuditEventType {
+  POLL_CREATED
+  VOTE_OBSERVED
+  VOTE_CONFIRMED
+}
+
+enum DaoMembershipRequestStatus {
+  PENDING
+  PROPOSED
+  ADMITTED
+  DECLINED
+  WITHDRAWN
+}
+
+model User {
+  id                       String                @id @default(cuid())
+  nick                     String                @unique
+  displayName              String?
+  avatarUrl                String?
+  shareProfileInDiscussion Boolean               @default(false)
+  email                    String?               @unique
+  emailVerifiedAt          DateTime?
+  passwordHash             String
+  role                     UserRole
+  status                   UserStatus            @default(ACTIVE)
+  createdAt                DateTime              @default(now())
+  polls                    Poll[]                @relation("PollCreator")
+  eligibility              PollEligibility[]
+  assignments              TicketAssignment[]
+  invites                  PollInvite[]
+  createdCommunities       Community[]           @relation("CommunityCreator")
+  communityMemberships     CommunityMembership[]
+  treasuryOperations       TreasuryOperation[]   @relation("TreasuryOperationActor")
+  authoredPollComments     PollComment[]         @relation("PollCommentAuthor")
+  moderatedPollComments    PollComment[]         @relation("PollCommentModerator")
+  creditAccounts           CreditAccount[]
+  pollCommentReactions     PollCommentReaction[]
+  creditPurchases          CreditPurchase[]
+  passkeys                 Passkey[]
+  fundingQuotes            ProposalFundingQuote[]
+  fundingQuoteThrottle     FundingQuoteThrottle?
+  collectionChecks         PollCollectionCheck[]
+  daoMemberships           DaoMember[]
+  membershipRequests       DaoMembershipRequest[] @relation("MembershipApplicant")
+  reviewedMembershipRequests DaoMembershipRequest[] @relation("MembershipReviewer")
+  membershipActions        DaoMembershipAction[] @relation("MembershipAccountTarget")
+  proposalSubmissions      ProposalSubmission[]
+  receivedNotifications    DiscussionNotification[] @relation("NotificationRecipient")
+  sentNotifications        DiscussionNotification[] @relation("NotificationActor")
+}
+
+model EmailAuthChallenge {
+  id            String    @id
+  email         String
+  purpose       String
+  userId        String?
+  binding       String
+  origin        String
+  codeHash      String
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime
+  deliveredAt   DateTime?
+  consumedAt    DateTime?
+  attempts      Int       @default(0)
+
+  @@index([expiresAt])
+}
+
+model EmailAuthThrottle {
+  id          String   @id
+  attempts    Int
+  resetsAt    DateTime
+  lastSentAt  DateTime
+
+  @@index([resetsAt])
+}
+
+model Passkey {
+  id             String    @id @default(cuid())
+  credentialId   String    @unique
+  userId         String
+  userHandle     String
+  rpId           String
+  publicKey      Bytes
+  counter        BigInt    @default(0)
+  transports     String[]  @default([])
+  deviceType     String
+  backedUp       Boolean
+  label          String
+  createdAt      DateTime  @default(now())
+  lastUsedAt     DateTime?
+  revokedAt      DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, rpId, revokedAt])
+}
+
+// Short-lived, single-use ceremonies bound to an HttpOnly browser cookie.
+model PasskeyChallenge {
+  id              String   @id
+  challenge       String
+  purpose         String
+  origin          String
+  rpId            String
+  userId          String?
+  userHandle      String?
+  passwordVersion String?
+  label           String?
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+
+  @@index([expiresAt])
+}
+
+// Bounds password reauthentication attempts for passkey management.
+model PasskeyThrottle {
+  id        String   @id
+  attempts  Int      @default(0)
+  resetsAt  DateTime
+}
+
+enum WorkspaceKind {
+  DAO
+  COMMITTEE
+}
+
+model Community {
+  id                         String                @id @default(cuid())
+  name                       String
+  kind                       WorkspaceKind         @default(DAO)
+  slug                       String                @unique
+  createdById                String
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  createdBy                  User                  @relation("CommunityCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  memberships                CommunityMembership[]
+  polls                      Poll[]
+  daoMembers                 DaoMember[]
+  treasuries                 CommunityTreasury[]
+  treasuryOperations         TreasuryOperation[]
+  participationMode          ParticipationMode     @default(FREE)
+  commentCost                Int                   @default(1)
+  reactionCost               Int                   @default(1)
+  participationPolicyVersion Int                   @default(1)
+  creditAccounts             CreditAccount[]
+  creditPurchases             CreditPurchase[]
+  membershipRequests          DaoMembershipRequest[]
+  proposalArchives           ProposalArchive[]     @relation("HostedArchives")
+  committeeArchives          ProposalArchive[]     @relation("CommitteeArchives")
+  hostedSubmissions          ProposalSubmission[]  @relation("HostedSubmissions")
+  committeeSubmissions       ProposalSubmission[]  @relation("CommitteeSubmissions")
+  committeePolicy            CommitteePolicy?
+  committeeInvitations       CommitteeInvitation[]
+  committeeEvents            CommitteeEvent[]
+}
+
+// Private drafts become immutable, account-owned pilot publications. No DAO ballot.
+model ProposalSubmission {
+  id             String @id
+  communityId    String
+  committeeId    String
+  authorId       String
+  payload        Json
+  contentHash    String
+  version        Int @default(1)
+  state          String @default("DRAFT")
+  requestKey     String?
+  recordId       String? @unique
+  submittedAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  community      Community @relation("HostedSubmissions", fields: [communityId], references: [id], onDelete: Restrict)
+  committee      Community @relation("CommitteeSubmissions", fields: [committeeId], references: [id], onDelete: Restrict)
+  author         User @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  abandonment    ProposalAbandonment?
+  @@index([authorId, communityId, updatedAt])
+}
+
+// No draft text is retained. A tombstone prevents stale retries from recreating it.
+model ProposalDraftDeletion {
+  id          String @id
+  communityId String
+  committeeId String
+  authorId    String
+  version     Int
+  createdAt   DateTime
+  deletedAt   DateTime @default(now())
+  @@index([authorId, createdAt])
+}
+
+// Append-only lifecycle projection. The published submission and files never change.
+model ProposalAbandonment {
+  archiveId    String @id
+  submissionId String @unique
+  eventId      String @unique
+  requestKey   String
+  archive      ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  submission   ProposalSubmission @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+  event        ArchiveActivityEvent @relation(fields: [eventId], references: [id], onDelete: Restrict)
+}
+
+// Public historical records have no ballot lifecycle or treasury authority.
+model ProposalArchive {
+  id          String @id @default(cuid())
+  communityId String
+  committeeId String?
+  recordId    String
+  title       String
+  // Committee annotations are versioned separately from immutable proposal files.
+  labels      String[] @default([])
+  labelsVersion Int @default(0)
+  createdAt   DateTime @default(now())
+  community   Community @relation("HostedArchives", fields: [communityId], references: [id], onDelete: Restrict)
+  committee   Community? @relation("CommitteeArchives", fields: [committeeId], references: [id], onDelete: Restrict)
+  revisions   ArchiveRevision[]
+  comments    ArchiveComment[]
+  likes       ArchiveProposalLike[]
+  likeRequests ArchiveProposalLikeRequest[]
+  activityActors ArchiveActivityActor[]
+  activityEvents ArchiveActivityEvent[]
+  notifications DiscussionNotification[]
+  abandonment ProposalAbandonment?
+  @@unique([communityId, recordId])
+  @@index([committeeId])
+}
+
+model ArchiveRevision {
+  id           String @id @default(cuid())
+  archiveId    String
+  revision     Int
+  manifestHash String
+  packageJson  String
+  createdAt    DateTime @default(now())
+  archive      ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  anchors      ArchiveAnchor[]
+  decision     SignedDecisionRound?
+  @@unique([archiveId, revision])
+  @@unique([archiveId, manifestHash])
+}
+
+// Background source intake. Public requests cannot create jobs or choose a signer.
+model ParticipateAutomationState {
+  hostId        String @id
+  committeeId   String
+  policyHash    String
+  startedAt     DateTime
+  cursorAt      DateTime
+  nextPollAt    DateTime @default(now())
+  lastRunAt     DateTime?
+  lastSuccessAt DateTime?
+  lastErrorCode String?
+  failures      Int @default(0)
+}
+
+model ParticipateAutomationJob {
+  id            String @id @default(cuid())
+  hostId        String
+  committeeId   String
+  issueNumber   Int
+  sourceUrl     String
+  revision      Int @default(1)
+  sourceFingerprint String?
+  manifestHash  String
+  packageJson   String
+  revisionId    String?
+  anchorId      String?
+  state         String @default("CAPTURED")
+  txid          String?
+  feeZat        Int?
+  attempts      Int @default(0)
+  lastErrorCode String?
+  nextAttemptAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@unique([hostId, issueNumber, revision])
+  @@index([hostId, nextAttemptAt])
+}
+
+// Discovery cache only. Official identity always comes from immutable archives.
+model ParticipateSourceCheckpoint {
+  hostId          String
+  issueNumber     Int
+  recordId        String
+  sourceUpdatedAt DateTime
+  checkedAt       DateTime
+  @@id([hostId, issueNumber])
+  @@index([hostId, checkedAt])
+}
+
+model ParticipateAutomationLog {
+  id          String @id @default(cuid())
+  hostId      String
+  jobId       String?
+  level       String
+  event       String
+  code        String?
+  details     Json
+  createdAt   DateTime @default(now())
+  @@index([hostId, createdAt])
+}
+
+// Independent, public pilot reviews. Never modifies imported committee decisions.
+model SignedDecisionRound {
+  id           String @id
+  revisionId   String @unique
+  scopeId      String
+  manifestJson String
+  manifestHash String @unique
+  closesAt     DateTime?
+  createdAt    DateTime @default(now())
+  revision     ArchiveRevision @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  voters       SignedDecisionVoter[]
+  ballots      SignedDecisionBallot[]
+  challenges   SignedDecisionChallenge[]
+}
+
+// Private account mapping; public receipts use a fresh, round-scoped voter ID.
+model SignedDecisionVoter {
+  id          String @id
+  roundId     String
+  userId      String
+  keyIds      String[]
+  round       SignedDecisionRound @relation(fields: [roundId], references: [id], onDelete: Restrict)
+  ballot      SignedDecisionBallot?
+  @@unique([roundId, userId])
+}
+
+model SignedDecisionBallot {
+  id          String @id
+  roundId     String
+  voterId     String @unique
+  ballotJson  String
+  ballotHash  String
+  recordedAt  DateTime @default(now())
+  round       SignedDecisionRound @relation(fields: [roundId], references: [id], onDelete: Restrict)
+  voter       SignedDecisionVoter @relation(fields: [voterId], references: [id], onDelete: Restrict)
+  @@index([roundId])
+}
+
+model SignedDecisionChallenge {
+  id          String @id
+  roundId     String
+  userId      String
+  envelope    String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  round       SignedDecisionRound @relation(fields: [roundId], references: [id], onDelete: Restrict)
+  @@unique([roundId, userId])
+  @@index([expiresAt])
+}
+
+model ArchiveAnchor {
+  id            String @id @default(cuid())
+  revisionId    String
+  network       CreditPaymentNetwork
+  memo          String
+  commitment    Json?
+  state         String @default("PREPARED")
+  operationId   String?
+  txids         String[] @default([])
+  receiver      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  revision      ArchiveRevision @relation(fields: [revisionId], references: [id], onDelete: Restrict)
+  checks        ArchiveAnchorCheck[]
+  @@unique([revisionId, network])
+}
+
+model ArchiveAnchorCheck {
+  id        String @id @default(cuid())
+  anchorId  String
+  status    String
+  evidence  Json
+  createdAt DateTime @default(now())
+  anchor    ArchiveAnchor @relation(fields: [anchorId], references: [id], onDelete: Restrict)
+  @@index([anchorId, createdAt])
+}
+
+model ArchiveComment {
+  currentVersion Int @default(1)
+  withdrawnAt DateTime?
+  withdrawalKey String?
+  versions ArchiveCommentVersion[]
+  id            String @id @default(cuid())
+  archiveId     String
+  authorId      String
+  authorLabel   String
+  body          String
+  parentId      String?
+  requestKey    String
+  createdAt     DateTime @default(now())
+  hiddenAt      DateTime?
+  hiddenById    String?
+  hiddenByLabel String?
+  hideReason    String?
+  archive       ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  reactions     ArchiveReaction[]
+  requests      ArchiveReactionRequest[]
+  notifications DiscussionNotification[]
+  @@unique([archiveId, authorId, requestKey])
+  @@index([archiveId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+enum DiscussionNotificationKind {
+  PROPOSAL_ARRIVED
+  COMMENT_LIKED
+  COMMENT_REPLIED
+}
+
+// Private inbox state; public interaction history remains in ArchiveActivityEvent.
+model DiscussionNotification {
+  id          String @id @default(cuid())
+  kind        DiscussionNotificationKind
+  recipientId String
+  actorId     String?
+  commentId   String?
+  archiveId   String?
+  createdAt   DateTime @default(now())
+  readAt      DateTime?
+  withdrawnAt DateTime?
+  recipient   User @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Restrict)
+  actor       User? @relation("NotificationActor", fields: [actorId], references: [id], onDelete: Restrict)
+  comment     ArchiveComment? @relation(fields: [commentId], references: [id], onDelete: Restrict)
+  archive     ProposalArchive? @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  @@unique([kind, actorId, commentId])
+  @@unique([kind, recipientId, archiveId])
+  @@index([recipientId, createdAt, id])
+  @@index([recipientId, readAt, withdrawnAt])
+}
+
+model ArchiveCommentVersion {
+  id String @id @default(cuid())
+  commentId String
+  version Int
+  body String
+  bodyHash String
+  previousBodyHash String?
+  requestKey String
+  createdAt DateTime @default(now())
+  comment ArchiveComment @relation(fields: [commentId], references: [id], onDelete: Restrict)
+  @@unique([commentId, version])
+  @@unique([commentId, requestKey])
+}
+
+model ArchiveReaction {
+  version Int @default(1)
+  commentId String
+  userId    String
+  liked     Boolean
+  chargedBefore Boolean @default(false)
+  comment   ArchiveComment @relation(fields: [commentId], references: [id], onDelete: Restrict)
+  @@id([commentId, userId, version])
+}
+
+model ArchiveProposalLike {
+  archiveId String
+  userId String
+  liked Boolean
+  chargedBefore Boolean @default(false)
+  archive ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  @@id([archiveId, userId])
+}
+
+model ArchiveProposalLikeRequest {
+  id String @id @default(cuid())
+  archiveId String
+  userId String
+  requestKey String
+  liked Boolean
+  createdAt DateTime @default(now())
+  archive ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  @@unique([archiveId, userId, requestKey])
+  @@index([userId, createdAt])
+}
+
+model ArchiveReactionRequest {
+  version Int @default(1)
+  id         String @id @default(cuid())
+  commentId  String
+  userId     String
+  requestKey String
+  liked      Boolean
+  createdAt  DateTime @default(now())
+  comment    ArchiveComment @relation(fields: [commentId], references: [id], onDelete: Restrict)
+  @@unique([commentId, userId, requestKey])
+  @@index([userId, createdAt])
+}
+
+// Public event identities are scoped to one proposal. Account mappings stay private.
+model ArchiveActivityActor {
+  id        String @id @default(uuid())
+  archiveId String
+  userId    String
+  archive   ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  @@unique([archiveId, userId])
+}
+
+model ArchiveActivityEvent {
+  id          String @id @default(uuid())
+  archiveId   String
+  sequence    Int
+  sourceKey   String
+  eventHash   String @unique
+  eventJson   String
+  createdAt   DateTime @default(now())
+  archive     ProposalArchive @relation(fields: [archiveId], references: [id], onDelete: Restrict)
+  inclusion   ArchiveActivityInclusion?
+  abandonment ProposalAbandonment?
+  @@unique([archiveId, sequence])
+  @@unique([archiveId, sourceKey])
+}
+
+model ArchiveActivityBatch {
+  pool String @default("sapling")
+  automation ActivityAutomationJob?
+  id          String @id @default(uuid())
+  communityId String
+  network     CreditPaymentNetwork
+  root        String
+  leafCount   Int
+  memo        String
+  receiver    String
+  txid        String?
+  createdAt   DateTime @default(now())
+  entries     ArchiveActivityInclusion[]
+  checks      ArchiveActivityCheck[]
+  @@index([communityId, createdAt])
+}
+
+model ArchiveActivityInclusion {
+  eventId String @id
+  batchId String
+  proof   Json
+  event   ArchiveActivityEvent @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  batch   ArchiveActivityBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  @@index([batchId])
+}
+
+model ArchiveActivityCheck {
+  id        String @id @default(cuid())
+  batchId   String
+  status    String
+  evidence  Json
+  createdAt DateTime @default(now())
+  batch     ArchiveActivityBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  @@index([batchId, createdAt])
+}
+
+// A frozen official-source verdict snapshot; later discussion never rewrites it.
+model ArchiveDiscussionClosure {
+  id String @id @default(cuid())
+  archiveId String
+  revisionId String @unique
+  snapshotHash String @unique
+  snapshotJson String
+  createdAt DateTime @default(now())
+  @@index([archiveId, createdAt])
+}
+
+model ActivityAutomationJob {
+  batchId String @id
+  state String @default("PREPARED")
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  lastErrorCode String?
+  feeZat Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  batch ArchiveActivityBatch @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  @@index([state, nextAttemptAt])
+}
+
+model CommunityMembership {
+  id          String                    @id @default(cuid())
+  communityId String
+  userId      String
+  role        CommunityMembershipRole
+  status      CommunityMembershipStatus @default(ACTIVE)
+  publicName  String?
+  version     Int                       @default(1)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+  community   Community                 @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  user        User                      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([communityId, userId])
+  @@index([userId, status])
+}
+
+model CommitteePolicy {
+  communityId     String @id
+  quorum          Int
+  approvalPercent Int
+  durationHours   Int
+  version         Int @default(1)
+  updatedAt       DateTime @updatedAt
+  community       Community @relation(fields: [communityId], references: [id], onDelete: Restrict)
+}
+
+// Email-bound invitations; the opaque ID alone never grants access.
+model CommitteeInvitation {
+  id           String @id
+  communityId  String
+  email        String
+  role         CommunityMembershipRole
+  invitedById  String
+  expiresAt    DateTime
+  acceptedAt   DateTime?
+  acceptedById String?
+  revokedAt    DateTime?
+  createdAt    DateTime @default(now())
+  community    Community @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  @@index([communityId, email, createdAt])
+}
+
+// Private operator audit, append-only and hash-linked. Not a blockchain anchor.
+model CommitteeEvent {
+  id          String @id
+  communityId String
+  sequence    Int
+  actorId     String
+  action      String
+  details     Json
+  previousHash String?
+  hash        String @unique
+  createdAt   DateTime
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  @@unique([communityId, sequence])
+}
+
+model Poll {
+  id                      String                       @id @default(cuid())
+  question                String
+  proposalBody            String?
+  proposalTags            String[]                     @default([])
+  contentHashVersion      String?
+  treasuryId              String?
+  requestedAmountZat      BigInt?
+  requestedAmountUsdCents BigInt?
+  optionALabel            String?
+  optionBLabel            String?
+  optionCLabel            String?
+  optionDLabel            String?
+  optionELabel            String?
+  status                  PollStatus                   @default(DRAFT)
+  voteModel               PollVoteModel                @default(SINGLE_CHOICE)
+  quorumPercent           Int                          @default(40)
+  passingThresholdPercent Int                          @default(67)
+  anchorTxid              String?
+  anchorHeight            Int?
+  audience                PollAudience                 @default(CUSTOM)
+  questionHash            String
+  feeZat                  BigInt
+  opensAt                 DateTime
+  closesAt                DateTime
+  createdById             String
+  // Nullable only to preserve unassigned legacy history. New writes require a community.
+  communityId             String?
+  createdAt               DateTime                     @default(now())
+  updatedAt               DateTime                     @updatedAt
+  createdBy               User                         @relation("PollCreator", fields: [createdById], references: [id])
+  community               Community?                   @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  eligibility             PollEligibility[]
+  tickets                 VoteTicket[]
+  receipts                VoteReceipt[]
+  assignments             TicketAssignment[]
+  invites                 PollInvite[]
+  voterAccesses           PollVoterAccess[]
+  tally                   PollTally?
+  publicAuditEvents       PublicAuditEvent[]
+  membershipAction        DaoMembershipAction?
+  membersAdded            DaoMember[]                  @relation("DaoMemberAddedByPoll")
+  membersRemoved          DaoMember[]                  @relation("DaoMemberRemovedByPoll")
+  treasury                CommunityTreasury?           @relation("PollFundingTreasury", fields: [treasuryId, communityId], references: [id, communityId], onDelete: Restrict)
+  comments                PollComment[]
+  commentReactions        PollCommentReaction[]
+  commentReactionRequests PollCommentReactionRequest[]
+  fundingQuotes           ProposalFundingQuote[]
+  collectionChecks        PollCollectionCheck[]
+
+  @@index([communityId, createdAt])
+}
+
+// Private observation history. OBSERVED is not a finalized tally or a cutoff proof.
+model PollCollectionCheck {
+  id                 String    @id @default(cuid())
+  pollId             String
+  actorId            String
+  requestKey         String
+  scopeHash          String
+  status             String    @default("RUNNING")
+  reason             String?
+  startedAt          DateTime  @default(now())
+  leaseExpiresAt     DateTime
+  finishedAt         DateTime?
+  sourceVersion      String?
+  sourceFingerprint  String?
+  network            String?
+  tipHeight          Int?
+  scannedHeight      Int?
+  transactionCount   Int?
+  outputCount        Int?
+  evidenceHash       String?
+  evidence           Json?
+  poll               Poll      @relation(fields: [pollId], references: [id], onDelete: Restrict)
+  actor              User      @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@unique([pollId, actorId, requestKey])
+  @@index([pollId, startedAt])
+}
+
+// Historical estimates only. These rows cannot authorize or record a payment.
+model ProposalFundingQuote {
+  id                  String   @id @default(cuid())
+  pollId              String
+  actorId             String
+  requestKey          String
+  proposalHash        String
+  usdCents            BigInt
+  rateUsdPerZecE8      BigInt
+  amountZat           BigInt
+  source              String   @default("COINGECKO")
+  quotedAt            DateTime
+  retrievedAt         DateTime
+  expiresAt           DateTime
+  createdAt           DateTime @default(dbgenerated("(CURRENT_TIMESTAMP AT TIME ZONE 'UTC')"))
+  rounding            String   @default("CEILING_ZAT")
+  fees                String   @default("EXCLUDED")
+  poll                Poll     @relation(fields: [pollId], references: [id], onDelete: Restrict)
+  actor               User     @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@unique([pollId, actorId, requestKey])
+  @@index([pollId, createdAt])
+}
+
+model FundingQuoteThrottle {
+  userId    String   @id
+  attempts  Int
+  resetsAt  DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PollEligibility {
+  pollId String
+  userId String
+  poll   Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([pollId, userId])
+}
+
+model VoteTicket {
+  id                 String            @id @default(cuid())
+  pollId             String
+  ticketPublicId     String            @unique
+  ticketHash         String            @unique
+  status             TicketStatus      @default(ISSUED)
+  lockedOptionLetter VoteOptionLetter?
+  lockedRequestId    String?
+  lockedAt           DateTime?
+  issuedAt           DateTime          @default(now())
+  expiresAt          DateTime?
+  poll               Poll              @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  assignment         TicketAssignment?
+  requests           VoteRequest[]
+
+  @@unique([id, pollId])
+}
+
+model TicketAssignment {
+  ticketId          String           @id
+  pollId            String
+  userId            String?
+  pollVoterAccessId String?
+  ticket            VoteTicket       @relation(fields: [ticketId, pollId], references: [id, pollId], onDelete: Cascade)
+  poll              Poll             @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user              User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pollVoterAccess   PollVoterAccess? @relation(fields: [pollVoterAccessId], references: [id], onDelete: Cascade)
+
+  @@unique([ticketId, pollId])
+  @@unique([pollId, userId])
+  @@unique([pollId, pollVoterAccessId])
+}
+
+model VoteRequest {
+  id              String            @id @default(cuid())
+  ticketId        String
+  optionLetter    VoteOptionLetter
+  shieldedAddress String            @unique
+  zip321Uri       String
+  status          VoteRequestStatus @default(ACTIVE)
+  ticket          VoteTicket        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@unique([ticketId, optionLetter])
+}
+
+model VoteReceipt {
+  id                     String            @id @default(cuid())
+  pollId                 String
+  ticketHash             String
+  receiptPublicId        String?           @unique
+  receiptEmailId         String?
+  receiptEmailSentAt     DateTime?
+  receiptEmailError      String?
+  receiptSignalMessageId String?
+  receiptSignalSentAt    DateTime?
+  receiptSignalError     String?
+  optionLetter           VoteOptionLetter
+  txid                   String
+  blockHeight            Int?
+  amountZat              BigInt
+  memo                   String
+  status                 VoteReceiptStatus @default(PENDING)
+  rejectionReason        String?
+  confirmedAt            DateTime?
+  poll                   Poll              @relation(fields: [pollId], references: [id], onDelete: Cascade)
+
+  @@unique([txid, ticketHash])
+}
+
+model PollVoterAccess {
+  id               String                @id @default(cuid())
+  pollId           String
+  nick             String
+  email            String?
+  signalUsername   String?
+  passwordHash     String?
+  status           PollVoterAccessStatus @default(ACTIVE)
+  inviteToken      String                @unique
+  passwordIssuedAt DateTime?
+  lastLoginAt      DateTime?
+  expiresAt        DateTime
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  poll             Poll                  @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  assignments      TicketAssignment[]
+  invites          PollInvite[]
+  comments         PollComment[]
+  commentReactions PollCommentReaction[]
+
+  @@unique([id, pollId])
+  @@unique([pollId, nick])
+  @@unique([pollId, email])
+  @@unique([pollId, signalUsername])
+}
+
+model DaoMember {
+  id              String                @id @default(cuid())
+  nick            String
+  signalUsername  String?
+  // Explicit account binding only. Never infer this from a nickname or Signal alias.
+  userId          String?
+  user            User?                 @relation(fields: [userId], references: [id], onDelete: Restrict)
+  // Nullable only to preserve unassigned legacy history. New writes require a community.
+  communityId     String?
+  status          DaoMemberStatus       @default(ACTIVE)
+  addedByPollId   String?
+  removedByPollId String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  addedByPoll     Poll?                 @relation("DaoMemberAddedByPoll", fields: [addedByPollId], references: [id], onDelete: SetNull)
+  removedByPoll   Poll?                 @relation("DaoMemberRemovedByPoll", fields: [removedByPollId], references: [id], onDelete: SetNull)
+  removalActions  DaoMembershipAction[] @relation("DaoMembershipRemovalTarget")
+  community       Community?            @relation(fields: [communityId], references: [id], onDelete: Restrict)
+
+  @@unique([communityId, nick])
+  @@unique([communityId, signalUsername])
+  @@unique([communityId, userId])
+  @@index([communityId, status])
+}
+
+model DaoMembershipAction {
+  id             String                    @id @default(cuid())
+  pollId         String                    @unique
+  type           DaoMembershipActionType
+  status         DaoMembershipActionStatus @default(PENDING)
+  nick           String
+  signalUsername String?
+  userId         String?
+  requestId      String?                   @unique
+  user           User?                     @relation("MembershipAccountTarget", fields: [userId], references: [id], onDelete: Restrict)
+  request        DaoMembershipRequest?     @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  targetMemberId String?
+  appliedAt      DateTime?
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  poll           Poll                      @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  targetMember   DaoMember?                @relation("DaoMembershipRemovalTarget", fields: [targetMemberId], references: [id], onDelete: SetNull)
+}
+
+// One immutable attempt per request. New attempts never rewrite a prior decision.
+model DaoMembershipRequest {
+  id           String                     @id
+  communityId  String
+  userId       String
+  status       DaoMembershipRequestStatus @default(PENDING)
+  reviewedById String?
+  createdAt    DateTime                   @default(now())
+  updatedAt    DateTime                   @updatedAt
+  community    Community                  @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  user         User                       @relation("MembershipApplicant", fields: [userId], references: [id], onDelete: Restrict)
+  reviewedBy   User?                      @relation("MembershipReviewer", fields: [reviewedById], references: [id], onDelete: Restrict)
+  action       DaoMembershipAction?
+
+  @@index([communityId, status, createdAt])
+  @@index([userId, createdAt])
+}
+
+model PollInvite {
+  id                String                    @id @default(cuid())
+  pollId            String
+  userId            String?
+  pollVoterAccessId String?
+  email             String?
+  signalUsername    String?
+  deliveryChannel   PollInviteDeliveryChannel @default(EMAIL)
+  inviteToken       String                    @unique
+  status            PollInviteStatus          @default(PENDING)
+  resendEmailId     String?
+  signalMessageId   String?
+  sentAt            DateTime?
+  openedAt          DateTime?
+  lastError         String?
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  poll              Poll                      @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user              User?                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pollVoterAccess   PollVoterAccess?          @relation(fields: [pollVoterAccessId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId])
+  @@unique([pollId, pollVoterAccessId])
+}
+
+model PollTally {
+  pollId         String   @id
+  countA         Int      @default(0)
+  countB         Int      @default(0)
+  countC         Int      @default(0)
+  countD         Int      @default(0)
+  countE         Int      @default(0)
+  totalConfirmed Int      @default(0)
+  updatedAt      DateTime @updatedAt
+  poll           Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
+}
+
+model PublicAuditEvent {
+  id        String               @id @default(cuid())
+  pollId    String
+  eventType PublicAuditEventType
+  sourceKey String               @unique
+  summary   String
+  txid      String?
+  createdAt DateTime             @default(now())
+  poll      Poll                 @relation(fields: [pollId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([pollId, createdAt])
+}
+
+// Recorded accounting only. No balance here is asserted to be a wallet balance.
+model CommunityTreasury {
+  id                 String                @id @default(cuid())
+  communityId        String
+  kind               TreasuryKind
+  currency           String                @default("ZEC")
+  availableZat       BigInt                @default(0)
+  reservedZat        BigInt                @default(0)
+  committedZat       BigInt                @default(0)
+  paidZat            BigInt                @default(0)
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  community          Community             @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  entries            TreasuryLedgerEntry[]
+  outgoingOperations TreasuryOperation[]   @relation("TreasuryOperationSource")
+  incomingOperations TreasuryOperation[]   @relation("TreasuryOperationDestination")
+  polls              Poll[]                @relation("PollFundingTreasury")
+
+  @@unique([communityId, kind])
+  @@unique([id, communityId])
+}
+
+model TreasuryOperation {
+  id                    String                @id @default(cuid())
+  communityId           String
+  kind                  TreasuryOperationKind
+  sourceTreasuryId      String?
+  destinationTreasuryId String
+  amountZat             BigInt
+  currency              String                @default("ZEC")
+  fundingSource         String?
+  reason                String
+  actorUserId           String
+  actorLabel            String
+  idempotencyKey        String
+  payloadHash           String
+  createdAt             DateTime              @default(now())
+  community             Community             @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  actor                 User                  @relation("TreasuryOperationActor", fields: [actorUserId], references: [id], onDelete: Restrict)
+  sourceTreasury        CommunityTreasury?    @relation("TreasuryOperationSource", fields: [sourceTreasuryId, communityId], references: [id, communityId], onDelete: Restrict)
+  destinationTreasury   CommunityTreasury     @relation("TreasuryOperationDestination", fields: [destinationTreasuryId, communityId], references: [id, communityId], onDelete: Restrict)
+  entries               TreasuryLedgerEntry[]
+
+  @@unique([communityId, idempotencyKey])
+  @@unique([id, communityId])
+  @@index([communityId, createdAt])
+}
+
+model TreasuryLedgerEntry {
+  id          String            @id @default(cuid())
+  communityId String
+  treasuryId  String
+  operationId String
+  // Signed change in available recorded funds; allocations have a paired debit/credit.
+  deltaZat    BigInt
+  createdAt   DateTime          @default(now())
+  treasury    CommunityTreasury @relation(fields: [treasuryId, communityId], references: [id, communityId], onDelete: Restrict)
+  operation   TreasuryOperation @relation(fields: [operationId, communityId], references: [id, communityId], onDelete: Restrict)
+
+  @@unique([operationId, treasuryId])
+  @@index([treasuryId, createdAt])
+}
+
+model PollComment {
+  id                      String                       @id @default(cuid())
+  pollId                  String
+  parentId                String?
+  authorUserId            String?
+  authorPollVoterAccessId String?
+  authorLabel             String
+  body                    String
+  requestKey              String?
+  requestHash             String?
+  createdAt               DateTime                     @default(now())
+  hiddenAt                DateTime?
+  hiddenByUserId          String?
+  hiddenByLabel           String?
+  hideReason              String?
+  poll                    Poll                         @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  parent                  PollComment?                 @relation("PollCommentReplies", fields: [parentId, pollId], references: [id, pollId], onDelete: Restrict)
+  replies                 PollComment[]                @relation("PollCommentReplies")
+  authorUser              User?                        @relation("PollCommentAuthor", fields: [authorUserId], references: [id], onDelete: Restrict)
+  authorPollVoterAccess   PollVoterAccess?             @relation(fields: [authorPollVoterAccessId], references: [id], onDelete: Restrict)
+  hiddenByUser            User?                        @relation("PollCommentModerator", fields: [hiddenByUserId], references: [id], onDelete: Restrict)
+  reactions               PollCommentReaction[]
+  reactionRequests        PollCommentReactionRequest[]
+
+  @@unique([id, pollId])
+  @@unique([pollId, authorUserId, requestKey])
+  @@unique([pollId, authorPollVoterAccessId, requestKey])
+  @@index([pollId, createdAt])
+  @@index([authorUserId, createdAt])
+  @@index([authorPollVoterAccessId, createdAt])
+}
+
+model CreditAccount {
+  id          String            @id @default(cuid())
+  communityId String
+  userId      String
+  balance     Int               @default(0)
+  paymentReview Boolean         @default(false)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  community   Community         @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  operations  CreditOperation[]
+  purchases   CreditPurchase[]
+
+  @@unique([communityId, userId])
+  @@unique([id, communityId, userId])
+  @@index([userId, createdAt])
+}
+
+model CreditOperation {
+  id            String              @id @default(cuid())
+  accountId     String
+  communityId   String
+  userId        String
+  kind          CreditOperationKind
+  delta         Int
+  requestKey    String
+  payloadHash   String
+  targetId      String?
+  purchaseId    String?             @unique
+  policyVersion Int
+  createdAt     DateTime            @default(now())
+  account       CreditAccount       @relation(fields: [accountId, communityId, userId], references: [id, communityId, userId], onDelete: Restrict)
+  purchase      CreditPurchase?     @relation(fields: [purchaseId, accountId, communityId, userId], references: [id, creditAccountId, communityId, userId], onDelete: Restrict)
+
+  @@unique([accountId, requestKey])
+  @@unique([purchaseId, accountId, communityId, userId])
+  @@index([userId, communityId, createdAt])
+}
+
+model CreditPurchase {
+  id                    String              @id @default(cuid())
+  creditAccountId       String
+  communityId           String
+  userId                String
+  requestKey            String
+  receiverId            String
+  receiverAccountId     String
+  network               CreditPaymentNetwork
+  address               String
+  amountZat             BigInt
+  credits               Int
+  requiredConfirmations Int
+  memo                  String              @unique
+  startHeight           Int
+  expiresAt             DateTime
+  status                CreditPurchaseState @default(PENDING)
+  txid                  String?
+  confirmations         Int                 @default(0)
+  blockHeight           Int?
+  blockHash             String?
+  blockTime             DateTime?
+  lastCheckedAt         DateTime?
+  checkLeaseKey         String?
+  checkLeaseUntil       DateTime?
+  creditedAt            DateTime?
+  reviewReason          String?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  account               CreditAccount       @relation(fields: [creditAccountId, communityId, userId], references: [id, communityId, userId], onDelete: Restrict)
+  user                  User                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  community             Community           @relation(fields: [communityId], references: [id], onDelete: Restrict)
+  receipt               CreditPaymentReceipt?
+  operation             CreditOperation?
+
+  @@unique([communityId, userId, requestKey])
+  @@unique([id, creditAccountId, communityId, userId])
+  @@index([creditAccountId, createdAt])
+  @@index([userId, communityId, createdAt])
+  @@index([status, lastCheckedAt])
+}
+
+model CreditPaymentReceipt {
+  id                String               @id @default(cuid())
+  purchaseId        String               @unique
+  network           CreditPaymentNetwork
+  txid              String
+  pool              CreditPaymentPool
+  outputIndex       Int
+  receiverAccountId String
+  amountZat         BigInt
+  memo              String
+  blockHeight       Int
+  blockHash         String
+  blockTime         DateTime
+  confirmations     Int
+  tipHeight         Int
+  tipHash           String
+  scannedHeight     Int
+  createdAt         DateTime             @default(now())
+  purchase          CreditPurchase       @relation(fields: [purchaseId], references: [id], onDelete: Restrict)
+
+  @@unique([network, txid, pool, outputIndex])
+}
+
+model PollCommentReaction {
+  id                      String           @id @default(cuid())
+  pollId                  String
+  commentId               String
+  actorKey                String
+  authorUserId            String?
+  authorPollVoterAccessId String?
+  active                  Boolean          @default(true)
+  chargedBefore           Boolean          @default(false)
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  poll                    Poll             @relation(fields: [pollId], references: [id], onDelete: Restrict)
+  comment                 PollComment      @relation(fields: [commentId, pollId], references: [id, pollId], onDelete: Restrict)
+  authorUser              User?            @relation(fields: [authorUserId], references: [id], onDelete: Restrict)
+  authorPollVoterAccess   PollVoterAccess? @relation(fields: [authorPollVoterAccessId, pollId], references: [id, pollId], onDelete: Restrict)
+
+  @@unique([commentId, actorKey])
+  @@index([pollId, active])
+}
+
+model PollCommentReactionRequest {
+  id          String      @id @default(cuid())
+  pollId      String
+  commentId   String
+  actorKey    String
+  requestKey  String
+  payloadHash String
+  liked       Boolean
+  createdAt   DateTime    @default(now())
+  poll        Poll        @relation(fields: [pollId], references: [id], onDelete: Restrict)
+  comment     PollComment @relation(fields: [commentId, pollId], references: [id, pollId], onDelete: Restrict)
+
+  @@unique([pollId, actorKey, requestKey])
+  @@index([commentId, createdAt])
+  @@index([pollId, actorKey, createdAt])
+}

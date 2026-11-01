@@ -1,0 +1,52 @@
+.participate-history { max-width: 1240px; margin: 0 auto; font-family: var(--font-body); color: var(--dao-ink); }
+.history-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.history-topline { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 34px; margin-bottom: 14px; }
+.dao-app .history-topline p { font-size: 13px; font-weight: 500; }
+.history-topline p span { color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.dao-app .history-export { display: flex; gap: 10px; align-items: center; padding: 8px 0 8px 12px; color: var(--dao-muted); font-size: 12px; cursor: pointer; white-space: nowrap; }
+.history-filters { display: flex; gap: 26px; overflow-x: auto; border-bottom: 1px solid var(--dao-line); }
+.dao-app .history-filters button { min-height: 43px; padding: 0 1px 11px; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; color: var(--dao-muted); cursor: pointer; white-space: nowrap; }
+.dao-app .history-filters button[aria-pressed="true"] { color: var(--dao-ink); border-bottom-color: var(--dao-gold); }
+.history-tools { display: flex; align-items: center; gap: 10px; margin: 18px 0 16px; }
+.history-tools .dao-search { flex: 1; }
+.dao-app .history-tools select { min-height: 40px; width: auto; max-width: 155px; padding: 8px 33px 8px 12px; border: 0; background-color: var(--dao-paper); border-radius: 7px; font-family: var(--font-body); font-size: 12px; color: var(--dao-muted); }
+.history-results { scroll-margin-top: 82px; }
+.history-results:focus { outline: none; }
+.dao-app .history-count { color: var(--dao-muted); font-size: 11px; margin: 0 0 12px; font-variant-numeric: tabular-nums; }
+.history-records { margin: 0; padding: 0 22px; list-style: none; border-radius: 10px; background: var(--dao-paper); }
+.history-records > li { display: grid; grid-template-columns: 95px minmax(0, 1fr) 85px; align-items: start; gap: 24px; padding: 23px 0; }
+.history-records > li + li { border-top: 1px solid var(--dao-line); }
+.history-records time { font-size: 11px; line-height: 22px; color: var(--dao-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dao-app .history-record-subject h2 { font-size: 15px; font-weight: 600; line-height: 1.5; letter-spacing: -.015em; margin: 0; overflow-wrap: anywhere; }
+.dao-app .history-record-subject p { font-size: 12px; line-height: 1.6; color: var(--dao-muted); margin-top: 5px; overflow-wrap: anywhere; }
+.history-outcome { justify-self: end; padding: 4px 9px; border-radius: 5px; color: var(--dao-muted); background: var(--dao-soft); font-size: 10px; font-weight: 600; line-height: 1.5; }
+.history-outcome[data-outcome="Approved"] { color: var(--dao-positive); background: var(--dao-positive-bg); }
+.history-outcome[data-outcome="Rejected"], .history-outcome[data-outcome="Vetoed"] { color: var(--dao-error); background: var(--dao-error-bg); }
+.history-sources { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 9px; }
+.dao-app .history-sources a { color: var(--dao-accent); font-size: 11px; line-height: 1.6; }
+.history-pagination { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; }
+.history-pagination span { color: var(--dao-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.dao-app .history-pagination button { min-height: 40px; font-size: 12px; color: var(--dao-ink); cursor: pointer; }
+.participate-history :disabled { opacity: .4; cursor: not-allowed; }
+.history-provenance { margin-top: 18px; color: var(--dao-muted); font-size: 12px; }
+.history-provenance summary { cursor: pointer; width: fit-content; padding-block: 8px; }
+.dao-app .history-provenance p { max-width: 680px; font-size: 12px; line-height: 1.7; margin-top: 8px; }
+.history-empty { padding: 36px 22px; background: var(--dao-paper); border-radius: 10px; text-align: center; }
+.dao-app .history-empty h1 { font-size: 20px; font-weight: 600; }
+.dao-app .history-empty p { font-size: 13px; line-height: 1.7; color: var(--dao-muted); margin-bottom: 16px; }
+.participate-history :is(button, a, select, summary):focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; }
+@media (max-width: 640px) {
+  .history-topline { align-items: flex-start; gap: 8px; }
+  .history-topline p span { display: block; margin-top: 4px; }
+  .history-filters { gap: 22px; }
+  .dao-app .history-filters button { font-size: 13px; }
+  .history-tools { display: grid; grid-template-columns: 1fr 1fr; }
+  .history-tools .dao-search { grid-column: 1/-1; width: 100%; }
+  .dao-app .history-tools select { width: 100%; max-width: none; min-width: 0; font-size: 14px; min-height: 42px; }
+  .history-records { padding: 0 16px; }
+  .history-records > li { grid-template-columns: 1fr auto; gap: 10px; padding: 18px 0; }
+  .history-record-subject { grid-column: 1/-1; grid-row: 2; }
+  .history-outcome { grid-column: 2; grid-row: 1; }
+  .dao-app .history-record-subject h2 { font-size: 14px; }
+  .history-results { scroll-margin-top: 122px; }
+}

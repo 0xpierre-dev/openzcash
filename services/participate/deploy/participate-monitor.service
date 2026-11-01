@@ -1,0 +1,16 @@
+[Unit]
+Description=Participate operational health and incident notifications
+After=network-online.target docker.service
+Wants=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/participate/monitor.py
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/participate-monitor
+TimeoutStartSec=150
+StandardOutput=journal
+StandardError=journal

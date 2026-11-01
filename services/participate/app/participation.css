@@ -1,0 +1,23 @@
+/* Discussion participation follows the workspace's light and dark tokens. */
+.dao-participation-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; }
+.dao-participation-balance { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; min-width: 0; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-participation-balance > svg { flex: none; color: var(--dao-accent); }
+.dao-credit-demo { padding: 2px 6px; border-radius: 4px; background: var(--dao-soft); color: var(--dao-muted); font-size: 10px; font-weight: 500; letter-spacing: .01em; }
+.dao-app .dao-credit-link { display: inline-flex; align-items: center; justify-content: center; flex: none; min-width: 44px; min-height: 44px; padding: 4px 2px; color: var(--dao-accent); font-size: 12px; font-weight: 550; line-height: 1.5; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.dao-app .dao-credit-link:hover { color: var(--dao-ink); }
+.dao-participation-error, .dao-participation-refresh { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; }
+.dao-participation-error > span, .dao-participation-refresh > span { min-width: 0; flex: 1 1 200px; }
+.dao-participation-refresh { margin-top: 16px; padding: 10px 14px; border-radius: 6px; background: var(--dao-soft); color: var(--dao-muted); font-size: 12px; line-height: 1.7; }
+.dao-discussion .dao-comment-actions { align-items: center; flex-wrap: wrap; gap: 6px 18px; }
+.dao-app .dao-like-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 44px; min-height: 44px; padding: 5px 9px; border-radius: 6px; color: var(--dao-muted); font-size: 12px; font-weight: 500; line-height: 1.5; cursor: pointer; }
+.dao-app .dao-like-button:hover { background: var(--dao-soft); color: var(--dao-accent); }
+.dao-app .dao-like-button[aria-pressed="true"] { background: var(--dao-accent-soft); color: var(--dao-accent); }
+.dao-like-button > svg { flex: none; }
+.dao-like-count { font-variant-numeric: tabular-nums; }
+.dao-like-cost { padding-left: 7px; border-left: 1px solid var(--dao-line-strong); font-size: 11px; font-weight: 400; }
+.dao-reaction-error { margin-left: 44px; }
+@media (max-width: 650px) {
+  .dao-participation-meta { gap: 3px 12px; }
+  .dao-discussion .dao-comment-actions { gap: 4px 14px; }
+  .dao-reaction-error { margin-left: 0; }
+}

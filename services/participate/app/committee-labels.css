@@ -1,0 +1,56 @@
+.committee-label-badges { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 10px 0 0; list-style: none; }
+.committee-label-badge { display: inline-block; max-width: 100%; padding: 3px 7px; border: 1px solid var(--label-border); border-radius: 5px; background: var(--label-color); color: var(--label-ink); font: 500 11px/1.45 var(--font-body); overflow-wrap: anywhere; vertical-align: middle; }
+.dao-theme-root[data-theme="dark"] .committee-label-badge { background: var(--label-dark-color); color: var(--label-dark-ink); border-color: var(--label-dark-border); }
+@media (prefers-color-scheme: dark) {
+  .dao-theme-root[data-theme="system"] .committee-label-badge { background: var(--label-dark-color); color: var(--label-dark-ink); border-color: var(--label-dark-border); }
+}
+.zcg-proposal-labels { display: flex; align-items: start; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; }
+.zcg-tag-group { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 8px; min-width: 0; max-width: 100%; }
+.dao-app .zcg-tag-origin { flex-shrink: 0; font-size: 10px; line-height: 24px; font-weight: 500; color: var(--dao-muted); text-decoration: none; }
+.zcg-tag-group :is(.committee-label-badges, .dao-proposal-tags) { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.zcg-tag-group .dao-topic { font-size: 11px; line-height: 1.45; padding: 4px 8px; border-radius: 5px; }
+.zcg-proposal-labels--compact { position: relative; align-items: center; gap: 6px 10px; margin-top: 14px; }
+.zcg-extra-labels { color: var(--dao-muted); }
+.zcg-extra-labels > summary { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 5px; list-style: none; font-size: 11px; line-height: 1.45; cursor: pointer; border-radius: 5px; }
+.zcg-extra-labels > summary::-webkit-details-marker { display: none; }
+.zcg-extra-labels > summary:hover, .zcg-extra-labels[open] > summary { color: var(--dao-ink); background: var(--dao-soft); }
+.zcg-extra-labels-panel { position: absolute; left: 0; top: calc(100% + 6px); z-index: 9; width: min(420px, 100%); padding: 14px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-paper); box-shadow: 0 10px 30px var(--dao-shadow); }
+.zcg-extra-labels-panel > span { font-size: 11px; color: var(--dao-muted); }
+.zcg-extra-labels-panel .committee-label-badges { margin-top: 9px; }
+.committee-label-editor { margin-top: 16px; }
+.committee-label-heading, .committee-label-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dao-app .committee-label-heading h3 { font-size: 16px; margin: 0; font-weight: 600; }
+.committee-label-heading h3 span { font-size: 12px; font-weight: 400; color: var(--dao-muted); margin-left: 5px; }
+.dao-app .committee-label-heading p { font-size: 12px; margin: 5px 0 0; color: var(--dao-muted); }
+.committee-label-heading a { flex-shrink: 0; font-size: 12px; color: var(--dao-accent); }
+.committee-label-search { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 12px; margin: 18px 0 12px; }
+.committee-label-selection { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.committee-label-selection > span { font-size: 11px; color: var(--dao-muted); }
+.committee-label-selection > div { display: flex; gap: 6px; flex-wrap: wrap; }
+.dao-app .committee-label-selection button { display: flex; align-items: center; gap: 6px; max-width: 100%; font-size: 14px; color: var(--dao-muted); cursor: pointer; }
+.committee-label-options { max-height: 290px; overflow: auto; border: 1px solid var(--dao-line); border-radius: 8px; padding: 4px 14px; margin: 0; min-width: 0; }
+.dao-app .committee-label-options > label { display: flex; flex-direction: row; align-items: center; gap: 12px; padding: 12px 0; cursor: pointer; }
+.committee-label-options > label + label { border-top: 1px solid var(--dao-line); }
+.committee-label-options input { width: 16px; height: 16px; margin: 0; flex-shrink: 0; accent-color: var(--dao-accent); }
+.committee-label-options label > span { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+.committee-label-options small { font-size: 11px; font-weight: 400; line-height: 1.5; color: var(--dao-muted); }
+.committee-label-options > p { padding: 18px 0; font-size: 13px; color: var(--dao-muted); }
+.committee-label-footer { margin-top: 16px; }
+.committee-label-footer > span { font-size: 11px; color: var(--dao-muted); }
+.committee-label-footer > div { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.committee-review-panel .committee-panel-tabs { min-width: 0; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .zcg-tag-group { display: grid; grid-template-columns: 50px minmax(0, 1fr); width: 100%; align-items: start; }
+  .zcg-tag-group--labels { grid-template-columns: minmax(0, 1fr); }
+  .zcg-proposal-labels--compact .zcg-tag-group { display: flex; width: auto; }
+  .zcg-extra-labels > summary { min-height: 44px; }
+  .committee-label-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .committee-label-search { grid-template-columns: 1fr; gap: 8px; }
+  .committee-label-footer { align-items: stretch; flex-direction: column; }
+  .committee-label-footer > div { justify-content: flex-end; }
+  .committee-label-options { padding-inline: 10px; max-height: 240px; }
+  .committee-review-panel .committee-panel-tools { gap: 6px; }
+  .committee-review-panel .committee-panel-tabs { flex-wrap: nowrap; gap: 10px; }
+  .dao-app .committee-review-panel .committee-panel-tabs button { font-size: 11px; }
+  .committee-review-panel .committee-panel-tools > .committee-icon-button { width: 24px; min-width: 24px; }
+}

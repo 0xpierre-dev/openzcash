@@ -31,15 +31,18 @@ export async function recordPublications<T>(
       if (!seen.has(key)) updates.push({ key, value: null, initial: null });
     }
   }
-  const changed: (typeof zcgPublications.$inferInsert)[] = [];
+  const changed = new Map<string, typeof zcgPublications.$inferInsert>();
   for (const { key, value, initial } of updates) {
     const previous = states.get(key);
     const next = observePublication(previous, value, initial, now);
-    if (next !== previous) changed.push({ scope, key, ...next });
+    if (next !== previous) changed.set(key, { scope, key, ...next });
     states.set(key, next);
   }
-  for (let i = 0; i < changed.length; i += 200) {
-    await tx.insert(zcgPublications).values(changed.slice(i, i + 200)).onConflictDoUpdate({
+  // Repeated source rows still apply in order, but each identity is written once.
+  // PostgreSQL rejects a single upsert batch that updates the same key twice.
+  const writes = [...changed.values()];
+  for (let i = 0; i < writes.length; i += 200) {
+    await tx.insert(zcgPublications).values(writes.slice(i, i + 200)).onConflictDoUpdate({
       target: [zcgPublications.scope, zcgPublications.key],
       set: {
         published: sql`excluded.published`, pending: sql`excluded.pending`,

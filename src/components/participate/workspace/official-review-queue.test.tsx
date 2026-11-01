@@ -109,7 +109,7 @@ it("adds the published vote card to the existing 0xramp archive without duplicat
   const url = "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/454";
   const title = "0xramp: ZEC payments and wallet integrations (revision of #408)";
   const checked = await buildSourceProposal({ number: 454, html_url: url, title,
-    body: "### Requested Grant Amount (USD)\n\n$45,000", user: { login: "vinibarbosabr" }, state: "open",
+    body: "### Requested Grant Amount (USD)\n\n$45,000", user: { login: "sample-applicant" }, state: "open",
     created_at: "2026-09-29T12:00:00Z", updated_at: "2026-10-12T12:00:00Z",
     labels: [{ name: "📋 Grant Application", color: "bdb853", description: null }, { name: "👀 Ready For ZCG Review", color: "115858", description: null }],
   }, 454, "2026-10-14T14:00:00.000Z");
@@ -178,7 +178,7 @@ it("keeps the curated vote of a recaptured record and lists every decided card b
     ] }}
     initialOfficialProposals={{ ...snapshot, proposals: [
       { ...snapshot.proposals[0], issueNumber: 424, url: issueUrl(424), title: "GraphSense", applicant: "@steven3002", submitted: "2026-09-14", outcome: "approved" },
-      { ...snapshot.proposals[0], issueNumber: 454, url: issueUrl(454), title: "0xramp", applicant: "@vinibarbosabr", submitted: "2026-09-29", outcome: "approved" },
+      { ...snapshot.proposals[0], issueNumber: 454, url: issueUrl(454), title: "0xramp", applicant: "@sample-applicant", submitted: "2026-09-29", outcome: "approved" },
     ] }} />);
   const graphsense = cardHtml(html, "zcg-graphsense-2026-09-28");
   expect(graphsense).toContain('dateTime="2026-09-28">Decision Sep 28, 2026');

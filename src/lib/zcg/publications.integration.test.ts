@@ -37,6 +37,8 @@ describe.skipIf(!testUrl)("D-1 publication with Postgres", () => {
 
   beforeEach(async () => {
     vi.resetModules();
+    // Each case clears the database, so its shared fetch cache must start fresh too.
+    delete (globalThis as typeof globalThis & { __openZcashGrantApplications?: unknown }).__openZcashGrantApplications;
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(now);
     await client`truncate zcg_publications, zcg_proposals, zcg_changelog, zcg_sheet_imports`;
@@ -107,6 +109,8 @@ describe.skipIf(!testUrl)("D-1 publication with Postgres", () => {
     vi.setSystemTime(new Date("2026-09-15T18:16:00Z"));
     expect((await getGrantApplications())[0].status).toBe("review");
     state.issues = [];
+    // A process restart clears globalThis as well as the imported modules.
+    delete (globalThis as typeof globalThis & { __openZcashGrantApplications?: unknown }).__openZcashGrantApplications;
     vi.resetModules();
     const restarted = await import("./github-applications");
     expect((await restarted.getGrantApplications())[0].status).toBe("review");
@@ -137,6 +141,21 @@ describe.skipIf(!testUrl)("D-1 publication with Postgres", () => {
       throw new Error("import failed");
     })).rejects.toThrow("import failed");
     expect((await readPublications("proposal-status")).has("rollback")).toBe(false);
+  });
+
+  it("records repeated proposal observations atomically and keeps the final same-day correction pending", async () => {
+    const { recordPublications, readPublications } = await import("./publications-repo");
+    const initial = { status: "pending" };
+    await state.db.transaction((tx) => recordPublications(tx, "proposal-status", [
+      { key: "repeated", value: { status: "approved" }, initial },
+      { key: "repeated", value: { status: "approved" }, initial },
+      { key: "repeated", value: { status: "rejected" }, initial },
+    ], { now }));
+    const rows = await client`select published, pending from zcg_publications where scope = 'proposal-status' and key = 'repeated'`;
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ published: initial, pending: { status: "rejected" } });
+    expect((await readPublications("proposal-status", now)).get("repeated")).toEqual(initial);
+    expect((await readPublications("proposal-status", midnight)).get("repeated")).toEqual({ status: "rejected" });
   });
 
   it("retains the day's original status through repeated reversals in the RSS", async () => {

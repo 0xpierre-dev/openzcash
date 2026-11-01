@@ -1,10 +1,5 @@
 {
   "standardId": "openzcash-editorial-4.0",
-  "formatApproved": true,
-  "automationId": "openzcash-monthly",
-  "status": "active-verified",
-  "automaticPublicationEnabledForThisStandard": true,
-  "reason": "The existing native automation was successfully updated on October 1, 2026 and its saved prompt was read back and matched the approved Editorial 4.0 prompt. The existing monthly generation and publication authorization continues; every issue still requires fresh research and review.",
-  "proposedPromptSha256": "6259652c787f97a0f092d1c4e853b4ca96406182c354009679a2bdcc93dc6228",
-  "checkedAt": "2026-10-01T16:34:35.816336+00:00"
+  "status": "unverified",
+  "reason": "Scheduled-task activation and publication authorization are kept in private operating records."
 }
