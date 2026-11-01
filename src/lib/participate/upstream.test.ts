@@ -81,6 +81,7 @@ describe("same-origin Participate API routing", () => {
     "/api/account/credits/purchases",
     "/api/communities/preview_orchard/treasury",
     "/api/participate/unknown",
+    "/api/participate/demo",
     "/fonts/secret.txt",
     "/verify/coinholder_verify.py",
   ])(
@@ -89,4 +90,24 @@ describe("same-origin Participate API routing", () => {
       expect(matches(path)).toHaveLength(0);
     },
   );
+  it("mounts the committee demo actions only in a demo build", () => {
+    const demo = participationRewrites(
+      "http://participate-demo.railway.internal:3000",
+      { demo: true },
+    );
+    const demoMatches = demo.filter((rule) =>
+      getPathMatch(rule.source)("/api/participate/demo"),
+    );
+    expect(demoMatches).toEqual([
+      {
+        source: "/api/participate/demo",
+        destination:
+          "http://participate-demo.railway.internal:3000/api/participate/demo",
+      },
+    ]);
+    expect(demo).toHaveLength(rules.length + 1);
+    expect(
+      rules.some((rule) => getPathMatch(rule.source)("/api/participate/demo")),
+    ).toBe(false);
+  });
 });

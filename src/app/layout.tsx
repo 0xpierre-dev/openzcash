@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { participateDemoMode } from "@/lib/participate/demo";
 import { Suspense } from "react";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   // No og:title here: every page shares under its own title.
   ...rootShareMetadata(),
   applicationName: "OpenZcash",
-  ...(process.env.OPENZCASH_ENV === "redesign"
+  ...(process.env.OPENZCASH_ENV === "redesign" || participateDemoMode()
     ? { robots: { index: false, follow: false } }
     : {}),
   appleWebApp: {
@@ -78,6 +79,7 @@ export default async function RootLayout({
         <TapFeedback />
         <ShellGate
           isAdmin={isAdmin}
+          bare={participateDemoMode()}
           isPreview={process.env.OPENZCASH_ENV === "redesign"}
           footer={
             <Suspense

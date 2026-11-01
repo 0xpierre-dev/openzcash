@@ -432,3 +432,227 @@
   .oz-participate .committee-review-tab-copy small { font-size: 10px; }
   .oz-participate .committee-review-context { font-size: 11px; }
 }
+
+/* Committee demo deployment only (PARTICIPATE_DEMO_ENVIRONMENT=true). */
+.oz-participate .participate-demo-banner {
+  /* Stays visible under the portal's sticky 56px top bar. */
+  position: sticky;
+  top: 56px;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 10px 22px;
+  border-bottom: 1px solid var(--dao-line);
+  border-left: 3px solid var(--dao-gold);
+  background: var(--dao-soft);
+  color: var(--dao-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.oz-participate .participate-demo-banner strong {
+  color: var(--dao-ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.oz-participate .participate-demo-fill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  border: 1px dashed var(--dao-gold);
+  border-radius: 10px;
+  background: var(--dao-soft);
+}
+.oz-participate .participate-demo-fill strong { color: var(--dao-ink); font-size: 14px; }
+.oz-participate .dao-app .participate-demo-fill p { margin: 4px 0 0; max-width: 62ch; color: var(--dao-muted); font-size: 13px; line-height: 1.55; }
+.oz-participate .participate-demo-fill--note { display: block; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .participate-demo-fill-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.oz-participate .participate-demo-fill-actions label { display: grid; gap: 4px; color: var(--dao-muted); font-size: 12px; }
+.oz-participate .participate-demo-fill-actions select { min-height: 40px; padding: 0 10px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-paper); color: var(--dao-ink); font: inherit; font-size: 14px; }
+.oz-participate .participate-demo-fill .dao-form-error { flex-basis: 100%; margin: 0; }
+.oz-participate .participate-demo-reset { min-height: 36px; font-size: 13px; }
+.oz-participate .participate-demo-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .participate-demo-confirm .dao-form-error { flex-basis: 100%; margin: 0; }
+@media (max-width: 640px) {
+  .oz-participate .participate-demo-banner { position: static; padding: 10px 16px; }
+  .oz-participate .participate-demo-fill-actions, .oz-participate .participate-demo-fill-actions label, .oz-participate .participate-demo-fill-actions select, .oz-participate .participate-demo-fill-actions button { width: 100%; }
+}
+
+/* Committee demo: guided practice page and quieter account settings. */
+.oz-participate[data-demo] .dao-account-credits { display: none; }
+.oz-participate .demo-practice { display: grid; gap: 18px; max-width: 880px; margin: 0 auto; padding: 32px 22px 64px; }
+.oz-participate .demo-practice-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.oz-participate .dao-app .demo-practice-head h1, .oz-participate .demo-practice-head h1 { margin: 0; color: var(--dao-ink); font-size: 28px; font-weight: 600; letter-spacing: -0.01em; }
+.oz-participate .demo-practice-head p { margin: 6px 0 0; color: var(--dao-muted); font-size: 15px; }
+.oz-participate .demo-practice-tools { display: flex; align-items: center; gap: 14px; }
+.oz-participate .demo-practice-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.oz-participate .demo-practice-steps li { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--dao-line); border-radius: 10px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .demo-practice-steps li span { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--dao-soft); color: var(--dao-ink); font-size: 12px; font-weight: 600; }
+.oz-participate .demo-practice-steps li[data-state="current"] { border-color: var(--dao-gold); color: var(--dao-ink); }
+.oz-participate .demo-practice-steps li[data-state="current"] span { background: var(--dao-gold); color: #171613; }
+.oz-participate .demo-practice-steps li[data-state="done"] { color: var(--dao-ink); }
+.oz-participate .demo-practice-steps li[data-state="done"] span { background: var(--dao-positive-soft, var(--dao-soft)); color: var(--dao-positive, var(--dao-ink)); }
+.oz-participate .demo-practice-card { display: grid; gap: 12px; padding: 24px 26px; border: 1px solid var(--dao-line); border-radius: 14px; background: var(--dao-paper); }
+.oz-participate .demo-practice-card--narrow { max-width: 520px; }
+.oz-participate .dao-app .demo-practice-card h2, .oz-participate .demo-practice-card h2 { margin: 0; color: var(--dao-ink); font-size: 21px; font-weight: 600; }
+.oz-participate .demo-practice-card > p { margin: 0; color: var(--dao-muted); font-size: 14px; line-height: 1.6; }
+.oz-participate .demo-practice-card > .dao-button--primary { justify-self: start; }
+.oz-participate .demo-practice-kicker { color: var(--dao-muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.oz-participate .demo-practice-outcome { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .demo-practice-outcome select { min-height: 36px; padding: 0 10px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-paper); color: var(--dao-ink); font: inherit; font-size: 13px; }
+.oz-participate .demo-practice-progress { display: grid; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.oz-participate .demo-practice-progress li { padding: 10px 14px; border-radius: 8px; background: var(--dao-soft); color: var(--dao-muted); font-size: 14px; }
+.oz-participate .demo-practice-progress li[data-state="done"] { color: var(--dao-ink); }
+.oz-participate .demo-practice-progress li[data-state="done"]::before { content: "✓ "; color: var(--dao-positive, var(--dao-gold)); }
+.oz-participate .demo-practice-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+@media (max-width: 640px) {
+  .oz-participate .demo-practice { padding: 20px 16px 48px; }
+  .oz-participate .demo-practice-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .oz-participate .demo-practice-actions > * { flex: 1 1 100%; }
+}
+/* The demo host renders without the portal top bar. */
+.oz-participate[data-demo] .participate-demo-banner { top: 0; }
+.oz-participate[data-demo] .dao-auth-help { display: none; }
+/* Without the portal shell the page background follows the workspace theme edge to edge. */
+html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="dark"]) body { background: #0f0e0c; }
+html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="light"]) body { background: var(--dao-canvas, #f8f6f1); }
+
+/* Proposal tags: always open, every tag visible as a toggle. */
+.oz-participate .committee-tags-open { margin: 0 0 16px; padding: 0 0 16px; border-bottom: 1px solid var(--dao-line); }
+.oz-participate .committee-label-groups { display: grid; gap: 12px; }
+.oz-participate .committee-label-group { margin: 0; padding: 0; border: 0; min-width: 0; }
+.oz-participate .committee-label-group legend { margin: 0 0 6px; padding: 0; color: var(--dao-muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.oz-participate .committee-label-group > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.oz-participate .dao-app .committee-label-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 2px; border: 1px solid transparent; border-radius: 8px; background: transparent; cursor: pointer; opacity: 0.55; }
+.oz-participate .dao-app .committee-label-chip:hover { opacity: 0.85; }
+.oz-participate .dao-app .committee-label-chip[aria-pressed="true"] { border-color: var(--dao-gold); opacity: 1; }
+.oz-participate .dao-app .committee-label-chip > span[aria-hidden] { padding: 0 4px; color: var(--dao-gold); font-size: 12px; }
+@media (prefers-color-scheme: dark) {
+  html:has(.oz-participate[data-demo] .dao-theme-root[data-theme="system"]) body { background: #0f0e0c; }
+}
+/* Demo banner light/dark toggle (the demo host has no portal top bar). */
+.oz-participate .participate-demo-banner { align-items: center; }
+.oz-participate .participate-demo-banner .dao-theme-toggle { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: auto; padding: 0; border: 1px solid var(--dao-line); border-radius: 8px; background: transparent; color: var(--dao-ink); cursor: pointer; }
+.oz-participate .participate-demo-banner .dao-theme-toggle:hover { border-color: var(--dao-gold); }
+.oz-participate .participate-demo-banner .dao-theme-icon { width: 18px; height: 18px; }
+/* "More tags": post-decision tags in a searchable checklist. */
+.oz-participate .committee-more-tags { position: relative; margin-top: 14px; }
+.oz-participate .committee-more-tags-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.oz-participate .dao-app .committee-more-tags-trigger { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 12px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-soft); color: var(--dao-ink); font-size: 13px; font-weight: 600; cursor: pointer; }
+.oz-participate .dao-app .committee-more-tags-trigger[aria-expanded="true"] { border-color: var(--dao-gold); }
+.oz-participate .dao-app .committee-more-tags-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+.oz-participate .committee-more-tags-trigger span { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--dao-gold); color: #171613; font-size: 11px; }
+.oz-participate .committee-more-tags-panel { position: absolute; z-index: 30; top: calc(100% + 6px); left: 0; display: grid; gap: 10px; width: min(420px, 100%); padding: 12px; border: 1px solid var(--dao-line); border-radius: 12px; background: var(--dao-paper); box-shadow: 0 12px 32px rgb(0 0 0 / 0.18); }
+.oz-participate .dao-app .committee-more-tags-panel input[type="search"] { width: 100%; min-height: 36px; padding: 0 10px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-canvas); color: var(--dao-ink); font-size: 14px; }
+.oz-participate .committee-more-tags-list { display: grid; gap: 12px; max-height: 320px; overflow: auto; }
+.oz-participate .committee-more-tags-list fieldset { display: grid; gap: 2px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.oz-participate .committee-more-tags-list legend { margin: 0 0 4px; padding: 0; color: var(--dao-muted); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+.oz-participate .dao-app .committee-more-tags-list label { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 2px 6px; border-radius: 6px; cursor: pointer; }
+.oz-participate .dao-app .committee-more-tags-list label:hover { background: var(--dao-soft); }
+.oz-participate .committee-more-tags-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--dao-gold); }
+.oz-participate .committee-more-tags-list p { margin: 0; color: var(--dao-muted); font-size: 13px; }
+.oz-participate .dao-app .committee-more-tags-row .committee-label-chip > span[aria-hidden] { color: var(--dao-muted); }
+.oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label { flex-direction: row; justify-content: flex-start; align-items: center; gap: 10px; margin: 0; font-size: 13px; }
+.oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label input[type="checkbox"] { flex: none; margin: 0; }
+.oz-participate .dao-app .committee-more-tags-panel .committee-more-tags-list label input[type="checkbox"] { width: 16px; height: 16px; min-height: 0; padding: 0; }
+
+/* Committee demo: one centred 1240px column for banner, header and content, and News-style headings. */
+.oz-participate[data-demo] .participate-demo-banner { padding-inline: max(22px, calc((100% - 1240px) / 2)); border-left: 0; }
+.oz-participate[data-demo] .dao-header > * { max-width: 1284px; margin-inline: auto; }
+.oz-participate[data-demo] .committee-heading { align-items: center; }
+.oz-participate[data-demo] .dao-app .committee-heading h1 { font-size: 32px; font-weight: 400; letter-spacing: -0.015em; }
+.oz-participate[data-demo] .committee-heading-actions { gap: 8px; }
+.oz-participate[data-demo] .demo-practice { max-width: 1284px; padding-inline: 22px; }
+.oz-participate[data-demo] .dao-app .demo-practice-head h1 { font-size: 32px; font-weight: 400; letter-spacing: -0.015em; }
+
+/* Committee queue header: compact stats line, tabs, segmented filters and rows on one readable scale. */
+.oz-participate .committee-review-summary { display: flex; flex-wrap: wrap; gap: 8px 24px; max-width: none; margin: 6px 0 22px; padding: 0; }
+.oz-participate .committee-review-summary > div,
+.oz-participate .committee-review-summary > div:first-child { display: flex; flex-direction: row; align-items: baseline; gap: 6px; padding: 0; border: 0; }
+.oz-participate .committee-review-summary > div + div { border-left: 0; }
+.oz-participate .committee-review-summary dt { color: var(--dao-muted); font-size: 14px; }
+.oz-participate .committee-review-summary dd { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.oz-participate .committee-tabs { gap: 26px; margin-bottom: 18px; }
+.oz-participate .dao-app .committee-tabs button { min-height: 42px; padding: 0 1px 10px; font-size: 15px; font-weight: 400; }
+.oz-participate .dao-app .committee-tabs button[aria-current="page"] { font-weight: 500; }
+.oz-participate .committee-filters { display: inline-flex; gap: 2px; padding: 4px; border-radius: 10px; background: var(--dao-soft); }
+.oz-participate .dao-app .committee-filters button { justify-content: center; min-height: 36px; padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 400; color: var(--dao-muted); background: transparent; }
+.oz-participate .dao-app .committee-filters button[aria-pressed="true"] { background: var(--dao-paper); color: var(--dao-ink); font-weight: 500; box-shadow: 0 1px 2px rgb(0 0 0 / 0.08); }
+.oz-participate .committee-filters button > span { color: var(--dao-muted); font-size: 12px; }
+.oz-participate .dao-app .committee-workspace .committee-search input { min-height: 42px; font-size: 14px; }
+.oz-participate .committee-tools .committee-search { flex-basis: 260px; }
+.oz-participate .committee-search > svg { top: 13px; }
+.oz-participate .committee-title > span { font-size: 14px; }
+.oz-participate .committee-queue-row { position: relative; padding: 18px 22px; gap: 18px; grid-template-columns: minmax(0, 1fr) 100px 120px; transition: background-color .15s ease; }
+.oz-participate .dao-app .committee-proposal h2 { font-size: 16px; font-weight: 500; line-height: 1.45; margin: 0 0 4px; }
+.oz-participate .dao-app .committee-proposal p { font-size: 13px; }
+.oz-participate .committee-state { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+.oz-participate .committee-state--none { background: transparent; }
+.oz-participate .dao-app .committee-review-button { font-size: 14px; font-weight: 500; }
+/* The whole row opens the proposal: the row button's hit area covers the row ("stretched link"). */
+.oz-participate .dao-app .committee-queue-row .committee-review-button::after { content: ""; position: absolute; inset: 0; }
+.oz-participate .committee-queue-row:hover { background: var(--dao-soft); }
+.oz-participate .committee-queue-row:has(.committee-review-button:focus-visible) { background: var(--dao-soft); }
+.oz-participate .dao-app .committee-heading-actions .committee-icon-button { width: 36px; min-height: 36px; height: 36px; color: var(--dao-muted); }
+.oz-participate .committee-heading-actions .committee-icon-button svg { width: 18px; height: 18px; }
+.oz-participate .dao-app .committee-heading-actions .participate-demo-reset { min-height: 36px; height: 36px; padding: 0 14px; font-size: 13px; }
+@media (max-width: 720px) {
+  .oz-participate .committee-queue-row { grid-template-columns: 1fr auto; padding: 16px; }
+  .oz-participate .dao-app .committee-proposal h2 { font-size: 15px; }
+  .oz-participate .dao-app .committee-tabs button { font-size: 14px; }
+  .oz-participate .committee-tabs { gap: 20px; }
+  /* Filters share the full width in four equal parts. */
+  .oz-participate .committee-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; box-sizing: border-box; }
+  .oz-participate .dao-app .committee-filters button { padding: 7px 4px; font-size: 13px; gap: 5px; }
+}
+@media (max-width: 640px) {
+  /* Phone: title and theme toggle share the first line, the notice sits below in a smaller size. */
+  .oz-participate .participate-demo-banner { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "title toggle" "text text"; gap: 4px 12px; padding: 10px 16px; }
+  .oz-participate .participate-demo-banner > strong { grid-area: title; align-self: center; }
+  .oz-participate .participate-demo-banner > span { grid-area: text; font-size: 12px; line-height: 1.45; }
+  .oz-participate .participate-demo-banner .dao-theme-toggle { grid-area: toggle; margin-left: 0; }
+}
+@media (max-width: 640px) {
+  /* Phone gutter matches the workspace content (12px). */
+  .oz-participate[data-demo] .participate-demo-banner { padding-inline: 12px; }
+  .oz-participate[data-demo] .demo-practice { padding-inline: 12px; }
+}
+/* Demo banner: title, notice and theme toggle on one row; below 1100px the notice moves under the title. */
+.oz-participate .participate-demo-banner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "title text toggle"; gap: 4px 14px; }
+.oz-participate .participate-demo-banner > strong { grid-area: title; }
+.oz-participate .participate-demo-banner > span { grid-area: text; }
+.oz-participate .participate-demo-banner .dao-theme-toggle { grid-area: toggle; margin-left: 0; align-self: center; }
+@media (max-width: 1100px) {
+  .oz-participate .participate-demo-banner { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title toggle" "text text"; }
+  .oz-participate .participate-demo-banner > strong { align-self: center; }
+}
+.oz-participate[data-demo] .dao-app .demo-practice-head h1 { line-height: 1.2; }
+.oz-participate .demo-practice-tools { flex-wrap: wrap; gap: 8px 16px; }
+.oz-participate .demo-practice-tools > * { white-space: nowrap; }
+@media (max-width: 640px) {
+  .oz-participate[data-demo] .dao-app .demo-practice-head h1,
+  .oz-participate[data-demo] .dao-app .committee-heading h1 { font-size: 26px; }
+}
+/* Discussion source switch: same segmented control as the queue filters, with a one-line explanation. */
+.oz-participate .committee-discussion-switch { flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.oz-participate .committee-discussion-options { display: inline-flex; gap: 2px; padding: 4px; border-radius: 10px; background: var(--dao-soft); }
+.oz-participate .dao-app .committee-discussion-options button { min-height: 36px; padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 400; color: var(--dao-muted); background: transparent; }
+.oz-participate .dao-app .committee-discussion-options button[aria-pressed="true"] { color: var(--dao-ink); font-weight: 500; background: var(--dao-paper); box-shadow: 0 1px 2px rgb(0 0 0 / 0.08); }
+.oz-participate .committee-discussion-hint { margin: 0; color: var(--dao-muted); font-size: 13px; }
+
+/* Tabs on the left, queue counts on the right of the same line; the divider spans the whole row. */
+.oz-participate .committee-nav-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 18px; border-bottom: 1px solid var(--dao-line); }
+.oz-participate .committee-nav-row .committee-tabs { min-width: 0; margin-bottom: 0; border-bottom: 0; }
+.oz-participate .committee-nav-row .committee-review-summary { flex-wrap: nowrap; gap: 20px; margin: 0; }
+@media (max-width: 720px) {
+  /* Phone: counts move above the tabs on their own line. */
+  .oz-participate .committee-nav-row { flex-wrap: wrap; }
+  .oz-participate .committee-nav-row .committee-review-summary { order: -1; flex-basis: 100%; margin: 4px 0 10px; }
+}

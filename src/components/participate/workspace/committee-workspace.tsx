@@ -14,6 +14,7 @@ import { CommitteeLabels, CommitteeLabelEditor } from "@/components/participate/
 import { CommitteeReviewGuide } from "./committee-review-guide";
 import { CommitteeReviewTabs, reviewTabId, type CommitteeReviewPanel } from "./committee-review-tabs";
 import { ReviewFinish } from "./review-finish";
+import { DemoFillSeats, DemoReset } from "./committee-demo";
 import { CommitteeSourceDecision } from "@/components/participate/workspace/committee-source-decision";
 import { passkeyFetch } from "@/lib/participate/workspace/auth/passkey-client";
 import { committeeRoleLabels, reviewerRoles, type CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
@@ -31,8 +32,11 @@ const messages: Record<string, string> = {
   COMMITTEE_INVALID_QUORUM: "Quorum must fit the active reviewer count.", COMMITTEE_FIXED_RULES: "Committee reviews use 3 of 5 approvals with no deadline. Refresh to use the current rules.", COMMITTEE_RATE_LIMITED: "Too many changes. Try again in a few minutes.",
   forbidden_origin: "Reload the workspace and try again.", unauthorized: "Sign in to your account again."
 };
-const states: Record<string, string> = { AWAITING_REVIEW: "To review", OPEN: "Open", APPROVED: "Approved", REJECTED: "Rejected", QUORUM_NOT_MET: "No quorum", HISTORICAL: "Published", ABANDONED: "Abandoned" };
+const states: Record<string, string> = { AWAITING_REVIEW: "", OPEN: "Voting", APPROVED: "Approved", REJECTED: "Rejected", QUORUM_NOT_MET: "No quorum", HISTORICAL: "Published", ABANDONED: "Abandoned" };
 const filters = ["To review", "For me", "Closed", "Source decisions"] as const;
+// Short labels keep the word "review" out of every control; the filter keys stay stable.
+const filterLabels: Record<(typeof filters)[number], string> = { "To review": "Open", "For me": "My vote", "Closed": "Decided", "Source decisions": "Source" };
+const tabLabels: Record<(typeof tabs)[number], string> = { Reviews: "Proposals", Members: "Members", Rules: "Rules", History: "History" };
 type ReviewFilter = (typeof filters)[number];
 function matchesFilter(proposal: CommitteeWorkspace["queue"][number], filter: ReviewFilter) {
   return filter === "For me" ? proposal.myPending : filter === "To review" ? ["AWAITING_REVIEW", "OPEN"].includes(proposal.state) : filter === "Closed" ? ["APPROVED", "REJECTED", "QUORUM_NOT_MET", "ABANDONED"].includes(proposal.state) : proposal.state === "HISTORICAL";
@@ -44,7 +48,8 @@ const date = (value: string) => new Intl.DateTimeFormat("en", { dateStyle: "medi
 const sourceDate = (value: string) => new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${value}T12:00:00Z`));
 const getForm = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); return new FormData(event.currentTarget); };
 
-export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial: CommitteeWorkspace; initialRecordId?: string }) {
+/** `demoMode` is set only by the committee demo deployment (test seats and reset). */
+export function CommitteeWorkspacePanel({ initial, initialRecordId, demoMode = false }: { initial: CommitteeWorkspace; initialRecordId?: string; demoMode?: boolean }) {
   const openHostView = useParticipateHost();
   const [data, setData] = useState(initial), [tab, setTab] = useState<(typeof tabs)[number]>("Reviews");
   const [busy, setBusy] = useState(false), [error, setError] = useState(""), [notice, setNotice] = useState("");
@@ -53,6 +58,8 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
   const [panel, setPanel] = useState<CommitteeReviewPanel>(() => { const row = initial.queue.find(p => p.recordId === initialRecordId); return row && matchesFilter(row, "Closed") ? "Finish" : row?.state === "HISTORICAL" ? "Vote" : "Proposal"; });
   const [discussion, setDiscussion] = useState<"source" | "discussion">("source");
   const [inviting, setInviting] = useState(false);
+  // Demo only: bumped after the TEST seats sign, so the vote and Finish panels reload.
+  const [demoFills, setDemoFills] = useState(0);
   const guard = useRef(false);
   const reviewPanel = useRef<HTMLDivElement>(null);
   const reviewTrigger = useRef<HTMLButtonElement | null>(null);
@@ -100,9 +107,9 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
   // Imported source decisions and closed reviews without a verdict are separate records.
   const reviewQueue = data.queue.filter(proposal => proposal.kind !== "HISTORICAL_SUMMARY");
   const reviewSummary = [
-    { label: "Awaiting review", count: reviewQueue.filter(proposal => proposal.state === "AWAITING_REVIEW").length },
-    { label: "Review started", count: reviewQueue.filter(proposal => proposal.state === "OPEN").length },
-    { label: "Decided", count: reviewQueue.filter(proposal => ["APPROVED", "REJECTED"].includes(proposal.state)).length },
+    { label: "awaiting", count: reviewQueue.filter(proposal => proposal.state === "AWAITING_REVIEW").length },
+    { label: "voting", count: reviewQueue.filter(proposal => proposal.state === "OPEN").length },
+    { label: "decided", count: reviewQueue.filter(proposal => ["APPROVED", "REJECTED"].includes(proposal.state)).length },
   ];
   const shown = data.queue.filter(p => p.title.toLocaleLowerCase("en").includes(search.trim().toLocaleLowerCase("en")) && matchesFilter(p, filter));
   if (filter === "Source decisions") shown.sort((a, b) => (b.sourceDecision?.decisionDate ?? "").localeCompare(a.sourceDecision?.decisionDate ?? "") || a.title.localeCompare(b.title, "en"));
@@ -110,7 +117,7 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
   return <section className="committee-workspace" aria-labelledby="committee-heading">
     <header className="committee-heading">
       <div className="committee-title"><h1 id="committee-heading">Committee</h1>{data.access === "MEMBER" ? <span>{data.name} <i aria-hidden="true">/</i> {data.role ? committeeRoleLabels[data.role] : "Admin preview"}</span> : null}</div>
-      <div className="committee-heading-actions">{data.access === "MEMBER" && (data.demo || !data.canMutate) ? <details className="committee-mode"><summary>{data.demo ? "Preview · Read only" : !data.emailReady ? "Verify email" : "Read only"}<CommitteeIcon kind="info" /></summary><p>{data.demo ? "Committee operations are not enabled. This preview cannot submit votes or change decisions." : !data.emailReady ? "Verify your email to make changes." : "Changes are unavailable for this session."}</p></details> : null}<button type="button" className="committee-icon-button" aria-label="Refresh committee" title="Refresh" disabled={busy} onClick={() => void refresh()}><CommitteeIcon kind="refresh" /></button></div>
+      <div className="committee-heading-actions">{data.access === "MEMBER" && (data.demo || !data.canMutate) ? <details className="committee-mode"><summary>{data.demo ? "Preview · Read only" : !data.emailReady ? "Verify email" : "Read only"}<CommitteeIcon kind="info" /></summary><p>{data.demo ? "Committee operations are not enabled. This preview cannot submit votes or change decisions." : !data.emailReady ? "Verify your email to make changes." : "Changes are unavailable for this session."}</p></details> : null}{demoMode && data.access === "MEMBER" ? <DemoReset disabled={busy} onDone={async notice => { setSelected(null); await refresh(); setNotice(notice); }} /> : null}<button type="button" className="committee-icon-button" aria-label="Refresh committee" title="Refresh" disabled={busy} onClick={() => void refresh()}><CommitteeIcon kind="refresh" /></button></div>
     </header>
     {error ? <p className="dao-form-error" role="alert">{error}</p> : null}
     {notice ? <p className="committee-notice" role="status">{notice}</p> : null}
@@ -124,13 +131,15 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
           <button className="dao-button dao-button--primary" disabled={busy}>Accept invitation</button>
         </form>)}
         {data.access === "MEMBER" ? <>
-          <dl className="committee-review-summary" aria-label="Review overview">
-            {reviewSummary.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.count.toLocaleString("en-US")}</dd></div>)}
-          </dl>
-          <nav className="committee-tabs" aria-label="Committee sections">{tabs.map(item => <button key={item} type="button" aria-current={tab === item ? "page" : undefined} onClick={() => { setTab(item); setError(""); setSelected(null); }}>{item}</button>)}</nav>
+          <div className="committee-nav-row">
+            <nav className="committee-tabs" aria-label="Committee sections">{tabs.map(item => <button key={item} type="button" aria-current={tab === item ? "page" : undefined} onClick={() => { setTab(item); setError(""); setSelected(null); }}>{tabLabels[item]}</button>)}</nav>
+            <dl className="committee-review-summary" aria-label="Review overview">
+              {reviewSummary.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.count.toLocaleString("en-US")}</dd></div>)}
+            </dl>
+          </div>
           {tab === "Reviews" ? <>
             <CommitteeReviewGuide data={data} onMembers={() => { setTab("Members"); setSelected(null); }} />
-            <div className="committee-tools"><div className="committee-filters" aria-label="Review filters">{filters.map(item => <button type="button" key={item} aria-label={item} aria-pressed={filter === item} onClick={() => { setFilter(item); setSelected(null); }}>{item}<span>{data.queue.filter(p => matchesFilter(p, item)).length}</span></button>)}</div><label className="committee-search"><CommitteeIcon kind="search" /><span className="dao-sr-only">Search committee proposals</span><input type="search" placeholder="Search proposals" value={search} onChange={e => { setSearch(e.target.value); setSelected(null); }} /></label></div>
+            <div className="committee-tools"><div className="committee-filters" aria-label="Review filters">{filters.map(item => <button type="button" key={item} aria-label={filterLabels[item]} aria-pressed={filter === item} onClick={() => { setFilter(item); setSelected(null); }}>{filterLabels[item]}<span>{data.queue.filter(p => matchesFilter(p, item)).length}</span></button>)}</div><label className="committee-search"><CommitteeIcon kind="search" /><span className="dao-sr-only">Search committee proposals</span><input type="search" placeholder="Search proposals" value={search} onChange={e => { setSearch(e.target.value); setSelected(null); }} /></label></div>
             <ul className="committee-queue">{shown.map(proposal => {
               const historical = proposal.kind === "HISTORICAL_SUMMARY";
               const source = historical ? proposal.sourceDecision : null;
@@ -138,20 +147,20 @@ export function CommitteeWorkspacePanel({ initial, initialRecordId }: { initial:
               return <li key={proposal.recordId} data-selected={selected === proposal.recordId}>
               <div className="committee-queue-row">
                 <div className="committee-proposal"><h2>{proposal.title}</h2><p>{source ? <><time dateTime={source.decisionDate}>{sourceDate(source.decisionDate)}</time> · {source.votes.length} published votes</> : <>v{proposal.revision}{proposal.closesAt && proposal.state !== "ABANDONED" ? <> · {proposal.state === "OPEN" ? "Closes" : "Closed"} <time dateTime={proposal.closesAt}>{date(proposal.closesAt)}</time></> : ` · ${proposal.kind === "REVIEW_SNAPSHOT" || proposal.kind === "SOURCE_PROPOSAL" ? "Application" : proposal.kind === "NATIVE_PROPOSAL" ? "Pilot submission" : "Historical record"}`}{!historical && proposal.roundId ? <span> · {proposal.signed}/{proposal.eligible} signed{proposal.myChoice ? ` · You: ${proposal.myChoice.toLowerCase()}` : ""}</span> : null}</>}</p><CommitteeLabels ids={proposal.labels} /></div>
-                <span className={`committee-state committee-state--${state.toLowerCase()}`}>{states[state]}</span>
-                <button type="button" className="committee-review-button" aria-label={`${historical ? "View source decision:" : "Review"} ${proposal.title}`} aria-expanded={selected === proposal.recordId} aria-controls={selected === proposal.recordId ? `committee-review-${proposal.recordId}` : undefined} onClick={event => { reviewTrigger.current = event.currentTarget; setSelected(selected === proposal.recordId ? null : proposal.recordId); setPanel(historical ? "Vote" : matchesFilter(proposal, "Closed") ? "Finish" : "Proposal"); }}>{selected === proposal.recordId ? "Close" : historical ? "View decision" : proposal.myPending ? "Your decision" : "Review"}<CommitteeIcon kind={selected === proposal.recordId ? "close" : "arrow"} /></button>
+                {states[state] ? <span className={`committee-state committee-state--${state.toLowerCase()}`}>{states[state]}</span> : <span className="committee-state committee-state--none" aria-hidden="true" />}
+                <button type="button" className="committee-review-button" aria-label={`${historical ? "View source decision:" : proposal.myPending ? "Vote on" : "Open"} ${proposal.title}`} aria-expanded={selected === proposal.recordId} aria-controls={selected === proposal.recordId ? `committee-review-${proposal.recordId}` : undefined} onClick={event => { reviewTrigger.current = event.currentTarget; setSelected(selected === proposal.recordId ? null : proposal.recordId); setPanel(historical ? "Vote" : matchesFilter(proposal, "Closed") ? "Finish" : "Proposal"); }}>{selected === proposal.recordId ? "Close" : historical ? "View decision" : proposal.myPending ? "Vote" : "Open"}<CommitteeIcon kind={selected === proposal.recordId ? "close" : "arrow"} /></button>
               </div>
               {selected === proposal.recordId ? <div className="committee-review-panel" id={`committee-review-${proposal.recordId}`} ref={reviewPanel} tabIndex={-1} role="region" aria-label={`Review: ${proposal.title}`}>
                 <div className="committee-review-context"><span>Revision {proposal.revision} · {historical ? "Published source evidence" : "Independent pilot review"}</span><Link href={`/zcg/participate?record=${encodeURIComponent(proposal.recordId)}`}>View public proposal ↗</Link></div>
                 <CommitteeReviewTabs recordId={proposal.recordId} panelId={`committee-content-${proposal.recordId}`} selected={panel} historical={historical} onChange={setPanel} />
                 <div className="committee-review-content" role="tabpanel" id={`committee-content-${proposal.recordId}`} aria-labelledby={reviewTabId(proposal.recordId, panel)} tabIndex={0}>
-                <details className="committee-tags-disclosure" hidden={panel !== "Proposal"}><summary>Proposal tags</summary><CommitteeLabelEditor key={`${proposal.recordId}:${proposal.labelsVersion}`} recordId={proposal.recordId} labels={proposal.labels} version={proposal.labelsVersion} canReview={data.permissions.canReview} canSave={data.canMutate} demo={data.demo} onReload={async () => { await refresh(); }} onSaved={value => {
+                <div className="committee-tags-open" hidden={panel !== "Proposal"}><CommitteeLabelEditor key={`${proposal.recordId}:${proposal.labelsVersion}`} recordId={proposal.recordId} labels={proposal.labels} version={proposal.labelsVersion} canReview={data.permissions.canReview} canSave={data.canMutate} demo={data.demo} onReload={async () => { await refresh(); }} onSaved={value => {
                   setData(previous => ({ ...previous, queue: previous.queue.map(row => row.recordId === proposal.recordId ? { ...row, ...value } : row) }));
                   setNotice("Labels saved."); void refresh();
-                }} /></details>
-                <div hidden={panel !== "Vote"}>{historical ? <CommitteeSourceDecision decision={source} /> : <SignedDecision key={proposal.recordId} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} revision={proposal.revision} initiallyOpen compact readOnlyReason={data.demo ? "Committee operations are disabled. This admin preview cannot open reviews or sign votes." : undefined} visible={panel === "Vote"} onChanged={() => reviewChanged(proposal.recordId)} />}</div>
-                {!historical ? <div hidden={panel !== "Finish"}><ReviewFinish endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} recordId={proposal.recordId} revision={proposal.revision} roundId={proposal.roundId} visible={panel === "Finish"} /></div> : null}
-                {panel === "Discussion" ? <div className="committee-discussion-switch" aria-label="Discussion source"><button type="button" aria-pressed={discussion === "source"} onClick={() => setDiscussion("source")}>Source comments</button><button type="button" aria-pressed={discussion === "discussion"} onClick={() => setDiscussion("discussion")}>OpenZcash</button></div> : null}
+                }} /></div>
+                <div hidden={panel !== "Vote"}>{!historical && demoMode ? <DemoFillSeats proposal={proposal} onDone={async notice => { await reviewChanged(proposal.recordId); setDemoFills(count => count + 1); setNotice(notice); }} /> : null}{historical ? <CommitteeSourceDecision decision={source} /> : <SignedDecision key={demoMode ? `${proposal.recordId}:${proposal.roundId ?? "none"}:${demoFills}` : proposal.recordId} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} revision={proposal.revision} initiallyOpen compact readOnlyReason={data.demo ? "Committee operations are disabled. This admin preview cannot open reviews or sign votes." : undefined} visible={panel === "Vote"} onChanged={() => reviewChanged(proposal.recordId)} />}</div>
+                {!historical ? <div hidden={panel !== "Finish"}><ReviewFinish key={demoMode ? `${proposal.roundId ?? "none"}:${demoFills}` : undefined} endpoint={`/api/communities/${encodeURIComponent(proposal.hostId)}/archives/${encodeURIComponent(proposal.recordId)}`} recordId={proposal.recordId} revision={proposal.revision} roundId={proposal.roundId} visible={panel === "Finish"} /></div> : null}
+                {panel === "Discussion" ? <div className="committee-discussion-switch"><div className="committee-discussion-options" role="group" aria-label="Discussion source"><button type="button" aria-pressed={discussion === "source"} onClick={() => setDiscussion("source")}>GitHub comments</button><button type="button" aria-pressed={discussion === "discussion"} onClick={() => setDiscussion("discussion")}>Community comments</button></div><p className="committee-discussion-hint">{discussion === "source" ? "From the official application on GitHub." : "Posted by the community here on OpenZcash."}</p></div> : null}
                 <ProposalInlineDetails committeeReview key={proposal.recordId} communityId={proposal.hostId} recordId={proposal.recordId} active={panel === "Discussion" ? discussion : panel === "Proposal" ? "record" : null} onClose={closeReview} />
                 </div>
               </div> : null}
