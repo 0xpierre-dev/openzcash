@@ -1,0 +1,10 @@
+[Unit]
+Description=Run the Participate queue every minute (source polling every five minutes)
+
+[Timer]
+OnBootSec=30
+OnUnitInactiveSec=60
+Unit=participate-automation.service
+
+[Install]
+WantedBy=timers.target

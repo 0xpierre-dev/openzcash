@@ -2,20 +2,30 @@ import { chatEntryNavigation, entryChevron, entryClose, entryMenu, entryTheme } 
 import { chatEntryStyles } from "./private-chat-entry-styles";
 
 /** Only this document hosts the isolated chat; no portal runtime is loaded. */
-export const PRIVATE_CHAT_SERVICE_ORIGIN = "https://private-chat-production-b8bd.up.railway.app";
-
-export function chatServiceOrigin(env: Record<string, string | undefined> = process.env): string {
-  // Local preview can point to the local chat, never an arbitrary production host.
-  if (env.NODE_ENV === "development" && env.PRIVATE_CHAT_LOCAL_ORIGIN) {
-    const url = new URL(env.PRIVATE_CHAT_LOCAL_ORIGIN);
-    if (url.protocol === "http:" && url.hostname === "127.0.0.1" &&
-        url.pathname === "/" && !url.username && !url.password && !url.search && !url.hash) return url.origin;
-    throw new Error("Invalid local chat origin");
-  }
-  return PRIVATE_CHAT_SERVICE_ORIGIN;
+export function chatServiceOrigin(env: Record<string, string | undefined> = process.env): string | null {
+  const value = env.PRIVATE_CHAT_SERVICE_ORIGIN ??
+    (env.NODE_ENV === "development" ? env.PRIVATE_CHAT_LOCAL_ORIGIN : undefined);
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    const local = env.NODE_ENV === "development" && url.protocol === "http:" &&
+      ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+    if ((!local && url.protocol !== "https:") || url.pathname !== "/" ||
+        url.username || url.password || url.search || url.hash) return null;
+    return url.origin;
+  } catch { return null; }
 }
 
-export function chatEntryResponse(nonce: string, origin = PRIVATE_CHAT_SERVICE_ORIGIN): Response {
+export function chatEntryResponse(nonce: string, origin: string | null = chatServiceOrigin()): Response {
+  if (!origin) return new Response(`<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private Chat · OpenZcash</title></head><body><main><h1>Private Chat</h1>
+<p>Chat is not available on this instance.</p><a href="/zcg">Back to OpenZcash</a></main></body></html>`, {
+    status: 503,
+    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store",
+      "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+      "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow", "X-Content-Type-Options": "nosniff" },
+  });
   const policy = ["default-src 'none'", `script-src 'nonce-${nonce}'`,
     `style-src 'nonce-${nonce}'`, `frame-src ${origin}`, "img-src 'self'", "font-src 'self'", "connect-src 'none'",
     "frame-ancestors 'none'", "base-uri 'none'", "form-action 'none'", "object-src 'none'"].join("; ");

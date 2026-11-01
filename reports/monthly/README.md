@@ -10,9 +10,30 @@ The approved reference PDFs are stored in `standards/editorial-4.0/`; their hash
 
 ## Run preparation
 
-The existing Codex routine is scheduled monthly on day 1 at 09:00 America/Sao_Paulo. Read `routine-activation.json` for whether the Editorial 4.0 prompt has actually been saved in that job. The native Editorial 4.0 update was authorized, saved and verified on October 1, 2026. Each run must still match the saved prompt to the active standard and complete fresh publication gates. It is a local Codex task and requires that host to be available. This repository does not run a cloud cron.
+The verification and production tools require Python **3.11+** (`tomllib`),
+`pypdf`, and, for rendering, `reportlab`. PDF import derives thumbnails with
+Poppler's `pdftoppm`. Install Python packages in a local virtual environment.
+The current renderers use Gill Sans and DIN font files from macOS's
+`/System/Library/Fonts/Supplemental`; those fonts are not distributed by this
+repository. Rendering on another system requires a reviewed font/layout setup.
+The published PDF reader works without these generation dependencies.
 
-Read the active standard from the durable project folder before consulting deployed historical instructions. Run `python reports/monthly/check_monthly_standard.py --scheduled-for YYYY-MM-01` to verify the saved format, approved reference hashes and intended calendar boundaries. Use `--automation-file /absolute/automation.toml` to also compare the actual saved job with `AUTOMATION-PROMPT.md`. This check does not fetch data, generate a report or establish a successful future run.
+The generic checks can be run independently:
+
+```bash
+python3 -m unittest discover -s reports/monthly -p 'test_check_monthly_standard.py'
+python3 -m unittest discover -s reports/monthly -p 'test_reading_set_import.py'
+```
+
+The legacy `test_quality_gates.py` is an issue-specific command, not a generic
+test-discovery module. Run it with `--issue-dir /path/to/reviewed-issue`; that
+private issue workspace must include `report-content.json`,
+`evidence-snapshot.json` and their supporting source records. Those working
+files are not part of the public source snapshot.
+
+This public repository does not attest to an active scheduled task or authorize publication. `routine-activation.json` records that the private task has not been verified in this snapshot. A task used for publication must be checked against private operating configuration, and each run must complete fresh publication gates.
+
+Read the format standard in this directory before consulting deployed historical instructions. Run `python reports/monthly/check_monthly_standard.py --scheduled-for YYYY-MM-01` to verify the format, reference hashes and intended calendar boundaries. `--automation-file` checks the status and cadence of a private task; optional private identity and prompt arguments enable exact comparison. The check does not fetch data, generate a report or establish publication authority.
 
 Keep one private workspace per issue with current raw sources, capture metadata, evidence snapshot, reviewed calculations, coverage/status registers, page content, assets, chart exports, per-page review and a production record for both PDFs. Store issue-specific facts in data, never in a reusable renderer. Derive closed-month and comparison dates from the intended schedule; keep the actual evidence cutoff separate.
 
@@ -32,4 +53,4 @@ Prepare the reader as a complete bundle. Monthly and Operations keep independent
 
 Reuse the legacy tools' financial, source, type-size and review protections when preparing current evidence. `import_reading_set.py` now imports both reviewed PDFs and the four registers into `src/lib/monthly/reading-sets.json`; the public `/monthly` reader selects that bundle while retaining legacy editions. Its source folder and hash-bound review are described in [PUBLISHING.md](PUBLISHING.md). Never call a successful legacy import evidence that the two-publication integration works. Verify the current outputs and live reader before claiming publication. Do not silently loosen the data gates or publish only one PDF.
 
-This change locks the prompt, schedule and acceptance standard. It does not turn the dated preview into a new monthly close or claim that the production website already supports the new bundle. [PUBLISHING.md](PUBLISHING.md) defines that final integration and publication gate.
+This format standard does not turn the dated preview into a new monthly close or establish that the production website supports the new bundle. [PUBLISHING.md](PUBLISHING.md) describes the integration and publication gate.

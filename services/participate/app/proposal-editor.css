@@ -1,0 +1,84 @@
+/* GitHub-inspired labels, with contrast pairs for each workspace theme. */
+.dao-theme-root {
+  --dao-tag-blue-ink: #1e40af; --dao-tag-blue-bg: #dbeafe;
+  --dao-tag-purple-ink: #6b21a8; --dao-tag-purple-bg: #f3e8ff;
+  --dao-tag-teal-ink: #115e59; --dao-tag-teal-bg: #ccfbf1;
+  --dao-tag-red-ink: #991b1b; --dao-tag-red-bg: #fee2e2;
+  --dao-tag-amber-ink: #854d0e; --dao-tag-amber-bg: #fef3c7;
+  --dao-tag-slate-ink: #475569; --dao-tag-slate-bg: #e2e8f0;
+  --dao-tag-pink-ink: #9d174d; --dao-tag-pink-bg: #fce7f3;
+}
+.dao-theme-root[data-theme="dark"] {
+  --dao-tag-blue-ink: #b6ceff; --dao-tag-blue-bg: #202f4e;
+  --dao-tag-purple-ink: #dbc4ff; --dao-tag-purple-bg: #382649;
+  --dao-tag-teal-ink: #99f6e4; --dao-tag-teal-bg: #173b37;
+  --dao-tag-red-ink: #fecaca; --dao-tag-red-bg: #462929;
+  --dao-tag-amber-ink: #fde68a; --dao-tag-amber-bg: #3b341b;
+  --dao-tag-slate-ink: #cbd5e1; --dao-tag-slate-bg: #30343c;
+  --dao-tag-pink-ink: #fbcfe8; --dao-tag-pink-bg: #422637;
+}
+@media (prefers-color-scheme: dark) {
+  .dao-theme-root[data-theme="system"] {
+    --dao-tag-blue-ink: #b6ceff; --dao-tag-blue-bg: #202f4e;
+    --dao-tag-purple-ink: #dbc4ff; --dao-tag-purple-bg: #382649;
+    --dao-tag-teal-ink: #99f6e4; --dao-tag-teal-bg: #173b37;
+    --dao-tag-red-ink: #fecaca; --dao-tag-red-bg: #462929;
+    --dao-tag-amber-ink: #fde68a; --dao-tag-amber-bg: #3b341b;
+    --dao-tag-slate-ink: #cbd5e1; --dao-tag-slate-bg: #30343c;
+    --dao-tag-pink-ink: #fbcfe8; --dao-tag-pink-bg: #422637;
+  }
+}
+.dao-topic--blue { --tag-ink: var(--dao-tag-blue-ink); --tag-bg: var(--dao-tag-blue-bg); }
+.dao-topic--purple { --tag-ink: var(--dao-tag-purple-ink); --tag-bg: var(--dao-tag-purple-bg); }
+.dao-topic--teal { --tag-ink: var(--dao-tag-teal-ink); --tag-bg: var(--dao-tag-teal-bg); }
+.dao-topic--red { --tag-ink: var(--dao-tag-red-ink); --tag-bg: var(--dao-tag-red-bg); }
+.dao-topic--amber { --tag-ink: var(--dao-tag-amber-ink); --tag-bg: var(--dao-tag-amber-bg); }
+.dao-topic--slate { --tag-ink: var(--dao-tag-slate-ink); --tag-bg: var(--dao-tag-slate-bg); }
+.dao-topic--pink { --tag-ink: var(--dao-tag-pink-ink); --tag-bg: var(--dao-tag-pink-bg); }
+.dao-proposal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 9px 0 4px; padding: 0; list-style: none; }
+.dao-topic { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; background: var(--tag-bg); color: var(--tag-ink); font-size: 11px; line-height: 1.55; font-weight: 600; }
+.dao-page-heading > .dao-proposal-tags { margin: 14px 0; }
+.dao-app .dao-status { border-radius: 20px; padding: 5px 10px; }
+.dao-app .dao-status--draft { color: var(--dao-tag-amber-ink); background: var(--dao-tag-amber-bg); }
+.dao-app .dao-status--anchoring, .dao-app .dao-status--scheduled { color: var(--dao-tag-blue-ink); background: var(--dao-tag-blue-bg); }
+.dao-app .dao-status--open, .dao-app .dao-status--ongoing { color: var(--dao-tag-teal-ink); background: var(--dao-tag-teal-bg); }
+.dao-app .dao-status--closed, .dao-app .dao-status--archived { color: var(--dao-tag-slate-ink); background: var(--dao-tag-slate-bg); }
+.dao-app .dao-status--finalized { color: var(--dao-tag-purple-ink); background: var(--dao-tag-purple-bg); }
+.dao-app .dao-status--rejected { color: var(--dao-tag-red-ink); background: var(--dao-tag-red-bg); }
+.dao-template-picker { padding: 20px; border-radius: 8px; background: var(--dao-soft); }
+.dao-template-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dao-template-heading h2 { font-size: 16px; }
+.dao-template-heading p, .dao-template-description, .dao-template-replace p { color: var(--dao-muted); font-size: 13px; line-height: 1.65; }
+.dao-template-heading p { margin-top: 4px; }
+.dao-template-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 14px 0 10px; }
+.dao-template-controls select { flex: 1; }
+.dao-app .dao-template-download { min-height: 44px; color: var(--dao-accent); font-size: 13px; cursor: pointer; padding: 0 8px; }
+.dao-template-description a { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 3px; }
+.dao-template-replace { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--dao-line-strong); }
+.dao-template-replace .dao-form-actions { margin-top: 8px; }
+.dao-template-picker > [role="status"] { margin-top: 12px; }
+.dao-app .dao-file-input { display: none; }
+.dao-tag-picker { margin: 0; padding: 0; border: 0; min-width: 0; }
+.dao-tag-picker legend { padding: 0; color: var(--dao-ink); font-size: 14px; font-weight: 600; }
+.dao-tag-picker legend span { color: var(--dao-muted); font-size: 12px; font-weight: 400; margin-left: 8px; }
+.dao-tag-picker > div { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.dao-app .dao-topic-choice { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; border-radius: 24px; padding: 8px 12px; background: var(--tag-bg); color: var(--tag-ink); font-size: 12px; cursor: pointer; }
+.dao-app .dao-topic-choice[aria-pressed="true"] { box-shadow: inset 0 0 0 1.5px currentColor; }
+.dao-app .dao-topic-choice:disabled { opacity: .6; }
+.dao-editor-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dao-editor-heading > label { font-size: 14px; font-weight: 600; }
+.dao-editor-heading > div { display: flex; align-items: center; gap: 4px; }
+.dao-app .dao-editor-heading button { min-height: 44px; padding: 8px 12px; border-radius: 6px; color: var(--dao-muted); font-size: 13px; cursor: pointer; }
+.dao-app .dao-editor-heading button[aria-pressed="true"] { background: var(--dao-soft); color: var(--dao-ink); }
+.dao-app .dao-markdown-editor { font-family: var(--font-numeric); font-size: 13px; line-height: 1.85; resize: vertical; }
+.dao-app .dao-markdown-editor[hidden] { display: none; }
+.dao-markdown-preview { min-height: 320px; max-height: 720px; overflow: auto; padding: 22px; border: 1px solid var(--dao-line); border-radius: 8px; }
+.dao-editor-hint { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.dao-editor-hint > span:last-child { font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) {
+  .dao-template-picker { padding: 16px; }
+  .dao-template-heading { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+  .dao-template-controls select { flex-basis: 100%; width: 100%; }
+  .dao-markdown-preview { padding: 16px; }
+  .dao-app .dao-markdown-editor { font-size: 16px; }
+}

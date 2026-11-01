@@ -1,0 +1,404 @@
+{
+  "checkedAt": "2026-10-10T03:19:20Z",
+  "source": "https://api.github.com/repos/ZcashCommunityGrants/zcashcommunitygrants/issues?state=open&per_page=100",
+  "proposals": [
+    {
+      "id": "zcg-github-478",
+      "issueNumber": 478,
+      "title": "Travel Support for Devcon 8 Mumbai — Speaker, Curator, Performer (ZK-Music)",
+      "applicant": "4NI4",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-08T19:13:56Z",
+      "sourceUpdatedAt": "2026-10-08T19:37:44Z",
+      "requestedUsd": 1000,
+      "tags": [
+        "events"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/478"
+    },
+    {
+      "id": "zcg-github-477",
+      "issueNumber": 477,
+      "title": "VKX Wallet: Native Shielded Zcash Integration & Open-Source React Native Module",
+      "applicant": "VkxProtocol",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-08T17:32:55Z",
+      "sourceUpdatedAt": "2026-10-08T19:23:04Z",
+      "requestedUsd": 48000,
+      "tags": [
+        "wallets",
+        "integration"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/477"
+    },
+    {
+      "id": "zcg-github-474",
+      "issueNumber": 474,
+      "title": "Zcash Kenya — Privacy, Community & Economic Adoption Initiative",
+      "applicant": "chainweb-commits",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-08T07:23:08Z",
+      "sourceUpdatedAt": "2026-10-08T13:29:54Z",
+      "requestedUsd": 16500,
+      "tags": [
+        "community",
+        "education"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/474"
+    },
+    {
+      "id": "zcg-github-468",
+      "issueNumber": 468,
+      "title": "Hito Zcash: Stable Firmware, Internal Security Review, and Maintenance",
+      "applicant": "hito-dev",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-05T19:27:49Z",
+      "sourceUpdatedAt": "2026-10-05T20:36:55Z",
+      "requestedUsd": 88000,
+      "tags": [
+        "wallets",
+        "security"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/468"
+    },
+    {
+      "id": "zcg-github-467",
+      "issueNumber": 467,
+      "title": "Zcash Shielded Payments: An English/Korean Research Report",
+      "applicant": "FPSteve",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-04T12:45:09Z",
+      "sourceUpdatedAt": "2026-10-08T13:32:07Z",
+      "requestedUsd": 20000,
+      "tags": [
+        "research",
+        "education"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/467"
+    },
+    {
+      "id": "zcg-github-462",
+      "issueNumber": 462,
+      "title": "Tells: a privacy checkup for Zcash wallets",
+      "applicant": "luoy16002-svg",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-02T11:36:20Z",
+      "sourceUpdatedAt": "2026-10-04T14:01:22Z",
+      "requestedUsd": 24000,
+      "tags": [
+        "security",
+        "wallets"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/462"
+    },
+    {
+      "id": "zcg-github-460",
+      "issueNumber": 460,
+      "title": "Fixing, Updating & Streamlining of Zcash Documentation",
+      "applicant": "DeBelg",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-01T22:43:40Z",
+      "sourceUpdatedAt": "2026-10-01T23:31:30Z",
+      "requestedUsd": 40904,
+      "tags": [
+        "education",
+        "infrastructure"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/460"
+    },
+    {
+      "id": "zcg-github-458",
+      "issueNumber": 458,
+      "title": "VaihtoFX: Shielded ZEC On/Off-Ramp via M-Pesa & Airtel Money in Kenya",
+      "applicant": "Mahdi-Kintaal",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-10-01T09:57:11Z",
+      "sourceUpdatedAt": "2026-10-02T18:33:19Z",
+      "requestedUsd": 132092,
+      "tags": [
+        "integration",
+        "applications"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/458"
+    },
+    {
+      "id": "zcg-github-457",
+      "issueNumber": 457,
+      "title": "Build Buddies x Zcash: Privacy Education and Community Adoption in Latin America and Asia",
+      "applicant": "VoodooKingX",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-30T20:58:14Z",
+      "sourceUpdatedAt": "2026-10-02T18:34:20Z",
+      "requestedUsd": 10000,
+      "tags": [
+        "education",
+        "community"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/457"
+    },
+    {
+      "id": "zcg-github-456",
+      "issueNumber": 456,
+      "title": "Zcash Privacy Payment Rail & NFC Programmable Cards",
+      "applicant": "ONEONUORA",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-30T13:44:02Z",
+      "sourceUpdatedAt": "2026-10-02T11:10:59Z",
+      "requestedUsd": 150000,
+      "tags": [
+        "applications",
+        "integration"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/456"
+    },
+    {
+      "id": "zcg-github-455",
+      "issueNumber": 455,
+      "title": "Nozy Sync Engine public ($45k)",
+      "applicant": "Lowo88",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-29T22:42:17Z",
+      "sourceUpdatedAt": "2026-09-30T12:48:49Z",
+      "requestedUsd": 45000,
+      "tags": [
+        "infrastructure",
+        "wallets"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/455"
+    },
+    {
+      "id": "zcg-github-454",
+      "issueNumber": 454,
+      "title": "0xramp: ZEC payments and wallet integrations (revision of #408)",
+      "applicant": "vinibarbosabr",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-29T18:50:04Z",
+      "sourceUpdatedAt": "2026-09-29T19:29:31Z",
+      "requestedUsd": 45000,
+      "tags": [
+        "applications",
+        "integration"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/454"
+    },
+    {
+      "id": "zcg-github-453",
+      "issueNumber": 453,
+      "title": "zswap by stalllion labs",
+      "applicant": "peejay-git",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-29T05:53:00Z",
+      "sourceUpdatedAt": "2026-09-30T12:43:41Z",
+      "requestedUsd": 50000,
+      "tags": [
+        "applications",
+        "integration"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/453"
+    },
+    {
+      "id": "zcg-github-450",
+      "issueNumber": 450,
+      "title": "Zcash Global Community & Marketing Operations",
+      "applicant": "Dk51islive",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-28T10:28:57Z",
+      "sourceUpdatedAt": "2026-09-28T14:54:21Z",
+      "requestedUsd": 12000,
+      "tags": [
+        "community",
+        "media"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/450"
+    },
+    {
+      "id": "zcg-github-448",
+      "issueNumber": 448,
+      "title": "Zcash Privacy Ecosystem Mapping & Adoption Data",
+      "applicant": "jen-sei",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-26T14:48:38Z",
+      "sourceUpdatedAt": "2026-09-26T17:53:16Z",
+      "requestedUsd": 5000,
+      "tags": [
+        "research",
+        "community"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/448"
+    },
+    {
+      "id": "zcg-github-444",
+      "issueNumber": 444,
+      "title": "Independent Recomputation of the Zcash Supply Ledger, including the NU7 NSM Reserve",
+      "applicant": "robustfengbin",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-25T02:31:40Z",
+      "sourceUpdatedAt": "2026-09-25T11:43:49Z",
+      "requestedUsd": 50000,
+      "tags": [
+        "research",
+        "protocol"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/444"
+    },
+    {
+      "id": "zcg-github-442",
+      "issueNumber": 442,
+      "title": "ZCASH AFRICA PRIVACY ENGINEERING RESIDENCY",
+      "applicant": "Codeinx",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-23T22:00:11Z",
+      "sourceUpdatedAt": "2026-09-24T21:32:36Z",
+      "requestedUsd": 49000,
+      "tags": [
+        "education",
+        "security"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/442"
+    },
+    {
+      "id": "zcg-github-439",
+      "issueNumber": 439,
+      "title": "Zebra-Native Non-Custodial Mining Stack (RobotBase)",
+      "applicant": "wygogogo19",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-22T12:31:06Z",
+      "sourceUpdatedAt": "2026-09-23T13:00:59Z",
+      "requestedUsd": 19500,
+      "tags": [
+        "infrastructure"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/439"
+    },
+    {
+      "id": "zcg-github-435",
+      "issueNumber": 435,
+      "title": "P2P Cash-to-ZEC Onboarding via Bank CDMs",
+      "applicant": "imerkle",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-09-20T09:48:48Z",
+      "sourceUpdatedAt": "2026-09-22T13:10:26Z",
+      "requestedUsd": 40500,
+      "tags": [
+        "integration",
+        "applications"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/435"
+    },
+    {
+      "id": "zcg-github-386",
+      "issueNumber": 386,
+      "title": "ZKP-cryptography course",
+      "applicant": "MarijaMikic",
+      "outcome": "under_review",
+      "state": "open",
+      "submittedAt": "2026-08-04T15:37:03Z",
+      "sourceUpdatedAt": "2026-09-30T17:33:56Z",
+      "requestedUsd": 8120,
+      "tags": [
+        "education",
+        "research"
+      ],
+      "labels": [
+        "📋 Grant Application",
+        "👀 Ready For ZCG Review"
+      ],
+      "proposalUrl": "https://github.com/ZcashCommunityGrants/zcashcommunitygrants/issues/386"
+    }
+  ]
+}

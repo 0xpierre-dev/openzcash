@@ -15,6 +15,29 @@ const api = "https://api.github.com/repos/zcash/zips";
 export const ZIP_PATH = /^zips\/(?:zip-\d{4,6}|draft-[a-z0-9-]+)\.(?:rst|md)$/;
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 export const gitBlobHash = (text: string) => createHash("sha1").update(`blob ${Buffer.byteLength(text)}\0`).update(text).digest("hex");
+const emailAddress = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
+const angledEmailAddress = /[ \t]*<[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}>/gi;
+
+/** Keep public author names and source hashes without committing their contact addresses. */
+export function redactZipContacts(text: string): string {
+  return text.replace(angledEmailAddress, "").replace(emailAddress, "[contact removed]");
+}
+
+function sanitizedDocument(document: ZipDocument): ZipDocument {
+  const text = redactZipContacts(document.text);
+  return text === document.text ? document : { ...document, text };
+}
+
+function sanitizedDocuments(documents: ZipDocument[]): ZipDocument[] {
+  const clean = documents.map(sanitizedDocument);
+  return clean.every((document, i) => document === documents[i]) ? documents : clean;
+}
+
+function assertNoContacts(corpus: ZipCorpus): ZipCorpus {
+  const serialized = JSON.stringify(corpus);
+  if (redactZipContacts(serialized) !== serialized) throw new Error("ZIP_CONTACT_IN_SNAPSHOT");
+  return corpus;
+}
 
 export function parseZip(path: string, text: string, sha: string, revision: string): ZipDocument {
   if (!ZIP_PATH.test(path) || !/^[a-f0-9]{40}$/.test(sha) || !/^[a-f0-9]{40}$/.test(revision) || gitBlobHash(text) !== sha) throw new Error("INVALID_ZIP_SOURCE");
@@ -36,7 +59,7 @@ export function parseZip(path: string, text: string, sha: string, revision: stri
   const id = path.slice(5).replace(/\.(?:md|rst)$/, "");
   return { id, number, path, title: headers.Title, status: headers.Status,
     createdOn: date(headers.Created), updatedOn: date(headers["Last-Updated"]), license: headers.License || "See repository COPYING and document",
-    url: `https://zips.z.cash/${id}`, sourceUrl: `${repository}/blob/${revision}/${path}`, sha, sha256: hash(text), text };
+    url: `https://zips.z.cash/${id}`, sourceUrl: `${repository}/blob/${revision}/${path}`, sha, sha256: hash(text), text: redactZipContacts(text) };
 }
 
 async function readPublic(url: string, signal: AbortSignal, maxBytes: number, fetcher: typeof fetch) {
@@ -64,7 +87,7 @@ export async function refreshZipCorpus(previous?: ZipCorpus, options: { timeoutM
     const head = JSON.parse(await read(`${api}/commits/main`, 2_000_000));
     const revision = head.sha;
     if (typeof revision !== "string" || !/^[a-f0-9]{40}$/.test(revision)) throw new Error("INVALID_ZIP_REVISION");
-    if (previous?.revision === revision) return { ...previous, retrievedAt: new Date().toISOString() };
+    if (previous?.revision === revision) return assertNoContacts({ ...previous, readme: redactZipContacts(previous.readme), documents: sanitizedDocuments(previous.documents), retrievedAt: new Date().toISOString() });
     const tree = JSON.parse(await read(`${api}/git/trees/${revision}?recursive=1`, 3_000_000));
     if (tree.truncated || !Array.isArray(tree.tree)) throw new Error("INCOMPLETE_ZIP_TREE");
     type Entry = { path: string; sha: string; type: string; size: number };
@@ -72,14 +95,15 @@ export async function refreshZipCorpus(previous?: ZipCorpus, options: { timeoutM
     if (entries.length < 3 || entries.length > 402 || entries.some((e) => !/^[a-f0-9]{40}$/.test(e.sha) || !Number.isFinite(e.size) || e.size > 1_000_000) || entries.reduce((n, e) => n + e.size, 0) > 10_000_000) throw new Error("INVALID_ZIP_MANIFEST");
     if (!entries.some((e) => e.path === "README.rst") || !entries.some((e) => e.path === "COPYING.rst")) throw new Error("MISSING_ZIP_INDEX");
     const old = new Map(previous?.documents.map((doc) => [doc.path, doc]) ?? []);
+    const retained = new Map<string, ZipDocument>();
     const texts = new Map<string, string>();
     for (const e of entries) {
       const doc = old.get(e.path);
-      if (doc?.sha === e.sha) texts.set(e.path, doc.text);
+      if (doc?.sha === e.sha) retained.set(e.path, sanitizedDocument(doc));
       if (e.path === "README.rst" && e.sha === previous?.readmeSha) texts.set(e.path, previous.readme);
       if (e.path === "COPYING.rst" && e.sha === previous?.licenseSha) texts.set(e.path, previous.license);
     }
-    const changed = entries.filter((e) => !texts.has(e.path));
+    const changed = entries.filter((e) => !texts.has(e.path) && !retained.has(e.path));
     if (changed.length > (options.maxChanged ?? 12)) throw new Error("ZIP_OFFLINE_SYNC_REQUIRED");
     let next = 0;
     await Promise.all(Array.from({ length: Math.min(4, changed.length) }, async () => {
@@ -90,15 +114,15 @@ export async function refreshZipCorpus(previous?: ZipCorpus, options: { timeoutM
         texts.set(item.path, text);
       }
     }));
-    const readme = texts.get("README.rst")!;
+    const readme = redactZipContacts(texts.get("README.rst")!);
     if (!readme.includes("Index of ZIPs")) throw new Error("INVALID_ZIP_INDEX");
-    const documents = entries.filter((e) => ZIP_PATH.test(e.path)).map((e) => parseZip(e.path, texts.get(e.path)!, e.sha, revision)).sort((a, b) => a.id.localeCompare(b.id));
+    const documents = entries.filter((e) => ZIP_PATH.test(e.path)).map((e) => retained.get(e.path) ?? parseZip(e.path, texts.get(e.path)!, e.sha, revision)).sort((a, b) => a.id.localeCompare(b.id));
     const numbers = documents.filter((d) => d.number !== null).map((d) => d.number);
     if (new Set(numbers).size !== numbers.length) throw new Error("DUPLICATE_ZIP_NUMBER");
     // Every numbered document linked by the official index must be present.
     for (const match of readme.matchAll(/zips\/(zip-\d{4,6})\.(?:rst|md)/g)) if (!documents.some((d) => d.id === match[1])) throw new Error("INCOMPLETE_ZIP_CATALOG");
-    return { version: 1, repository, revision, retrievedAt: new Date().toISOString(), readme, readmeSha: entries.find((e) => e.path === "README.rst")!.sha,
-      license: texts.get("COPYING.rst")!, licenseSha: entries.find((e) => e.path === "COPYING.rst")!.sha, documents };
+    return assertNoContacts({ version: 1, repository, revision, retrievedAt: new Date().toISOString(), readme, readmeSha: entries.find((e) => e.path === "README.rst")!.sha,
+      license: texts.get("COPYING.rst")!, licenseSha: entries.find((e) => e.path === "COPYING.rst")!.sha, documents });
   } finally { controller.abort(); clearTimeout(timeout); }
 }
 

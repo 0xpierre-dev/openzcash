@@ -17,7 +17,7 @@ Live: **[openzcash.org](https://openzcash.org)**
 
 <p align="center"><img src="docs/img/openzcash-menu.png" alt="OpenZcash dashboard menu" width="740"></p>
 
-> The system never holds spend keys. Current public chain reads use a public
+> The portal never holds spend keys. Current public chain reads use a public
 > lightwalletd; historical reconciliation still displays previously scanned data.
 
 ## Try the API right now
@@ -31,6 +31,13 @@ One row per grant, straight from the live ledger. Amounts are USD (dollars) and
 ZEC, and the payment ledger at `/api/zcg/data/disbursements` carries provenance on
 every row (`sourceSheetGid`, `sourceRow`, `sourceUrl`). The full endpoint index
 lives at `GET /api/zcg`.
+
+## Included applications
+
+The root contains the portal. [Participate](services/participate/README.md) and
+[Private Chat](services/private-chat/README.md) are separately runnable services
+with their own dependencies, tests and setup guides. See
+[Local development](docs/local-development.md) for the complete topology.
 
 ## What's inside
 
@@ -87,9 +94,7 @@ lists the site's public endpoints by area. Methodology:
 npx skills@1.7.2 add https://openzcash.org --skill zcg-copilot
 ```
 
-Install from the site's published copies; the repository itself is currently
-private. Once this repository is public, `npx skills add Michae2xl/openzcash
---skill zcg-copilot` works from the source repository too.
+Install from the site's published copies; the source can also be installed from `skills/zcg-copilot` in your checkout.
 
 Ask your agent about grants, spending, recipients, and proposals under review;
 answers come from the live API above with a citation on every figure, never from
@@ -103,7 +108,7 @@ for open discovery.
 
 ## Local development
 
-Requires Node 24.22.1 and Postgres. Development, CI and production use the exact version pinned in `package.json` `engines.node`.
+Requires Node **24.22.1** and Postgres. Use the version pinned in `.nvmrc` and `package.json` `engines.node` for development, builds, and production.
 
 Create `.env.local` with the connection string for your local development database:
 
@@ -116,7 +121,7 @@ as a reference for additional settings; omit unused optional variables instead
 of copying blank values or placeholder URLs.
 
 ```bash
-npm install
+npm ci
 npm run db:migrate           # apply the schema
 npm run import-zcg           # mirror the ZCG spreadsheet into the DB
 npm run dev                  # http://localhost:3000
@@ -129,11 +134,18 @@ treasury onboarding, viewing-key and scan HTTP routes are retired. Public-data
 imports still use the separate `CRON_SECRET` when triggered manually.
 
 ```bash
-npm run typecheck && npm test && npm run build
+npm run typecheck && npm run lint && npm test && npm run test:copilot && npm run build
 ```
+
+The [CI workflow](.github/workflows/ci.yml) runs these checks on pull requests and
+pushes to `main`. Database integration tests require disposable local databases;
+see [Contributing](CONTRIBUTING.md#tests) for their opt-in settings. Python 3 is
+required for the copilot tests. Live AI features also need the provider settings
+described in [Using Zarvis](docs/using-zarvis.md) and [Zarvis configuration](docs/zarvis.md).
 
 ## Documentation
 
+- [Local setup and service dependencies](docs/local-development.md) — covers the included Participate and Private Chat services
 - Methodology: [openzcash.org/zcg/methodology](https://openzcash.org/zcg/methodology)
 - [Design and credits](docs/design-and-credits.md) — the evidence-led standard for new screens
 - [Funding history methodology](docs/funding-history-methodology.md)
@@ -165,5 +177,9 @@ Tailwind · React Three Fiber (the 3D office) · deployed on Railway.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Data is mirrored from the ZCG public spreadsheet,
+Portal and Private Chat: MIT — see [LICENSE](LICENSE). Participate retains
+[Apache-2.0](services/participate/LICENSE). Third-party assets retain their notices. Data is mirrored from the ZCG public spreadsheet,
 the ZCG GitHub issue tracker, and the Zcash Community Forum.
+
+See [Source distribution](docs/source-distribution.md) for the included services,
+licenses, excluded private material and operational boundaries.

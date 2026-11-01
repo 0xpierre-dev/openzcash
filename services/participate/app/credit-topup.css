@@ -1,0 +1,71 @@
+/* Wallet payment requests use the same theme tokens as the credit account. */
+.dao-topup { padding: 8px 0 20px; border-top: 1px solid var(--dao-line); }
+.dao-topup-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dao-topup-heading h3 { margin: 0; font-size: 14px; font-weight: 550; letter-spacing: -.015em; }
+.dao-app .dao-topup-refresh { display: inline-flex; align-items: center; justify-content: center; flex: none; min-width: 44px; min-height: 44px; border-radius: 6px; color: var(--dao-muted); cursor: pointer; }
+.dao-app .dao-topup-refresh:hover { color: var(--dao-accent); background: var(--dao-soft); }
+.dao-topup-loading, .dao-topup-unavailable { padding: 16px 0; color: var(--dao-muted); font-size: 12px; line-height: 1.7; }
+.dao-topup-package { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 12px; padding: 16px; border-radius: 8px; background: var(--dao-soft); }
+.dao-topup-package > div { min-width: 0; }
+.dao-topup-package strong { display: block; color: var(--dao-ink); font-size: 19px; font-weight: 600; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.dao-topup-package p { margin-top: 3px; color: var(--dao-secondary); font-size: 12px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-topup-package p > span { color: var(--dao-muted); }
+.dao-app .dao-topup .dao-button { min-height: 44px; padding: 9px 12px; font-size: 12px; }
+.dao-app .dao-topup-return { display: inline-flex; align-items: center; min-height: 44px; color: var(--dao-accent); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.dao-topup-invoice { margin-top: 14px; padding: 16px; border-radius: 9px; background: var(--dao-soft); }
+.dao-topup-invoice-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.dao-topup-status { display: inline-flex; align-items: center; gap: 6px; color: var(--dao-muted); font-size: 11px; font-weight: 550; }
+.dao-topup-status::before { content: ""; width: 5px; height: 5px; flex: none; border-radius: 50%; background: currentColor; }
+.dao-topup-status--confirming, .dao-topup-status--review { color: var(--dao-accent); }
+.dao-topup-status--credited { color: var(--dao-positive); }
+.dao-topup-network { padding: 2px 6px; border-radius: 4px; color: var(--dao-secondary); background: var(--dao-paper); font-size: 10px; font-weight: 500; }
+.dao-topup-amount { display: flex; flex-direction: column; gap: 3px; margin: 15px 0 10px; }
+.dao-topup-amount > strong { color: var(--dao-ink); font-family: var(--font-numeric); font-size: 24px; font-weight: 500; line-height: 1.4; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.dao-topup-amount strong > span { color: var(--dao-muted); font-family: var(--font-body); font-size: 12px; font-weight: 500; letter-spacing: 0; }
+.dao-topup-amount > span { color: var(--dao-secondary); font-size: 12px; }
+.dao-topup .dao-topup-instructions { color: var(--dao-secondary); font-size: 12px; line-height: 1.7; }
+.dao-topup .dao-topup-confirmations { margin-top: 9px; color: var(--dao-accent); font-size: 12px; font-variant-numeric: tabular-nums; }
+.dao-topup .dao-topup-expiry { margin-top: 9px; color: var(--dao-muted); font-size: 11px; line-height: 1.7; }
+.dao-topup-qr { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 16px 0 4px; }
+.dao-topup-qr img { display: block; width: 180px; height: 180px; max-width: 100%; border: 8px solid #fff; border-radius: 6px; background: #fff; }
+.dao-topup-qr > span, .dao-topup-qr figcaption, .dao-topup .dao-topup-qr-fallback { color: var(--dao-muted); font-size: 11px; line-height: 1.7; }
+.dao-topup .dao-topup-qr-fallback { margin-top: 14px; }
+.dao-topup-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.dao-topup-actions:empty { display: none; }
+.dao-topup-payment-details { margin-top: 12px; border-top: 1px solid var(--dao-line); }
+.dao-topup-payment-details > summary, .dao-topup-history > summary { display: flex; align-items: center; justify-content: space-between; min-height: 44px; color: var(--dao-secondary); font-size: 12px; font-weight: 500; list-style: none; cursor: pointer; }
+.dao-topup-payment-details > summary::-webkit-details-marker, .dao-topup-history > summary::-webkit-details-marker { display: none; }
+.dao-topup-payment-details > summary::after { content: ""; flex: none; width: 6px; height: 6px; margin-right: 4px; border-right: 1.5px solid; border-bottom: 1.5px solid; transform: rotate(45deg); }
+.dao-topup-payment-details[open] > summary::after { transform: rotate(225deg); }
+.dao-topup-copy-field + .dao-topup-copy-field { margin-top: 7px; }
+.dao-topup-copy-field > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2px 8px; }
+.dao-topup-copy-field label { color: var(--dao-muted); font-size: 11px; }
+.dao-app .dao-topup-copy { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; color: var(--dao-accent); font-size: 11px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.dao-app .dao-topup-copy:hover { color: var(--dao-ink); }
+.dao-app .dao-topup-copy-field textarea { display: block; width: 100%; min-height: 66px; padding: 10px; border: 1px solid var(--dao-line-strong); border-radius: 5px; background: var(--dao-paper); color: var(--dao-secondary); font-family: var(--font-numeric); font-size: 12px; line-height: 1.7; letter-spacing: -.02em; resize: vertical; overflow-wrap: anywhere; }
+.dao-topup-copy-message { display: block; margin-top: 4px; color: var(--dao-muted); font-size: 11px; }
+.dao-topup .dao-topup-memo-hint { margin-top: 7px; color: var(--dao-muted); font-size: 11px; line-height: 1.7; }
+.dao-topup-reference { display: grid; gap: 10px; margin: 16px 0 0; color: var(--dao-muted); font-size: 11px; line-height: 1.7; }
+.dao-topup-reference > div { display: grid; gap: 3px; }
+.dao-topup-reference dd { margin: 0; color: var(--dao-secondary); overflow-wrap: anywhere; }
+.dao-topup-history { margin-top: 14px; }
+.dao-topup-history > summary > span { color: var(--dao-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.dao-topup-history ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.dao-app .dao-topup-history button { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 52px; padding: 8px 10px; border-radius: 6px; text-align: left; cursor: pointer; }
+.dao-app .dao-topup-history button:hover { background: var(--dao-soft); }
+.dao-app .dao-topup-history button[aria-pressed="true"] { background: var(--dao-selected-bg); }
+.dao-topup-history button > span:first-child { display: grid; gap: 2px; min-width: 0; }
+.dao-topup-history strong { color: var(--dao-secondary); font-size: 12px; font-weight: 500; }
+.dao-topup-history time { color: var(--dao-muted); font-size: 10px; }
+.dao-topup-history-status { color: var(--dao-muted); font-size: 10px; font-weight: 500; }
+.dao-topup-history-status--credited { color: var(--dao-positive); }
+.dao-topup-history-status--confirming, .dao-topup-history-status--review { color: var(--dao-accent); }
+.dao-topup .dao-topup-error, .dao-topup .dao-topup-notice { margin-top: 12px; padding: 11px 13px; border-radius: 6px; font-size: 12px; line-height: 1.7; }
+.dao-topup .dao-topup-error { color: var(--dao-error); background: var(--dao-error-bg); }
+.dao-topup .dao-topup-notice { color: var(--dao-secondary); background: var(--dao-soft); }
+@media (max-width: 600px) {
+  .dao-topup-package, .dao-topup-invoice { padding: 14px; }
+  .dao-topup-actions > .dao-button { flex: 1 1 auto; }
+  .dao-topup-amount > strong { font-size: 21px; }
+  .dao-app .dao-topup-copy-field textarea { font-size: 16px; }
+}

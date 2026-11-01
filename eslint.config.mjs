@@ -25,6 +25,7 @@ const eslintConfig = defineConfig([
   proposalCardContract,
   // Override default ignores of eslint-config-next.
   globalIgnores([
+    "services/**",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",

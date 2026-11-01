@@ -1,20 +1,25 @@
 import { describe, expect, it, vi } from "vitest";
+import { createHash } from "node:crypto";
 import snapshot from "./zip-content.json";
-import { createZipStore, gitBlobHash, parseZip, refreshZipCorpus, ZIP_PATH, ZIP_REFRESH_MS, type ZipCorpus } from "./zip-source";
+import { createZipStore, gitBlobHash, parseZip, redactZipContacts, refreshZipCorpus, ZIP_PATH, ZIP_REFRESH_MS, type ZipCorpus } from "./zip-source";
 const revision = "a".repeat(40), nextRevision = "b".repeat(40);
 const text = "```\nZIP: 259\nTitle: Deployment of NU7\nStatus: Draft\nCreated: 2026-09-15\nLicense: MIT\n```\n\n# Abstract\nA proposal, not activation.";
 const doc = parseZip("zips/zip-0259.md", text, gitBlobHash(text), revision);
+const syntheticContact = ["owner", "example.invalid"].join("@");
+const textWithContact = text.replace("License: MIT", `Owners: Example Author <${syntheticContact}>\nLicense: MIT`);
 const initial: ZipCorpus = { version: 1, repository: "https://github.com/zcash/zips", revision, retrievedAt: "2026-09-28T00:00:00Z", documents: [doc], readme: "Index of ZIPs\nzips/zip-0259.md", readmeSha: "c".repeat(40), license: "MIT", licenseSha: gitBlobHash("MIT") };
 const json = (value: unknown) => new Response(JSON.stringify(value));
 
 describe("Complete official ZIP source snapshot", () => {
-  it("retains every numbered/draft source and verifies its original bytes and metadata", () => {
+  it("retains every numbered/draft source, provenance hashes and redacted text", () => {
     const corpus = snapshot as ZipCorpus;
     expect(corpus.documents.length).toBeGreaterThan(100);
     expect(corpus.license).toContain("Permission is hereby granted");
     for (const source of corpus.documents) {
       expect(ZIP_PATH.test(source.path)).toBe(true);
-      expect(parseZip(source.path, source.text, source.sha, corpus.revision)).toEqual(source);
+      expect(source.sha).toMatch(/^[0-9a-f]{40}$/);
+      expect(source.sha256).toMatch(/^[0-9a-f]{64}$/);
+      expect(redactZipContacts(source.text)).toBe(source.text);
     }
     for (const match of corpus.readme.matchAll(/zips\/(zip-\d{4,6})\.(?:md|rst)/g)) expect(corpus.documents.some((d) => d.id === match[1])).toBe(true);
   });
@@ -28,6 +33,13 @@ describe("Complete official ZIP source snapshot", () => {
     expect(() => parseZip("zips/zip-0259.md", text + "changed", gitBlobHash(text), revision)).toThrow();
     expect(() => parseZip("../../.env", text, gitBlobHash(text), revision)).toThrow();
   });
+  it("verifies source bytes before removing contact addresses while retaining author names and source hashes", () => {
+    const source = parseZip("zips/zip-0259.md", textWithContact, gitBlobHash(textWithContact), revision);
+    expect(source.text).toContain("Owners: Example Author");
+    expect(source.text).not.toContain(syntheticContact);
+    expect(source.sha).toBe(gitBlobHash(textWithContact));
+    expect(source.sha256).toBe(createHash("sha256").update(textWithContact).digest("hex"));
+  });
 });
 
 describe("Bounded and atomic public catalog refresh", () => {
@@ -38,6 +50,23 @@ describe("Bounded and atomic public catalog refresh", () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
     expect(fetcher.mock.calls[0][1]).toMatchObject({ redirect: "error", cache: "no-store" });
     expect(JSON.stringify(fetcher.mock.calls)).not.toMatch(/Authorization|messages|apiKey/);
+  });
+  it("redacts a legacy in-memory snapshot when the upstream revision has not changed", async () => {
+    const unsafe = { ...initial, documents: [{ ...doc, text: textWithContact, sha: gitBlobHash(textWithContact) }] };
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(json({ sha: revision }));
+    const result = await refreshZipCorpus(unsafe, { fetcher });
+    expect(result.documents[0].text).not.toContain(syntheticContact);
+    expect(result.documents[0].sha).toBe(unsafe.documents[0].sha);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+  it("reuses sanitized unchanged documents without fetching or rehashing their redacted text", async () => {
+    const clean = parseZip("zips/zip-0259.md", textWithContact, gitBlobHash(textWithContact), revision);
+    const previous = { ...initial, documents: [clean] };
+    const tree = [{ path: clean.path, type: "blob", sha: clean.sha, size: textWithContact.length }, { path: "README.rst", type: "blob", sha: initial.readmeSha, size: 200 }, { path: "COPYING.rst", type: "blob", sha: initial.licenseSha, size: 3 }];
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ sha: nextRevision })).mockResolvedValueOnce(json({ tree, truncated: false }));
+    const result = await refreshZipCorpus(previous, { fetcher });
+    expect(result.documents[0]).toBe(clean);
+    expect(fetcher).toHaveBeenCalledTimes(2);
   });
   it("fetches only changed documents pinned to the exact new commit", async () => {
     const changed = text.replace("Status: Draft", "Status: Proposed");

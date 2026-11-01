@@ -1,0 +1,88 @@
+.signed-decision { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--dao-line); }
+.signed-decision > summary { display: flex; align-items: center; gap: .65rem; width: fit-content; cursor: pointer; font-weight: 650; }
+.signed-decision > summary::before { content: "+"; color: var(--dao-muted); }
+.signed-decision[open] > summary::before { content: "−"; }
+.signed-decision > summary > span { font-size: .7rem; font-weight: 500; padding: .15rem .45rem; border-radius: 1rem; background: var(--dao-soft); color: var(--dao-muted); }
+.signed-decision-body { padding-top: 1rem; max-width: 960px; font-size: .9rem; line-height: 1.6; }
+.signed-decision-body p { margin: .6rem 0 1rem; color: var(--dao-muted); }
+.signed-decision-heading, .signed-decision-roster, .signed-decision-proof li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.signed-decision-heading strong { font-size: 1.1rem; }
+.signed-decision-heading p { margin-top: .15rem; }
+.signed-decision-status { font-weight: 650; white-space: nowrap; }
+.signed-decision-counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.2rem 0; font-variant-numeric: tabular-nums; }
+.signed-decision-counts span { color: var(--dao-muted); }
+.signed-decision-counts strong { display: block; font-size: 1.65rem; color: var(--dao-ink); letter-spacing: -.04em; line-height: 1.25; }
+.signed-decision-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; max-width: 540px; }
+.signed-decision-fields label { display: flex; flex-direction: column; gap: .3rem; font-weight: 600; }
+.signed-decision-fields input { width: 100%; box-sizing: border-box; padding: .65rem .8rem; font: inherit; color: var(--dao-ink); background: var(--dao-paper); border: 1px solid var(--dao-line); border-radius: .55rem; }
+.signed-decision-fields small { font-weight: 400; color: var(--dao-muted); }
+.signed-decision-confirm { margin: 1.25rem 0; }
+.signed-decision-confirm fieldset { padding: 0; border: 0; display: flex; gap: 1.25rem; flex-wrap: wrap; }
+.signed-decision-confirm legend { margin-bottom: .6rem; font-weight: 650; }
+.signed-decision-confirm label { display: flex; gap: .45rem; align-items: center; cursor: pointer; }
+.signed-decision-confirm input { accent-color: var(--dao-accent); width: 1rem; height: 1rem; }
+.signed-decision-tools { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
+.signed-decision-proof { margin-top: 1rem; }
+.signed-decision-proof ul { padding: 0; list-style: none; }
+.signed-decision-proof li { padding: .45rem 0; }
+.signed-decision-proof code { display: block; overflow-wrap: anywhere; font-size: .78rem; }
+.signed-decision-proof pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .75rem; }
+.signed-decision-proof a { display: inline-block; margin-top: 1rem; }
+.signed-decision summary:focus-visible, .signed-decision input:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 4px; }
+@media (max-width: 540px) {
+  .signed-decision-counts { grid-template-columns: repeat(2, 1fr); }
+  .signed-decision-fields { gap: .6rem; }
+  .signed-decision-fields small { font-size: .7rem; }
+  .signed-decision-heading { flex-wrap: wrap; }
+}
+.signed-decision-rationale { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; font-weight: 600; font-size: 14px; }
+.signed-decision-rationale textarea { width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--dao-line); background: var(--dao-paper); border-radius: 9px; padding: 12px; color: var(--dao-ink); font: inherit; font-weight: 400; line-height: 1.6; }
+.signed-decision-rationale textarea:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; }
+.signed-decision-rationale small { color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.committee-decision-rule { display: flex; align-items: center; gap: 22px; margin: 8px 0 22px; }
+.committee-decision-rule > strong { font-size: 38px; line-height: 1; letter-spacing: -.05em; white-space: nowrap; color: var(--dao-ink); }
+.committee-decision-rule > strong > span { font-size: 23px; color: var(--dao-muted); font-weight: 500; }
+.committee-decision-rule > div { display: grid; gap: 3px; }
+.committee-decision-rule b { font-size: 15px; font-weight: 650; }
+.committee-decision-rule > div > span { font-size: 12px; color: var(--dao-muted); }
+.signed-decision-fields.signed-decision-fields--duration { grid-template-columns: minmax(0, 210px); }
+.signed-member-list { padding: 0; margin: 12px 0 20px; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; }
+.signed-member-list > li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; min-width: 0; font-size: 13px; }
+.signed-member-list .dao-account-avatar, .signed-member-seat { width: 32px; height: 32px; flex-shrink: 0; font-size: 13px; }
+.signed-member-seat { display: grid; place-items: center; background: var(--dao-soft); color: var(--dao-muted); border-radius: 50%; }
+.signed-member-list > li > span:not(.signed-member-seat) { display: grid; gap: 2px; }
+.signed-member-list small { font-size: 11px; color: var(--dao-muted); }
+.signed-member-list strong { font-weight: 600; overflow-wrap: anywhere; }
+.signed-member-status { font-size: 11px; font-weight: 600; color: var(--dao-muted); margin-left: auto; white-space: nowrap; }
+.signed-member-status[data-choice="APPROVE"] { color: var(--dao-positive, #268661); }
+.signed-member-status[data-choice="REJECT"] { color: var(--dao-negative, #c55a4c); }
+.signed-member-status[data-choice="ABSTAIN"] { color: var(--dao-accent); }
+.signed-member-content { flex: 1; min-width: 0; }
+.signed-member-content > div { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; }
+.signed-member-content details { margin-top: 4px; }
+.signed-member-content summary { cursor: pointer; width: fit-content; font-size: 12px; color: var(--dao-muted); }
+.signed-member-content p { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.6; margin: 8px 0; }
+.signed-member-unassigned { color: var(--dao-muted); align-items: center !important; }
+@media (min-width: 761px) {
+  .signed-member-list--setup { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .signed-member-list--setup > li { flex-direction: column; gap: 8px; align-items: flex-start !important; padding: 4px 0; }
+  .signed-member-list--setup .signed-member-status { display: none; }
+}
+.signed-majority-progress { margin: 16px 0; max-width: 640px; }
+.signed-majority-progress > div:first-child { display: flex; gap: 10px; justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
+.signed-majority-progress strong { font-size: 27px; font-variant-numeric: tabular-nums; }
+.signed-majority-progress strong > span { font-size: 15px; font-weight: 500; }
+.signed-majority-progress > div > span { font-size: 12px; color: var(--dao-muted); }
+.signed-member-meter { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin: 8px 0; }
+.signed-member-meter > span { height: 6px; border-radius: 3px; background: var(--dao-soft); }
+.signed-member-meter [data-choice="APPROVE"] { background: #30855f; }
+.signed-member-meter [data-choice="REJECT"] { background: #c56754; }
+.signed-member-meter [data-choice="ABSTAIN"] { background: #b5812c; }
+.signed-majority-progress > p { font-size: 12px; margin: 0; }
+@media (max-width: 600px) {
+  .signed-member-list { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .committee-decision-rule { gap: 16px; align-items: flex-start; }
+  .committee-decision-rule > strong { font-size: 32px; }
+}
+.signed-decision-feedback { margin-top: 20px; }.signed-decision-feedback summary { cursor: pointer; font-size: 14px; }.signed-decision-feedback summary > span { color: var(--dao-muted); margin-left: 8px; }
+.signed-decision-feedback ul { list-style: none; padding: 0; }.signed-decision-feedback li { padding: 20px 0; border-bottom: 1px solid var(--dao-line); }.signed-decision-feedback li > div { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }.signed-decision-feedback .dao-account-avatar { width: 32px; height: 32px; font-size: 14px; flex-shrink: 0; }.signed-decision-feedback li > div > span:last-child { margin-left: auto; color: var(--dao-accent); }.signed-decision-feedback li p { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; margin: 12px 0; }.signed-decision-feedback li small { color: var(--dao-muted); font-size: 12px; }

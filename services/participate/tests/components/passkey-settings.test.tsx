@@ -1,0 +1,70 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { PasskeySettings } from "@/components/passkey-settings";
+const client = vi.hoisted(() => ({ registerPasskey: vi.fn(), passkeyFetch: vi.fn(), requirePasskeyBrowser: vi.fn(), rememberSavedPasskey: vi.fn(), passkeyErrorMessage: (error: Error) => error.message }));
+const email = vi.hoisted(() => ({ emailFetch: vi.fn(), emailErrorMessage: (error: Error) => error.message, emailRetryAfter: () => 0 }));
+vi.mock("@/lib/auth/passkey-client", () => client);
+vi.mock("@/lib/auth/email-client", () => email);
+const saving = vi.fn();
+const access = { canManage: true, emailAvailable: true };
+beforeEach(() => { vi.clearAllMocks(); email.emailFetch.mockResolvedValue({ sent: true }); });
+it("does not enroll credentials for the shared demo", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [], canManage: false, emailAvailable: false });
+  render(<PasskeySettings onSavingChange={saving} />);
+  expect(await screen.findByText(/Passkeys are off for the demo/)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Add passkey" })).not.toBeInTheDocument();
+  expect(client.registerPasskey).not.toHaveBeenCalled();
+});
+it("explains email verification and recovery in the compact profile settings", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [], ...access });
+  render(<PasskeySettings onSavingChange={saving} compact />);
+  expect(await screen.findByRole("button", { name: "Add passkey" })).toBeEnabled();
+  expect(screen.getByText("Use your device to sign in. Keep email as a backup.")).toBeInTheDocument();
+});
+it("adds a passkey only after an explicit action and fresh email confirmation", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [], ...access });
+  client.registerPasskey.mockResolvedValueOnce({ passkey: { id: "key-1", label: "My laptop", createdAt: "2026-10-10", lastUsedAt: null } });
+  render(<PasskeySettings onSavingChange={saving} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Add passkey" }));
+  fireEvent.change(screen.getByLabelText("Passkey name"), { target: { value: "My laptop" } });
+  fireEvent.submit(screen.getByRole("button", { name: "Send confirmation code" }).closest("form")!);
+  expect(await screen.findByLabelText("Email confirmation code")).toBeRequired();
+  expect(email.emailFetch).toHaveBeenCalledWith("/api/account/email-code", { action: "add", label: "My laptop" });
+  expect(client.registerPasskey).not.toHaveBeenCalled();
+  fireEvent.change(screen.getByLabelText("Email confirmation code"), { target: { value: "123456" } });
+  fireEvent.submit(screen.getByRole("button", { name: "Create passkey" }).closest("form")!);
+  expect(await screen.findByRole("status")).toHaveTextContent("Passkey added");
+  expect(client.registerPasskey).toHaveBeenCalledWith("My laptop", "123456");
+  expect(client.rememberSavedPasskey).toHaveBeenCalledWith(true);
+  expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument();
+});
+it("requires a code scoped to the specific key before removal", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [{ id: "key-1", label: "My phone", createdAt: "2026-10-10", lastUsedAt: null }], ...access }).mockResolvedValueOnce({ removed: true });
+  render(<PasskeySettings onSavingChange={saving} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Remove My phone" }));
+  fireEvent.submit(screen.getByRole("button", { name: "Send confirmation code" }).closest("form")!);
+  fireEvent.change(await screen.findByLabelText("Email confirmation code"), { target: { value: "123456" } });
+  expect(email.emailFetch).toHaveBeenCalledWith("/api/account/email-code", { action: "remove", passkeyId: "key-1" });
+  fireEvent.submit(screen.getByRole("button", { name: "Remove passkey" }).closest("form")!);
+  expect(await screen.findByRole("status")).toHaveTextContent("Passkey removed");
+  expect(client.passkeyFetch).toHaveBeenLastCalledWith("/api/account/passkeys/key-1", { code: "123456" }, "DELETE");
+});
+it("keeps the saved list after device cancellation and requests new email proof", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [], ...access });
+  client.registerPasskey.mockRejectedValueOnce(new Error("Registration cancelled"));
+  render(<PasskeySettings onSavingChange={saving} />);
+  fireEvent.click(await screen.findByRole("button", { name: "Add passkey" }));
+  fireEvent.change(screen.getByLabelText("Passkey name"), { target: { value: "Laptop" } });
+  fireEvent.submit(screen.getByRole("button", { name: "Send confirmation code" }).closest("form")!);
+  fireEvent.change(await screen.findByLabelText("Email confirmation code"), { target: { value: "123456" } });
+  fireEvent.submit(screen.getByRole("button", { name: "Create passkey" }).closest("form")!);
+  expect(await screen.findByRole("alert")).toHaveTextContent("Registration cancelled");
+  expect(screen.queryByLabelText("Email confirmation code")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Send code in 60s" })).toBeDisabled();
+  expect(client.rememberSavedPasskey).not.toHaveBeenCalled();
+});
+it("does not offer setup when email delivery is missing", async () => {
+  client.passkeyFetch.mockResolvedValueOnce({ passkeys: [], canManage: true, emailAvailable: false });
+  render(<PasskeySettings onSavingChange={saving} />);
+  expect(await screen.findByText(/available when email delivery/)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Add passkey" })).not.toBeInTheDocument();
+});

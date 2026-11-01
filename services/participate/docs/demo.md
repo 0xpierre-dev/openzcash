@@ -1,0 +1,34 @@
+# Demo Guide
+
+This is the legacy community-poll walkthrough. For the separate Participate
+committee review practice environment, see [Committee practice](committee-practice.md).
+
+## What to show
+
+### 1. Public board
+- open `/polls`
+- show reconciled result only
+- explain that duplicates are not exposed there
+
+### 2. Admin flow
+- create a poll
+- review question, answers, voter table, and window
+- click `Open poll`
+- show the visible opening stages
+
+### 3. Voter flow
+- receive Signal invite
+- open the one-time poll link to create the poll session
+- choose one answer
+- confirm and lock the ticket
+- show the single QR
+
+### 4. Confirmation
+- observe the QR disappear after note detection
+- wait for one-block confirmation
+- show receipt delivery and `VOTED` state
+
+### 5. Results
+- show admin completion state
+- show public reconciled percentages
+- explain duplicate protection

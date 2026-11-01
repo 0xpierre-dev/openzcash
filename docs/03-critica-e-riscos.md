@@ -1,5 +1,8 @@
 # Crítica Adversarial — Riscos e Decisões Abertas
 
+> Historical design research, retained for context. See [current setup and guides](README.md).
+> This document does not describe the current implementation or establish its security guarantees.
+
 > Auditoria do design v1 ([01-arquitetura.md](01-arquitetura.md)). Nenhum item contradiz os fatos da pesquisa — são **completude faltante** sobre fatos que a própria pesquisa já mencionou.
 
 ## Os 3 maiores furos

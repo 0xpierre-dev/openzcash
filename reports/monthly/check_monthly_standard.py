@@ -8,8 +8,6 @@ import json
 from pathlib import Path
 import tomllib
 
-from pypdf import PdfReader
-
 KIT = Path(__file__).resolve().parent
 REPO = KIT.parent.parent
 ROLES = ['cover', 'zf', 'shielded-labs', 'tachyon', 'zakura', 'wallets',
@@ -59,6 +57,8 @@ def verify_contract(c):
 
 
 def verify_references():
+    from pypdf import PdfReader
+
     refs = json.loads((KIT / 'reference.json').read_text())
     require(refs['designVersion'] == '4.0' and set(refs['documents']) == {'monthly', 'operations'},
             'The approved two-document reference is missing.')
@@ -81,25 +81,41 @@ def verify_references():
     return verified
 
 
-def verify_automation(path):
+def verify_automation(path, expected_id=None, expected_target_thread_id=None,
+                      expected_prompt_file=None):
     saved = tomllib.loads(path.read_text())
-    require(saved['id'] == 'openzcash-monthly' and saved['kind'] == 'heartbeat', 'Wrong existing automation.')
-    require(saved['status'] == 'ACTIVE', 'The monthly job is not active.')
+    require(saved.get('kind') == 'heartbeat', 'Expected a thread heartbeat.')
+    require(saved.get('status') == 'ACTIVE', 'The monthly job is not active.')
+    require(bool(saved.get('target_thread_id')), 'The heartbeat has no target task.')
     fields = dict(part.split('=', 1) for part in saved['rrule'].split(';'))
     require(fields == {'FREQ': 'MONTHLY', 'BYMONTHDAY': '1', 'BYHOUR': '9', 'BYMINUTE': '0', 'BYSECOND': '0'},
             'Saved cadence differs from the existing monthly schedule.')
-    require(saved['target_thread_id'] == '01a08c37-8610-7cb0-8a7a-377a129b0707', 'Automation targets another task.')
-    expected = (KIT / 'AUTOMATION-PROMPT.md').read_text().strip()
-    require(saved['prompt'].strip() == expected, 'The saved automation is not using the approved prompt.')
-    return {'id': saved['id'], 'status': saved['status'], 'kind': saved['kind'],
-            'promptSha256': hashlib.sha256(expected.encode()).hexdigest()}
+    if expected_id is not None:
+        require(saved.get('id') == expected_id, 'Automation ID does not match private configuration.')
+    if expected_target_thread_id is not None:
+        require(saved['target_thread_id'] == expected_target_thread_id,
+                'Automation target does not match private configuration.')
+    if expected_prompt_file is not None:
+        expected = expected_prompt_file.read_text().strip()
+        require(saved.get('prompt', '').strip() == expected,
+                'Automation prompt does not match private configuration.')
+    return {'status': saved['status'], 'kind': saved['kind'], 'cadenceVerified': True,
+            'idVerified': expected_id is not None,
+            'targetVerified': expected_target_thread_id is not None,
+            'promptVerified': expected_prompt_file is not None}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scheduled-for', required=True)
     parser.add_argument('--automation-file', type=Path)
+    parser.add_argument('--expected-automation-id')
+    parser.add_argument('--expected-target-thread-id')
+    parser.add_argument('--expected-prompt-file', type=Path)
     args = parser.parse_args()
+    if not args.automation_file and (args.expected_automation_id or args.expected_target_thread_id
+                                     or args.expected_prompt_file):
+        parser.error('Private automation checks require --automation-file.')
     c = json.loads((KIT / 'reading-set-contract.json').read_text())
     verify_contract(c)
     result = {'ok': True, 'standardId': c['standardId'], 'calendar': calendar_for(args.scheduled_for),
@@ -107,7 +123,9 @@ def main():
               'productionDeploymentVerified': False,
               'routineActivation': json.loads((KIT / 'routine-activation.json').read_text())['status']}
     if args.automation_file:
-        result['automation'] = verify_automation(args.automation_file)
+        result['automation'] = verify_automation(
+            args.automation_file, args.expected_automation_id,
+            args.expected_target_thread_id, args.expected_prompt_file)
     print(json.dumps(result, indent=2))
 
 

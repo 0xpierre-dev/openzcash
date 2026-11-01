@@ -1,0 +1,66 @@
+.coin-share-weight-panel .coin-series-heading { margin-bottom: 16px; }
+.coin-share-weight-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 20px; margin-bottom: 14px; }
+.coin-share-weight-selection { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px; min-width: 0; }
+.coin-share-weight-selection > strong { font-size: 12px; font-weight: 600; color: var(--dao-secondary); overflow-wrap: anywhere; }
+.dao-app .coin-share-weight-selection > button { min-height: 32px; color: var(--dao-accent); font-size: 12px; padding: 6px 0; }
+.coin-share-weight-legend { display: flex; flex: none; list-style: none; gap: 18px; margin: 0; padding: 0; color: var(--dao-muted); font-size: 11px; }
+.coin-share-weight-legend li { display: flex; align-items: center; gap: 7px; }
+.coin-share-weight-share { display: block; width: 8px; height: 8px; border: 2px solid var(--dao-secondary); border-radius: 50%; background: var(--dao-paper); }
+.coin-share-weight-zec { display: block; width: 7px; height: 7px; background: var(--dao-accent); transform: rotate(45deg); }
+.coin-share-weight-scroll { max-height: 340px; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--dao-control-border) transparent; border-radius: 5px; }
+.coin-share-weight-scroll:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 4px; }
+.coin-share-weight-table { width: 100%; min-width: 760px; table-layout: fixed; border-collapse: separate; border-spacing: 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+.coin-share-weight-table th, .coin-share-weight-table td { text-align: right; padding: 10px 12px; vertical-align: middle; }
+.coin-share-weight-table thead th { position: sticky; top: 0; z-index: 1; background: var(--dao-paper); color: var(--dao-muted); font-size: 11px; font-weight: 400; padding-top: 4px; padding-bottom: 12px; }
+.coin-share-weight-table th:first-child { width: 30%; padding-left: 0; text-align: left; }
+.coin-share-weight-table th:nth-child(2) { width: 23%; }
+.coin-share-weight-table th:nth-child(3) { width: 15%; }
+.coin-share-weight-table th:nth-child(4) { width: 21%; }
+.coin-share-weight-table th:last-child { width: 11%; padding-right: 0; }
+.coin-share-weight-table tbody th { font-weight: 500; }
+.coin-share-weight-table tbody tr { background: transparent; }
+.coin-share-weight-table tbody tr:hover { background: var(--dao-soft); }
+.coin-share-weight-table td:last-child { padding-right: 0; }
+.coin-share-weight-table td strong { display: block; font-size: 12px; font-weight: 500; white-space: nowrap; color: var(--dao-ink); }
+.coin-share-weight-table td small { display: block; margin-top: 3px; font-size: 11px; color: var(--dao-muted); }
+.coin-share-weight-table thead th.coin-share-weight-scale { position: sticky; font-weight: 500; color: var(--dao-secondary); }.coin-share-weight-scale > span:first-child { float: left; }.coin-share-weight-scale > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); }.coin-share-weight-scale > span:last-child { float: right; }
+.dao-app .coin-share-weight-proposal { display: flex; align-items: baseline; gap: 9px; width: 100%; min-height: 26px; text-align: left; font-size: 12px; padding: 3px 0; color: var(--dao-secondary); }
+.coin-share-weight-proposal > span:first-child { flex: none; min-width: 24px; font-size: 11px; color: var(--dao-muted); }
+.coin-share-weight-proposal > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dao-app .coin-share-weight-proposal:hover { color: var(--dao-accent); }.dao-app .coin-share-weight-proposal:focus-visible { outline: 2px solid var(--dao-accent); outline-offset: 3px; border-radius: 2px; }
+.coin-share-weight-visual-cell { padding-left: 16px !important; padding-right: 16px !important; }
+.coin-share-weight-track { position: relative; width: 100%; height: 2px; background: var(--dao-line); }
+.coin-share-weight-connector { position: absolute; top: 0; height: 2px; background: var(--dao-muted); opacity: .75; }
+.coin-share-weight-track .coin-share-weight-share { position: absolute; top: 50%; transform: translate(-50%, -50%); }
+.coin-share-weight-track .coin-share-weight-zec { position: absolute; top: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+.coin-share-weight-gap { color: var(--dao-secondary); white-space: nowrap; }
+.coin-share-weight-caption { color: var(--dao-muted); font-size: 11px; line-height: 1.6; margin: 12px 0 0 !important; }
+.coin-share-weight-details { margin-top: 12px; color: var(--dao-muted); font-size: 12px; line-height: 1.65; }
+.coin-share-weight-details > summary { width: fit-content; cursor: pointer; }
+.coin-share-weight-details[open] > summary { margin-bottom: 10px; }
+.coin-share-weight-details p { margin: 0 0 10px !important; }
+.coin-share-weight-details > div { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.coin-share-weight-details a { color: var(--dao-accent); }
+.coin-share-weight-unavailable { color: var(--dao-muted); font-size: 12px; padding: 20px 0; }
+@media (max-width: 600px) {
+  .coin-share-weight-scroll--selected { max-height: none; }
+  .coin-share-weight-toolbar { align-items: flex-start; gap: 10px; }
+  .coin-share-weight-toolbar .coin-segmented { flex-wrap: wrap; }
+  .coin-share-weight-toolbar .coin-segmented button { padding-left: 9px; padding-right: 9px; }
+  .coin-share-weight-selection { gap: 3px 12px; }
+  .dao-app .coin-share-weight-proposal { min-height: 36px; }
+  .coin-share-weight-table { display: block; min-width: 0; }
+  .coin-share-weight-table thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .coin-share-weight-table tbody { display: block; }
+  .coin-share-weight-table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 12px; align-items: center; padding: 9px 0; }
+  .coin-share-weight-table tbody th, .coin-share-weight-table tbody td { min-width: 0; width: auto; padding: 0; }
+  .coin-share-weight-table tbody th:first-child { grid-row: 1; grid-column: 1; width: auto; text-align: left; }
+  .coin-share-weight-gap { grid-row: 1; grid-column: 2; }
+  .coin-share-weight-table .coin-share-weight-visual-cell { grid-row: 2; grid-column: 1 / -1; padding: 5px 5px 17px !important; }
+  .coin-share-weight-track::before, .coin-share-weight-track::after { position: absolute; top: 6px; font-size: 10px; line-height: 1; color: var(--dao-muted); }
+  .coin-share-weight-track::before { content: "0%"; left: -4px; }.coin-share-weight-track::after { content: "100%"; right: -4px; }
+  .coin-share-weight-table .coin-share-weight-shares { grid-row: 3; grid-column: 1; text-align: left; }
+  .coin-share-weight-amount { grid-row: 3; grid-column: 2; }
+  .coin-share-weight-table td[data-label]::before { content: attr(data-label); display: block; font-size: 10px; line-height: 1.4; color: var(--dao-muted); margin-bottom: 3px; }
+  .coin-share-weight-table td small { margin-top: 2px; }
+}

@@ -1,5 +1,8 @@
 # Integração com o node real (Zebra + zallet)
 
+> Historical design research, retained for context. See [current setup and guides](README.md).
+> This document does not describe the current implementation or establish its security guarantees.
+
 > Registro histórico. O diagnóstico `/api/health` e o scan de viewing keys
 > foram desativados; não use as instruções abaixo para configurar a aplicação
 > atual. O healthcheck do deploy usa `/api`.

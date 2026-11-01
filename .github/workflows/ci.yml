@@ -69,3 +69,64 @@ jobs:
           key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: next-${{ runner.os }}-
       - run: npm run build
+
+  services:
+    name: Service (${{ matrix.service }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [participate, private-chat]
+    defaults:
+      run:
+        working-directory: services/${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.22.1
+          cache: npm
+          cache-dependency-path: services/${{ matrix.service }}/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test -- --maxWorkers=2
+      - if: matrix.service == 'participate'
+        run: npm run test:runtime
+      - run: npm run build
+        env:
+          DATABASE_URL: postgres://ci:ci@127.0.0.1:5432/ci
+
+  participate-database:
+    name: Participate database integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: community_treasury_tests
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    defaults:
+      run:
+        working-directory: services/participate
+    env:
+      DATABASE_URL: postgres://ci:ci@127.0.0.1:5432/community_treasury_tests
+      TREASURY_TEST_DATABASE_URL: postgres://ci:ci@127.0.0.1:5432/community_treasury_tests
+      PARTICIPATE_TEST_PORT: '5432'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.22.1
+          cache: npm
+          cache-dependency-path: services/participate/package-lock.json
+      - run: npm ci
+      - run: npm run db:setup
+      - run: npm test -- --maxWorkers=2

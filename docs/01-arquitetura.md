@@ -1,5 +1,8 @@
 # Design de Arquitetura — Tesouraria/Folha em ZEC com Viewing Keys
 
+> Historical design research, retained for context. See [current setup and guides](README.md).
+> This document does not describe the current implementation or establish its security guarantees.
+
 > Fundamentado na pesquisa de domínio ([02-fatos-zcash.md](02-fatos-zcash.md)). Suposições marcadas como **[SUPOSIÇÃO]**; itens que dependem do ambiente real como **[CONFIRMAR]** (consolidados na §7 e em [03-critica-e-riscos.md](03-critica-e-riscos.md)).
 >
 > ⚠️ Esta é a **v1** do design. A crítica adversarial ([03](03-critica-e-riscos.md)) apontou furos que **devem** ser incorporados antes de implementar — sobretudo **fees (ZIP-317)**, **notas/change**, **expiry de transação**, **UFVK centralizada e irrevogável**, e **what-you-see-is-not-what-you-sign** na ponte FROST.

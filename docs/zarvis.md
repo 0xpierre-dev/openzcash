@@ -86,14 +86,6 @@ Cache writes (the 5-minute cache) are reported and priced separately only by Ant
 
 `estimateUsageUsd` prices every completed model answer for a listed model without further configuration. `ZARVIS_INPUT_USD_PER_MILLION`, `ZARVIS_CACHED_INPUT_USD_PER_MILLION`, `ZARVIS_CACHE_WRITE_USD_PER_MILLION`, `ZARVIS_OUTPUT_USD_PER_MILLION` and `ZARVIS_SEARCH_USD_PER_CALL` override individual fields (and are the only way to price an unlisted model). Search-content tokens are billed at model rates and appear in the reported token usage. Example with grok-4.7: 10,000 input (4,000 cached) + 1,000 output tokens + one search = $0.025. A model-assisted question can use up to three model requests (four for deeper analysis); history, instructions and retrieved sources all count as input. Estimates are not invoices: a failed or aborted answer is priced from the usage reported before the failure (a lower bound that still counts toward the daily cap), provider calls may be billed beyond what was reported, and long-context tiers are not modelled. Re-check the pricing pages when changing `ZARVIS_MODEL`.
 
-## Flagship local evaluation (2026-09-26)
-
-The local preview was switched to `ZARVIS_MODEL=gpt-6-astra` at the user's request, using the existing server-only key. At that evaluation, reasoning was `low` and output was limited to 3,000 tokens per model call, and there is no automatic fallback to another model. This is a preview configuration, not a change to Railway or the default model above.
-
-Current standard GPT-6 Astra pricing per million tokens: **$10 input, $1 cached input, $12.50 cache writes, $50 output**. Reasoning tokens and repeated context count toward usage; web search has separate fees. Check actual project usage before choosing a production model. Source: https://developers.openai.com/api/docs/models/gpt-6-astra and https://developers.openai.com/api/docs/pricing.
-
-See [the conversation evaluation](zarvis-conversation-evaluation.md) for the actual comparison, latency, token usage and limits. The provider returned three hosted web-search items in one response despite the requested tool budget of two; this parameter must not be represented as a guaranteed billing cap. The enforced app request limits, output budget and deadline remain separate controls.
-
 ## OpenZcash first (2026-09-27)
 
 1. `scripts/build-zarvis-knowledge.mjs` extracts visible public text from an explicit allowlist of 54 source files. The generated index currently contains 109 chunks. `predev` and `prebuild` regenerate it; `npm test` checks it matches its sources. No repository crawl, private routes, environment files or code execution is involved. Rebuilding covers published local edits, not arbitrary changes on external websites.
@@ -211,7 +203,7 @@ The UI renders no model-generated HTML or images. No third-party model endpoints
 
 Set `ZARVIS_DIAGNOSTICS=true` only in development to print per-answer route, model/call counts, hosted-search item counts and provider-reported token totals/cache hits. No conversation text, reasoning, raw provider errors, IPs or credentials are logged by these diagnostics; the flag is ignored in production. These are measurements, not invoice calculations (cache writes, reasoning and tool charges may differ).
 
-Real-provider smoke tests require a securely configured funded provider account. Distinguish deterministic local replies from real model responses. See [the local knowledge evaluation](zarvis-local-knowledge-evaluation.md) for September 27 results and limits.
+Real-provider smoke tests require a securely configured funded provider account. Distinguish deterministic local replies from real model responses.
 
 
 ## Internal quality layer (September 27)
@@ -246,20 +238,12 @@ Answer feedback sends only a signed one-hour ticket, a useful/needs-work vote an
 - `npm run eval:zarvis`: offline retrieval, arithmetic, assumptions, continuity, grounding, limits and feedback cases. No model tokens or model-as-judge scoring.
 - `python3 scripts/eval-zarvis-live.py --confirm-paid`: synthetic loopback-only conversations against the existing configured provider. This can incur costs; the script never loads a credential. Results are written to a temporary file for semantic review.
 - The quality workflow runs runtime dependency auditing, full tests, types, index checks and scoped lint for relevant pull requests, without AI credentials.
-- See [internal evaluation](zarvis-internal-evaluation.md) for measured results and the distinction between retrieval checks, mocked contracts and real-provider conversations.
-
-## Preproduction audit
-
-See [the September 27 audit](zarvis-preproduction-audit.md) for corrected findings, the latest local verification results, the development-tool dependency follow-up, and the remaining production/CI/Grok release gates. The feature remains disabled in production pending those checks.
-
-
-## Live Grok validation
-
-The selected candidates are Grok 4.6 and 4.7. See [the real-provider evaluation](zarvis-grok-evaluation.md) for credential setup, observed fixes, usage and the original newest-ZIP research timeout. [The ZIP catalog evaluation](zarvis-zip-catalog-evaluation.md) records the subsequent internal-catalog implementation and before/after measurements. `scripts/eval-zarvis-live.py --confirm-paid --extended` adds bare-confirmation and live-research cases. The local preview uses 4.7; this does not enable production.
 
 ## Complete ZIP catalog (September 28)
 
 The catalog is retrieval, not model training. Explanations still use the selected external model with bounded local evidence; hosted web research is reserved for missing/stale facts. `lookup_zcash_zips` retrieves additional passages within the selected response depth's local-lookup limit. Document section ancestry is retained to distinguish pool-specific rules, and ZIP 310 retains its full-viewing-key assumptions.
+
+The committed ZIP and external-source snapshots omit contact email addresses. Public author names, source links, document licenses and original ZIP source hashes remain. The embedded ZIP text therefore differs from the original bytes; follow the source link for exact wording. Each third-party document retains its own license, which the project's MIT license does not replace.
 
 A plain one-turn “What is the latest ZIP?” / “Qual é o último ZIP?” can answer without a model call when the catalog is fresh. It ranks the `Created` header, states missing dates and explicitly does not claim first publication or activation. Qualified questions and conversations continue through synthesis. Unknown identifiers are reported as absent from the snapshot, never proof that no proposal exists elsewhere. Newest-by-creation, highest number and source revision are different fields.
 
@@ -282,7 +266,7 @@ Provider timeouts are 50 / 90 seconds within those overall generation deadlines.
 
 Simple numeric treasury questions retain the deterministic calculator reply. Analytical scenarios retain that verified numeric block and then synthesize interpretation, limitations and requested sensitivity checks. The existing unsupported-amount check also runs on that analysis. This checks numeric provenance, not full semantic correctness. Final model rounds cannot request tools and must return an answer or a specific evidence gap rather than a promise to look something up later.
 
-ZIP retrieval includes scope notes for ZIP 310 and revision-specific caveats for ZIP 317. Created/Last-Updated, retrieval time, specification status and actual network activation remain distinct. See [the refinement evaluation](zarvis-refinement-evaluation.md) for real local responses, failed iterations and release limitations.
+ZIP retrieval includes scope notes for ZIP 310 and revision-specific caveats for ZIP 317. Created/Last-Updated, retrieval time, specification status and actual network activation remain distinct.
 
 
 ## Sharing (2026-09-28)
@@ -383,10 +367,9 @@ curl --fail-with-body -H "Authorization: Bearer $CRON_SECRET" https://openzcash.
 Verification: `npx vitest run`, `npx tsc --noEmit`, `npx eslint src/lib/zarvis src/app/api/zarvis src/components/zarvis`.
 
 
-## Expertise and narrative audit — October 20, 2026
+## Expertise and narrative sources
 
-See [the expertise audit](zarvis-expertise-audit.md) for retrieval gaps,
-real-provider failures, corrections and measured validation. The public index
+The public index
 now includes every visible public navigation destination and projects the
 original narrative catalog into locale/length-specific evidence. The build
 reads explicit allowlisted files only. Update the catalogs and

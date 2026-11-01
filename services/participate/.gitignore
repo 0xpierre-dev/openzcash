@@ -1,0 +1,13 @@
+.next
+node_modules
+.env
+.env.local
+.env.test
+.env.automation
+.runtime/
+tmp/
+coverage
+dist
+*.log
+*.tsbuildinfo
+prisma/dev.db

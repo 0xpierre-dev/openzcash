@@ -1,0 +1,252 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const { daoMemberFindManyMock, pushMock, readSessionMock, readManagedCommunitiesMock } = vi.hoisted(() => ({
+  daoMemberFindManyMock: vi.fn(),
+  pushMock: vi.fn(),
+  readSessionMock: vi.fn(),
+  readManagedCommunitiesMock: vi.fn()
+}));
+
+vi.mock("@/lib/auth/session", () => ({ readSession: readSessionMock }));
+vi.mock("@/lib/services/communities", () => ({ readManagedCommunities: readManagedCommunitiesMock }));
+
+vi.mock("@/lib/db", () => ({
+  db: {
+    daoMember: {
+      findMany: daoMemberFindManyMock
+    }
+  }
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: pushMock
+  }),
+  usePathname: () => "/admin/polls/new",
+  redirect: (target: string) => { throw new Error(`redirect:${target}`); },
+  notFound: () => { throw new Error("not-found"); }
+}));
+
+import NewPollPage from "@/app/admin/polls/new/page";
+
+describe("NewPollPage", () => {
+  beforeEach(() => {
+    pushMock.mockReset();
+    daoMemberFindManyMock.mockReset();
+    daoMemberFindManyMock.mockResolvedValue([]);
+    readSessionMock.mockResolvedValue({ subjectType: "user", userId: "user_a", role: "USER" });
+    readManagedCommunitiesMock.mockResolvedValue([{ id: "community_a", name: "Community A", slug: "community-a" }]);
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  it("blocks duplicate legacy creates while a save is pending and recovers an unknown outcome safely", async () => {
+    daoMemberFindManyMock.mockResolvedValue([{ id: "member-a", nick: "Alice", signalUsername: "alice.42" }]);
+    let reject: (reason: Error) => void = () => {};
+    vi.mocked(globalThis.fetch).mockReturnValue(new Promise((_, rejectPromise) => { reject = rejectPromise; }));
+    render(await NewPollPage({}));
+    const form = screen.getByRole("button", { name: /Create review draft/ }).closest("form")!;
+    fireEvent.submit(form); fireEvent.submit(form);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: "Creating draft..." })).toBeDisabled();
+    reject(new Error("offline"));
+    expect(await screen.findByRole("alert")).toHaveTextContent("draft may have been saved");
+    expect(screen.getByRole("link", { name: "Check proposals" })).toHaveAttribute("href", "/communities/community_a/dao");
+    fireEvent.submit(form);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("publishes official UTC timestamps from the datetime inputs", async () => {
+    const { container } = render(await NewPollPage({}));
+
+    fireEvent.change(screen.getByLabelText(/^opens at/i), {
+      target: { value: "2026-05-01T10:00" }
+    });
+    fireEvent.change(screen.getByLabelText(/^closes at/i), {
+      target: { value: "2026-05-03T10:00" }
+    });
+
+    expect(
+      (container.querySelector('input[name="opensAt"]') as HTMLInputElement).value
+    ).toBe("2026-05-01T10:00:00.000Z");
+    expect(
+      (container.querySelector('input[name="closesAt"]') as HTMLInputElement).value
+    ).toBe("2026-05-03T10:00:00.000Z");
+    expect(
+      (screen.getByLabelText(/^opens at/i) as HTMLInputElement).name
+    ).toBe("opensAtLocal");
+    expect(screen.getByText(/minimum window: 24 hours/i)).toBeInTheDocument();
+  });
+
+  it("redirects to the created poll dashboard after a successful submit", async () => {
+    vi.mocked(globalThis.fetch).mockResolvedValue(
+      new Response(JSON.stringify({ pollId: "poll_1" }), { status: 200 })
+    );
+
+    render(await NewPollPage({}));
+
+    fireEvent.change(screen.getByLabelText(/^question$/i), {
+      target: { value: "Which option should we fund?" }
+    });
+    fireEvent.change(screen.getByLabelText(/^a label$/i), {
+      target: { value: "Approve" }
+    });
+    fireEvent.change(screen.getByLabelText(/^b label$/i), {
+      target: { value: "Reject" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter nick 1$/i), {
+      target: { value: "michae2xl" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter signal username 1$/i), {
+      target: { value: "michae2xl.42" }
+    });
+    fireEvent.change(screen.getByLabelText(/^opens at/i), {
+      target: { value: "2026-05-01T10:00" }
+    });
+    fireEvent.change(screen.getByLabelText(/^closes at/i), {
+      target: { value: "2026-05-03T10:00" }
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: /create review draft/i }));
+
+    await waitFor(() =>
+      expect(pushMock).toHaveBeenCalledWith("/admin/polls/poll_1")
+    );
+  });
+
+  it("ignores fully blank extra voter rows on submit", async () => {
+    vi.mocked(globalThis.fetch).mockResolvedValue(
+      new Response(JSON.stringify({ pollId: "poll_1" }), { status: 200 })
+    );
+
+    render(await NewPollPage({}));
+
+    fireEvent.change(screen.getByLabelText(/^question$/i), {
+      target: { value: "Which option should we fund?" }
+    });
+    fireEvent.change(screen.getByLabelText(/^a label$/i), {
+      target: { value: "Approve" }
+    });
+    fireEvent.change(screen.getByLabelText(/^b label$/i), {
+      target: { value: "Reject" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter nick 1$/i), {
+      target: { value: "michae2xl" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter signal username 1$/i), {
+      target: { value: "michae2xl.42" }
+    });
+    fireEvent.click(screen.getByRole("button", { name: /add voter/i }));
+    fireEvent.change(screen.getByLabelText(/^opens at/i), {
+      target: { value: "2026-05-01T10:00" }
+    });
+    fireEvent.change(screen.getByLabelText(/^closes at/i), {
+      target: { value: "2026-05-03T10:00" }
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: /create review draft/i }));
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1));
+
+    const requestInit = vi.mocked(globalThis.fetch).mock.calls[0]?.[1] as
+      | RequestInit
+      | undefined;
+    const body = requestInit?.body as FormData;
+    expect(body.get("voters")).toBe("michae2xl,michae2xl.42");
+    expect(body.get("communityId")).toBe("community_a");
+  });
+
+  it("blocks submit when a voter row is only partially filled", async () => {
+    render(await NewPollPage({}));
+
+    fireEvent.change(screen.getByLabelText(/^question$/i), {
+      target: { value: "Which option should we fund?" }
+    });
+    fireEvent.change(screen.getByLabelText(/^a label$/i), {
+      target: { value: "Approve" }
+    });
+    fireEvent.change(screen.getByLabelText(/^b label$/i), {
+      target: { value: "Reject" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter nick 1$/i), {
+      target: { value: "michae2xl" }
+    });
+    fireEvent.change(screen.getByLabelText(/^voter signal username 1$/i), {
+      target: { value: "michae2xl.42" }
+    });
+    fireEvent.click(screen.getByRole("button", { name: /add voter/i }));
+    fireEvent.change(screen.getByLabelText(/^voter nick 2$/i), {
+      target: { value: "alice" }
+    });
+    fireEvent.change(screen.getByLabelText(/^opens at/i), {
+      target: { value: "2026-05-01T10:00" }
+    });
+    fireEvent.change(screen.getByLabelText(/^closes at/i), {
+      target: { value: "2026-05-03T10:00" }
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: /create review draft/i }));
+
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+    expect(
+      screen.getByText(/complete both user id and signal username for voter row 2/i)
+    ).toBeInTheDocument();
+  });
+
+  it("uses the DAO member basket when it has already been initialized", async () => {
+    daoMemberFindManyMock.mockResolvedValue([
+      {
+        id: "member_1",
+        nick: "michae2xl",
+        signalUsername: "michae2xl.42"
+      }
+    ]);
+    vi.mocked(globalThis.fetch).mockResolvedValue(
+      new Response(JSON.stringify({ pollId: "poll_1" }), { status: 200 })
+    );
+
+    render(await NewPollPage({}));
+
+    expect(screen.getAllByText(/dao member basket/i).length).toBeGreaterThan(0);
+    expect(screen.queryByLabelText(/^voter nick 1$/i)).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/^question$/i), {
+      target: { value: "Should we accept the next member proposal?" }
+    });
+    fireEvent.change(screen.getByLabelText(/^a label$/i), {
+      target: { value: "Approve" }
+    });
+    fireEvent.change(screen.getByLabelText(/^b label$/i), {
+      target: { value: "Reject" }
+    });
+    fireEvent.change(screen.getByLabelText(/^opens at/i), {
+      target: { value: "2026-05-01T10:00" }
+    });
+    fireEvent.change(screen.getByLabelText(/^closes at/i), {
+      target: { value: "2026-05-03T10:00" }
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: /create review draft/i }));
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1));
+
+    const requestInit = vi.mocked(globalThis.fetch).mock.calls[0]?.[1] as
+      | RequestInit
+      | undefined;
+    const body = requestInit?.body as FormData;
+    expect(body.get("audience")).toBe("DAO_MEMBERS");
+    expect(body.get("voters")).toBe("");
+  });
+
+  it("rejects a guessed community before loading its roster", async () => {
+    await expect(NewPollPage({ searchParams: Promise.resolve({ communityId: "community_b" }) })).rejects.toThrow("not-found");
+    expect(daoMemberFindManyMock).not.toHaveBeenCalled();
+  });
+
+  it("loads only the selected community roster", async () => {
+    await NewPollPage({ searchParams: Promise.resolve({ communityId: "community_a" }) });
+    expect(daoMemberFindManyMock).toHaveBeenCalledWith(expect.objectContaining({
+      where: { communityId: "community_a", status: "ACTIVE" }
+    }));
+  });
+});

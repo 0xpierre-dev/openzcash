@@ -1,5 +1,8 @@
 # Fatos técnicos verificados — Zcash (pesquisa de domínio)
 
+> Historical design research, retained for context. See [current setup and guides](README.md).
+> This document does not describe the current implementation or establish its security guarantees.
+
 > Coletados via pesquisa multi-frente (7 frentes, ~106 buscas web). Confiança e lacunas anotadas por frente. Fontes ao final.
 
 ## Memo encriptado (confiança: alta)

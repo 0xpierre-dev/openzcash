@@ -1,0 +1,99 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const { readSessionMock, sendPollInvitesMock, creatorOwnsPollMock } = vi.hoisted(() => ({
+  readSessionMock: vi.fn(),
+  sendPollInvitesMock: vi.fn(),
+  creatorOwnsPollMock: vi.fn()
+}));
+
+vi.mock("@/lib/auth/session", () => ({
+  readSession: readSessionMock
+}));
+
+vi.mock("@/lib/auth/poll-ownership", () => ({
+  creatorOwnsPoll: creatorOwnsPollMock
+}));
+
+vi.mock("@/lib/services/poll-invites", () => ({
+  InviteServiceError: class InviteServiceError extends Error {
+    constructor(
+      message: string,
+      public readonly status: 400 | 404 | 409 | 503,
+      public readonly code: string
+    ) {
+      super(message);
+    }
+  },
+  sendPollInvites: sendPollInvitesMock
+}));
+
+import { POST } from "@/app/api/admin/polls/[pollId]/invites/send/route";
+
+beforeEach(() => {
+  readSessionMock.mockReset();
+  sendPollInvitesMock.mockReset();
+  creatorOwnsPollMock.mockReset();
+});
+
+describe("admin send invites route", () => {
+  it("rejects callers without management access to the poll", async () => {
+    readSessionMock.mockResolvedValue({
+      userId: "user_1",
+      nick: "alice",
+      role: "USER"
+    });
+    creatorOwnsPollMock.mockResolvedValue(false);
+
+    const response = await POST(
+      new Request("http://localhost/api/admin/polls/poll_1/invites/send", {
+        method: "POST",
+        headers: {
+          origin: "http://localhost"
+        }
+      }) as never,
+      { params: Promise.resolve({ pollId: "poll_1" }) } as never
+    );
+
+    expect(response.status).toBe(404);
+    await expect(response.json()).resolves.toMatchObject({
+      error: "POLL_NOT_FOUND"
+    });
+  });
+
+  it("returns the invite send summary for admins", async () => {
+    readSessionMock.mockResolvedValue({
+      userId: "admin_1",
+      nick: "admin",
+      role: "ADMIN"
+    });
+    creatorOwnsPollMock.mockResolvedValue(true);
+    sendPollInvitesMock.mockResolvedValue({
+      totalEligible: 3,
+      sent: 2,
+      failed: 0,
+      skippedMissingDelivery: 1
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/admin/polls/poll_1/invites/send", {
+        method: "POST",
+        headers: {
+          origin: "http://localhost"
+        }
+      }) as never,
+      { params: Promise.resolve({ pollId: "poll_1" }) } as never
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      totalEligible: 3,
+      sent: 2,
+      failed: 0,
+      skippedMissingDelivery: 1
+    });
+    expect(sendPollInvitesMock).toHaveBeenCalledWith({
+      pollId: "poll_1",
+      baseUrl: "http://localhost"
+    });
+  });
+});

@@ -1,0 +1,1228 @@
+@font-face {
+  font-family: "OpenZcash Inter";
+  src: url("/fonts/openzcash-inter-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Published revisions: document on the left, compact verification on the right. */
+.dao-archive-heading { margin: 20px 0 28px; max-width: 980px; }
+.dao-archive-heading h1 { font-size: clamp(26px, 3vw, 38px); line-height: 1.2; letter-spacing: -.04em; margin: 10px 0 12px; }
+.dao-archive-heading > p:last-child { color: var(--dao-muted); margin: 0; font-size: 14px; }
+.dao-archive-heading .dao-eyebrow span { color: var(--dao-muted); }
+.dao-archive-layout { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 24px; align-items: start; }
+.dao-archive-content { min-width: 0; }
+.dao-archive-document { padding: 28px 32px; }
+.dao-archive-document .dao-section-heading { margin-bottom: 20px; gap: 16px; }
+.dao-archive-document h2 { font-size: 20px; }
+.dao-archive-document .dao-proposal-markdown { font-size: 15px; }
+.dao-archive-join { display: flex; justify-content: space-between; gap: 18px; align-items: center; padding: 20px 4px; color: var(--dao-muted); font-size: 14px; }
+.dao-archive-proof { padding: 25px; position: sticky; top: 100px; }
+.dao-archive-proof-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dao-archive-proof-top .dao-eyebrow { font-size: 10px; margin: 0; }
+.dao-archive-network { color: var(--dao-muted); font-size: 11px; }
+.dao-archive-proof h2 { margin: 22px 0; font-size: 25px; letter-spacing: -.035em; line-height: 1.25; }
+.dao-archive-steps { list-style: none; padding: 0; margin: 0 0 24px; }
+.dao-archive-steps li { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; }
+.dao-archive-steps li > span { font-family: var(--font-numeric); color: var(--dao-muted); font-size: 12px; padding-top: 2px; }
+.dao-archive-steps li > div { flex: 1; }
+.dao-archive-steps strong { font-size: 14px; font-weight: 600; }
+.dao-archive-steps p { margin: 3px 0 0; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-archive-steps b { font-weight: 500; color: var(--dao-muted); }
+.dao-archive-steps [data-complete="true"] b { color: var(--dao-positive); }
+.dao-archive-download { width: 100%; justify-content: center; }
+.dao-archive-file-check { margin: 24px 0; padding: 22px 0; border-top: 1px solid var(--dao-line); border-bottom: 1px solid var(--dao-line); }
+.dao-archive-file-check h3 { font-size: 15px; margin: 0; }
+.dao-archive-file-check > p { color: var(--dao-muted); font-size: 12px; line-height: 1.65; }
+.dao-archive-upload { font-size: 13px; cursor: pointer; }
+.dao-archive-file-check:focus-within .dao-archive-upload { outline: 2px solid var(--dao-accent); outline-offset: 3px; }
+.dao-archive-check-result { display: flex; flex-direction: column; gap: 5px; overflow-wrap: anywhere; }
+.dao-archive-check-result[data-result="matches"] strong { color: var(--dao-positive); }
+.dao-archive-check-result[data-result="mismatch"] strong { color: var(--dao-error); }
+.dao-archive-details { margin: 0 0 18px; font-size: 12px; }
+.dao-archive-details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+.dao-archive-details summary::after { content: "+"; margin-left: auto; }
+.dao-archive-details[open] summary::after { content: "−"; }
+.dao-archive-details dl > div { margin: 0 0 16px; }
+.dao-archive-details dt { color: var(--dao-muted); margin-bottom: 5px; }
+.dao-archive-details dd { margin: 0; overflow-wrap: anywhere; }
+.dao-archive-details code { font-family: var(--font-numeric); font-size: 11px; word-break: break-all; }
+.dao-archive-details > p { color: var(--dao-muted); }
+.dao-archive-proof > .dao-text-button { font-size: 12px; }
+.dao-archive-jump { margin-top: 14px; font-size: 13px; }
+.dao-archive-version-notice { margin: 0 0 20px; padding: 14px 18px; background: var(--dao-soft); border-radius: 10px; font-size: 14px; }
+.dao-archive-version-notice a { margin-left: 8px; color: var(--dao-accent-ink); }
+.dao-archive-history { margin: 20px 4px 4px; font-size: 13px; }
+.dao-archive-history summary { cursor: pointer; min-height: 44px; align-content: center; font-weight: 600; }
+.dao-archive-history summary > span { margin-left: 8px; color: var(--dao-muted); font-weight: 400; }
+.dao-archive-history nav { display: flex; flex-direction: column; gap: 4px; padding: 8px 0; }
+.dao-archive-history nav a { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; padding: 12px; text-decoration: none; color: inherit; border-radius: 8px; }
+.dao-archive-history nav a[aria-current="page"] { background: var(--dao-soft); }
+.dao-archive-history nav span, .dao-archive-history > p { color: var(--dao-muted); font-size: 12px; }
+.dao-archive-tools { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.dao-archive-tools .dao-text-button { font-size: 12px; min-height: 40px; }
+.archive-recovery-guide ol { display: grid; gap: 18px; padding: 4px 0 0 22px; margin: 16px 0; }
+.archive-recovery-guide li { padding-left: 4px; }
+.archive-recovery-guide li::marker { color: var(--dao-accent); font-size: 12px; }
+.archive-recovery-guide li strong { font-size: 14px; }
+.archive-recovery-guide li p { margin: 5px 0 0; line-height: 1.6; color: var(--dao-muted); font-size: 13px; }
+.archive-recovery-guide .archive-recovery-note { margin-top: 18px; font-size: 12px; line-height: 1.5; color: var(--dao-muted); }
+.dao-archive-receipt { display: inline-flex; margin-top: 12px; min-height: 36px; align-items: center; }
+#verification { scroll-margin-top: 100px; }
+@media (max-width: 1080px) {
+  .dao-archive-layout { grid-template-columns: minmax(0, 1fr) 310px; gap: 18px; }
+  .dao-archive-proof { padding: 20px; }
+}
+@media (max-width: 780px) {
+  .dao-archive-layout { display: flex; flex-direction: column; }
+  .dao-archive-proof { position: static; order: -1; width: 100%; box-sizing: border-box; }
+  .dao-archive-content { width: 100%; }
+  .dao-archive-document { padding: 22px; }
+  .dao-archive-document .dao-section-heading { flex-wrap: wrap; }
+  .dao-archive-join { flex-wrap: wrap; }
+}
+@font-face {
+  font-family: "OpenZcash Mono";
+  src: url("/fonts/openzcash-geist-mono-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* OpenZcash light foundation and a Zcash-inspired dark palette. */
+.dao-theme-root {
+  color-scheme: light;
+  position: relative;
+  min-height: 100dvh;
+  --dao-canvas: #faf8f4;
+  --dao-paper: #ffffff;
+  --dao-soft: #f6f3ec;
+  --dao-ink: #1c1917;
+  --dao-secondary: #3f3a35;
+  --dao-muted: #57534e;
+  --dao-line: #e9e3d6;
+  --dao-line-strong: #d8cfba;
+  --dao-control-border: #8f8574;
+  --dao-gold: #b7791f;
+  --dao-accent: #92600f;
+  --dao-accent-soft: #f8eedb;
+  --dao-header: #ffffff;
+  --dao-header-line: #d8cfba;
+  --dao-switcher: #f6f3ec;
+  --dao-switcher-hover: #f3ead9;
+  --dao-avatar-bg: #f3e8d3;
+  --dao-avatar-line: #ddc69f;
+  --dao-avatar-ink: #805315;
+  --dao-selected-bg: #fbf3e4;
+  --dao-selected-line: #e5cfa7;
+  --dao-primary-bg: #f4b728;
+  --dao-primary-ink: #1c1917;
+  --dao-primary-hover: #ffd05c;
+  --dao-status-bg: #f5f4f1;
+  --dao-status-line: #dfdcd7;
+  --dao-positive: #246443;
+  --dao-positive-bg: #edf5ef;
+  --dao-positive-line: #c7decb;
+  --dao-error: #982f23;
+  --dao-error-bg: #fff1ed;
+  --dao-error-line: #ecc9bf;
+  --dao-shadow: #1c191726;
+  --dao-logo-ink: #1c1917;
+  --dao-vote-yes: #2d8c60;
+  --dao-vote-no: #c36b53;
+  --font-body: "OpenZcash Inter", "Segoe UI", sans-serif;
+  --font-display: var(--font-body);
+  --font-numeric: "OpenZcash Mono", ui-monospace, monospace;
+  --ink-primary: var(--dao-ink);
+  --ink-secondary: var(--dao-secondary);
+  --line-primary: var(--dao-line);
+  --accent-mint-bright: var(--dao-accent);
+}
+.dao-app, .dao-loading {
+  color: var(--dao-ink);
+  background: var(--dao-canvas);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+}
+.dao-theme-root[data-theme="dark"] {
+  color-scheme: dark;
+  --dao-canvas: #141412;
+  --dao-paper: #1e1f1c;
+  --dao-soft: #282922;
+  --dao-ink: #f5f3ed;
+  --dao-secondary: #dedfd8;
+  --dao-muted: #bdbeb4;
+  --dao-line: #3e4036;
+  --dao-line-strong: #56594b;
+  --dao-control-border: #8b907d;
+  --dao-gold: #f4b728;
+  --dao-accent: #f2c866;
+  --dao-accent-soft: #37311f;
+  --dao-header: #191a16;
+  --dao-header-line: #4d5043;
+  --dao-switcher: #282922;
+  --dao-switcher-hover: #37392d;
+  --dao-avatar-bg: #373922;
+  --dao-avatar-line: #6c6639;
+  --dao-avatar-ink: #f2d28c;
+  --dao-selected-bg: #303322;
+  --dao-selected-line: #6c6639;
+  --dao-primary-bg: #f4b728;
+  --dao-primary-ink: #181c13;
+  --dao-primary-hover: #ffd05c;
+  --dao-status-bg: #283329;
+  --dao-status-line: #56594b;
+  --dao-positive: #a0dfb7;
+  --dao-positive-bg: #203c2c;
+  --dao-positive-line: #41694c;
+  --dao-error: #ffc1ad;
+  --dao-error-bg: #43271f;
+  --dao-error-line: #845a49;
+  --dao-shadow: #00000066;
+  --dao-logo-ink: #f4b728;
+  --dao-vote-yes: #72c396;
+  --dao-vote-no: #db8b78;
+}
+@media (prefers-color-scheme: dark) {
+  .dao-theme-root[data-theme="system"] {
+    color-scheme: dark;
+  --dao-canvas: #141412;
+  --dao-paper: #1e1f1c;
+  --dao-soft: #282922;
+  --dao-ink: #f5f3ed;
+  --dao-secondary: #dedfd8;
+  --dao-muted: #bdbeb4;
+  --dao-line: #3e4036;
+  --dao-line-strong: #56594b;
+  --dao-control-border: #8b907d;
+  --dao-gold: #f4b728;
+  --dao-accent: #f2c866;
+  --dao-accent-soft: #37311f;
+  --dao-header: #191a16;
+  --dao-header-line: #4d5043;
+  --dao-switcher: #282922;
+  --dao-switcher-hover: #37392d;
+  --dao-avatar-bg: #373922;
+  --dao-avatar-line: #6c6639;
+  --dao-avatar-ink: #f2d28c;
+  --dao-selected-bg: #303322;
+  --dao-selected-line: #6c6639;
+  --dao-primary-bg: #f4b728;
+  --dao-primary-ink: #181c13;
+  --dao-primary-hover: #ffd05c;
+  --dao-status-bg: #283329;
+  --dao-status-line: #56594b;
+  --dao-positive: #a0dfb7;
+  --dao-positive-bg: #203c2c;
+  --dao-positive-line: #41694c;
+  --dao-error: #ffc1ad;
+  --dao-error-bg: #43271f;
+  --dao-error-line: #845a49;
+  --dao-shadow: #00000066;
+  --dao-logo-ink: #f4b728;
+  --dao-vote-yes: #72c396;
+  --dao-vote-no: #db8b78;
+  }
+}
+.dao-app { position: relative; z-index: 1; display: block; min-height: 100dvh; }
+.dao-app h1, .dao-app h2, .dao-app h3, .dao-app h4 { margin: 0; font-family: var(--font-body); color: var(--dao-ink); font-weight: 650; letter-spacing: -.035em; }
+.dao-app h2 { font-size: 25px; line-height: 1.25; }
+.dao-app h3 { font-size: 18px; line-height: 1.4; letter-spacing: -.02em; }
+.dao-app p { margin: 0; }
+.dao-app a { color: inherit; text-decoration: none; }
+.dao-app button { min-height: 44px; padding: 0; border: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; font-weight: 550; letter-spacing: 0; text-transform: none; box-shadow: none; transition: background 140ms, border-color 140ms, color 140ms; }
+.dao-app button:hover { transform: none; box-shadow: none; }
+.dao-app button:disabled { cursor: not-allowed; opacity: .55; }
+.dao-app input, .dao-app textarea, .dao-app select { min-width: 0; min-height: 46px; border: 1px solid var(--dao-control-border); border-radius: 8px; background: var(--dao-paper); color: var(--dao-ink); padding: 11px 14px; font: inherit; font-size: 16px; line-height: 1.5; box-shadow: none; }
+.dao-app select { appearance: none; padding-right: 42px; background-image: linear-gradient(45deg, transparent 50%, var(--dao-muted) 50%), linear-gradient(135deg, var(--dao-muted) 50%, transparent 50%); background-position: calc(100% - 19px) 50%, calc(100% - 14px) 50%; background-size: 5px 5px; background-repeat: no-repeat; cursor: pointer; }
+.dao-app select:hover:not(:disabled) { border-color: var(--dao-accent); }
+.dao-app :is(input, textarea, select):disabled { cursor: not-allowed; opacity: .65; }
+.dao-app :is(input, textarea, select)[aria-invalid="true"] { border-color: var(--dao-error); }
+.dao-app input::placeholder, .dao-app textarea::placeholder { color: var(--dao-muted); opacity: 1; }
+.dao-app textarea { min-height: 110px; resize: vertical; }
+.dao-app :is(input, textarea, select):autofill, .dao-app :is(input, textarea, select):-webkit-autofill { -webkit-text-fill-color: var(--dao-ink); box-shadow: 0 0 0 1000px var(--dao-paper) inset; }
+.dao-app :focus-visible, .dao-loading :focus-visible { outline: 3px solid var(--dao-accent); outline-offset: 3px; box-shadow: none; }
+.dao-app input:focus-visible, .dao-app textarea:focus-visible, .dao-app select:focus-visible { border-color: var(--dao-accent); outline: 2px solid var(--dao-accent); outline-offset: 2px; }
+.dao-app [id], .dao-app :focus { scroll-margin-top: 88px; }
+.dao-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.dao-skip-link { position: absolute; top: 8px; left: 8px; z-index: 20; padding: 12px 18px; background: var(--dao-paper); color: var(--dao-ink) !important; transform: translateY(-150%); }
+.dao-skip-link:focus { transform: translateY(0); }
+
+/* Brand, navigation and account share one aligned header row. */
+.dao-header { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--dao-line); background: var(--dao-header); color: var(--dao-ink); }
+.dao-header-main { display: flex; align-items: center; gap: 56px; width: 100%; max-width: 1440px; min-height: 68px; margin: 0 auto; padding: 0 32px; }
+.dao-brand { --dao-brand-mark-size: 44px; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; flex: none; font-size: 28px; color: var(--dao-ink) !important; }
+.dao-brand-copy { display: block; font-size: inherit; font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+.dao-space-context { min-width: 0; flex: 0 1 340px; padding-left: 18px; }
+.dao-current-space { display: flex; flex-direction: column; gap: 3px; }
+.dao-current-space > span { color: var(--dao-muted); font-size: 11px; }
+.dao-current-space > strong { overflow-wrap: anywhere; font-size: 15px; }
+.dao-header-main :focus-visible { outline-color: var(--dao-accent); }
+.dao-account { display: flex; flex-shrink: 0; align-items: center; gap: 4px; margin-left: auto; min-width: 0; }
+.dao-account-avatar, .dao-comment-avatar { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: 1px solid var(--dao-line-strong); border-radius: 50%; background: var(--dao-soft); color: var(--dao-secondary); font-size: 14px; font-weight: 650; flex: none; }
+.dao-account .dao-account-avatar { width: 34px; height: 34px; border-color: var(--dao-avatar-line); background: var(--dao-avatar-bg); color: var(--dao-avatar-ink); }
+.dao-account-name, .dao-account-role { display: block; }
+.dao-account-name { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; }
+.dao-account-role { color: var(--dao-muted); font-size: 12px; white-space: nowrap; }
+.dao-navigation { --dao-nav-font-size: 14px; display: flex; align-self: stretch; flex: none; gap: 32px; }
+/* Links and buttons use one rule so the control reset cannot change their type or alignment. */
+.dao-app .dao-nav-link { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 68px; padding: 2px 6px 0; border-bottom: 2px solid transparent; border-radius: 0; color: var(--dao-muted); font-family: var(--font-body); font-size: var(--dao-nav-font-size); line-height: 20px; font-weight: 500; letter-spacing: -.015em; cursor: pointer; transition: color 120ms ease, border-color 120ms ease; }
+.dao-nav-link svg { flex: none; width: 17px; height: 17px; }
+.dao-app .dao-nav-link:hover { color: var(--dao-accent); border-bottom-color: var(--dao-line-strong); }
+.dao-app .dao-nav-link--active { border-bottom-color: var(--dao-gold); color: var(--dao-accent); font-weight: 600; }
+.dao-app .dao-nav-link--active:hover { border-bottom-color: var(--dao-gold); }
+.dao-muted { color: var(--dao-muted); font-weight: 400; }
+.dao-main { width: 100%; max-width: 1440px; margin: 0 auto; padding: 24px 32px; }
+
+/* Accessible community / DAO picker, limited to the viewer's available spaces. */
+.dao-switcher { position: relative; width: 100%; min-width: 0; }
+.dao-app .dao-switcher-trigger { display: flex; align-items: center; gap: 11px; width: 100%; min-height: 48px; padding: 5px 11px; border: 0; border-radius: 6px; background: var(--dao-switcher); color: var(--dao-ink); text-align: left; }
+.dao-app .dao-switcher-trigger:hover, .dao-app .dao-switcher-trigger[aria-expanded="true"] { border-color: var(--dao-accent); background: var(--dao-switcher-hover); }
+.dao-switcher-avatar { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 35px; height: 35px; border: 0; border-radius: 6px; background: var(--dao-avatar-bg); color: var(--dao-avatar-ink); font-family: var(--font-numeric); font-size: 12px; font-weight: 550; }
+.dao-switcher-trigger-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.dao-switcher-label { color: var(--dao-muted); font-size: 10px; font-weight: 500; letter-spacing: .055em; text-transform: uppercase; }
+.dao-switcher-name { display: block; color: var(--dao-ink); font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dao-switcher-chevron { flex: none; width: 16px; height: 16px; color: var(--dao-accent); }
+.dao-switcher-popover { position: absolute; top: calc(100% + 12px); left: 0; z-index: 30; width: 390px; max-width: calc(100vw - 40px); max-height: min(520px, calc(100dvh - 115px)); overflow-y: auto; padding: 20px; border: 1px solid var(--dao-line-strong); border-radius: 12px; background: var(--dao-paper); color: var(--dao-ink); box-shadow: 0 16px 48px var(--dao-shadow); }
+.dao-switcher-popover :focus-visible { outline-color: var(--dao-accent); }
+.dao-switcher-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.dao-switcher-heading h2, .dao-switcher-heading h3 { font-size: 19px; letter-spacing: -.025em; }
+.dao-switcher-heading p { margin-top: 5px; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-app .dao-switcher-close { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 32px; min-height: 32px; margin: -5px -6px 0 0; border-radius: 6px; color: var(--dao-muted); }
+.dao-app .dao-switcher-close:hover { background: var(--dao-soft); }
+.dao-switcher-search { position: relative; margin-bottom: 16px; }
+.dao-switcher-search > svg { position: absolute; top: 15px; left: 12px; width: 17px; height: 17px; color: var(--dao-muted); }
+.dao-app .dao-switcher-search input { width: 100%; padding-left: 37px; min-height: 46px; font-size: 14px; }
+.dao-switcher-count { margin: 0 0 10px !important; color: var(--dao-muted); font-size: 11px; font-weight: 550; letter-spacing: .05em; text-transform: uppercase; }
+.dao-switcher-list { display: flex; flex-direction: column; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.dao-app .dao-switcher-option { display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 11px 12px; border: 1px solid transparent; border-radius: 8px; color: var(--dao-ink); text-decoration: none; }
+.dao-app .dao-switcher-option:hover { background: var(--dao-canvas); border-color: var(--dao-line-strong); }
+.dao-app .dao-switcher-option--current { background: var(--dao-selected-bg); border-color: var(--dao-selected-line); }
+.dao-switcher-option .dao-switcher-avatar { width: 39px; height: 39px; border-color: var(--dao-avatar-line); background: var(--dao-avatar-bg); color: var(--dao-avatar-ink); }
+.dao-switcher-option-copy { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.dao-switcher-option-copy > strong { font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+.dao-switcher-option-copy > span { color: var(--dao-muted); font-size: 12px; }
+.dao-switcher-check { flex: none; width: 18px; height: 18px; color: var(--dao-accent); }
+.dao-switcher-empty { padding: 24px 12px; text-align: center; color: var(--dao-muted); font-size: 14px; }
+
+/* Proposals lead the workspace; community context stays alongside. */
+.dao-page-heading { margin-bottom: 28px; }
+.dao-page-heading h1 { margin: 8px 0 12px; font-size: clamp(30px, 3.2vw, 44px); font-weight: 700; line-height: 1.13; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.dao-page-heading > p:not(.dao-eyebrow), .dao-page-subtitle { color: var(--dao-muted); font-size: 15px; line-height: 1.6; }
+.dao-eyebrow { color: var(--dao-accent); font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: .11em; line-height: 1.6; }
+.dao-app .dao-board-layout--public { grid-template-columns: minmax(0, 1fr); max-width: 1100px; margin-inline: auto; }
+.dao-board-layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 28px; align-items: start; }
+.dao-proposals-section { min-width: 0; }
+.dao-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 16px; }
+.dao-section-heading h2 { margin-top: 0; font-size: 21px; }
+.dao-proposals-heading { flex-wrap: wrap; }
+.dao-proposals-heading h1 { margin: 0; font-size: 21px; letter-spacing: -.025em; }
+.dao-app .dao-proposals-heading .dao-button { min-height: 44px; padding: 9px 14px; }
+.dao-section-description { color: var(--dao-muted); font-size: 13px; line-height: 1.6; text-align: right; }
+.dao-community-sidebar { min-width: 0; display: flex; flex-direction: column; gap: 22px; padding: 22px; background: var(--dao-paper); border-radius: 10px; }
+.dao-community-sidebar > section, .dao-community-sidebar > details { padding: 0; border: 0; background: transparent; }
+.dao-community-summary h2 { font-size: 16px; font-weight: 600; letter-spacing: -.025em; }
+.dao-community-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 14px 0 0; padding: 14px 10px; border-radius: 7px; background: var(--dao-soft); }
+.dao-community-stats > div { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; text-align: center; }
+.dao-community-stats dt { color: var(--dao-muted); font-size: 11px; line-height: 1.4; }
+.dao-community-stats dd { order: -1; margin: 0; font-family: var(--font-numeric); font-size: 21px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-stat-active dd { color: var(--dao-accent); }
+.dao-treasury-section { min-width: 0; }
+.dao-treasury-section .dao-section-heading { margin-bottom: 12px; }
+.dao-treasury-section .dao-section-heading h2 { font-size: 16px; font-weight: 600; letter-spacing: -.025em; }
+.dao-treasury-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.dao-treasury-card { min-width: 0; padding: 14px 14px 10px; border-radius: 8px; background: var(--dao-soft); color: var(--dao-ink); }
+.dao-treasury-card--sustainability { background: var(--dao-selected-bg); }
+.dao-fund-title { display: flex; align-items: center; gap: 7px; min-height: 22px; flex-wrap: wrap; }
+.dao-fund-icon { flex: none; color: var(--dao-muted); }
+.dao-treasury-card--sustainability .dao-fund-icon { color: var(--dao-accent); }
+.dao-fund-title h3 { color: var(--dao-ink); font-size: 13px; font-weight: 600; letter-spacing: -.015em; overflow-wrap: anywhere; }
+.dao-fund-role { margin-left: auto; color: var(--dao-muted); font-size: 10px; line-height: 1.5; }
+.dao-balance-label { color: var(--dao-muted); font-size: 11px; font-weight: 400; }
+.dao-fund-balance { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.dao-fund-amount { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px; min-width: 0; color: var(--dao-ink); }
+.dao-fund-amount > span:first-child { min-width: 0; font-family: var(--font-numeric); font-size: 27px; font-weight: 500; line-height: 1.2; letter-spacing: -.055em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-currency { color: var(--dao-muted); font-size: 11px; font-weight: 500; }
+.dao-fund-action { font-size: 12px; font-weight: 500; }
+.dao-fund-details { margin-top: 9px; }
+.dao-fund-details > summary, .dao-activity-details > summary { align-items: center; gap: 8px; min-height: 44px; cursor: pointer; color: var(--dao-muted); font-size: 12px; font-weight: 500; list-style: none; }
+.dao-fund-details > summary { display: grid; grid-template-columns: minmax(0, 1fr) auto 6px; min-height: 56px; padding: 2px 0 4px; border-radius: 4px; }
+.dao-activity-details > summary { display: flex; justify-content: space-between; }
+.dao-fund-details > summary::-webkit-details-marker, .dao-activity-details > summary::-webkit-details-marker { display: none; }
+.dao-fund-details > summary::after, .dao-activity-details > summary::after { content: ''; width: 5px; height: 5px; margin-right: 3px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); flex: none; }
+.dao-fund-details[open] > summary::after, .dao-activity-details[open] > summary::after { transform: rotate(225deg); }
+.dao-fund-details > summary:hover, .dao-activity-details > summary:hover { color: var(--dao-accent); }
+.dao-fund-breakdown { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0 8px; padding: 12px 0; border-top: 1px solid var(--dao-line); }
+.dao-fund-breakdown dt { font-size: 10px; color: var(--dao-muted); margin-bottom: 3px; }
+.dao-fund-breakdown dd { margin: 0; font-size: 12px; font-weight: 550; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-fund-breakdown dd > span { font-size: 10px; font-weight: 400; color: var(--dao-muted); }
+.dao-treasury-action-links { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+.dao-app .dao-text-button { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 5px 2px; color: var(--dao-accent); font-size: 13px; font-weight: 600; line-height: 1.5; text-align: left; }
+.dao-app .dao-text-button:hover { text-decoration: underline; text-underline-offset: 4px; }
+.dao-app .dao-text-button--muted { color: var(--dao-muted); font-weight: 500; }
+.dao-ledger-note { display: flex; align-items: flex-start; gap: 8px; padding: 13px 2px 0; color: var(--dao-muted); font-size: 11px; line-height: 1.6; }
+.dao-ledger-note svg { flex: none; margin-top: 2px; }
+.dao-wallet-status { display: block; font-size: 10px; }
+.dao-community-sidebar > .dao-activity-details { padding: 8px 0 0; border-top: 1px solid var(--dao-line); }
+.dao-activity-details > summary { color: var(--dao-ink); font-size: 13px; font-weight: 500; }
+.dao-activity-details > summary h2 { font: inherit; letter-spacing: -.015em; }
+.dao-app .dao-button, .dao-loading .dao-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--dao-line); border-radius: 9px; background: var(--dao-paper); color: var(--dao-ink); font-family: var(--font-body); font-size: 14px; font-weight: 600; line-height: 1.5; letter-spacing: -.015em; text-transform: none; box-shadow: none; text-align: center; transition: background-color 150ms, border-color 150ms, color 150ms; }
+.dao-app .dao-button:hover, .dao-loading .dao-button:hover { background: var(--dao-soft); border-color: #b8aa8e; transform: none; }
+.dao-app .dao-button--primary, .dao-loading .dao-button--primary { background: var(--dao-primary-bg); border-color: var(--dao-primary-bg); color: var(--dao-primary-ink); }
+.dao-app .dao-button--primary:hover { background: var(--dao-primary-hover); border-color: var(--dao-primary-hover); }
+.dao-app .dao-button--danger { background: #a53728; border-color: #a53728; color: #fff; }
+.dao-app .dao-button--danger:hover { background: #82281c; }
+.dao-app .dao-button--quiet { background: transparent; border-color: transparent; color: var(--dao-muted); }
+.dao-app .dao-button--quiet:hover { border-color: transparent; background: var(--dao-soft); color: var(--dao-ink); }
+.dao-app .dao-button:disabled { pointer-events: none; }
+.dao-proposal-tools { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.dao-filter-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.dao-app .dao-filter { min-height: 44px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 7px; border-bottom: 2px solid transparent; border-radius: 0; color: var(--dao-muted); font-size: 13px; font-weight: 500; white-space: nowrap; }
+.dao-app .dao-filter:hover { background: var(--dao-soft); }
+.dao-app .dao-filter--active { border-bottom-color: var(--dao-gold); background: transparent; color: var(--dao-ink); font-weight: 600; }
+.dao-app .dao-filter--active:hover { background: var(--dao-soft); }
+.dao-filter > span { border-radius: 4px; min-width: 19px; padding: 0 4px; font-size: 11px; background: var(--dao-soft); color: var(--dao-muted); }
+.dao-filter--active > span { background: var(--dao-accent-soft); color: var(--dao-accent); }
+.dao-search { display: flex; align-items: center; gap: 9px; min-width: 0; width: 215px; border: 0; border-radius: 5px; padding-left: 12px; background: var(--dao-paper); color: var(--dao-muted); }
+.dao-search > svg { flex: none; }
+.dao-app .dao-search input { width: 100%; min-height: 40px; border: 0; border-radius: 7px; padding: 8px 10px 8px 0; font-size: 13px; background: transparent; }
+.dao-search:focus-within { outline: 2px solid var(--dao-accent); outline-offset: 2px; }
+.dao-app .dao-search input:focus-visible { outline: none; }
+.dao-proposal-list { display: grid; gap: 12px; list-style: none; margin: 0; padding: 0; }
+.dao-proposal-list:empty { display: none; }
+.dao-proposal-row { min-width: 0; padding: 20px 24px 14px; border: 0; border-radius: 6px; background: var(--dao-paper); }
+.dao-proposal-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.dao-proposal-primary { min-width: 0; }
+.dao-proposal-heading { margin: 0; }
+.dao-app .dao-proposal-title { color: var(--dao-ink); font-size: 18px; font-weight: 650; line-height: 1.5; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.dao-proposal-title:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.dao-proposal-created { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 5px !important; color: var(--dao-muted); font-size: 12px; }
+.proposal-zec-estimate { position: relative; max-width: 100%; }
+.dao-app .proposal-zec-trigger { display: inline-flex; align-items: center; gap: 7px; min-height: 28px; padding: 4px 9px; border: 0; border-radius: 5px; background: var(--dao-status-bg); color: var(--dao-muted); font: inherit; line-height: 1.4; cursor: pointer; }
+.dao-app .proposal-zec-trigger[data-available="true"] { background: var(--dao-accent-soft); color: var(--dao-accent); }
+.proposal-zec-trigger strong { font-weight: 650; font-variant-numeric: tabular-nums; }
+.proposal-zec-trigger > span { font-size: 11px; }
+.dao-app .proposal-zec-trigger[aria-expanded="true"], .dao-app .proposal-zec-trigger:hover { box-shadow: inset 0 0 0 1px currentColor; }
+.proposal-zec-detail { position: absolute; top: calc(100% + 8px); left: 0; z-index: 12; width: 340px; padding: 16px; border: 1px solid var(--dao-line); border-radius: 10px; background: var(--dao-paper); color: var(--dao-secondary); box-shadow: 0 12px 36px rgb(0 0 0 / .15); font-size: 12px; line-height: 1.55; }
+.proposal-zec-detail-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--dao-ink); }
+.proposal-zec-detail-heading > strong { font-size: 14px; font-weight: 650; }
+.dao-app .proposal-zec-detail-heading > button { display: grid; place-items: center; width: 28px; height: 28px; min-height: 28px; margin: -5px -6px -5px 0; border: 0; border-radius: 4px; background: transparent; color: var(--dao-muted); font: inherit; font-size: 22px; cursor: pointer; }
+.dao-app .proposal-zec-detail-heading > button:hover { color: var(--dao-ink); background: var(--dao-status-bg); }
+.proposal-zec-detail dl { display: grid; gap: 6px; margin: 0; }
+.proposal-zec-detail dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.proposal-zec-detail dd { margin: 0; color: var(--dao-ink); text-align: right; font-weight: 550; font-variant-numeric: tabular-nums; }
+.proposal-zec-detail dt a { color: inherit; }
+.proposal-zec-detail p { margin: 12px 0 !important; font-size: 12px; line-height: 1.6; }
+.proposal-zec-price-source { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 3px 10px; padding-top: 10px; border-top: 1px solid var(--dao-line); font-size: 10px; color: var(--dao-muted); }
+.proposal-zec-price-source a { color: var(--dao-accent); }
+@media (max-width: 700px) {
+  .proposal-zec-estimate { position: static; }
+  .dao-app .proposal-zec-trigger { min-height: 44px; }
+  .dao-app .proposal-zec-detail-heading > button { width: 44px; min-height: 44px; }
+  .proposal-zec-detail { top: auto; left: 16px; right: 16px; width: auto; margin-top: 8px; }
+}
+.dao-proposal-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+.dao-proposal-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-proposal-meta > a { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; color: var(--dao-secondary); }
+.dao-proposal-meta > a:hover { color: var(--dao-accent); }
+.dao-status { display: inline-flex; align-items: center; justify-content: center; gap: 5px; justify-self: start; width: fit-content; border: 0; border-radius: 4px; padding: 5px 8px; background: var(--dao-status-bg); color: var(--dao-muted); font-size: 11px; font-weight: 600; line-height: 1.4; white-space: nowrap; }
+.dao-status--open { color: var(--dao-positive); background: var(--dao-positive-bg); border-color: var(--dao-positive-line); }
+.dao-status--open::before { content: ""; width: 5px; height: 5px; background: currentColor; border-radius: 50%; }
+.dao-status--scheduled, .dao-status--anchoring, .dao-status--ongoing, .dao-status--under_review { color: var(--dao-accent); background: var(--dao-accent-soft); border-color: var(--dao-selected-line); }
+.dao-status--finalized, .dao-status--approved { color: var(--dao-positive); background: var(--dao-positive-bg); border-color: var(--dao-positive-line); }
+.dao-status--rejected { color: var(--dao-error); background: var(--dao-error-bg); }
+.dao-status--ongoing::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.dao-proposal-date { min-width: 0; color: var(--dao-secondary); text-align: right; font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.dao-proposal-date-label { display: inline; color: var(--dao-muted); font-size: 11px; margin-right: 5px; }
+.dao-empty-state { padding: 34px 24px; border: 1px dashed var(--dao-line-strong); border-radius: 9px; background: var(--dao-paper); color: var(--dao-secondary); font-size: 15px; }
+.dao-empty-state > span, .dao-discussion-empty > span { display: block; margin-top: 8px; color: var(--dao-muted); font-size: 13px; }
+.dao-activity-list { list-style: none; margin: 12px 0 0; padding: 0; }
+.dao-activity-list > li { position: relative; display: flex; gap: 13px; padding-bottom: 18px; }
+.dao-activity-list > li:not(:last-child)::before { content: ""; position: absolute; left: 3px; top: 16px; bottom: 4px; width: 1px; background: var(--dao-line-strong); }
+.dao-activity-dot { width: 7px; height: 7px; margin-top: 8px; flex: none; border: 1px solid #b8ad99; border-radius: 50%; background: var(--dao-paper); }
+.dao-activity-dot--gold { background: var(--dao-gold); border-color: var(--dao-gold); }
+.dao-activity-title { color: var(--dao-ink); font-size: 13px; font-weight: 600; }
+.dao-activity-amount { margin-top: 4px !important; color: var(--dao-ink); font-size: 13px; font-weight: 550; }
+.dao-activity-amount > span { color: var(--dao-muted); font-weight: 400; }
+.dao-activity-reason { margin-top: 8px !important; font-size: 12px; color: var(--dao-muted); line-height: 1.7; overflow-wrap: anywhere; }
+.dao-activity-meta { margin-top: 7px !important; font-size: 11px; color: var(--dao-muted); overflow-wrap: anywhere; }
+.dao-quiet-empty { color: var(--dao-muted); font-size: 14px; }
+
+/* Explicitly simulated vote examples in the local sample workspace. */
+.dao-vote-preview { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "labels count demo" "track track track"; gap: 9px 12px; margin: 18px 0 0; }
+.dao-vote-labels { grid-area: labels; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 18px; font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.dao-vote-label-yes, .dao-vote-label-no { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.dao-vote-label-yes { color: var(--dao-positive); }
+.dao-vote-label-no { color: var(--dao-error); }
+.dao-vote-label-yes::before, .dao-vote-label-no::before { content: ""; align-self: center; width: 6px; height: 6px; margin-right: 2px; border-radius: 50%; background: var(--dao-vote-yes); }
+.dao-vote-label-no::before { background: var(--dao-vote-no); }
+.dao-vote-labels strong { font-weight: 650; }
+.dao-vote-labels > span > span { color: var(--dao-muted); }
+.dao-vote-count { grid-area: count; align-self: center; color: var(--dao-muted); font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dao-vote-track { grid-area: track; display: flex; width: 100%; height: 7px; overflow: hidden; border-radius: 4px; background: var(--dao-line); }
+.dao-vote-yes { background: var(--dao-vote-yes); }
+.dao-vote-no { background: var(--dao-vote-no); }
+.dao-vote-demo { grid-area: demo; align-self: center; color: var(--dao-muted); font-size: 11px; line-height: 1.5; }
+
+/* Historical committee examples: one visible seat per published position. */
+.dao-proposal-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+.dao-proposal-source { display: inline-flex; padding: 3px; border-radius: 8px; background: var(--dao-soft); }
+.dao-app .dao-proposal-source button { padding: 7px 12px; border-radius: 6px; font-size: 12px; color: var(--dao-muted); }
+.dao-app .dao-proposal-source button[aria-pressed="true"] { color: var(--dao-ink); background: var(--dao-paper); }
+.dao-zcg-context { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; margin-bottom: 18px; color: var(--dao-muted); font-size: 12px; }
+.dao-zcg-context p { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.dao-zcg-source-mark { color: var(--dao-accent); font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+.dao-zcg-proposal { position: relative; padding: 22px 26px 12px; }
+.dao-zcg-proposal:focus-within, .dao-zcg-proposal:hover { z-index: 2; }
+.dao-zcg-proposal .dao-zcg-card-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 20px 28px; }
+.dao-zcg-title-line { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.dao-zcg-title-score { display: grid; justify-items: center; flex: 0 0 56px; color: var(--dao-positive); }
+.dao-zcg-title-score[data-outcome="rejected"] { color: var(--dao-error); }
+.dao-zcg-title-score strong { font-size: 28px; line-height: 1.15; font-weight: 650; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.dao-zcg-turnout { color: var(--dao-secondary); }
+.dao-zcg-turnout > span { color: var(--dao-muted); }
+.dao-zcg-budget { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; min-width: 0; max-width: 100%; font-size: 12px; color: var(--dao-muted); }
+.dao-zcg-budget-amount { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+.dao-zcg-budget-amount strong { color: var(--dao-ink); font-size: 22px; font-weight: 650; line-height: 1.25; letter-spacing: -.035em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-zcg-budget[data-approved="true"] .dao-zcg-budget-amount strong { color: var(--dao-accent); }
+.dao-zcg-budget-amount > span { font-size: 11px; white-space: nowrap; }
+.dao-zcg-budget .proposal-zec-detail { left: auto; right: 0; text-align: left; }
+.dao-zcg-external { color: var(--dao-muted); font-size: 13px; }
+.dao-zcg-proposal > .dao-proposal-tags { margin-top: 10px; }
+.dao-zcg-votes { position: relative; margin-top: 16px; }
+.dao-zcg-vote-summary { display: flex; align-items: baseline; justify-content: space-between; gap: 10px 20px; margin-bottom: 10px; flex-wrap: wrap; }
+.dao-zcg-support { display: flex; align-items: baseline; gap: 8px; font-size: 12px; color: var(--dao-muted); }
+.dao-zcg-support strong { font-size: 25px; font-weight: 650; line-height: 1.2; letter-spacing: -.04em; color: var(--dao-ink); font-variant-numeric: tabular-nums; }
+.dao-zcg-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; color: var(--dao-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.dao-zcg-votes [data-vote="approve"] { --seat-color: var(--dao-vote-yes); --seat-text: var(--dao-positive); }
+.dao-zcg-votes [data-vote="reject"] { --seat-color: var(--dao-vote-no); --seat-text: var(--dao-error); }
+.dao-zcg-votes [data-vote="abstain"] { --seat-color: var(--dao-control-border); --seat-text: var(--dao-muted); }
+.dao-zcg-legend > span { display: inline-flex; align-items: center; gap: 5px; }
+.dao-zcg-legend > span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--seat-color); }
+.dao-zcg-vote-rail { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.dao-app .dao-zcg-voter { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; min-width: 0; min-height: 66px; border-radius: 5px; padding: 0 0 4px; cursor: pointer; }
+.dao-app .dao-zcg-voter:hover, .dao-app .dao-zcg-voter[aria-expanded="true"] { background: var(--dao-soft); }
+.dao-zcg-vote-segment { display: block; height: 5px; border-radius: 2px; background: var(--seat-color); }
+.dao-zcg-voter-identity { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 11px; padding-inline: 3px; color: var(--dao-secondary); font-size: 12px; font-weight: 500; line-height: 1.4; }
+.dao-zcg-portrait { position: relative; display: block; flex: none; }
+.dao-zcg-portrait img { display: block; width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--dao-soft); }
+.dao-zcg-vote-symbol { position: absolute; right: -3px; bottom: -3px; display: grid; place-items: center; height: 15px; width: 15px; border: 2px solid var(--dao-paper); border-radius: 50%; color: var(--dao-canvas); background: var(--seat-color); font-size: 11px; line-height: 1; font-weight: 700; }
+.dao-zcg-feedback { position: absolute; z-index: 10; top: 100%; left: clamp(0px, calc(var(--zcg-anchor) - 150px), max(0px, calc(100% - 300px))); width: min(300px, 100%); padding: 13px 15px 9px; border: 1px solid var(--dao-line); border-radius: 9px; color: var(--dao-ink); background: var(--dao-paper); box-shadow: 0 10px 30px var(--dao-shadow); overflow-y: auto; }
+.dao-zcg-feedback[data-placement="above"] { top: auto; bottom: 100%; }
+.dao-zcg-feedback-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.dao-zcg-feedback-heading strong { font-size: 13px; font-weight: 650; }
+.dao-zcg-feedback-heading > span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--seat-text); }
+.dao-zcg-feedback-heading > span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--seat-color); }
+.dao-app .dao-zcg-feedback-heading button { width: 28px; min-height: 28px; margin: -4px -6px -4px auto; font-size: 21px; color: var(--dao-muted); border-radius: 5px; }
+.dao-app .dao-zcg-feedback-heading button:hover { background: var(--dao-soft); }
+.dao-zcg-feedback p { color: var(--dao-secondary); font-size: 13px; line-height: 1.55; }
+.dao-zcg-feedback-source { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; margin-top: 7px; font-size: 9px; color: var(--dao-muted); }
+.dao-zcg-feedback-source a { display: inline-flex; align-items: center; min-height: 30px; color: var(--dao-accent); font-size: 11px; }
+.dao-zcg-minutes, .dao-zcg-record-label { color: var(--dao-muted); font-size: 11px; }
+.dao-zcg-review-state { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 18px; color: var(--dao-muted); font-size: 13px; }
+.dao-zcg-review-state span:last-child { overflow-wrap: anywhere; }
+.dao-zcg-record-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.dao-zcg-minutes { display: inline-flex; align-items: center; min-height: 32px; }
+.dao-zcg-minutes:hover { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 3px; }
+.dao-zcg-method { margin-top: 20px; color: var(--dao-muted); font-size: 12px; line-height: 1.7; }
+.dao-zcg-method summary { width: fit-content; cursor: pointer; min-height: 44px; padding-block: 10px; }
+.dao-zcg-method p { max-width: 85ch; margin-bottom: 8px; }
+.dao-zcg-method a { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) {
+  .dao-proposal-heading-actions { gap: 8px; }
+  .dao-zcg-proposal { padding: 18px 16px 10px; }
+  .dao-zcg-proposal .dao-proposal-card-heading { gap: 10px; }
+  .dao-zcg-voter-identity { flex-direction: column; gap: 7px; font-size: 10px; }
+  .dao-zcg-votes { margin-top: 16px; }
+  .dao-zcg-legend { gap: 9px; font-size: 10px; }
+  .dao-zcg-denominator { display: none; }
+  .dao-zcg-title-line { gap: 12px; }
+  .dao-zcg-title-score { flex-basis: 47px; }
+  .dao-zcg-title-score strong { font-size: 25px; }
+  .dao-zcg-turnout > span { display: none; }
+  .dao-zcg-feedback { padding: 10px 13px 7px; }
+  .dao-app .dao-zcg-feedback-heading button { width: 44px; min-height: 44px; }
+  .dao-zcg-feedback-source a { min-height: 44px; }
+  .dao-zcg-context > span { display: none; }
+}
+@media (max-width: 800px) {
+  .dao-zcg-proposal .dao-zcg-card-heading { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .dao-zcg-budget { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; }
+  .dao-zcg-budget-amount { justify-content: flex-start; }
+  .dao-zcg-budget .proposal-zec-estimate { position: static; }
+  .dao-zcg-budget .proposal-zec-detail { top: auto; left: 16px; right: 16px; width: auto; margin-top: 8px; }
+}
+@media (max-width: 650px) {
+  .dao-vote-preview { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "labels labels" "track track" "count demo"; gap: 8px; margin-top: 16px; }
+  .dao-vote-labels { gap: 6px 14px; }
+  .dao-vote-demo { justify-self: end; }
+}
+
+/* The community roster shares the proposal board's restrained surfaces. */
+.dao-members-heading { flex-wrap: wrap; margin-bottom: 24px; }
+.dao-members-heading h1 { font-size: 21px; line-height: 1.3; }
+.dao-members-heading p { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--dao-muted); }
+.dao-app .dao-members-heading .dao-button { min-height: 44px; padding: 9px 14px; }
+.dao-member-tools { margin-bottom: 16px; }
+.dao-member-tools .dao-search { width: 280px; }
+.dao-member-list { overflow: hidden; border-radius: 6px; background: var(--dao-paper); }
+.dao-member-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 14px; }
+.dao-member-table th, .dao-member-table td { padding: 12px 24px; text-align: left; vertical-align: middle; overflow-wrap: anywhere; }
+.dao-member-table thead th { padding-top: 16px; padding-bottom: 16px; color: var(--dao-muted); font-size: 12px; font-weight: 550; }
+.dao-member-table thead th:nth-child(1) { width: 27%; }
+.dao-member-table thead th:nth-child(2) { width: 33%; }
+.dao-member-table thead th:nth-child(3) { width: 16%; }
+.dao-member-table thead th:nth-child(4) { width: 24%; }
+.dao-member-table tbody tr { border-top: 1px solid var(--dao-line); }
+.dao-member-table tbody tr:hover { background: var(--dao-soft); }
+.dao-member-name { font-weight: 550; color: var(--dao-ink); }
+.dao-member-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dao-member-avatar { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--dao-avatar-bg); color: var(--dao-avatar-ink); font-size: 12px; font-weight: 600; }
+.dao-member-signal { color: var(--dao-secondary); font-family: var(--font-numeric); font-size: 12px; }
+.dao-member-source { color: var(--dao-muted); font-size: 13px; }
+.dao-member-source a { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 3px; }
+.dao-member-mobile-label { display: none; }
+.dao-members-note { margin-top: 16px !important; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-members-empty, .dao-members-setup { padding: 28px; border-radius: 6px; background: var(--dao-paper); }
+.dao-members-empty p { font-size: 15px; font-weight: 550; }
+.dao-members-empty > span { display: block; margin-top: 8px; font-size: 13px; color: var(--dao-muted); }
+.dao-member-setup-form { max-width: 680px; }
+.dao-member-setup-heading h2 { font-size: 18px; }
+.dao-member-setup-heading p { margin-top: 8px; font-size: 14px; line-height: 1.65; color: var(--dao-muted); }
+.dao-member-setup-form textarea { font-family: var(--font-numeric); font-size: 14px; }
+.dao-form-error { padding: 12px 16px; border-radius: 6px; color: var(--dao-error); background: var(--dao-error-bg); font-size: 14px; line-height: 1.6; }
+@media (max-width: 650px) {
+  .dao-members-heading { gap: 16px; }
+  .dao-member-tools .dao-search { width: 100%; }
+  .dao-member-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dao-member-table, .dao-member-table tbody { display: block; }
+  .dao-member-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "member status" "signal signal" "source source"; gap: 9px 12px; padding: 18px; }
+  .dao-member-table tbody tr:first-child { border-top: 0; }
+  .dao-member-table th, .dao-member-table td { display: block; padding: 0; }
+  .dao-member-name { grid-area: member; }
+  .dao-member-signal { grid-area: signal; display: flex !important; gap: 10px; align-items: baseline; }
+  .dao-member-signal > span:last-child { min-width: 0; }
+  .dao-member-status { grid-area: status; align-self: center; }
+  .dao-member-source { grid-area: source; }
+  .dao-member-mobile-label { display: inline; flex: none; font-family: var(--font-body); color: var(--dao-muted); font-size: 12px; }
+  .dao-members-empty, .dao-members-setup { padding: 22px 18px; }
+}
+
+/* Proposal reading, forms and private discussions. */
+.dao-panel { min-width: 0; padding: 28px; border: 1px solid var(--dao-line); border-radius: 12px; background: var(--dao-paper); }
+.dao-form { display: flex; flex-direction: column; align-items: stretch; gap: 24px; }
+.dao-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dao-field > label { color: var(--dao-ink); font-size: 14px; font-weight: 600; }
+.dao-field > p, .dao-field-hint { color: var(--dao-muted); font-size: 13px; line-height: 1.65; }
+.dao-field-row { display: flex; gap: 24px; }
+.dao-field-row > .dao-field { flex: 1; }
+.dao-form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.dao-membership-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: start; gap: 24px; }
+.dao-membership-form > fieldset { min-width: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 22px; }
+.dao-membership-form > fieldset > legend { float: left; width: 100%; margin: 0; color: var(--dao-ink); font-size: 16px; font-weight: 650; }
+.dao-choice-tabs { display: inline-flex; align-self: flex-start; gap: 4px; padding: 4px; border-radius: 10px; background: var(--dao-soft); }
+.dao-app .dao-choice-tabs button { min-height: 44px; padding: 10px 16px; border-radius: 7px; font-size: 14px; font-weight: 550; color: var(--dao-muted); }
+.dao-app .dao-choice-tabs button[aria-pressed="true"] { background: var(--dao-paper); color: var(--dao-ink); box-shadow: 0 1px 4px #00000012; }
+.dao-app .dao-choice-tabs button:hover:not(:disabled) { color: var(--dao-ink); }
+.dao-membership-rules { background: var(--dao-soft); border-color: transparent; }
+.dao-membership-rules h2 { margin: 6px 0 18px; font-size: 20px; }
+.dao-membership-rules dl { margin: 0 0 20px; }
+.dao-membership-rules dl > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 0; font-size: 13px; }
+.dao-membership-rules dt { color: var(--dao-muted); }
+.dao-membership-rules dd { margin: 0; font-weight: 600; }
+.dao-rule-details { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--dao-line); color: var(--dao-muted); font-size: 13px; line-height: 1.7; }
+.dao-rule-details summary { min-height: 32px; color: var(--dao-ink); font-weight: 550; cursor: pointer; }
+.dao-rule-details p + p { margin-top: 12px; }
+.dao-field > .dao-field-error { color: var(--dao-error); }
+.dao-membership-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 0 0 20px; margin: 0 0 20px; border-bottom: 1px solid var(--dao-line); white-space: normal; }
+.dao-membership-summary p { flex-basis: 100%; font-size: 14px; line-height: 1.7; }
+@media (max-width: 900px) { .dao-membership-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .dao-membership-form .dao-field-row { flex-direction: column; gap: 22px; } .dao-membership-form, .dao-membership-rules { padding: 22px 18px; } .dao-membership-form .dao-form-actions > * { width: 100%; } }
+@media (forced-colors: active) { .dao-app select { appearance: auto; background-image: none; padding-right: 14px; border: 1px solid ButtonText; } }
+@media (prefers-reduced-motion: reduce) { .dao-app .dao-button { transition: none; } }
+.dao-notice { margin-top: 12px !important; color: var(--dao-muted); font-size: 13px; line-height: 1.65; }
+.dao-notice > a { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 3px; }
+.dao-error { margin-top: 12px !important; padding: 11px 13px; border-radius: 6px; background: var(--dao-error-bg); border: 1px solid var(--dao-error-line); color: var(--dao-error); font-size: 14px; line-height: 1.6; }
+.dao-treasury-form { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--dao-line); gap: 14px; }
+.dao-inline-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dao-treasury-form .dao-button { align-self: flex-start; }
+.dao-treasury-form .dao-inline-heading h3 { font-size: 15px; }
+.dao-detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 24px; align-items: start; }
+.dao-detail-grid > div { min-width: 0; }
+.dao-proposal-body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; color: var(--dao-secondary); line-height: 1.85; }
+.dao-proposal-body h2 { margin-bottom: 22px; }
+.dao-proposal-body p + p { margin-top: 20px; }
+.dao-detail-meta { position: sticky; top: 24px; background: var(--dao-soft); font-size: 14px; color: var(--dao-secondary); }
+.dao-detail-meta h2 { margin: 7px 0 12px; font-family: var(--font-numeric); font-size: 27px; line-height: 1.35; font-weight: 500; overflow-wrap: anywhere; }
+.dao-detail-meta dl { margin: 16px 0 0; }
+.dao-detail-meta dl > div { padding: 15px 0; border-bottom: 1px solid var(--dao-line-strong); }
+.dao-detail-meta dl > div:last-child { border-bottom: 0; }
+.dao-detail-meta dt { color: var(--dao-muted); font-size: 12px; margin-bottom: 5px; }
+.dao-detail-meta dd { margin: 0; color: var(--dao-ink); font-size: 14px; overflow-wrap: anywhere; }
+.dao-detail-meta .dao-button { margin-top: 14px; width: 100%; }
+.dao-funding-quote { margin: 22px 0; padding: 20px 0; border-block: 1px solid var(--dao-line); }
+.dao-funding-quote-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dao-funding-quote-heading h3 { margin: 0; font-size: 14px; font-weight: 600; color: var(--dao-ink); }
+.dao-funding-quote-heading > span { font-size: 12px; color: var(--dao-muted); }
+.dao-funding-quote-heading > .dao-funding-quote-fresh { color: var(--dao-positive); }
+.dao-funding-quote-amount { margin: 14px 0 6px; font-family: var(--font-numeric); font-size: 21px; font-weight: 500; line-height: 1.5; letter-spacing: -.04em; overflow-wrap: anywhere; color: var(--dao-ink); }
+.dao-funding-quote-amount > span { font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--dao-muted); }
+.dao-funding-quote-rate { font-size: 12px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dao-funding-quote-time, .dao-funding-quote-validity { margin-top: 9px; font-size: 12px; line-height: 1.7; color: var(--dao-muted); }
+.dao-funding-quote-time a { color: var(--dao-accent); text-underline-offset: 3px; }
+.dao-funding-quote-history { margin-top: 16px; font-size: 12px; line-height: 1.75; color: var(--dao-muted); }
+.dao-funding-quote-history summary { cursor: pointer; min-height: 32px; color: var(--dao-secondary); }
+.dao-funding-quote-history p { margin: 10px 0; }
+.dao-funding-quote-record { display: flex; flex-direction: column; padding: 12px 0; gap: 4px; border-top: 1px solid var(--dao-line); overflow-wrap: anywhere; }
+.dao-funding-quote-record strong { font-variant-numeric: tabular-nums; color: var(--dao-ink); }
+.dao-app .dao-back-link { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 16px; color: var(--dao-muted); font-size: 14px; }
+.dao-back-link:hover { color: var(--dao-accent); text-decoration: underline; text-underline-offset: 4px; }
+.dao-discussion { margin-top: 24px; }
+.dao-discussion .dao-section-heading { align-items: center; margin-bottom: 14px; }
+.dao-count { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; vertical-align: middle; margin-left: 7px; border-radius: 6px; background: var(--dao-accent-soft); padding: 3px 7px; color: var(--dao-accent); font-size: 13px; font-weight: 600; letter-spacing: 0; }
+.dao-app .dao-comment-sort select { width: auto; min-height: 44px; padding: 9px 38px 9px 13px; border-color: transparent; border-radius: 9px; background-color: var(--dao-soft); color: var(--dao-secondary); font-size: 13px; font-weight: 500; }
+.dao-app .dao-comment-sort select:hover { border-color: var(--dao-line-strong); }
+.dao-discussion-policy { color: var(--dao-muted); font-size: 13px; line-height: 1.7; }
+.dao-comment-composer { margin-top: 24px; padding: 20px; border: 1px solid var(--dao-line); border-radius: 10px; background: var(--dao-canvas); }
+.dao-composer-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+.dao-composer-heading > label { font-size: 14px; font-weight: 600; }
+.dao-comment-composer textarea { background: var(--dao-paper); min-height: 120px; font-size: 16px; }
+.dao-composer-footer { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 16px; }
+.dao-composer-footer > p { color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-composer-footer > p > span { display: block; margin-top: 5px; font-family: var(--font-numeric); font-size: 11px; }
+.dao-reply-context { margin-bottom: 14px !important; padding-left: 12px; border-left: 2px solid var(--dao-gold); color: var(--dao-muted); font-size: 13px; overflow-wrap: anywhere; }
+.dao-comment-list, .dao-comment-replies { list-style: none; margin: 0; padding: 0; }
+.dao-comment-list { margin-top: 28px; }
+.dao-comment-list > li { padding: 25px 0; border-top: 1px solid var(--dao-line); }
+.dao-comment-list > li:last-child { padding-bottom: 0; }
+.dao-comment-header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.dao-comment-avatar { width: 34px; height: 34px; font-size: 13px; }
+.dao-comment-header > strong { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.dao-app .dao-comment-permalink { margin-left: auto; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-comment-permalink:hover { text-decoration: underline; text-underline-offset: 3px; }
+.dao-comment-body { margin: 12px 0 0 44px !important; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--dao-secondary); font-size: 16px; line-height: 1.8; }
+.dao-comment-actions { display: flex; gap: 20px; margin: 7px 0 0 44px; }
+.dao-comment-replies { margin: 20px 0 0 16px; padding-left: 24px; border-left: 2px solid var(--dao-line); }
+.dao-comment-replies > li { margin-top: 22px; }
+.dao-comment-tombstone { margin: 14px 0 0 44px; padding: 16px; border: 1px dashed var(--dao-line-strong); border-radius: 7px; color: var(--dao-muted); background: var(--dao-canvas); font-size: 14px; }
+.dao-comment-tombstone > span { display: block; font-size: 12px; margin-top: 10px; }
+.dao-moderation-reason { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 7px !important; }
+.dao-moderation-form { margin: 14px 0 0 44px; padding: 18px; border: 1px solid var(--dao-line-strong); border-radius: 8px; background: var(--dao-soft); }
+.dao-read-only { margin-top: 22px !important; padding: 16px; border: 1px solid var(--dao-line); border-radius: 8px; background: var(--dao-canvas); color: var(--dao-muted); font-size: 14px; }
+.dao-discussion-empty { padding: 32px 0 8px; text-align: center; color: var(--dao-secondary); font-size: 16px; }
+.dao-loading { position: relative; z-index: 1; min-height: 100dvh; padding: 15vh max(24px, 8vw); }
+.dao-loading h1 { margin: 12px 0 18px; font-family: var(--font-body); font-size: 36px; font-weight: 650; letter-spacing: -.04em; }
+.dao-loading .dao-button { margin-top: 20px; }
+
+@media (max-width: 1100px) {
+  .dao-detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .dao-detail-meta { position: static; }
+  .dao-board-layout { grid-template-columns: minmax(0, 1fr) 280px; gap: 20px; }
+  .dao-main { padding: 24px; }
+  .dao-community-sidebar { padding: 20px; }
+  .dao-proposal-row { padding: 20px; }
+  .dao-proposal-tools { align-items: stretch; }
+  .dao-search { width: 100%; }
+}
+@media (max-width: 900px) {
+  .dao-board-layout { grid-template-columns: minmax(0, 1fr); }
+  .dao-community-sidebar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 20px 30px; }
+  .dao-community-sidebar > .dao-treasury-section { grid-column: 2; grid-row: 1 / 3; }
+  .dao-proposal-tools { flex-wrap: nowrap; }
+  .dao-search { width: 230px; }
+}
+@media (max-width: 650px) {
+  .dao-main { padding: 22px 18px; }
+  .dao-page-heading h1 { font-size: 30px; }
+  .dao-page-subtitle { font-size: 14px; }
+  .dao-proposal-tools { flex-wrap: wrap; gap: 12px; }
+  .dao-filter-list { width: 100%; gap: 0; justify-content: space-between; }
+  .dao-zcg-examples .dao-filter-list { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding-block: 2px; scrollbar-width: none; }
+  .dao-zcg-examples .dao-filter { flex: none; }
+  .dao-app .dao-filter { padding: 8px 9px; font-size: 12px; }
+  .dao-search { width: 100%; }
+  .dao-app .dao-search input { min-height: 44px; font-size: 16px; }
+  .dao-proposal-card-heading { flex-direction: column; gap: 12px; }
+  .dao-proposal-row { padding: 18px; }
+  .dao-app .dao-proposal-title { font-size: 17px; }
+  .dao-proposal-card-footer { flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; }
+  .dao-proposal-date { text-align: left; }
+  .dao-proposal-meta { gap: 8px 12px; }
+  .dao-community-sidebar { display: flex; }
+  .dao-community-sidebar > section, .dao-community-sidebar > details { width: 100%; }
+  .dao-panel { padding: 22px 20px; }
+  .dao-field-row { flex-direction: column; gap: 24px; }
+  .dao-detail-grid { gap: 20px; }
+  .dao-proposal-body { font-size: 16px; line-height: 1.85; }
+  .dao-discussion .dao-section-heading { flex-wrap: wrap; align-items: center; }
+  .dao-comment-composer { padding: 16px; }
+  .dao-composer-footer { flex-direction: column; align-items: flex-start; }
+  .dao-composer-footer .dao-button { width: 100%; }
+  .dao-comment-permalink { width: 100%; margin-left: 44px !important; }
+  .dao-comment-replies { margin-left: 5px; padding-left: 16px; }
+  .dao-comment-body, .dao-comment-actions, .dao-comment-tombstone, .dao-moderation-form { margin-left: 0 !important; }
+  .dao-detail-meta h2 { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.dao-app) { scroll-behavior: auto; }
+  .dao-app *, .dao-app *::before, .dao-app *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media (max-width: 1100px) {
+  .dao-header-main { gap: 48px; padding-left: 28px; padding-right: 28px; }
+  .dao-space-context { padding-left: 24px; flex-basis: 320px; }
+  .dao-account-copy { display: none; }
+}
+@media (max-width: 900px) {
+  .dao-header-main { gap: 20px; min-height: 64px; padding: 0 20px; }
+  .dao-brand { --dao-brand-mark-size: 40px; font-size: 26px; }
+  .dao-account { margin-left: auto; }
+  .dao-space-context { display: none; }
+  .dao-switcher-popover { width: 100%; max-width: none; max-height: min(480px, calc(100dvh - 195px)); }
+  .dao-navigation { --dao-nav-font-size: 13px; gap: 16px; }
+  .dao-app .dao-nav-link { min-height: 64px; gap: 6px; padding: 2px 2px 0; }
+  .dao-nav-link svg { width: 16px; height: 16px; }
+}
+@media (max-width: 600px) {
+  .dao-header-main { gap: 12px; min-height: 60px; padding: 0 16px; }
+  .dao-navigation { gap: 4px; }
+  .dao-app .dao-nav-link { min-width: 44px; min-height: 60px; padding: 2px 0 0; }
+  .dao-nav-link > span { display: none; }
+  .dao-nav-link svg { width: 19px; height: 19px; }
+  .dao-account { gap: 0; }
+  .dao-account-chevron { display: none; }
+  .dao-app .dao-account-trigger { min-width: 44px; justify-content: center; }
+}
+@media (max-width: 450px) {
+  .dao-header-main { padding: 0 12px; gap: 8px; }
+  .dao-brand { --dao-brand-mark-size: 36px; gap: 8px; font-size: 22px; }
+  .dao-account .dao-account-avatar { width: 30px; height: 30px; font-size: 12px; }
+  .dao-navigation { gap: 0; }
+  .dao-switcher-popover { padding: 16px; }
+  .dao-app .dao-switcher-search input { font-size: 16px; }
+}
+
+/* Native controls, logo silhouettes and document chrome follow the same scheme. */
+html:has(.dao-theme-root) { color-scheme: light; }
+html:has(.dao-theme-root[data-theme="dark"]) { color-scheme: dark; }
+body:has(.dao-theme-root)::before { display: none; }
+@media (prefers-color-scheme: dark) {
+  html:has(.dao-theme-root[data-theme="system"]) { color-scheme: dark; }
+}
+.dao-theme-root { background: var(--dao-canvas); }
+.dao-header { border-top: 2px solid #f4b728; }
+.dao-app .dao-theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--dao-accent); box-shadow: none; cursor: pointer; }
+.dao-app .dao-theme-toggle:hover { color: var(--dao-ink); background: transparent; }
+.dao-theme-icon { width: 21px; height: 21px; pointer-events: none; }
+.dao-theme-icon--light { display: none; }
+.dao-theme-root[data-theme="dark"] .dao-theme-icon--light { display: block; }
+.dao-theme-root[data-theme="dark"] .dao-theme-icon--dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .dao-theme-root[data-theme="system"] .dao-theme-icon--light { display: block; }
+  .dao-theme-root[data-theme="system"] .dao-theme-icon--dark { display: none; }
+}
+.dao-zcash-mark { display: inline-block; flex: none; width: 26px; height: 34px; background: var(--dao-logo-ink); mask: url("/brand/zcash-currency-mark.png") center / auto 100% no-repeat; -webkit-mask: url("/brand/zcash-currency-mark.png") center / auto 100% no-repeat; }
+.dao-brand .dao-zcash-mark { width: calc(var(--dao-brand-mark-size) * .76); height: var(--dao-brand-mark-size); }
+@media (max-width: 450px) {
+  .dao-account .dao-account-avatar { display: none; }
+}
+
+@media (max-width: 900px) {
+  .dao-header { position: relative; }
+  .dao-app [id], .dao-app :focus { scroll-margin-top: 20px; }
+  .dao-space-context .dao-switcher-trigger { min-height: 44px; }
+  .dao-switcher-label { font-size: 9px; }
+  .dao-switcher-trigger-copy { gap: 1px; }
+  .dao-switcher-avatar { width: 31px; height: 31px; }
+}
+
+/* Account controls stay within the same quiet workspace palette. */
+.dao-account-menu { position: relative; }
+.dao-app .dao-account-trigger { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 3px 4px; text-align: left; border-radius: 8px; cursor: pointer; }
+.dao-app .dao-account-trigger:hover { background: var(--dao-soft); }
+.dao-account-chevron { color: var(--dao-muted); flex: none; }
+.dao-account-avatar img, .dao-settings-avatar img, .dao-comment-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.dao-account-popover { position: absolute; z-index: 60; right: 0; top: calc(100% + 12px); width: min(236px, calc(100vw - 32px)); padding: 8px; border-radius: 14px; background: var(--dao-paper); box-shadow: 0 12px 40px var(--dao-shadow); text-align: left; }
+.dao-account-summary { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 14px; overflow-wrap: anywhere; }
+.dao-account-summary strong { font-size: 15px; line-height: 1.4; }
+.dao-account-summary span { color: var(--dao-muted); font-size: 12px; }
+.dao-app .dao-account-popover button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 6px; font-size: 14px; text-align: left; cursor: pointer; }
+.dao-app .dao-account-popover button:hover { background: var(--dao-soft); }
+.dao-account-popover form { margin-top: 4px; }
+.dao-account-popover form button { color: var(--dao-muted); }
+.dao-account-profile-link > span { display: grid; gap: 2px; font-weight: 600; }
+.dao-account-profile-link small { color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.dao-account-guest { color: var(--dao-muted); padding: 0 12px; font-size: 13px; }
+.dao-app .dao-settings-dialog { position: fixed; inset: 0; width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 0; border-radius: 16px; background: var(--dao-paper); color: var(--dao-ink); box-shadow: 0 24px 80px #0004; overflow-y: auto; overscroll-behavior: contain; }
+.dao-settings-dialog::backdrop { background: #16151280; }
+.dao-settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 28px 20px; }
+.dao-settings-heading .dao-eyebrow { font-size: 10px; letter-spacing: .14em; margin: 0; color: var(--dao-muted); }
+.dao-settings-heading h2 { font-size: 25px; letter-spacing: -.04em; line-height: 1.3; margin: 5px 0 0; }
+.dao-app .dao-settings-close { display: grid; place-items: center; width: 44px; min-height: 44px; flex: none; border-radius: 50%; cursor: pointer; }
+.dao-app .dao-settings-close:hover { background: var(--dao-soft); }
+.dao-settings-nav { display: flex; gap: 8px; padding: 0 28px 0; border-bottom: 1px solid var(--dao-line); }
+.dao-app .dao-settings-nav button { display: flex; align-items: center; gap: 8px; padding: 8px 16px 12px; border-bottom: 2px solid transparent; border-radius: 0; font-size: 14px; color: var(--dao-muted); cursor: pointer; }
+.dao-app .dao-settings-nav button[aria-pressed="true"] { color: var(--dao-ink); border-bottom-color: var(--dao-primary-bg); }
+.dao-settings-nav { flex-wrap: wrap; }
+.dao-passkey-list { list-style: none; margin: 20px 0; padding: 0; }
+.dao-passkey-list li { display: flex; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--dao-line); }
+.dao-passkey-list li > div { flex: 1; min-width: 0; }
+.dao-passkey-list strong { display: block; font-size: 14px; overflow-wrap: anywhere; }
+.dao-passkey-list small { display: block; margin-top: 4px; font-size: 12px; color: var(--dao-muted); }
+.dao-passkey-empty { margin: 24px 0; color: var(--dao-muted); font-size: 14px; }
+.dao-passkey-form { display: grid; gap: 18px; margin-top: 24px; }
+.dao-passkey-actions { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+.dao-passkey-notice { margin-top: 18px; color: var(--dao-accent); font-size: 13px; line-height: 1.6; }
+@media (max-width: 600px) {
+  .dao-settings-nav { flex-wrap: nowrap; gap: 4px; }
+  .dao-app .dao-settings-nav button { flex: 1; justify-content: center; gap: 6px; padding: 8px 6px 12px; font-size: 12px; }
+}
+.dao-settings-content { padding: 28px; min-height: 335px; }
+.dao-settings-avatar-row { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+.dao-settings-avatar { flex: none; display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; border-radius: 50%; background: var(--dao-avatar-bg); color: var(--dao-avatar-ink); font-size: 27px; font-weight: 600; }
+.dao-settings-avatar-row strong { font-size: 14px; font-weight: 600; }
+.dao-settings-avatar-row p { font-size: 12px; color: var(--dao-muted); margin: 3px 0 0; }
+.dao-avatar-actions { display: flex; gap: 16px; }
+.dao-app .dao-avatar-actions button { font-size: 12px; min-height: 36px; }
+.dao-settings-form .dao-field { gap: 7px; }
+.dao-settings-form .dao-field label { font-size: 13px; font-weight: 600; }
+.dao-app .dao-settings-form .dao-field input { width: 100%; border: 1px solid var(--dao-control-border); border-radius: 7px; background: var(--dao-paper); padding: 11px 12px; font-size: 16px; color: var(--dao-ink); min-height: 46px; }
+.dao-settings-form .dao-field-hint { font-size: 12px; margin-top: 5px; }
+.dao-settings-identity { margin-top: 24px; display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; font-size: 13px; }
+.dao-settings-identity > span { color: var(--dao-muted); }
+.dao-settings-identity > strong { font-weight: 500; overflow-wrap: anywhere; }
+.dao-settings-identity > p { grid-column: 1 / -1; font-size: 12px; margin: 2px 0 0; color: var(--dao-muted); }
+.dao-settings-section-title { font-size: 17px; font-weight: 600; letter-spacing: -.02em; margin: 0 0 6px; }
+.dao-settings-description { color: var(--dao-muted); font-size: 13px; margin: 0 0 22px; }
+.dao-privacy-option { display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; }
+.dao-privacy-option strong { font-size: 13px; display: block; font-weight: 600; }
+.dao-privacy-option small { font-size: 12px; color: var(--dao-muted); display: block; margin-top: 5px; }
+.dao-app .dao-privacy-option input { appearance: none; -webkit-appearance: none; width: 42px; min-width: 42px; height: 24px; min-height: 24px; padding: 0; background: var(--dao-line-strong); border-radius: 20px; border: 1px solid var(--dao-control-border); cursor: pointer; }
+.dao-privacy-option input::before { content: ""; display: block; width: 18px; height: 18px; margin: 2px; border-radius: 50%; background: var(--dao-paper); transition: transform .12s ease; }
+.dao-app .dao-privacy-option input:checked { background: var(--dao-primary-bg); border-color: var(--dao-primary-bg); }
+.dao-privacy-option input:checked::before { transform: translateX(18px); background: #1c1917; }
+.dao-profile-preview { display: flex; align-items: center; gap: 12px; padding: 18px; border-radius: 8px; margin-top: 24px; background: var(--dao-soft); }
+.dao-profile-preview > span:nth-child(2) { min-width: 0; }
+.dao-profile-preview strong { display: block; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.dao-profile-preview small { display: block; font-size: 12px; color: var(--dao-muted); overflow-wrap: anywhere; }
+.dao-profile-preview-label { margin-left: auto; font-size: 11px; color: var(--dao-muted); }
+.dao-settings-privacy-note { font-size: 12px; color: var(--dao-muted); margin: 16px 0 0; line-height: 1.7; }
+.dao-settings-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 18px 28px; background: var(--dao-soft); }
+.dao-app .dao-settings-footer .dao-button { min-height: 44px; font-size: 13px; padding: 9px 18px; }
+.dao-settings-message { padding: 28px; font-size: 14px; }
+.dao-comment-username { display: block; font-size: 11px; font-weight: 400; color: var(--dao-muted); }
+@media (max-width: 450px) {
+  .dao-account { gap: 0; }
+  .dao-account .dao-account-avatar { display: inline-flex; }
+  .dao-account-chevron { display: none; }
+  .dao-account-trigger { justify-content: center; min-width: 44px; }
+  .dao-settings-heading { padding: 20px 20px 16px; }
+  .dao-settings-heading h2 { font-size: 22px; }
+  .dao-settings-nav { padding: 0 20px; }
+  .dao-settings-content { padding: 24px 20px; }
+  .dao-settings-footer { padding: 16px 20px; }
+  .dao-settings-avatar-row { gap: 16px; }
+  .dao-settings-avatar { width: 64px; height: 64px; }
+  .dao-profile-preview { padding: 14px; }
+}
+.dao-settings-content .dao-settings-description { margin: 0 0 22px; }
+.dao-settings-content .dao-settings-privacy-note { margin: 16px 0 0; }
+.dao-settings-content .dao-settings-avatar-row p { margin: 3px 0 0; }
+.dao-settings-content .dao-field-hint { margin: 5px 0 0; }
+.dao-settings-content .dao-settings-identity > p { margin: 2px 0 0; }
+
+/* One account card: identity, credits and optional sign-in controls. */
+.dao-app .dao-account-card { width: min(520px, calc(100vw - 32px)); padding-bottom: 20px; border-radius: 20px; }
+.dao-account-card .dao-settings-heading { padding: 20px 28px 16px; }
+.dao-account-card .dao-settings-heading h2 { margin: 0; font-size: 22px; letter-spacing: -.035em; }
+.dao-account-card .dao-settings-content { min-height: 0; padding: 0 28px; }
+.dao-settings-personal { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 20px; align-items: center; }
+.dao-settings-photo { display: grid; justify-items: center; }
+.dao-app .dao-settings-photo .dao-text-button { min-height: 36px; padding: 0; font-size: 11px; white-space: nowrap; }
+.dao-settings-name { min-width: 0; }
+.dao-account-card .dao-settings-name .dao-field { margin: 0; gap: 6px; }
+.dao-account-card .dao-settings-name .dao-field label { color: var(--dao-muted); font-size: 12px; font-weight: 400; }
+.dao-app .dao-account-card .dao-settings-form .dao-field input { border: 0; border-radius: 9px; background: var(--dao-soft); min-height: 44px; font-size: 15px; padding: 10px 12px; }
+.dao-settings-handle { display: block; margin-top: 6px; color: var(--dao-muted); font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
+.dao-account-card .dao-settings-name .dao-settings-username { margin-top: 10px; }
+.dao-settings-username-input { position: relative; }
+.dao-settings-username-input > span { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); color: var(--dao-muted); font-size: 15px; pointer-events: none; }
+.dao-app .dao-account-card .dao-settings-form .dao-settings-username-input input { width: 100%; padding-left: 32px; }
+.dao-app .dao-settings-name .dao-text-button { min-height: 32px; font-size: 11px; }
+.dao-account-card .dao-privacy-option { margin-top: 22px; gap: 16px; }
+.dao-account-card .dao-privacy-option strong { font-size: 12px; font-weight: 500; }
+.dao-account-card .dao-privacy-option small { margin-top: 3px; font-size: 11px; }
+.dao-account-card .dao-settings-footer { padding: 16px 28px 0; background: transparent; gap: 8px; }
+.dao-app .dao-account-card .dao-settings-footer .dao-button { border: 0; min-height: 38px; padding: 8px 14px; font-size: 12px; }
+.dao-account-credits { margin-top: 32px; }
+.dao-account-card .dao-credit-section { border: 0; }
+.dao-account-card .dao-credit-section > summary { min-height: 42px; font-size: 12px; gap: 8px; }
+.dao-account-card .dao-credit-section > summary::after { width: 5px; height: 5px; }
+.dao-account-passkeys { margin: 12px 28px 0; }
+.dao-account-passkeys > summary small { color: var(--dao-muted); font-size: 11px; font-weight: 400; margin-left: auto; }
+.dao-account-card .dao-account-passkeys > summary::after { margin-left: 4px; }
+.dao-account-card .dao-passkeys { padding: 8px 0 0; }
+.dao-account-card .dao-passkey-list { margin: 12px 0; }
+.dao-account-card .dao-passkey-list li { border: 0; padding: 8px 0; }
+.dao-account-card .dao-passkey-empty { margin: 12px 0; font-size: 12px; }
+.dao-account-card .dao-settings-description, .dao-account-card .dao-settings-privacy-note { font-size: 12px; line-height: 1.6; }
+@media (max-width: 450px) {
+  .dao-account-card .dao-settings-heading { padding: 16px 20px 14px; }
+  .dao-account-card .dao-settings-content { padding: 0 20px; }
+  .dao-account-card .dao-settings-footer { padding: 14px 20px 0; }
+  .dao-settings-personal { grid-template-columns: 58px minmax(0, 1fr); gap: 14px; }
+  .dao-account-card .dao-settings-avatar { width: 56px; height: 56px; font-size: 23px; }
+  .dao-app .dao-account-card .dao-settings-form .dao-field input { font-size: 16px; }
+  .dao-account-passkeys { margin-inline: 20px; }
+}
+
+@media (max-width: 360px) {
+  .dao-header-main { gap: 1px; padding: 0 4px; }
+  .dao-brand { --dao-brand-mark-size: 30px; gap: 5px; font-size: 18px; }
+}
+
+.dao-collection-check { margin: 24px 0; padding-top: 24px; border-top: 1px solid var(--dao-line); }
+.dao-funding-quote + .dao-collection-check { padding-top: 0; border-top: 0; }
+.dao-collection-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dao-collection-heading h3 { margin: 0; font-size: 14px; }
+.dao-collection-check .dao-collection-state { margin: 14px 0 6px; font-weight: 600; font-size: 15px; }
+.dao-collection-time { color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-collection-time time { display: block; font-variant-numeric: tabular-nums; }
+.dao-collection-check .dao-button { margin-top: 8px; }
+.dao-collection-details { margin-top: 16px; color: var(--dao-muted); font-size: 12px; line-height: 1.6; }
+.dao-collection-details summary { cursor: pointer; font-weight: 600; }
+.dao-collection-details > p { margin: 10px 0; }
+.dao-collection-details dl { margin: 12px 0; }
+.dao-collection-details dd { font-variant-numeric: tabular-nums; }
+.dao-collection-record { display: flex; flex-direction: column; padding: 8px 0; }
+.dao-collection-record strong { color: var(--dao-ink); }
+.dao-membership-access { max-width: 650px; margin-inline: auto; padding: clamp(24px, 4vw, 44px); }
+.dao-membership-access h2 { margin: 10px 0 14px; font-size: clamp(25px, 3vw, 32px); letter-spacing: -.035em; }
+.dao-membership-access > p { line-height: 1.6; }
+.dao-membership-access > .dao-button { margin-block: 8px 12px; }
+.dao-membership-icon { display: inline-flex; padding: 12px; margin-bottom: 22px; border-radius: 16px; color: var(--dao-accent); background: var(--dao-soft); }
+.dao-account-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dao-account-identity > div { display: grid; gap: 5px; min-width: 0; }
+.dao-account-identity strong { overflow-wrap: anywhere; }
+.dao-account-identity > div > span { color: var(--dao-muted); font-size: 13px; }
+.dao-membership-access .dao-account-identity { padding-block: 20px 26px; }
+.dao-membership-requests { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--dao-line); }
+.dao-members-heading + .dao-membership-requests { margin-top: 0; margin-bottom: 24px; padding-top: 0; border-top: 0; }
+.dao-membership-requests h2 { display: flex; align-items: center; gap: 10px; font-size: 22px; }
+.dao-request-count { font-size: 13px; color: var(--dao-muted); background: var(--dao-soft); border-radius: 6px; padding: 4px 8px; }
+.dao-request-list { list-style: none; margin: 0; padding: 0; }
+.dao-request-list > li { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 20px; }
+.dao-request-list > li + li { border-top: 1px solid var(--dao-line); }
+.dao-request-list .dao-form-actions { margin: 0; }
+.dao-roster-check { display: flex; align-items: center; gap: 12px; min-height: 48px; cursor: pointer; }
+.dao-form .dao-roster-check input { width: 18px; height: 18px; min-height: 18px; accent-color: var(--dao-accent); }
+.dao-legacy-identity { font-size: 13px; }
+.dao-legacy-identity summary { cursor: pointer; color: var(--dao-muted); }
+.dao-legacy-identity > span { display: block; padding-top: 8px; overflow-wrap: anywhere; }
+.dao-member-account-label { font-size: 13px; }
+.dao-copy-join { max-width: 100%; }
+@media (max-width: 680px) {
+  .dao-request-list > li { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .dao-membership-requests .dao-section-heading { align-items: flex-start; gap: 12px; flex-direction: column; }
+}
+
+/* Public author withdrawal stays visible beside the preserved record. */
+.proposal-abandonment { margin: 18px 0; padding: 18px 20px; border-radius: 10px; background: var(--dao-soft); font-size: 13px; }
+.proposal-abandonment > div { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.proposal-abandonment time { color: var(--dao-muted); font-size: 11px; }
+.proposal-abandonment p, .proposal-activity-reason { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; color: var(--dao-muted); }
+.proposal-abandonment .dao-text-button { font-size: 12px; }
+.dao-status--abandoned { color: var(--dao-muted); background: var(--dao-soft); }
+
+/* Borderless conversations: the rail follows the parent avatar and stops at
+   the last reply. Keep its geometry shared with the mobile content gutter. */
+.dao-discussion .dao-comment-list {
+  --thread-root-size: 32px;
+  --thread-axis: 16px;
+  --thread-branch: 26px;
+  --thread-gap: 4px;
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+.dao-discussion .dao-comment-list > li {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.dao-app .dao-discussion .dao-comment {
+  --comment-avatar-size: var(--thread-root-size);
+  --comment-inset: 42px;
+  position: relative;
+  min-width: 0;
+  padding: 8px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.dao-comment-list li:has(> .dao-comment-replies) > .dao-comment::before {
+  content: "";
+  position: absolute;
+  left: var(--thread-axis);
+  top: calc(8px + var(--thread-root-size) + 4px);
+  bottom: 0;
+  border-left: 1px solid var(--dao-line-strong);
+  pointer-events: none;
+}
+.dao-comment .dao-comment-header {
+  display: grid;
+  grid-template-columns: var(--comment-avatar-size) minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  align-items: center;
+}
+.dao-comment .dao-comment-avatar {
+  align-self: start;
+  width: var(--comment-avatar-size);
+  height: var(--comment-avatar-size);
+}
+.dao-comment-header > strong { min-width: 0; line-height: 1.4; }
+.dao-app .dao-comment .dao-comment-permalink {
+  width: auto;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: right;
+}
+.dao-discussion .dao-comment-body {
+  margin: 6px 0 0 var(--comment-inset) !important;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.dao-discussion .dao-comment-actions {
+  gap: 4px 12px;
+  margin: 2px 0 0 var(--comment-inset);
+}
+.dao-discussion .dao-comment-replies {
+  display: grid;
+  gap: var(--thread-gap);
+  margin: var(--thread-gap) 0 0 var(--thread-axis);
+  padding-left: var(--thread-branch);
+  border: 0;
+}
+.dao-discussion .dao-comment-replies > li {
+  --thread-root-size: 28px;
+  --thread-axis: 14px;
+  position: relative;
+  min-width: 0;
+  margin: 0;
+}
+.dao-comment-replies > li::before {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--thread-gap));
+  bottom: 0;
+  left: calc(-1 * var(--thread-branch));
+  border-left: 1px solid var(--dao-line-strong);
+  pointer-events: none;
+}
+.dao-comment-replies > li:last-child::before {
+  bottom: auto;
+  height: calc(var(--thread-gap) + 14px);
+}
+.dao-comment-replies > li::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: calc(-1 * var(--thread-branch));
+  width: calc(var(--thread-branch) - 6px);
+  height: 8px;
+  border-left: 1px solid var(--dao-line-strong);
+  border-bottom: 1px solid var(--dao-line-strong);
+  border-bottom-left-radius: 8px;
+  pointer-events: none;
+}
+.dao-app .dao-discussion .dao-comment-replies .dao-comment {
+  --comment-avatar-size: 28px;
+  --comment-inset: 38px;
+}
+.dao-thread-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-top: 14px;
+}
+.dao-thread-parent { color: var(--dao-muted); }
+.dao-thread-continue {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  margin: 4px 0 0 38px;
+  font-size: 12px;
+}
+.dao-thread-continue > span:first-child { color: var(--dao-muted); font-weight: 400; }
+.dao-comment .dao-comment-tombstone,
+.dao-comment .dao-moderation-form,
+.dao-comment .dao-reaction-error {
+  margin: 8px 0 6px var(--comment-inset);
+}
+.dao-comment .dao-comment-tombstone {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 650px) {
+  .dao-discussion .dao-comment-list {
+    --thread-root-size: 28px;
+    --thread-axis: 14px;
+    --thread-branch: 20px;
+  }
+  .dao-app .dao-discussion .dao-comment {
+    --comment-inset: 38px;
+  }
+  .dao-comment .dao-comment-header {
+    grid-template-columns: var(--comment-avatar-size) minmax(0, 1fr);
+  }
+  .dao-comment .dao-comment-avatar { grid-row: 1 / 3; }
+  .dao-app .dao-comment .dao-comment-permalink {
+    grid-column: 2;
+    margin: 0 !important;
+    text-align: left;
+  }
+  .dao-discussion .dao-comment-body,
+  .dao-discussion .dao-comment-actions,
+  .dao-comment .dao-comment-tombstone,
+  .dao-comment .dao-moderation-form,
+  .dao-comment .dao-reaction-error { margin-left: var(--comment-inset) !important; }
+}
+
+
+/* Version history follows the same compact, borderless discussion flow. */
+.dao-comment-edit, .dao-comment-withdraw, .dao-comment-history { margin: .45rem 0 .45rem 2.5rem; max-width: 58rem; }
+.dao-app .dao-comment .dao-comment-edit textarea { width: 100%; height: auto; min-height: 96px; padding: 12px; font-size: 16px; line-height: 1.5; resize: vertical; }
+.dao-app .dao-comment :is(.dao-comment-edit, .dao-comment-withdraw) .dao-comment-actions { margin: 0; }
+.dao-comment-history > button { font-size: .75rem; }
+.dao-comment-history ol { list-style: none; padding: 0 0 0 1rem; margin: .6rem 0 0; border-left: 1px solid var(--dao-line); }
+.dao-comment-history li { padding: .55rem 0; }
+.dao-comment-history li > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .8rem; font-size: .75rem; }
+.dao-comment-history li span { color: var(--dao-muted); }
+.dao-comment-history li p, .dao-comment-withdraw p { margin: .35rem 0 .5rem; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .875rem; }
+@media (max-width: 600px) { .dao-comment-edit, .dao-comment-withdraw, .dao-comment-history { margin-left: 0; } }
+
+.dao-app .dao-comment-edit { gap: 10px; }
+.dao-comment-edit .dao-field-hint { margin: 0; font-size: 12px; }
+.dao-app .dao-comment-edit .dao-button, .dao-app .dao-comment-withdraw .dao-button { min-height: 38px; padding: 8px 14px; border-radius: 9px; font-size: 12px; }
+.dao-app .dao-comment-edit .dao-text-button, .dao-app .dao-comment-withdraw .dao-text-button { min-height: 38px; padding: 8px 12px; border-radius: 9px; }
+.dao-comment-more { position: relative; display: inline-flex; }
+.dao-app .dao-comment-more-toggle { display: inline-flex; align-items: center; justify-content: center; width: 36px; min-height: 36px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--dao-muted); cursor: pointer; }
+.dao-app .dao-comment-more-toggle:hover, .dao-app .dao-comment-more-toggle[aria-expanded="true"] { background: var(--dao-soft); color: var(--dao-ink); }
+.dao-comment-menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 8; width: 184px; padding: 5px; border: 1px solid var(--dao-line); border-radius: 12px; background: var(--dao-paper); box-shadow: 0 8px 28px #0002; }
+.dao-app .dao-comment-menu > button { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 40px; padding: 9px 10px; border: 0; border-radius: 8px; text-align: left; font-size: 12px; font-weight: 500; background: transparent; color: var(--dao-ink); cursor: pointer; }
+.dao-app .dao-comment-menu > button:hover, .dao-app .dao-comment-menu > button:focus-visible { background: var(--dao-soft); }
+.dao-app .dao-comment-menu > .dao-comment-withdraw-action { color: var(--dao-error); }
+.dao-comment-menu svg { flex: none; }
+@media (max-width: 600px) { .dao-app .dao-comment-more-toggle { min-height: 40px; width: 40px; } }

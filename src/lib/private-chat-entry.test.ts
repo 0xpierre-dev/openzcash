@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { chatEntryResponse, chatServiceOrigin, PRIVATE_CHAT_SERVICE_ORIGIN } from "./private-chat-entry";
+import { chatEntryResponse, chatServiceOrigin } from "./private-chat-entry";
+const PRIVATE_CHAT_SERVICE_ORIGIN = "https://chat.example.org";
 import { APPS } from "./design-routes";
 
 beforeEach(() => {
@@ -12,14 +13,21 @@ beforeEach(() => {
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); document.body.innerHTML = ""; window.history.replaceState(null, "", "/"); });
 
 describe("isolated chat entry document", () => {
-  it("pins the production service and restricts preview overrides to loopback", () => {
-    expect(chatServiceOrigin({ NODE_ENV: "production", PRIVATE_CHAT_LOCAL_ORIGIN: "https://evil.example" })).toBe(PRIVATE_CHAT_SERVICE_ORIGIN);
+  it("requires an explicitly configured origin and limits HTTP to local development", () => {
+    expect(chatServiceOrigin({ NODE_ENV: "production" })).toBeNull();
+    expect(chatServiceOrigin({ NODE_ENV: "production", PRIVATE_CHAT_SERVICE_ORIGIN })).toBe(PRIVATE_CHAT_SERVICE_ORIGIN);
     expect(chatServiceOrigin({ NODE_ENV: "development", PRIVATE_CHAT_LOCAL_ORIGIN: "http://127.0.0.1:4431" })).toBe("http://127.0.0.1:4431");
-    for (const url of ["https://evil.example", "http://user@127.0.0.1:4431", "http://127.0.0.1:4431/path", "http://127.0.0.1:4431?x=1"])
-      expect(() => chatServiceOrigin({ NODE_ENV: "development", PRIVATE_CHAT_LOCAL_ORIGIN: url })).toThrow();
+    for (const url of ["http://external.example", "http://user@127.0.0.1:4431", "https://chat.example.org/path", "https://chat.example.org?x=1", "javascript:alert(1)"])
+      expect(chatServiceOrigin({ NODE_ENV: "development", PRIVATE_CHAT_SERVICE_ORIGIN: url })).toBeNull();
+    expect(chatServiceOrigin({ NODE_ENV: "production", PRIVATE_CHAT_SERVICE_ORIGIN: "http://127.0.0.1:4431" })).toBeNull();
+  });
+  it("does not contact any chat service before configuration", async () => {
+    const response = chatEntryResponse("test-nonce", null);
+    expect(response.status).toBe(503);
+    expect(await response.text()).not.toContain("<iframe");
   });
   it("serves only a nonce-protected wrapper, without the portal runtime or network access", async () => {
-    const response = chatEntryResponse("test-nonce");
+    const response = chatEntryResponse("test-nonce", PRIVATE_CHAT_SERVICE_ORIGIN);
     const html = await response.text();
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(response.headers.get("referrer-policy")).toBe("no-referrer");
@@ -37,7 +45,7 @@ describe("isolated chat entry document", () => {
   it("clears fragments and forwards them only once after the expected frame is ready", async () => {
     vi.useFakeTimers();
     window.history.replaceState(null, "", "/private-chat#invite=synthetic-invite");
-    const html = await chatEntryResponse("test-nonce").text();
+    const html = await chatEntryResponse("test-nonce", PRIVATE_CHAT_SERVICE_ORIGIN).text();
     document.documentElement.innerHTML = html;
     const frame = document.querySelector("iframe")!;
     // Intercept src assignment to keep the synthetic frame stable in jsdom.
@@ -76,7 +84,7 @@ describe("isolated chat entry document", () => {
   it("syncs only the theme, expands the menu, and waits for authenticated leave approval", async () => {
     vi.useFakeTimers();
     localStorage.setItem("oz-theme", "dark");
-    document.documentElement.innerHTML = await chatEntryResponse("test-nonce").text();
+    document.documentElement.innerHTML = await chatEntryResponse("test-nonce", PRIVATE_CHAT_SERVICE_ORIGIN).text();
     const frame = document.querySelector("iframe")!;
     Object.defineProperty(frame, "src", { set() {} });
     const send = vi.spyOn(frame.contentWindow!, "postMessage");

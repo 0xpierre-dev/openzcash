@@ -13,7 +13,7 @@ holds spend keys, and the legacy admin surface is retired (those routes return
 
 ## Prerequisites
 
-- Node 24.22.1 (`package.json`, `engines`), matching CI and production
+- Node 24.22.1 (`.nvmrc` and `package.json`, `engines.node`)
 - Postgres (any local instance; `docker-compose.yml` ships an optional
   `postgres:16` container under the `db` profile)
 - Python 3, only if you run the copilot-skill test suite
@@ -32,7 +32,7 @@ unused optional variables: blank `CRON_SECRET` and placeholder RPC URLs fail
 validation even in mock mode. Only add a valid value when enabling that feature.
 
 ```bash
-npm install
+npm ci
 npm run db:migrate           # apply the schema
 npm run import-zcg           # mirror the ZCG spreadsheet into the DB
 npm run dev                  # http://localhost:3000
@@ -58,19 +58,17 @@ string disables that fallback.
 ## A good first task
 
 The typical small change is one surface, fixed and tested in the same PR. For
-example, commit `59cf88e` ("fix(news): keep source filters and rendered rows in
-sync") touches `src/app/news/page.tsx`, the lib module behind it, and adds
-colocated tests (`src/app/news/page.test.tsx`, `src/lib/news/feed-identity.test.ts`).
-Pick a page or module, make the change, and add a colocated `*.test.ts` next to
-what you touched.
+example, a news-filter change may touch `src/app/news/page.tsx`, its data module,
+and the colocated tests (`src/app/news/page.test.tsx`,
+`src/lib/news/feed-identity.test.ts`). Pick a page or module and run the relevant
+tests alongside the gate below.
 
 ## Dev workflow
 
 - Branches in this repo use topic prefixes such as `fix/`, `docs/`, or a personal
   `<name>/<topic>` prefix; PRs target `main`.
-- There are no issue/PR templates yet; a short description of what changed and
-  why is enough. CI (`.github/workflows/ci.yml`) runs the test gate below on
-  every PR and push to `main`.
+- The [CI workflow](.github/workflows/ci.yml) runs typecheck, lint, tests, copilot
+  tests, and the production build on pull requests and pushes to `main`.
 - Keep PRs to one surface when practical; the test gate below is fast.
 
 ## Tests
@@ -78,17 +76,13 @@ what you touched.
 Run the gate before opening a PR:
 
 ```bash
-npm run typecheck && npm test && npm run build
+npm run typecheck && npm run lint && npm test && npm run test:copilot && npm run build
 ```
 
-CI runs this gate automatically on every PR and push to `main`, plus
-`npm run lint` and `npm run test:copilot` (`.github/workflows/ci.yml`). The
-PostgreSQL suites below stay skipped in CI; they run only where their
-environment variable is set.
-
-Verified on a clean checkout (2026-10-05): `npm run typecheck` exits 0, and
-`npm test` reports 205 test files passed, 3 skipped (2,883 tests) from vitest plus
-6 passing tests from `node --test scripts/build-zarvis-knowledge.test.mjs`.
+Run the gate on the exact changes being submitted and report any skipped suites.
+The CI test job does not configure a database, so the opt-in PostgreSQL suites
+below are skipped there. They should also be run locally when changing imports,
+publication policy, or persisted snapshots.
 
 Other suites:
 
@@ -97,7 +91,7 @@ Other suites:
 - `npm run eval:zarvis` (Zarvis answer evaluation)
 
 To add tests, colocate a `*.test.ts` (or `.tsx`) file next to the module; vitest
-picks up `src/**/*.test.{ts,tsx}` (`vitest.config.ts`). Four PostgreSQL suites
+picks up `src/**/*.test.{ts,tsx}` (`vitest.config.ts`). Five PostgreSQL suites
 are independently skipped unless their environment variable is set:
 
 | Variable | Required local database | Suite |
@@ -105,6 +99,7 @@ are independently skipped unless their environment variable is set:
 | `ZCG_SNAPSHOT_TEST_DB_URL` | A migrated database on a loopback host; uses temporary tables | `src/lib/zcg/import-snapshots.integration.test.ts` |
 | `ZCG_PUBLICATION_TEST_DB_URL` | Host `127.0.0.1`, database name starting with `openzcash_d1_test` | `src/lib/zcg/publications.integration.test.ts` |
 | `ECOSYSTEM_TEST_DB_URL` | Host `127.0.0.1`, database `openzcash_ecosystem_test` | `src/lib/ecosystem/snapshot-store.integration.test.ts` |
+| `COINHOLDER_TOPICS_TEST_DB_URL` | Host `127.0.0.1`, database `openzcash_topics_test` | `src/lib/coinholder/topic-store.integration.test.ts` |
 | `LEGAL_ARCHIVE_TEST_DB_URL` | Host `127.0.0.1`, database `openzcash_legal_test` | `src/lib/legal/archive-store.integration.test.ts` |
 
 Use disposable local databases only. The publication, legal and ecosystem suites apply
@@ -143,3 +138,11 @@ the other suites; report any skipped suites with your validation results.
 Open an issue at
 [github.com/Michae2xl/openzcash/issues](https://github.com/Michae2xl/openzcash/issues).
 Discussions are not enabled on this repository.
+
+## Included services
+
+Run checks inside `services/participate` and `services/private-chat` for service
+changes. Their own READMEs describe setup and integration tests. CI also builds
+and tests both packages, and installs the Participate baseline in disposable
+PostgreSQL. Wallet, email-provider and real Nym delivery checks are separate
+operator acceptance tests; CI does not send messages or transact.
