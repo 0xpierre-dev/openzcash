@@ -29,6 +29,11 @@ import {
   readProfile,
 } from "@/lib/participate/service";
 import { readViewerContext } from "@/lib/participate/viewer";
+import { participateDemoMode } from "@/lib/participate/demo";
+import { cookies } from "next/headers";
+import { parseWorkspaceThemePreference, WORKSPACE_THEME_COOKIE } from "@/lib/participate/workspace/domain/workspace-theme";
+import { DemoBanner } from "@/components/participate/workspace/committee-demo";
+import { DemoPractice } from "@/components/participate/workspace/committee-demo-practice";
 import type { CommitteeWorkspace } from "@/lib/participate/workspace/domain/committee";
 import {
   historyResponseSchema,
@@ -94,7 +99,9 @@ export default async function ParticipatePage({
   searchParams: Promise<Search>;
 }) {
   const search = await searchParams;
-  const view = participationView(search.view);
+  // Demo deployment only: the guided practice page reads the committee data.
+  const practice = participateDemoMode() && search.view === "practice";
+  const view = practice ? "committee" : participationView(search.view);
   const context = await readViewerContext();
 
   if (!context.configured) {
@@ -123,6 +130,9 @@ export default async function ParticipatePage({
   }
 
   const communityId = participationCommunityId();
+  const demoMode = participateDemoMode();
+  // Demo host only: light by default; the banner toggle saves dark in the theme cookie.
+  const themePreference = demoMode ? (parseWorkspaceThemePreference((await cookies()).get(WORKSPACE_THEME_COOKIE)?.value) === "dark" ? "dark" : "light") : undefined;
   const { session, cookie } = context;
   const admin =
     session?.role === "ADMIN" && !session.userId.startsWith("preview_");
@@ -190,7 +200,13 @@ export default async function ParticipatePage({
   const retryHref = `${PARTICIPATE_PATH}${search.compose ? `?compose=${encodeURIComponent(search.compose)}` : ""}`;
 
   let content;
-  if (view === "history") {
+  if (practice) {
+    content = (
+      <div className="dao-app dao-app--embedded">
+        <DemoPractice key={session?.userId ?? "guest"} committee={committee} signedIn={Boolean(session)} />
+      </div>
+    );
+  } else if (view === "history") {
     content = (
       <WorkspaceFrame {...frame} embedded embeddedSection="history">
         <ParticipateHistory data={history} />
@@ -204,6 +220,7 @@ export default async function ParticipatePage({
             key={`${session?.userId ?? "guest"}:${search.record ?? "queue"}`}
             initial={committee}
             initialRecordId={search.record}
+            demoMode={demoMode}
           />
         ) : (
           <div className="dao-empty-state" role="alert">
@@ -290,9 +307,10 @@ export default async function ParticipatePage({
   }
 
   return (
-    <Participate view={view} configured>
-      <div className="oz-participate">
-        <WorkspaceThemeProvider>
+    <Participate view={view} configured wide={demoMode}>
+      <div className="oz-participate" data-demo={demoMode ? "" : undefined}>
+        <WorkspaceThemeProvider initialPreference={themePreference}>
+          {demoMode ? <DemoBanner /> : null}
           <ParticipateBridge>{content}</ParticipateBridge>
         </WorkspaceThemeProvider>
       </div>

@@ -13,7 +13,7 @@ holds spend keys, and the legacy admin surface is retired (those routes return
 
 ## Prerequisites
 
-- Node >= 20.9.0 (`package.json`, `engines`)
+- Node 24.22.1 (`package.json`, `engines`), matching CI and production
 - Postgres (any local instance; `docker-compose.yml` ships an optional
   `postgres:16` container under the `db` profile)
 - Python 3, only if you run the copilot-skill test suite
@@ -68,8 +68,9 @@ what you touched.
 
 - Branches in this repo use topic prefixes such as `fix/`, `docs/`, or a personal
   `<name>/<topic>` prefix; PRs target `main`.
-- There are no `.github/` templates yet; a short description of what changed and
-  why is enough.
+- There are no issue/PR templates yet; a short description of what changed and
+  why is enough. CI (`.github/workflows/ci.yml`) runs the test gate below on
+  every PR and push to `main`.
 - Keep PRs to one surface when practical; the test gate below is fast.
 
 ## Tests
@@ -79,6 +80,11 @@ Run the gate before opening a PR:
 ```bash
 npm run typecheck && npm test && npm run build
 ```
+
+CI runs this gate automatically on every PR and push to `main`, plus
+`npm run lint` and `npm run test:copilot` (`.github/workflows/ci.yml`). The
+PostgreSQL suites below stay skipped in CI; they run only where their
+environment variable is set.
 
 Verified on a clean checkout (2026-10-05): `npm run typecheck` exits 0, and
 `npm test` reports 205 test files passed, 3 skipped (2,883 tests) from vitest plus
