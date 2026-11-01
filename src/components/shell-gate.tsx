@@ -25,11 +25,14 @@ export function ShellGate({
   isAdmin,
   children,
   isPreview = false,
+  bare = false,
   footer,
 }: {
   isAdmin: boolean;
   children: ReactNode;
   isPreview?: boolean;
+  /** Every page renders without the portal chrome (the committee demo host). */
+  bare?: boolean;
   /** Server-rendered treasury bar, pinned to the bottom of shell pages. */
   footer?: ReactNode;
 }) {
@@ -38,7 +41,7 @@ export function ShellGate({
   // opening a bare page (Monthly) and coming back keeps the chat intact.
   return (
     <ZarvisProvider>
-      {isBare(pathname) ? (
+      {bare || isBare(pathname) ? (
         children
       ) : (
         <AppShell isAdmin={isAdmin} isPreview={isPreview} footer={footer}>

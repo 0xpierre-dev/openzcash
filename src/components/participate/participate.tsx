@@ -17,10 +17,13 @@ const INTRO_KEY = "openzcash-participate-intro-v1";
 export function Participate({
   view,
   configured,
+  wide = false,
   children,
 }: {
   view: "proposals" | "history" | "committee";
   configured: boolean;
+  /** No 1480px cap: the committee demo renders without the portal shell. */
+  wide?: boolean;
   children?: ReactNode;
 }) {
   const [entered, setEntered] = useState(false);
@@ -84,7 +87,7 @@ export function Participate({
   }
 
   return (
-    <div className={styles.page}>
+    <div className={wide ? `${styles.page} ${styles.wide}` : styles.page}>
       <h1 className={styles.srOnly}>Participate</h1>
       <div className={configured ? undefined : styles.inset}>
       {!configured ? (

@@ -3,6 +3,10 @@
   max-width: 1480px;
   margin: 0 auto;
 }
+/* The committee demo host has no portal shell: its banner and header bands run edge to edge. */
+.wide {
+  max-width: none;
+}
 .srOnly {
   position: absolute;
   width: 1px;

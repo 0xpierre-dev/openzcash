@@ -134,7 +134,7 @@ export function SignedDecision({ endpoint, revision, initiallyOpen = false, visi
           </div> : null}
           {committee ? <CommitteeCountingHelp /> : <details className="signed-decision-rules"><summary>Counting rules</summary><p>Abstentions count for quorum. Approval uses approve + reject only. One final choice per reviewer; rules lock when opened. Pilot reviews do not change published ZCG outcomes.</p></details>}
           {!data.canCreate ? <p className="signed-decision-note">{committee ? "All five seats need a verified account and passkey before opening. Configure them in Members." : "Verified accounts and passkeys are required to open a review."}</p> : null}
-          <button type="submit" className="dao-button" disabled={busy || !data.canCreate}>{busy ? "Opening…" : "Open signed review"}</button>
+          <button type="submit" className="dao-button dao-button--primary" disabled={busy || !data.canCreate}>{busy ? "Opening…" : "Open signed review"}</button>
         </form> : <p className="signed-decision-note">{readOnlyReason ?? "No signed review is open yet. A coordinator opens it after all five reviewers are ready."}</p>}
       </> : round && (tally || data?.progress) ? <>
         <header className="signed-decision-heading"><div><strong>{compact ? "Your vote & reason" : round.proposal.title}</strong>{!compact ? <p>Revision {round.proposal.revision} · Independent pilot</p> : null}</div><span className="signed-decision-status">{data?.abandonment || data?.sourceWithdrawal ? "Review stopped" : collecting ? "Collecting votes" : outcomes[tally?.outcome ?? "OPEN"]}</span></header>

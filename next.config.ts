@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import monthlyReadingSets from "./src/lib/monthly/reading-sets.json";
 import { participationRewrites } from "./src/lib/participate/upstream";
+import { participateDemoMode } from "./src/lib/participate/demo";
 
 // Content Security Policy. The app loads no third-party browser assets — fonts
 // are self-hosted (next/font), the logo/favicon are same-origin, and the client
@@ -60,7 +61,9 @@ const nextConfig: NextConfig = {
   // Don't advertise the framework/version in responses.
   poweredByHeader: false,
   async rewrites() {
-    return participationRewrites(process.env.PARTICIPATE_UPSTREAM_URL);
+    return participationRewrites(process.env.PARTICIPATE_UPSTREAM_URL, {
+      demo: participateDemoMode(),
+    });
   },
   // The home is the ZCG overview. A server redirect answers before any
   // rendering (the page-level redirect would stream behind loading.tsx).
