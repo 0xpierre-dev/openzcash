@@ -24,10 +24,15 @@ export function TapFeedback() {
       if (e.pointerType !== "touch" || !e.isPrimary) return;
       const target = e.target as Element | null;
       if (!target?.closest(INTERACTIVE)) return;
-      try {
-        navigator.vibrate?.(10);
-      } catch {
-        /* unsupported */
+      // Android / Chromium: the Vibration API is enough. Never also toggle the
+      // hidden switch there: focusing it scrolled the page back to the top.
+      if (typeof navigator.vibrate === "function") {
+        try {
+          navigator.vibrate(10);
+        } catch {
+          /* unsupported */
+        }
+        return;
       }
       // iOS haptic: toggle the hidden switch within this user gesture.
       try {
@@ -44,7 +49,8 @@ export function TapFeedback() {
     <label
       ref={labelRef}
       aria-hidden="true"
-      style={{ position: "absolute", left: "-9999px", top: 0 }}
+      // Fixed, not absolute: if the browser focuses the switch it must not scroll the page.
+      style={{ position: "fixed", left: "-9999px", top: 0, pointerEvents: "none" }}
     >
       <input ref={inputRef} type="checkbox" tabIndex={-1} />
     </label>
