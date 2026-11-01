@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Q4 } from "@/lib/coinholder/q4";
 import { Card, Stat } from "@/components/ui";
 import { OrgHeader } from "@/components/org-header";
 import { listGrants } from "@/lib/zcg/grants-repo";
@@ -133,6 +134,11 @@ export default async function FpfCoinholderGrantsPage() {
         <span aria-hidden>→</span>
       </Link>
 
+      <Link href={Q4.href} className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-700 hover:border-amber-500/40">
+        <span><strong className="font-semibold text-stone-900">Coinholder proposals</strong>{" · "}current round</span>
+        <span aria-hidden>→</span>
+      </Link>
+
       <section className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
         <Stat
           label="Grants"
@@ -162,8 +168,10 @@ export default async function FpfCoinholderGrantsPage() {
           </Card>
           <p className="mt-3 text-xs text-stone-600">
             {grantRows.length} grants · one approved grant per row · amounts in
-            USD with ZEC equivalents tracked in the ledger. Awaiting payment:
-            approved by coinholders, no payout recorded yet.
+            USD with ZEC equivalents tracked in the ledger.
+            {grantRows.some((g) => g.status === "awaiting_payment")
+              ? " Awaiting payment: approved by coinholders, no payout recorded yet."
+              : ""}
             {unlisted.length
               ? ` Approved but not in FPF's grants tab yet: ${unlisted
                   .map((u) => `${u.title} (${u.roundLabel})`)
