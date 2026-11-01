@@ -46,6 +46,10 @@ HTTPS origin. Match its `PRIVATE_CHAT_PARENT_ORIGIN` to the portal. Unconfigured
 Chat fails closed; cloning this project never silently selects OpenZcash's
 hosted Chat. Participate also needs its public-origin and community settings.
 
+The optional committee practice flow uses a separate portal, backend and
+disposable database. Follow [Committee practice](../services/participate/docs/committee-practice.md);
+the public free pilot and committee practice are separate modes.
+
 ## Checks
 
 ```sh

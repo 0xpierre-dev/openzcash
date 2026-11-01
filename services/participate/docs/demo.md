@@ -1,5 +1,8 @@
 # Demo Guide
 
+This is the legacy community-poll walkthrough. For the separate Participate
+committee review practice environment, see [Committee practice](committee-practice.md).
+
 ## What to show
 
 ### 1. Public board

@@ -5,6 +5,7 @@ node_modules
 .env.test
 .env.automation
 .runtime/
+tmp/
 coverage
 dist
 *.log

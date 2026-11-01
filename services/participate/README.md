@@ -50,6 +50,10 @@ those, delivery stays disabled. Tests mock email delivery; they send no email.
 Do not reuse OpenZcash production credentials or enable shared demo sign-in
 on a real deployment.
 
+For the isolated committee practice flow, see
+[Committee practice](docs/committee-practice.md). It requires its own database,
+test records and explicit gates; the ordinary seed does not enable it.
+
 ## Operate and extend
 
 Keep real credit purchases, live committee operations and wallet writers off

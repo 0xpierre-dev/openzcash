@@ -1,21 +1,30 @@
-# Documentação de planejamento — Back-office ZEC
+# OpenZcash documentation
 
-Sistema corporativo de **Contabilidade + Reporting + RH + Gestão de Pagamentos** para uma empresa que opera tesouraria e folha em **ZEC (Zcash)**, usando **viewing keys** para auditoria e o **campo de memo encriptado** do Zcash para anexar metadados estruturados aos pagamentos (a metáfora do `MEMO` de um cheque de papel).
+Start with [Local development](local-development.md) for the portal and its
+separately runnable Participate and Private Chat services. See
+[Source distribution](source-distribution.md) for included components,
+attribution and operational boundaries.
 
-> Status: **fase de design**. Nenhum código de implementação foi escrito ainda — aguardando alinhamento das decisões em [03-critica-e-riscos.md](03-critica-e-riscos.md) §E.
+## Current guides
 
-## Índice
+- [Contributing and checks](../CONTRIBUTING.md)
+- [Security](../SECURITY.md)
+- [Participate setup](../services/participate/README.md) and
+  [review flow](participate-review-flow.md)
+- [Isolated committee practice](../services/participate/docs/committee-practice.md)
+- [Private Chat setup and privacy boundaries](../services/private-chat/README.md)
+- [Coinholder rounds](coinholder-program.md) and [proposal topics](coinholder-topics.md)
+- [Zarvis](zarvis.md)
+- [Ecosystem data](ECOSYSTEM.md)
 
-| Doc                                              | Conteúdo                                                                                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [01-arquitetura.md](01-arquitetura.md)           | Design completo: princípios, módulos, modelo de dados, fluxos end-to-end, esquema do memo, stack.                                                                              |
-| [02-fatos-zcash.md](02-fatos-zcash.md)           | Fatos técnicos verificados na pesquisa (memo, viewing keys, zallet, ZIP-321, FROST, contabilidade) + fontes + lacunas.                                                         |
-| [03-critica-e-riscos.md](03-critica-e-riscos.md) | Crítica adversarial: furos do design (fees, change, expiry, UFVK centralizada, what-you-see-is-what-you-sign), riscos de privacidade/compliance/segurança e perguntas abertas. |
+## Historical design research
 
-## Stack Zcash existente da empresa (premissa)
+These documents describe the early accounting/viewing-key design. They are
+retained as research, not as current setup instructions or evidence that every
+proposed capability has been implemented. Version, provider and protocol claims
+must be checked before reuse.
 
-Node **Zebra** · carteira **zallet** (full-node, sobre librustzcash) · **FROST/zkool** (assinatura threshold) · carteira de referência **ZODL** (= Zashi rebrandeada, 2026).
-
-## Princípio inegociável
-
-**Nenhuma spend key no sistema.** Só viewing keys (read-only). Toda assinatura de pagamento é externa, via FROST threshold (t-de-n).
+- [Initial architecture](01-arquitetura.md)
+- [Zcash domain research](02-fatos-zcash.md)
+- [Design risks and open questions](03-critica-e-riscos.md)
+- [Node integration research](04-integracao-node.md)
