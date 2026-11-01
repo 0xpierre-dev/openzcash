@@ -12,7 +12,7 @@ Live: **[openzcash.org](https://openzcash.org)**
 
 [![CI](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml/badge.svg)](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node >= 20.9](https://img.shields.io/badge/node-%3E%3D%2020.9-brightgreen.svg)](package.json)
+[![Node 24.22.1](https://img.shields.io/badge/node-24.22.1-brightgreen.svg)](package.json)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fopenzcash.org)](https://openzcash.org)
 
 <p align="center"><img src="docs/img/openzcash-menu.png" alt="OpenZcash dashboard menu" width="740"></p>
@@ -103,7 +103,7 @@ for open discovery.
 
 ## Local development
 
-Requires Node 20.9+ and Postgres. Production runs the exact Node version pinned in `package.json` `engines.node`.
+Requires Node 24.22.1 and Postgres. Development, CI and production use the exact version pinned in `package.json` `engines.node`.
 
 Create `.env.local` with the connection string for your local development database:
 

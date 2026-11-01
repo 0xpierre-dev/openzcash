@@ -13,7 +13,7 @@ holds spend keys, and the legacy admin surface is retired (those routes return
 
 ## Prerequisites
 
-- Node >= 20.9.0 (`package.json`, `engines`)
+- Node 24.22.1 (`package.json`, `engines`), matching CI and production
 - Postgres (any local instance; `docker-compose.yml` ships an optional
   `postgres:16` container under the `db` profile)
 - Python 3, only if you run the copilot-skill test suite
