@@ -92,6 +92,7 @@ export const APPS: AppDef[] = [
     icon: "grant",
     pages: [
       { href: "/coinholders", label: "Program overview", mark: "/logos/glyphs/overview.png" },
+      { href: "/coinholders/proposals", label: "Proposals", mark: "/logos/glyphs/proposals.png" },
       { href: "/coinholders/results", label: "Results", mark: "/logos/glyphs/decisions.png" },
       { href: "/coinholders/activity", label: "Voting activity", mark: "/logos/glyphs/insights.png" },
       // Keep verification beside the results and activity it checks.
@@ -156,8 +157,9 @@ export const APPS: AppDef[] = [
   },
   { id: "zec-observatory", label: "ZEC Observatory", href: "/zec-observatory", sub: "Markets, DeFi liquidity & holdings", icon: "chart", pages: [] },
   { id: "legal", label: "Privacy & Policy", href: "/legal", sub: "Rights, regulation & public debate", icon: "balance", pages: [{ href: "/legal", label: "Updates" }] },
+  { id: "narratives", label: "Zcash Pitches & Narratives", href: "/narratives", sub: "Zcash pitches and explanations · EN / PT / ES", icon: "narratives", pages: [] },
   { id: "monthly", label: "Monthly", href: "/monthly", sub: "Ecosystem reports", logo: "/logos/marks/monthly.png", icon: "book", pages: [] },
-  { id: "ongoing-test", label: "Ongoing Test", href: "/ongoing-test", sub: "Hands-on ecosystem tests and incentives", icon: "experiment", open: true, navigationOnly: true, pages: [{ href: "/ongoing-test/crosslink", label: "Crosslink", brandLogo: "/logos/shielded-labs.png" }] },
+  { id: "ongoing-test", label: "Ongoing Test", href: "/ongoing-test", sub: "Hands-on ecosystem tests and incentives", icon: "experiment", navigationOnly: true, pages: [{ href: "/ongoing-test/crosslink", label: "Crosslink", brandLogo: "/logos/shielded-labs.png" }] },
   { id: "private-chat", label: "Private Chat", href: "/private-chat", sub: "Private conversations via Nym · Experimental pilot", icon: "private-chat", pages: [] },
   { id: "lockbox", label: "Lockbox", href: "/lockbox", sub: "Live funding", logo: "/logos/marks/lockbox.png", icon: "shield", pages: [], hidden: true },
   { id: "arborist", parentId: "ecosystem", parentGroup: "pages", label: "Arborist Calls", href: "/arborist", sub: "Protocol call archive", logo: "/logos/arborist.png", icon: "sigma", pages: [] },
@@ -255,6 +257,8 @@ export type Place = {
 export function placeOf(pathname: string): Place | undefined {
   const detail = DETAILS[pathname] ?? (/^\/ecosystem\/history\/[a-z0-9-]+$/.test(pathname)
     ? { parent: "/ecosystem/history", label: "Project history" }
+    : /^\/coinholders\/proposals\/[1-9]\d*$/.test(pathname)
+    ? { parent: "/coinholders/proposals", label: "Proposal detail" }
     : /^\/coinholders\/verify\/[a-z0-9-]+\/[^/]+$/.test(pathname)
     ? { parent: "/coinholders/verify", label: "Proposal detail" }
     : undefined);
@@ -266,8 +270,10 @@ export function placeOf(pathname: string): Place | undefined {
     const page = app.pages.find((p) => pathOf(p.href) === target);
     if (pathOf(app.href) === target && !detail) return { app };
     if (page) {
+      const round = pathname.match(/^\/coinholders\/verify\/([a-z0-9-]+)\/[^/]+$/)?.[1];
+      const parent = round ? { ...page, href: `${page.href}?round=${round}` } : page;
       return detail
-        ? { app, page, detail: { parent: page, label: detail.label } }
+        ? { app, page, detail: { parent, label: detail.label } }
         : { app, page };
     }
   }
