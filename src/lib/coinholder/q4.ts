@@ -40,14 +40,25 @@ export type Q4Snapshot = {
   proposals: Q4Proposal[] | null;
 };
 
-/** Only an explicit, standalone USD amount in the requested field. Do not
- * substitute a project's total cost for the amount requested from voters. */
-export function requestedCents(text: string | undefined): number | null {
-  if (!text) return null;
+function standaloneUsdCents(text: string): number | null {
   const match = text.trim().match(/^(?:US\$|\$|USD\s+)?\s*(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?\s*(?:USD)?$/i);
   if (!match) return null;
   const cents = Number(match[1].replaceAll(",", "")) * 100 + Number((match[2] ?? "").padEnd(2, "0"));
   return Number.isSafeInteger(cents) && cents > 0 ? cents : null;
+}
+
+/** Read the explicit request, optionally followed by a historical revision
+ * note. Arbitrary prose and conditional amounts remain unknown; never borrow
+ * a project's total budget or the previous amount from the note. */
+export function requestedCents(text: string | undefined): number | null {
+  if (!text) return null;
+  const revision = text.trim().match(/^(.+?)\s+\((reduced|increased)\s+from\s+(.+?)(?:\s+on\s+\d{4}-\d{2}-\d{2})?(?:,\s*see\s+[a-z][a-z /&-]*)?\)$/i);
+  const current = standaloneUsdCents(revision?.[1] ?? text);
+  if (!revision || current === null) return current;
+  const previous = standaloneUsdCents(revision[3]);
+  if (previous === null) return null;
+  const consistent = revision[2].toLowerCase() === "reduced" ? current < previous : current > previous;
+  return consistent ? current : null;
 }
 
 export function q4Proposals(issues: Q4Issue[]): Q4Proposal[] {
