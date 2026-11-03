@@ -1,11 +1,12 @@
 import "server-only";
+import { z } from "zod";
 
 /**
  * ZecHub DAO governance feed.
  *
  * ZecHub runs as an on-chain DAO (cw-dao / DAO DAO) on Juno. We read its
- * proposals from the public DAO DAO indexer (no API key) and cache them ~10 min
- * in-process — same pattern as the other live feeds (live-price, defi, news).
+ * proposals from the public indexer or directly from the Juno contract, and
+ * cache one shared 50-proposal window for ten minutes.
  * Read-only: we never submit or vote.
  */
 
@@ -17,6 +18,9 @@ const SINGLE_MODULE =
 const PREFIX = "A";
 const INDEXER = "https://indexer.daodao.zone/juno-1/contract";
 const TTL_MS = 10 * 60_000;
+const RETRY_MS = 60_000;
+const MAX_PROPOSALS = 50;
+const CHAIN_QUERY_URL = `https://rest.cosmos.directory/juno/cosmwasm/wasm/v1/contract/${SINGLE_MODULE}/smart/${encodeURIComponent(Buffer.from(JSON.stringify({ reverse_proposals: { limit: MAX_PROPOSALS } })).toString("base64"))}`;
 
 export const ZECHUB_DAO_URL = `https://daodao.zone/dao/${DAO}`;
 
@@ -28,29 +32,36 @@ export type ZechubProposal = {
   title: string;
   /** DAO DAO status: open | passed | executed | rejected | closed | … */
   status: string;
-  createdAt: string; // ISO 8601
+  createdAt: string; // ISO 8601, or "" when the source has no timestamp.
   yes: number;
   no: number;
   abstain: number;
   proposer: string;
   url: string;
-  /** The proposer's own text (budget included), cut at DESCRIPTION_CHARS; "" when the indexer has none. */
+  /** The proposer's own text (budget included), cut at DESCRIPTION_CHARS; "" when the source has none. */
   description: string;
 };
 
-type IndexerItem = {
-  id?: number;
-  createdAt?: string;
-  proposal?: {
-    title?: string;
-    status?: string;
-    proposer?: string;
-    description?: string;
-    votes?: { yes?: string; no?: string; abstain?: string };
-  };
+export type ZechubGovernance = {
+  proposals: ZechubProposal[];
+  status: "live" | "stale" | "unavailable";
+  fetchedAt: string | null;
+  source: "indexer" | "chain" | null;
 };
 
-/** Long enough for a budget table, short enough that thirty proposals stay a small cache. */
+const votes = z.union([z.string().regex(/^\d+$/), z.number().int().nonnegative()])
+  .transform(Number).refine(Number.isSafeInteger);
+const itemsSchema = z.array(z.object({
+  id: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+  createdAt: z.string().optional(),
+  proposal: z.object({
+    title: z.string().trim().min(1), status: z.string().min(1),
+    proposer: z.string(), description: z.string().optional(),
+    votes: z.object({ yes: votes, no: votes, abstain: votes }),
+  }),
+})).max(MAX_PROPOSALS).refine((items) => new Set(items.map((item) => item.id)).size === items.length);
+
+/** Long enough for a budget table, short enough to keep the shared cache small. */
 export const DESCRIPTION_CHARS = 2_000;
 function excerpt(text: string | undefined): string {
   const clean = (text ?? "").replace(/\r\n/g, "\n").trim();
@@ -59,56 +70,61 @@ function excerpt(text: string | undefined): string {
     : clean;
 }
 
-let cache: { at: number; items: ZechubProposal[] } | null = null;
+let cache: ZechubGovernance | null = null;
+let attemptedAt: number | null = null;
+let pending: Promise<ZechubGovernance> | null = null;
 
-function num(v: string | undefined): number {
-  const n = Number(v ?? "0");
-  return Number.isFinite(n) ? n : 0;
+async function read(source: "indexer" | "chain"): Promise<ZechubGovernance | null> {
+  try {
+    const res = await fetch(source === "indexer"
+      ? `${INDEXER}/${SINGLE_MODULE}/daoProposalSingle/reverseProposals?limit=${MAX_PROPOSALS}`
+      : CHAIN_QUERY_URL, {
+      headers: { accept: "application/json" }, signal: AbortSignal.timeout(8_000), cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const body: unknown = await res.json();
+    const raw = source === "chain"
+      ? z.object({ data: z.object({ proposals: itemsSchema }) }).parse(body).data.proposals
+      : itemsSchema.parse(body);
+    // This established DAO has proposal history. An empty indexer result is
+    // unconfirmed until the contract itself reports it.
+    if (source === "indexer" && !raw.length) return null;
+    const proposals = raw.sort((a, b) => b.id - a.id).map((item): ZechubProposal => ({
+      id: item.id, ref: `${PREFIX}${item.id}`, title: item.proposal.title,
+      status: item.proposal.status,
+      // Contract queries do not contain creation timestamps. Preserve a known
+      // timestamp for the same ID; never substitute fetch time or expiry time.
+      createdAt: item.createdAt && Number.isFinite(Date.parse(item.createdAt)) ? item.createdAt
+        : cache?.proposals.find((previous) => previous.id === item.id)?.createdAt ?? "",
+      yes: item.proposal.votes.yes, no: item.proposal.votes.no, abstain: item.proposal.votes.abstain,
+      proposer: item.proposal.proposer, url: `${ZECHUB_DAO_URL}/proposals/${PREFIX}${item.id}`,
+      description: excerpt(item.proposal.description),
+    }));
+    return { proposals, status: "live", source, fetchedAt: new Date().toISOString() };
+  } catch { return null; }
 }
 
-/** Latest ZecHub DAO proposals, newest first. Cached ~10 min in-process. */
-export async function getZechubProposals(
-  limit = 30,
-): Promise<ZechubProposal[]> {
+async function refresh(): Promise<ZechubGovernance> {
+  attemptedAt = Date.now();
+  const result = await read("indexer") ?? await read("chain");
+  if (result) cache = result;
+  else cache = cache?.fetchedAt ? { ...cache, status: "stale" }
+    : { proposals: [], status: "unavailable", source: null, fetchedAt: null };
+  return cache;
+}
+
+export async function getZechubGovernance(limit = 40): Promise<ZechubGovernance> {
+  const count = Number.isFinite(limit) ? Math.min(MAX_PROPOSALS, Math.max(1, Math.trunc(limit))) : MAX_PROPOSALS;
   const now = Date.now();
-  if (cache && now - cache.at < TTL_MS) return cache.items.slice(0, limit);
-  try {
-    const res = await fetch(
-      `${INDEXER}/${SINGLE_MODULE}/daoProposalSingle/reverseProposals?limit=${Math.min(
-        Math.max(limit, 1),
-        50,
-      )}`,
-      {
-        headers: { accept: "application/json" },
-        signal: AbortSignal.timeout(8_000),
-        cache: "no-store",
-      },
-    );
-    if (!res.ok) return cache?.items.slice(0, limit) ?? [];
-    const raw = (await res.json()) as IndexerItem[];
-    if (!Array.isArray(raw)) return cache?.items.slice(0, limit) ?? [];
-    const items: ZechubProposal[] = raw
-      .filter(
-        (it): it is IndexerItem & { id: number } =>
-          typeof it?.id === "number" && Boolean(it.proposal?.title),
-      )
-      .map((it) => ({
-        id: it.id,
-        ref: `${PREFIX}${it.id}`,
-        title: it.proposal!.title!,
-        status: it.proposal!.status ?? "open",
-        createdAt: it.createdAt ?? "",
-        yes: num(it.proposal!.votes?.yes),
-        no: num(it.proposal!.votes?.no),
-        abstain: num(it.proposal!.votes?.abstain),
-        proposer: it.proposal!.proposer ?? "",
-        url: `${ZECHUB_DAO_URL}/proposals/${PREFIX}${it.id}`,
-        description: excerpt(it.proposal!.description),
-      }));
-    if (items.length === 0) return cache?.items.slice(0, limit) ?? [];
-    cache = { at: now, items };
-    return items.slice(0, limit);
-  } catch {
-    return cache?.items.slice(0, limit) ?? [];
-  }
+  const fresh = cache?.status === "live" && cache.fetchedAt && now - Date.parse(cache.fetchedAt) < TTL_MS;
+  const backoff = attemptedAt != null && now - attemptedAt < RETRY_MS;
+  if (cache && (fresh || (!pending && backoff))) return { ...cache, proposals: cache.proposals.slice(0, count) };
+  if (!pending) pending = refresh().finally(() => { pending = null; });
+  const result = await pending;
+  return { ...result, proposals: result.proposals.slice(0, count) };
+}
+
+/** Compatibility reader for news; undated chain proposals remain undated. */
+export async function getZechubProposals(limit = 30): Promise<ZechubProposal[]> {
+  return (await getZechubGovernance(limit)).proposals;
 }

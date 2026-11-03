@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "e266db3cc0df03a2",
+  "sourceRevision": "e3bf18bffd72da72",
   "sourceFiles": 72,
   "documents": [
     {
@@ -307,13 +307,13 @@
       "id": "src/app/zechub/page.tsx:0",
       "url": "https://openzcash.org/zechub",
       "title": "zechub",
-      "text": "ZecHub DAO · OpenZcash\nZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote.\nnumeric\nimg\n%\nfunded ·\npaid\nyes\n·\nno\nDonations\nFPF program fund\nZecHub Inc\nZecHub DAO\ndaodao.zone\nTreasury sheet\nGitHub · ZecHub\nTreasury overview\nAllocations & payouts\nGovernance\nResearch with Copilot ↗\nTotal treasury · 3 funds\nDonations treasury\nAvailable in source snapshot\nPaid out to date\nZEC price used\nFPF allocation by category\nSince\n: FPF\n, donations\n.\nGrants: paid vs committed\nChanged this week\nSubscribe to new ZecHub treasury payouts via RSS\nRSS ↗\nNew payouts recorded on the treasury dashboard between imports.\nRecent proposals\nOpen now\nPassed / executed\nLatest proposals\nProposals are temporarily unavailable: the DAO DAO indexer did not respond. Try again shortly, or open\nthe DAO on daodao.zone ↗\nZecHub Copilot\nAsk your own agent why a vote passed or failed. It computes both tests a proposal has to clear (67% of yes+no and 40% turnout), names every voter, and reads the treasury without mistaking the headline total for spendable money.\nGet the skill\nTreasury balances and payout records mirror the\nZecHub DAO Treasury Dashboard ↗\nmaintained by the DAO"
+      "text": "ZecHub DAO · OpenZcash\nZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote.\nnumeric\nimg\n%\nfunded ·\npaid\nyes\n·\nno\nDonations\nFPF program fund\nZecHub Inc\nZecHub DAO\ndaodao.zone\nTreasury sheet\nGitHub · ZecHub\nTreasury overview\nAllocations & payouts\nGovernance\nResearch with Copilot ↗\nTotal treasury · 3 funds\nDonations treasury\nAvailable in source snapshot\nPaid out to date\nZEC price used\nFPF allocation by category\nSince\n: FPF\n, donations\n.\nGrants: paid vs committed\nChanged this week\nSubscribe to new ZecHub treasury payouts via RSS\nRSS ↗\nNew payouts recorded on the treasury dashboard between imports.\nRecent proposals\nPassed / executed\nUTC\nLatest proposals\nthe DAO on daodao.zone ↗\nZecHub Copilot\nAsk your own agent why a vote passed or failed. It computes both tests a proposal has to clear (67% of yes+no and 40% turnout), names every voter, and reads the treasury without mistaking the headline total for spendable money.\nGet the skill\nTreasury balances and payout records mirror the\nZecHub DAO Treasury Dashboard ↗\nmaintained by the DAO"
     },
     {
       "id": "src/app/zechub/page.tsx:1",
       "url": "https://openzcash.org/zechub",
       "title": "zechub",
-      "text": ", re-imported every 6 hours. Indicative USD values apply the separately dated market quote to those recorded balances; they do not establish current holdings or available funds. Proposals are read live from the DAO DAO indexer. The\nfunded\nchip links a proposal to its payout line by title match."
+      "text": ", re-imported every 6 hours. Indicative USD values apply the separately dated market quote to those recorded balances; they do not establish current holdings or available funds. Proposals are read from the DAO DAO indexer, with direct Juno contract queries as a fallback. Creation dates are shown only when known. The\nfunded\nchip links a proposal to its payout line by title match."
     },
     {
       "id": "src/app/arborist/page.tsx:0",
