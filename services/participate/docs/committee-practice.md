@@ -66,7 +66,29 @@ still be able to sign out.
 The service checks the opt-in flag, origin/writer configuration, actual database
 name and marker row before allowing practice actions. Its database regression
 suite uses `PARTICIPATE_DEMO_TEST_DATABASE_URL` separately from the ordinary
-treasury suites. Run it only against a disposable database prepared as above.
+treasury suites. Its synthetic fixture uses the same demo SQL setup without
+copying a deployed database.
+
+### Database regression tests
+
+Create a fresh local `participate_demo_test` database and install the baseline.
+For example, using your local PostgreSQL account:
+
+```sh
+createdb -h 127.0.0.1 participate_demo_test
+DATABASE_URL="postgresql://$USER@127.0.0.1:5432/participate_demo_test" npm run db:setup
+PARTICIPATE_DEMO_TEST_DATABASE_URL="postgresql://$USER@127.0.0.1:5432/participate_demo_test" \
+  npm test -- tests/integration/demo-committee-postgres.test.ts
+```
+
+The four tests prepare a synthetic owner, host, committee and three proposal
+packages, then apply `scripts/demo/participate-demo.sql`. They cover signed test
+ballots and reset, preservation of another tester's activity, practice resume
+and progression, and refusal of demo operations outside demo mode. The fixture
+refuses a database that already contains accounts. Use a new disposable database
+with the same required name for each run; do not point it at an existing demo
+deployment. CI creates this database separately from `community_treasury_tests`
+so the practice reset triggers never replace the ordinary integrity guards.
 
 The public free pilot (`PARTICIPATE_PUBLIC_DEMO`) is a different mode. It does not
 grant a committee seat or enable practice resets.

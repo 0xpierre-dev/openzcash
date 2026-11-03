@@ -1,11 +1,13 @@
 // @vitest-environment node
 import { randomUUID } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { env as processEnvironment } from "node:process";
 import { PrismaClient } from "@prisma/client";
-import { signingKey } from "@/tests/helpers/signed-decision";
+import { decisionPackage, signingKey } from "@/tests/helpers/signed-decision";
 
-// Runs against a disposable local COPY of a prepared demo database:
-//   createdb -T participate_demo_sandbox participate_demo_test && psql -d participate_demo_test -v host=preview_orchard -f scripts/demo/participate-demo.sql
+// Run against a fresh local participate_demo_test database with db:setup applied.
+// The suite creates only synthetic accounts/proposals and refuses existing users.
 //   PARTICIPATE_DEMO_TEST_DATABASE_URL=postgresql://<user>@localhost:5432/participate_demo_test npx vitest run tests/integration/demo-committee-postgres.test.ts
 const databaseUrl = processEnvironment.PARTICIPATE_DEMO_TEST_DATABASE_URL;
 if (databaseUrl) {
@@ -36,6 +38,34 @@ const { readCommitteeWorkspace, mutateCommittee } =
   await import("@/lib/services/committee");
 const { verifyDecisionReceipt } = await import("@/lib/decisions/verify");
 const { COMMITTEE_LABELS } = await import("@/lib/domain/committee-labels");
+const { publishArchiveRevision } = await import("@/lib/services/proposal-archives");
+
+async function prepareDemoFixture() {
+  if (await prisma.user.count())
+    throw new Error("Demo tests require a fresh participate_demo_test database with no accounts");
+  const owner = await prisma.user.create({
+    data: { nick: "demo-fixture-owner", role: "USER", passwordHash: "!disabled" },
+  });
+  const host = await prisma.community.create({
+    data: { name: "Synthetic demo host", slug: "demo-test-host", createdById: owner.id },
+  });
+  const committee = await prisma.community.create({
+    data: { name: "Synthetic demo committee", slug: "demo-test-committee", kind: "COMMITTEE", createdById: owner.id },
+  });
+  for (let i = 1; i <= 3; i++) {
+    const proposal = await decisionPackage(`demo-test-proposal-${i}`);
+    await publishArchiveRevision(host.id, proposal.bundle, proposal.manifestHash, committee.id);
+  }
+  const url = new URL(databaseUrl!);
+  execFileSync("psql", ["-X", "-v", "ON_ERROR_STOP=1", "-v", `host=${host.id}`, "-f",
+    fileURLToPath(new URL("../../scripts/demo/participate-demo.sql", import.meta.url))], {
+    env: { ...processEnvironment, PGHOST: url.hostname, PGPORT: url.port || "5432",
+      PGDATABASE: "participate_demo_test", PGUSER: decodeURIComponent(url.username),
+      PGPASSWORD: decodeURIComponent(url.password) },
+    stdio: "pipe",
+  });
+  return host.id;
+}
 
 const context = { origin: "http://localhost:4421", rpId: "localhost" };
 const demoEnv = {
@@ -118,11 +148,7 @@ async function openRound(hostId: string, userId: string) {
 describe.skipIf(!databaseUrl)("Committee demo in PostgreSQL", () => {
   let hostId = "";
   beforeAll(async () => {
-    hostId = (
-      await prisma.$queryRaw<
-        Array<{ hostId: string }>
-      >`SELECT "hostId" FROM "ParticipateDemoEnvironment"`
-    )[0].hostId;
+    hostId = await prepareDemoFixture();
   });
   beforeEach(() => {
     for (const [name, value] of Object.entries(demoEnv))
