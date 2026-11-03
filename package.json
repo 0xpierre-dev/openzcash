@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs && node --test ops/error-fallback/handler.test.mjs && npm run errors:check",
+    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs && node --test ops/error-fallback/handler.test.mjs && npm run errors:check && npm run test:ecosystem-sync",
     "test:watch": "vitest",
     "test:copilot": "node --test scripts/publish-copilot.test.mjs && python3 -B -m unittest discover -s skills/zcg-copilot/tests",
     "probe": "tsx scripts/probe-node.ts",
