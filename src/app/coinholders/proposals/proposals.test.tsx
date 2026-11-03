@@ -1,11 +1,28 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { Proposals } from "./proposals";
 import type { Q4ProposalSummary } from "@/lib/coinholder/q4";
 import { TOPIC_ANALYSIS_VERSION } from "@/lib/coinholder/proposal-topics";
 
-afterEach(cleanup);
+// Match Next's documented native History API integration with useSearchParams.
+vi.mock("next/navigation", async () => {
+  const { useSyncExternalStore } = await import("react");
+  const subscribe = (callback: () => void) => {
+    window.addEventListener("popstate", callback);
+    return () => window.removeEventListener("popstate", callback);
+  };
+  return { useSearchParams: () => new URLSearchParams(useSyncExternalStore(subscribe, () => window.location.search)) };
+});
+beforeEach(() => {
+  window.history.replaceState(null, "", "/coinholders/proposals");
+  const replace = window.history.replaceState.bind(window.history);
+  vi.spyOn(window.history, "replaceState").mockImplementation((...args) => {
+    replace(...args);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+});
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 const base = { applicant: "example", organization: null, summary: "Completed work", createdAt: "2026-10-30T12:00:00Z", updatedAt: "2026-10-30T13:00:00Z", url: "https://github.com/example" };
 const proposals: Q4ProposalSummary[] = [
   { ...base, number: 70, title: "Maya integration", organization: "Maya Protocol", category: "Integration", requestedUsdCents: 5000000 },
@@ -13,6 +30,31 @@ const proposals: Q4ProposalSummary[] = [
   { ...base, number: 71, title: "Unspecified request", category: null, requestedUsdCents: null },
 ];
 describe("Q4 proposal exploration", () => {
+  it("restores search, topic and sort when returning to the filtered URL", () => {
+    const view = render(<Proposals proposals={proposals} />);
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Zebra" } });
+    fireEvent.change(screen.getByLabelText("Topic"), { target: { value: "Research" } });
+    fireEvent.change(screen.getByLabelText("Sort"), { target: { value: "highest" } });
+    const saved = window.location.href;
+    view.unmount();
+    window.history.replaceState(null, "", "/coinholders/proposals/69");
+    window.history.replaceState(null, "", saved);
+    render(<Proposals proposals={proposals} />);
+    expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("Zebra");
+    expect((screen.getByLabelText("Topic") as HTMLSelectElement).value).toBe("Research");
+    expect((screen.getByLabelText("Sort") as HTMLSelectElement).value).toBe("highest");
+    expect(screen.getAllByRole("article")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
+    expect(window.location.search).toBe("?sort=highest");
+    expect(screen.getAllByRole("article")).toHaveLength(3);
+  });
+  it("ignores unknown topic and sort parameters in a shared link", () => {
+    window.history.replaceState(null, "", "/coinholders/proposals?topic=removed&sort=bad");
+    render(<Proposals proposals={proposals} />);
+    expect((screen.getByLabelText("Topic") as HTMLSelectElement).value).toBe("");
+    expect((screen.getByLabelText("Sort") as HTMLSelectElement).value).toBe("newest");
+    expect(screen.getAllByRole("article")).toHaveLength(3);
+  });
   it("filters by the displayed security topic and keeps source categories searchable", () => {
     const securityProposal = { ...proposals[1], title: "Zebra DoS (CVE-2026-44499)", category: "Research & Development" };
     render(<Proposals proposals={[proposals[0], securityProposal]} />);
