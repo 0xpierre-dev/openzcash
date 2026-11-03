@@ -17,7 +17,6 @@
     "test:watch": "vitest",
     "test:copilot": "node --test scripts/publish-copilot.test.mjs && python3 -B -m unittest discover -s skills/zcg-copilot/tests",
     "probe": "tsx scripts/probe-node.ts",
-    "import-ufvk": "tsx scripts/import-ufvk.ts",
     "import-zcg": "node --conditions=react-server --import tsx scripts/import-zcg.ts",
     "sync-ecosystem": "node scripts/sync-ecosystem.mjs",
     "audit:ecosystem": "tsx scripts/audit-ecosystem.ts",
