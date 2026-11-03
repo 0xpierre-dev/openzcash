@@ -2,12 +2,12 @@
 
 import { useRef, useState, type ReactNode } from "react";
 import { categories, communityTools, type ToolCategory } from "./community-tools";
-import { history, paidRounds, reportedPaid } from "./crosslink-history";
+import { history, paidRounds, releaseNotes, releaseTag, reportedPaid, sourcesChecked } from "./crosslink-history";
 import { OngoingTestIcon, type OngoingTestIconName } from "@/components/ongoing-test-icons";
 import styles from "./ongoing-test.module.css";
 
 const FORUM = "https://forum.zcashcommunity.com/t/crosslink-incentivized-feature-net/55210";
-const RELEASE = "https://github.com/ShieldedLabs/crosslink_monolith/releases/tag/v15";
+const RELEASE = releaseNotes;
 const ISSUES = "https://github.com/ShieldedLabs/crosslink_monolith/issues";
 const tabIcons: OngoingTestIconName[] = ["experiment", "tools", "rewards"];
 const tabs = ["Participate", "Community tools", "Incentives"] as const;
@@ -51,6 +51,7 @@ function Source({ href, children, variant = "source", className = "" }: {
 
 // Exact titles checked against the upstream GitHub API on 17 Oct 2026.
 // This is a curated index, not an assignment board or live issue-status feed.
+// A closed listing stays as history; reopen the source before treating it as active.
 const referencedIssues = [
   { id: 255, title: "Crash After Clicking Edit Stake Button Due to Out-of-Bounds" },
   { id: 231, title: "Reliable height/sync status" },
@@ -63,7 +64,7 @@ const participationPaths: { id: "test" | "build" | "operate"; title: string; det
 ];
 
 const steps = [
-  { title: "Install & back up", body: <>Download the build for your OS. Open the app and privately back up your test-wallet seed. Use cTAZ only.</>, check: "Record your OS and build.", href: RELEASE },
+  { title: "Install & back up", body: <>Download the build for your OS. Open the app and privately back up your test-wallet seed. Use cTAZ only. Shielded Labs ships weekly; only the current chain earns rewards, so upgrade within a week of each release.</>, check: "Record your OS and build.", href: RELEASE },
   { title: "Sync the network", body: <>Let the node catch up. Compare a block’s height and hash with a same-network explorer. Check that finalized height advances too.</>, check: "Matching chain. Advancing finality.", href: `${FORUM}/66` },
   { title: "Get test funds", body: <>Request cTAZ from the app’s faucet, or mine. Desktop CPU mining starts after sync by default.</>, check: "Funds arrive in your own wallet.", href: RELEASE },
   { title: "Choose a finalizer & stake", body: <>Check recent votes, then copy a finalizer’s identity. During a staking window: <b>Stake → Paste Identity → amount.</b></>, check: "Confirm the bond and destination.", href: RELEASE },
@@ -107,7 +108,7 @@ export function CrosslinkGuide() {
       <div className={styles.heroCopy}>
         <Source className={styles.brand} variant="brand" href="https://shieldedlabs.net/"><Logo src="/logos/shielded-labs.png" /><span>Shielded Labs</span></Source>
         <div className={styles.heroTitle}><h2 id="crosslink-title">Crosslink<span>.</span></h2><p>Help shape the next layer of Zcash.</p></div>
-        <div className={styles.actions}><Source variant="primary" href={RELEASE}>Download v15</Source><button onClick={() => {
+        <div className={styles.actions}><Source variant="primary" href={RELEASE}>Download {releaseTag}</Source><button onClick={() => {
           setTab("Participate"); setPath("test");
           content.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
         }} className={styles.internalLink}><span>Start testing</span><span className={styles.linkArrow}><Icon name="arrow" /></span></button><Source className={styles.heroRules} href={`${FORUM}/39`}>Program rules</Source></div>
@@ -146,8 +147,7 @@ export function CrosslinkGuide() {
           {path === "test" ? <>
 
           <h3 id="guide-heading" className={styles.linkHint}>Testing checklist</h3>
-          <progress className={styles.progress} max={steps.length} value={done.length} aria-label="Checklist progress" />
-          <ol className={styles.steps}>{steps.map((step, index) => <li key={step.title} data-done={done.includes(index) || undefined} data-next={index === nextStep || undefined} data-expanded={openStep === index || undefined}>
+          <progress className={styles.progress} max={steps.length} value={done.length} aria-label="Checklist progress" />          <ol className={styles.steps}>{steps.map((step, index) => <li key={step.title} data-done={done.includes(index) || undefined} data-next={index === nextStep || undefined} data-expanded={openStep === index || undefined}>
             <div className={styles.stepHeader}>
               <label className={styles.check}><input type="checkbox" checked={done.includes(index)} onChange={() => setDone((old) => old.includes(index) ? old.filter((n) => n !== index) : [...old, index])} aria-label={`Complete step ${index + 1}: ${step.title}`} /><span aria-hidden="true">{done.includes(index) ? <Icon name="check" /> : String(index + 1).padStart(2,"0")}</span></label>
               <button type="button" className={styles.stepButton} aria-expanded={openStep === index} aria-controls={`step-${index}`} onClick={() => setOpenStep((current) => current === index ? null : index)}>{step.title}<ToggleMark /></button>
@@ -167,11 +167,11 @@ export function CrosslinkGuide() {
             <div className={styles.sectionHeading}><h3 id="path-heading">Prepare your finalizer.</h3></div>
             <p>Use the release instructions for your network. Keep your node online and verify its participation.</p>
             <ol className={styles.pathSteps}>
-              <li><span>01</span><div><h4>Confirm the release</h4><p>Check your build and network before following operator instructions.</p><Source href={RELEASE}>v15 release notes</Source></div></li>
-              <li><span>02</span><div><h4>Set up your identity</h4><p>Review the documented delegation and finalizer setup.</p><Source href={RELEASE}>v15 finalizer instructions</Source></div></li>
+              <li><span>01</span><div><h4>Confirm the release</h4><p>Check your build and network before following operator instructions.</p><Source href={RELEASE}>{releaseTag} release notes</Source></div></li>
+              <li><span>02</span><div><h4>Set up your identity</h4><p>Review the documented delegation and finalizer setup.</p><Source href={RELEASE}>{releaseTag} finalizer instructions</Source></div></li>
               <li><span>03</span><div><h4>Observe participation</h4><p>Check roster membership, recent votes and advancing finality with same-network tools.</p><Source href="https://ctaz.cash/">Network diagnostics</Source></div></li>
             </ol>
-            <p className={styles.directoryNote}>OpenZcash summary of the linked v15 instructions. Follow the documentation for the release you run.</p>
+            <p className={styles.directoryNote}>OpenZcash summary of the linked {releaseTag} instructions. Follow the documentation for the release you run.</p>
           </div>}
         </section>
         <aside className={styles.guideAside} aria-labelledby="test-essentials-heading">
@@ -187,7 +187,7 @@ export function CrosslinkGuide() {
           <div className={styles.asideOptions} hidden={path !== "test"}>
             <details className={styles.compactDetail}>
               <summary><span className={styles.optionIcon}><OngoingTestIcon name="finalizer" /></span><span>Running a finalizer?</span><span className={styles.disclosureArrow}><Icon name="chevron" /></span></summary>
-              <div className={styles.optionBody}><p>The v15 instructions describe copying your desktop finalizer identity and staking to it during a Staking Day. A finalizer must be online to participate.</p><Source href={RELEASE}>v15 finalizer instructions</Source></div>
+              <div className={styles.optionBody}><p>The {releaseTag} instructions describe copying your desktop finalizer identity and staking to it during a Staking Day. A finalizer must be online to participate.</p><Source href={RELEASE}>{releaseTag} finalizer instructions</Source></div>
             </details>
             <details className={styles.compactDetail}>
               <summary><span className={styles.optionIcon}><OngoingTestIcon name="phone" /></span><span>Using a phone?</span><span className={styles.disclosureArrow}><Icon name="chevron" /></span></summary>
@@ -248,13 +248,13 @@ export function CrosslinkGuide() {
           <details className={styles.paymentNotes}><summary>Details & sources<ToggleMark /></summary><p>{round.recipients} mining and staking recipients. {round.note}</p><p>Claims closed {round.claim}.</p><div><Source href={round.source}>Payout report</Source><Source href={round.claimSource}>Claim announcement</Source></div></details>
         </li>)}</ol>
       </section>
-      <div className={styles.roundStatus}><span><b>Round 3</b> · Reward amount and claim dates pending.</span><Source href={`${FORUM}/101`}>Follow the round</Source></div>
+      <div className={styles.roundStatus}><span><b>Round 3</b> · Running on the {releaseTag} network; reward amount and claim dates pending.</span><Source href={`${FORUM}/101`}>Follow the round</Source></div>
       <div className={styles.rewardDetails}><section><h4>Earned cTAZ counts.</h4><p>Mining and staking earnings determine the proportional reward. Simply holding faucet or transferred funds does not qualify.</p><Source href={`${FORUM}/39`}>Eligibility</Source></section><section><h4>Claims stay with Shielded Labs.</h4><p>Wait for the round’s private submission instructions. Previous claims used test-wallet viewing keys and a mainnet payout address. Never share a seed or spending key.</p><Source href={`${FORUM}/94`}>Previous claim process</Source></section></div>
       <section className={styles.historySection} aria-labelledby="history-heading">
         <div className={styles.sectionHeading}><h3 id="history-heading">Timeline</h3><Source href={FORUM}>Forum</Source></div>
         <ol className={styles.timeline}>{history.map((event) => <li key={event.title} data-kind={event.kind}><time>{event.date}</time><details><summary><span>{event.title}</span><small>{event.kind}</small><ToggleMark /></summary><p>{event.detail}</p><Source href={event.source}>Original source</Source></details></li>)}</ol>
       </section>
     </div>
-    <footer className={styles.footer}><span>Curated by OpenZcash · Sources checked 17 Oct 2026</span><Source href={FORUM}>Crosslink forum</Source><Source href="https://github.com/ShieldedLabs/crosslink_monolith/releases">All releases</Source></footer>
+    <footer className={styles.footer}><span>Curated by OpenZcash · Sources checked {sourcesChecked}</span><Source href={FORUM}>Crosslink forum</Source><Source href="https://github.com/ShieldedLabs/crosslink_monolith/releases">All releases</Source></footer>
   </>;
 }

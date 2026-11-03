@@ -36,6 +36,9 @@
     "errors:check": "tsx scripts/build-error-fallback.tsx --check",
     "test:errors": "vitest run src/components/errors/error-state.test.tsx && node --test ops/error-fallback/handler.test.mjs && npm run errors:check",
     "check:proposal-cards": "node scripts/check-proposal-cards.mjs",
+    "check:crosslink": "node scripts/check-crosslink-sources.mjs",
+    "check:crosslink:report": "node scripts/check-crosslink-sources.mjs --report",
+    "test:crosslink-sources": "node --test scripts/lib/crosslink-sources.test.mjs",
     "wallets:check": "tsx scripts/validate-wallet-evidence.ts"
   },
   "dependencies": {
