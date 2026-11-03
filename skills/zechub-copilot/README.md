@@ -50,6 +50,10 @@ Read each proposal's actual voting rules and power. Keep approval, execution, an
 
 See [SKILL.md](./SKILL.md) for source URLs and research rules.
 
+The public package contains text only. During a DAO DAO indexer outage, follow
+the direct Juno contract queries in SKILL.md. The legacy `scripts/` helpers in
+the source repository require the indexer and are not included in the download.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).
