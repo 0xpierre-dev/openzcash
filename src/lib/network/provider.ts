@@ -12,6 +12,7 @@ import type {
 } from "./types";
 import { getNetworkActivity } from "./zecblock";
 import { getNetworkEconomics } from "./economics";
+import { projectHalving } from "./halving";
 
 const API_URL = "https://api.zcashinfo.com/api/v1";
 const SOURCE = {
@@ -21,8 +22,6 @@ const SOURCE = {
 };
 const RANGES: Record<NetworkPeriod, string> = { day: "24h", week: "1w", month: "1m" };
 const ZATS_PER_ZEC = 100_000_000;
-const SECOND_HALVING_HEIGHT = 2_726_400;
-const HALVING_BLOCKS = 1_680_000;
 const RETRY_MS = 10_000;
 
 const amount = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
@@ -128,27 +127,18 @@ function emission(info: Dashboard["info"], latest: ApiBlock): NetworkEmission {
     ? null : latest.total_minted_zatoshis / ZATS_PER_ZEC;
   const minerSubsidyZec = latest.miner_subsidy_zatoshis == null
     ? null : latest.miner_subsidy_zatoshis / ZATS_PER_ZEC;
-  // ZIP 208's current discrete schedule. A changed target or a scheduled NU7
-  // before the halving needs a new projection, not a guessed activation date.
-  const era = Math.floor((latest.height - SECOND_HALVING_HEIGHT) / HALVING_BLOCKS);
-  const next = SECOND_HALVING_HEIGHT + (era + 1) * HALVING_BLOCKS;
-  const knownSchedule = era >= 0 && info.target_block_spacing_secs === 75
-    && (info.nu7_activation_height == null || info.nu7_activation_height > next);
-  if (!knownSchedule) return {
-    blockSubsidyZec, minerSubsidyZec, nextHalvingHeight: null,
-    blocksRemaining: null, estimatedHalvingAt: null,
-    eraProgressPercent: null, nextBlockSubsidyZec: null,
-  };
-  const remaining = Math.max(0, next - latest.height);
   return {
     blockSubsidyZec,
     minerSubsidyZec,
-    nextHalvingHeight: next,
-    blocksRemaining: remaining,
-    estimatedHalvingAt: new Date((latest.time + remaining * info.target_block_spacing_secs) * 1_000).toISOString(),
-    eraProgressPercent: (1 - remaining / HALVING_BLOCKS) * 100,
-    nextBlockSubsidyZec: latest.total_minted_zatoshis == null
-      ? null : Math.floor(latest.total_minted_zatoshis / 2) / ZATS_PER_ZEC,
+    ...(projectHalving({
+      height: latest.height,
+      time: latest.time,
+      targetBlockSeconds: info.target_block_spacing_secs,
+      nu7ActivationHeight: info.nu7_activation_height,
+    }) ?? {
+      halvingSchedule: null, nextHalvingHeight: null, blocksRemaining: null,
+      estimatedHalvingAt: null, eraProgressPercent: null, nextBlockSubsidyZec: null,
+    }),
   };
 }
 

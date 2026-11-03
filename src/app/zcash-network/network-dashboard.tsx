@@ -304,6 +304,7 @@ export function NetworkDashboard() {
                 <Stat label="Annualized inflation">{inflation ? <AnimatedValue value={inflation.annualizedPercent} /> : "—"}<small>%</small></Stat>
               </div>
             </div>
+            {inflation && inflationDelayed && <span className={s.sectionState}>Inflation delayed · {dated(inflation.observedAt)} UTC</span>}
             <div className={s.supplyProgress}><div className={s.track}><span style={{ width: `${clampPercent(core.totalSupplyZec / 21_000_000 * 100)}%`, background: "var(--accent)" }} /></div><div className={s.caption}><span>{pct(core.totalSupplyZec / 21_000_000 * 100)} issued</span><span>21M ZEC maximum</span></div></div>
             <dl className={s.detailRows}>
               <div><dt>Block subsidy</dt><dd>{emission?.blockSubsidyZec != null ? `${precise.format(emission.blockSubsidyZec)} ZEC` : "—"}</dd></div>
@@ -314,16 +315,16 @@ export function NetworkDashboard() {
           </> : <Empty loading={loading} />}
         </Card>
 
-        <Card title="Next halving" icon={<NetworkIcon name="halving" />} className={s.halving} motionPaused={core?.stale ?? false}>
-          {core ? <>
+        <Card title="Next halving" icon={<NetworkIcon name="halving" />} className={s.halving} motionPaused={core?.stale ?? false} action={emission?.halvingSchedule === "nu7" ? <External href="https://zips.z.cash/zip-0259">NU7 schedule</External> : undefined}>
+          {core && emission?.nextHalvingHeight != null ? <>
             <Stat label="Blocks remaining">{emission?.blocksRemaining != null ? <AnimatedValue value={emission.blocksRemaining} format={number} /> : "—"}</Stat>
             <div className={s.supplyProgress}><div className={s.track}><span style={{ width: `${clampPercent(emission?.eraProgressPercent ?? 0)}%`, background: "var(--accent)" }} /></div><div className={s.caption}><span>Current era</span><span>{emission?.eraProgressPercent != null ? pct(emission.eraProgressPercent) : "—"}</span></div></div>
             <dl className={s.detailRows}>
               <div><dt>Estimated date</dt><dd>{emission?.estimatedHalvingAt ? dated(emission.estimatedHalvingAt) : "—"}</dd></div>
               <div><dt>Halving height</dt><dd>{emission?.nextHalvingHeight != null ? number.format(emission.nextHalvingHeight) : "—"}</dd></div>
-              <div><dt>Next block subsidy</dt><dd>{emission?.nextBlockSubsidyZec != null ? `${precise.format(emission.nextBlockSubsidyZec)} ZEC` : "—"}</dd></div>
+              <div><dt>Next scheduled subsidy</dt><dd>{emission?.nextBlockSubsidyZec != null ? `${precise.format(emission.nextBlockSubsidyZec)} ZEC` : "—"}</dd></div>
             </dl><Freshness fetchedAt={core.fetchedAt} stale={core.stale || old || error} now={clock} />
-          </> : <Empty loading={loading} />}
+          </> : <Empty loading={loading} message="Waiting for a verified halving schedule." href="https://zips.z.cash/zip-0259" />}
         </Card>
       </div>
 
@@ -360,6 +361,7 @@ export function NetworkDashboard() {
         <p><strong>Privacy.</strong> Shielded share uses all reported pool balances, including Lockbox. It measures ZEC holdings, not people or private transactions.</p>
         <p><strong>Mining.</strong> Distribution is the share of sampled blocks. Pool attribution is inferred by the explorer; unknown miners may share a group.</p>
         <p><strong>Supply & inflation.</strong> Reported on-chain supply differs from market circulating supply. Annualized inflation is the latest complete UTC day&apos;s supply increase × 365 ÷ that day&apos;s closing supply, including Deferred Lockbox issuance. It is an annualized daily reading, not a forecast. Miner subsidy excludes fees.</p>
+        <p><strong>Halving.</strong> The estimate uses the observed block height and time, with the published target spacing. When the source reports the <a href="https://zips.z.cash/zip-0259" target="_blank" rel="noreferrer">NU7 schedule</a>, it includes the change from 75 to 25 seconds at block 3,543,405 and the next halving at 6,132,390. Dates are estimates. Era progress follows the subsidy schedule; the next scheduled subsidy excludes NSM reissuance.</p>
         <p><strong>Size & price.</strong> Blockchain size is the explorer node&apos;s reported storage in decimal GB, not a required wallet download. ZEC / BTC is the price of one ZEC divided by one BTC × 100, not market-cap dominance or a price change. <a href={market?.source.url ?? "https://www.coingecko.com/en/coins/zcash"} target="_blank" rel="noreferrer">Market quote</a> timestamps are retained on failed refreshes.</p>
         <p><strong>Fees & mempool.</strong> Fees average the latest {core?.sampleBlocks ?? 100} blocks. Pending transactions reflect the explorer’s mempool view.</p>
         <p><strong>Insights.</strong> Average block size uses the recent blocks returned by the source. Each window is shown below its reading. Block pace compares observed block frequency with the source&apos;s target. Blocks in the last 24 hours use a full rolling window.</p>
