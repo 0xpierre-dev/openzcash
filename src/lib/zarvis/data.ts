@@ -214,7 +214,11 @@ async function readPublicData(topic: z.infer<typeof lookupSchema>["topic"], quer
     }
     case "arborist": { const { getArboristCalls, arboristFetchedAt, ARBORIST_REPO_URL, ARBORIST_YOUTUBE_URL } = await import("@/lib/arborist/notes"); return (await import("./arborist")).arboristContext(await getArboristCalls(), query, { fetchedAt: arboristFetchedAt(), repository: ARBORIST_REPO_URL, recordings: ARBORIST_YOUTUBE_URL }); }
     case "forum": return (await import("./forum")).forumContext(query, signal);
-    case "zechub_dao": { const { getZechubProposals, ZECHUB_DAO_URL } = await import("@/lib/dao/zechub"); return (await import("./dao")).daoContext(await getZechubProposals(50), query, { url: ZECHUB_DAO_URL, fetchedAt: new Date().toISOString() }); }
+    case "zechub_dao": {
+      const { getZechubGovernance, ZECHUB_DAO_URL } = await import("@/lib/dao/zechub");
+      const feed = await getZechubGovernance(50);
+      return (await import("./dao")).daoContext(feed.proposals, query, { url: ZECHUB_DAO_URL, fetchedAt: feed.fetchedAt, status: feed.status, source: feed.source });
+    }
     case "wallets": return (await import("./directory")).walletsContext(query);
     case "communities": {
       const [{ communitiesContext }, { getCommunitiesFunding }] = await Promise.all([import("./directory"), import("@/lib/communities/funding")]);

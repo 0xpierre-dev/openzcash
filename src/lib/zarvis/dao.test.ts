@@ -3,8 +3,16 @@ import { DAO_ROWS, daoContext, daoFilter } from "./dao";
 import type { ZechubProposal } from "@/lib/dao/zechub";
 const proposal = (id: number, title: string, status: string, over: Partial<ZechubProposal> = {}): ZechubProposal => ({ id, ref: `A${id}`, title, status, createdAt: `2026-0${(id % 9) + 1}-01T00:00:00.000Z`, yes: 10, no: 1, abstain: 0, proposer: "juno1abc", url: `https://daodao.zone/dao/juno1dao/proposals/A${id}`, description: `Budget for ${title}: 500 USD`, ...over });
 const proposals = [proposal(163, "Fund ZecHub Nigeria meetup", "open"), proposal(162, "Pay September contributors", "executed"), proposal(161, "Wiki translation bounty", "passed"), proposal(160, "Buy conference tickets", "rejected"), ...Array.from({ length: 20 }, (_, i) => proposal(159 - i, `Older proposal ${i}`, "executed"))];
-const meta = { url: "https://daodao.zone/dao/juno1dao", fetchedAt: "2026-09-28T21:00:00.000Z" };
+const meta = { url: "https://daodao.zone/dao/juno1dao", fetchedAt: "2026-09-28T21:00:00.000Z", status: "live" as const, source: "indexer" as const };
 describe("ZecHub DAO context", () => {
+  it("preserves a stale reading's date and distinguishes unavailable data from zero proposals", () => {
+    expect(daoContext(proposals, "latest", { ...meta, status: "stale", source: "chain" })).toMatchObject({
+      daoFetchedAt: meta.fetchedAt, status: "stale", source: "chain", proposalsListed: 24,
+    });
+    expect(daoContext([], "latest", { ...meta, status: "unavailable", source: null, fetchedAt: null })).toMatchObject({
+      daoFetchedAt: null, status: "unavailable", source: null, proposalsListed: null,
+    });
+  });
   it("reads numbers, status words and title words from a question in English or Portuguese", () => {
     expect(daoFilter("What is proposal A161 about?")).toMatchObject({ numbers: [161] });
     expect(daoFilter("Which ZecHub DAO proposals are open?")).toMatchObject({ statuses: ["open"], tokens: [] });
