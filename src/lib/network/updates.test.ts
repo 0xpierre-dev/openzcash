@@ -18,7 +18,7 @@ function core(recentBlocks: NetworkBlock[], overrides: Partial<NetworkCore> = {}
     averageBlockSeconds: 75, averageTxsPerBlock: 1, averageFeesZecPerBlock: 0,
     sampleBlocks: recentBlocks.length, totalSupplyZec: 1, poolTotalZec: 1,
     shieldedZec: 0, shieldedPercent: 0, pools: [], recentBlocks,
-    emission: { blockSubsidyZec: 1.5625, minerSubsidyZec: 1.25,
+    emission: { blockSubsidyZec: 1.5625, minerSubsidyZec: 1.25, halvingSchedule: null,
       nextHalvingHeight: null, blocksRemaining: null, estimatedHalvingAt: null,
       eraProgressPercent: null, nextBlockSubsidyZec: null },
     ...overrides,
