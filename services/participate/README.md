@@ -85,8 +85,12 @@ npm run build
 Database tests are opt-in. Create a disposable local `community_treasury_tests`
 database using the same baseline, then set `TREASURY_TEST_DATABASE_URL` and
 `PARTICIPATE_TEST_PORT` (default 55438). Database suites run serially. The separate
-`PARTICIPATE_DEMO_TEST_DATABASE_URL` suite requires the isolated demo seed; it is
-not enabled by the treasury variable. Never run these tests against user data.
+`PARTICIPATE_DEMO_TEST_DATABASE_URL` suite creates its own synthetic demo fixture
+in a fresh local `participate_demo_test` database with the baseline applied. It
+refuses existing accounts and is not enabled by the treasury variable. See the
+[demo test commands](docs/committee-practice.md#database-regression-tests).
+Never run these tests against user data. CI prepares both databases and runs
+the demo suite alongside the other database tests.
 
 Apache-2.0. The source and attribution notices are preserved. See [NOTICE](NOTICE)
 for changes made while preparing this distribution.
