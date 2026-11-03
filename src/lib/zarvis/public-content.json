@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "a1f380af57e29812",
+  "sourceRevision": "8ed10d119f465a0e",
   "sourceFiles": 72,
   "documents": [
     {
@@ -307,13 +307,13 @@
       "id": "src/app/zechub/page.tsx:0",
       "url": "https://openzcash.org/zechub",
       "title": "zechub",
-      "text": "ZecHub DAO · OpenZcash\nZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote.\nnumeric\nimg\n%\nfunded ·\npaid\nyes\n·\nno\nDonations\nFPF program fund\nZecHub Inc\nZecHub DAO\ndaodao.zone\nTreasury sheet\nGitHub · ZecHub\nTreasury overview\nAllocations & payouts\nGovernance\nResearch with Copilot ↗\nTotal treasury · 3 funds\nDonations treasury\nAvailable in source snapshot\nPaid out to date\nZEC price used\nFPF allocation by category\nSince\n: FPF\n, donations\n.\nGrants: paid vs committed\nChanged this week\nSubscribe to new ZecHub treasury payouts via RSS\nRSS ↗\nNew payouts recorded on the treasury dashboard between imports.\nRecent proposals\nOpen now\nPassed / executed\nLatest proposals\nProposals are temporarily unavailable: the DAO DAO indexer did not respond. Try again shortly, or open\nthe DAO on daodao.zone ↗\nZecHub Copilot\nAsk your own agent why a vote passed or failed. It computes both tests a proposal has to clear (67% of yes+no and 40% turnout), names every voter, and reads the treasury without mistaking the headline total for spendable money.\nGet the skill\nTreasury balances and payout records mirror the\nZecHub DAO Treasury Dashboard ↗\nmaintained by the DAO"
+      "text": "ZecHub DAO · OpenZcash\nZecHub governs itself on-chain (DAO DAO on Juno). Treasury balances come from its dated public spreadsheet; USD estimates use a separate market quote.\nnumeric\nimg\n%\nfunded ·\npaid\nyes\n·\nno\nDonations\nFPF program fund\nZecHub Inc\nZecHub DAO\ndaodao.zone\nTreasury sheet\nGitHub · ZecHub\nTreasury overview\nAllocations & payouts\nGovernance\nResearch with Copilot ↗\nTotal treasury · 3 funds\nDonations treasury\nAvailable in source snapshot\nPaid out to date\nZEC price used\nFPF allocation by category\nSince\n: FPF\n, donations\n.\nGrants: paid vs committed\nChanged this week\nSubscribe to new ZecHub treasury payouts via RSS\nRSS ↗\nNew payouts recorded on the treasury dashboard between imports.\nRecent proposals\nPassed / executed\nUTC\nLatest proposals\nthe DAO on daodao.zone ↗\nZecHub Copilot\nAsk your own agent why a vote passed or failed. It computes both tests a proposal has to clear (67% of yes+no and 40% turnout), names every voter, and reads the treasury without mistaking the headline total for spendable money.\nGet the skill\nTreasury balances and payout records mirror the\nZecHub DAO Treasury Dashboard ↗\nmaintained by the DAO"
     },
     {
       "id": "src/app/zechub/page.tsx:1",
       "url": "https://openzcash.org/zechub",
       "title": "zechub",
-      "text": ", re-imported every 6 hours. Indicative USD values apply the separately dated market quote to those recorded balances; they do not establish current holdings or available funds. Proposals are read live from the DAO DAO indexer. The\nfunded\nchip links a proposal to its payout line by title match."
+      "text": ", re-imported every 6 hours. Indicative USD values apply the separately dated market quote to those recorded balances; they do not establish current holdings or available funds. Proposals are read from the DAO DAO indexer, with direct Juno contract queries as a fallback. Creation dates are shown only when known. The\nfunded\nchip links a proposal to its payout line by title match."
     },
     {
       "id": "src/app/arborist/page.tsx:0",
@@ -355,7 +355,7 @@
       "id": "src/app/ceremony/ten-years/page.tsx:0",
       "url": "https://openzcash.org/ceremony/ten-years",
       "title": "ceremony · ten years",
-      "text": "Ten years · Zcash Ceremony · OpenZcash\nTen years of Zcash since the genesis block of October 28, 2016: every generation of shielded pools, the end of the trusted setup, the halvings, and the claims that keep circulating.\nTen years\nFrom the genesis block to NU5, which ended the need for any ceremony, through two halvings and an emergency, to the tenth anniversary. Upgrades and votes follow the ZIPs and this site's own records.\nSince the genesis block\ndays\nTo the tenth anniversary\nIn Ironwood now\nEvery activation height and how it was decided is on\nZcash governance\n; every ZEC paid outside mining on\nZcash's Since block zero\n.\nOften misstated"
+      "text": "Ten years · Zcash Ceremony · OpenZcash\nTen years of Zcash since the genesis block of October 28, 2016: every generation of shielded pools, the end of the trusted setup, the halvings, and the claims that keep circulating.\nnumeric\nTen years\nFrom the genesis block to NU5, which ended the need for any ceremony, through two halvings and an emergency, to the tenth anniversary. Upgrades and votes follow the ZIPs and this site's own records.\nSince the genesis block\nand\nTenth anniversary\nIn Ironwood now\nEvery activation height and how it was decided is on\nZcash governance\n; every ZEC paid outside mining on\nZcash's Since block zero\n.\nOften misstated"
     },
     {
       "id": "src/app/ceremony/watch/page.tsx:0",
@@ -3962,6 +3962,12 @@
       "title": "Coinholder Grants · Proposals",
       "text": "The permanent Proposals page at /coinholders/proposals shows the current round, Q4 2026. It lists open applications from the Financial-Privacy-Foundation/ZcashCoinholderGrantsProgram GitHub repository with the exact label Ready For Vote - All Steps Completed, created from October 30 through December 31, 2026. Decided, withdrawn and cancelled applications are excluded. Search by title, applicant or organization, filter by category and sort by amount or date. View proposal opens the full application inside OpenZcash; its GitHub link opens the source and discussion. The FPF schedule accepts proposals October 30–November 13, reviews November 16–December 16 and schedules voting December 17–29, 2026. Each closing deadline is 20:00 UTC. Official submission status is not approval, payment or a vote result. Counts, requested USD and labels are checked on access with a five-minute cache. A stale or unavailable source is marked explicitly; an unavailable source does not mean zero proposals. This static guide cannot establish current proposal counts or funding totals; consult the page and its last successful check. Sources & method contains the exact eligibility label and source link. The page refreshes every five minutes while visible; Refresh also checks the current cached list. Results, Voting activity and Verify default to the active cycle, Q4 2026, with a pending state and the same announced timeline. Q3 and earlier outcomes are selected by round; activity archives currently cover Q3 2026 only. Q4 has no published result, vote-chain tally or verification yet. The program overview and fund show the current cycle separately from historical approvals and payments. FPF announces quarterly cycles; later dates are not inferred automatically.",
       "url": "https://openzcash.org/coinholders/proposals"
+    },
+    {
+      "id": "guide:opportunities-beta",
+      "title": "Zcash Opportunities beta: tasks, wallets, tests and campaigns",
+      "text": "Opportunities is a read-only OpenZcash beta with 27 illustrative opportunities and 27 matte-paper stock covers. It mixes wallets, node tests, development, research, education, community tasks and contests in a randomized initial order. No project has a fixed featured position; filtering and navigating back preserve the current order. Visitors can filter by type, category, organizer, work language and country, inspect briefs and example rewards, bookmark items, and try the first creation step including the stock cover library. Publishing, file uploads, community or campaign creation, applications and contest submissions are blocked. All organizers and rewards are examples: no funds are committed and no project sponsorship is implied. Displayed USD conversions are a dated illustrative reference, not a live quote. Beta de leitura: oportunidades e premios sao exemplos, sem fundos comprometidos. A ordem inicial e aleatoria; criacao, publicacao e submissoes estao bloqueadas depois da configuracao inicial e escolha da capa. Beta de solo lectura: oportunidades y premios de ejemplo, orden aleatorio, sin publicaciones ni entregas habilitadas.",
+      "url": "https://openzcash.org/opportunities"
     }
   ]
 }

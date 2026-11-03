@@ -70,10 +70,12 @@ export type NetworkBlock = {
 export type NetworkEmission = {
   blockSubsidyZec: number | null;
   minerSubsidyZec: number | null;
+  halvingSchedule: "blossom" | "nu7" | null;
   nextHalvingHeight: number | null;
   blocksRemaining: number | null;
   estimatedHalvingAt: string | null;
   eraProgressPercent: number | null;
+  /** Scheduled subsidy after the next halving, excluding NSM reissuance. */
   nextBlockSubsidyZec: number | null;
 };
 

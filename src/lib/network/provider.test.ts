@@ -173,6 +173,43 @@ describe("Zcash network public data", () => {
     });
   });
 
+  it("restores the NU7 projection while retaining observed subsidy and delayed inflation", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("/dashboard")) return ok({ ...dashboard(), info: {
+        ...dashboard().info, nu7_activation_height: 3_543_405,
+      } });
+      return ok(apiResponse(url));
+    });
+    const reading = economics();
+    reading.inflation.stale = true;
+    economicsMock.mockResolvedValue(reading);
+    const { getNetworkSnapshot } = await import("./provider");
+    const snapshot = await getNetworkSnapshot();
+    expect(snapshot).toMatchObject({ status: "partial", unavailableSections: [],
+      inflation: reading.inflation, core: { emission: {
+        halvingSchedule: "nu7", nextHalvingHeight: 6_132_390,
+        blocksRemaining: 2_618_890, nextBlockSubsidyZec: 0.26041666,
+        blockSubsidyZec: 1.5625, minerSubsidyZec: 1.25,
+      } },
+    });
+  });
+
+  it("does not infer future scheduled subsidy from observed minting or missing fields", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("/dashboard")) return ok({ ...dashboard(),
+        info: { ...dashboard().info, target_block_spacing_secs: 25, nu7_activation_height: 3_543_405 },
+        recent_blocks: [{ ...block(), height: 9_000_000,
+          total_minted_zatoshis: 40_000_000, miner_subsidy_zatoshis: null }],
+      });
+      return ok(apiResponse(url));
+    });
+    const { getNetworkSnapshot } = await import("./provider");
+    expect((await getNetworkSnapshot()).core?.emission).toMatchObject({
+      blockSubsidyZec: 0.4, minerSubsidyZec: null,
+      halvingSchedule: "nu7", nextHalvingHeight: 11_172_390, nextBlockSubsidyZec: 0.13020833,
+    });
+  });
+
   it("deduplicates parallel page requests and caches shared core data across selected periods", async () => {
     const { getNetworkSnapshot } = await import("./provider");
     const [first, second] = await Promise.all([getNetworkSnapshot(), getNetworkSnapshot()]);

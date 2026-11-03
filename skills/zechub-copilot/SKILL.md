@@ -57,6 +57,21 @@ Inspect response shapes: indexer arrays/objects differ from LCD's data wrapper.
 An error string is not an empty vote list. Paginate history and disclose failed pages
 or caps. No open proposals on the first page does not prove none exist.
 
+If the indexer is unavailable (including HTTP 530), query the same proposal
+contract through the Juno contract endpoint above. Encode the UTF-8 JSON as
+base64, then URL-encode that value for the final path segment:
+
+- Recent module-A proposals: {"reverse_proposals":{"limit":50}}.
+- Earlier proposals: add "start_before":<lowest-id> inside reverse_proposals.
+- One proposal: {"proposal":{"proposal_id":<N>}}.
+
+The recent-list response is data.proposals; a single response is data with its
+id and proposal. Preserve canonical DAO DAO links ending in /proposals/A<N>.
+Contract responses do not contain proposal creation timestamps. Leave them
+unknown unless another cited source supplies them; never use retrieval time or
+expiration as creation time. Identify the actual source and retrieval time.
+If both sources fail, report unavailable coverage instead of zero proposals.
+
 Read each proposal's votes, total_power, threshold, expiration, and status. Voting
 power is snapshotted per proposal; today's membership count is not interchangeable.
 Modules can use different voting strategies and rules.

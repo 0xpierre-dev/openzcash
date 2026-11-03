@@ -41,6 +41,26 @@ it("parses USD without accepting ambiguous or malformed amounts", () => {
   for (const value of ["$1,25", "$5k", "$500 or $800", "-50", "0", "$5.555", "1e5", "$500\nOther $50"]) expect(requestedCents(value)).toBeNull();
 });
 
+it("uses the current request when a parenthetical note records its previous amount", () => {
+  expect(requestedCents("$1,690 (reduced from $2,000 on 2026-11-02, see Other Funding Sources)")).toBe(169000);
+  expect(requestedCents("USD 1,690.25 (reduced from US$2,000)")).toBe(169025);
+  expect(requestedCents("2,500 USD (increased from $2,000 on 2026-11-02)")).toBe(250000);
+});
+
+it("does not turn ambiguous, conditional or contradictory notes into requested totals", () => {
+  for (const value of [
+    "$1,690 (or $2,000)",
+    "$1,690 (per month)",
+    "$1,690 (reduced from $2,000 if approved)",
+    "$1,690 (reduced from $1,500)",
+    "$1,690 (increased from $2,000)",
+    "$1,690 (reduced from $2,000 or $3,000)",
+    "$1,690 (reduced from $2,000, see $310 contribution)",
+    "$1,690 (reduced from $2,000) plus $310",
+    "$1,690 (reduced from $2k)",
+  ]) expect(requestedCents(value), value).toBeNull();
+});
+
 it("uses announced boundaries and does not call submissions a live vote", () => {
   expect(q4Phase(Date.parse(Q4.submissionsOpen)).label).toBe("Accepting proposals");
   expect(q4Phase(Date.parse(Q4.submissionsClose) + 1).label).toBe("Submissions closed");

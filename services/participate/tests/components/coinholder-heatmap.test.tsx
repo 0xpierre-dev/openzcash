@@ -38,12 +38,14 @@ describe("Coinholder reveal heatmap", () => {
 
     for (const [option, label] of [["accept", "Accept"], ["reject", "Reject"], ["lower", "Lower amount"], ["abstain", "Abstain"]] as const) {
       choose(label);
+      const renderedRows = table.querySelectorAll("tbody tr");
       for (let rowIndex = 0; rowIndex < 37; rowIndex++) {
         const proposal = history.proposals.find(value => value.id === rowIndex + 1)!;
+        const buttons = renderedRows[rowIndex].querySelectorAll<HTMLButtonElement>("td button");
         for (let dayIndex = 0; dayIndex < 13; dayIndex++) {
           const day = proposal.days[dayIndex];
           const total = Object.values(day.counts).reduce((sum, count) => sum + count, 0);
-          const button = cell(rowIndex, dayIndex);
+          const button = buttons[dayIndex];
           if (!total) {
             expect(button).toHaveTextContent("—");
             expect(button).toHaveAccessibleName(/No shares; daily total 0/);

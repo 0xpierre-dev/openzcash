@@ -21,6 +21,11 @@ If FPF adds a round marker, update this selection rule and its tests together.
 This page represents active submissions; it is not an archive of all Q4 votes.
 
 Amounts come only from `Requested Grant Amount (USD)` and are stored in cents.
+An explicit amount may include a parenthetical `reduced from` or `increased from`
+history note, optionally dated and referencing another section. For example,
+`$1,690 (reduced from $2,000 on 2026-11-02, see Other Funding Sources)` contributes
+$1,690 to the total. Both amounts must be valid USD values and agree with the
+stated direction. Conditional amounts and arbitrary prose remain unknown.
 Unrecognized or missing amounts stay unknown; project cost is not substituted.
 The list sends summaries to the client and renders the full Markdown only on
 the application page using the existing safe proposal renderer.
@@ -57,6 +62,12 @@ cards, and a Sources & method disclosure for eligibility details. Long applicant
 summaries are limited to two lines in the list; the application remains complete
 on its detail page. Refresh uses the same five-minute server cache. The page
 also refreshes while visible without replacing a search field during typing.
+Search (`q`), topic (`topic`) and ordering (`sort`) live in the collection URL.
+Browser Back, reloads and shared collection links restore the same view. Filter
+edits replace the current history entry through Next's native History API
+integration, without refetching the page for every keystroke. Unknown topics or
+sort values fall back to the unfiltered/default selection; clearing filters
+preserves the selected ordering.
 
 ## Recurring cycles and adjacent pages
 

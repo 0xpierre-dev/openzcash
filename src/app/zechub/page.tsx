@@ -2,7 +2,7 @@ import { FeatureLink } from "@/components/workspace";
 import { Badge, Card, Stat } from "@/components/ui";
 import { OrgHeader } from "@/components/org-header";
 import {
-  getZechubProposals,
+  getZechubGovernance,
   ZECHUB_DAO_URL,
   type ZechubProposal,
 } from "@/lib/dao/zechub";
@@ -272,7 +272,7 @@ function ProposalRow({
           ) : null}
         </div>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-stone-500">
-          <span>{fmtDate(p.createdAt)}</span>
+          {p.createdAt && <span>{fmtDate(p.createdAt)}</span>}
           {total > 0 ? (
             <span className="tnum">
               <span className="text-emerald-700">{p.yes} yes</span> ·{" "}
@@ -288,15 +288,17 @@ function ProposalRow({
 }
 
 export default async function ZechubDaoPage() {
-  const [proposals, snapshot, payouts, series, changes, quote] =
+  const [governance, snapshot, payouts, series, changes, quote] =
     await Promise.all([
-      getZechubProposals(40),
+      getZechubGovernance(40),
       latestTreasurySnapshot(),
       treasuryPayouts(),
       treasurySeries(),
       listChangelog(7, 10, "zechub").catch(() => []),
       currentZecUsdQuote(),
     ]);
+  const proposals = governance.proposals;
+  const governanceAvailable = governance.status !== "unavailable";
   const allocations = snapshot ? await treasuryAllocations(snapshot.id) : [];
   const previous = series.length >= 2 ? series[series.length - 2] : null;
 
@@ -606,21 +608,26 @@ export default async function ZechubDaoPage() {
       >
         <Stat
           label="Recent proposals"
-          value={String(proposals.length)}
-          sub="newest first"
+          value={governanceAvailable ? String(proposals.length) : "—"}
+          sub={governanceAvailable ? "newest first" : "awaiting source"}
         />
         <Stat
-          label="Open now"
-          value={String(openCount)}
+          label={governance.status === "stale" ? "Open at last check" : "Open now"}
+          value={governanceAvailable ? String(openCount) : "—"}
           sub="voting in progress"
           tone="warn"
         />
         <Stat
           label="Passed / executed"
-          value={String(passedCount)}
+          value={governanceAvailable ? String(passedCount) : "—"}
           sub="of those shown"
         />
       </section>
+
+      {governance.fetchedAt && <p className="mb-3 text-xs text-stone-500">
+        {governance.status === "stale" ? "Delayed · last available reading" : governance.source === "chain" ? "Juno · direct contract data" : "DAO DAO"}
+        {" · "}{new Date(governance.fetchedAt).toISOString().slice(0, 16).replace("T", " ")} UTC
+      </p>}
 
       {proposals.length > 0 ? (
         <Card className="p-0">
@@ -636,8 +643,7 @@ export default async function ZechubDaoPage() {
       ) : (
         <Card>
           <p className="text-sm text-stone-600">
-            Proposals are temporarily unavailable: the DAO DAO indexer did not
-            respond. Try again shortly, or open{" "}
+            {governanceAvailable ? "No proposals were returned. Open" : "Proposal data is temporarily unavailable. Open"}{" "}
             <a
               href={`${ZECHUB_DAO_URL}/proposals`}
               target="_blank"
@@ -674,8 +680,9 @@ export default async function ZechubDaoPage() {
           : ""}
         , re-imported every 6 hours. Indicative USD values apply the separately
         dated market quote to those recorded balances; they do not establish
-        current holdings or available funds. Proposals are read live from the
-        DAO DAO indexer. The{" "}
+        current holdings or available funds. Proposals are read from the DAO DAO
+        indexer, with direct Juno contract queries as a fallback. Creation dates
+        are shown only when known. The{" "}
         <span className="rounded bg-emerald-500/10 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
           funded
         </span>{" "}
