@@ -3792,7 +3792,7 @@
 .opportunity-directory .directory-footer { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 18px; display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 12px; }
 .opportunity-directory .directory-footer a { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .opportunity-directory .directory-detail { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; }
-.opportunity-directory .directory-detail-cover { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.opportunity-directory .directory-detail-cover { width: 100%; max-width: 480px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
 .opportunity-directory .directory-detail-cover img { display: block; width: 100%; height: auto; object-fit: contain; }
 .opportunity-directory .directory-detail-heading { padding: 26px 0 20px; }
 .opportunity-directory .directory-detail-heading > span + span { margin-left: 14px; font-size: 11px; color: var(--muted); }
