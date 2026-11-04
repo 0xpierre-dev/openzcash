@@ -3769,8 +3769,9 @@
 .opportunity-directory .directory-count { white-space: nowrap; color: var(--muted); font-size: 12px; }
 .opportunity-directory .op-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .opportunity-directory .directory-card { display: flex; flex-direction: column; overflow: hidden; }
-.opportunity-directory .directory-card > .op-card-art { display: block; position: relative; margin: 12px 12px 0; border-radius: 12px; overflow: hidden; }
-.opportunity-directory .directory-card .op-card-art .illustration { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+/* Match the full paper artwork, overriding the legacy card's 180px cap. */
+.opportunity-directory .directory-card > .op-card-art { display: block; position: relative; flex-shrink: 0; height: auto; max-height: none; aspect-ratio: 3 / 2; margin: 12px 12px 0; border-radius: 12px; overflow: hidden; }
+.opportunity-directory .directory-card .op-card-art .illustration { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
 .opportunity-directory .directory-kind { position: absolute; bottom: 12px; left: 12px; background: #faf8f2; color: #292722; border: 1px solid #e3ded3; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 550; }
 .opportunity-directory .directory-card .op-card-body { display: flex; flex-direction: column; flex: 1; padding: 20px; }
 .opportunity-directory .directory-card h2 { margin: 15px 0 10px; font-size: 19px; line-height: 1.35; min-height: 0; }
@@ -3792,7 +3793,7 @@
 .opportunity-directory .directory-footer a { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .opportunity-directory .directory-detail { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; }
 .opportunity-directory .directory-detail-cover { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-.opportunity-directory .directory-detail-cover img { display: block; width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+.opportunity-directory .directory-detail-cover img { display: block; width: 100%; height: auto; object-fit: contain; }
 .opportunity-directory .directory-detail-heading { padding: 26px 0 20px; }
 .opportunity-directory .directory-detail-heading > span + span { margin-left: 14px; font-size: 11px; color: var(--muted); }
 .opportunity-directory .directory-detail-heading h1 { font-size: clamp(28px, 3vw, 40px); line-height: 1.2; letter-spacing: -.025em; margin: 18px 0 14px; }
@@ -3821,8 +3822,8 @@
 .opportunity-directory .directory-how b { color: var(--accent-ink); margin-right: 8px; font-size: 11px; }
 .opportunity-directory .directory-platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .opportunity-directory .directory-platform-card { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--surface); }
-.opportunity-directory .directory-platform-art { height: 180px; overflow: hidden; }
-.opportunity-directory .directory-platform-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.opportunity-directory .directory-platform-art { aspect-ratio: 3 / 2; overflow: hidden; }
+.opportunity-directory .directory-platform-art img { display: block; width: 100%; height: auto; object-fit: contain; }
 .opportunity-directory .directory-platform-card > div + div { padding: 24px; }
 .opportunity-directory .directory-platform-card h2 { margin: 14px 0 10px; font-size: 22px; }
 .opportunity-directory .directory-platform-card p { color: var(--muted); line-height: 1.7; font-size: 13px; }
