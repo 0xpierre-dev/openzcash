@@ -25,6 +25,11 @@ and one minute on an incomplete/failed read. Expired data is replaced on failure
 not retained as current. Source URLs are fixed or constructed from validated IDs.
 No third-party image content is loaded from bounty descriptions.
 
+Every page supplies its freshly validated catalog to the client. Visible listing
+and detail pages refresh their server data every minute and when the tab regains
+focus, while keeping the session's mixed order. Expired deadlines are removed on
+each server read. Preparation pages do not poll or reset their drafts.
+
 Gleyo had no validated anonymous feed during research on 2026-11-03: the tested
 search route redirected to login. It is represented by a curated program link;
 no private/session-based scraping is used. Job entries link to employer pages and

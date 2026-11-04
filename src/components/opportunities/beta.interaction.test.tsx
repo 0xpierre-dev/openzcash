@@ -1,23 +1,24 @@
 // @vitest-environment jsdom
 import type { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
-import { cleanup, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { OpportunitiesLayout } from "./frame";
 import { OpportunitiesRoutes } from "./routes";
 import { Editor } from "./editor";
-import { curatedItems } from "./catalog";
-const navigation = vi.hoisted(() => ({ path: "/opportunities", search: "" }));
-vi.mock("next/navigation", () => ({ usePathname: () => navigation.path, useSearchParams: () => new URLSearchParams(navigation.search) }));
+import { curatedItems, type Catalog } from "./catalog";
+const navigation = vi.hoisted(() => ({ path: "/opportunities", search: "", refresh: vi.fn() }));
+vi.mock("next/navigation", () => ({ usePathname: () => navigation.path, useSearchParams: () => new URLSearchParams(navigation.search), useRouter: () => navigation }));
 vi.mock("next/link", () => ({ default: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props} /> }));
 vi.mock("next/image", () => ({ default: ({ unoptimized: _u, ...props }: ImgHTMLAttributes<HTMLImageElement> & { unoptimized?: boolean }) => { void _u; return <img {...props} alt={props.alt ?? ""} />; } })); // eslint-disable-line @next/next/no-img-element
 const items = [...curatedItems].reverse();
 function Directory() { return <OpportunitiesLayout catalog={{ items, sources: [{ id: "zec-bounties", status: "available", checkedAt: "2026-11-03" }] }}><OpportunitiesRoutes /></OpportunitiesLayout>; }
 beforeEach(() => {
   navigation.path = "/opportunities"; navigation.search = "";
+  navigation.refresh.mockClear();
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
   HTMLDialogElement.prototype.close = function () { this.removeAttribute("open"); };
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 it("shows jobs and programs with no local account, application or publication controls", () => {
   render(<Directory />);
   expect(screen.getByRole("button", { name: "Jobs" })).toBeTruthy();
@@ -52,6 +53,45 @@ it("provides all stock images as downloads, with searchable artwork", () => {
   fireEvent.change(screen.getByRole("textbox", { name: "Search artwork" }), { target: { value: "yukon" } });
   expect(screen.getAllByRole("link", { name: /^Download / })).toHaveLength(1);
   expect(screen.getByRole("link", { name: "Download HashSmash · Yukon" }).hasAttribute("download")).toBe(true);
+});
+it("uses fresh page data instead of records retained by the shared layout", () => {
+  const initial: Catalog = { items, sources: [] };
+  const removed = items[0];
+  const fresh: Catalog = { items: items.slice(1).reverse(), sources: [] };
+  const view = render(<OpportunitiesLayout catalog={initial}><OpportunitiesRoutes catalog={initial} /></OpportunitiesLayout>);
+  view.rerender(<OpportunitiesLayout catalog={initial}><OpportunitiesRoutes catalog={fresh} /></OpportunitiesLayout>);
+  expect(Array.from(view.container.querySelectorAll(".directory-card h2")).map((x) => x.textContent)).toEqual(items.slice(1).map((x) => x.title));
+  expect(screen.queryByRole("link", { name: "View " + removed.title })).toBeNull();
+  navigation.path = "/opportunities/tasks/" + removed.id;
+  view.rerender(<OpportunitiesLayout catalog={initial}><OpportunitiesRoutes catalog={fresh} /></OpportunitiesLayout>);
+  expect(screen.getByText("This opportunity is no longer listed")).toBeTruthy();
+  expect(screen.queryByRole("link", { name: removed.actionLabel })).toBeNull();
+});
+it("refreshes visible listings periodically and on focus, but leaves preparation alone", () => {
+  vi.useFakeTimers();
+  const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
+  const view = render(<Directory />);
+  act(() => { vi.advanceTimersByTime(60_000); });
+  expect(navigation.refresh).toHaveBeenCalledTimes(1);
+  visibility.mockReturnValue("hidden");
+  act(() => { vi.advanceTimersByTime(60_000); });
+  expect(navigation.refresh).toHaveBeenCalledTimes(1);
+  visibility.mockReturnValue("visible");
+  fireEvent.focus(window);
+  expect(navigation.refresh).toHaveBeenCalledTimes(2);
+  navigation.path = "/opportunities/prepare"; view.rerender(<Directory />);
+  fireEvent.focus(window);
+  act(() => { vi.advanceTimersByTime(60_000); });
+  expect(navigation.refresh).toHaveBeenCalledTimes(2);
+});
+it("preserves an in-progress brief when refreshed layout data arrives", () => {
+  navigation.path = "/opportunities/prepare"; navigation.search = "provider=gleyo";
+  const initial: Catalog = { items, sources: [] };
+  const view = render(<OpportunitiesLayout catalog={initial}><OpportunitiesRoutes catalog={initial} /></OpportunitiesLayout>);
+  fireEvent.change(screen.getByLabelText("Title"), { target: { value: "My unfinished quest" } });
+  const fresh = { ...initial, items: [...items].reverse() };
+  view.rerender(<OpportunitiesLayout catalog={fresh}><OpportunitiesRoutes catalog={fresh} /></OpportunitiesLayout>);
+  expect((screen.getByLabelText("Title") as HTMLInputElement).value).toBe("My unfinished quest");
 });
 it("prepares a quest with artwork and copies a brief without account creation or a network submission", async () => {
   const writeText = vi.fn().mockResolvedValue(undefined);

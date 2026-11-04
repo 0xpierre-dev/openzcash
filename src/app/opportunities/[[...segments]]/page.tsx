@@ -16,6 +16,7 @@ export default async function Page({ params, searchParams }: Props) {
   if (legacy) redirect(legacy);
   const { tab } = await searchParams;
   if (!segments.length && ["activity", "campaigns", "communities"].includes(tab || "")) redirect("/opportunities/platforms");
-  if (!opportunityRoute(segments, (await getCatalog()).items)) notFound();
-  return <OpportunitiesRoutes />;
+  const catalog = await getCatalog();
+  if (!opportunityRoute(segments, catalog.items)) notFound();
+  return <OpportunitiesRoutes catalog={catalog} />;
 }

@@ -1,15 +1,16 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { BASE, type Catalog } from "./catalog";
 import { Icon } from "./visuals";
+import { retainOrder } from "./order";
 
 const CatalogContext = createContext<Catalog | null>(null);
-export function useCatalog() {
+export function useCatalog(incoming?: Catalog) {
   const value = useContext(CatalogContext);
   if (!value) throw new Error("Missing opportunity catalog");
-  return value;
+  return incoming ? { ...incoming, items: retainOrder(incoming.items, value.items.map((item) => item.id)) } : value;
 }
 export function Dialog({ open, onClose, title, children, className = "" }: {
   open: boolean; onClose: () => void; title: string; children: ReactNode; className?: string;
@@ -32,7 +33,22 @@ export function Dialog({ open, onClose, title, children, className = "" }: {
 }
 export function OpportunitiesLayout({ children, catalog }: { children: ReactNode; catalog: Catalog }) {
   const path = usePathname();
-  return <CatalogContext.Provider value={catalog}>
+  const router = useRouter();
+  const [order] = useState(() => catalog.items.map((item) => item.id));
+  const current = useMemo(() => ({ ...catalog, items: retainOrder(catalog.items, order) }), [catalog, order]);
+  useEffect(() => {
+    if (path !== BASE && !path.startsWith(BASE + "/tasks/")) return;
+    const refresh = () => { if (document.visibilityState === "visible") router.refresh(); };
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [path, router]);
+  return <CatalogContext.Provider value={current}>
     <section className="opportunities-beta opportunity-directory" aria-label="Opportunities">
       <div className="op-content"><div className="op-page">
         <div className="op-appbar op-workspace-bar"><div className="op-workspace-bar-inner">

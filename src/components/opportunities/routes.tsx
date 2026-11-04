@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { BASE, filterCatalog, formatDate, platforms, platformFor, type CatalogItem } from "./catalog";
+import { BASE, filterCatalog, formatDate, platforms, platformFor, type Catalog, type CatalogItem } from "./catalog";
 import { useCatalog } from "./frame";
 import { Empty, Field, Heading, Hero, LocaleSummary, PlatformMark } from "./components";
 import { Editor } from "./editor";
@@ -21,8 +21,8 @@ function Card({ item, returnQuery }: { item: CatalogItem; returnQuery: string })
     <div className="op-card-body"><PlatformMark id={item.provider} /><h2><Link href={href}>{item.title}</Link></h2><p className="directory-card-summary">{item.summary}</p><div className="directory-card-facts"><span>{item.rewardLabel}</span><span>{item.deadline ? formatDate(item.deadline) : item.status === "Listed" ? "Check availability" : item.status}</span></div><LocaleSummary language={item.language} country={item.country} location={item.location} /><div className="directory-card-bottom"><span title={item.organizer}>{item.organizer}</span><Link href={href} aria-label={"Details for " + item.title}>Details <Icon name="arrow" size={15} /></Link></div></div>
   </article>;
 }
-function Listing() {
-  const catalog = useCatalog(), params = useSearchParams();
+function Listing({ catalog }: { catalog: Catalog }) {
+  const params = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
   const current = new URLSearchParams(params.toString());
   const items = filterCatalog(catalog.items, current);
@@ -62,8 +62,8 @@ function ArtLibrary() {
   const covers = filterCovers(query, topic);
   return <><Heading title="A cover for your next idea." description={`${stockCovers.length} matte paper illustrations. Download a cover to bring to your platform.`} /><div className="cover-filters"><label className="cover-search"><Icon name="search" size={17} /><input aria-label="Search artwork" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Wallets, testing, community…" /></label><select aria-label="Artwork topic" value={topic} onChange={(e) => setTopic(e.target.value)}><option value="All">All topics</option>{coverTopics.map((t) => <option key={t}>{t}</option>)}</select></div><p className="directory-art-count" aria-live="polite">{covers.length} {covers.length === 1 ? "cover" : "covers"}</p><div className="directory-art-grid">{covers.map((cover) => <article key={cover.id}><Illustration kind={cover.id} /><div><h2>{cover.name}</h2><p>{cover.topic}</p><a href={stockCoverUrl(cover.id)} download className="op-text" aria-label={"Download " + cover.name}>Download PNG<Icon name="arrowdown" size={15} /></a></div></article>)}</div>{!covers.length && <Empty title="No matching artwork"><button className="op-button" onClick={() => { setQuery(""); setTopic("All"); }}>Show all covers</button></Empty>}<p className="directory-curation">Artwork is illustrative. Use project branding only for activities that relate to that project.</p></>;
 }
-export function OpportunitiesRoutes() {
-  const path = usePathname(), params = useSearchParams(), catalog = useCatalog();
+export function OpportunitiesRoutes({ catalog: incoming }: { catalog?: Catalog } = {}) {
+  const path = usePathname(), params = useSearchParams(), catalog = useCatalog(incoming);
   if (path === BASE + "/prepare") return <Editor initialProvider={params.get("provider") === "gleyo" ? "gleyo" : params.get("provider") === "zec-bounties" ? "zec-bounties" : undefined} />;
   if (path === BASE + "/platforms") return <Platforms />;
   if (path === BASE + "/art") return <ArtLibrary />;
@@ -71,5 +71,5 @@ export function OpportunitiesRoutes() {
     const item = catalog.items.find((o) => o.id === path.split("/").pop());
     return item ? <Detail item={item} /> : <Empty title="This opportunity is no longer listed"><p>It may be assigned, closed or temporarily unavailable.</p><Link href={BASE} className="op-button">Explore opportunities</Link></Empty>;
   }
-  return <Listing />;
+  return <Listing catalog={catalog} />;
 }
