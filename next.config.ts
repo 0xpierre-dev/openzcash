@@ -62,7 +62,7 @@ const nextConfig: NextConfig = {
     localPatterns: [
       { pathname: "/**", search: "" },
       // Revised paper artwork must bypass previously optimized image caches.
-      { pathname: "/opportunities/art/*.png", search: "?v=20261103-paper-2" },
+      { pathname: "/opportunities/art/*.png", search: "?v=20261103-paper-3" },
     ],
   },
   // Don't advertise the framework/version in responses.

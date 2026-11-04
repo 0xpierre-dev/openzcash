@@ -200,7 +200,7 @@ export const coverLabel = (value: string) =>
 export const stockCoverUrl = (value: string) =>
   "/opportunities/art/" +
   (stockCovers.some((c) => c.id === value) ? value : "code") +
-  ".png?v=20261103-paper-2";
+  ".png?v=20261103-paper-3";
 export function filterCovers(query: string, topic = "All") {
   const q = query.trim().toLowerCase();
   return stockCovers.filter(

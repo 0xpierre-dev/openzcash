@@ -147,12 +147,12 @@ export const APPS: AppDef[] = [
     sub: "Projects, teams & organizations",
     icon: "ecosystem",
     navigationOrder: [
-      "/wallets/find", "/opportunities", "/ecosystem/history", "/communities", "/development", "/arborist",
+      "/opportunities", "/wallets/find", "/ecosystem/history", "/communities", "/development", "/arborist",
       "/zcg/fpf", "/shielded-labs", "/tachyon", "/zf", "/zakura", "/zechub", "/zodl",
     ],
     pages: [
       { href: "/wallets/find", label: "Wallets", mark: "/logos/glyphs/wallets.png" },
-      { href: "/opportunities", label: "Opportunities", beta: true, mark: "/logos/glyphs/grants.png" },
+      { href: "/opportunities", label: "Opportunities", beta: true },
       { href: "/ecosystem/history", label: "Project histories", mark: "/logos/glyphs/grants.png" },
       { href: "/development", label: "Development", mark: "/logos/glyphs/development.png" },
       { href: "/ecosystem/history/z3", label: "Z3 stack", mark: "/logos/glyphs/z3.png", hidden: true, palette: true },

@@ -1086,6 +1086,16 @@ a.rd-treasury-pool:hover .rd-treasury-name {
   flex-shrink: 0;
   color: var(--side-dim);
 }
+.rd-side-opportunities-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  font-size: 17px;
+  line-height: 1;
+}
 .rd-side-item:hover .rd-side-icon,
 .rd-side-item[aria-current="page"] .rd-side-icon {
   color: var(--side-ink);

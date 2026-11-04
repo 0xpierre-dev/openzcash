@@ -20,8 +20,8 @@ export function LocaleSummary({ language, country, location }: { language?: stri
 }
 export function Hero() {
   return <section className="op-hero op-hero-compact directory-hero"><div className="op-hero-content">
-    <div className="op-hero-intro"><span className="directory-eyebrow">CONTRIBUTE TO ZCASH</span><h1>Find your next opportunity.</h1><p>Quests, bounties, jobs and testing. Discover here, continue with the people behind them.</p></div>
-    <div className="op-hero-art" aria-hidden="true">{Array.from({ length: 5 }, (_, i) => <Coin key={i} black={i === 2 || i === 4} />)}</div>
+    <div className="op-hero-intro"><h1>Find your next opportunity.</h1><p>Quests, bounties, jobs and testing.<br />Discover here. Participate at the source.</p></div>
+    <div className="directory-hero-mark" aria-hidden="true"><Coin /></div>
   </div></section>;
 }
 export function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: ReactElement<{ id?: string; "aria-invalid"?: boolean; "aria-describedby"?: string }> }) {

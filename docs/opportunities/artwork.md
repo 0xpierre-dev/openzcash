@@ -36,7 +36,8 @@ Their final files are `public/opportunities/art/<id>.png`.
 
 Seven were already clean: `wallet`, `story`, `language`, `design`, `research`,
 `community` and `0xramp-pay`. Meaningful network/server geometry was retained in
-`zebra`, `zakura`, `hashsmash`, `crosslink` and `zero-indexer`.
+`zebra`, `zakura`, `crosslink` and `zero-indexer`. HashSmash was subsequently
+recomposed at the user's request as described below.
 
 Shared edit prompt:
 
@@ -48,3 +49,12 @@ Final file: `public/opportunities/art/brave.png`. The blank phone screen was
 corrected using the lion logo already present on the laptop as the reference.
 
 Use case: precise-object-edit. Edit target: the supplied clean matte-paper Brave Wallet illustration. Change only the currently blank screen of the smartphone on the right: place the official orange Brave lion logo centered on that screen. Duplicate the precise lion shape, white facial cutouts and orange color already visible on the left laptop panel, scale it to comfortably fit the phone screen, and match the phone's perspective and subtle embossed matte-paper surface. Keep a generous margin so the entire lion is visible. Preserve everything else exactly: laptop logo and Brave Wallet text, Zcash card and logo, phone and laptop geometry, base sheets, paper grain, shadows, colors, composition and original landscape 1536x1024 canvas. Keep the clean background; no cubes, no new decorations, no additional text, no metallic gloss.
+
+## HashSmash revision
+
+Final file: `public/opportunities/art/hashsmash.png`. Removed the seven rear cubes
+and their connectors, enlarged the foreground challenge sign and increased text
+contrast. This brings the revised existing collection to 16 covers, plus the two
+new ZecHub and NU7 covers.
+
+Use case: precise-object-edit. Edit the supplied matte-paper HashSmash / Yukon illustration. Remove ALL seven floating cubes behind the main sign (the three yellow cubes, the three charcoal cubes and the central white cube) and ALL connecting zigzag ribbons between them. Fill their background naturally with clean warm off-white textured paper. Keep the small winner podium on the right as part of the foreground, but remove no more objects. Recompose the remaining foreground as the main focus, approximately 20 percent larger, centered vertically and horizontally with 10 percent breathing room, so the challenge reads clearly in a card thumbnail. The standing folded paper plaque and its exact word 'HashSmash' must be dominant, with clear larger bold deep navy blue lettering. Put the exact word 'Yukon' below in the same deep navy for legibility against cream paper, instead of pale lime; retain lime as a restrained paper accent with deep navy and Zcash yellow. Preserve the existing official Zcash symbol geometry on the yellow corner medallion and the exact word 'Yukon' on the smaller navy tent card. Keep typography crisp and all lettering exact. Preserve the 3D handcrafted matte paper aesthetic, realistic paper fibers, soft shadows, no gloss or metallic gold. No new cubes, ribbons in the background, prize amounts, dates, UI, additional text or decorations. Landscape 1536x1024, opaque warm paper background.

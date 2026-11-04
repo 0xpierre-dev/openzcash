@@ -92,7 +92,7 @@ export function CoverPicker({
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
           >
-            <option>All</option>
+            <option value="All">All topics</option>
             {coverTopics.map((t) => (
               <option key={t}>{t}</option>
             ))}

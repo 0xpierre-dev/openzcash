@@ -14,7 +14,7 @@ it("keeps manual choices and only resolves known local artwork", () => {
   expect(resolveCover("zingo", "Development")).toBe("zingo");
   expect(resolveCover(undefined, "Research", "HashSmash challenge")).toBe("hashsmash");
   for (const value of ["../../secret", "https://example.com/image.png", "upload:old"]) expect(resolveCover(value, "Design")).toBe("design");
-  expect(stockCoverUrl("../../secret")).toBe("/opportunities/art/code.png?v=20261103-paper-2");
+  expect(stockCoverUrl("../../secret")).toBe("/opportunities/art/code.png?v=20261103-paper-3");
 });
 it("finds wallet, infrastructure and challenge artwork", () => {
   expect(resolveCover(undefined, "Content", "Create a Zcash NU7 video")).toBe("nu7");
