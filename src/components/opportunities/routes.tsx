@@ -49,10 +49,44 @@ export function Detail({ item }: { item: CatalogItem }) {
   const params = useSearchParams();
   const platform = platformFor(item.provider);
   const guideUrl = item.kind === "Job" ? item.sourceUrl : platform.docs;
-  return <><Link className="op-back" href={BASE + (params.size ? "?" + params : "")}><Icon name="left" size={16} />Back to opportunities</Link>
-    <div className="directory-detail"><section><div className="directory-detail-cover"><Illustration kind={item.art} /></div><div className="directory-detail-heading"><PlatformMark id={item.provider} /><span>{item.kind} · {item.category}</span><h1>{item.title}</h1><p>{item.summary}</p></div><div className="directory-description"><ReactMarkdown components={{ img: () => null, a: ({ href, children }) => href?.startsWith("https://") ? <a href={href} target="_blank" rel="noopener noreferrer">{children}</a> : <span>{children}</span> }}>{item.description}</ReactMarkdown></div><div className="directory-provenance"><a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">Original source <Icon name="external" size={14} /></a><span>Checked {formatDate(item.checkedAt)}</span>{item.sourceUpdatedAt && <span>Source updated {formatDate(item.sourceUpdatedAt)}</span>}</div></section>
-    <aside><div className="directory-action-panel"><span className="directory-eyebrow">{item.kind === "Job" ? "CAREERS" : "PARTICIPATE"}</span><h2>{item.rewardLabel}</h2><dl><div><dt>Organizer</dt><dd>{item.organizer}</dd></div><div><dt>Platform</dt><dd>{platform.name}</dd></div>{item.deadline && <div><dt>Deadline</dt><dd>{formatDate(item.deadline)}</dd></div>}</dl><LocaleSummary language={item.language} country={item.country} location={item.location} /><Destination item={item} className="op-button primary full" /><p>{item.kind === "Job" ? "Apply directly through the employer’s instructions." : "Participation and rewards follow the source’s rules."}</p></div><div className="directory-next-steps"><h2>What to do next</h2><ol className="directory-steps">{item.steps.map((step) => <li key={step}>{step}</li>)}</ol><a className="op-text" href={guideUrl} target={guideUrl.startsWith("/") ? undefined : "_blank"} rel="noopener noreferrer">Read the guide <Icon name="arrow" size={14} /></a></div></aside></div>
-  </>;
+  return <article className="directory-detail-page" aria-labelledby="opportunity-title">
+    <Link className="op-back" href={BASE + (params.size ? "?" + params : "")}><Icon name="left" size={16} />Back to opportunities</Link>
+    <div className="directory-detail">
+      <header className="directory-detail-heading directory-detail-tile">
+        <div className="directory-detail-meta"><PlatformMark id={item.provider} /><span>{item.kind} · {item.category}</span></div>
+        <h1 id="opportunity-title">{item.title}</h1>
+        <p>{item.summary}</p>
+      </header>
+      <div className="directory-detail-cover"><Illustration kind={item.art} /></div>
+      <aside className="directory-action-panel" aria-label="Participation">
+        <span className="directory-eyebrow">{item.kind === "Job" ? "CAREERS" : "PARTICIPATE"}</span>
+        <h2>{item.rewardLabel}</h2>
+        <dl>
+          <div><dt>Organizer</dt><dd>{item.organizer}</dd></div>
+          {item.organizer !== platform.name && <div><dt>Platform</dt><dd>{platform.name}</dd></div>}
+          {item.deadline && <div><dt>Deadline</dt><dd>{formatDate(item.deadline)}</dd></div>}
+        </dl>
+        <LocaleSummary language={item.language} country={item.country} location={item.location} />
+        <Destination item={item} className="op-button primary full" />
+        <p>{item.kind === "Job" ? "Apply directly through the employer’s instructions." : "Participation and rewards follow the source’s rules."}</p>
+      </aside>
+      <section className="directory-detail-body directory-detail-tile" aria-labelledby="opportunity-details">
+        <h2 id="opportunity-details">Details</h2>
+        <div className="directory-description"><ReactMarkdown components={{
+          img: () => null,
+          h1: ({ children }) => <h3>{children}</h3>,
+          h2: ({ children }) => <h3>{children}</h3>,
+          h3: ({ children }) => <h4>{children}</h4>,
+          a: ({ href, children }) => href?.startsWith("https://") ? <a href={href} target="_blank" rel="noopener noreferrer">{children}</a> : <span>{children}</span>,
+        }}>{item.description}</ReactMarkdown></div>
+      </section>
+      <section className="directory-next-steps directory-detail-tile" aria-labelledby="opportunity-next-steps">
+        <div className="directory-section-heading"><h2 id="opportunity-next-steps">Next steps</h2><a className="op-text" href={guideUrl} target={guideUrl.startsWith("/") ? undefined : "_blank"} rel="noopener noreferrer">Read the guide <Icon name="arrow" size={14} /></a></div>
+        <ol className="directory-steps" role="list">{item.steps.map((step, index) => <li key={step}><span className="directory-step-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><p>{step}</p></li>)}</ol>
+      </section>
+      <footer className="directory-provenance"><a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">Original source <Icon name="external" size={14} /></a><span>Checked {formatDate(item.checkedAt)}</span>{item.sourceUpdatedAt && <span>Source updated {formatDate(item.sourceUpdatedAt)}</span>}</footer>
+    </div>
+  </article>;
 }
 function Platforms() {
   return <><Heading title="Meet the platforms" description="Find the right place to contribute or publish an activity." /><div className="directory-how"><span><b>01</b> Discover on OpenZcash</span><Icon name="arrow" size={18} /><span><b>02</b> Read the requirements</span><Icon name="arrow" size={18} /><span><b>03</b> Continue at the source</span></div><div className="directory-platform-grid">{platforms.map((p) => <article className="directory-platform-card" key={p.id}><div className="directory-platform-art"><Illustration kind={p.art} /></div><div><PlatformMark id={p.id} /><h2>{p.label}</h2><p>{p.description}</p><ol className="directory-steps">{p.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="directory-platform-actions"><a className="op-button" href={p.url} target="_blank" rel="noopener noreferrer">Visit {p.name}<Icon name="external" size={15} /></a>{(p.id === "gleyo" || p.id === "zec-bounties") && <Link className="op-text" href={BASE + "/prepare?provider=" + p.id}>Prepare a brief<Icon name="arrow" size={14} /></Link>}</div></div></article>)}</div></>;
