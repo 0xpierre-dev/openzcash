@@ -73,8 +73,8 @@ const steps = [
   { title: "Share what you found", body: <>Record version, OS, time, transaction IDs and expected versus actual behavior. Recheck after restarting. Remove secrets before reporting.</>, check: "Report desktop-app problems in the official issue tracker.", href: ISSUES },
 ];
 
-export function CrosslinkGuide() {
-  const [tab, setTab] = useState<Tab>("Participate");
+export function CrosslinkGuide({ initialTab = "Participate" }: { initialTab?: Tab } = {}) {
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [category, setCategory] = useState<ToolCategory>("All");
   const [path, setPath] = useState<"test" | "build" | "operate">("test");
   const [communityView, setCommunityView] = useState<"tools" | "issues">("tools");
