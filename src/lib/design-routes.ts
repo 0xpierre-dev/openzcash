@@ -258,7 +258,10 @@ export type Place = {
 
 /** Where a route sits in the hierarchy. Undefined for Home and unknown routes. */
 export function placeOf(pathname: string): Place | undefined {
-  const opportunityLabel = pathname === "/opportunities/new" ? "Create opportunity"
+  const opportunityLabel = pathname === "/opportunities/prepare" ? "Prepare an activity"
+    : pathname === "/opportunities/platforms" ? "Platforms"
+    : pathname === "/opportunities/art" ? "Art library"
+    : pathname === "/opportunities/new" ? "Prepare an activity"
     : /^\/opportunities\/(campaigns|communities)\/new$/.test(pathname) ? (pathname.includes('/campaigns/') ? "Create campaign" : "Create community")
     : /^\/opportunities\/(tasks|campaigns|communities)\/[a-z0-9-]+$/.test(pathname) ? (pathname.includes('/tasks/') ? "Opportunity" : pathname.includes('/campaigns/') ? "Campaign" : "Organizer")
     : undefined;
