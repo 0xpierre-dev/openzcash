@@ -107,7 +107,7 @@ export function CrosslinkGuide({ initialTab = "Participate" }: { initialTab?: Ta
     <section className={styles.hero} aria-labelledby="crosslink-title">
       <div className={styles.heroCopy}>
         <Source className={styles.brand} variant="brand" href="https://shieldedlabs.net/"><Logo src="/logos/shielded-labs.png" /><span>Shielded Labs</span></Source>
-        <div className={styles.heroTitle}><h2 id="crosslink-title">Crosslink<span>.</span></h2><p>Help shape the next layer of Zcash.</p></div>
+        <div className={styles.heroTitle}><h2 id="crosslink-title">Crosslink<span>.</span></h2></div>
         <div className={styles.actions}><Source variant="primary" href={RELEASE}>Download {releaseTag}</Source><button onClick={() => {
           setTab("Participate"); setPath("test");
           content.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
