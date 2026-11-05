@@ -38,6 +38,7 @@
     "check:proposal-cards": "node scripts/check-proposal-cards.mjs",
     "check:crosslink": "node scripts/check-crosslink-sources.mjs",
     "check:crosslink:report": "node scripts/check-crosslink-sources.mjs --report",
+    "test:funding-days": "node --test scripts/lib/funding-days-guard.test.mjs",
     "test:crosslink-sources": "node --test scripts/lib/crosslink-sources.test.mjs",
     "wallets:check": "tsx scripts/validate-wallet-evidence.ts"
   },
