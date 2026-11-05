@@ -6,7 +6,16 @@ import { RELEASE_REFRESH_MS } from "./config";
 export const NEWS_GITHUB_REPOSITORIES = [
   "ZcashFoundation/zebra", "zingolabs/zaino", "zcash/zcash",
   "zcash/librustzcash", "zcash/zallet",
+  "zakura-core/zakura",
+  "zodl-inc/zodl-android", "zodl-inc/zodl-ios",
+  "zodl-inc/zodl-swift-wallet-sdk", "zodl-inc/zodl-android-wallet-sdk",
+  "ShieldedLabs/crosslink_monolith",
+  "ZcashFoundation/zeeder", "ZcashFoundation/zc",
+  "zcash/lightwalletd", "zcash/zcash-swift-wallet-sdk",
+  "zingolabs/zingolib", "zingolabs/zingo-mobile", "zingolabs/zingo-pc",
 ] as const;
+/** Active repositories ship several releases a week; the feed window trims older ones. */
+const RELEASES_PER_REPOSITORY = 5;
 export type NewsGitHubHealth = {
   repository: string;
   status: "live" | "cached" | "unavailable" | "unchecked";
@@ -29,7 +38,7 @@ function releases(value: unknown, repository: string): NewsItem[] {
     if (url.protocol !== "https:" || url.hostname !== "github.com" || url.port || url.username || url.password ||
         !url.pathname.toLowerCase().startsWith(`/${repository.toLowerCase()}/releases/`)) throw new Error("GITHUB_RELEASES_UNAVAILABLE");
     return [{ id: `github:${url.href}`, source: "github" as const, kind: name,
-      title: `${name} ${typeof row.name === "string" && row.name.trim() ? row.name : row.tag_name}`,
+      title: `${name} ${typeof row.name === "string" && row.name.trim() ? row.name : row.tag_name}${row.prerelease === true ? " (pre-release)" : ""}`,
       url: url.href, ts: new Date(row.published_at).toISOString() }];
   });
 }
@@ -51,7 +60,7 @@ export function createGitHubNewsReader({ fetcher = fetch, now = Date.now, ttlMs 
     if (pending) return pending;
     const request = (async () => {
       try {
-        const response = await fetcher(`https://api.github.com/repos/${repository}/releases?per_page=2`, {
+        const response = await fetcher(`https://api.github.com/repos/${repository}/releases?per_page=${RELEASES_PER_REPOSITORY}`, {
           headers: ghHeaders(), signal: AbortSignal.timeout(7_000), cache: "no-store", redirect: "error",
         });
         if (!response.ok) throw new Error("GITHUB_RELEASES_UNAVAILABLE");
