@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-import { createGitHubNewsReader } from "./github";
+import { createGitHubNewsReader, NEWS_GITHUB_REPOSITORIES } from "./github";
 const repository = "ZcashFoundation/zebra";
 const release = { name: "Zebra 7.0.0-rc.0", tag_name: "v7.0.0-rc.0", published_at: "2026-10-02T00:02:03Z", html_url: "https://github.com/ZcashFoundation/zebra/releases/tag/v7.0.0-rc.0", draft: false };
 const response = (body: unknown = [release], status = 200) => Response.json(body, { status });
@@ -12,7 +12,7 @@ describe("GitHub News source recovery", () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(response());
     const reader = createGitHubNewsReader({ ttlMs: 0, fetcher });
     const items = await reader.read(repository);
-    expect(fetcher).toHaveBeenCalledWith(`https://api.github.com/repos/${repository}/releases?per_page=2`, expect.objectContaining({ headers: expect.objectContaining({ authorization: "Bearer test-read-token-sentinel" }), cache: "no-store", redirect: "error" }));
+    expect(fetcher).toHaveBeenCalledWith(`https://api.github.com/repos/${repository}/releases?per_page=5`, expect.objectContaining({ headers: expect.objectContaining({ authorization: "Bearer test-read-token-sentinel" }), cache: "no-store", redirect: "error" }));
     expect(items[0]).toMatchObject({ source: "github", ts: "2026-10-02T00:02:03.000Z" });
     expect(JSON.stringify({ items, health: reader.health() })).not.toContain("test-read-token-sentinel");
   });
@@ -31,7 +31,7 @@ describe("GitHub News source recovery", () => {
     expect(await reader.read("zcash/wallet")).toEqual([]);
     expect(fetcher).not.toHaveBeenCalled();
     expect(await reader.read("zcash/zallet")).toEqual([expect.objectContaining({ kind: "zallet", url: "https://github.com/zcash/zallet/releases/tag/v0.1.0" })]);
-    expect(fetcher).toHaveBeenCalledWith("https://api.github.com/repos/zcash/zallet/releases?per_page=2", expect.objectContaining({ redirect: "error" }));
+    expect(fetcher).toHaveBeenCalledWith("https://api.github.com/repos/zcash/zallet/releases?per_page=5", expect.objectContaining({ redirect: "error" }));
   });
   it.each([
     ["rate limit", () => response({ message: "private-error" }, 403)],
@@ -73,6 +73,12 @@ describe("GitHub News source recovery", () => {
     const items = await reader.read(repository);
     expect(items).toHaveLength(1);
     expect(items[0].ts).toBe("2026-10-02T00:02:03.000Z");
+  });
+  it("reads the official organizations and flags pre-releases in the title", async () => {
+    const zakura = { ...release, name: "v1.8.2", tag_name: "v1.8.2", prerelease: true, html_url: "https://github.com/zakura-core/zakura/releases/tag/v1.8.2" };
+    const reader = createGitHubNewsReader({ ttlMs: 0, fetcher: vi.fn<typeof fetch>().mockResolvedValue(response([zakura])) });
+    expect(await reader.read("zakura-core/zakura")).toEqual([expect.objectContaining({ kind: "zakura", title: "zakura v1.8.2 (pre-release)" })]);
+    expect(NEWS_GITHUB_REPOSITORIES).toEqual(expect.arrayContaining(["zodl-inc/zodl-android", "ShieldedLabs/crosslink_monolith", "zingolabs/zingolib"]));
   });
   it("shares an overlapping read and releases it after completion", async () => {
     let finish!: (r: Response) => void;

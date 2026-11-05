@@ -58,6 +58,13 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    localPatterns: [
+      { pathname: "/**", search: "" },
+      // Revised paper artwork must bypass previously optimized image caches.
+      { pathname: "/opportunities/art/*.png", search: "?v=20261103-paper-3" },
+    ],
+  },
   // Don't advertise the framework/version in responses.
   poweredByHeader: false,
   async rewrites() {

@@ -1,0 +1,45 @@
+name: Funding history refresh
+
+# /funding-history and Zarvis read src/data/funding/days.json, which is built
+# from external daily data. Once a week this appends the new complete days and
+# commits only that file to main. The generator refuses to rewrite published
+# days, so a source correction fails here and waits for human review.
+on:
+  schedule:
+    - cron: "17 5 * * 1" # Mondays 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: funding-history-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Append new funding days
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.22.1
+      - run: npm ci
+      - run: npm run test:funding-days
+      - name: Regenerate
+        run: npx tsx scripts/gen-funding-history.ts
+      - name: Commit only the data file
+        run: |
+          if git diff --quiet -- src/data/funding/days.json; then
+            echo "No change"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/funding/days.json
+          git commit -m "chore(funding): refresh daily history"
+          git push origin HEAD:main

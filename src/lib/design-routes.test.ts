@@ -95,6 +95,11 @@ describe("the navigation hierarchy", () => {
 });
 
 describe("backOf", () => {
+  it("keeps the opportunity preparation and libraries under Opportunities", () => {
+    for (const route of ["prepare", "platforms", "art"]) {
+      expect(backOf(`/opportunities/${route}`)).toEqual({ href: "/opportunities", label: "Opportunities" });
+    }
+  });
   it("returns from every organization landing page to Ecosystem", () => {
     for (const app of childAppsOf(appOf("ecosystem"))) {
       expect(backOf(app.href)).toEqual({ href: "/ecosystem", label: "Ecosystem" });
