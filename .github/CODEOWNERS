@@ -1,0 +1,14 @@
+# CODEOWNERS: review ownership for sensitive paths. Default owners cover
+# everything not listed explicitly.
+
+* @Michae2xl @vinibarbosabr
+
+# Workflow and supply-chain changes need explicit owner review.
+/.github/ @Michae2xl @vinibarbosabr
+
+# Data pipeline and published datasets.
+/src/lib/zcg/ @Michae2xl
+/data/ @Michae2xl
+
+# Published agent skills.
+/skills/ @Michae2xl @vinibarbosabr

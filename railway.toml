@@ -1,4 +1,4 @@
-# Railway deploy config for the Zcash Back Office (ZBO).
+# Railway deploy config for the OpenZcash portal.
 #
 # Pure Next.js app (Railpack builds it: npm install -> npm run build -> the
 # start command below). Public data comes from external sources and the

@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+  - package-ecosystem: npm
+    directory: /services/participate
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+  - package-ecosystem: npm
+    directory: /services/private-chat
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies

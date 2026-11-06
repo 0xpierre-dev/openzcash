@@ -11,6 +11,7 @@ answer.
 Live: **[openzcash.org](https://openzcash.org)**
 
 [![CI](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml/badge.svg)](https://github.com/Michae2xl/openzcash/actions/workflows/ci.yml)
+[![Tests 4,276](https://img.shields.io/badge/tests-4%2C276-brightgreen.svg)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node 24.22.1](https://img.shields.io/badge/node-24.22.1-brightgreen.svg)](package.json)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fopenzcash.org)](https://openzcash.org)
@@ -138,10 +139,16 @@ npm run typecheck && npm run lint && npm test && npm run test:copilot && npm run
 ```
 
 The [CI workflow](.github/workflows/ci.yml) runs these checks on pull requests and
-pushes to `main`. Database integration tests require disposable local databases;
+pushes to `main`; see [CI overview](docs/ci.md) for what each job does. Database
+integration tests require disposable local databases;
 see [Contributing](CONTRIBUTING.md#tests) for their opt-in settings. Python 3 is
 required for the copilot tests. Live AI features also need the provider settings
 described in [Using Zarvis](docs/using-zarvis.md) and [Zarvis configuration](docs/zarvis.md).
+
+The full suite currently counts 4,276 automated checks: 4,178 vitest tests,
+75 `node --test` and Python checks, and 23 ecosystem-sync tests (4,253 of them
+gated in CI on every pull request), with 19 environment-gated skips. Counts are
+refreshed at each release checkpoint.
 
 ## Documentation
 

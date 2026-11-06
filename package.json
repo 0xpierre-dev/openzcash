@@ -1,5 +1,5 @@
 {
-  "name": "account-zcash-viewingkeys",
+  "name": "openzcash",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -13,11 +13,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs && node --test ops/error-fallback/handler.test.mjs && npm run errors:check",
+    "test": "vitest run && node --test scripts/build-zarvis-knowledge.test.mjs && node --test ops/error-fallback/handler.test.mjs && npm run errors:check && npm run test:ecosystem-sync",
     "test:watch": "vitest",
     "test:copilot": "node --test scripts/publish-copilot.test.mjs && python3 -B -m unittest discover -s skills/zcg-copilot/tests",
     "probe": "tsx scripts/probe-node.ts",
-    "import-ufvk": "tsx scripts/import-ufvk.ts",
     "import-zcg": "node --conditions=react-server --import tsx scripts/import-zcg.ts",
     "sync-ecosystem": "node scripts/sync-ecosystem.mjs",
     "audit:ecosystem": "tsx scripts/audit-ecosystem.ts",
