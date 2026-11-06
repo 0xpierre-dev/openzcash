@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceRevision": "44250518866f5042",
+  "sourceRevision": "a5a74e1f6cab2cdf",
   "sourceFiles": 72,
   "documents": [
     {
@@ -55,7 +55,7 @@
       "id": "src/app/zcg/disbursements/page.tsx:0",
       "url": "https://openzcash.org/zcg/disbursements",
       "title": "zcg · disbursements",
-      "text": "ZCG Disbursements · OpenZcash\nZCG off-chain ledger: each row is a milestone or payment (grant, contractor, bounty or monthly transfer) with budgeted USD, disbursed ZEC and the day's rate.\nAll\nGrants\nContractors\nCoinholder\nDiscretionary\nMonthly\nDisbursements\nRecords\nPaid entries\nUSD paid\nZEC paid\nMilestones for grant\nAll grants\nDisbursements classified as\nTotals →\nPayments of type\nInsights →\nDisbursements paid in\nnavigation\n·\nfrom spreadsheet\n= mirrored from the ZCG public sheet;\nadmin entry\n/\nadmin-edited\n= added or corrected in this back-office\nAmounts, exchange rates, classifications and source-row links remain attached to each record. Use the table filters to inspect a recipient, payment status or date."
+      "text": "ZCG Disbursements · OpenZcash\nZCG off-chain ledger: each row is a milestone or payment (grant, contractor, bounty or monthly transfer) with budgeted USD, disbursed ZEC and the day's rate.\nAll\nGrants\nContractors\nCoinholder\nDiscretionary\nMonthly\nDisbursements\nRecords\nPaid entries\nUSD paid\nZEC paid\nMilestones for grant\nAll grants\nDisbursements classified as\nTotals →\nPayments of type\nInsights →\nDisbursements paid in\nnavigation\n·\nfrom spreadsheet\n= mirrored from the ZCG public sheet;\nadmin entry\n/\nadmin-edited\n= added or corrected by maintainers\nAmounts, exchange rates, classifications and source-row links remain attached to each record. Use the table filters to inspect a recipient, payment status or date."
     },
     {
       "id": "src/app/zcg/recipients/page.tsx:0",
