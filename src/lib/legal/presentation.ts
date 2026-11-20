@@ -1,10 +1,14 @@
 import type { LegalItem, ReadingLanguage } from "./types";
 
 export const readingLanguages = {
-  en: { name: "English", flag: "🇬🇧" },
+  en: { name: "English", flag: "🇺🇸" },
   pt: { name: "Português", flag: "🇧🇷" },
   es: { name: "Español", flag: "🇪🇸" },
 } satisfies Record<ReadingLanguage, { name: string; flag: string }>;
+
+export function isReadingLanguage(value: string | null): value is ReadingLanguage {
+  return value !== null && Object.hasOwn(readingLanguages, value);
+}
 
 // Languages of the registered publication endpoints (including archived records).
 const sourceLanguages: Partial<Record<string, ReadingLanguage>> = {
